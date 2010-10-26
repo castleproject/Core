@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Text;
+
 namespace Castle.Services.Logging.Log4netIntegration
 {
 	using System;
@@ -31,6 +33,15 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			FileInfo file = GetConfigFile(configFile);
 			XmlConfigurator.ConfigureAndWatch(file);
+		}
+
+		/// <summary>
+		/// Configures log4net with a stream containing XML.
+		/// </summary>
+		/// <param name="config"></param>
+		public Log4netFactory(Stream config)
+		{
+			XmlConfigurator.Configure(config);
 		}
 
 		public override ILogger Create(String name)
