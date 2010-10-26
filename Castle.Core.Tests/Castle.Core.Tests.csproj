@@ -147,6 +147,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net-3.5\adodb.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\net-3.5\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Rhino.Mocks.CPP.Interfaces">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net-3.5\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
@@ -174,8 +178,8 @@
     <Reference Include="NUnit.Silverlight.Framework">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\sl3\NUnit.Silverlight.Framework.dll</HintPath>
-      </Reference>
-      <Reference Include="NUnit.Silverlight.Compatibility">
+    </Reference>
+    <Reference Include="NUnit.Silverlight.Compatibility">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\sl3\NUnit.Silverlight.Compatibility.dll</HintPath>
     </Reference>
@@ -254,6 +258,12 @@
     <Compile Include="InterClasses\IExtendedService.cs" />
     <Compile Include="InterClasses\IService.cs" />
     <Compile Include="InterClasses\ServiceImpl.cs" />
+    <Compile Include="log4netIntegration\log4netConfig.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>log4netConfig.resx</DependentUpon>
+    </Compile>
+    <Compile Include="log4netIntegration\Log4netFactoryTestCase.cs" />
     <Compile Include="MethodsWithAttributesOnParametersTestCase.cs" />
     <Compile Include="MixinTestCase.cs" />
     <Compile Include="ThrowingInterceptorException.cs" />
@@ -435,6 +445,7 @@
     <Compile Include="TraceLoggerTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="log4netIntegration\log4net.xml" />
     <EmbeddedResource Include="Core.Tests\Resources\file1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -444,11 +455,19 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="Core.Tests\Resources\MoreRes\file2.txt" />
+    <EmbeddedResource Include="log4netIntegration\log4netConfig.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>log4netConfig.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.Core\Castle.Core.csproj">
       <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
       <Name>Castle.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj">
+      <Project>{FA79D6B4-30B1-444A-A627-ED283BF6406B}</Project>
+      <Name>Castle.Services.Logging.log4netIntegration</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -456,6 +475,7 @@
       <Link>CastleKey.snk</Link>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition="($(MSBuildTargets) == '') Or ($(MSBuildTargets) == 'CSharp')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 3.0'" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 4.0'" />
