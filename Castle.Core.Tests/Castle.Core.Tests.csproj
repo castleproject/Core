@@ -247,6 +247,7 @@
     <Compile Include="DynamicProxy.Tests\Classes\NonPublicMethodsClass.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ServiceClass.cs" />
     <Compile Include="ClassWithAttributesTestCase.cs" />
+    <Compile Include="DynamicProxy.Tests\SerializableClassTestCase.cs" />
     <Compile Include="GenClasses\ClassWithGenArgs.cs" />
     <Compile Include="GenClasses\ClassWithIndexer.cs" />
     <Compile Include="GenClasses\ClassWithMethodWithReturnArrayOfListOfT.cs" />
@@ -436,7 +437,6 @@
     <Compile Include="ProxyNothingHook.cs" />
     <Compile Include="ProxyTargetAccessorHandlingTestCase.cs" />
     <Compile Include="RhinoMocksTestCase.cs" />
-    <Compile Include="SerializableClassTestCase.cs" />
     <Compile Include="InternalsVisibleTo.cs" />
     <Compile Include="Interceptors\SetReturnValueInterceptor.cs" />
     <Compile Include="Interceptors\WithCallbackInterceptor.cs" />
