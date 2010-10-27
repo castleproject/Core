@@ -195,8 +195,6 @@ namespace Castle.DynamicProxy.Contributors
 			// If base type implements ISerializable, we have to make sure
 			// the GetObjectData is marked as virtual
 			var getObjectDataMethod = baseType.GetInterfaceMap(typeof(ISerializable)).TargetMethods[0];
-
-			Debug.Assert(getObjectDataMethod.Name == "GetObjectData");
 			if (getObjectDataMethod.IsPrivate) //explicit interface implementation
 			{
 				return false;
