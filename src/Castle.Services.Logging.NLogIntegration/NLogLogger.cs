@@ -18,6 +18,9 @@ namespace Castle.Services.Logging.NLogIntegration
 	using Castle.Core.Logging;
 	using NLog;
 
+	/// <summary>
+	/// Implementation of <see cref="ILogger"/> for NLog.
+	/// </summary>
 	public class NLogLogger : ILogger
 	{
 		private Logger logger;
@@ -27,29 +30,53 @@ namespace Castle.Services.Logging.NLogIntegration
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="NLogLogger"/> class.
+		/// </summary>
+		/// <param name="logger">The logger.</param>
+		/// <param name="factory">The factory.</param>
 		public NLogLogger(Logger logger, NLogFactory factory)
 		{
 			Logger = logger;
 			Factory = factory;
 		}
 
+		/// <summary>
+		/// Creates a child logger with the specied <paramref name="name"/>.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
 		public virtual ILogger CreateChildLogger(String name)
 		{
 			return Factory.Create(Logger.Name + "." + name);
 		}
 
+		/// <summary>
+		/// Gets or sets the logger.
+		/// </summary>
+		/// <value>The logger.</value>
 		protected internal Logger Logger
 		{
 			get { return logger; }
 			set { logger = value; }
 		}
 
+		/// <summary>
+		/// Gets or sets the factory.
+		/// </summary>
+		/// <value>The factory.</value>
 		protected internal NLogFactory Factory
 		{
 			get { return factory; }
 			set { factory = value; }
 		}
 
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
 		public override string ToString()
 		{
 			return Logger.ToString();
@@ -482,6 +509,11 @@ namespace Castle.Services.Logging.NLogIntegration
 
 		#region FatalError (obsolete)
 
+		/// <summary>
+		/// Logs a fatal message.
+		/// </summary>
+		/// <param name="format">Format string for the message to log</param>
+		/// <param name="args">Format arguments for the message to log</param>
 		[Obsolete("Use FatalFormat instead")]
 		public void FatalError(String format, params object[] args)
 		{
@@ -489,6 +521,11 @@ namespace Castle.Services.Logging.NLogIntegration
 				Logger.Fatal(format, args);
 		}
 
+		/// <summary>
+		/// Logs a fatal message.
+		/// </summary>
+		/// <param name="message">The message to log</param>
+		/// <param name="exception">The exception</param>
 		[Obsolete("Use Fatal instead")]
 		public void FatalError(String message, Exception exception)
 		{
@@ -496,6 +533,10 @@ namespace Castle.Services.Logging.NLogIntegration
 				Logger.FatalException(message, exception);
 		}
 
+		/// <summary>
+		/// Logs a fatal message.
+		/// </summary>
+		/// <param name="message">The message to log</param>
 		[Obsolete("Use Fatal instead")]
 		public void FatalError(String message)
 		{
@@ -519,7 +560,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <summary>
 		/// Determines if messages of priority "info" will be logged.
 		/// </summary>
-		/// <value>True if "info" messages will be logged.</value> 
+		/// <value><c>true</c> if "info" messages will be logged, <c>false</c> otherwise</value> 
 		public bool IsInfoEnabled
 		{
 			get { return Logger.IsInfoEnabled; }
@@ -528,7 +569,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <summary>
 		/// Determines if messages of priority "warn" will be logged.
 		/// </summary>
-		/// <value>True if "warn" messages will be logged.</value> 
+		/// <value><c>true</c> if "warn" messages will be logged, <c>false</c> otherwise</value> 
 		public bool IsWarnEnabled
 		{
 			get { return Logger.IsWarnEnabled; }
@@ -537,7 +578,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <summary>
 		/// Determines if messages of priority "error" will be logged.
 		/// </summary>
-		/// <value>True if "error" messages will be logged.</value> 
+		/// <value><c>true</c> if "error" messages will be logged, <c>false</c> otherwise</value> 
 		public bool IsErrorEnabled
 		{
 			get { return Logger.IsErrorEnabled; }
@@ -546,12 +587,16 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <summary>
 		/// Determines if messages of priority "fatal" will be logged.
 		/// </summary>
-		/// <value>True if "fatal" messages will be logged.</value> 
+		/// <value><c>true</c> if "fatal" messages will be logged, <c>false</c> otherwise</value> 
 		public bool IsFatalEnabled
 		{
 			get { return Logger.IsFatalEnabled; }
 		}
 
+		/// <summary>
+		/// Determines if messages of priority "fatal" will be logged.
+		/// </summary>
+		/// <value><c>true</c> if "fatal" messages will be logged, <c>false</c> otherwise</value> 
 		[Obsolete("Use IsFatalEnabled instead")]
 		public bool IsFatalErrorEnabled
 		{

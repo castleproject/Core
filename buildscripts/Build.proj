@@ -238,7 +238,7 @@ limitations under the License.
 		Name="_ExecStatLight"
 		>
 
-		<CreateProperty Value='$(ToolsPath)\StatLight\StatLight.exe -x="$(OutputPath)Castle.Core.Tests.xap" -o=NUnit'>
+		<CreateProperty Value='$(ToolsPath)\StatLight\StatLight.exe -b -x="$(OutputPath)Castle.Core.Tests.xap" -o=NUnit'>
 			<Output PropertyName="StatLightCmdLine" TaskParameter="Value"/>
 		</CreateProperty>
 
