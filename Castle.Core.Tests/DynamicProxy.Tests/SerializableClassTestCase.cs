@@ -44,6 +44,12 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(typeof(SimpleClass), newProxy.GetType().BaseType);
 		}
 
+		[Test(Description = "DYNPROXY-133")]
+		public void Can_proxy_class_with_explicit_GetObjectData()
+		{
+			generator.CreateClassProxy<SerializableExplicitImpl>();
+		}
+
 		[Test]
 		public void ClassProxyWithTargetSerialization()
 		{
