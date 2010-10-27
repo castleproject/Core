@@ -7,7 +7,6 @@ src/*/obj
 src/*/bin
 *.csproj.user
 _ReSharper*
-*.ReSharper
 *.user
 *.suo
 *.cache
