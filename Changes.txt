@@ -1,3 +1,4 @@
+- implemented DYNPROXY-139 - Better error message 
 - fixed DYNPROXY-133 - Debug assertion in ClassProxyInstanceContributor fails when proxying ISerializable with an explicit implementation of GetObjectData
 - applied patch by Alwin Meijs - ExtendedLog4netFactory can be configured with a stream from for example an embedded log4net xml config
 - Upgraded NLog to 2.0 Beta 1
