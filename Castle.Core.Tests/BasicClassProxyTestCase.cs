@@ -83,9 +83,15 @@ namespace Castle.DynamicProxy.Tests
 			var type = Type.GetType("System.AppDomainInitializerInfo, mscorlib");
 			var exception = Assert.Throws(typeof(GeneratorException),
 			                              () => generator.CreateClassProxy(type, new StandardInterceptor()));
+#if !SILVERLIGHT
 			Assert.AreEqual(
 				"Type System.AppDomainInitializerInfo is not visible to DynamicProxy. Can not create proxy for types that are not accessible. Make the type public, or internal and mark your assembly with [assembly: InternalsVisibleTo(InternalsVisible.ToDynamicProxyGenAssembly2)] attribute.",
 				exception.Message);
+#else
+			Assert.AreEqual(
+				"Type System.AppDomainInitializerInfo is not public. Can not create proxy for types that are not accessible.",
+				exception.Message);
+#endif
 		}
 #endif
 
