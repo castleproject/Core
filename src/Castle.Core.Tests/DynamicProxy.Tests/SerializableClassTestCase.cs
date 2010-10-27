@@ -18,15 +18,14 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Collections;
 	using System.IO;
-	using System.Reflection;
 	using System.Runtime.Serialization;
 	using System.Runtime.Serialization.Formatters.Binary;
-	using System.Text.RegularExpressions;
 
 	using Castle.DynamicProxy.Serialization;
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.BugsReported;
 	using Castle.DynamicProxy.Tests.InterClasses;
+	using Castle.DynamicProxy.Tests.Serialization;
 
 	using NUnit.Framework;
 
@@ -598,126 +597,7 @@ namespace Castle.DynamicProxy.Tests
 				return (T)formatter.Deserialize(stream);
 			}
 		}
-
-		[Serializable]
-		public class C
-		{
-			public int I;
-			public C This;
-
-			public C(int i)
-			{
-				I = i;
-				This = this;
-			}
-		}
-
-		[Serializable]
-		public class ClassWithDirectAndIndirectSelfReference
-		{
-			public ArrayList List = new ArrayList();
-			public ClassWithDirectAndIndirectSelfReference This;
-
-			public ClassWithDirectAndIndirectSelfReference()
-			{
-				This = this;
-				List.Add(this);
-			}
-		}
-
-		[Serializable]
-		public class ClassWithIndirectSelfReference
-		{
-			public ArrayList List = new ArrayList();
-
-			public ClassWithIndirectSelfReference()
-			{
-				List.Add(this);
-			}
-		}
-
-		[Serializable]
-		private class ComplexHolder
-		{
-			public object Element;
-			public Type Type;
-		}
-
-		[Serializable]
-		public class DelegateHolder
-		{
-			public ArrayList ComplexTypeMember;
-			public EventHandler DelegateMember;
-
-			public void TestHandler(object sender, EventArgs e)
-			{
-			}
-		}
-
-		[Serializable]
-		public class EventHandlerClass
-		{
-			public void TestHandler(object sender, EventArgs e)
-			{
-			}
-		}
-
-		public interface IMixedInterface
-		{
-			object GetExecutingObject();
-		}
-
-		[Serializable]
-		public class IndirectDelegateHolder
-		{
-			public DelegateHolder DelegateHolder = new DelegateHolder();
-
-			public void TestHandler(object sender, EventArgs e)
-			{
-			}
-		}
-
-		[Serializable]
-		private class MethodFilterHook : IProxyGenerationHook
-		{
-			private string nameFilter;
-
-			public MethodFilterHook(string nameFilter)
-			{
-				this.nameFilter = nameFilter;
-			}
-
-			public void MethodsInspected()
-			{
-			}
-
-			public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
-			{
-			}
-
-			public bool ShouldInterceptMethod(Type type, MethodInfo memberInfo)
-			{
-				return Regex.IsMatch(memberInfo.Name, nameFilter);
-			}
-		}
-
-		[Serializable]
-		public class SerializableInterceptorSelector : IInterceptorSelector
-		{
-			public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
-			{
-				return interceptors;
-			}
-		}
-
-		[Serializable]
-		public class SerializableMixin : IMixedInterface
-		{
-			public object GetExecutingObject()
-			{
-				return this;
-			}
-		}
 	}
+
 #endif
 }
