@@ -42,7 +42,6 @@ namespace Castle.Core.Logging
 
 		public abstract ILogger Create(String name, LoggerLevel level);
 
-#if !SILVERLIGHT
 		/// <summary>
 		/// Gets the configuration file.
 		/// </summary>
@@ -50,6 +49,7 @@ namespace Castle.Core.Logging
 		/// <returns></returns>
 		protected static FileInfo GetConfigFile(string fileName)
 		{
+#if !SILVERLIGHT
 			FileInfo result;
 
 			if (Path.IsPathRooted(fileName))
@@ -62,7 +62,9 @@ namespace Castle.Core.Logging
 			}
 
 			return result;
-		}
+#else
+			return new FileInfo(fileName);
 #endif
+		}
 	}
 }
