@@ -145,15 +145,15 @@
   <ItemGroup>
     <Reference Include="adodb, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\net-3.5\adodb.dll</HintPath>
+      <HintPath>..\..\lib\net35\adodb.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\net-3.5\log4net.dll</HintPath>
+      <HintPath>..\..\lib\net35\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.Mocks.CPP.Interfaces">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\net-3.5\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
+      <HintPath>..\..\lib\net35\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -179,27 +179,15 @@
 	</When>
   </Choose>
   <Choose>
-	<When Condition="$(MSBuildTargets) == 'Silverlight 3.0'">
+	<When Condition="$(MSBuildTargets) == 'Silverlight 3.0' or $(MSBuildTargets) == 'Silverlight 4.0'">
 	  <ItemGroup>
 		<Reference Include="NUnit.Silverlight.Framework">
 		  <SpecificVersion>False</SpecificVersion>
-		  <HintPath>..\..\lib\sl3\NUnit.Silverlight.Framework.dll</HintPath>
+		  <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NUnit.Silverlight.Framework.dll</HintPath>
 		</Reference>
 		<Reference Include="NUnit.Silverlight.Compatibility">
 		  <SpecificVersion>False</SpecificVersion>
-		  <HintPath>..\..\lib\sl3\NUnit.Silverlight.Compatibility.dll</HintPath>
-		</Reference>
-	  </ItemGroup>
-	</When>
-	<When Condition="$(MSBuildTargets) == 'Silverlight 4.0'">
-	  <ItemGroup>
-		<Reference Include="NUnit.Silverlight.Framework">
-		  <SpecificVersion>False</SpecificVersion>
-		  <HintPath>..\..\lib\sl4\NUnit.Silverlight.Framework.dll</HintPath>
-		</Reference>
-		<Reference Include="NUnit.Silverlight.Compatibility">
-		  <SpecificVersion>False</SpecificVersion>
-		  <HintPath>..\..\lib\sl4\NUnit.Silverlight.Compatibility.dll</HintPath>
+		  <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NUnit.Silverlight.Compatibility.dll</HintPath>
 		</Reference>
 	  </ItemGroup>
 	</When>
