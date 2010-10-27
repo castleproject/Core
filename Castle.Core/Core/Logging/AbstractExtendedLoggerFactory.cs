@@ -23,8 +23,6 @@ namespace Castle.Core.Logging
 	public abstract class AbstractExtendedLoggerFactory : MarshalByRefObject, IExtendedLoggerFactory
 #endif
 	{
-		#region IExtendedLoggerFactory Members
-
 		/// <summary>
 		/// Creates a new extended logger, getting the logger name from the specified type.
 		/// </summary>
@@ -54,10 +52,6 @@ namespace Castle.Core.Logging
 		/// Creates a new extended logger.
 		/// </summary>
 		public abstract IExtendedLogger Create(string name, LoggerLevel level);
-
-		#endregion
-
-		#region ILoggerFactory Members
 
 		/// <summary>
 		/// Creates a new logger, getting the logger name from the specified type.
@@ -91,9 +85,6 @@ namespace Castle.Core.Logging
 			return Create(name, level);
 		}
 
-		#endregion
-
-#if !SILVERLIGHT
 		/// <summary>
 		/// Gets the configuration file.
 		/// </summary>
@@ -101,6 +92,7 @@ namespace Castle.Core.Logging
 		/// <returns></returns>
 		protected static FileInfo GetConfigFile(string fileName)
 		{
+#if !SILVERLIGHT
 			FileInfo result;
 
 			if (Path.IsPathRooted(fileName))
@@ -113,7 +105,9 @@ namespace Castle.Core.Logging
 			}
 
 			return result;
-		}
+#else
+			return new FileInfo(fileName);
 #endif
+		}
 	}
 }
