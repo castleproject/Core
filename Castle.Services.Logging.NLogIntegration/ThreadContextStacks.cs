@@ -12,14 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Services.Logging.NLogtIntegration
+namespace Castle.Services.Logging.NLogIntegration
 {
 	using Castle.Core.Logging;
 
+	///<summary>
+	///</summary>
 	public class ThreadContextStacks : IContextStacks
 	{
 		#region IContextStacks Members
 
+		/// <summary>
+		/// Gets the single <see cref="Castle.Core.Logging.IContextStack"/>.
+		/// </summary>
+		/// <value>The value of <param name="key"></param> is ignored because NLog only has a single stack</value>
 		public IContextStack this[string key]
 		{
 			get

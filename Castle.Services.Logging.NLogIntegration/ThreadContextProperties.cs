@@ -12,14 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Services.Logging.NLogtIntegration
+namespace Castle.Services.Logging.NLogIntegration
 {
 	using Castle.Core.Logging;
+	using NLog;
 
+	/// <summary>
+	/// Used to access to <see cref="MappedDiagnosticsContext"/>
+	/// </summary>
 	public class ThreadContextProperties : IContextProperties
 	{
-		#region IContextProperties Members
-
 		/// <summary>
 		/// Gets or sets the value of a property
 		/// </summary>
@@ -33,10 +35,8 @@ namespace Castle.Services.Logging.NLogtIntegration
 		/// </remarks>
 		public object this[string key]
 		{
-			get { return NLog.MappedDiagnosticsContext.Get(key); }
-			set { NLog.MappedDiagnosticsContext.Set(key, value.ToString()); }
+			get { return MappedDiagnosticsContext.Get(key); }
+			set { MappedDiagnosticsContext.Set(key, value.ToString()); }
 		}
-
-		#endregion
 	}
 }
