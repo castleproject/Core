@@ -168,17 +168,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <Choose>
-	<When Condition="$(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
-	  <ItemGroup>
-		<Reference Include="System.configuration" />
-		<Reference Include="System.Data" />
-		<Reference Include="System.Web" />
-		<Reference Include="nunit.framework">
-		  <SpecificVersion>False</SpecificVersion>
-		  <HintPath>..\..\lib\nunit.framework.dll</HintPath>
-		</Reference>
-	  </ItemGroup>
-	</When>
+    <When Condition="$(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
+      <ItemGroup>
+        <Reference Include="System.configuration" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Web" />
+        <Reference Include="nunit.framework">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+    </When>
   </Choose>
   <Choose>
 	<When Condition="$(MSBuildTargets) == 'Silverlight 3.0' or $(MSBuildTargets) == 'Silverlight 4.0'">
@@ -237,6 +237,19 @@
     <Compile Include="DynamicProxy.Tests\Classes\NonPublicMethodsClass.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ServiceClass.cs" />
     <Compile Include="ClassWithAttributesTestCase.cs" />
+    <Compile Include="DynamicProxy.Tests\SerializableClassTestCase.cs" />
+    <Compile Include="DynamicProxy.Tests\Serialization\C.cs" />
+    <Compile Include="DynamicProxy.Tests\Serialization\ClassWithDirectAndIndirectSelfReference.cs" />
+    <Compile Include="DynamicProxy.Tests\Serialization\ClassWithIndirectSelfReference.cs" />
+    <Compile Include="DynamicProxy.Tests\Serialization\ComplexHolder.cs" />
+    <Compile Include="DynamicProxy.Tests\Serialization\DelegateHolder.cs" />
+    <Compile Include="DynamicProxy.Tests\Serialization\EventHandlerClass.cs" />
+    <Compile Include="DynamicProxy.Tests\Serialization\SerializableExplicitImpl.cs" />
+    <Compile Include="DynamicProxy.Tests\Serialization\IMixedInterface.cs" />
+    <Compile Include="DynamicProxy.Tests\Serialization\IndirectDelegateHolder.cs" />
+    <Compile Include="DynamicProxy.Tests\Serialization\MethodFilterHook.cs" />
+    <Compile Include="DynamicProxy.Tests\Serialization\SerializableInterceptorSelector.cs" />
+    <Compile Include="DynamicProxy.Tests\Serialization\SerializableMixin.cs" />
     <Compile Include="GenClasses\ClassWithGenArgs.cs" />
     <Compile Include="GenClasses\ClassWithIndexer.cs" />
     <Compile Include="GenClasses\ClassWithMethodWithReturnArrayOfListOfT.cs" />
@@ -264,16 +277,16 @@
     <Compile Include="XmlSerializationTestCase.cs" />
   </ItemGroup>
   <Choose>
-	<When Condition="$(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
-	  <ItemGroup>
-		<Compile Include="log4netIntegration\log4netConfig.Designer.cs">
-		  <AutoGen>True</AutoGen>
-		  <DesignTime>True</DesignTime>
-		  <DependentUpon>log4netConfig.resx</DependentUpon>
-		</Compile>
-		<Compile Include="log4netIntegration\Log4netFactoryTestCase.cs" />
-	  </ItemGroup>
-	</When>
+    <When Condition="$(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
+      <ItemGroup>
+        <Compile Include="log4netIntegration\log4netConfig.Designer.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>log4netConfig.resx</DependentUpon>
+        </Compile>
+        <Compile Include="log4netIntegration\Log4netFactoryTestCase.cs" />
+      </ItemGroup>
+    </When>
   </Choose>
   <ItemGroup>
     <None Include="..\..\buildscripts\CastleKey.snk">
@@ -426,7 +439,6 @@
     <Compile Include="ProxyNothingHook.cs" />
     <Compile Include="ProxyTargetAccessorHandlingTestCase.cs" />
     <Compile Include="RhinoMocksTestCase.cs" />
-    <Compile Include="SerializableClassTestCase.cs" />
     <Compile Include="InternalsVisibleTo.cs" />
     <Compile Include="Interceptors\SetReturnValueInterceptor.cs" />
     <Compile Include="Interceptors\WithCallbackInterceptor.cs" />
@@ -474,14 +486,14 @@
     </ProjectReference>
   </ItemGroup>
   <Choose>
-	<When Condition="$(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
-	  <ItemGroup>
-		<ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj">
-		  <Project>{FA79D6B4-30B1-444A-A627-ED283BF6406B}</Project>
-		  <Name>Castle.Services.Logging.log4netIntegration</Name>
-		</ProjectReference>
-	  </ItemGroup>
-	</When>
+    <When Condition="$(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
+      <ItemGroup>
+        <ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj">
+          <Project>{FA79D6B4-30B1-444A-A627-ED283BF6406B}</Project>
+          <Name>Castle.Services.Logging.log4netIntegration</Name>
+        </ProjectReference>
+      </ItemGroup>
+    </When>
   </Choose>
   <ItemGroup>
     <None Include="..\..\buildscripts\CastleKey.snk">
