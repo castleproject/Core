@@ -40,10 +40,8 @@ namespace Castle.Components.Validator
 		{
 			this.property = property;
 			this.validationRegistry = validationRegistry;
-			if (errorMessage == null)
-			{
-				errorMessage = BuildErrorMessage();
-			}
+			
+			errorMessage = BuildErrorMessage();
 		}
 
 		/// <summary>

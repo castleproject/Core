@@ -17,28 +17,30 @@ namespace Castle.Components.Validator.Tests.LocalizationTests
 	using System;
 	using System.Globalization;
 	using System.Reflection;
+	using System.Resources;
 	using System.Threading;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class ErrorMessageAndFriendlyNameResourceLocalizationTestCase
 	{
+		private ValidatorRunner runner;
+		private CachedValidationRegistry cachedValidationRegistry;
+
 		#region Setup/Teardown
 
 		[SetUp]
 		public void SetUp()
 		{
-			runner = new ValidatorRunner(new CachedValidationRegistry());
+			cachedValidationRegistry = new CachedValidationRegistry(new ResourceManager("Castle.Components.Validator.Messages", typeof(CachedValidationRegistry).Assembly));
+			runner = new ValidatorRunner(cachedValidationRegistry);
 		}
 
 		#endregion
 
-		private ValidatorRunner runner;
-		private const string This_is_a_required_field = "This is a required field";
-
 		private static IDisposable SwitchUICulture(CultureInfo culture)
 		{
-			return new UICultureSwitcher(culture);
+			return new CultureSwitcher(culture);
 		}
 
 		[Test]
@@ -220,25 +222,41 @@ namespace Castle.Components.Validator.Tests.LocalizationTests
 				Assert.AreEqual(Messages.CorrectlyLocalized_DescriptionValidateNonEmpty, summary.ErrorMessages[0]);
 				Assert.AreEqual(Messages.CorrectlyLocalized_Description, summary.InvalidProperties[0]);
 			}
-
 		}
 
+		[Test]
+		public void LocalizedValidation_Can_Detect_CultureInfo_Change()
+		{
+			using (SwitchUICulture(CultureInfo.CreateSpecificCulture("en-US")))
+			{
+				var validators = cachedValidationRegistry.GetValidators(runner, typeof (LenghtLocalized), RunWhen.Everytime);
+
+				Assert.AreEqual("Field must be between 4 and 5 characters long", validators[0].ErrorMessage);
+			}
+
+			using (SwitchUICulture(CultureInfo.CreateSpecificCulture("es-ES")))
+			{
+				var validators = cachedValidationRegistry.GetValidators(runner, typeof(LenghtLocalized), RunWhen.Everytime);
+
+				Assert.AreEqual("Este campo debe tener entre 4 y 5 caracteres", validators[0].ErrorMessage);
+			}
+		}
 	}
 
-	internal class UICultureSwitcher : IDisposable
+	internal class CultureSwitcher : IDisposable
 	{
 		private readonly CultureInfo previousUICulture;
 
-		public UICultureSwitcher(CultureInfo newCulture)
+		public CultureSwitcher(CultureInfo newCulture)
 		{
-			previousUICulture = Thread.CurrentThread.CurrentUICulture;
+			previousUICulture = Thread.CurrentThread.CurrentCulture;
 
 			ThreadCurrentUICulture = newCulture;
 		}
 
 		private static CultureInfo ThreadCurrentUICulture
 		{
-			set { Thread.CurrentThread.CurrentUICulture = value; }
+			set { Thread.CurrentThread.CurrentCulture = value; }
 		}
 
 		#region IDisposable Members
@@ -331,5 +349,11 @@ namespace Castle.Components.Validator.Tests.LocalizationTests
 			ErrorMessageKey = "errormessage",
 			ResourceType = typeof(Messages))]
 		public string Bar { get; set; }
+	}
+
+	public class LenghtLocalized
+	{
+		[ValidateLength(4, 5)]
+		public string UserName { get; set; }
 	}
 }
