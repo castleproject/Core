@@ -16,6 +16,7 @@ namespace Castle.Components.Validator
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Reflection;
 	using System.Resources;
@@ -80,14 +81,14 @@ namespace Castle.Components.Validator
 				propertiesPerType[targetType] = properties = ResolveProperties(targetType);
 			}
 
-			ArrayList list = new ArrayList();
+			var list = new List<IValidator>();
 
-			foreach(PropertyInfo prop in properties)
+			foreach (PropertyInfo prop in properties)
 			{
 				list.AddRange(GetValidators(validatorRunner, targetType, prop, runWhen));
 			}
 
-			return (IValidator[]) list.ToArray(typeof(IValidator));
+			return list.ToArray();
 		}
 
 		/// <summary>
@@ -117,15 +118,15 @@ namespace Castle.Components.Validator
 
 				attrsPerProperty[property] = builders;
 
-				foreach(IValidatorBuilder builder in builders)
+				foreach (IValidatorBuilder builder in builders)
 				{
 					builder.Initialize(this, property);
 				}
 			}
 
-			ArrayList validators = new ArrayList();
+			var validators = new List<IValidator>();
 
-			foreach(IValidatorBuilder builder in builders)
+			foreach (IValidatorBuilder builder in builders)
 			{
 				IValidator validator = builder.Build(validatorRunner, targetType);
 
@@ -135,7 +136,7 @@ namespace Castle.Components.Validator
 				validators.Add(validator);
 			}
 
-			return (IValidator[]) validators.ToArray(typeof(IValidator));
+			return validators.ToArray();
 		}
 
 		/// <summary>
