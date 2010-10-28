@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,22 +17,22 @@ namespace Castle.DynamicProxy
 	using System;
 
 #if SILVERLIGHT
-    public class StandardInterceptor : IInterceptor
+	public class StandardInterceptor : IInterceptor
 #else
 	[Serializable]
-    public class StandardInterceptor : MarshalByRefObject, IInterceptor
+	public class StandardInterceptor : MarshalByRefObject, IInterceptor
 #endif
 	{
 		public void Intercept(IInvocation invocation)
 		{
 			PreProceed(invocation);
 			PerformProceed(invocation);
-			PostProceed (invocation);
+			PostProceed(invocation);
 		}
 
 		protected virtual void PerformProceed(IInvocation invocation)
 		{
-			invocation.Proceed ();
+			invocation.Proceed();
 		}
 
 		protected virtual void PreProceed(IInvocation invocation)
