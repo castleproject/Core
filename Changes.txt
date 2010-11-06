@@ -1,3 +1,4 @@
+- fixed CORE-32 - Determining if permission is granted via PermissionUtil does not work in .NET 4
 - implemented DYNPROXY-139 - Better error message 
 - fixed DYNPROXY-133 - Debug assertion in ClassProxyInstanceContributor fails when proxying ISerializable with an explicit implementation of GetObjectData
 - applied patch by Alwin Meijs - ExtendedLog4netFactory can be configured with a stream from for example an embedded log4net xml config
