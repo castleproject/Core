@@ -113,11 +113,11 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core" Condition="$(Configuration.StartsWith(&quot;SL&quot;))">
+    <Reference Include="Castle.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Castle.Core\bin\$(Configuration)\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Core.Tests" Condition="$(Configuration.StartsWith(&quot;SL&quot;))">
+    <Reference Include="Castle.Core.Tests">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Castle.Core.Tests\bin\$(Configuration)\Castle.Core.Tests.dll</HintPath>
     </Reference>

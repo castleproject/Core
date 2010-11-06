@@ -12,15 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Services.Logging.NLogtIntegration
+namespace Castle.Services.Logging.NLogIntegration
 {
 	using Castle.Core.Logging;
 	using NLog;
 
+	/// <summary>
+	/// Used to access <see cref="GlobalDiagnosticsContext"/>
+	/// </summary>
 	public class GlobalContextProperties : IContextProperties
 	{
-		#region IContextProperties Members
-
 		/// <summary>
 		/// Gets or sets the value of a property
 		/// </summary>
@@ -37,7 +38,5 @@ namespace Castle.Services.Logging.NLogtIntegration
 			get { return GlobalDiagnosticsContext.Get(key); }
 			set { GlobalDiagnosticsContext.Set(key, value.ToString()); }
 		}
-
-		#endregion
 	}
 }

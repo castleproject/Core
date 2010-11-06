@@ -16,10 +16,12 @@ namespace Castle.Services.Logging.NLogIntegration
 {
 	using System;
 	using Castle.Core.Logging;
-	using Castle.Services.Logging.NLogtIntegration;
 	using NLog;
 	using ExtendedLogger = Core.Logging.IExtendedLogger;
 
+	/// <summary>
+	/// Implementation of <see cref="IExtendedLogger"/> for NLog.
+	/// </summary>
 	public class ExtendedNLogLogger : NLogLogger, ExtendedLogger
 	{
 		private static readonly IContextProperties globalProperties = new GlobalContextProperties();
@@ -28,22 +30,41 @@ namespace Castle.Services.Logging.NLogIntegration
 
 		private ExtendedNLogFactory factory;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ExtendedNLogLogger"/> class.
+		/// </summary>
+		/// <param name="logger">The logger.</param>
+		/// <param name="factory">The factory.</param>
 		public ExtendedNLogLogger(Logger logger, ExtendedNLogFactory factory)
 		{
 			Logger = logger;
 			Factory = factory;
 		}
 
+		/// <summary>
+		/// Creates a child logger with the specied <paramref name="name"/>.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
 		public override ILogger CreateChildLogger(String name)
 		{
 			return CreateExtendedChildLogger(name);
 		}
 
+		/// <summary>
+		/// Creates an extended child logger with the specified <paramref name="name"/>
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
 		public ExtendedLogger CreateExtendedChildLogger(String name)
 		{
 			return Factory.Create(Logger.Name + "." + name);
 		}
 
+		/// <summary>
+		/// Gets or sets the factory.
+		/// </summary>
+		/// <value>The factory.</value>
 		protected internal new ExtendedNLogFactory Factory
 		{
 			get { return factory; }
