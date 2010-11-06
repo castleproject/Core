@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,28 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+namespace Castle.Core.Tests.Internal
 {
-	using System;
-	using System.Security;
-	using System.Security.Permissions;
-	
 #if !SILVERLIGHT
-	public static class PermissionUtil
-	{
-#if DOTNET
-		[SecuritySafeCritical]
-#endif
-		public static bool IsGranted(this IPermission permission)
-		{
-#if DOTNET35 || MONO26
-			return SecurityManager.IsGranted(permission);
-#else
-			var permissionSet = new PermissionSet(PermissionState.None);
-			permissionSet.AddPermission(permission);
+	using System.Security.Permissions;
 
-			return permissionSet.IsSubsetOf(AppDomain.CurrentDomain.PermissionSet);
-#endif
+	using Castle.Core.Internal;
+
+	using NUnit.Framework;
+
+	[TestFixture]
+	public class PermissionUtilTestCase
+	{
+		[Test]
+		public void Correctly_determines_permissions()
+		{
+			// Execution has to be always granted. Otherwise this code wouldn't run in the first place.
+			var securityPermission = new SecurityPermission(SecurityPermissionFlag.Execution);
+
+			Assert.IsTrue(securityPermission.IsGranted());
 		}
 	}
 #endif

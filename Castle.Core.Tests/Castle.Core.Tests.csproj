@@ -181,18 +181,18 @@
     </When>
   </Choose>
   <Choose>
-	<When Condition="$(MSBuildTargets) == 'Silverlight 3.0' or $(MSBuildTargets) == 'Silverlight 4.0'">
-	  <ItemGroup>
-		<Reference Include="NUnit.Silverlight.Framework">
-		  <SpecificVersion>False</SpecificVersion>
-		  <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NUnit.Silverlight.Framework.dll</HintPath>
-		</Reference>
-		<Reference Include="NUnit.Silverlight.Compatibility">
-		  <SpecificVersion>False</SpecificVersion>
-		  <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NUnit.Silverlight.Compatibility.dll</HintPath>
-		</Reference>
-	  </ItemGroup>
-	</When>
+    <When Condition="$(MSBuildTargets) == 'Silverlight 3.0' or $(MSBuildTargets) == 'Silverlight 4.0'">
+      <ItemGroup>
+        <Reference Include="NUnit.Silverlight.Framework">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NUnit.Silverlight.Framework.dll</HintPath>
+        </Reference>
+        <Reference Include="NUnit.Silverlight.Compatibility">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NUnit.Silverlight.Compatibility.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+    </When>
   </Choose>
   <ItemGroup>
     <Compile Include="AccessLevelTestCase.cs" />
@@ -227,6 +227,7 @@
     <Compile Include="Components.DictionaryAdapter.Tests\IStringLists.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Phone.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\PhoneConverter.cs" />
+    <Compile Include="Core.Tests\Internal\PermissionUtilTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithParamsArrayCtorArg.cs" />
     <Compile Include="DynamicProxy.Tests\DelegateProxyTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasNonInheritableAttribute.cs" />
