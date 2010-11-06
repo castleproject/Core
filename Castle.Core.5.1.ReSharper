@@ -163,7 +163,7 @@ II.2.12 <HandlesEvent />
   </Pattern>
 
   <!--Default pattern-->
-  <Pattern>
+  <Pattern RemoveAllRegions="true">
     <!--according to http://castleproject.org/community/codingstandards.html-->
     <!--constants-->
     <Entry>
@@ -182,8 +182,8 @@ II.2.12 <HandlesEvent />
       </Match>
       <Sort>
         <Static/>
-        <Readonly/>
         <Access/>
+        <Readonly/>
         <Name/>
       </Sort>
     </Entry>
@@ -216,8 +216,8 @@ II.2.12 <HandlesEvent />
       <Sort>
         <Kind Order="property indexer method"/>
         <Abstract/>
-        <ImplementsInterface/>
         <Access/>
+        <ImplementsInterface/>
         <Readonly/>
         <Name/>
       </Sort>
@@ -238,8 +238,8 @@ II.2.12 <HandlesEvent />
       <Sort>
         <Kind Order="property indexer method"/>
         <Abstract/>
-        <ImplementsInterface/>
         <Access/>
+        <ImplementsInterface/>
         <Readonly/>
         <Name/>
       </Sort>
@@ -346,4 +346,18 @@ limitations under the License.
       <Abbreviation Text="CLR" />
     </Naming2>
   </CodeStyleSettings>
+  <SharedSolutionTemplateManager>
+    <LiveTemplates>
+      <Template uid="23b01823-0695-4cc8-9dad-7e352945de81" shortcut="test" description="NUnit unit test" text="[NUnit.Framework.Test]&#xD;&#xA;public void $member_should_action$()&#xD;&#xA;{&#xD;&#xA;	$END$&#xD;&#xA;}" reformat="True" shortenQualifiedReferences="True">
+        <Context>
+          <CSharpContext context="TypeMember" minimumLanguageVersion="2.0" />
+        </Context>
+        <Categories />
+        <Variables>
+          <Variable name="member_should_action" expression="" initialRange="0" />
+        </Variables>
+        <CustomProperties />
+      </Template>
+    </LiveTemplates>
+  </SharedSolutionTemplateManager>
 </Configuration>
