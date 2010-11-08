@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy
 #endif
 	public class AllMethodsHook : IProxyGenerationHook
 	{
-		private static readonly ICollection<Type> SkippedTypes = new[]
+		protected static readonly ICollection<Type> SkippedTypes = new[]
 		                                              	{
 		                                              		typeof (object),
 #if !SILVERLIGHT
@@ -33,22 +33,22 @@ namespace Castle.DynamicProxy
 #endif
 		                                              	};
 
-		public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
+		public virtual bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
 		{
 			return SkippedTypes.Contains(methodInfo.DeclaringType) == false;
 		}
 
-		public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
+		public virtual void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
 		{
 		}
 
-		public void MethodsInspected()
+		public virtual void MethodsInspected()
 		{
 		}
 
 		public override bool Equals(object obj)
 		{
-			return obj != null && obj.GetType() == typeof (AllMethodsHook);
+			return obj != null && obj.GetType() == GetType();
 		}
 
 		public override int GetHashCode()
