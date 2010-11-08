@@ -3,7 +3,6 @@
   <PropertyGroup>
     <RootPath Condition=" '$(RootPath)' == '' ">$(MSBuildProjectDirectory)\..\..</RootPath>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">NET40-Release</Configuration>
@@ -21,6 +20,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET40-Debug|AnyCPU' ">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+	<TargetFrameworkProfile></TargetFrameworkProfile>
     <OutputPath>bin\NET40-Debug\</OutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -33,6 +33,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET40-Release|AnyCPU' ">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+	<TargetFrameworkProfile></TargetFrameworkProfile>
     <OutputPath>bin\NET40-Release\</OutputPath>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -483,7 +484,7 @@
     </ProjectReference>
   </ItemGroup>
   <Choose>
-    <When Condition="$(TargetFrameworkProfile) != 'Client' and $(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
+    <When Condition="$(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
       <ItemGroup>
         <ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj">
           <Project>{FA79D6B4-30B1-444A-A627-ED283BF6406B}</Project>

@@ -27,7 +27,6 @@ limitations under the License.
 	-->
 	<PropertyGroup>
 		<Configuration Condition="$(Configuration)=='' or $(Configuration)=='Release'">NET40-Release</Configuration>
-		<TargetFrameworkProfile></TargetFrameworkProfile>
 	</PropertyGroup>
 
 
@@ -35,7 +34,6 @@ limitations under the License.
 	<PropertyGroup Condition="$(Configuration) == 'NET40-Release' or $(Configuration) == 'NET40-Debug'">
 		<BuildConfigKey>NET40</BuildConfigKey>
 		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-		<TargetFrameworkProfile>Client</TargetFrameworkProfile>
 	</PropertyGroup>
 
 	<!-- .NET 3.5 -->
