@@ -51,6 +51,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Debug|AnyCPU'">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
     <OutputPath>bin\NET35-Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY DOTNET DOTNET35</DefineConstants>
     <DocumentationFile>
@@ -65,6 +66,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Release|AnyCPU'">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
     <OutputPath>bin\NET35-Release\</OutputPath>
     <DefineConstants>TRACE;PHYSICALASSEMBLY DOTNET DOTNET35</DefineConstants>
     <DocumentationFile>bin\NET35-Release\Castle.Core.xml</DocumentationFile>
@@ -77,6 +79,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Release|AnyCPU'">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
     <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
     <OutputPath>bin\SL40-Release\</OutputPath>
     <DefineConstants>TRACE;PHYSICALASSEMBLY SILVERLIGHT SL4</DefineConstants>
@@ -90,6 +93,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Debug|AnyCPU'">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
     <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\SL40-Debug\</OutputPath>
@@ -103,6 +107,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL30-Debug|AnyCPU'">
+    <TargetFrameworkProfile></TargetFrameworkProfile>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\SL30-Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY SILVERLIGHT SL3</DefineConstants>
@@ -115,6 +120,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL30-Release|AnyCPU'">
+    <TargetFrameworkProfile></TargetFrameworkProfile>
     <OutputPath>bin\SL30-Release\</OutputPath>
     <DefineConstants>TRACE;PHYSICALASSEMBLY SILVERLIGHT SL3</DefineConstants>
     <DocumentationFile>bin\SL30-Release\Castle.Core.xml</DocumentationFile>
@@ -126,6 +132,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Debug|AnyCPU'">
+    <TargetFrameworkProfile></TargetFrameworkProfile>
     <OutputPath>bin\MONO26-Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY MONO MONO26</DefineConstants>
     <DocumentationFile>bin\MONO26-Debug\Castle.Core.xml</DocumentationFile>
@@ -138,6 +145,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Release|AnyCPU'">
+    <TargetFrameworkProfile></TargetFrameworkProfile>
     <OutputPath>bin\MONO26-Release\</OutputPath>
     <DefineConstants>TRACE;PHYSICALASSEMBLY MONO MONO26</DefineConstants>
     <DocumentationFile>bin\MONO26-Release\Castle.Core.xml</DocumentationFile>
@@ -148,6 +156,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO28-Debug|AnyCPU'">
+    <TargetFrameworkProfile></TargetFrameworkProfile>
     <OutputPath>bin\MONO28-Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY MONO MONO28</DefineConstants>
     <DocumentationFile>bin\MONO28-Debug\Castle.Core.xml</DocumentationFile>
@@ -160,6 +169,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO28-Release|AnyCPU'">
+    <TargetFrameworkProfile></TargetFrameworkProfile>
     <OutputPath>bin\MONO28-Release\</OutputPath>
     <DefineConstants>TRACE;PHYSICALASSEMBLY MONO MONO28</DefineConstants>
     <DocumentationFile>bin\MONO28-Release\Castle.Core.xml</DocumentationFile>
