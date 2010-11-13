@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,18 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy
+namespace Castle.DynamicProxy.Tests.Classes
 {
-	using System;
-
-	public class ProxyGenerationException : Exception
+	public class HasFinalizeMethod
 	{
-		public ProxyGenerationException(string message) : base(message)
+#pragma warning disable 0465 //Introducing a 'Finalize' method can interfere with destructor invocation. Did you intend to declare a destructor?	e:\OSS.Code\Castle.Core\src\Castle.Core.Tests\DynamicProxy.Tests\Classes\HasFinalizeMethod.cs	20	26	Castle.Core.Tests
+		protected virtual void Finalize()
 		{
 		}
-
-		public ProxyGenerationException(string message, Exception innerException) : base(message, innerException)
-		{
-		}
+#pragma warning restore 0465
 	}
 }
