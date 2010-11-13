@@ -22,18 +22,19 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Tests.Interfaces;
 
 	using NUnit.Framework;
+
 #if !SILVERLIGHT
 	[TestFixture]
 	public class ExplicitInterfaceTestCase : BasePEVerifyTestCase
 	{
-
-		public override void Init()
-		{
-			base.Init();
-			interceptor = new LogInvocationInterceptor();
-		}
-
 		private LogInvocationInterceptor interceptor;
+
+		[Test]
+		public void Can_proxy_class_with_two_explicit_methods_differing_only_by_return_type()
+		{
+			generator.CreateClassProxy(typeof(TwoInterfacesExplicit), new[] { typeof(ISimpleInterface), typeof(IDisposable) },
+			                           interceptor);
+		}
 
 		[Test]
 		public void ExplicitGenericInterface()
@@ -64,11 +65,10 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ExplicitGenericMethod_without_base_call()
 		{
-			
 			var proxy = (IGenericInterface)generator.CreateClassProxy(typeof(GenericMethodExplicit),
-																	  new[] { typeof(IGenericInterface) },
-																	  interceptor,
-																	  new SetReturnValueInterceptor(5));
+			                                                          new[] { typeof(IGenericInterface) },
+			                                                          interceptor,
+			                                                          new SetReturnValueInterceptor(5));
 
 			var result = proxy.GenericMethod<int>();
 
@@ -100,7 +100,7 @@ namespace Castle.DynamicProxy.Tests
 			                                                                interceptor);
 
 			proxy.DoVirtual();
-			int result = ((ISimpleInterface)proxy).Do();
+			var result = ((ISimpleInterface)proxy).Do();
 			proxy.DoVirtual();
 
 			Assert.AreEqual(3, interceptor.Invocations.Count);
@@ -155,13 +155,19 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("Did ", interceptor.LogContents);
 		}
 
+		public override void Init()
+		{
+			base.Init();
+			interceptor = new LogInvocationInterceptor();
+		}
+
 		[Test]
 		public void NonVirtualExplicitInterfaceMethods_AreIgnored_OnClassProxy()
 		{
 			var instance = generator.CreateClassProxy<SimpleInterfaceExplicit>(interceptor);
 
 			instance.DoVirtual();
-			int result = ((ISimpleInterface)instance).Do();
+			var result = ((ISimpleInterface)instance).Do();
 			instance.DoVirtual();
 
 			Assert.AreEqual(2, interceptor.Invocations.Count);
@@ -172,6 +178,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 #endif
+
 	public class ExplicitInterfaceWithPropertyImplementation : ISimpleInterfaceWithProperty
 	{
 		public int Age

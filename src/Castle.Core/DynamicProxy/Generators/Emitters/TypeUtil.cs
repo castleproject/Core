@@ -11,7 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
@@ -21,10 +20,35 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	public static class TypeUtil
 	{
+		public static FieldInfo[] GetAllFields(this Type type)
+		{
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
+
+			if (type.IsClass == false)
+			{
+				throw new ArgumentException(string.Format("Type {0} is not a class type. This method supports only classes", type));
+			}
+
+			var fields = new List<FieldInfo>();
+			var currentType = type;
+			while (currentType != typeof(object))
+			{
+				var currentFields =
+					currentType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+				fields.AddRange(currentFields);
+				currentType = currentType.BaseType;
+			}
+
+			return fields.ToArray();
+		}
+
 		/// <summary>
 		///   Returns list of all unique interfaces implemented given types, including their base interfaces.
 		/// </summary>
-		/// <param name="types"></param>
+		/// <param name = "types"></param>
 		/// <returns></returns>
 		public static ICollection<Type> GetAllInterfaces(params Type[] types)
 		{
@@ -59,14 +83,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static ICollection<Type> GetAllInterfaces(this Type type)
 		{
-			return GetAllInterfaces(new[] {type});
-		}
-
-		public static void SetStaticField(this Type type, string fieldName, BindingFlags additionalFlags, object value)
-		{
-			var flags = additionalFlags | BindingFlags.Static | BindingFlags.SetField;
-
-			type.InvokeMember(fieldName, flags, null, null, new[] {value});
+			return GetAllInterfaces(new[] { type });
 		}
 
 		public static Type GetClosedParameterType(this AbstractTypeEmitter type, Type parameter)
@@ -105,6 +122,43 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return parameter;
 		}
 
+		public static void SetStaticField(this Type type, string fieldName, BindingFlags additionalFlags, object value)
+		{
+			var flags = additionalFlags | BindingFlags.Static | BindingFlags.SetField;
+
+			try
+			{
+				type.InvokeMember(fieldName, flags, null, null, new[] { value });
+			}
+			catch (MissingFieldException e)
+			{
+				throw new ProxyGenerationException(
+					string.Format(
+						"Could not find field named '{0}' on type {1}. This is likely a bug in DynamicProxy. Please report it.",
+						fieldName,
+						type), e);
+			}
+			catch (TargetException e)
+			{
+				throw new ProxyGenerationException(
+					string.Format(
+						"There was an error trying to set field named '{0}' on type {1}. This is likely a bug in DynamicProxy. Please report it.",
+						fieldName,
+						type), e);
+			}
+			catch (TargetInvocationException e) // yes, this is not documented in MSDN. Yay for documentation
+			{
+				if ((e.InnerException is TypeInitializationException) == false)
+				{
+					throw;
+				}
+				throw new ProxyGenerationException(
+					string.Format(
+						"There was an error in static constructor on type {0}. This is likely a bug in DynamicProxy. Please report it.",
+						type), e);
+			}
+		}
+
 		public static MemberInfo[] Sort(MemberInfo[] members)
 		{
 			Array.Sort(members, (l, r) => string.Compare(l.Name, r.Name));
@@ -124,28 +178,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 			}
 			return hasAnyGenericParameters;
-		}
-
-		public static FieldInfo[] GetAllFields(this Type type)
-		{
-			if (type == null) throw new ArgumentNullException("type");
-
-			if (type.IsClass == false)
-			{
-				throw new ArgumentException(string.Format("Type {0} is not a class type. This method supports only classes", type));
-			}
-
-			var fields = new List<FieldInfo>();
-			var currentType = type;
-			while (currentType != typeof (object))
-			{
-				var currentFields =
-					currentType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
-				fields.AddRange(currentFields);
-				currentType = currentType.BaseType;
-			}
-
-			return fields.ToArray();
 		}
 
 		private static Type[] Sort(IEnumerable<Type> types)
