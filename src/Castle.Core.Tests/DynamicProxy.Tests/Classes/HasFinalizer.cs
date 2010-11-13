@@ -12,17 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy
+namespace Castle.DynamicProxy.Tests.Classes
 {
-	using System;
-
-	public class ProxyGenerationException : Exception
+	public class HasFinalizer
 	{
-		public ProxyGenerationException(string message) : base(message)
-		{
-		}
-
-		public ProxyGenerationException(string message, Exception innerException) : base(message, innerException)
+		~HasFinalizer()
 		{
 		}
 	}
