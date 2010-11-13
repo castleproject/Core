@@ -1,3 +1,4 @@
+- implemented DYNPROXY-149 - Make AllMethodsHook members virtual so it can be used as a base class
 - fixed CORE-32 - Determining if permission is granted via PermissionUtil does not work in .NET 4
 - implemented DYNPROXY-139 - Better error message 
 - fixed DYNPROXY-133 - Debug assertion in ClassProxyInstanceContributor fails when proxying ISerializable with an explicit implementation of GetObjectData
