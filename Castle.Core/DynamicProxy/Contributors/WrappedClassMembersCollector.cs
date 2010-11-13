@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
+
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 
@@ -33,38 +34,53 @@ namespace Castle.DynamicProxy.Contributors
 			// TODO: perhaps we should also look for nested classes...
 		}
 
-		private void CollectFields(IProxyGenerationHook hook)
-		{
-			var fields = type.GetAllFields();
-			foreach (var field in fields)
-			{
-				if(IsOKToBeOnProxy(field)) continue;
-
-				hook.NonProxyableMemberNotification(type, field);
-			}
-		}
-
-#if SILVERLIGHT
 		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
 		{
+#if SILVERLIGHT
 			if(method.IsPublic == false)
 			{
 				// we can't proxy protected methods like this on Silverlight
 				return null;
 			}
-			return base.GetMethodToGenerate(method, hook, isStandalone);
-		}
 #endif
+			if (!IsAccessible(method))
+			{
+				return null;
+			}
 
-		protected virtual bool IsOKToBeOnProxy(FieldInfo field)
-		{
-			return IsGeneratedByTheCompiler(field);
+			var accepted = AcceptMethod(method, true, hook);
+			if (!accepted && !method.IsAbstract)
+			{
+				//we don't need to do anything...
+				return null;
+			}
+
+			return new MetaMethod(method, method, isStandalone, accepted, hasTarget: true);
 		}
 
 		protected bool IsGeneratedByTheCompiler(FieldInfo field)
 		{
 			// for example fields backing autoproperties
 			return Attribute.IsDefined(field, typeof(CompilerGeneratedAttribute));
+		}
+
+		protected virtual bool IsOKToBeOnProxy(FieldInfo field)
+		{
+			return IsGeneratedByTheCompiler(field);
+		}
+
+		private void CollectFields(IProxyGenerationHook hook)
+		{
+			var fields = type.GetAllFields();
+			foreach (var field in fields)
+			{
+				if (IsOKToBeOnProxy(field))
+				{
+					continue;
+				}
+
+				hook.NonProxyableMemberNotification(type, field);
+			}
 		}
 	}
 }
