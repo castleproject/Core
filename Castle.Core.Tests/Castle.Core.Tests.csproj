@@ -20,7 +20,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET40-Debug|AnyCPU' ">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-	<TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <OutputPath>bin\NET40-Debug\</OutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -33,7 +34,8 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET40-Release|AnyCPU' ">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-	<TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <OutputPath>bin\NET40-Release\</OutputPath>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -225,7 +227,14 @@
     <Compile Include="Components.DictionaryAdapter.Tests\Phone.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\PhoneConverter.cs" />
     <Compile Include="Core.Tests\Internal\PermissionUtilTestCase.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\AbstractClassWithMethod.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithParamsArrayCtorArg.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\HasFinalizeMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\HasFinalizer.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\InheritsDbConnection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DynamicProxy.Tests\Classes\InheritsAbstractClassWithMethod.cs" />
     <Compile Include="DynamicProxy.Tests\DelegateProxyTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasNonInheritableAttribute.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassToSerialize.cs" />
@@ -495,7 +504,7 @@
           <SpecificVersion>False</SpecificVersion>
           <HintPath>..\..\lib\net35\log4net.dll</HintPath>
         </Reference>
-      </ItemGroup>	  
+      </ItemGroup>
     </When>
   </Choose>
   <ItemGroup>

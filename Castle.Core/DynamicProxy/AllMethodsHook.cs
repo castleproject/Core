@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Reflection;
 
 #if !SILVERLIGHT
@@ -35,7 +34,12 @@ namespace Castle.DynamicProxy
 
 		public virtual bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
 		{
-			return SkippedTypes.Contains(methodInfo.DeclaringType) == false;
+			return SkippedTypes.Contains(methodInfo.DeclaringType) == false && IsFinalizer(methodInfo) == false;
+		}
+
+		protected bool IsFinalizer(MethodInfo methodInfo)
+		{
+			return methodInfo.Name == "Finalize" && methodInfo.GetBaseDefinition().DeclaringType == typeof(object);
 		}
 
 		public virtual void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)

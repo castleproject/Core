@@ -516,6 +516,29 @@ namespace Castle.DynamicProxy.Tests
 			(proxy as VirtuallyImplementsInterfaceWithEvent).MyEvent += null;
 			(proxy as IHasEvent).MyEvent += null;
 		}
+
+		[Test]
+		public void Finalizer_is_not_proxied()
+		{
+			var proxy = generator.CreateClassProxy<HasFinalizer>();
+
+			var finalize = proxy.GetType().GetMethod("Finalize", BindingFlags.Instance | BindingFlags.NonPublic);
+
+			Assert.IsNotNull(finalize);
+			Assert.AreEqual(typeof(HasFinalizer), finalize.DeclaringType, "Finalizer shouldn't have been proxied");
+		}
+
+		[Test]
+		public void Finalize_method_is_proxied_even_though_its_not_the_best_idea_ever()
+		{
+			var proxy = generator.CreateClassProxy<HasFinalizeMethod>();
+
+			var finalize = proxy.GetType().GetMethod("Finalize", BindingFlags.Instance | BindingFlags.NonPublic);
+
+			Assert.IsNotNull(finalize);
+			Assert.AreNotEqual(typeof(HasFinalizeMethod), finalize.DeclaringType, "Finalize method is not a finalizer and should have been proxied");
+		}
+
 		public class ResultModifierInterceptor : StandardInterceptor
 		{
 			protected override void PostProceed(IInvocation invocation)
