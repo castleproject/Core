@@ -231,6 +231,7 @@
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithParamsArrayCtorArg.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasFinalizeMethod.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasFinalizer.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\HasTwoProtectedMethods.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\InheritsDbConnection.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -244,6 +245,7 @@
     <Compile Include="DynamicProxy.Tests\Classes\NonPublicMethodsClass.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ServiceClass.cs" />
     <Compile Include="ClassWithAttributesTestCase.cs" />
+    <Compile Include="DynamicProxy.Tests\Explicit\TwoInterfacesExplicit.cs" />
     <Compile Include="DynamicProxy.Tests\ProxyTypeCachingWithDifferentHooksTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\SerializableClassTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Serialization\C.cs" />

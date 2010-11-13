@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Linq;
 	using System.Reflection;
 	using System.Reflection.Emit;
 
@@ -170,7 +171,9 @@ namespace Castle.DynamicProxy.Contributors
 			var key = new CacheKey(
 				typeof(Delegate),
 				targetType,
-				ArgumentsUtil.GetTypes(method.MethodOnTarget.GetParameters()),
+				new[] { method.MethodOnTarget.ReturnType }
+					.Concat(ArgumentsUtil.GetTypes(method.MethodOnTarget.GetParameters())).
+					ToArray(),
 				null);
 
 			var type = scope.GetFromCache(key);

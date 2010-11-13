@@ -54,9 +54,23 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void Can_proxy_class_with_two_protected_methods_differing_by_return_type()
+		{
+			generator.CreateClassProxyWithTarget(new HasTwoProtectedMethods());
+		}
+
+		[Test]
 		public void Can_proxy_purely_virtual_class()
 		{
 			var proxy = generator.CreateClassProxyWithTarget(new VirtualClassWithMethod());
+			var result = proxy.Method();
+			Assert.AreEqual(42, result);
+		}
+
+		[Test]
+		public void Can_proxy_purely_virtual_inherited_abstract_class()
+		{
+			var proxy = generator.CreateClassProxyWithTarget<AbstractClassWithMethod>(new InheritsAbstractClassWithMethod());
 			var result = proxy.Method();
 			Assert.AreEqual(42, result);
 		}
