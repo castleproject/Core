@@ -17,11 +17,14 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 #if !SILVERLIGHT
 	using System.Xml.Serialization;
 #endif
+	using Castle.Components.DictionaryAdapter;
+	using Castle.Core.Internal;
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
@@ -149,6 +152,16 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			var constructor = emitter.CreateConstructor(args);
+			if(baseConstructorParams != null && baseConstructorParams.Length != 0)
+			{
+				var last = baseConstructorParams.Last();
+				if (last.ParameterType.IsArray && last.HasAttribute<ParamArrayAttribute>())
+				{
+					var parameter = constructor.ConstructorBuilder.DefineParameter(args.Length, ParameterAttributes.None, last.Name);
+					var builder = AttributeUtil.CreateBuilder<ParamArrayAttribute>();
+					parameter.SetCustomAttribute(builder);
+				}
+			}
 
 			for (var i = 0; i < fields.Length; i++)
 			{

@@ -30,6 +30,9 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Xml.XPath;
 #endif
 	using System.Diagnostics;
+
+	using Castle.Core.Internal;
+
 	/// <summary>
 	/// Uses Reflection.Emit to expose the properties of a dictionary
 	/// through a dynamic implementation of a typed interface.

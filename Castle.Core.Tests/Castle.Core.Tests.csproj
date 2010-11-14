@@ -228,7 +228,7 @@
     <Compile Include="Components.DictionaryAdapter.Tests\PhoneConverter.cs" />
     <Compile Include="Core.Tests\Internal\PermissionUtilTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\AbstractClassWithMethod.cs" />
-    <Compile Include="DynamicProxy.Tests\Classes\ClassWithParamsArrayCtorArg.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\HasCtorWithParamsStrings.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasCtorWithIntAndParamsArgument.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasCtorWithParamsArgument.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasFinalizeMethod.cs" />
@@ -375,7 +375,7 @@
     <Compile Include="DynamicProxy.Tests\Classes\SimpleClass.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassOverridingEqualsAndGetHashCode.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithDefaultConstructor.cs" />
-    <Compile Include="ClassProxyConstructorsTestCase.cs" />
+    <Compile Include="DynamicProxy.Tests\ClassProxyConstructorsTestCase.cs" />
     <Compile Include="Interceptors\DoNothingInterceptor.cs" />
     <Compile Include="GenClasses\ClassWithMethodWithArrayOfListOfT.cs" />
     <Compile Include="GenClasses\ClassWithMethodWithGenericOfGenericOfT.cs" />

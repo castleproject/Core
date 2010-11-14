@@ -113,7 +113,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			if (TypeBuilder.IsInterface)
 				throw new InvalidOperationException ("Interfaces cannot have constructors.");
 
-			ConstructorEmitter member = new ConstructorEmitter(this, arguments);
+			var member = new ConstructorEmitter(this, arguments);
 			constructors.Add(member);
 			return member;
 		}

@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,25 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.DictionaryAdapter
+namespace Castle.Core.Internal
 {
 	using System;
 	using System.ComponentModel;
+	using System.Linq;
 	using System.Reflection;
 
 	/// <summary>
-	/// Helper class for retrieving attributes.
+	///   Helper class for retrieving attributes.
 	/// </summary>
 	public static class AttributesUtil
 	{
 		/// <summary>
-		/// Gets the type attribute.
+		///   Gets the attribute.
 		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns>The type attribute.</returns>
-		public static T GetTypeAttribute<T>(Type type) where T : class
+		/// <param name = "member">The member.</param>
+		/// <returns>The member attribute.</returns>
+		public static T GetAttribute<T>(this ICustomAttributeProvider member) where T : class
 		{
-			T attribute = GetAttribute<T>(type);
+			return GetAttributes<T>(member).FirstOrDefault();
+		}
+
+		/// <summary>
+		///   Gets the attributes. Does not consider inherited attributes!
+		/// </summary>
+		/// <param name = "member">The member.</param>
+		/// <returns>The member attributes.</returns>
+		public static T[] GetAttributes<T>(this ICustomAttributeProvider member) where T : class
+		{
+			if (typeof(T) != typeof(object))
+			{
+				return (T[])member.GetCustomAttributes(typeof(T), false);
+			}
+			return (T[])member.GetCustomAttributes(false);
+		}
+
+		/// <summary>
+		///   Gets the type attribute.
+		/// </summary>
+		/// <param name = "type">The type.</param>
+		/// <returns>The type attribute.</returns>
+		public static T GetTypeAttribute<T>(this Type type) where T : class
+		{
+			var attribute = GetAttribute<T>(type);
 
 			if (attribute == null)
 			{
@@ -48,24 +73,9 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		/// <summary>
-		/// Gets the attribute.
+		///   Gets the type attributes.
 		/// </summary>
-		/// <param name="member">The member.</param>
-		/// <returns>The member attribute.</returns>
-		public static T GetAttribute<T>(MemberInfo member) where T : class
-		{
-			var attributes = GetAttributes<T>(member);
-			if (attributes.Length > 0)
-			{
-				return (T)attributes[0];
-			}
-			return null;
-		}
-
-		/// <summary>
-		/// Gets the type attributes.
-		/// </summary>
-		/// <param name="type">The type.</param>
+		/// <param name = "type">The type.</param>
 		/// <returns>The type attributes.</returns>
 		public static T[] GetTypeAttributes<T>(Type type) where T : class
 		{
@@ -87,23 +97,9 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		/// <summary>
-		/// Gets the attributes.
+		///   Gets the type converter.
 		/// </summary>
-		/// <param name="member">The member.</param>
-		/// <returns>The member attributes.</returns>
-		public static T[] GetAttributes<T>(MemberInfo member) where T : class
-		{
-			if (typeof(T) != typeof(object))
-			{
-				return (T[])member.GetCustomAttributes(typeof(T), false);
-			}
-			return (T[])member.GetCustomAttributes(false);
-		}
-
-		/// <summary>
-		/// Gets the type converter.
-		/// </summary>
-		/// <param name="member">The member.</param>
+		/// <param name = "member">The member.</param>
 		/// <returns></returns>
 		public static Type GetTypeConverter(MemberInfo member)
 		{
@@ -115,6 +111,16 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			return null;
+		}
+
+		/// <summary>
+		///   Gets the attribute.
+		/// </summary>
+		/// <param name = "member">The member.</param>
+		/// <returns>The member attribute.</returns>
+		public static bool HasAttribute<T>(this ICustomAttributeProvider member) where T : class
+		{
+			return GetAttributes<T>(member).FirstOrDefault() != null;
 		}
 	}
 }

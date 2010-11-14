@@ -17,6 +17,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System;
 	using System.Collections.Generic;
 
+	using Castle.Core.Internal;
+
 	public interface IValidationRule
 	{
 		void Apply(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, 

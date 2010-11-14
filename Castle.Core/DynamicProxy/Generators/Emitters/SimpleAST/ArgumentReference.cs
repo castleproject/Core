@@ -19,11 +19,10 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	public class ArgumentReference : TypeReference
 	{
-		private int position = -1;
-
 		public ArgumentReference(Type argumentType)
 			: base(argumentType)
 		{
+			Position = -1;
 		}
 
 		public ArgumentReference(Type argumentType, int position)
@@ -32,11 +31,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			Position = position;
 		}
 
-		internal int Position
-		{
-			get { return position; }
-			set { position = value; }
-		}
+		internal int Position { get; set; }
 
 		public override void LoadReference(ILGenerator gen)
 		{

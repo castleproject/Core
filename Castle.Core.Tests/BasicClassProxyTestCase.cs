@@ -116,7 +116,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Can_proxy_class_with_ctor_having_params_array()
 		{
-			generator.CreateClassProxy(typeof(ClassWithParamsArrayCtorArg), new object[] { new string[0] });
+			generator.CreateClassProxy(typeof(HasCtorWithParamsStrings), new object[] { new string[0] });
 		}
 
 

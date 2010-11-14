@@ -73,6 +73,23 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void Can_pass_params_arguments_inline()
+		{
+				generator.CreateClassProxy(typeof(HasCtorWithParamsStrings), new object[] { });
+		}
+		[Test]
+		public void Can_pass_params_arguments_inline2()
+		{
+			generator.CreateClassProxy(typeof(HasCtorWithParamsArgument), new object[] { });
+		}
+
+		[Test]
+		public void Can_pass_params_arguments_inline_implicitly()
+		{
+			generator.CreateClassProxy(typeof(HasCtorWithIntAndParamsArgument), new object[] { 5 });
+		}
+
+		[Test]
 		public void Should_properly_interpret_nothing_as_lack_of_ctor_arguments()
 		{
 			var proxy =
