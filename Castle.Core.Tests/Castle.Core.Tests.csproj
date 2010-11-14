@@ -229,6 +229,8 @@
     <Compile Include="Core.Tests\Internal\PermissionUtilTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\AbstractClassWithMethod.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithParamsArrayCtorArg.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\HasCtorWithIntAndParamsArgument.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\HasCtorWithParamsArgument.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasFinalizeMethod.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasFinalizer.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasTwoProtectedMethods.cs" />
