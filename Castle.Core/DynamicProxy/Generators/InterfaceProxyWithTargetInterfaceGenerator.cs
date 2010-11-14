@@ -48,12 +48,17 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override InterfaceProxyWithoutTargetContributor GetContributorForAdditionalInterfaces(INamingScope namingScope)
 		{
-			return new InterfaceProxyWithoutTargetContributor(namingScope, GetTarget) { Logger = Logger };
+			return new InterfaceProxyWithOptionalTargetContributor(namingScope, GetTargetExpression, GetTarget)
+			{ Logger = Logger };
 		}
 
-		private Expression GetTarget(ClassEmitter @class, MethodInfo method)
+		private Reference GetTarget(ClassEmitter @class, MethodInfo method)
 		{
-			return new AsTypeReference(@class.GetField("__target"), method.DeclaringType).ToExpression();
+			return new AsTypeReference(@class.GetField("__target"), method.DeclaringType);
+		}
+		private Expression GetTargetExpression(ClassEmitter @class, MethodInfo method)
+		{
+			return GetTarget(@class, method).ToExpression();
 		}
 
 		protected override bool AllowChangeTarget

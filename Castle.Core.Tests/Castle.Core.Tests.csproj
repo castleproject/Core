@@ -232,9 +232,6 @@
     <Compile Include="DynamicProxy.Tests\Classes\HasFinalizeMethod.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasFinalizer.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasTwoProtectedMethods.cs" />
-    <Compile Include="DynamicProxy.Tests\Classes\InheritsDbConnection.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="DynamicProxy.Tests\Classes\InheritsAbstractClassWithMethod.cs" />
     <Compile Include="DynamicProxy.Tests\DelegateProxyTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasNonInheritableAttribute.cs" />
@@ -246,6 +243,7 @@
     <Compile Include="DynamicProxy.Tests\Classes\ServiceClass.cs" />
     <Compile Include="ClassWithAttributesTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Explicit\TwoInterfacesExplicit.cs" />
+    <Compile Include="DynamicProxy.Tests\InterfaceProxyWithTargetInterfaceAdditionalInterfacesTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\ProxyTypeCachingWithDifferentHooksTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\SerializableClassTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Serialization\C.cs" />
@@ -281,6 +279,9 @@
     <Compile Include="InterClasses\IExtendedService.cs" />
     <Compile Include="InterClasses\IService.cs" />
     <Compile Include="InterClasses\ServiceImpl.cs" />
+    <Compile Include="InterClasses\OneAndEmpty.cs" />
+    <Compile Include="InterClasses\WithRefOut.cs" />
+    <Compile Include="InterClasses\WithRefOutEmpty.cs" />
     <Compile Include="MethodsWithAttributesOnParametersTestCase.cs" />
     <Compile Include="MixinTestCase.cs" />
     <Compile Include="ThrowingInterceptorException.cs" />
@@ -396,9 +397,9 @@
     <Compile Include="Interfaces\IOne.cs" />
     <Compile Include="Interfaces\ITwo.cs" />
     <Compile Include="Interfaces\IWithRefOut.cs" />
-    <Compile Include="Interfaces\One.cs" />
-    <Compile Include="Interfaces\OneTwo.cs" />
-    <Compile Include="Interfaces\Two.cs" />
+    <Compile Include="InterClasses\One.cs" />
+    <Compile Include="InterClasses\OneTwo.cs" />
+    <Compile Include="InterClasses\Two.cs" />
     <Compile Include="InvocationMethodInvocationTargetTestCase.cs" />
     <Compile Include="InvocationTypesCachingTestCase.cs" />
     <Compile Include="LoggingTestCase.cs" />

@@ -51,7 +51,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Debug|AnyCPU'">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <OutputPath>bin\NET35-Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY DOTNET DOTNET35</DefineConstants>
     <DocumentationFile>
@@ -66,7 +67,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Release|AnyCPU'">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <OutputPath>bin\NET35-Release\</OutputPath>
     <DefineConstants>TRACE;PHYSICALASSEMBLY DOTNET DOTNET35</DefineConstants>
     <DocumentationFile>bin\NET35-Release\Castle.Core.xml</DocumentationFile>
@@ -79,7 +81,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Release|AnyCPU'">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
     <OutputPath>bin\SL40-Release\</OutputPath>
     <DefineConstants>TRACE;PHYSICALASSEMBLY SILVERLIGHT SL4</DefineConstants>
@@ -93,7 +96,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Debug|AnyCPU'">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\SL40-Debug\</OutputPath>
@@ -107,7 +111,8 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL30-Debug|AnyCPU'">
-    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\SL30-Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY SILVERLIGHT SL3</DefineConstants>
@@ -120,7 +125,8 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL30-Release|AnyCPU'">
-    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <OutputPath>bin\SL30-Release\</OutputPath>
     <DefineConstants>TRACE;PHYSICALASSEMBLY SILVERLIGHT SL3</DefineConstants>
     <DocumentationFile>bin\SL30-Release\Castle.Core.xml</DocumentationFile>
@@ -132,7 +138,8 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Debug|AnyCPU'">
-    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <OutputPath>bin\MONO26-Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY MONO MONO26</DefineConstants>
     <DocumentationFile>bin\MONO26-Debug\Castle.Core.xml</DocumentationFile>
@@ -145,7 +152,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Release|AnyCPU'">
-    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <OutputPath>bin\MONO26-Release\</OutputPath>
     <DefineConstants>TRACE;PHYSICALASSEMBLY MONO MONO26</DefineConstants>
     <DocumentationFile>bin\MONO26-Release\Castle.Core.xml</DocumentationFile>
@@ -156,7 +164,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO28-Debug|AnyCPU'">
-    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <OutputPath>bin\MONO28-Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY MONO MONO28</DefineConstants>
     <DocumentationFile>bin\MONO28-Debug\Castle.Core.xml</DocumentationFile>
@@ -169,7 +178,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO28-Release|AnyCPU'">
-    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <OutputPath>bin\MONO28-Release\</OutputPath>
     <DefineConstants>TRACE;PHYSICALASSEMBLY MONO MONO28</DefineConstants>
     <DocumentationFile>bin\MONO28-Release\Castle.Core.xml</DocumentationFile>
@@ -278,8 +288,10 @@
     <Compile Include="DynamicProxy\Contributors\ClassProxyWithTargetTargetContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\CompositeTypeContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\DelegateTypeGenerator.cs" />
+    <Compile Include="DynamicProxy\Contributors\InterfaceProxyWithOptionalTargetContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\InvocationWithDelegateContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\InvocationWithGenericDelegateContributor.cs" />
+    <Compile Include="DynamicProxy\Contributors\OptionallyForwardingMethodGenerator.cs" />
     <Compile Include="DynamicProxy\Contributors\WrappedClassMembersCollector.cs" />
     <Compile Include="DynamicProxy\Generators\AttributeDisassembler.cs" />
     <Compile Include="DynamicProxy\CacheMappingsAttribute.cs" />
@@ -294,6 +306,8 @@
     <Compile Include="DynamicProxy\Generators\DelegateProxyGenerator.cs" />
     <Compile Include="DynamicProxy\Contributors\DelegateProxyTargetContributor.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\BindDelegateExpression.cs" />
+    <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\IfNullExpression.cs" />
+    <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\MultiStatementExpression.cs" />
     <Compile Include="DynamicProxy\Generators\IInvocationCreationContributor.cs" />
     <Compile Include="DynamicProxy\Generators\InheritanceInvocationTypeGenerator.cs" />
     <Compile Include="DynamicProxy\Generators\ClassProxyWithTargetGenerator.cs" />

@@ -22,7 +22,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		protected readonly MethodInfo method;
 		protected readonly Expression[] args;
 		protected readonly Reference owner;
-		private bool virtualCall;
 
 		public MethodInvocationExpression(MethodInfo method, params Expression[] args) :
 			this(SelfReference.Self, method, args)
@@ -46,11 +45,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.args = args;
 		}
 
-		public bool VirtualCall
-		{
-			get { return virtualCall; }
-			set { virtualCall = value; }
-		}
+		public bool VirtualCall { get; set; }
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
@@ -61,7 +56,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				exp.Emit(member, gen);
 			}
 
-			if (virtualCall)
+			if (VirtualCall)
 			{
 				gen.Emit(OpCodes.Callvirt, method);
 			}
