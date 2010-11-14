@@ -12,12 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests.Interfaces
+namespace Castle.InterClasses
 {
-	public interface IWithRefOut
-	{
-		void Do(out int i);
-		void Did(ref int i);
-	}
+	using Castle.DynamicProxy.Tests.Interfaces;
 
+	public class OneAndEmpty : IOne, IEmpty
+	{
+		public int OneMethod()
+		{
+			return 1;
+		}
+	}
 }

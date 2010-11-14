@@ -12,18 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests.Interfaces
+namespace Castle.InterClasses
 {
-	using System;
+	using Castle.DynamicProxy.Tests.Interfaces;
 
-#if !SILVERLIGHT
-	[Serializable]
-#endif
-	public class Two : ITwo
+	public class One : IOne
 	{
-		public int TwoMethod()
+		public int OneMethod()
 		{
-			return 20;
+			return 1;
 		}
 	}
 }

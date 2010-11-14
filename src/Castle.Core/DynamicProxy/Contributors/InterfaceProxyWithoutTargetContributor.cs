@@ -46,8 +46,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			if (!method.Proxyable)
 			{
-				return new MinimialisticMethodGenerator(method,
-														overrideMethod);
+				return new MinimialisticMethodGenerator(method, overrideMethod);
 			}
 
 			var invocation = GetInvocationType(method, @class, options);
