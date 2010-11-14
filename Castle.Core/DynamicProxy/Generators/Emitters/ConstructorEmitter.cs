@@ -28,20 +28,19 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private ConstructorCodeBuilder constructorCodeBuilder;
 
-		internal ConstructorEmitter(AbstractTypeEmitter maintype, params ArgumentReference[] arguments)
-		{
-			this.maintype = maintype;
-
-			Type[] args = ArgumentsUtil.InitializeAndConvert(arguments);
-
-			builder = maintype.TypeBuilder.DefineConstructor(
-			                                                	MethodAttributes.Public, CallingConventions.Standard, args);
-		}
-
 		protected internal ConstructorEmitter(AbstractTypeEmitter maintype, ConstructorBuilder builder)
 		{
 			this.maintype = maintype;
 			this.builder = builder;
+		}
+
+		internal ConstructorEmitter(AbstractTypeEmitter maintype, params ArgumentReference[] arguments)
+		{
+			this.maintype = maintype;
+
+			var args = ArgumentsUtil.InitializeAndConvert(arguments);
+
+			builder = maintype.TypeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, args);
 		}
 
 		public virtual ConstructorCodeBuilder CodeBuilder
@@ -62,15 +61,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return builder; }
 		}
 
-		private bool ImplementedByRuntime
-		{
-			get
-			{
-				var attributes = builder.GetMethodImplementationFlags();
-				return (attributes & MethodImplAttributes.Runtime) != 0;
-			}
-		}
-
 		public MemberInfo Member
 		{
 			get { return builder; }
@@ -79,6 +69,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public Type ReturnType
 		{
 			get { return typeof(void); }
+		}
+
+		private bool ImplementedByRuntime
+		{
+			get
+			{
+				var attributes = builder.GetMethodImplementationFlags();
+				return (attributes & MethodImplAttributes.Runtime) != 0;
+			}
 		}
 
 		public virtual void EnsureValidCodeBlock()

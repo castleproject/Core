@@ -263,7 +263,7 @@
     <Compile Include="Components.DictionaryAdapter\IPropertyDescriptorInitializer.cs" />
     <Compile Include="Components.DictionaryAdapter\NameValueCollectionAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\PropertyDescriptor.cs" />
-    <Compile Include="Components.DictionaryAdapter\Util\AttributesUtil.cs" />
+    <Compile Include="Core\Internal\AttributesUtil.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\BehaviorVisitor.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\BindingListInitializer.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\DynamicValue.cs" />
