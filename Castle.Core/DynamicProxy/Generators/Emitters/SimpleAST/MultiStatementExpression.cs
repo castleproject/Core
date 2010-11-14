@@ -12,12 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests.Interfaces
+namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
-	public interface IWithRefOut
-	{
-		void Do(out int i);
-		void Did(ref int i);
-	}
+	using System.Collections.Generic;
+	using System.Reflection.Emit;
 
+	public class MultiStatementExpression : Expression
+	{
+		private readonly List<Statement> statements = new List<Statement>();
+
+		public void AddStatement(Statement statement)
+		{
+			statements.Add(statement);
+		}
+
+		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		{
+			statements.ForEach(s => s.Emit(member, gen));
+		}
+	}
 }
