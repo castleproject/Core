@@ -22,6 +22,8 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Reflection;
 	using System.Diagnostics;
 
+	using Castle.Core.Internal;
+
 	/// <summary>
 	/// Describes a dictionary property.
 	/// </summary>

@@ -1,6 +1,7 @@
 - fixed DYNPROXY-150 - Finalizer should not be proxied
 - implemented DYNPROXY-149 - Make AllMethodsHook members virtual so it can be used as a base class
 - fixed DYNPROXY-147 - Can't crete class proxies with two non-public methods having same argument types but different return type
+- fixed DYNPROXY-144 - params argument not supported in constructor
 - fixed DYNPROXY-143 - Permit call to reach "non-proxied" methods of inherited interfaces
 - fixed CORE-32 - Determining if permission is granted via PermissionUtil does not work in .NET 4
 - implemented DYNPROXY-139 - Better error message 

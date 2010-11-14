@@ -117,7 +117,7 @@ namespace Castle.DynamicProxy
 // CustomAttributeData is internal in Silverlight
 #endif
 
-		public static IEnumerable<CustomAttributeBuilder> GetNonInheritableAttributes(MemberInfo member)
+		public static IEnumerable<CustomAttributeBuilder> GetNonInheritableAttributes(this MemberInfo member)
 		{
 			Debug.Assert(member != null, "member != null");
 			var attributes =
