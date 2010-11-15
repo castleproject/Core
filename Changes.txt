@@ -1,14 +1,16 @@
+2.5.2 (2010-11-15)
+==================
 - fixed DYNPROXY-150 - Finalizer should not be proxied
 - implemented DYNPROXY-149 - Make AllMethodsHook members virtual so it can be used as a base class
 - fixed DYNPROXY-147 - Can't crete class proxies with two non-public methods having same argument types but different return type
+- fixed DYNPROXY-145 Unable to proxy System.Threading.SynchronizationContext (.NET 4.0)
 - fixed DYNPROXY-144 - params argument not supported in constructor
 - fixed DYNPROXY-143 - Permit call to reach "non-proxied" methods of inherited interfaces
-- fixed CORE-32 - Determining if permission is granted via PermissionUtil does not work in .NET 4
 - implemented DYNPROXY-139 - Better error message 
 - fixed DYNPROXY-133 - Debug assertion in ClassProxyInstanceContributor fails when proxying ISerializable with an explicit implementation of GetObjectData
+- fixed CORE-32 - Determining if permission is granted via PermissionUtil does not work in .NET 4
 - applied patch by Alwin Meijs - ExtendedLog4netFactory can be configured with a stream from for example an embedded log4net xml config
 - Upgraded NLog to 2.0 Beta 1
-- applied patch from David Tchepak fixing DYNPROXY-145 Unable to proxy System.Threading.SynchronizationContext (.NET 4.0)
 - Added DefaultXmlSerializer to bridge XPathAdapter with standard Xml Serialization.
 - XPathAdapter for DictionaryAdapter added IXPathSerializer to provide hooks for custom serialization.
 
