@@ -23,7 +23,7 @@ limitations under the License.
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<!--
-		Overridables properties
+		Overridable properties
 	-->
 	<PropertyGroup>
 		<Configuration Condition="$(Configuration)=='' or $(Configuration)=='Release'">NET40-Release</Configuration>
@@ -103,6 +103,12 @@ limitations under the License.
 		<ComVisible Condition="'$(ComVisible)' == ''">false</ComVisible>
 		<CLSCompliant Condition="'$(CLSCompliant)' == ''">true</CLSCompliant>
 		<AllowPartiallyTrustedCallers Condition="'$(AllowPartiallyTrustedCallers)' == ''">false</AllowPartiallyTrustedCallers>
+
+		<!-- Assembly versioning. These can be overridden to vary file and assembly versions. -->
+		<AssemblyVersion_Major Condition="'$(AssemblyVersion_Major)' == ''">$(Project_Major)</AssemblyVersion_Major>
+		<AssemblyVersion_Minor Condition="'$(AssemblyVersion_Minor)' == ''">$(Project_Minor)</AssemblyVersion_Minor>
+		<AssemblyVersion_Build Condition="'$(AssemblyVersion_Build)' == ''">$(Project_Build)</AssemblyVersion_Build>
+
 	</PropertyGroup>
 
 	
@@ -181,7 +187,7 @@ limitations under the License.
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.CLSCompliant($(CLSCompliant))]' />
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Reflection.AssemblyTitle("$(AssemblyTitle)")]' />
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Reflection.AssemblyProduct("$(AssemblyProduct)")]' />
-		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Reflection.AssemblyVersion("$(Project_Major).$(Project_Minor).$(Project_Build).0")]' />
+		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Reflection.AssemblyVersion("$(AssemblyVersion_Major).$(AssemblyVersion_Minor).$(AssemblyVersion_Build).0")]' />
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Reflection.AssemblyFileVersion("$(Project_Major).$(Project_Minor).$(Project_Build).$(Build_Revision)")]' />
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Reflection.AssemblyInformationalVersion("$(Project_Major).$(Project_Minor).$(Project_Build).$(Build_Revision)")]' />
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Security.AllowPartiallyTrustedCallers]' Condition="$(AllowPartiallyTrustedCallers) and $(BuildConfigKey) != 'NET40'" />
@@ -190,7 +196,7 @@ limitations under the License.
 	
 	</Target>
 
-	<!-- User targets can be run as the lastest -->
+	<!-- Run user targets last -->
 	<Import Condition="Exists('$(RootPath)/Common.User.Targets')" Project="$(RootPath)/Common.User.Targets" />
 
 </Project>

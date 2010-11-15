@@ -36,7 +36,9 @@ limitations under the License.
 		<!-- Versioning -->
 		<Project_Major>2</Project_Major>
 		<Project_Minor>5</Project_Minor>
-		<Project_Build>1</Project_Build>
+		<Project_Build>2</Project_Build>
+
+		<AssemblyVersion_Build>1</AssemblyVersion_Build> <!-- By default it's (and should be) equal to $(Project_Build) -->
 
 		<!-- Project folders -->
 		<BuildScriptsPath Condition="'$(BuildScriptsPath)' ==''">$(RootPath)\buildscripts</BuildScriptsPath>
