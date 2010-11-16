@@ -46,6 +46,19 @@ limitations under the License.
 	</PropertyGroup>
 	
 
+	<ItemGroup>
+		<!-- 
+		Specify additional items to package here, they are added to the package
+		in addition to automatically detected dependencies.
+		The items are resolved relative to $(OutputPath)
+		-->
+		<PackageFiles Include="$(OutputPath)log4net.dll" />
+		<PackageFiles Include="$(OutputPath)log4net.xml" />
+		<PackageFiles Include="$(OutputPath)NLog.dll" />
+		<PackageFiles Include="$(OutputPath)NLog.xml" />
+	</ItemGroup>
+
+
 	<!-- Import framework version specific settings, like Settings-v3.5 or Settings-v4.0 -->
 	<Import
 		Project="$(RootPath)\Settings-$(TargetFrameworkVersion).proj"

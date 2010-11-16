@@ -44,12 +44,6 @@ limitations under the License.
 	</Target>
 		
 
-	<UsingTask
-		TaskName="NCover.MSBuildTasks.NCover"
-		AssemblyFile="$(NCoverPath)/Build Task Plugins/NCover.MSBuildTasks.dll"
-		Condition="$(TestRunner_EnableCoverage)" />
-
-	
 	<!--
 		Public targets
 	-->
@@ -166,18 +160,14 @@ limitations under the License.
 		Internal targets
 	==================================================
 	-->
-	<!-- Executes NUnit or NCover with NUnit -->
 	<Target
 		Name="_ExecTestRunner"
-		DependsOnTargets="_CreateTestResultsFolder"
 		Condition="$(TestRunner_Enabled)"
 		>
 		
-		<CallTarget Targets="_ExecNUnit" Condition="!$(TestRunner_EnableCoverage) and ($(BuildConfigKey) != 'SL30' and $(BuildConfigKey) != 'SL40')" />
+		<CallTarget Targets="_ExecNUnit" Condition="$(BuildConfigKey) != 'SL30' and $(BuildConfigKey) != 'SL40'" />
 	
-		<CallTarget Targets="_ExecNCover" Condition="$(TestRunner_EnableCoverage) and ($(BuildConfigKey) != 'SL30' and $(BuildConfigKey) != 'SL40')" />
-
-		<CallTarget Targets="_ExecStatLight" Condition="$(TestRunner_Enabled) and ($(BuildConfigKey) == 'SL30' or $(BuildConfigKey) == 'SL40')" />
+		<CallTarget Targets="_ExecStatLight" Condition="$(BuildConfigKey) == 'SL30' or $(BuildConfigKey) == 'SL40'" />
 
 	</Target>
 	
@@ -188,6 +178,8 @@ limitations under the License.
 	<Target
 		Name="_ExecNUnit"
 		>
+
+		<MakeDir Directories="$(TestResultsPath)" Condition="'$(TestResultsPath)' != '' And !Exists('$(TestResultsPath)')" />
 
 		<CreateProperty Value="$(TestResultsPath)/nunit-results.xml" Condition="'$(NUnitTestResultXmlFiles)' == ''">
 			<Output PropertyName="NUnitTestResultXmlFiles" TaskParameter="Value"/>
@@ -209,32 +201,6 @@ limitations under the License.
 
 
 	<Target
-		Name="_ExecNCover"
-		>
-
-		<CreateProperty Value="$(TestResultsPath)/nunit-coverage-results.xml" Condition="'$(NCoverResultXmlFiles)' == ''">
-			<Output PropertyName="NCoverResultXmlFiles" TaskParameter="Value"/>
-		</CreateProperty>
-
-		<NCover
-			ToolPath="$(NCoverPath)"
-			TestRunnerExe="$(NUnitPath)/nunit-console-x86.exe"
-			TestRunnerArgs="@(TestAssemblies) /noshadow"
-			CoverageFile="$(NCoverResultXmlFiles)"
-			ContinueOnError="$(TestRunner_ContinueOnError)"
-			Timeout="$(TestRunner_Timeout)"
-			>
-			
-			<Output TaskParameter="ExitCode" PropertyName="NCoverExitCode" />
-		
-		</NCover>
-		
-		<Error Condition="$(NCoverExitCode) != '0'" Text="NCover failed with exit code $(NCoverExitCode)." />
-	
-	</Target>
-
-
-	<Target
 		Name="_ExecStatLight"
 		>
 
@@ -251,16 +217,6 @@ limitations under the License.
 	</Target>
 
 
-	<Target
-		Name="_CreateTestResultsFolder"
-		Condition="'$(TestResultsPath)' != '' And !Exists('$(TestResultsPath)')"
-		>
-		
-		<MakeDir Directories="$(TestResultsPath)" />
-	
-	</Target>
-
-
 	<!-- Prepare package directory -->
 	<Target Name="_PreparePackage">
 
@@ -274,16 +230,10 @@ limitations under the License.
 		<CreateItem Include="$(OutputPath)Castle.*.dll;$(OutputPath)Castle.*.xml" Exclude="$(OutputPath)Castle*.Tests.dll">
 			<Output TaskParameter="Include" ItemName="_CastleDependencies"/>
 		</CreateItem>
-		<CreateItem Include="$(BuildScriptsPath)/*.txt">
-			<Output TaskParameter="Include" ItemName="_BuildScriptsTxtFiles"/>
-		</CreateItem>
-		<CreateItem Include="$(RootPath)/src/Change*.txt">
-			<Output TaskParameter="Include" ItemName="_ChangesTxt"/>
-		</CreateItem>
 
 		<!-- Create list with items to be copied to package directory. The metadata <DestinationFolder> controls where they wind up. -->
 		<CreateItem
-			Include="@(_BuildScriptsTxtFiles)"
+			Include="$(BuildScriptsPath)/*.txt"
 			AdditionalMetadata="DestinationFolder=$(PackageDir)">
 
 			<Output TaskParameter="Include" ItemName="CopyToPackageDirectory"/>
@@ -295,7 +245,7 @@ limitations under the License.
 			<Output TaskParameter="Include" ItemName="CopyToPackageDirectory"/>
 		</CreateItem>
 		<CreateItem
-			Include="@(_ChangesTxt)"
+			Include="$(RootPath)/*.txt"
 			AdditionalMetadata="DestinationFolder=$(PackageDir)/ReleaseNotes">
 
 			<Output TaskParameter="Include" ItemName="CopyToPackageDirectory"/>

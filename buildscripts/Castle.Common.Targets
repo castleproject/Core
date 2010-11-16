@@ -137,15 +137,12 @@ limitations under the License.
 		<!-- Specifies the timeout for nunit -->
 		<TestRunner_ContinueOnError Condition="'$(TestRunner_ContinueOnError)' == ''">false</TestRunner_ContinueOnError>
 		<!-- Controls whether to continue the build if tests are failing -->
-		<TestRunner_EnableCoverage Condition="'$(TestRunner_EnableCoverage)' == ''">false</TestRunner_EnableCoverage>
-		<!-- Controls whether tests will be run under NCover to generate coverage logs -->
 	</PropertyGroup>
 
 	
 	<!-- 3rd Party Program Paths -->
 	<PropertyGroup>
 		<NUnitPath Condition="'$(NUnitPath)' == ''">$(ToolsPath)/NUnit/bin</NUnitPath>
-		<NCoverPath Condition="'$(NCoverPath)' == ''">$(ProgramFiles)/NCover</NCoverPath>
 		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(ToolsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
 	</PropertyGroup>
 
