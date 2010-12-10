@@ -3,23 +3,8 @@
   <!-- Root Path definition relative for actual build file -->
   <PropertyGroup>
     <RootPath Condition=" '$(RootPath)' == '' ">$(MSBuildProjectDirectory)\..\..</RootPath>
-    <TargetFrameworkVersion>$(TargetFrameworkVersion)</TargetFrameworkVersion>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -50,56 +35,88 @@
     <SignAssembly>true</SignAssembly>
     <OldToolsVersion>3.5</OldToolsVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <DocumentationFile>bin\Debug\Castle.Components.Binder.XML</DocumentationFile>
+  
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">NET40-Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET40-Debug|AnyCPU' ">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+	</TargetFrameworkProfile>
+    <OutputPath>bin\NET40-Debug\</OutputPath>
     <DebugSymbols>true</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>1591</NoWarn>
-    <Optimize>false</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY DOTNET DOTNET40 CLIENTPROFILE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>bin\Release\Castle.Components.Binder.XML</DocumentationFile>
-    <DebugSymbols>true</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>1591</NoWarn>
-    <Optimize>true</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
-    <DebugType>pdbonly</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>
+    </DocumentationFile>
+    <NoWarn>1591</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET40-Release|AnyCPU' ">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+	</TargetFrameworkProfile>
+    <OutputPath>bin\NET40-Release\</OutputPath>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;PHYSICALASSEMBLY DOTNET DOTNET40 CLIENTPROFILE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\NET40-Release\Castle.Components.Binder.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Debug|AnyCPU'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <OutputPath>bin\NET35-Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY DOTNET DOTNET35</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Release|AnyCPU'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <OutputPath>bin\NET35-Release\</OutputPath>
+    <DefineConstants>TRACE;PHYSICALASSEMBLY DOTNET DOTNET35</DefineConstants>
+    <DocumentationFile>bin\NET35-Release\Castle.Components.Binder.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  
   <ItemGroup>
-    <Reference Include="Castle.Components.Validator, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+    <Reference Include="Castle.Components.Validator">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\$(BuildConfigKey)\Castle.Components.Validator.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+    <Reference Include="Castle.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\$(BuildConfigKey)\Castle.Core.dll</HintPath>
     </Reference>
