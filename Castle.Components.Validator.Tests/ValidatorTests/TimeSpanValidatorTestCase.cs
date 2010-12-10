@@ -50,11 +50,6 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 			Assert.IsFalse(validator.IsValid(target, "32:56f"));
 			Assert.IsFalse(validator.IsValid(target, "00:70"));
 			Assert.IsFalse(validator.IsValid(target, "-00:70"));
-#if DOTNET35
-			Assert.IsFalse(validator.IsValid(target, "50:00:50"));
-			Assert.IsFalse(validator.IsValid(target, "50:05:50"));
-			Assert.IsFalse(validator.IsValid(target, "50:3:50"));
-#endif
 		}
 
 		[Test]
