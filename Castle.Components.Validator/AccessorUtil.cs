@@ -193,7 +193,12 @@ namespace Castle.Components.Validator
 
 		private static bool IsReflectionEmitAllowed()
 		{
+#if (DOTNET40)
+			//The ReflectionEmit permission is obsolete on .NET 4
+			return true;
+#else
 			return SecurityManager.IsGranted(new ReflectionPermission(ReflectionPermissionFlag.ReflectionEmit));
+#endif
 		}
 
 		private static Type GeneratePropertyIL(PropertyInfo property, ILGenerator il)

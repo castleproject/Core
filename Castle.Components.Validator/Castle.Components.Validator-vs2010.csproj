@@ -2,79 +2,59 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <RootPath Condition=" '$(RootPath)' == '' ">$(MSBuildProjectDirectory)\..\..</RootPath>
-    <TargetFrameworkVersion>$(TargetFrameworkVersion)</TargetFrameworkVersion>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <ProjectGuid>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">NET40-Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</ProjectGuid>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Castle.Components.Validator</RootNamespace>
     <AssemblyName>Castle.Components.Validator</AssemblyName>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>CastleKey.snk</AssemblyOriginatorKeyFile>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET40-Debug|AnyCPU' ">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <OutputPath>bin\NET40-Debug\</OutputPath>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY DOTNET DOTNET40 CLIENTPROFILE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Castle.Components.Validator.XML</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>
+    </DocumentationFile>
     <NoWarn>0618</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET40-Release|AnyCPU' ">
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <OutputPath>bin\NET40-Release\</OutputPath>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;PHYSICALASSEMBLY DOTNET DOTNET40 CLIENTPROFILE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\NET40-Release\Castle.Components.Validator.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>bin\Release\Castle.Components.Validator.XML</DocumentationFile>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>0618</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET40-Release|AnyCPU'">
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-	<OutputPath>bin\NET40-Release\</OutputPath>
-    <DocumentationFile>\bin\NET40-Release\Castle.Components.Validator.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Release|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Debug|AnyCPU'">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
-    <OutputPath>bin\NET35-Release\</OutputPath>
-	<DocumentationFile>\bin\NET35-Release\Castle.Components.Validator.XML</DocumentationFile>
+    <OutputPath>bin\NET35-Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY DOTNET DOTNET35</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
@@ -85,6 +65,20 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Release|AnyCPU'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <OutputPath>bin\NET35-Release\</OutputPath>
+    <DefineConstants>TRACE;PHYSICALASSEMBLY DOTNET DOTNET35</DefineConstants>
+    <DocumentationFile>bin\NET35-Release\Castle.Components.Validator.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1591</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -100,6 +94,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="AssemblyLevelSettings.cs" />
     <Compile Include="Attributes\AbstractCrossReferenceValidationAttribute.cs" />
     <Compile Include="Attributes\ValidateCreditCardAttribute.cs" />
     <Compile Include="Attributes\ValidateDateAttribute.cs" />
@@ -135,29 +130,7 @@
     <Compile Include="IValidationPerformer.cs" />
     <Compile Include="IValidatorContainerInterface.cs" />
     <Compile Include="IValidatorRunner.cs" />
-    <Compile Include="Messages.es.Designer.cs">
-      <DependentUpon>Messages.es.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Messages.fr.Designer.cs">
-      <DependentUpon>Messages.fr.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Messages.it.Designer.cs">
-      <DependentUpon>Messages.it.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Messages.lt.Designer.cs">
-      <DependentUpon>Messages.lt.resx</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Messages.lv.Designer.cs">
-      <DependentUpon>Messages.lv.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Messages.nl.Designer.cs">
-      <DependentUpon>Messages.nl.resx</DependentUpon>
-    </Compile>
     <Compile Include="ErrorSummary.cs" />
-    <Compile Include="Messages.pt.Designer.cs">
-      <DependentUpon>Messages.pt.resx</DependentUpon>
-    </Compile>
     <Compile Include="InputElementType.cs" />
     <Compile Include="IValidatorRegistry.cs" />
     <Compile Include="IBrowserValidationGenerator.cs" />
@@ -166,12 +139,6 @@
       <DependentUpon>Messages.resx</DependentUpon>
     </Compile>
     <Compile Include="CachedValidationRegistry.cs" />
-    <Compile Include="Messages.ru.Designer.cs">
-      <DependentUpon>Messages.ru.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Messages.sv.Designer.cs">
-      <DependentUpon>Messages.sv.resx</DependentUpon>
-    </Compile>
     <Compile Include="AccessorUtil.cs" />
     <Compile Include="ValidationException.cs" />
     <Compile Include="ValidationInternalError.cs" />
@@ -257,7 +224,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Messages.resx">
       <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Messages.sv.resx">
