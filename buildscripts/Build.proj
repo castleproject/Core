@@ -155,6 +155,34 @@ limitations under the License.
 
 	</Target>
 	
+	<Target
+		Name="NuSpec"
+		>
+		
+		<CreateProperty Value="$(BuildPath)/NuSpec">
+			<Output PropertyName="NuSpecDir" TaskParameter="Value"/>
+		</CreateProperty>
+
+		<MakeDir Directories="$(NuSpecDir)/lib/NET35" />
+		<MakeDir Directories="$(NuSpecDir)/lib/NET40ClientProfile" />
+		<MakeDir Directories="$(NuSpecDir)/lib/SL3" />
+		<MakeDir Directories="$(NuSpecDir)/lib/SL4" />
+
+		<CreateProperty Value="$(NuSpecDir)/$(ProjectName).nuspec">
+			<Output PropertyName="NuSpecFile" TaskParameter="Value"/>
+		</CreateProperty>
+
+		<Copy SourceFiles="nuspec.tmpl" DestinationFiles="$(NuSpecFile)" />
+		<FileUpdate Files="$(NuSpecFile)" Regex="\$\(Id\)" ReplacementText="$(ProjectName)" />
+		<FileUpdate Files="$(NuSpecFile)" Regex="\$\(Version\)" ReplacementText="$(Project_Major).$(Project_Minor).$(Project_Build)" />
+		<FileUpdate Files="$(NuSpecFile)" Regex="\$\(Title\)" ReplacementText="$(ProjectName)" />
+		<FileUpdate Files="$(NuSpecFile)" Regex="\$\(Description\)" ReplacementText="DynamicProxy, Logging, and Dictionary Adapter components" />
+		<FileUpdate Files="$(NuSpecFile)" Regex="\$\(Summary\)" ReplacementText="Castle Project core components" />
+		<FileUpdate Files="$(NuSpecFile)" Regex="\$\(IconUrl\)" ReplacementText="http://www.castleproject.org/images/cp_logo.png" />
+		<FileUpdate Files="$(NuSpecFile)" Regex="\$\(Modified\)" ReplacementText='$([System.DateTime]::UtcNow.ToString(""s""))Z' />
+		
+	</Target>
+	
 	<!--
 	==================================================
 		Internal targets
