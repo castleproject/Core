@@ -44,14 +44,14 @@ limitations under the License.
 
 	<!-- Mono 2.6 -->
 	<PropertyGroup Condition="$(Configuration) == 'MONO26-Release' or $(Configuration) == 'MONO26-Debug'">
-		<BuildConfigKey>MONO26</BuildConfigKey>
+		<BuildConfigKey>mono26</BuildConfigKey>
 		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 		<BuildConfigDescription>Mono 2.6 - $(TargetFrameworkVersion) Profile</BuildConfigDescription>
 	</PropertyGroup>
 
 	<!-- Mono 2.8 -->
 	<PropertyGroup Condition="$(Configuration) == 'MONO28-Release' or $(Configuration) == 'MONO28-Debug'">
-		<BuildConfigKey>MONO28</BuildConfigKey>
+		<BuildConfigKey>mono28</BuildConfigKey>
 		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
 		<BuildConfigDescription>Mono 2.8 - $(TargetFrameworkVersion) Profile</BuildConfigDescription>
 	</PropertyGroup>
