@@ -52,10 +52,10 @@ limitations under the License.
 		in addition to automatically detected dependencies.
 		The items are resolved relative to $(OutputPath)
 		-->
-		<PackageFiles Include="$(OutputPath)log4net.dll" />
-		<PackageFiles Include="$(OutputPath)log4net.xml" />
-		<PackageFiles Include="$(OutputPath)NLog.dll" />
-		<PackageFiles Include="$(OutputPath)NLog.xml" />
+		<PackageFiles Include="$(OutputPath)log4net.dll" Condition="Exists('$(OutputPath)log4net.dll')"/>
+		<PackageFiles Include="$(OutputPath)log4net.xml" Condition="Exists('$(OutputPath)log4net.xml')"/>
+		<PackageFiles Include="$(OutputPath)NLog.dll"  Condition="Exists('$(OutputPath)NLog.dll')"/>
+		<PackageFiles Include="$(OutputPath)NLog.xml"  Condition="Exists('$(OutputPath)NLog.xml')"/>
 	</ItemGroup>
 
 
