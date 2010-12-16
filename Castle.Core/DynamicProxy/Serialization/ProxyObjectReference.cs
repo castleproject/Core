@@ -70,7 +70,7 @@ namespace Castle.DynamicProxy.Serialization
 		}
 
 		/// <summary>
-		/// Gets the <see cref="DynamicProxy.ModuleScope"/> used for deserialization.
+		/// Gets the <see cref="ModuleScope"/> used for deserialization.
 		/// </summary>
 		/// <value>As <see cref="ProxyObjectReference"/> has no way of automatically determining the scope used by the application (and the application
 		/// might use more than one scope at the same time), <see cref="ProxyObjectReference"/> uses a dedicated scope instance for deserializing proxy
