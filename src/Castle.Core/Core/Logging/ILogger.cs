@@ -412,7 +412,7 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="loggerName">The Subname of this logger.</param>
 		/// <returns>The New ILogger instance.</returns> 
-		/// <exception cref="System.ArgumentException">If the name has an empty element name.</exception>
+		/// <exception cref="ArgumentException">If the name has an empty element name.</exception>
 		ILogger CreateChildLogger(String loggerName);
 	}
 }

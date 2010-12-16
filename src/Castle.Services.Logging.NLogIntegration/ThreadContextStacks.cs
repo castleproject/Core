@@ -23,7 +23,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		#region IContextStacks Members
 
 		/// <summary>
-		/// Gets the single <see cref="Castle.Core.Logging.IContextStack"/>.
+		/// Gets the single <see cref="IContextStack"/>.
 		/// </summary>
 		/// <value>The value of <param name="key"></param> is ignored because NLog only has a single stack</value>
 		public IContextStack this[string key]
