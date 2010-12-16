@@ -61,7 +61,7 @@ namespace Castle.Core.Logging
 		///	</param>
 		///	<param name="encoding">
 		///	The encoding that will be used for this stream.
-		///	<see cref="System.IO.StreamWriter"/>
+		///	<see cref="StreamWriter"/>
 		///	</param>
 		public StreamLogger(String name, Stream stream, Encoding encoding) : this(name, new StreamWriter(stream, encoding))
 		{
@@ -80,11 +80,11 @@ namespace Castle.Core.Logging
 		///	</param>
 		///	<param name="encoding">
 		///	The encoding that will be used for this stream.
-		///	<see cref="System.IO.StreamWriter"/>
+		///	<see cref="StreamWriter"/>
 		///	</param>
 		///	<param name="bufferSize">
 		///	The buffer size that will be used for this stream.
-		///	<see cref="System.IO.StreamWriter"/>
+		///	<see cref="StreamWriter"/>
 		///	</param>
 		public StreamLogger(String name, Stream stream, Encoding encoding, int bufferSize)
 			: this(name, new StreamWriter(stream, encoding, bufferSize))

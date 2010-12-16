@@ -33,7 +33,7 @@ namespace Castle.DynamicProxy
 		private ILogger logger = NullLogger.Instance;
 
 		/// <summary>
-		///   Initializes a new instance of the <see cref = "DefaultProxyBuilder" /> class with new <see cref = "DynamicProxy.ModuleScope" />.
+		///   Initializes a new instance of the <see cref = "DefaultProxyBuilder" /> class with new <see cref = "ModuleScope" />.
 		/// </summary>
 		public DefaultProxyBuilder()
 			: this(new ModuleScope())

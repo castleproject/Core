@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy
 {
+	using System;
 	/// <summary>
 	/// Exposes means to change target objects of proxies and invocations
 	/// </summary>
@@ -24,14 +25,14 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		/// <param name="target">The new value of target of invocation.</param>
 		/// <remarks>
-		/// Although the method takes <see cref="object"/> the actual instance must be of type assignable to <see cref="IInvocation.TargetType"/>, otherwise an <see cref="System.InvalidCastException"/> will be thrown.
+		/// Although the method takes <see cref="object"/> the actual instance must be of type assignable to <see cref="IInvocation.TargetType"/>, otherwise an <see cref="InvalidCastException"/> will be thrown.
 		/// Also while it's technically legal to pass null reference (Nothing in Visual Basic) as <paramref name="target"/>, for obvious reasons Dynamic Proxy will not be able to call the intercepted method on such target.
-		/// In this case last interceptor in the pipeline mustn't call <see cref="IInvocation.Proceed"/> or a <see cref="System.NotImplementedException"/> will be throws.
+		/// In this case last interceptor in the pipeline mustn't call <see cref="IInvocation.Proceed"/> or a <see cref="NotImplementedException"/> will be throws.
 		/// Also while it's technically legal to pass proxy itself as <paramref name="target"/>, this would create stack overflow.
-		/// In this case last interceptor in the pipeline mustn't call <see cref="IInvocation.Proceed"/> or a <see cref="System.InvalidOperationException"/> will be throws.
+		/// In this case last interceptor in the pipeline mustn't call <see cref="IInvocation.Proceed"/> or a <see cref="InvalidOperationException"/> will be throws.
 		/// </remarks>
-		/// <exception cref="System.InvalidCastException">Thrown when <paramref name="target"/> is not assignable to the proxied type.</exception>
-		void ChangeInvocationTarget(object target);
+		/// <exception cref="InvalidCastException">Thrown when <paramref name="target"/> is not assignable to the proxied type.</exception>
+		void ChangeInvocationTarget (object target);
 
 
 		/// <summary>
@@ -39,13 +40,13 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		/// <param name="target">The new value of target of the proxy.</param>
 		/// <remarks>
-		/// Although the method takes <see cref="object"/> the actual instance must be of type assignable to proxy's target type, otherwise an <see cref="System.InvalidCastException"/> will be thrown.
+		/// Although the method takes <see cref="object"/> the actual instance must be of type assignable to proxy's target type, otherwise an <see cref="InvalidCastException"/> will be thrown.
 		/// Also while it's technically legal to pass null reference (Nothing in Visual Basic) as <paramref name="target"/>, for obvious reasons Dynamic Proxy will not be able to call the intercepted method on such target.
-		/// In this case last interceptor in the pipeline mustn't call <see cref="IInvocation.Proceed"/> or a <see cref="System.NotImplementedException"/> will be throws.
+		/// In this case last interceptor in the pipeline mustn't call <see cref="IInvocation.Proceed"/> or a <see cref="NotImplementedException"/> will be throws.
 		/// Also while it's technically legal to pass proxy itself as <paramref name="target"/>, this would create stack overflow.
-		/// In this case last interceptor in the pipeline mustn't call <see cref="IInvocation.Proceed"/> or a <see cref="System.InvalidOperationException"/> will be throws.
+		/// In this case last interceptor in the pipeline mustn't call <see cref="IInvocation.Proceed"/> or a <see cref="InvalidOperationException"/> will be throws.
 		/// </remarks>
-		/// <exception cref="System.InvalidCastException">Thrown when <paramref name="target"/> is not assignable to the proxied type.</exception>
-		void ChangeProxyTarget(object target);
+		/// <exception cref="InvalidCastException">Thrown when <paramref name="target"/> is not assignable to the proxied type.</exception>
+		void ChangeProxyTarget (object target);
 	}
 }

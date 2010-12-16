@@ -81,9 +81,9 @@ namespace Castle.Core.Configuration
 
 		/// <summary>
 		/// Gets the value of the node and converts it
-		/// into specified <see cref="System.Type"/>.
+		/// into specified <see cref="Type"/>.
 		/// </summary>
-		/// <param name="type">The <see cref="System.Type"/></param>
+		/// <param name="type">The <see cref="Type"/></param>
 		/// <param name="defaultValue">
 		/// The Default value returned if the convertion fails.
 		/// </param>
