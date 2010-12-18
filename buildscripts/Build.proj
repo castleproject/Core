@@ -178,7 +178,7 @@ limitations under the License.
 		<FileUpdate Files="$(NuSpecFile)" Regex="\$\(Title\)" ReplacementText="$(ProjectName)" />
 		<FileUpdate Files="$(NuSpecFile)" Regex="\$\(Description\)" ReplacementText="DynamicProxy, Logging, and Dictionary Adapter components" />
 		<FileUpdate Files="$(NuSpecFile)" Regex="\$\(Summary\)" ReplacementText="Castle Project core components" />
-		<FileUpdate Files="$(NuSpecFile)" Regex="\$\(IconUrl\)" ReplacementText="http://www.castleproject.org/images/cp_logo.png" />
+		<FileUpdate Files="$(NuSpecFile)" Regex="\$\(IconUrl\)" ReplacementText="http://www.castleproject.org/images/cp_logo32.png" />
 		<FileUpdate Files="$(NuSpecFile)" Regex="\$\(Modified\)" ReplacementText='$([System.DateTime]::UtcNow.ToString(""s""))Z' />
 		
 	</Target>
