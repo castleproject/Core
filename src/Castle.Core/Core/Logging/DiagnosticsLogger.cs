@@ -29,7 +29,7 @@ namespace Castle.Core.Logging
 		private EventLog eventLog;
 
 		/// <summary>
-		/// Creates a logger based on <see cref="System.Diagnostics.EventLog"/>.
+		/// Creates a logger based on <see cref="EventLog"/>.
 		/// </summary>
 		/// <param name="logName"><see cref="EventLog.Log"/></param>
 		public DiagnosticsLogger(string logName) : this(logName, "default")
@@ -37,7 +37,7 @@ namespace Castle.Core.Logging
 		}
 
 		/// <summary>
-		/// Creates a logger based on <see cref="System.Diagnostics.EventLog"/>.
+		/// Creates a logger based on <see cref="EventLog"/>.
 		/// </summary>
 		/// <param name="logName"><see cref="EventLog.Log"/></param>
 		/// <param name="source"><see cref="EventLog.Source"/></param>
@@ -54,7 +54,7 @@ namespace Castle.Core.Logging
 		}
 
 		/// <summary>
-		/// Creates a logger based on <see cref="System.Diagnostics.EventLog"/>.
+		/// Creates a logger based on <see cref="EventLog"/>.
 		/// </summary>
 		/// <param name="logName"><see cref="EventLog.Log"/></param>
 		/// <param name="machineName"><see cref="EventLog.MachineName"/></param>

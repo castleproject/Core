@@ -65,7 +65,7 @@ namespace Castle.Core
 		}
 
 		/// <summary>
-		/// Gets or sets the <see cref="System.Object"/> with the specified key.
+		/// Gets or sets the <see cref="Object"/> with the specified key.
 		/// </summary>
 		/// <value></value>
 		public object this[object key]

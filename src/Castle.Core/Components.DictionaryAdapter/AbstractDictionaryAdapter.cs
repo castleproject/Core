@@ -115,7 +115,7 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		/// <summary>
-		/// Gets or sets the <see cref="System.Object"/> with the specified key.
+		/// Gets or sets the <see cref="Object"/> with the specified key.
 		/// </summary>
 		/// <value></value>
 		public abstract object this[object key] { get; set; }

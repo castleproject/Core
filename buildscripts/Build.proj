@@ -216,9 +216,11 @@ limitations under the License.
 		<Message Text="Running tests from assemblies: $(TestAssemblies)" />
 		
 		<Exec Command="$(NUnitPath)$(NUnitExecutable) /nologo $(TestAssemblies) /xml=$(NUnitTestResultXmlFiles) /framework=$(TargetFrameworkVersion)" Condition=" '$(TEAMCITY_VERSION)' == '' and '$(OS)' == 'Windows_NT' " />
-		<Exec Command="$(MonoShell) $(NUnitPath)$(NUnitExecutable) $(OutputPath)Castle.Core.Tests.dll -nologo -xml=$(NUnitTestResultXmlFiles)" Condition=" '$(TEAMCITY_VERSION)' == '' and '$(OS)' != 'Windows_NT' " />
+		<Exec Command="$(MonoShell) $(NUnitPath)$(NUnitExecutable) $(OutputPath)Castle.Core.Tests.dll -nologo -xml=$(NUnitTestResultXmlFiles)" Condition=" '$(OS)' != 'Windows_NT' " />
 
-		<Exec Command="$(MonoShell) $(teamcity_dotnet_nunitlauncher) mono-2.0 x86 NUnit-2.5.5 $(OutputPath)Castle.Core.Tests.dll" Condition=" '$(TEAMCITY_VERSION)' != '' and $(MonoShell) != '' " />
+		<!-- TC NUnit launcher crashes on 64bit Linux with Mono
+		<Exec Command="$(MonoShell) S(teamcity_dotnet_nunitlauncher) mono-2.0 x86 NUnit-2.5.5 $(OutputPath)Castle.Core.Tests.dll" Condition=" '$(TEAMCITY_VERSION)' != '' and '$(OS)' != 'Windows_NT' " />
+		-->
 
 		<NUnitTeamCity
 			Assemblies="@(TestAssemblies)"
