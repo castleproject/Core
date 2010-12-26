@@ -175,6 +175,11 @@ namespace Castle.DynamicProxy.Tests
 			throw new NotImplementedException();
 		}
 
+		public void Debug(Func<string> messageFactory)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void Debug(string message, Exception exception)
 		{
 			throw new NotImplementedException();
@@ -201,6 +206,11 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		public void Info(string message)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Info(Func<string> messageFactory)
 		{
 			throw new NotImplementedException();
 		}
@@ -235,6 +245,11 @@ namespace Castle.DynamicProxy.Tests
 			throw new NotImplementedException();
 		}
 
+		public void Warn(Func<string> messageFactory)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void Warn(string message, Exception exception)
 		{
 			throw new NotImplementedException();
@@ -265,6 +280,11 @@ namespace Castle.DynamicProxy.Tests
 			throw new NotImplementedException();
 		}
 
+		public void Error(Func<string> messageFactory)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void Error(string message, Exception exception)
 		{
 			throw new NotImplementedException();
@@ -291,6 +311,11 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		public void Fatal(string message)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Fatal(Func<string> messageFactory)
 		{
 			throw new NotImplementedException();
 		}
