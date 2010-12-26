@@ -112,6 +112,11 @@ namespace Castle.Core.Logging
 		{
 		}
 
+		public void Debug(Func<string> messageFactory)
+		{
+			
+		}
+
 		/// <summary>
 		///   No-op.
 		/// </summary>
@@ -166,6 +171,10 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name = "message">Ignored</param>
 		public void Error(string message)
+		{
+		}
+
+		public void Error(Func<string> messageFactory)
 		{
 		}
 
@@ -226,6 +235,10 @@ namespace Castle.Core.Logging
 		{
 		}
 
+		public void Fatal(Func<string> messageFactory)
+		{
+		}
+
 		/// <summary>
 		///   No-op.
 		/// </summary>
@@ -283,6 +296,10 @@ namespace Castle.Core.Logging
 		{
 		}
 
+		public void Info(Func<string> messageFactory)
+		{
+		}
+
 		/// <summary>
 		///   No-op.
 		/// </summary>
@@ -337,6 +354,10 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name = "message">Ignored</param>
 		public void Warn(string message)
+		{
+		}
+
+		public void Warn(Func<string> messageFactory)
 		{
 		}
 
