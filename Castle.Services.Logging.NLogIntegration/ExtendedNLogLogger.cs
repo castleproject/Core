@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,12 +15,15 @@
 namespace Castle.Services.Logging.NLogIntegration
 {
 	using System;
+
 	using Castle.Core.Logging;
+
 	using NLog;
+
 	using ExtendedLogger = Core.Logging.IExtendedLogger;
 
 	/// <summary>
-	/// Implementation of <see cref="IExtendedLogger"/> for NLog.
+	///   Implementation of <see cref = "IExtendedLogger" /> for NLog.
 	/// </summary>
 	public class ExtendedNLogLogger : NLogLogger, ExtendedLogger
 	{
@@ -29,10 +32,10 @@ namespace Castle.Services.Logging.NLogIntegration
 		private static readonly IContextStacks threadStacks = new ThreadContextStacks();
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ExtendedNLogLogger"/> class.
+		///   Initializes a new instance of the <see cref = "ExtendedNLogLogger" /> class.
 		/// </summary>
-		/// <param name="logger">The logger.</param>
-		/// <param name="factory">The factory.</param>
+		/// <param name = "logger">The logger.</param>
+		/// <param name = "factory">The factory.</param>
 		public ExtendedNLogLogger(Logger logger, ExtendedNLogFactory factory)
 		{
 			Logger = logger;
@@ -40,35 +43,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		}
 
 		/// <summary>
-		/// Creates a child logger with the specied <paramref name="name"/>.
-		/// </summary>
-		/// <param name="name">The name.</param>
-		/// <returns></returns>
-		public override ILogger CreateChildLogger(String name)
-		{
-			return CreateExtendedChildLogger(name);
-		}
-
-		/// <summary>
-		/// Creates an extended child logger with the specified <paramref name="name"/>
-		/// </summary>
-		/// <param name="name">The name.</param>
-		/// <returns></returns>
-		public ExtendedLogger CreateExtendedChildLogger(String name)
-		{
-			return Factory.Create(Logger.Name + "." + name);
-		}
-
-		/// <summary>
-		/// Gets or sets the factory.
-		/// </summary>
-		/// <value>The factory.</value>
-		protected internal new ExtendedNLogFactory Factory { get; set; }
-
-		#region IExtendedLogger Members
-
-		/// <summary>
-		/// Exposes the Global Context of the extended logger. 
+		///   Exposes the Global Context of the extended logger.
 		/// </summary>
 		public IContextProperties GlobalProperties
 		{
@@ -76,7 +51,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		}
 
 		/// <summary>
-		/// Exposes the Thread Context of the extended logger.
+		///   Exposes the Thread Context of the extended logger.
 		/// </summary>
 		public IContextProperties ThreadProperties
 		{
@@ -84,13 +59,37 @@ namespace Castle.Services.Logging.NLogIntegration
 		}
 
 		/// <summary>
-		/// Exposes the Thread Stack of the extended logger.
+		///   Exposes the Thread Stack of the extended logger.
 		/// </summary>
 		public IContextStacks ThreadStacks
 		{
 			get { return threadStacks; }
 		}
 
-		#endregion
+		/// <summary>
+		///   Gets or sets the factory.
+		/// </summary>
+		/// <value>The factory.</value>
+		protected internal new ExtendedNLogFactory Factory { get; set; }
+
+		/// <summary>
+		///   Creates an extended child logger with the specified <paramref name = "name" />
+		/// </summary>
+		/// <param name = "name">The name.</param>
+		/// <returns></returns>
+		public ExtendedLogger CreateExtendedChildLogger(String name)
+		{
+			return Factory.Create(Logger.Name + "." + name);
+		}
+
+		/// <summary>
+		///   Creates a child logger with the specied <paramref name = "name" />.
+		/// </summary>
+		/// <param name = "name">The name.</param>
+		/// <returns></returns>
+		public override ILogger CreateChildLogger(String name)
+		{
+			return CreateExtendedChildLogger(name);
+		}
 	}
 }

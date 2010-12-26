@@ -15,23 +15,24 @@
 namespace Castle.Services.Logging.NLogIntegration
 {
 	using Castle.Core.Logging;
+
 	using NLog;
 
 	/// <summary>
-	/// Used to access <see cref="GlobalDiagnosticsContext"/>
+	///   Used to access <see cref = "GlobalDiagnosticsContext" />
 	/// </summary>
 	public class GlobalContextProperties : IContextProperties
 	{
 		/// <summary>
-		/// Gets or sets the value of a property
+		///   Gets or sets the value of a property
 		/// </summary>
 		/// <value>
-		/// The value for the property with the specified key
+		///   The value for the property with the specified key
 		/// </value>
 		/// <remarks>
-		/// <para>
-		/// Gets or sets the value of a property
-		/// </para>
+		///   <para>
+		///     Gets or sets the value of a property
+		///   </para>
 		/// </remarks>
 		public object this[string key]
 		{

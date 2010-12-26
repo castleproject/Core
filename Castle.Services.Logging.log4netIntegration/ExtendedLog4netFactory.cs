@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 {
 	using System;
 	using System.IO;
+
 	using Castle.Core.Logging;
 
 	using log4net;
@@ -29,30 +30,30 @@ namespace Castle.Services.Logging.Log4netIntegration
 
 		public ExtendedLog4netFactory(String configFile)
 		{
-			FileInfo file = GetConfigFile(configFile);
+			var file = GetConfigFile(configFile);
 			XmlConfigurator.ConfigureAndWatch(file);
 		}
 
 		/// <summary>
-		/// Configures log4net with a stream containing XML.
+		///   Configures log4net with a stream containing XML.
 		/// </summary>
-		/// <param name="config"></param>
+		/// <param name = "config"></param>
 		public ExtendedLog4netFactory(Stream config)
 		{
 			XmlConfigurator.Configure(config);
 		}
 
 		/// <summary>
-		/// Creates a new extended logger.
+		///   Creates a new extended logger.
 		/// </summary>
 		public override IExtendedLogger Create(string name)
 		{
-			ILog log = LogManager.GetLogger(name);
+			var log = LogManager.GetLogger(name);
 			return new ExtendedLog4netLogger(log, this);
 		}
 
 		/// <summary>
-		/// Creates a new extended logger.
+		///   Creates a new extended logger.
 		/// </summary>
 		public override IExtendedLogger Create(string name, LoggerLevel level)
 		{
