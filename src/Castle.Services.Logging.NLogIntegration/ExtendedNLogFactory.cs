@@ -15,23 +15,23 @@
 namespace Castle.Services.Logging.NLogIntegration
 {
 	using System;
-	using System.IO;
+
 	using Castle.Core.Logging;
 
 	using NLog;
 	using NLog.Config;
 
 	/// <summary>
-	/// Implementation of <see cref="IExtendedLoggerFactory"/> for NLog.
+	///   Implementation of <see cref = "IExtendedLoggerFactory" /> for NLog.
 	/// </summary>
 	public class ExtendedNLogFactory : AbstractExtendedLoggerFactory
 	{
 		// Deal with mono bug https://bugzilla.novell.com/show_bug.cgi?id=63986
 #pragma warning disable 419
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ExtendedNLogFactory"/> class.
-		/// Configures NLog with a config file name 'nlog.config' 
-		/// <seealso cref="Create(string)"/>
+		///   Initializes a new instance of the <see cref = "ExtendedNLogFactory" /> class.
+		///   Configures NLog with a config file name 'nlog.config' 
+		///   <seealso cref = "Create(string)" />
 		/// </summary>
 		public ExtendedNLogFactory()
 			: this("nlog.config")
@@ -40,36 +40,36 @@ namespace Castle.Services.Logging.NLogIntegration
 #pragma warning restore 419
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ExtendedNLogFactory"/> class with the configfile specified by <paramref name="configFile"/>
+		///   Initializes a new instance of the <see cref = "ExtendedNLogFactory" /> class with the configfile specified by <paramref name = "configFile" />
 		/// </summary>
-		/// <param name="configFile">The config file.</param>
+		/// <param name = "configFile">The config file.</param>
 		public ExtendedNLogFactory(string configFile)
 		{
-			FileInfo file = GetConfigFile(configFile);
+			var file = GetConfigFile(configFile);
 			LogManager.Configuration = new XmlLoggingConfiguration(file.FullName);
 		}
 
 		/// <summary>
-		/// Creates a new extended logger with the specified <paramref name="name"/>.
+		///   Creates a new extended logger with the specified <paramref name = "name" />.
 		/// </summary>
-		/// <param name="name"></param>
+		/// <param name = "name"></param>
 		/// <returns></returns>
 		public override IExtendedLogger Create(string name)
 		{
-			Logger log = LogManager.GetLogger(name);
+			var log = LogManager.GetLogger(name);
 			return new ExtendedNLogLogger(log, this);
 		}
 
 		/// <summary>
-		/// Not implemented, NLog logger levels cannot be set at runtime.
+		///   Not implemented, NLog logger levels cannot be set at runtime.
 		/// </summary>
-		/// <param name="name">The name.</param>
-		/// <param name="level">The level.</param>
+		/// <param name = "name">The name.</param>
+		/// <param name = "level">The level.</param>
 		/// <returns></returns>
-		/// <exception cref="NotImplementedException" />
+		/// <exception cref = "NotImplementedException" />
 		public override IExtendedLogger Create(string name, LoggerLevel level)
 		{
-			throw new NotImplementedException("Logger levels cannot be set at runtime. Please review your configuration file.");
+			throw new NotSupportedException("Logger levels cannot be set at runtime. Please review your configuration file.");
 		}
 	}
 }
