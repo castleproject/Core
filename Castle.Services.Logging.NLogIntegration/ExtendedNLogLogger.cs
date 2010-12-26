@@ -28,8 +28,6 @@ namespace Castle.Services.Logging.NLogIntegration
 		private static readonly IContextProperties threadProperties = new ThreadContextProperties();
 		private static readonly IContextStacks threadStacks = new ThreadContextStacks();
 
-		private ExtendedNLogFactory factory;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExtendedNLogLogger"/> class.
 		/// </summary>
@@ -65,11 +63,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// Gets or sets the factory.
 		/// </summary>
 		/// <value>The factory.</value>
-		protected internal new ExtendedNLogFactory Factory
-		{
-			get { return factory; }
-			set { factory = value; }
-		}
+		protected internal new ExtendedNLogFactory Factory { get; set; }
 
 		#region IExtendedLogger Members
 

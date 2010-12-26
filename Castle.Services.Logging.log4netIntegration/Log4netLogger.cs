@@ -116,16 +116,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		[Obsolete("Use DebugFormat instead")]
-		public void Debug(String format, params object[] args)
-		{
-			if (IsDebugEnabled)
-			{
-				Logger.Log(declaringType, Level.Debug, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
-			}
-		}
-
-		#endregion
+    	#endregion
 
 		#region Info
 
@@ -177,16 +168,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		[Obsolete("Use InfoFormat instead")]
-		public void Info(String format, params object[] args)
-		{
-			if (IsInfoEnabled)
-			{
-				Logger.Log(declaringType, Level.Info, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
-			}
-		}
-
-		#endregion
+    	#endregion
 
 		#region Warn
 
@@ -235,15 +217,6 @@ namespace Castle.Services.Logging.Log4netIntegration
 			if (IsWarnEnabled)
 			{
 				Logger.Log(declaringType, Level.Warn, new SystemStringFormat(formatProvider, format, args), exception);
-			}
-		}
-
-		[Obsolete("Use WarnFormat instead")]
-		public void Warn(String format, params object[] args)
-		{
-			if (IsWarnEnabled)
-			{
-				Logger.Log(declaringType, Level.Warn, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
 			}
 		}
 
@@ -299,16 +272,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		[Obsolete("Use ErrorFormat instead")]
-		public void Error(String format, params object[] args)
-		{
-			if (IsErrorEnabled)
-			{
-				Logger.Log(declaringType, Level.Error, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
-			}
-		}
-
-		#endregion
+    	#endregion
 
 		#region Fatal
 
@@ -360,47 +324,11 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		[Obsolete("Use FatalFormat instead")]
-		public void Fatal(String format, params object[] args)
-		{
-			if (IsFatalEnabled)
-			{
-				Logger.Log(declaringType, Level.Fatal, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
-			}
-		}
-
-		#endregion
+    	#endregion
 
 		#region FatalError (obsolete)
 
-		[Obsolete("Use FatalFormat instead")]
-		public void FatalError(String format, params object[] args)
-		{
-			if (IsFatalErrorEnabled)
-			{
-				Logger.Log(declaringType, Level.Fatal, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
-			}
-		}
-
-		[Obsolete("Use Fatal instead")]
-		public void FatalError(String message, Exception exception)
-		{
-			if (IsFatalErrorEnabled)
-			{
-				Logger.Log(declaringType, Level.Fatal, message, exception);
-			}
-		}
-
-		[Obsolete("Use Fatal instead")]
-		public void FatalError(String message)
-		{
-			if (IsFatalErrorEnabled)
-			{
-				Logger.Log(declaringType, Level.Fatal, message, null);
-			}
-		}
-
-		#endregion
+    	#endregion
 
 		#region Is (...) Enabled
 
@@ -424,13 +352,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			get { return Logger.IsEnabledFor(Level.Fatal); }
 		}
 
-		[Obsolete("Use IsFatalEnabled instead")]
-		public bool IsFatalErrorEnabled
-		{
-			get { return Logger.IsEnabledFor(Level.Fatal); }
-		}
-
-		public bool IsInfoEnabled
+    	public bool IsInfoEnabled
 		{
 			get { return Logger.IsEnabledFor(Level.Info); }
 		}

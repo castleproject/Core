@@ -180,14 +180,9 @@ namespace Castle.DynamicProxy.Tests
 			throw new NotImplementedException();
 		}
 
-		public void Debug(string format, params object[] args)
-		{
-			messages.Add("DEBUG: " + string.Format(format, args));
-		}
-
 		public void DebugFormat(string format, params object[] args)
 		{
-			throw new NotImplementedException();
+			messages.Add("DEBUG: " + string.Format(format, args));
 		}
 
 		public void DebugFormat(Exception exception, string format, params object[] args)
@@ -211,11 +206,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		public void Info(string message, Exception exception)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Info(string format, params object[] args)
 		{
 			throw new NotImplementedException();
 		}
@@ -250,14 +240,9 @@ namespace Castle.DynamicProxy.Tests
 			throw new NotImplementedException();
 		}
 
-		public void Warn(string format, params object[] args)
-		{
-			messages.Add("WARN: " + string.Format(format, args));
-		}
-
 		public void WarnFormat(string format, params object[] args)
 		{
-			throw new NotImplementedException();
+			messages.Add("WARN: " + string.Format(format, args));
 		}
 
 		public void WarnFormat(Exception exception, string format, params object[] args)
@@ -281,11 +266,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		public void Error(string message, Exception exception)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Error(string format, params object[] args)
 		{
 			throw new NotImplementedException();
 		}
@@ -320,11 +300,6 @@ namespace Castle.DynamicProxy.Tests
 			throw new NotImplementedException();
 		}
 
-		public void Fatal(string format, params object[] args)
-		{
-			throw new NotImplementedException();
-		}
-
 		public void FatalFormat(string format, params object[] args)
 		{
 			throw new NotImplementedException();
@@ -341,21 +316,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		public void FatalFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void FatalError(string message)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void FatalError(string message, Exception exception)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void FatalError(string format, params object[] args)
 		{
 			throw new NotImplementedException();
 		}
@@ -386,11 +346,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		public bool IsFatalEnabled
-		{
-			get { return true; }
-		}
-
-		public bool IsFatalErrorEnabled
 		{
 			get { return true; }
 		}
