@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,12 +20,10 @@ namespace Castle.Services.Logging.NLogIntegration
 	///</summary>
 	public class ThreadContextStacks : IContextStacks
 	{
-		#region IContextStacks Members
-
 		/// <summary>
-		/// Gets the single <see cref="IContextStack"/>.
+		///   Gets the single <see cref = "IContextStack" />.
 		/// </summary>
-		/// <value>The value of <param name="key"></param> is ignored because NLog only has a single stack</value>
+		/// <value>The value of <param name = "key"></param> is ignored because NLog only has a single stack</value>
 		public IContextStack this[string key]
 		{
 			get
@@ -34,7 +32,5 @@ namespace Castle.Services.Logging.NLogIntegration
 				return new ThreadContextStack();
 			}
 		}
-
-		#endregion
 	}
 }

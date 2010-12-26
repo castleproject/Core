@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,23 +15,20 @@
 namespace Castle.Services.Logging.Log4netIntegration
 {
 	using Castle.Core.Logging;
+
 	using log4net;
 
 	public class ThreadContextStacks : IContextStacks
 	{
-		#region IContextStacks Members
-
 		public IContextStack this[string key]
 		{
 			get
 			{
-				log4net.Util.ThreadContextStack log4netStack = ThreadContext.Stacks[key];
+				var log4netStack = ThreadContext.Stacks[key];
 
 				// log4net never allows a null stack.
 				return new ThreadContextStack(log4netStack);
 			}
 		}
-
-		#endregion
 	}
 }

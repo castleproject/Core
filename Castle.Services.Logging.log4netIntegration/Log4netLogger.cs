@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,23 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 namespace Castle.Services.Logging.Log4netIntegration
 {
 	using System;
 	using System.Globalization;
+
 	using log4net;
 	using log4net.Core;
 	using log4net.Util;
+
 	using Logger = Castle.Core.Logging.ILogger;
 
 	[Serializable]
 	public class Log4netLogger : MarshalByRefObject, Logger
 	{
-		private static Type declaringType = typeof(Log4netLogger);
+		private static readonly Type declaringType = typeof(Log4netLogger);
 
-		private ILogger logger;
-		private Log4netFactory factory;
+		public Log4netLogger(ILogger logger, Log4netFactory factory)
+		{
+			Logger = logger;
+			Factory = factory;
+		}
 
 		internal Log4netLogger()
 		{
@@ -38,35 +42,44 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 		}
 
-		public Log4netLogger(ILogger logger, Log4netFactory factory)
+		public bool IsDebugEnabled
 		{
-			Logger = logger;
-			Factory = factory;
+			get { return Logger.IsEnabledFor(Level.Debug); }
 		}
 
-		public virtual Logger CreateChildLogger(String name)
+		public bool IsErrorEnabled
 		{
-			return Factory.Create(Logger.Name + "." + name);
+			get { return Logger.IsEnabledFor(Level.Error); }
 		}
 
-		protected internal ILogger Logger
+		public bool IsFatalEnabled
 		{
-			get { return logger; }
-			set { logger = value; }
+			get { return Logger.IsEnabledFor(Level.Fatal); }
 		}
 
-		protected internal Log4netFactory Factory
+		public bool IsInfoEnabled
 		{
-			get { return factory; }
-			set { factory = value; }
+			get { return Logger.IsEnabledFor(Level.Info); }
 		}
+
+		public bool IsWarnEnabled
+		{
+			get { return Logger.IsEnabledFor(Level.Warn); }
+		}
+
+		protected internal Log4netFactory Factory { get; set; }
+
+		protected internal ILogger Logger { get; set; }
 
 		public override string ToString()
 		{
 			return Logger.ToString();
 		}
 
-		#region Debug
+		public virtual Logger CreateChildLogger(String name)
+		{
+			return Factory.Create(Logger.Name + "." + name);
+		}
 
 		public void Debug(String message)
 		{
@@ -104,7 +117,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsDebugEnabled)
 			{
-                Logger.Log(declaringType, Level.Debug, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), exception);
+				Logger.Log(declaringType, Level.Debug, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), exception);
 			}
 		}
 
@@ -112,7 +125,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsDebugEnabled)
 			{
-                Logger.Log(declaringType, Level.Debug, new SystemStringFormat(formatProvider, format, args), null);
+				Logger.Log(declaringType, Level.Debug, new SystemStringFormat(formatProvider, format, args), null);
 			}
 		}
 
@@ -120,133 +133,9 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 			if (IsDebugEnabled)
 			{
-                Logger.Log(declaringType, Level.Debug, new SystemStringFormat(formatProvider, format, args), exception);
+				Logger.Log(declaringType, Level.Debug, new SystemStringFormat(formatProvider, format, args), exception);
 			}
 		}
-
-    	#endregion
-
-		#region Info
-
-		public void Info(String message)
-		{
-			if (IsInfoEnabled)
-			{
-				Logger.Log(declaringType, Level.Info, message, null);
-			}
-		}
-
-		public void Info(Func<string> messageFactory)
-		{
-			if (IsInfoEnabled)
-			{
-				Logger.Log(declaringType, Level.Info, messageFactory.Invoke(), null);
-			}
-		}
-
-		public void Info(String message, Exception exception)
-		{
-			if (IsInfoEnabled)
-			{
-				Logger.Log(declaringType, Level.Info, message, exception);
-			}
-		}
-
-		public void InfoFormat(String format, params Object[] args)
-		{
-			if (IsInfoEnabled)
-			{
-				Logger.Log(declaringType, Level.Info, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
-			}
-		}
-
-		public void InfoFormat(Exception exception, String format, params Object[] args)
-		{
-			if (IsInfoEnabled)
-			{
-				Logger.Log(declaringType, Level.Info, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), exception);
-			}
-		}
-
-		public void InfoFormat(IFormatProvider formatProvider, String format, params Object[] args)
-		{
-			if (IsInfoEnabled)
-			{
-				Logger.Log(declaringType, Level.Info, new SystemStringFormat(formatProvider, format, args), null);
-			}
-		}
-
-		public void InfoFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args)
-		{
-			if (IsInfoEnabled)
-			{
-				Logger.Log(declaringType, Level.Info, new SystemStringFormat(formatProvider, format, args), exception);
-			}
-		}
-
-    	#endregion
-
-		#region Warn
-
-		public void Warn(String message)
-		{
-			if (IsWarnEnabled)
-			{
-				Logger.Log(declaringType, Level.Warn, message, null);
-			}
-		}
-
-		public void Warn(Func<string> messageFactory)
-		{
-			if (IsWarnEnabled)
-			{
-				Logger.Log(declaringType, Level.Warn, messageFactory.Invoke(), null);
-			}
-		}
-
-		public void Warn(String message, Exception exception)
-		{
-			if (IsWarnEnabled)
-			{
-				Logger.Log(declaringType, Level.Warn, message, exception);
-			}
-		}
-
-		public void WarnFormat(String format, params Object[] args)
-		{
-			if (IsWarnEnabled)
-			{
-				Logger.Log(declaringType, Level.Warn, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
-			}
-		}
-
-		public void WarnFormat(Exception exception, String format, params Object[] args)
-		{
-			if (IsWarnEnabled)
-			{
-				Logger.Log(declaringType, Level.Warn, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), exception);
-			}
-		}
-
-		public void WarnFormat(IFormatProvider formatProvider, String format, params Object[] args)
-		{
-			if (IsWarnEnabled)
-			{
-				Logger.Log(declaringType, Level.Warn, new SystemStringFormat(formatProvider, format, args), null);
-			}
-		}
-
-		public void WarnFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args)
-		{
-			if (IsWarnEnabled)
-			{
-				Logger.Log(declaringType, Level.Warn, new SystemStringFormat(formatProvider, format, args), exception);
-			}
-		}
-
-		#endregion
-
-		#region Error
 
 		public void Error(String message)
 		{
@@ -304,10 +193,6 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-    	#endregion
-
-		#region Fatal
-
 		public void Fatal(String message)
 		{
 			if (IsFatalEnabled)
@@ -364,35 +249,116 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-    	#endregion
-
-		#region Is (...) Enabled
-
-		public bool IsErrorEnabled
+		public void Info(String message)
 		{
-			get { return Logger.IsEnabledFor(Level.Error); }
+			if (IsInfoEnabled)
+			{
+				Logger.Log(declaringType, Level.Info, message, null);
+			}
 		}
 
-		public bool IsWarnEnabled
+		public void Info(Func<string> messageFactory)
 		{
-			get { return Logger.IsEnabledFor(Level.Warn); }
+			if (IsInfoEnabled)
+			{
+				Logger.Log(declaringType, Level.Info, messageFactory.Invoke(), null);
+			}
 		}
 
-		public bool IsDebugEnabled
+		public void Info(String message, Exception exception)
 		{
-			get { return Logger.IsEnabledFor(Level.Debug); }
+			if (IsInfoEnabled)
+			{
+				Logger.Log(declaringType, Level.Info, message, exception);
+			}
 		}
 
-		public bool IsFatalEnabled
+		public void InfoFormat(String format, params Object[] args)
 		{
-			get { return Logger.IsEnabledFor(Level.Fatal); }
+			if (IsInfoEnabled)
+			{
+				Logger.Log(declaringType, Level.Info, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
+			}
 		}
 
-    	public bool IsInfoEnabled
+		public void InfoFormat(Exception exception, String format, params Object[] args)
 		{
-			get { return Logger.IsEnabledFor(Level.Info); }
+			if (IsInfoEnabled)
+			{
+				Logger.Log(declaringType, Level.Info, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), exception);
+			}
 		}
 
-		#endregion
+		public void InfoFormat(IFormatProvider formatProvider, String format, params Object[] args)
+		{
+			if (IsInfoEnabled)
+			{
+				Logger.Log(declaringType, Level.Info, new SystemStringFormat(formatProvider, format, args), null);
+			}
+		}
+
+		public void InfoFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args)
+		{
+			if (IsInfoEnabled)
+			{
+				Logger.Log(declaringType, Level.Info, new SystemStringFormat(formatProvider, format, args), exception);
+			}
+		}
+
+		public void Warn(String message)
+		{
+			if (IsWarnEnabled)
+			{
+				Logger.Log(declaringType, Level.Warn, message, null);
+			}
+		}
+
+		public void Warn(Func<string> messageFactory)
+		{
+			if (IsWarnEnabled)
+			{
+				Logger.Log(declaringType, Level.Warn, messageFactory.Invoke(), null);
+			}
+		}
+
+		public void Warn(String message, Exception exception)
+		{
+			if (IsWarnEnabled)
+			{
+				Logger.Log(declaringType, Level.Warn, message, exception);
+			}
+		}
+
+		public void WarnFormat(String format, params Object[] args)
+		{
+			if (IsWarnEnabled)
+			{
+				Logger.Log(declaringType, Level.Warn, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
+			}
+		}
+
+		public void WarnFormat(Exception exception, String format, params Object[] args)
+		{
+			if (IsWarnEnabled)
+			{
+				Logger.Log(declaringType, Level.Warn, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), exception);
+			}
+		}
+
+		public void WarnFormat(IFormatProvider formatProvider, String format, params Object[] args)
+		{
+			if (IsWarnEnabled)
+			{
+				Logger.Log(declaringType, Level.Warn, new SystemStringFormat(formatProvider, format, args), null);
+			}
+		}
+
+		public void WarnFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args)
+		{
+			if (IsWarnEnabled)
+			{
+				Logger.Log(declaringType, Level.Warn, new SystemStringFormat(formatProvider, format, args), exception);
+			}
+		}
 	}
 }

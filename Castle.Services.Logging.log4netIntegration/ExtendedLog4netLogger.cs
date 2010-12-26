@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,19 +15,20 @@
 namespace Castle.Services.Logging.Log4netIntegration
 {
 	using System;
+
 	using Castle.Core.Logging;
+
 	using log4net;
-	using ILogger=log4net.Core.ILogger;
+
+	using ILogger = log4net.Core.ILogger;
 	using Logger = Castle.Core.Logging.ILogger;
 	using ExtendedLogger = Castle.Core.Logging.IExtendedLogger;
 
 	public class ExtendedLog4netLogger : Log4netLogger, ExtendedLogger
 	{
-		private static readonly IContextProperties threadContextProperties = new ThreadContextProperties();
 		private static readonly IContextProperties globalContextProperties = new GlobalContextProperties();
+		private static readonly IContextProperties threadContextProperties = new ThreadContextProperties();
 		private static readonly IContextStacks threadContextStacks = new ThreadContextStacks();
-
-		private ExtendedLog4netFactory factory;
 
 		public ExtendedLog4netLogger(ILog log, ExtendedLog4netFactory factory) : this(log.Logger, factory)
 		{
@@ -39,26 +40,8 @@ namespace Castle.Services.Logging.Log4netIntegration
 			Factory = factory;
 		}
 
-		public override Logger CreateChildLogger(String name)
-		{
-			return CreateExtendedChildLogger(name);
-		}
-
-		public ExtendedLogger CreateExtendedChildLogger(string name)
-		{
-			return Factory.Create(Logger.Name + "." + name);
-		}
-
-		protected internal new ExtendedLog4netFactory Factory
-		{
-			get { return factory; }
-			set { factory = value; }
-		}
-
-		#region IExtendedLogger Members
-
 		/// <summary>
-		/// Exposes the Global Context of the extended logger. 
+		///   Exposes the Global Context of the extended logger.
 		/// </summary>
 		public IContextProperties GlobalProperties
 		{
@@ -66,7 +49,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		}
 
 		/// <summary>
-		/// Exposes the Thread Context of the extended logger.
+		///   Exposes the Thread Context of the extended logger.
 		/// </summary>
 		public IContextProperties ThreadProperties
 		{
@@ -74,13 +57,23 @@ namespace Castle.Services.Logging.Log4netIntegration
 		}
 
 		/// <summary>
-		/// Exposes the Thread Stack of the extended logger.
+		///   Exposes the Thread Stack of the extended logger.
 		/// </summary>
 		public IContextStacks ThreadStacks
 		{
 			get { return threadContextStacks; }
 		}
 
-		#endregion
+		protected internal new ExtendedLog4netFactory Factory { get; set; }
+
+		public ExtendedLogger CreateExtendedChildLogger(string name)
+		{
+			return Factory.Create(Logger.Name + "." + name);
+		}
+
+		public override Logger CreateChildLogger(String name)
+		{
+			return CreateExtendedChildLogger(name);
+		}
 	}
 }

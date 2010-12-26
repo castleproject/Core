@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,23 +15,24 @@
 namespace Castle.Services.Logging.NLogIntegration
 {
 	using Castle.Core.Logging;
+
 	using NLog;
 
 	/// <summary>
-	/// Used to access to <see cref="MappedDiagnosticsContext"/>
+	///   Used to access to <see cref = "MappedDiagnosticsContext" />
 	/// </summary>
 	public class ThreadContextProperties : IContextProperties
 	{
 		/// <summary>
-		/// Gets or sets the value of a property
+		///   Gets or sets the value of a property
 		/// </summary>
 		/// <value>
-		/// The value for the property with the specified key
+		///   The value for the property with the specified key
 		/// </value>
 		/// <remarks>
-		/// <para>
-		/// Gets or sets the value of a property
-		/// </para>
+		///   <para>
+		///     Gets or sets the value of a property
+		///   </para>
 		/// </remarks>
 		public object this[string key]
 		{
