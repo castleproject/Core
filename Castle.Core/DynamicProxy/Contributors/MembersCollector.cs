@@ -236,7 +236,7 @@ namespace Castle.DynamicProxy.Contributors
 			// we can never intercept a sealed (final) method
 			if (method.IsFinal)
 			{
-				Logger.Debug("Excluded sealed method {0} on {1} because it cannot be intercepted.", method.Name, method.DeclaringType.FullName);
+				Logger.DebugFormat("Excluded sealed method {0} on {1} because it cannot be intercepted.", method.Name, method.DeclaringType.FullName);
 				return false;
 			}
 
@@ -256,7 +256,7 @@ namespace Castle.DynamicProxy.Contributors
 				if (method.DeclaringType != typeof(MarshalByRefObject))
 #endif
 				{
-					Logger.Debug("Excluded non-virtual method {0} on {1} because it cannot be intercepted.", method.Name, method.DeclaringType.FullName);
+					Logger.DebugFormat("Excluded non-virtual method {0} on {1} because it cannot be intercepted.", method.Name, method.DeclaringType.FullName);
 					hook.NonProxyableMemberNotification(type, method);
 				}
 				return false;
