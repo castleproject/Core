@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,14 +26,20 @@ namespace Castle.Core.Logging
 	{
 		public virtual ILogger Create(Type type)
 		{
-			if (type == null) throw new ArgumentNullException("type");
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
 
 			return Create(type.FullName);
 		}
 
 		public virtual ILogger Create(Type type, LoggerLevel level)
 		{
-			if (type == null) throw new ArgumentNullException("type");
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
 
 			return Create(type.FullName, level);
 		}
@@ -43,9 +49,9 @@ namespace Castle.Core.Logging
 		public abstract ILogger Create(String name, LoggerLevel level);
 
 		/// <summary>
-		/// Gets the configuration file.
+		///   Gets the configuration file.
 		/// </summary>
-		/// <param name="fileName">i.e. log4net.config</param>
+		/// <param name = "fileName">i.e. log4net.config</param>
 		/// <returns></returns>
 		protected static FileInfo GetConfigFile(string fileName)
 		{

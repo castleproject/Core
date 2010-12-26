@@ -114,7 +114,6 @@ namespace Castle.Core.Logging
 
 		public void Debug(Func<string> messageFactory)
 		{
-			
 		}
 
 		/// <summary>
