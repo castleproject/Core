@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 
 namespace Castle.Core.Logging
 {
-	#if !SILVERLIGHT
+#if !SILVERLIGHT
 	using System;
 
 	[Serializable]
@@ -29,11 +29,11 @@ namespace Castle.Core.Logging
 
 		public override ILogger Create(string name, LoggerLevel level)
 		{
-			DiagnosticsLogger logger = new DiagnosticsLogger(DefaultLogName, name);
+			var logger = new DiagnosticsLogger(DefaultLogName, name);
 			logger.Level = level;
 			return logger;
 		}
 	}
 
-	#endif
+#endif
 }

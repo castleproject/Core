@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ namespace Castle.Core.Logging
 	public class NullLogFactory : AbstractLoggerFactory
 	{
 		/// <summary>
-		/// Creates an instance of ILogger with the specified name.
+		///   Creates an instance of ILogger with the specified name.
 		/// </summary>
-		/// <param name="name">Name.</param>
+		/// <param name = "name">Name.</param>
 		/// <returns></returns>
 		public override ILogger Create(String name)
 		{
@@ -35,10 +35,10 @@ namespace Castle.Core.Logging
 		}
 
 		/// <summary>
-		/// Creates an instance of ILogger with the specified name and LoggerLevel.
+		///   Creates an instance of ILogger with the specified name and LoggerLevel.
 		/// </summary>
-		/// <param name="name">Name.</param>
-		/// <param name="level">Level.</param>
+		/// <param name = "name">Name.</param>
+		/// <param name = "level">Level.</param>
 		/// <returns></returns>
 		public override ILogger Create(String name, LoggerLevel level)
 		{
