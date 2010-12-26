@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,24 +15,24 @@
 namespace Castle.Core.Logging
 {
 	/// <summary>
-	/// Provides an interface that supports <see cref="ILogger"/> and
-	/// allows the storage and retrieval of Contexts. These are supported in
-	/// both log4net and NLog.
+	///   Provides an interface that supports <see cref = "ILogger" /> and
+	///   allows the storage and retrieval of Contexts. These are supported in
+	///   both log4net and NLog.
 	/// </summary>
 	public interface IExtendedLogger : ILogger
 	{
 		/// <summary>
-		/// Exposes the Global Context of the extended logger. 
+		///   Exposes the Global Context of the extended logger.
 		/// </summary>
 		IContextProperties GlobalProperties { get; }
 
 		/// <summary>
-		/// Exposes the Thread Context of the extended logger.
+		///   Exposes the Thread Context of the extended logger.
 		/// </summary>
 		IContextProperties ThreadProperties { get; }
 
 		/// <summary>
-		/// Exposes the Thread Stack of the extended logger.
+		///   Exposes the Thread Stack of the extended logger.
 		/// </summary>
 		IContextStacks ThreadStacks { get; }
 	}

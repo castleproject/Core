@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,15 +14,15 @@
 
 namespace Castle.Core.Logging
 {
-	#if !SILVERLIGHT
+#if !SILVERLIGHT
 	using System;
 	using System.IO;
 	using System.Text;
 
 	/// <summary>
-	/// Creates <see cref="StreamLogger"/> outputing 
-	/// to files. The name of the file is derived from the log name
-	/// plus the 'log' extension.
+	///   Creates <see cref = "StreamLogger" /> outputing 
+	///   to files. The name of the file is derived from the log name
+	///   plus the 'log' extension.
 	/// </summary>
 	[Serializable]
 	public class StreamLoggerFactory : AbstractLoggerFactory
@@ -34,12 +34,12 @@ namespace Castle.Core.Logging
 
 		public override ILogger Create(string name, LoggerLevel level)
 		{
-			StreamLogger logger =
+			var logger =
 				new StreamLogger(name, new FileStream(name + ".log", FileMode.Append, FileAccess.Write), Encoding.Default);
 			logger.Level = level;
 			return logger;
 		}
 	}
 
-	#endif
+#endif
 }

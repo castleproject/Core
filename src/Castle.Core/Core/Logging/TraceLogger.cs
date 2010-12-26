@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 
 namespace Castle.Core.Logging
 {
-	#if !SILVERLIGHT
+#if !SILVERLIGHT
 	using System;
 	using System.Diagnostics;
 	using System.Collections.Generic;
@@ -23,26 +23,26 @@ namespace Castle.Core.Logging
 #endif
 
 	/// <summary>
-	/// The TraceLogger sends all logging to the System.Diagnostics.TraceSource
-	/// built into the .net framework. 
+	///   The TraceLogger sends all logging to the System.Diagnostics.TraceSource
+	///   built into the .net framework.
 	/// </summary>
 	/// <remarks>
-	/// Logging can be configured in the system.diagnostics configuration 
-	/// section. 
+	///   Logging can be configured in the system.diagnostics configuration 
+	///   section. 
 	/// 
-	/// If logger doesn't find a source name with a full match it will
-	/// use source names which match the namespace partially. For example you can
-	/// configure from all castle components by adding a source name with the
-	/// name "Castle". 
+	///   If logger doesn't find a source name with a full match it will
+	///   use source names which match the namespace partially. For example you can
+	///   configure from all castle components by adding a source name with the
+	///   name "Castle". 
 	/// 
-	/// If no portion of the namespace matches the source named "Default" will
-	/// be used.
+	///   If no portion of the namespace matches the source named "Default" will
+	///   be used.
 	/// </remarks>
 	public class TraceLogger : LevelFilteredLogger
 	{
 		private static readonly Dictionary<string, TraceSource> cache = new Dictionary<string, TraceSource>();
 
-		TraceSource traceSource;
+		private TraceSource traceSource;
 
 		/// <summary>
 		/// Build a new trace logger based on the named TraceSource
@@ -111,7 +111,7 @@ namespace Castle.Core.Logging
 #if DOTNET40
 		[SecurityCritical]
 #endif
-		void Initialize()
+		private void Initialize()
 		{
 			lock (cache)
 			{
@@ -121,10 +121,11 @@ namespace Castle.Core.Logging
 				// the named TraceSources which have been created
 
 				if (cache.TryGetValue(Name, out traceSource))
+				{
 					return;
+				}
 
-
-				SourceLevels defaultLevel = MapSourceLevels(Level);
+				var defaultLevel = MapSourceLevels(Level);
 				traceSource = new TraceSource(Name, defaultLevel);
 
 				// no further action necessary when the named source is configured
@@ -135,12 +136,12 @@ namespace Castle.Core.Logging
 				}
 
 				// otherwise hunt for a shorter source that been configured            
-				TraceSource foundSource = new TraceSource("Default", defaultLevel);
+				var foundSource = new TraceSource("Default", defaultLevel);
 
-				string searchName = ShortenName(Name);
+				var searchName = ShortenName(Name);
 				while (!string.IsNullOrEmpty(searchName))
 				{
-					TraceSource searchSource = new TraceSource(searchName, defaultLevel);
+					var searchSource = new TraceSource(searchName, defaultLevel);
 					if (IsSourceConfigured(searchSource))
 					{
 						foundSource = searchSource;
@@ -154,15 +155,17 @@ namespace Castle.Core.Logging
 				traceSource.Switch = foundSource.Switch;
 				traceSource.Listeners.Clear();
 				foreach (TraceListener listener in foundSource.Listeners)
+				{
 					traceSource.Listeners.Add(listener);
+				}
 
 				cache.Add(Name, traceSource);
 			}
 		}
 
-		static string ShortenName(string name)
+		private static string ShortenName(string name)
 		{
-			int lastDot = name.LastIndexOf('.');
+			var lastDot = name.LastIndexOf('.');
 			if (lastDot != -1)
 			{
 				return name.Substring(0, lastDot);
@@ -170,23 +173,21 @@ namespace Castle.Core.Logging
 			return null;
 		}
 
-
 #if DOTNET40
 		[SecuritySafeCritical]
 #endif
-		static bool IsSourceConfigured(TraceSource source)
+		private static bool IsSourceConfigured(TraceSource source)
 		{
 			if (source.Listeners.Count == 1 &&
-				source.Listeners[0] is DefaultTraceListener &&
-				source.Listeners[0].Name == "Default")
+			    source.Listeners[0] is DefaultTraceListener &&
+			    source.Listeners[0].Name == "Default")
 			{
 				return false;
 			}
 			return true;
 		}
 
-
-		static LoggerLevel MapLoggerLevel(SourceLevels level)
+		private static LoggerLevel MapLoggerLevel(SourceLevels level)
 		{
 			switch (level)
 			{
@@ -206,7 +207,7 @@ namespace Castle.Core.Logging
 			return LoggerLevel.Off;
 		}
 
-		static SourceLevels MapSourceLevels(LoggerLevel level)
+		private static SourceLevels MapSourceLevels(LoggerLevel level)
 		{
 			switch (level)
 			{
@@ -224,7 +225,7 @@ namespace Castle.Core.Logging
 			return SourceLevels.Off;
 		}
 
-		static TraceEventType MapTraceEventType(LoggerLevel level)
+		private static TraceEventType MapTraceEventType(LoggerLevel level)
 		{
 			switch (level)
 			{
@@ -243,5 +244,5 @@ namespace Castle.Core.Logging
 		}
 	}
 
-	#endif
+#endif
 }
