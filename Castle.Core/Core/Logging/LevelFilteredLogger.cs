@@ -19,7 +19,6 @@ namespace Castle.Core.Logging
 #if DOTNET40
 	using System.Security;
 #endif
-	using System.Security.Permissions;
 
 	/// <summary>
 	///	The Level Filtered Logger class.  This is a base clase which
@@ -110,6 +109,13 @@ namespace Castle.Core.Logging
 			Log(LoggerLevel.Debug, message, null);
 		}
 
+		public void Debug(Func<string> messageFactory)
+		{
+			if (!IsDebugEnabled) return;
+
+			Log(LoggerLevel.Debug, messageFactory.Invoke(), null);
+		}
+
 		/// <summary>
 		/// Logs a debug message. 
 		/// </summary>
@@ -187,6 +193,13 @@ namespace Castle.Core.Logging
 			if (!IsInfoEnabled) return;
 
 			Log(LoggerLevel.Info, message, null);
+		}
+
+		public void Info(Func<string> messageFactory)
+		{
+			if (!IsInfoEnabled) return;
+
+			Log(LoggerLevel.Info, messageFactory.Invoke(), null);
 		}
 
 		/// <summary>
@@ -268,6 +281,13 @@ namespace Castle.Core.Logging
 			Log(LoggerLevel.Warn, message, null);
 		}
 
+		public void Warn(Func<string> messageFactory)
+		{
+			if (!IsWarnEnabled) return;
+
+			Log(LoggerLevel.Warn, messageFactory.Invoke(), null);
+		}
+
 		/// <summary>
 		/// Logs a warn message. 
 		/// </summary>
@@ -345,6 +365,13 @@ namespace Castle.Core.Logging
 			if (!IsErrorEnabled) return;
 
 			Log(LoggerLevel.Error, message, null);
+		}
+
+		public void Error(Func<string> messageFactory)
+		{
+			if (!IsErrorEnabled) return;
+
+			Log(LoggerLevel.Error, messageFactory.Invoke(), null);
 		}
 
 		/// <summary>
@@ -426,6 +453,13 @@ namespace Castle.Core.Logging
 			Log(LoggerLevel.Fatal, message, null);
 		}
 
+		public void Fatal(Func<string> messageFactory)
+		{
+			if (!IsFatalEnabled) return;
+
+			Log(LoggerLevel.Fatal, messageFactory.Invoke(), null);
+		}
+
 		/// <summary>
 		/// Logs a fatal message. 
 		/// </summary>
@@ -489,10 +523,6 @@ namespace Castle.Core.Logging
 
 			Log(LoggerLevel.Fatal, String.Format(formatProvider, format, args), exception);
 		}
-
-		#endregion
-
-		#region FatalError (obsolete)
 
 		#endregion
 

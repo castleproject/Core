@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Logger = Castle.Core.Logging.ILogger;
 
 namespace Castle.Services.Logging.Log4netIntegration
 {
@@ -21,8 +20,9 @@ namespace Castle.Services.Logging.Log4netIntegration
 	using log4net;
 	using log4net.Core;
 	using log4net.Util;
+	using Logger = Castle.Core.Logging.ILogger;
 
-    [Serializable]
+	[Serializable]
 	public class Log4netLogger : MarshalByRefObject, Logger
 	{
 		private static Type declaringType = typeof(Log4netLogger);
@@ -73,6 +73,14 @@ namespace Castle.Services.Logging.Log4netIntegration
 			if (IsDebugEnabled)
 			{
 				Logger.Log(declaringType, Level.Debug, message, null);
+			}
+		}
+
+		public void Debug(Func<string> messageFactory)
+		{
+			if (IsDebugEnabled)
+			{
+				Logger.Log(declaringType, Level.Debug, messageFactory.Invoke(), null);
 			}
 		}
 
@@ -128,6 +136,14 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
+		public void Info(Func<string> messageFactory)
+		{
+			if (IsInfoEnabled)
+			{
+				Logger.Log(declaringType, Level.Info, messageFactory.Invoke(), null);
+			}
+		}
+
 		public void Info(String message, Exception exception)
 		{
 			if (IsInfoEnabled)
@@ -177,6 +193,14 @@ namespace Castle.Services.Logging.Log4netIntegration
 			if (IsWarnEnabled)
 			{
 				Logger.Log(declaringType, Level.Warn, message, null);
+			}
+		}
+
+		public void Warn(Func<string> messageFactory)
+		{
+			if (IsWarnEnabled)
+			{
+				Logger.Log(declaringType, Level.Warn, messageFactory.Invoke(), null);
 			}
 		}
 
@@ -232,6 +256,14 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
+		public void Error(Func<string> messageFactory)
+		{
+			if (IsErrorEnabled)
+			{
+				Logger.Log(declaringType, Level.Error, messageFactory.Invoke(), null);
+			}
+		}
+
 		public void Error(String message, Exception exception)
 		{
 			if (IsErrorEnabled)
@@ -284,6 +316,14 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
+		public void Fatal(Func<string> messageFactory)
+		{
+			if (IsFatalEnabled)
+			{
+				Logger.Log(declaringType, Level.Fatal, messageFactory.Invoke(), null);
+			}
+		}
+
 		public void Fatal(String message, Exception exception)
 		{
 			if (IsFatalEnabled)
@@ -323,10 +363,6 @@ namespace Castle.Services.Logging.Log4netIntegration
 				Logger.Log(declaringType, Level.Fatal, new SystemStringFormat(formatProvider, format, args), exception);
 			}
 		}
-
-    	#endregion
-
-		#region FatalError (obsolete)
 
     	#endregion
 
