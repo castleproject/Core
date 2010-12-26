@@ -234,7 +234,7 @@ namespace Castle.DynamicProxy.Generators
 				// Check the proxy generation hook
 				if (!OverridesEqualsAndGetHashCode(options.Hook.GetType()))
 				{
-					Logger.Warn("The IProxyGenerationHook type {0} does not override both Equals and GetHashCode. " +
+					Logger.WarnFormat("The IProxyGenerationHook type {0} does not override both Equals and GetHashCode. " +
 					            "If these are not correctly overridden caching will fail to work causing performance problems.",
 					            options.Hook.GetType().FullName);
 				}
@@ -371,7 +371,7 @@ namespace Castle.DynamicProxy.Generators
 				var cacheType = GetFromCache(cacheKey);
 				if (cacheType != null)
 				{
-					Logger.Debug("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
+					Logger.DebugFormat("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
 					return cacheType;
 				}
 
@@ -382,12 +382,12 @@ namespace Castle.DynamicProxy.Generators
 				cacheType = GetFromCache(cacheKey);
 				if (cacheType != null)
 				{
-					Logger.Debug("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
+					Logger.DebugFormat("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
 					return cacheType;
 				}
 
 				// Log details about the cache miss
-				Logger.Debug("No cached proxy type was found for target type {0}.", targetType.FullName);
+				Logger.DebugFormat("No cached proxy type was found for target type {0}.", targetType.FullName);
 				EnsureOptionsOverrideEqualsAndGetHashCode(ProxyGenerationOptions);
 
 

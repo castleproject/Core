@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,36 +15,103 @@
 namespace Castle.Services.Logging.NLogIntegration
 {
 	using System;
+
 	using Castle.Core.Logging;
+
 	using NLog;
 
 	/// <summary>
-	/// Implementation of <see cref="ILogger"/> for NLog.
+	///   Implementation of <see cref = "ILogger" /> for NLog.
 	/// </summary>
 	public class NLogLogger : ILogger
 	{
-		private Logger logger;
-		private NLogFactory factory;
-
-		internal NLogLogger()
-		{
-		}
-
 		/// <summary>
-		/// Initializes a new instance of the <see cref="NLogLogger"/> class.
+		///   Initializes a new instance of the <see cref = "NLogLogger" /> class.
 		/// </summary>
-		/// <param name="logger">The logger.</param>
-		/// <param name="factory">The factory.</param>
+		/// <param name = "logger">The logger.</param>
+		/// <param name = "factory">The factory.</param>
 		public NLogLogger(Logger logger, NLogFactory factory)
 		{
 			Logger = logger;
 			Factory = factory;
 		}
 
+		internal NLogLogger()
+		{
+		}
+
 		/// <summary>
-		/// Creates a child logger with the specied <paramref name="name"/>.
+		///   Determines if messages of priority "debug" will be logged.
 		/// </summary>
-		/// <param name="name">The name.</param>
+		/// <value>True if "debug" messages will be logged.</value>
+		public bool IsDebugEnabled
+		{
+			get { return Logger.IsDebugEnabled; }
+		}
+
+		/// <summary>
+		///   Determines if messages of priority "error" will be logged.
+		/// </summary>
+		/// <value><c>true</c> if "error" messages will be logged, <c>false</c> otherwise</value>
+		public bool IsErrorEnabled
+		{
+			get { return Logger.IsErrorEnabled; }
+		}
+
+		/// <summary>
+		///   Determines if messages of priority "fatal" will be logged.
+		/// </summary>
+		/// <value><c>true</c> if "fatal" messages will be logged, <c>false</c> otherwise</value>
+		public bool IsFatalEnabled
+		{
+			get { return Logger.IsFatalEnabled; }
+		}
+
+		/// <summary>
+		///   Determines if messages of priority "info" will be logged.
+		/// </summary>
+		/// <value><c>true</c> if "info" messages will be logged, <c>false</c> otherwise</value>
+		public bool IsInfoEnabled
+		{
+			get { return Logger.IsInfoEnabled; }
+		}
+
+		/// <summary>
+		///   Determines if messages of priority "warn" will be logged.
+		/// </summary>
+		/// <value><c>true</c> if "warn" messages will be logged, <c>false</c> otherwise</value>
+		public bool IsWarnEnabled
+		{
+			get { return Logger.IsWarnEnabled; }
+		}
+
+		/// <summary>
+		///   Gets or sets the factory.
+		/// </summary>
+		/// <value>The factory.</value>
+		protected internal NLogFactory Factory { get; set; }
+
+		/// <summary>
+		///   Gets or sets the logger.
+		/// </summary>
+		/// <value>The logger.</value>
+		protected internal Logger Logger { get; set; }
+
+		/// <summary>
+		///   Returns a <see cref = "String" /> that represents this instance.
+		/// </summary>
+		/// <returns>
+		///   A <see cref = "String" /> that represents this instance.
+		/// </returns>
+		public override string ToString()
+		{
+			return Logger.ToString();
+		}
+
+		/// <summary>
+		///   Creates a child logger with the specied <paramref name = "name" />.
+		/// </summary>
+		/// <param name = "name">The name.</param>
 		/// <returns></returns>
 		public virtual ILogger CreateChildLogger(String name)
 		{
@@ -52,557 +119,408 @@ namespace Castle.Services.Logging.NLogIntegration
 		}
 
 		/// <summary>
-		/// Gets or sets the logger.
+		///   Logs a debug message.
 		/// </summary>
-		/// <value>The logger.</value>
-		protected internal Logger Logger
-		{
-			get { return logger; }
-			set { logger = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the factory.
-		/// </summary>
-		/// <value>The factory.</value>
-		protected internal NLogFactory Factory
-		{
-			get { return factory; }
-			set { factory = value; }
-		}
-
-		/// <summary>
-		/// Returns a <see cref="String"/> that represents this instance.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="String"/> that represents this instance.
-		/// </returns>
-		public override string ToString()
-		{
-			return Logger.ToString();
-		}
-
-		#region Debug
-
-		/// <summary>
-		/// Logs a debug message.
-		/// </summary>
-		/// <param name="message">The message to log</param>
+		/// <param name = "message">The message to log</param>
 		public void Debug(string message)
 		{
 			if (Logger.IsDebugEnabled)
+			{
 				Logger.Debug(message);
+			}
 		}
 
 		/// <summary>
-		/// Logs a debug message. 
+		///   Logs a debug message.
 		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="message">The message to log</param>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "message">The message to log</param>
 		public void Debug(string message, Exception exception)
 		{
 			if (Logger.IsDebugEnabled)
+			{
 				Logger.DebugException(message, exception);
+			}
 		}
 
 		/// <summary>
-		/// Logs a debug message.
+		///   Logs a debug message.
 		/// </summary>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
-		[Obsolete("Use DebugFormat instead")]
-		public void Debug(string format, params object[] args)
-		{
-			if (Logger.IsDebugEnabled)
-				Logger.Debug(format, args);
-		}
-
-		/// <summary>
-		/// Logs a debug message.
-		/// </summary>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
 		public void DebugFormat(string format, params object[] args)
 		{
 			if (Logger.IsDebugEnabled)
+			{
 				Logger.Debug(format, args);
+			}
 		}
 
 		/// <summary>
-		/// Logs a debug message.
+		///   Logs a debug message.
 		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
 		public void DebugFormat(Exception exception, string format, params object[] args)
 		{
 			if (Logger.IsDebugEnabled)
+			{
 				Logger.DebugException(String.Format(format, args), exception);
+			}
 		}
 
 		/// <summary>
-		/// Logs a debug message.
+		///   Logs a debug message.
 		/// </summary>
-		/// <param name="formatProvider">The format provider to use</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
+		/// <param name = "formatProvider">The format provider to use</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
 		public void DebugFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (Logger.IsDebugEnabled)
+			{
 				Logger.Debug(formatProvider, format, args);
+			}
 		}
 
 		/// <summary>
-		/// Logs a debug message.
+		///   Logs a debug message.
 		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="formatProvider">The format provider to use</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "formatProvider">The format provider to use</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
 		public void DebugFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (Logger.IsDebugEnabled)
+			{
 				Logger.DebugException(String.Format(formatProvider, format, args), exception);
-		}
-
-		#endregion
-
-		#region Info
-
-		/// <summary>
-		/// Logs an info message.
-		/// </summary>
-		/// <param name="message">The message to log</param>
-		public void Info(string message)
-		{
-			if (Logger.IsInfoEnabled)
-				Logger.Info(message);
+			}
 		}
 
 		/// <summary>
-		/// Logs an info message. 
+		///   Logs an error message.
 		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="message">The message to log</param>
-		public void Info(string message, Exception exception)
-		{
-			if (Logger.IsInfoEnabled)
-				Logger.InfoException(message, exception);
-		}
-
-		/// <summary>
-		/// Logs an info message.
-		/// </summary>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
-		[Obsolete("Use InfoFormat instead")]
-		public void Info(string format, params object[] args)
-		{
-			if (Logger.IsInfoEnabled)
-				Logger.Info(format, args);
-		}
-
-		/// <summary>
-		/// Logs an info message.
-		/// </summary>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
-		public void InfoFormat(string format, params object[] args)
-		{
-			if (Logger.IsInfoEnabled)
-				Logger.Info(format, args);
-		}
-
-		/// <summary>
-		/// Logs an info message.
-		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
-		public void InfoFormat(Exception exception, string format, params object[] args)
-		{
-			if (Logger.IsInfoEnabled)
-				Logger.InfoException(String.Format(format, args), exception);
-		}
-
-		/// <summary>
-		/// Logs an info message.
-		/// </summary>
-		/// <param name="formatProvider">The format provider to use</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
-		public void InfoFormat(IFormatProvider formatProvider, string format, params object[] args)
-		{
-			if (Logger.IsInfoEnabled)
-				Logger.Info(formatProvider, format, args);
-		}
-
-		/// <summary>
-		/// Logs an info message.
-		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="formatProvider">The format provider to use</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
-		public void InfoFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
-		{
-			if (Logger.IsInfoEnabled)
-				Logger.InfoException(String.Format(formatProvider, format, args), exception);
-		}
-
-		#endregion
-
-		#region Warn
-
-		/// <summary>
-		/// Logs a warn message.
-		/// </summary>
-		/// <param name="message">The message to log</param>
-		public void Warn(string message)
-		{
-			if (Logger.IsWarnEnabled)
-				Logger.Warn(message);
-		}
-
-		/// <summary>
-		/// Logs a warn message. 
-		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="message">The message to log</param>
-		public void Warn(string message, Exception exception)
-		{
-			if (Logger.IsWarnEnabled)
-				Logger.WarnException(message, exception);
-		}
-
-		/// <summary>
-		/// Logs a warn message.
-		/// </summary>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
-		[Obsolete("Use WarnFormat instead")]
-		public void Warn(string format, params object[] args)
-		{
-			if (Logger.IsWarnEnabled)
-				Logger.Warn(format, args);
-		}
-
-		/// <summary>
-		/// Logs a warn message.
-		/// </summary>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
-		public void WarnFormat(string format, params object[] args)
-		{
-			if (Logger.IsWarnEnabled)
-				Logger.Warn(format, args);
-		}
-
-		/// <summary>
-		/// Logs a warn message.
-		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
-		public void WarnFormat(Exception exception, string format, params object[] args)
-		{
-			if (Logger.IsWarnEnabled)
-				Logger.WarnException(String.Format(format, args), exception);
-		}
-
-		/// <summary>
-		/// Logs a warn message.
-		/// </summary>
-		/// <param name="formatProvider">The format provider to use</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
-		public void WarnFormat(IFormatProvider formatProvider, string format, params object[] args)
-		{
-			if (Logger.IsWarnEnabled)
-				Logger.Warn(formatProvider, format, args);
-		}
-
-		/// <summary>
-		/// Logs a warn message.
-		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="formatProvider">The format provider to use</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
-		public void WarnFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
-		{
-			if (Logger.IsWarnEnabled)
-				Logger.WarnException(String.Format(formatProvider, format, args), exception);
-		}
-
-		#endregion
-
-		#region Error
-
-		/// <summary>
-		/// Logs an error message.
-		/// </summary>
-		/// <param name="message">The message to log</param>
+		/// <param name = "message">The message to log</param>
 		public void Error(string message)
 		{
 			if (Logger.IsErrorEnabled)
+			{
 				Logger.Error(message);
+			}
 		}
 
 		/// <summary>
-		/// Logs an error message. 
+		///   Logs an error message.
 		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="message">The message to log</param>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "message">The message to log</param>
 		public void Error(string message, Exception exception)
 		{
 			if (Logger.IsErrorEnabled)
+			{
 				Logger.ErrorException(message, exception);
+			}
 		}
 
 		/// <summary>
-		/// Logs an error message.
+		///   Logs an error message.
 		/// </summary>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
-		[Obsolete("Use ErrorFormat instead")]
-		public void Error(string format, params object[] args)
-		{
-			if (Logger.IsErrorEnabled)
-				Logger.Error(format, args);
-		}
-
-		/// <summary>
-		/// Logs an error message.
-		/// </summary>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
 		public void ErrorFormat(string format, params object[] args)
 		{
 			if (Logger.IsErrorEnabled)
+			{
 				Logger.Error(format, args);
+			}
 		}
 
 		/// <summary>
-		/// Logs an error message.
+		///   Logs an error message.
 		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
 		public void ErrorFormat(Exception exception, string format, params object[] args)
 		{
 			if (Logger.IsErrorEnabled)
+			{
 				Logger.ErrorException(String.Format(format, args), exception);
+			}
 		}
 
 		/// <summary>
-		/// Logs an error message.
+		///   Logs an error message.
 		/// </summary>
-		/// <param name="formatProvider">The format provider to use</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
+		/// <param name = "formatProvider">The format provider to use</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
 		public void ErrorFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (Logger.IsErrorEnabled)
+			{
 				Logger.Error(formatProvider, format, args);
+			}
 		}
 
 		/// <summary>
-		/// Logs an error message.
+		///   Logs an error message.
 		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="formatProvider">The format provider to use</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "formatProvider">The format provider to use</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
 		public void ErrorFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (Logger.IsErrorEnabled)
+			{
 				Logger.ErrorException(String.Format(formatProvider, format, args), exception);
+			}
 		}
 
-		#endregion
-
-		#region Fatal
-
 		/// <summary>
-		/// Logs a fatal message.
+		///   Logs a fatal message.
 		/// </summary>
-		/// <param name="message">The message to log</param>
+		/// <param name = "message">The message to log</param>
 		public void Fatal(string message)
 		{
 			if (Logger.IsFatalEnabled)
+			{
 				Logger.Fatal(message);
+			}
 		}
 
 		/// <summary>
-		/// Logs a fatal message. 
+		///   Logs a fatal message.
 		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="message">The message to log</param>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "message">The message to log</param>
 		public void Fatal(string message, Exception exception)
 		{
 			if (Logger.IsFatalEnabled)
+			{
 				Logger.FatalException(message, exception);
+			}
 		}
 
 		/// <summary>
-		/// Logs a fatal message.
+		///   Logs a fatal message.
 		/// </summary>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
-		[Obsolete("Use FatalFormat instead")]
-		public void Fatal(string format, params object[] args)
-		{
-			if (Logger.IsFatalEnabled)
-				Logger.Fatal(format, args);
-		}
-
-		/// <summary>
-		/// Logs a fatal message.
-		/// </summary>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
 		public void FatalFormat(string format, params object[] args)
 		{
 			if (Logger.IsFatalEnabled)
+			{
 				Logger.Fatal(format, args);
+			}
 		}
 
 		/// <summary>
-		/// Logs a fatal message.
+		///   Logs a fatal message.
 		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
 		public void FatalFormat(Exception exception, string format, params object[] args)
 		{
 			if (Logger.IsFatalEnabled)
+			{
 				Logger.FatalException(String.Format(format, args), exception);
+			}
 		}
 
 		/// <summary>
-		/// Logs a fatal message.
+		///   Logs a fatal message.
 		/// </summary>
-		/// <param name="formatProvider">The format provider to use</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
+		/// <param name = "formatProvider">The format provider to use</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
 		public void FatalFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (Logger.IsFatalEnabled)
+			{
 				Logger.Fatal(formatProvider, format, args);
+			}
 		}
 
 		/// <summary>
-		/// Logs a fatal message.
+		///   Logs a fatal message.
 		/// </summary>
-		/// <param name="exception">The exception to log</param>
-		/// <param name="formatProvider">The format provider to use</param>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "formatProvider">The format provider to use</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
 		public void FatalFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (Logger.IsFatalEnabled)
+			{
 				Logger.FatalException(String.Format(formatProvider, format, args), exception);
-		}
-
-		#endregion
-
-		#region FatalError (obsolete)
-
-		/// <summary>
-		/// Logs a fatal message.
-		/// </summary>
-		/// <param name="format">Format string for the message to log</param>
-		/// <param name="args">Format arguments for the message to log</param>
-		[Obsolete("Use FatalFormat instead")]
-		public void FatalError(String format, params object[] args)
-		{
-			if (Logger.IsFatalEnabled)
-				Logger.Fatal(format, args);
+			}
 		}
 
 		/// <summary>
-		/// Logs a fatal message.
+		///   Logs an info message.
 		/// </summary>
-		/// <param name="message">The message to log</param>
-		/// <param name="exception">The exception</param>
-		[Obsolete("Use Fatal instead")]
-		public void FatalError(String message, Exception exception)
+		/// <param name = "message">The message to log</param>
+		public void Info(string message)
 		{
-			if (Logger.IsFatalEnabled)
-				Logger.FatalException(message, exception);
+			if (Logger.IsInfoEnabled)
+			{
+				Logger.Info(message);
+			}
 		}
 
 		/// <summary>
-		/// Logs a fatal message.
+		///   Logs an info message.
 		/// </summary>
-		/// <param name="message">The message to log</param>
-		[Obsolete("Use Fatal instead")]
-		public void FatalError(String message)
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "message">The message to log</param>
+		public void Info(string message, Exception exception)
 		{
-			if (Logger.IsFatalEnabled)
-				Logger.Fatal(message);
-		}
-
-		#endregion
-
-		#region Is (...) Enabled
-
-		/// <summary>
-		/// Determines if messages of priority "debug" will be logged.
-		/// </summary>
-		/// <value>True if "debug" messages will be logged.</value> 
-		public bool IsDebugEnabled
-		{
-			get { return Logger.IsDebugEnabled; }
+			if (Logger.IsInfoEnabled)
+			{
+				Logger.InfoException(message, exception);
+			}
 		}
 
 		/// <summary>
-		/// Determines if messages of priority "info" will be logged.
+		///   Logs an info message.
 		/// </summary>
-		/// <value><c>true</c> if "info" messages will be logged, <c>false</c> otherwise</value> 
-		public bool IsInfoEnabled
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		public void InfoFormat(string format, params object[] args)
 		{
-			get { return Logger.IsInfoEnabled; }
+			if (Logger.IsInfoEnabled)
+			{
+				Logger.Info(format, args);
+			}
 		}
 
 		/// <summary>
-		/// Determines if messages of priority "warn" will be logged.
+		///   Logs an info message.
 		/// </summary>
-		/// <value><c>true</c> if "warn" messages will be logged, <c>false</c> otherwise</value> 
-		public bool IsWarnEnabled
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		public void InfoFormat(Exception exception, string format, params object[] args)
 		{
-			get { return Logger.IsWarnEnabled; }
+			if (Logger.IsInfoEnabled)
+			{
+				Logger.InfoException(String.Format(format, args), exception);
+			}
 		}
 
 		/// <summary>
-		/// Determines if messages of priority "error" will be logged.
+		///   Logs an info message.
 		/// </summary>
-		/// <value><c>true</c> if "error" messages will be logged, <c>false</c> otherwise</value> 
-		public bool IsErrorEnabled
+		/// <param name = "formatProvider">The format provider to use</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		public void InfoFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			get { return Logger.IsErrorEnabled; }
+			if (Logger.IsInfoEnabled)
+			{
+				Logger.Info(formatProvider, format, args);
+			}
 		}
 
 		/// <summary>
-		/// Determines if messages of priority "fatal" will be logged.
+		///   Logs an info message.
 		/// </summary>
-		/// <value><c>true</c> if "fatal" messages will be logged, <c>false</c> otherwise</value> 
-		public bool IsFatalEnabled
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "formatProvider">The format provider to use</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		public void InfoFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			get { return Logger.IsFatalEnabled; }
+			if (Logger.IsInfoEnabled)
+			{
+				Logger.InfoException(String.Format(formatProvider, format, args), exception);
+			}
 		}
 
 		/// <summary>
-		/// Determines if messages of priority "fatal" will be logged.
+		///   Logs a warn message.
 		/// </summary>
-		/// <value><c>true</c> if "fatal" messages will be logged, <c>false</c> otherwise</value> 
-		[Obsolete("Use IsFatalEnabled instead")]
-		public bool IsFatalErrorEnabled
+		/// <param name = "message">The message to log</param>
+		public void Warn(string message)
 		{
-			get { return Logger.IsFatalEnabled; }
+			if (Logger.IsWarnEnabled)
+			{
+				Logger.Warn(message);
+			}
 		}
 
-		#endregion
+		/// <summary>
+		///   Logs a warn message.
+		/// </summary>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "message">The message to log</param>
+		public void Warn(string message, Exception exception)
+		{
+			if (Logger.IsWarnEnabled)
+			{
+				Logger.WarnException(message, exception);
+			}
+		}
+
+		/// <summary>
+		///   Logs a warn message.
+		/// </summary>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		public void WarnFormat(string format, params object[] args)
+		{
+			if (Logger.IsWarnEnabled)
+			{
+				Logger.Warn(format, args);
+			}
+		}
+
+		/// <summary>
+		///   Logs a warn message.
+		/// </summary>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		public void WarnFormat(Exception exception, string format, params object[] args)
+		{
+			if (Logger.IsWarnEnabled)
+			{
+				Logger.WarnException(String.Format(format, args), exception);
+			}
+		}
+
+		/// <summary>
+		///   Logs a warn message.
+		/// </summary>
+		/// <param name = "formatProvider">The format provider to use</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		public void WarnFormat(IFormatProvider formatProvider, string format, params object[] args)
+		{
+			if (Logger.IsWarnEnabled)
+			{
+				Logger.Warn(formatProvider, format, args);
+			}
+		}
+
+		/// <summary>
+		///   Logs a warn message.
+		/// </summary>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "formatProvider">The format provider to use</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		public void WarnFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
+		{
+			if (Logger.IsWarnEnabled)
+			{
+				Logger.WarnException(String.Format(formatProvider, format, args), exception);
+			}
+		}
 	}
 }

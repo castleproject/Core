@@ -277,6 +277,7 @@
     <Compile Include="Components.DictionaryAdapter\XPathContext.cs" />
     <Compile Include="Components.DictionaryAdapter\XPathExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\XPathResult.cs" />
+    <Compile Include="Core\Logging\LoggerLevel.cs" />
     <Compile Include="DynamicProxy\AbstractInvocation.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,3 +1,6 @@
+==================
+- removed obsolete members from ILogger and its implementations
+
 2.5.2 (2010-11-15)
 ==================
 - fixed DYNPROXY-150 - Finalizer should not be proxied

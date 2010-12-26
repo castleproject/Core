@@ -174,18 +174,6 @@ namespace Castle.Core.Logging
 			Log(LoggerLevel.Debug, String.Format(formatProvider, format, args), exception);
 		}
 
-		/// <summary>
-		/// Logs a debug message.
-		/// </summary>
-		/// <param name="format">Message format</param>
-		/// <param name="args">Array of objects to write using format</param>
-		public void Debug(string format, params Object[] args)
-		{
-			if (!IsDebugEnabled) return;
-
-			Log(LoggerLevel.Debug, String.Format(CultureInfo.CurrentCulture, format, args), null);
-		}
-
 		#endregion
 
 		#region Info
@@ -263,18 +251,6 @@ namespace Castle.Core.Logging
 			if (!IsInfoEnabled) return;
 
 			Log(LoggerLevel.Info, String.Format(formatProvider, format, args), exception);
-		}
-
-		/// <summary>
-		/// Logs an info message.
-		/// </summary>
-		/// <param name="format">Message format</param>
-		/// <param name="args">Array of objects to write using format</param>
-		public void Info(string format, params Object[] args)
-		{
-			if (!IsInfoEnabled) return;
-
-			Log(LoggerLevel.Info, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		#endregion
@@ -356,18 +332,6 @@ namespace Castle.Core.Logging
 			Log(LoggerLevel.Warn, String.Format(formatProvider, format, args), exception);
 		}
 
-		/// <summary>
-		/// Logs a warn message.
-		/// </summary>
-		/// <param name="format">Message format</param>
-		/// <param name="args">Array of objects to write using format</param>
-		public void Warn(string format, params Object[] args)
-		{
-			if (!IsWarnEnabled) return;
-
-			Log(LoggerLevel.Warn, String.Format(CultureInfo.CurrentCulture, format, args), null);
-		}
-
 		#endregion
 
 		#region Error
@@ -445,18 +409,6 @@ namespace Castle.Core.Logging
 			if (!IsErrorEnabled) return;
 
 			Log(LoggerLevel.Error, String.Format(formatProvider, format, args), exception);
-		}
-
-		/// <summary>
-		/// Logs an error message.
-		/// </summary>
-		/// <param name="format">Message format</param>
-		/// <param name="args">Array of objects to write using format</param>
-		public void Error(string format, params Object[] args)
-		{
-			if (!IsErrorEnabled) return;
-
-			Log(LoggerLevel.Error, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		#endregion
@@ -538,59 +490,9 @@ namespace Castle.Core.Logging
 			Log(LoggerLevel.Fatal, String.Format(formatProvider, format, args), exception);
 		}
 
-		/// <summary>
-		/// Logs a fatal message.
-		/// </summary>
-		/// <param name="format">Message format</param>
-		/// <param name="args">Array of objects to write using format</param>
-		public void Fatal(string format, params Object[] args)
-		{
-			if (!IsFatalEnabled) return;
-
-			Log(LoggerLevel.Fatal, String.Format(CultureInfo.CurrentCulture, format, args), null);
-		}
-
 		#endregion
 
 		#region FatalError (obsolete)
-
-		/// <summary>
-		/// Logs a fatal error message.
-		/// </summary>
-		/// <param name="message">The Message</param>
-		[Obsolete("Use Fatal instead")]
-		public void FatalError(string message)
-		{
-			if (!IsFatalEnabled) return;
-
-			Log(LoggerLevel.Fatal, message, null);
-		}
-
-		/// <summary>
-		/// Logs a fatal error message.
-		/// </summary>
-		/// <param name="message">The Message</param>
-		/// <param name="exception">The Exception</param>
-		[Obsolete("Use Fatal instead")]
-		public void FatalError(string message, Exception exception)
-		{
-			if (!IsFatalEnabled) return;
-
-			Log(LoggerLevel.Fatal, message, exception);
-		}
-
-		/// <summary>
-		/// Logs a fatal error message.
-		/// </summary>
-		/// <param name="format">Message format</param>
-		/// <param name="args">Array of objects to write using format</param>
-		[Obsolete("Use Fatal or FatalFormat instead")]
-		public void FatalError(string format, params Object[] args)
-		{
-			if (!IsFatalEnabled) return;
-
-			Log(LoggerLevel.Fatal, String.Format(CultureInfo.CurrentCulture, format, args), null);
-		}
 
 		#endregion
 
@@ -635,16 +537,6 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <value><c>true</c> if log level flags include the <see cref="LoggerLevel.Fatal"/> bit</value> 
 		public bool IsFatalEnabled
-		{
-			get { return (Level >= LoggerLevel.Fatal); }
-		}
-
-		/// <summary>
-		/// Determines if messages of priority "fatal" will be logged.
-		/// </summary>
-		/// <value><c>true</c> if log level flags include the <see cref="LoggerLevel.Fatal"/> bit</value> 
-		[Obsolete("Use IsFatalEnabled instead")]
-		public bool IsFatalErrorEnabled
 		{
 			get { return (Level >= LoggerLevel.Fatal); }
 		}
