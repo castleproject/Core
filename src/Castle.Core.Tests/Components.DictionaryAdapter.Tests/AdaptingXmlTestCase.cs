@@ -426,6 +426,19 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual("RISE", document.DocumentElement.NamespaceURI);
 		}
 
+		[Test, Ignore("Not done")]
+		public void Can_Use_XPath_To_Translate_Properties()
+		{
+			XmlDocument document = null;
+			var translator = CreateXmlAdapter<ICanDoTranslations>(null, ref document);
+			translator.FirstName = "Billy";
+			translator.LastName = "Bob";
+			var names = document.SelectNodes("Name/Names");
+			Assert.AreEqual(1, names.Count);
+			var surnames = document.SelectNodes("Name/Surnames");
+			Assert.AreEqual(1, surnames.Count);
+		}
+
 		private T CreateXmlAdapter<T>(string xml, ref XmlDocument document)
 		{
 			document = document ?? new XmlDocument();
@@ -497,6 +510,21 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			[XmlElement("Tag")]
 			string[] Tags { get; set; }
 			XmlElement ExtraStuff { get; set; }
+		}
+
+		public interface IName
+		{
+			string[] Names { get; set; }
+			string[] Surnames { get; set; }
+		}
+
+		public interface ICanDoTranslations
+		{
+			[XPath("Name/Names/*/text()")]
+			string FirstName { get; set; }
+
+			[XPath("Name/Surnames/*/text()")]
+			string LastName { get; set; }
 		}
 
 		[Test]

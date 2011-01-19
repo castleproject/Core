@@ -16,17 +16,8 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 
-	/// <summary>
-	/// Conract for traversing a <see cref="IDictionaryAdapter"/>.
-	/// </summary>
-	public interface IDictionaryAdapterVisitor
+	public interface IDictionaryCoerceStrategy
 	{
-		void VisitDictionaryAdapter(IDictionaryAdapter dictionaryAdapter);
-
-		void VisitProperty(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property);
-
-		void VisitInterface(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property);
-
-		void VisitCollection(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, Type collectionItemType);
+		object Coerce(IDictionaryAdapter adapter, Type type);
 	}
 }
