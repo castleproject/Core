@@ -16,17 +16,21 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 
-	/// <summary>
-	/// Conract for traversing a <see cref="IDictionaryAdapter"/>.
-	/// </summary>
-	public interface IDictionaryAdapterVisitor
+	public abstract partial class DictionaryAdapterBase
 	{
-		void VisitDictionaryAdapter(IDictionaryAdapter dictionaryAdapter);
+		public T Coerce<T>() where T : class
+		{
+			return (T)Coerce(typeof(T));
+		}
 
-		void VisitProperty(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property);
-
-		void VisitInterface(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property);
-
-		void VisitCollection(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, Type collectionItemType);
+		public object Coerce(Type type)
+		{
+			if (This.CoerceStrategy != null)
+			{
+				var coerced = This.CoerceStrategy.Coerce(this, type);
+				if (coerced != null) return coerced;
+			}
+			return This.Factory.GetAdapter(type, This.Dictionary, This.Descriptor);
+		}
 	}
 }

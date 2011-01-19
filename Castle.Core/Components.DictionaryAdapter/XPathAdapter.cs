@@ -18,7 +18,6 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 	using System.Xml;
 	using System.Xml.Serialization;
@@ -210,7 +209,13 @@ namespace Castle.Components.DictionaryAdapter
 			if (node != null)
 			{
 				if (result.Type.IsEnum)
+				{
 					return Enum.Parse(result.Type, node.Value);
+				}
+				else if (result.Type == typeof(Guid))
+				{
+					return new Guid(node.Value);
+				}
 
 				try
 				{
@@ -554,13 +559,9 @@ namespace Castle.Components.DictionaryAdapter
 					var node = root.Clone();
 					var attrib = (XmlElementAttribute)behavior;
 					if (string.IsNullOrEmpty(attrib.ElementName) == false)
-					{
 						name = attrib.ElementName;
-					}
 					if (string.IsNullOrEmpty(attrib.Namespace) == false)
-					{
 						ns = attrib.Namespace;
-					}
 					matchingCreate = () => keyContext.AppendElement(name, ns, node);
 				}
 				else if (behavior is XmlAttributeAttribute)
@@ -569,13 +570,9 @@ namespace Castle.Components.DictionaryAdapter
 					var node = root.Clone();
 					var attrib = (XmlAttributeAttribute)behavior;
 					if (string.IsNullOrEmpty(attrib.AttributeName) == false)
-					{
 						name = attrib.AttributeName;
-					}
 					if (string.IsNullOrEmpty(attrib.Namespace) == false)
-					{
 						ns = attrib.Namespace;
-					}
 					matchingCreate = () => keyContext.CreateAttribute(name, ns, node);
 				}
 				else if (behavior is XmlArrayAttribute)
@@ -584,13 +581,9 @@ namespace Castle.Components.DictionaryAdapter
 					var node = root.Clone();
 					var attrib = (XmlArrayAttribute)behavior;
 					if (string.IsNullOrEmpty(attrib.ElementName) == false)
-					{
 						name = attrib.ElementName;
-					}
 					if (string.IsNullOrEmpty(attrib.Namespace) == false)
-					{
 						ns = attrib.Namespace;
-					}
 					matchingCreate = () => keyContext.AppendElement(name, ns, node);
 				}
 				else if (behavior is XPathAttribute)
@@ -608,7 +601,7 @@ namespace Castle.Components.DictionaryAdapter
 					keyContext.Arguments.Clear();
 					keyContext.Arguments.AddParam("key", "", name);
 					keyContext.Arguments.AddParam("ns", "", ns ?? XPathContext.IgnoreNamespace);
-					if (keyContext.Evaluate(xpath, Root, out result))
+					if (keyContext.Evaluate(xpath, root, out result))
 					{
 						create = matchingCreate ?? create;
 						return new XPathResult(property, result, keyContext, behavior, create);
@@ -620,9 +613,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			if (xpath != null)
-			{
 				return new XPathResult(property, null, keyContext, matchingBehavior, create);
-			}
 
 			keyContext.Arguments.Clear();
 			keyContext.Arguments.AddParam("key", "", key);

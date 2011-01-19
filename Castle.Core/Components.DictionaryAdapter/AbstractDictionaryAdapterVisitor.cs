@@ -15,17 +15,53 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
+	using System.Linq;
 	using System.Collections;
+	using System.Collections.Generic;
 
 	/// <summary>
 	/// Abstract implementation of <see cref="IDictionaryAdapterVisitor"/>.
 	/// </summary>
 	public abstract class AbstractDictionaryAdapterVisitor : IDictionaryAdapterVisitor
 	{
+#if SL3 //Silverlight 3 does not have HashSet<T>
+		private List<IDictionaryAdapter> visited;
+#else
+		private HashSet<IDictionaryAdapter> visited;
+#endif
+		protected AbstractDictionaryAdapterVisitor()
+		{
+#if SL3
+		visited = new List<IDictionaryAdapter>();
+#else
+		visited = new HashSet<IDictionaryAdapter>(ReferenceEqualityComparer<IDictionaryAdapter>.Instance);
+#endif			
+		}
+
+		protected AbstractDictionaryAdapterVisitor(AbstractDictionaryAdapterVisitor parent)
+		{
+			visited = parent.visited;
+		}
+
 		public virtual void VisitDictionaryAdapter(IDictionaryAdapter dictionaryAdapter)
 		{
+			VisitDictionaryAdapter(dictionaryAdapter, null);
+		}
+
+		public virtual void VisitDictionaryAdapter(IDictionaryAdapter dictionaryAdapter, Func<PropertyDescriptor, bool> selector)
+		{
+			if (ShouldVisit(dictionaryAdapter) == false)
+			{
+				return;
+			}
+
 			foreach (var property in dictionaryAdapter.This.Properties.Values)
 			{
+				if (selector != null && selector(property) == false)
+				{
+					continue;
+				}
+
 				Type collectionItemType;
 				if (IsCollection(property, out collectionItemType))
 				{
@@ -58,7 +94,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		protected virtual void VisitInterface(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
 		{
-			
+			VisitProperty(dictionaryAdapter, property);
 		}
 
 		void IDictionaryAdapterVisitor.VisitCollection(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property,
@@ -71,6 +107,20 @@ namespace Castle.Components.DictionaryAdapter
 											   Type collectionItemType)
 		{
 			VisitProperty(dictionaryAdapter, property);
+		}
+
+		private bool ShouldVisit(IDictionaryAdapter dictionaryAdapter)
+		{
+#if SL3
+			if (visited.Contains(dictionaryAdapter, ReferenceEqualityComparer<IDictionaryAdapter>.Instance))
+			{
+				return false;
+			}
+			visited.Add(dictionaryAdapter);
+			return true;
+#else
+			return visited.Add(dictionaryAdapter);
+#endif
 		}
 
 		private static bool IsCollection(PropertyDescriptor property, out Type collectionItemType)
