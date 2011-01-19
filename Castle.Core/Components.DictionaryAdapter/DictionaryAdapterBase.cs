@@ -154,11 +154,6 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		public T Coerce<T>() where T : class
-		{
-			return (T)This.Factory.GetAdapter(typeof(T), This.Dictionary, This.Descriptor);
-		}
-
 		public override bool Equals(object obj)
 		{
 			var other = obj as IDictionaryAdapter;
