@@ -164,15 +164,6 @@ namespace Castle.Components.Validator
 		}
 
 		/// <summary>
-		/// Builds the error message.
-		/// </summary>
-		/// <returns></returns>
-		protected override string BuildErrorMessage()
-		{
-			return string.Format(GetString(MessageConstants.InvalidSetMessage));
-		}
-
-		/// <summary>
 		/// Returns the key used to internationalize error messages
 		/// </summary>
 		/// <returns></returns>

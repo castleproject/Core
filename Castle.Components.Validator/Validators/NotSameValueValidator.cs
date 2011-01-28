@@ -62,14 +62,5 @@ namespace Castle.Components.Validator
 		{
 			get { return MessageConstants.NotSameValueMessage; }
 		}
-
-		/// <summary>
-		/// Builds the error message.
-		/// </summary>
-		/// <returns></returns>
-		protected override string BuildErrorMessage()
-		{
-			return string.Format(GetString(MessageConstants.NotSameValueMessage), value);
-		}
 	}
 }
