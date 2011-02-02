@@ -202,6 +202,8 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Components.DictionaryAdapter\Attributes\StringStorageAttribute.cs" />
+    <Compile Include="Components.DictionaryAdapter\DictionaryAdapterBase.Copy.cs" />
+    <Compile Include="Components.DictionaryAdapter\IDictionaryCopyStrategy.cs" />
     <Compile Include="Components.DictionaryAdapter\DictionaryAdapterBase.Coerce.cs" />
     <Compile Include="Components.DictionaryAdapter\IDictionaryCoerceStrategy.cs" />
     <Compile Include="Components.DictionaryAdapter\DefaultXmlSerializer.cs" />
