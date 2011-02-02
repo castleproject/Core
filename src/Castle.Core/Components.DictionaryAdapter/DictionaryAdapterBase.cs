@@ -14,7 +14,6 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System;
 	using System.Collections;
 	using System.ComponentModel;
 	using System.Linq;
@@ -128,30 +127,6 @@ namespace Castle.Components.DictionaryAdapter
 				var dictionary = GetDictionary(This.Dictionary, ref key);
 				if (dictionary != null) dictionary.Remove(key);
 			}	
-		}
-
-		public void CopyTo(IDictionaryAdapter other)
-		{
-			CopyTo(other, null);
-		}
-
-		public void CopyTo(IDictionaryAdapter other, Predicate<PropertyDescriptor> selector)
-		{
-			if (Meta.Type.IsAssignableFrom(other.Meta.Type) == false)
-			{
-				throw new ArgumentException(string.Format(
-					"Unable to copy to {0}.  Type must be assignable from {1}.",
-					other.Meta.Type.FullName, Meta.Type.FullName));
-			}
-
-			selector = selector ?? (p => true);
-	
-			foreach (var property in This.Properties.Values.Where(p => selector(p)))
-			{
-				var propertyValue = GetProperty(property.PropertyName, true);
-				if (propertyValue != null)
-					other.SetProperty(property.PropertyName, ref propertyValue);
-			}
 		}
 
 		public override bool Equals(object obj)
