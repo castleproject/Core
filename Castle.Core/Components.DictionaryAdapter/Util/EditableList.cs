@@ -25,7 +25,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public void BeginEdit()
 		{
-			if (!isEditing)
+			if (isEditing == false)
 			{
 				snapshot = new List<T>(this);
 				isEditing = true;

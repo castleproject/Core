@@ -182,7 +182,7 @@ namespace Castle.Components.DictionaryAdapter
 					return ReadFragment(result);
 
 				if (propertyType.IsArray || typeof(IEnumerable).IsAssignableFrom(propertyType))
-					return ReadCollection(result, dictionaryAdapter);
+					return ReadCollection(result, ifExists, dictionaryAdapter);
 				
 				if (propertyType.IsInterface)
 					return ReadComponent(result, ifExists, dictionaryAdapter);
@@ -269,8 +269,11 @@ namespace Castle.Components.DictionaryAdapter
 			return component;
 		}
 
-		private object ReadCollection(XPathResult result, IDictionaryAdapter dictionaryAdapter)
+		private object ReadCollection(XPathResult result, bool ifExists, IDictionaryAdapter dictionaryAdapter)
 		{
+			if (ifExists && result.Result == null)
+				return null;
+
 			if (result.Type.IsArray)
 				return ReadArray(result, dictionaryAdapter);
 
@@ -669,14 +672,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region XPath
 
-		private static readonly XPathExpression XPathElement =
-			XPathExpression.Compile("*[castle-da:match($key,$ns)]");
-
-		private static readonly XPathExpression XPathAttribute =
-			XPathExpression.Compile("@*[castle-da:match($key,$ns)]");
-
-		private static readonly XPathExpression XPathElementOrAttribute =
-			XPathExpression.Compile("(*|@*)[castle-da:match($key,$ns)]");
+		private static readonly XPathExpression XPathElement = XPathExpression.Compile("*[castle-da:match($key,$ns)]");
+		private static readonly XPathExpression XPathAttribute = XPathExpression.Compile("@*[castle-da:match($key,$ns)]");
+		private static readonly XPathExpression XPathElementOrAttribute = XPathExpression.Compile("(*|@*)[castle-da:match($key,$ns)]");
 
 		#endregion
 	}
