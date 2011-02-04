@@ -86,7 +86,7 @@ namespace Castle.Components.DictionaryAdapter
 			string key, ref object value, PropertyDescriptor property)
 		{
 			dictionaryAdapter.This.ExtendedProperties.Remove(property.PropertyName);
-			return true;
+			return false;
 		}
 
 		#endregion
