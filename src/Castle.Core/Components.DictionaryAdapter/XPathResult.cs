@@ -125,10 +125,7 @@ namespace Castle.Components.DictionaryAdapter
 							string name, namespaceUri;
 							var xmlMeta = GetItemQualifedName(type, item, getXmlMeta, out name, out namespaceUri);
 							return Container.SelectChildren(name, namespaceUri).Cast<XPathNavigator>()
-								.Select(r => new XPathResult(item.Type ?? type, r, Context, matchingBehavior)
-								{
-									XmlMeta = xmlMeta
-								});
+								.Select(r => new XPathResult(item.Type ?? type, r, Context, matchingBehavior) { XmlMeta = xmlMeta });
 						}).OrderBy(r => (XPathNavigator)r.Result, XPathPositionComparer.Instance);
 					}
 					else
@@ -153,10 +150,7 @@ namespace Castle.Components.DictionaryAdapter
 						string name, namespaceUri;
 						var xmlMeta = GetItemQualifedName(type, item, getXmlMeta, out name, out namespaceUri);
 						return parents.SelectMany(p => p.SelectChildren(name, namespaceUri).Cast<XPathNavigator>())
-							.Select(r => new XPathResult(item.Type ?? type, r, Context, matchingBehavior)
-							{
-								XmlMeta = xmlMeta
-							});
+							.Select(r => new XPathResult(item.Type ?? type, r, Context, matchingBehavior) { XmlMeta = xmlMeta });
 					}).OrderBy(r => (XPathNavigator)r.Result, XPathPositionComparer.Instance);
 				}
 				else

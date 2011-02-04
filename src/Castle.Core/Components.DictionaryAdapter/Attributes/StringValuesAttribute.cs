@@ -52,7 +52,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private string GetPropertyAsString(PropertyDescriptor property, object value)
 		{
-			if (!string.IsNullOrEmpty(format))
+			if (string.IsNullOrEmpty(format) == false)
 			{
 				return String.Format(format, value);
 			}
