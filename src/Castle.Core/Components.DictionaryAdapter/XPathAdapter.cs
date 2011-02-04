@@ -300,9 +300,14 @@ namespace Castle.Components.DictionaryAdapter
 			var genericDef = result.Type.GetGenericTypeDefinition();
 			var itemType = arguments[0];
 
-			if (genericDef == typeof(List<>))
+			if (genericDef == typeof(IEnumerable<>) || genericDef == typeof(ICollection<>) ||
+				genericDef == typeof(IList<>) || genericDef == typeof(List<>))
 			{
 				listType = typeof(EditableList<>).MakeGenericType(arguments);
+			}
+			else if (genericDef == typeof(ISet<>) || genericDef == typeof(HashSet<>))
+			{
+				listType = typeof(List<>).MakeGenericType(arguments);
 			}
 			else
 			{
@@ -316,6 +321,11 @@ namespace Castle.Components.DictionaryAdapter
 			foreach (var item in result.GetNodes(itemType, getXmlMeta))
 			{
 				list.Add(ReadProperty(item, false, dictionaryAdapter));
+			}
+
+			if (genericDef == typeof(ISet<>) || genericDef == typeof(HashSet<>))
+			{
+				return Activator.CreateInstance(typeof(HashSet<>).MakeGenericType(arguments), list);
 			}
 
 			if (initializerType != null)
