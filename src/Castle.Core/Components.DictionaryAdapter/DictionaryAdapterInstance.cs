@@ -50,6 +50,10 @@ namespace Castle.Components.DictionaryAdapter
 
 		public IDictionaryCreateStrategy CreateStrategy { get; set; }
 
+		public IDictionaryCoerceStrategy CoerceStrategy { get; set; }
+
+		public IDictionaryCopyStrategy CopyStrategy { get; set; }
+
 		public IDictionary ExtendedProperties
 		{
 			get

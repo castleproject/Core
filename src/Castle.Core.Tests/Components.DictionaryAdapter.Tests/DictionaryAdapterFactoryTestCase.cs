@@ -861,27 +861,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.Name = "Fred Flinstone";
 		}
 #endif
-#if SILVERLIGHT
-		[Ignore("NO INotifyPropertyChanging in Silverlight")]
-#endif
-		[Test]
-		public void WillStopProgagtingPropertyChangedEventWhenNestedPropertyRemoved()
-		{
-			var notifyCalled = false;
-			var container = factory.GetAdapter<IItemContainerWithComponent<IPerson>>(dictionary);
-			var item = container.Item;
-
-			container.PropertyChanged += (s, e) =>
-			{
-				notifyCalled = (item == s);
-			};
-
-			container.Item = null;
-
-			item.Name = "Craig";
-			Assert.IsFalse(notifyCalled);
-		}
-
 		[Test]
 		public void CanSuppressAllPropertyChangedEvents()
 		{

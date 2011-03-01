@@ -14,19 +14,26 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System;
+	using System.Collections.Generic;
+	using System.Runtime.CompilerServices;
 
-	/// <summary>
-	/// Conract for traversing a <see cref="IDictionaryAdapter"/>.
-	/// </summary>
-	public interface IDictionaryAdapterVisitor
+	internal class ReferenceEqualityComparer<T> : IEqualityComparer<T>
 	{
-		void VisitDictionaryAdapter(IDictionaryAdapter dictionaryAdapter);
+		public static readonly ReferenceEqualityComparer<T> Instance = new ReferenceEqualityComparer<T>();
 
-		void VisitProperty(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property);
+		private ReferenceEqualityComparer()
+		{	
+		}
 
-		void VisitInterface(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property);
+		public bool Equals(T x, T y)
+		{
+			return ReferenceEquals(x, y);
+		}
 
-		void VisitCollection(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, Type collectionItemType);
+		public int GetHashCode(T obj)
+		{
+			return RuntimeHelpers.GetHashCode(obj);
+
+		}
 	}
 }
