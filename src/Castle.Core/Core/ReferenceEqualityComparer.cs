@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,28 +12,45 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.DictionaryAdapter
+namespace Castle.Core
 {
+	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Runtime.CompilerServices;
 
-	internal class ReferenceEqualityComparer<T> : IEqualityComparer<T>
+	[Serializable]
+	public class ReferenceEqualityComparer<T> : IEqualityComparer, IEqualityComparer<T>
 	{
-		public static readonly ReferenceEqualityComparer<T> Instance = new ReferenceEqualityComparer<T>();
+		private static readonly ReferenceEqualityComparer<T> instance = new ReferenceEqualityComparer<T>();
 
 		private ReferenceEqualityComparer()
-		{	
+		{
 		}
 
-		public bool Equals(T x, T y)
+		public int GetHashCode(object obj)
+		{
+			return RuntimeHelpers.GetHashCode(obj);
+		}
+
+		bool IEqualityComparer.Equals(object x, object y)
 		{
 			return ReferenceEquals(x, y);
 		}
 
-		public int GetHashCode(T obj)
+		bool IEqualityComparer<T>.Equals(T x, T y)
+		{
+			return ReferenceEquals(x, y);
+		}
+
+		int IEqualityComparer<T>.GetHashCode(T obj)
 		{
 			return RuntimeHelpers.GetHashCode(obj);
+		}
 
+		public static ReferenceEqualityComparer<T> Instance
+		{
+			get { return instance; }
 		}
 	}
 }
