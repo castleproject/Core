@@ -18,7 +18,6 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Linq;
 	using System.Xml;
 	using System.Xml.Serialization;
@@ -183,7 +182,7 @@ namespace Castle.Components.DictionaryAdapter
 					return ReadFragment(result);
 
 				if (propertyType.IsArray || typeof(IEnumerable).IsAssignableFrom(propertyType))
-					return ReadCollection(result, dictionaryAdapter);
+					return ReadCollection(result, ifExists, dictionaryAdapter);
 				
 				if (propertyType.IsInterface)
 					return ReadComponent(result, ifExists, dictionaryAdapter);
@@ -210,7 +209,13 @@ namespace Castle.Components.DictionaryAdapter
 			if (node != null)
 			{
 				if (result.Type.IsEnum)
+				{
 					return Enum.Parse(result.Type, node.Value);
+				}
+				else if (result.Type == typeof(Guid))
+				{
+					return new Guid(node.Value);
+				}
 
 				try
 				{
@@ -264,8 +269,11 @@ namespace Castle.Components.DictionaryAdapter
 			return component;
 		}
 
-		private object ReadCollection(XPathResult result, IDictionaryAdapter dictionaryAdapter)
+		private object ReadCollection(XPathResult result, bool ifExists, IDictionaryAdapter dictionaryAdapter)
 		{
+			if (ifExists && result.Result == null)
+				return null;
+
 			if (result.Type.IsArray)
 				return ReadArray(result, dictionaryAdapter);
 
@@ -292,9 +300,14 @@ namespace Castle.Components.DictionaryAdapter
 			var genericDef = result.Type.GetGenericTypeDefinition();
 			var itemType = arguments[0];
 
-			if (genericDef == typeof(List<>))
+			if (genericDef == typeof(IEnumerable<>) || genericDef == typeof(ICollection<>) ||
+				genericDef == typeof(IList<>) || genericDef == typeof(List<>))
 			{
 				listType = typeof(EditableList<>).MakeGenericType(arguments);
+			}
+			else if (genericDef == typeof(ISet<>) || genericDef == typeof(HashSet<>))
+			{
+				listType = typeof(List<>).MakeGenericType(arguments);
 			}
 			else
 			{
@@ -308,6 +321,11 @@ namespace Castle.Components.DictionaryAdapter
 			foreach (var item in result.GetNodes(itemType, getXmlMeta))
 			{
 				list.Add(ReadProperty(item, false, dictionaryAdapter));
+			}
+
+			if (genericDef == typeof(ISet<>) || genericDef == typeof(HashSet<>))
+			{
+				return Activator.CreateInstance(typeof(HashSet<>).MakeGenericType(arguments), list);
 			}
 
 			if (initializerType != null)
@@ -554,13 +572,9 @@ namespace Castle.Components.DictionaryAdapter
 					var node = root.Clone();
 					var attrib = (XmlElementAttribute)behavior;
 					if (string.IsNullOrEmpty(attrib.ElementName) == false)
-					{
 						name = attrib.ElementName;
-					}
 					if (string.IsNullOrEmpty(attrib.Namespace) == false)
-					{
 						ns = attrib.Namespace;
-					}
 					matchingCreate = () => keyContext.AppendElement(name, ns, node);
 				}
 				else if (behavior is XmlAttributeAttribute)
@@ -569,13 +583,9 @@ namespace Castle.Components.DictionaryAdapter
 					var node = root.Clone();
 					var attrib = (XmlAttributeAttribute)behavior;
 					if (string.IsNullOrEmpty(attrib.AttributeName) == false)
-					{
 						name = attrib.AttributeName;
-					}
 					if (string.IsNullOrEmpty(attrib.Namespace) == false)
-					{
 						ns = attrib.Namespace;
-					}
 					matchingCreate = () => keyContext.CreateAttribute(name, ns, node);
 				}
 				else if (behavior is XmlArrayAttribute)
@@ -584,13 +594,9 @@ namespace Castle.Components.DictionaryAdapter
 					var node = root.Clone();
 					var attrib = (XmlArrayAttribute)behavior;
 					if (string.IsNullOrEmpty(attrib.ElementName) == false)
-					{
 						name = attrib.ElementName;
-					}
 					if (string.IsNullOrEmpty(attrib.Namespace) == false)
-					{
 						ns = attrib.Namespace;
-					}
 					matchingCreate = () => keyContext.AppendElement(name, ns, node);
 				}
 				else if (behavior is XPathAttribute)
@@ -608,7 +614,7 @@ namespace Castle.Components.DictionaryAdapter
 					keyContext.Arguments.Clear();
 					keyContext.Arguments.AddParam("key", "", name);
 					keyContext.Arguments.AddParam("ns", "", ns ?? XPathContext.IgnoreNamespace);
-					if (keyContext.Evaluate(xpath, Root, out result))
+					if (keyContext.Evaluate(xpath, root, out result))
 					{
 						create = matchingCreate ?? create;
 						return new XPathResult(property, result, keyContext, behavior, create);
@@ -620,9 +626,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			if (xpath != null)
-			{
 				return new XPathResult(property, null, keyContext, matchingBehavior, create);
-			}
 
 			keyContext.Arguments.Clear();
 			keyContext.Arguments.AddParam("key", "", key);
@@ -678,14 +682,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region XPath
 
-		private static readonly XPathExpression XPathElement =
-			XPathExpression.Compile("*[castle-da:match($key,$ns)]");
-
-		private static readonly XPathExpression XPathAttribute =
-			XPathExpression.Compile("@*[castle-da:match($key,$ns)]");
-
-		private static readonly XPathExpression XPathElementOrAttribute =
-			XPathExpression.Compile("(*|@*)[castle-da:match($key,$ns)]");
+		private static readonly XPathExpression XPathElement = XPathExpression.Compile("*[castle-da:match($key,$ns)]");
+		private static readonly XPathExpression XPathAttribute = XPathExpression.Compile("@*[castle-da:match($key,$ns)]");
+		private static readonly XPathExpression XPathElementOrAttribute = XPathExpression.Compile("(*|@*)[castle-da:match($key,$ns)]");
 
 		#endregion
 	}

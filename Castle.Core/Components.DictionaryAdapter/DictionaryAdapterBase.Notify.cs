@@ -61,7 +61,7 @@ namespace Castle.Components.DictionaryAdapter
 		}
 		protected bool NotifyPropertyChanging(PropertyDescriptor property, object oldValue, object newValue)
 		{
-			if (!property.SuppressNotifications)
+			if (property.SuppressNotifications == false)
 			{
 				var propertyChanging = PropertyChanging;
 
@@ -77,7 +77,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		protected void NotifyPropertyChanged(PropertyDescriptor property, object oldValue, object newValue)
 		{
-			if (!property.SuppressNotifications)
+			if (property.SuppressNotifications == false)
 			{
 				var propertyChanged = PropertyChanged;
 
@@ -300,7 +300,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			private bool NotifyIfChanged(PropertyDescriptor descriptor, object oldValue, object newValue)
 			{
-				if (!Object.Equals(oldValue, newValue))
+				if (Object.Equals(oldValue, newValue) == false)
 				{
 					adapter.NotifyPropertyChanged(descriptor, oldValue, newValue);
 					return true;

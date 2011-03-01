@@ -42,13 +42,11 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (This.CreateStrategy != null)
 			{
-				return This.CreateStrategy.Create(this, type, dictionary);
+				var created = This.CreateStrategy.Create(this, type, dictionary);
+				if (created != null) return created;
 			}
-			else
-			{
-				dictionary = dictionary ?? new HybridDictionary();
-				return This.Factory.GetAdapter(type, dictionary, This.Descriptor);
-			}
+			dictionary = dictionary ?? new HybridDictionary();
+			return This.Factory.GetAdapter(type, dictionary, This.Descriptor);
 		}
 
 		public T Create<T>(Action<T> init)

@@ -373,27 +373,21 @@ namespace Castle.Components.DictionaryAdapter
 		public bool SetPropertyValue(IDictionaryAdapter dictionaryAdapter,
 			string key, ref object value, PropertyDescriptor descriptor)
 		{
-			bool consumed = false;
-
 			key = GetKey(dictionaryAdapter, key, descriptor);
 
 			if (setters != null)
 			{
 				foreach(var setter in setters)
 				{
-					if (!setter.SetPropertyValue(dictionaryAdapter, key, ref value, this))
+					if (setter.SetPropertyValue(dictionaryAdapter, key, ref value, this) == false)
 					{
-						consumed = true;
+						return true;
 					}
 				}
 			}
 
-			if (!consumed)
-			{
-				dictionaryAdapter.StoreProperty(this, key, value);
-			}
-
-			return !consumed;
+			dictionaryAdapter.StoreProperty(this, key, value);
+			return true;
 		}
 
 		/// <summary>

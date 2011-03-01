@@ -475,7 +475,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			foreach (Type type in types)
 			{
-				if (!InfrastructureTypes.Contains(type))
+				if (InfrastructureTypes.Contains(type) == false)
 				{
 					foreach (var property in type.GetProperties(publicBindings))
 					{
@@ -554,7 +554,7 @@ namespace Castle.Components.DictionaryAdapter
 			if (type.IsGenericType)
 			{
 				var name = new StringBuilder();
-				if (!string.IsNullOrEmpty(type.Namespace))
+				if (string.IsNullOrEmpty(type.Namespace) == false)
 				{
 					name.Append(type.Namespace).Append(".");
 				}
