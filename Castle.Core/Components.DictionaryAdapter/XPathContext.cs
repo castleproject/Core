@@ -246,6 +246,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public XPathNavigator CreateAttribute(string name, string namespaceUri, XPathNavigator source)
 		{
+			name = XmlConvert.EncodeLocalName(name);
 			source.CreateAttribute(null, name, namespaceUri, "");
 			source.MoveToAttribute(name, namespaceUri ?? "");
 			return source;
@@ -253,6 +254,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public XPathNavigator AppendElement(string name, string namespaceUri, XPathNavigator source)
 		{
+			name = XmlConvert.EncodeLocalName(name);
 			namespaceUri = GetEffectiveNamespace(namespaceUri);
 			source.AppendChildElement(LookupPrefix(namespaceUri), name, namespaceUri, "");
 			return source.SelectSingleNode("*[position()=last()]");
@@ -308,6 +310,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static string GetQualifiedName(string prefix, string name)
 		{
+			name = XmlConvert.EncodeLocalName(name);
 			if (string.IsNullOrEmpty(prefix))
 				return name;
 			return String.Format("{0}:{1}", prefix, name);
@@ -397,7 +400,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			public object Invoke(XsltContext xsltContext, object[] args, XPathNavigator docContext)
 			{
-				var key = (string)args[0];
+				var key = XmlConvert.EncodeLocalName((string)args[0]);
 				if (key.Equals(docContext.LocalName, StringComparison.OrdinalIgnoreCase) == false)
 				{
 					return false;
