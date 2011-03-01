@@ -307,6 +307,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			else if (
 #if !DOTNET35
+				//NOTE: what about SortedSet?
 				genericDef == typeof(ISet<>) || 
 #endif
 				genericDef == typeof(HashSet<>))
@@ -329,6 +330,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (
 #if !DOTNET35
+				//NOTE: what about SortedSet?
 				genericDef == typeof(ISet<>) ||
 #endif
 				genericDef == typeof(HashSet<>))
