@@ -19,6 +19,8 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections;
 	using System.Collections.Generic;
 
+	using Castle.Core;
+
 	/// <summary>
 	/// Abstract implementation of <see cref="IDictionaryAdapterVisitor"/>.
 	/// </summary>

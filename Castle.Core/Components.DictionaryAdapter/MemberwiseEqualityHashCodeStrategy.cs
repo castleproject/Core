@@ -18,6 +18,8 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections;
 	using System.Collections.Generic;
 
+	using Castle.Core;
+
 	public class MemberwiseEqualityHashCodeStrategy : DictionaryBehaviorAttribute,
 		IDictionaryEqualityHashCodeStrategy, IDictionaryInitializer, IEqualityComparer<IDictionaryAdapter>
 	{
