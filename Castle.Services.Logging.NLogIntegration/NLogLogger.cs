@@ -127,6 +127,10 @@ namespace Castle.Services.Logging.NLogIntegration
 			Logger.Debug(message);
 		}
 
+		/// <summary>
+		///   Logs a debug message.
+		/// </summary>
+		/// <param name = "messageFactory">Factory constructing lazily the message to log if the level is enabled</param>
 		public void Debug(Func<string> messageFactory)
 		{
 			Logger.Debug(messageFactory.Invoke);
@@ -195,6 +199,10 @@ namespace Castle.Services.Logging.NLogIntegration
 			Logger.Error(message);
 		}
 
+		/// <summary>
+		///   Logs an error message.
+		/// </summary>
+		/// <param name = "messageFactory">Factory constructing lazily the message to log if the level is enabled</param>
 		public void Error(Func<string> messageFactory)
 		{
 			Logger.Error(messageFactory.Invoke);
@@ -263,6 +271,10 @@ namespace Castle.Services.Logging.NLogIntegration
 			Logger.Fatal(message);
 		}
 
+		/// <summary>
+		///   Logs a fatal message.
+		/// </summary>
+		/// <param name = "messageFactory">Factory constructing lazily the message to log if the level is enabled</param>
 		public void Fatal(Func<string> messageFactory)
 		{
 			// we don't need to pre-check, NLog does that internally anyway
@@ -332,6 +344,10 @@ namespace Castle.Services.Logging.NLogIntegration
 			Logger.Info(message);
 		}
 
+		/// <summary>
+		///   Logs a info message.
+		/// </summary>
+		/// <param name = "messageFactory">Factory constructing lazily the message to log if the level is enabled</param>
 		public void Info(Func<string> messageFactory)
 		{
 			Logger.Info(messageFactory.Invoke);
@@ -400,6 +416,10 @@ namespace Castle.Services.Logging.NLogIntegration
 			Logger.Warn(message);
 		}
 
+		/// <summary>
+		///   Logs a warn message.
+		/// </summary>
+		/// <param name = "messageFactory">Factory constructing lazily the message to log if the level is enabled</param>
 		public void Warn(Func<string> messageFactory)
 		{
 			Logger.Warn(messageFactory.Invoke);
