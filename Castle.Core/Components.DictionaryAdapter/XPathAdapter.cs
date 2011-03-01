@@ -305,7 +305,11 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				listType = typeof(EditableList<>).MakeGenericType(arguments);
 			}
-			else if (genericDef == typeof(ISet<>) || genericDef == typeof(HashSet<>))
+			else if (
+#if !DOTNET35
+				genericDef == typeof(ISet<>) || 
+#endif
+				genericDef == typeof(HashSet<>))
 			{
 				listType = typeof(List<>).MakeGenericType(arguments);
 			}
@@ -323,7 +327,11 @@ namespace Castle.Components.DictionaryAdapter
 				list.Add(ReadProperty(item, false, dictionaryAdapter));
 			}
 
-			if (genericDef == typeof(ISet<>) || genericDef == typeof(HashSet<>))
+			if (
+#if !DOTNET35
+				genericDef == typeof(ISet<>) ||
+#endif
+				genericDef == typeof(HashSet<>))
 			{
 				return Activator.CreateInstance(typeof(HashSet<>).MakeGenericType(arguments), list);
 			}
