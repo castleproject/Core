@@ -23,6 +23,15 @@ namespace Castle.Components.DictionaryAdapter
 		private bool isEditing;
 		private List<T> snapshot;
 
+		public EditableList()
+		{
+		}
+
+		public EditableList(IEnumerable<T> collection) 
+			: base(collection)
+		{
+		}
+
 		public void BeginEdit()
 		{
 			if (isEditing == false)
@@ -86,6 +95,13 @@ namespace Castle.Components.DictionaryAdapter
 
 	public class EditableList : EditableList<object>, IList
 	{
+		public EditableList()
+		{
+		}
 
+		public EditableList(IEnumerable<object> collection)
+			: base(collection)
+		{
+		}
 	}
 }
