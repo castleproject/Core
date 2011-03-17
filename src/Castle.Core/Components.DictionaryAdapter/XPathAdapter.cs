@@ -157,10 +157,15 @@ namespace Castle.Components.DictionaryAdapter
 
 		object IDictionaryCreateStrategy.Create(IDictionaryAdapter adapter, Type type, IDictionary dictionary)
 		{
+			return Create(adapter, type, dictionary, new XPathAdapter(new XmlDocument()));
+		}
+
+		private static object Create(IDictionaryAdapter adapter, Type type, IDictionary dictionary, XPathAdapter xpathAdapter)
+		{
 			dictionary = dictionary ?? new Hashtable();
 			var descriptor = new DictionaryDescriptor();
 			adapter.This.Descriptor.CopyBehaviors(descriptor, b => b is XPathAdapter == false);
-			descriptor.AddBehavior(XPathBehavior.Instance).AddBehavior(new XPathAdapter(new XmlDocument()));
+			descriptor.AddBehavior(XPathBehavior.Instance).AddBehavior(xpathAdapter);
 			return adapter.This.Factory.GetAdapter(type, dictionary, descriptor);
 		}
 
@@ -236,7 +241,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private object ReadComponent(XPathResult result, bool ifExists, IDictionaryAdapter dictionaryAdapter)
 		{
-			XPathAdapter adapter;
+			XPathAdapter xpathAdapter;
 			var source = result.GetNavigator(false);
 			if (source == null && ifExists) return null;
 		
@@ -252,16 +257,15 @@ namespace Castle.Components.DictionaryAdapter
 					var xmlType = Context.GetXmlType(source);
 					elementType = dictionaryAdapter.GetXmlSubclass(xmlType, elementType) ?? elementType;
 				}
-				adapter = new XPathAdapter(source, this);
+				xpathAdapter = new XPathAdapter(source, this);
 			}
 			else
 			{
 				Func<XPathNavigator> createSource = () => result.GetNavigator(true);
-				adapter = new XPathAdapter(createSource, this);
+				xpathAdapter = new XPathAdapter(createSource, this);
 			}
 
-			var component = dictionaryAdapter.This.Factory.GetAdapter(elementType, new Hashtable(), 
-				new DictionaryDescriptor().AddBehavior(XPathBehavior.Instance, adapter));
+			var component = Create(dictionaryAdapter, elementType, null, xpathAdapter);
 
 			if (result.Property != null)
 				dictionaryAdapter.This.ExtendedProperties[result.Property.PropertyName] = component;
@@ -435,7 +439,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			var node = result.GetNavigator(true);
 
-			if (result.Type.IsEnum)
+			if (result.Type.IsEnum || result.Type == typeof(Guid))
 			{
 				node.SetTypedValue(value.ToString());
 			}
