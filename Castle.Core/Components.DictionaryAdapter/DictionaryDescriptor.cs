@@ -189,6 +189,16 @@ namespace Castle.Components.DictionaryAdapter
 			return base.CopyBehaviors(other);
 		}
 
+		public override PropertyDescriptor CopyBehaviors(PropertyDescriptor other, Func<IDictionaryBehavior, bool> selector)
+		{
+			if (other is DictionaryDescriptor)
+			{
+				var otherDict = (DictionaryDescriptor)other;
+				CopyMetaInitializers(otherDict, selector).CopyInitializers(otherDict, selector);
+			}
+			return base.CopyBehaviors(other, selector);
+		}
+
 		protected override void InternalAddBehavior(IDictionaryBehavior behavior)
 		{
 			if (behavior is IDictionaryInitializer)

@@ -32,6 +32,10 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				return true;
 			}
+			if ((adapter1 == null) ^ (adapter2 == null))
+			{
+				return false;
+			}
 			if (adapter1.Meta.Type != adapter2.Meta.Type)
 			{
 				return false;
@@ -48,6 +52,12 @@ namespace Castle.Components.DictionaryAdapter
 
 		public bool GetHashCode(IDictionaryAdapter adapter, out int hashCode)
 		{
+			if (adapter == null)
+			{
+				hashCode = 0;
+				return true;
+			}
+
 			var clear = false;
 			var visitedLocal = visited;
 			try
@@ -68,7 +78,7 @@ namespace Castle.Components.DictionaryAdapter
 				hashCode = 27;
 				foreach (var property in adapter.Meta.Properties)
 				{
-					var value = adapter.GetProperty(property.Key, false);
+					var value = adapter.GetProperty(property.Key, true);
 					var valueHashCode = GetValueHashCode(value);
 					unchecked
 					{
@@ -110,16 +120,16 @@ namespace Castle.Components.DictionaryAdapter
 
 		private int GetEnumerableHashcode(IEnumerable enumerable)
 		{
-			var hash = 0;
+			var hashCode = 0;
 			foreach (var value in enumerable)
 			{
 				var valueHashCode = GetValueHashCode(value);
 				unchecked
 				{
-					hash = (13 * hash) + valueHashCode;
+					hashCode = (13 * hashCode) + valueHashCode;
 				}
 			}
-			return hash;
+			return hashCode;
 		}
 
 		void IDictionaryInitializer.Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors)

@@ -508,7 +508,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="other"></param>
 		/// <param name="selector"></param>
 		/// <returns></returns>
-		public PropertyDescriptor CopyBehaviors(PropertyDescriptor other, Func<IDictionaryBehavior, bool> selector)
+		public virtual PropertyDescriptor CopyBehaviors(PropertyDescriptor other, Func<IDictionaryBehavior, bool> selector)
 		{
 			if (selector == null)
 			{
