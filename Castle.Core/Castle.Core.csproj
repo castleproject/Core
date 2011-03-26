@@ -212,7 +212,7 @@
     <Compile Include="Components.DictionaryAdapter\IDictionaryBehaviorBuilder.cs" />
     <Compile Include="Components.DictionaryAdapter\GenericDictionaryAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\IXPathSerializer.cs" />
-    <Compile Include="Components.DictionaryAdapter\Util\PriorityBehavior.cs" />
+    <Compile Include="Components.DictionaryAdapter\Util\PriorityBehaviorExtensions.cs" />
     <Compile Include="Core\ReferenceEqualityComparer.cs" />
     <Compile Include="Core\Extensions\SimpleConverter.cs" />
     <Compile Include="Core\Internal\InternalsVisible.cs" />
