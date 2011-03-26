@@ -439,6 +439,120 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(1, surnames.Count);
 		}
 
+		[Test]
+		public void Can_Read_Nullable_Attribute()
+		{
+			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
+					 <Name>Soccer Adult Spring II 2010</Name>
+					 <MinimumAge>16</MinimumAge>
+					 <Division>Male</Division>
+					 <League>
+						<Team name='Hit And Run' GamesPlayed='2'>
+						   <AmountDue>100.50</AmountDue>
+						</Team>
+						<Team name='Nemisis'>
+						   <AmountDue>250.00</AmountDue>
+						</Team>
+					 </League>
+				  </Season>";
+
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			var team = season.Teams[0];
+			Assert.AreEqual(2, team.GamesPlayed);
+		}
+
+		[Test]
+		public void Can_Read_Nullable_Element()
+		{
+			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
+					 <Name>Soccer Adult Spring II 2010</Name>
+					 <MinimumAge>16</MinimumAge>
+					 <Division>Male</Division>
+					 <League>
+						<Team name='Hit And Run'>
+						   <MaxPlayers>15</MaxPlayers>
+						   <AmountDue>100.50</AmountDue>
+						</Team>
+						<Team name='Nemisis'>
+						   <AmountDue>250.00</AmountDue>
+						</Team>
+					 </League>
+				  </Season>";
+
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			var team = season.Teams[0];
+			Assert.AreEqual(15, team.MaxPlayers);
+		}
+
+		[Test]
+		public void Can_Write_Nullable_Attribute()
+		{
+			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
+					 <Name>Soccer Adult Spring II 2010</Name>
+					 <MinimumAge>16</MinimumAge>
+					 <Division>Male</Division>
+					 <League>
+						<Team name='Hit And Run'>
+						   <AmountDue>100.50</AmountDue>
+						</Team>
+						<Team name='Nemisis'>
+						   <AmountDue>250.00</AmountDue>
+						</Team>
+					 </League>
+				  </Season>";
+
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			var team = season.Teams[0];
+			team.GamesPlayed = 2;
+			Assert.AreEqual(2, team.GamesPlayed);
+		}
+
+		[Test]
+		public void Can_Write_Nullable_Element()
+		{
+			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
+					 <Name>Soccer Adult Spring II 2010</Name>
+					 <MinimumAge>16</MinimumAge>
+					 <Division>Male</Division>
+					 <League>
+						<Team name='Hit And Run'>
+						   <AmountDue>100.50</AmountDue>
+						</Team>
+						<Team name='Nemisis'>
+						   <AmountDue>250.00</AmountDue>
+						</Team>
+					 </League>
+				  </Season>";
+
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			var team = season.Teams[0];
+			team.MaxPlayers = 15;
+			Assert.AreEqual(15, team.MaxPlayers);
+		}
+
+		[Test]
+		public void Can_Coerce_Xml()
+		{
+			var xml = @"<Season xmlns='RISE'>
+					 <Address xmlns='Common'>
+						<Line1>2922 South Highway 205</Line1>
+					 </Address>
+				  </Season>";
+
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			var tagged = season.Coerce<ITagged>();
+			tagged.Tags = new[] { "Primary", "Soccer" };
+
+			var seasonNode = document["Season", "RISE"];
+			var tagsNode = seasonNode["Tags", "urn:www.castle.org:tags"];
+			Assert.IsNotNull(tagsNode);
+		}
+
 		private T CreateXmlAdapter<T>(string xml, ref XmlDocument document)
 		{
 			document = document ?? new XmlDocument();
@@ -483,7 +597,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			[XmlAttribute]
 			string Name { get; set; }
+			[XmlAttribute]
 			int? GamesPlayed { get; set; }
+			int? MaxPlayers { get; set; }
 			[XmlElement("AmountDue")]
 			decimal Balance { get; set; }
 			[XmlArray("Roster"), XmlArrayItem("Participant")]
@@ -525,6 +641,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			[XPath("Name/Surnames/*/text()")]
 			string LastName { get; set; }
+		}
+
+		[XmlType(Namespace = "urn:www.castle.org:tags")]
+		public interface ITagged
+		{
+			string[] Tags { get; set; }
 		}
 
 		[Test]
@@ -696,7 +818,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	{
 		int Level { get; set; }
 	}
-
+	
 	#endregion
 
 	#region Xml Serialization Model
