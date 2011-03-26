@@ -213,18 +213,24 @@ namespace Castle.Components.DictionaryAdapter
 			var node = result.GetNavigator(false);
 			if (node != null)
 			{
-				if (result.Type.IsEnum)
+				Type underlyingType;
+				if (IsNullableType(result.Type, out underlyingType) == false)
 				{
-					return Enum.Parse(result.Type, node.Value);
+					underlyingType = result.Type;
 				}
-				else if (result.Type == typeof(Guid))
+
+				if (underlyingType.IsEnum)
+				{
+					return Enum.Parse(underlyingType, node.Value);
+				}
+				else if (underlyingType == typeof(Guid))
 				{
 					return new Guid(node.Value);
 				}
 
 				try
 				{
-					return node.ValueAs(result.Type);
+					return node.ValueAs(underlyingType);
 				}
 				catch (InvalidCastException)
 				{
@@ -304,8 +310,7 @@ namespace Castle.Components.DictionaryAdapter
 			var genericDef = result.Type.GetGenericTypeDefinition();
 			var itemType = arguments[0];
 
-			if (genericDef == typeof(IEnumerable<>) || genericDef == typeof(ICollection<>) ||
-				genericDef == typeof(IList<>) || genericDef == typeof(List<>))
+			if (genericDef == typeof(IEnumerable<>) || genericDef == typeof(ICollection<>) || genericDef == typeof(List<>))
 			{
 				listType = typeof(EditableList<>).MakeGenericType(arguments);
 			}
@@ -653,6 +658,17 @@ namespace Castle.Components.DictionaryAdapter
 		private static bool ShouldIgnoreProperty(PropertyDescriptor property)
 		{
 			return property.Behaviors.Any(behavior => behavior is XmlIgnoreAttribute);
+		}
+
+		private static bool IsNullableType(Type type, out Type underlyingType)
+		{
+			if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+			{
+				underlyingType = type.GetGenericArguments()[0];
+				return true;
+			}
+			underlyingType = null;
+			return false;
 		}
 
 		private XPathNavigator EnsureOffRoot()
