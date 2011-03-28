@@ -25,20 +25,16 @@ namespace Castle.Components.DictionaryAdapter
 		void IDictionaryMetaInitializer.Initialize(IDictionaryAdapterFactory factory, DictionaryAdapterMeta dictionaryMeta)
 		{
 			var type = dictionaryMeta.Type;
+			bool qualified = false;
 			string defaultNamespace = null;
 			XmlTypeAttribute xmlType = null;
 			XmlRootAttribute xmlRoot = null;
 			List<Type> xmlIncludes = null;
 
 			new BehaviorVisitor()
-				.OfType<XmlTypeAttribute>(attrib =>
-				{
-					xmlType = attrib;
-				})
-				.OfType<XmlRootAttribute>(attrib =>
-				{
-					xmlRoot = attrib;
-				})
+				.OfType<XmlTypeAttribute>(attrib => xmlType = attrib)
+				.OfType<XmlRootAttribute>(attrib => xmlRoot = attrib)
+				.OfType<XmlQualifiedAttribute>(_ => qualified = true)
 				.OfType<XmlNamespaceAttribute>(attrib =>
 				{
 					if (attrib.Default)
@@ -56,43 +52,22 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (xmlType == null)
 			{
-				xmlType = new XmlTypeAttribute
-				{
-					TypeName = type.Name,
-					Namespace = defaultNamespace
-				};
+				xmlType = new XmlTypeAttribute();
+			}
+
+			if (string.IsNullOrEmpty(xmlType.TypeName))
+			{
+				xmlType.TypeName = type.Name;
 				if (xmlType.TypeName.StartsWith("I"))
 				{
 					xmlType.TypeName = xmlType.TypeName.Substring(1);
 				}
 			}
-			else if (xmlType.Namespace == null)
+
+			if (xmlType.Namespace == null)
 				xmlType.Namespace = defaultNamespace;
 
-			dictionaryMeta.SetXmlMeta(new XmlMetadata(type, xmlType, xmlRoot, xmlIncludes));
+			dictionaryMeta.SetXmlMeta(new XmlMetadata(type, qualified, xmlType, xmlRoot, xmlIncludes));
 		}
 	}
-
-	#region Class: XmlMetadata
-
-	public class XmlMetadata
-	{
-		public XmlMetadata(Type type, XmlTypeAttribute xmlType, XmlRootAttribute xmlRoot, IEnumerable<Type> xmlIncludes)
-		{
-			Type = type;
-			XmlType = xmlType;
-			XmlRoot = xmlRoot;
-			XmlIncludes = xmlIncludes;
-		}
-
-		public Type Type { get; private set; }
-
-		public XmlTypeAttribute XmlType { get; private set; }
-
-		public XmlRootAttribute XmlRoot { get; private set; }
-
-		public IEnumerable<Type> XmlIncludes { get; private set; }
-	}
-
-	#endregion
 }

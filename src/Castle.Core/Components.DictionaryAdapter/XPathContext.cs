@@ -27,6 +27,7 @@ namespace Castle.Components.DictionaryAdapter
 	public class XPathContext : XsltContext
 	{
 		private readonly XPathContext parent;
+		private string qualifiedNamespace;
 		private IDictionary<string, Func<IXsltContextFunction>> functions;
 		private List<IXPathSerializer> serializers;
 		private int prefixCount;
@@ -88,17 +89,31 @@ namespace Castle.Components.DictionaryAdapter
 
 		public XPathContext ApplyBehaviors(IEnumerable behaviors)
 		{
+			var qualified = behaviors.OfType<XmlQualifiedAttribute>().Any();
+
 			new BehaviorVisitor()
 				.OfType<XmlTypeAttribute>(attrib =>
 				{
 					if (string.IsNullOrEmpty(attrib.Namespace) == false)
-						AddNamespace(string.Empty, attrib.Namespace);
+					{
+						if (qualified)
+						{
+							AddNamespace(attrib.Namespace);
+							qualifiedNamespace = attrib.Namespace;
+						}
+						else
+						{
+							AddNamespace(string.Empty, attrib.Namespace);
+						}
+					}
 				})
 				.OfType<XmlNamespaceAttribute>(attrib =>
 				{
 					AddNamespace(attrib.Prefix, attrib.NamespaceUri);
 					if (attrib.Default)
+					{
 						AddNamespace(string.Empty, attrib.NamespaceUri);
+					}
 				})
 				.OfType<XmlArrayItemAttribute>(attrib =>
 				{
@@ -283,7 +298,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public string GetEffectiveNamespace(string namespaceUri)
 		{
-			return namespaceUri ?? DefaultNamespace;
+			return namespaceUri ?? qualifiedNamespace ?? DefaultNamespace;
 		}
 
 		public override int CompareDocument(string baseUri, string nextbaseUri)
