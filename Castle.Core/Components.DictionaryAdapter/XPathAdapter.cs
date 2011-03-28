@@ -84,11 +84,6 @@ namespace Castle.Components.DictionaryAdapter
 			Context.ApplyBehaviors(behaviors);
 			xmlMeta = dictionaryAdapter.GetXmlMeta();
 
-			if (string.IsNullOrEmpty(xmlMeta.XmlType.Namespace) == false)
-			{
-				Context.AddNamespace(string.Empty, xmlMeta.XmlType.Namespace);
-			}
-
 			if (Parent == null)
 			{
 				foreach (var behavior in behaviors)
@@ -152,7 +147,7 @@ namespace Castle.Components.DictionaryAdapter
 				}
 			}
 
-			return false;
+			return true;
 		}
 
 		object IDictionaryCreateStrategy.Create(IDictionaryAdapter adapter, Type type, IDictionary dictionary)
@@ -165,7 +160,7 @@ namespace Castle.Components.DictionaryAdapter
 			dictionary = dictionary ?? new Hashtable();
 			var descriptor = new DictionaryDescriptor();
 			adapter.This.Descriptor.CopyBehaviors(descriptor, b => b is XPathAdapter == false);
-			descriptor.AddBehavior(XPathBehavior.Instance).AddBehavior(xpathAdapter);
+			descriptor.AddBehavior(xpathAdapter);
 			return adapter.This.Factory.GetAdapter(type, dictionary, descriptor);
 		}
 
@@ -558,7 +553,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			var dictionaryAdapter = adapter as IDictionaryAdapter;
 
-			if (dictionaryAdapter != null)
+			if (dictionaryAdapter != null && dictionaryAdapter.This.Descriptor != null)
 			{
 				XPathAdapter xpathAdapter = null;
 				var getters = dictionaryAdapter.This.Descriptor.Getters;

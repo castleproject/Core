@@ -535,7 +535,19 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
-		public void Can_Coerce_Xml()
+		public void Can_Force_Namespace_Qualification()
+		{
+			XmlDocument document = null;
+			var tags = CreateXmlAdapter<ITagged>(null, ref document);
+			tags.Tags = new[] { "Quick", "Smart" };
+			var taggedNode = document["Tagged", ""];
+			var tagsNode = taggedNode.GetElementsByTagName("string", "urn:www.castle.org:tags");
+			var t = tagsNode.Cast<XmlNode>().Select(node => node.InnerText).ToArray();
+			CollectionAssert.AreEqual(tags.Tags, t);
+		}
+
+		[Test]
+		public void Can_Coerce_Xml_With_Namespace()
 		{
 			var xml = @"<Season xmlns='RISE'>
 					 <Address xmlns='Common'>
@@ -550,6 +562,22 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			var seasonNode = document["Season", "RISE"];
 			var tagsNode = seasonNode["Tags", "urn:www.castle.org:tags"];
+			Assert.IsNotNull(tagsNode);
+		}
+
+		[Test]
+		public void Can_Coerce_Xml_Without_Namespace()
+		{
+			XmlDocument document = null;
+			var team = CreateXmlAdapter<ITeam>(null, ref document);
+			team.Name = "Fairly OddParents";
+			var tagged = ((IDictionaryAdapter)team).Coerce<ITagged>();
+			tagged.Tags = new[] { "Primary", "Soccer" };
+			team.Balance = 200.00M;
+
+			var teamNode = document["Team", ""];
+			Assert.AreEqual("200.00", teamNode["AmountDue", ""].InnerText);
+			var tagsNode = teamNode["Tags", "urn:www.castle.org:tags"];
 			Assert.IsNotNull(tagsNode);
 		}
 
@@ -643,7 +671,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			string LastName { get; set; }
 		}
 
-		[XmlType(Namespace = "urn:www.castle.org:tags")]
+		[XmlQualified,
+		 XmlNamespace("urn:www.castle.org:tags", "tags"),
+		 XmlType(Namespace = "urn:www.castle.org:tags")]
 		public interface ITagged
 		{
 			string[] Tags { get; set; }

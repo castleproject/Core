@@ -16,24 +16,8 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 
-	public abstract partial class DictionaryAdapterBase
+	[AttributeUsage(AttributeTargets.Interface)]
+	public class XmlQualifiedAttribute : Attribute
 	{
-		public T Coerce<T>() where T : class
-		{
-			return (T)Coerce(typeof(T));
-		}
-
-		public object Coerce(Type type)
-		{
-			if (type.IsAssignableFrom(Meta.Type))
-				return this;
-
-			if (This.CoerceStrategy != null)
-			{
-				var coerced = This.CoerceStrategy.Coerce(this, type);
-				if (coerced != null) return coerced;
-			}
-			return This.Factory.GetAdapter(type, This.Dictionary, This.Descriptor);
-		}
 	}
 }
