@@ -1502,6 +1502,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void WillReturnSameInstanceIfCoerceExistingInterface()
+		{
+			var personWithPrefix = factory.GetAdapter<IPersonWithPrefix>(dictionary);
+			var person = ((IDictionaryAdapter)personWithPrefix).Coerce<IPerson>();
+			Assert.AreSame(personWithPrefix, person);
+		}
+
+		[Test]
 		public void CanGroupBehaviorsWithBuilders()
 		{
 			var use = factory.GetAdapter<IUseBehaviorBuilder>(dictionary);
