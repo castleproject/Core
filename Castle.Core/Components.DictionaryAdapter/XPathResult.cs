@@ -29,8 +29,7 @@ namespace Castle.Components.DictionaryAdapter
 		private readonly object matchingBehavior;
 		private readonly Func<XPathNavigator> create;
 
-		public XPathResult(PropertyDescriptor property, object result,
-						   XPathContext context, object matchingBehavior)
+		public XPathResult(PropertyDescriptor property, object result, XPathContext context, object matchingBehavior)
 			: this(property, result, context, matchingBehavior, null)
 		{
 		}
@@ -41,8 +40,7 @@ namespace Castle.Components.DictionaryAdapter
 			Type = type;
 		}
 
-		public XPathResult(PropertyDescriptor property, object result, XPathContext context,
-						   object matchingBehavior, Func<XPathNavigator> create)
+		public XPathResult(PropertyDescriptor property, object result, XPathContext context, object matchingBehavior, Func<XPathNavigator> create)
 		{
 			Result = result;
 			Property = property;

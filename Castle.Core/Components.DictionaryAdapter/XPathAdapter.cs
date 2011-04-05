@@ -383,10 +383,25 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void WriteProperty(XPathResult result, object value, IDictionaryAdapter dictionaryAdapter)
 		{
+			var shouldRemove = false;
 			var propertyType = result.Type;
 
-			if (WriteCustom(result, value, dictionaryAdapter))
+			if (result.Property != null)
+			{
+				shouldRemove = value == null || dictionaryAdapter.ShouldClearProperty(result.Property, value);
+				dictionaryAdapter.This.ExtendedProperties.Remove(result.Property.PropertyName);
+			}
+
+			if (shouldRemove)
+			{
+				result.Remove();
 				return;
+			}
+
+			if (WriteCustom(result, value, dictionaryAdapter))
+			{
+				return;
+			}
 
 			if (propertyType == typeof(string))
 			{
@@ -429,14 +444,6 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void WriteSimple(XPathResult result, object value, IDictionaryAdapter dictionaryAdapter)
 		{
-			if (value == null)
-			{
-				result.Remove();
-				if (result.Property != null)
-					dictionaryAdapter.This.ExtendedProperties.Remove(result.Property.PropertyName);
-				return;
-			}
-
 			var node = result.GetNavigator(true);
 
 			if (result.Type.IsEnum || result.Type == typeof(Guid))
@@ -461,17 +468,6 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void WriteComponent(XPathResult result, object value, IDictionaryAdapter dictionaryAdapter)
 		{
-			if (result.Property != null)
-			{
-				dictionaryAdapter.This.ExtendedProperties.Remove(result.Property.PropertyName);
-			}
-
-			if (value == null)
-			{
-				result.Remove();
-				return;
-			}
-
 			var source = value as IDictionaryAdapter;
 			if (source != null)
 			{
@@ -563,6 +559,21 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			return null;
+		}
+
+		public static bool IsPropertyDefined(string propertyName, IDictionaryAdapter dictionaryAdapter)
+		{
+			var xpath = XPathAdapter.For(dictionaryAdapter);
+			return (xpath != null) ? IsPropertyDefined(propertyName, dictionaryAdapter, xpath) : false;
+		}
+
+		public static bool IsPropertyDefined(string propertyName, IDictionaryAdapter dictionaryAdapter, XPathAdapter xpath)
+		{
+			var key = dictionaryAdapter.GetKey(propertyName);
+			if (key == null) return false;
+			var property = dictionaryAdapter.Meta.Properties[propertyName];
+			var result = xpath.EvaluateProperty(key, property, dictionaryAdapter);
+			return result.GetNavigator(false) != null;
 		}
 
 		private XPathResult EvaluateProperty(string key, PropertyDescriptor property, IDictionaryAdapter dictionaryAdapter)
