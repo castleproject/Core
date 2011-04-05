@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,17 +14,11 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System;
-
 	/// <summary>
-	/// Assigns a prefix to the keyed properties using the interface name.
+	/// Contract for value matching.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = true)]
-	public class TypeKeyPrefixAttribute : DictionaryBehaviorAttribute, IDictionaryKeyBuilder
+	public interface ICondition
 	{
-		String IDictionaryKeyBuilder.GetKey(IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor property)
-		{
-			return String.Format("{0}#{1}", property.Property.DeclaringType.FullName, key);
-		}
+		bool SatisfiedBy(object value);
 	}
 }

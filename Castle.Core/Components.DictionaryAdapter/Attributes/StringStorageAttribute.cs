@@ -14,10 +14,12 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
+	using System;
+
+	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = false)]
 	public class StringStorageAttribute : DictionaryBehaviorAttribute, IDictionaryPropertySetter
 	{
-		public bool SetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key,
-									 ref object value, PropertyDescriptor property)
+		public bool SetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key, ref object value, PropertyDescriptor property)
 		{
 			value = (value != null) ? value.ToString() : null;
 			return true;

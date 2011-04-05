@@ -15,28 +15,18 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
-	using System.Collections;
 
 	/// <summary>
 	/// Converts all properties to strings.
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property,
-	                AllowMultiple = false, Inherited = true)]
+	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
 	public class StringValuesAttribute : DictionaryBehaviorAttribute, IDictionaryPropertySetter
 	{
-		private string format;
-
 		/// <summary>
 		/// Gets or sets the format.
 		/// </summary>
 		/// <value>The format.</value>
-		public string Format
-		{
-			get { return format; }
-			set { format = value; }
-		}
-
-		#region IDictionaryPropertySetter Members
+		public string Format { get; set; }
 
 		bool IDictionaryPropertySetter.SetPropertyValue(IDictionaryAdapter dictionaryAdapter,
 			string key, ref object value, PropertyDescriptor property)
@@ -48,13 +38,11 @@ namespace Castle.Components.DictionaryAdapter
 			return true;
 		}
 
-		#endregion
-
 		private string GetPropertyAsString(PropertyDescriptor property, object value)
 		{
-			if (string.IsNullOrEmpty(format) == false)
+			if (string.IsNullOrEmpty(Format) == false)
 			{
-				return String.Format(format, value);
+				return String.Format(Format, value);
 			}
 
 			var converter = property.TypeConverter;

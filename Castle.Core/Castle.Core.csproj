@@ -202,6 +202,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Compatibility\SilverlightHacks.cs" />
+    <Compile Include="Components.DictionaryAdapter\Attributes\RemoveIfAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\XmlQualifiedAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\StringStorageAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\MemberwiseEqualityHashCodeStrategy.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="Components.DictionaryAdapter\IDictionaryBehaviorBuilder.cs" />
     <Compile Include="Components.DictionaryAdapter\GenericDictionaryAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\IXPathSerializer.cs" />
+    <Compile Include="Components.DictionaryAdapter\Util\ICondition.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\PriorityBehaviorExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\XmlMetadata.cs" />
     <Compile Include="Core\ReferenceEqualityComparer.cs" />

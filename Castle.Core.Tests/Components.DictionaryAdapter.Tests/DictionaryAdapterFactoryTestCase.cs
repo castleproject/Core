@@ -1518,5 +1518,15 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(1, dictionary.Count);
 			Assert.IsTrue(dictionary.Contains("Foo First Name"));
 		}
+
+		[Test]
+		public void Can_Remove_Matching_Property()
+		{
+			var person = factory.GetAdapter<IPerson>(dictionary);
+			person.Name = "Snoopy";
+			Assert.IsTrue(dictionary.Contains("Name"));
+			person.Name = null;
+			Assert.IsFalse(dictionary.Contains("Name"));
+		}
 	}
 }
