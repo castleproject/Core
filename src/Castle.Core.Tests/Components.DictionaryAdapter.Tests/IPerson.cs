@@ -24,6 +24,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 , IDataErrorInfo
 #endif
 	{
+		[RemoveIf(null)]
 		string Name { get; set; }
 
 		int Age { get; set; }

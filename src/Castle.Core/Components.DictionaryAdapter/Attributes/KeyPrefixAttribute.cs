@@ -15,7 +15,6 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
-	using System.Collections;
 
 	/// <summary>
 	/// Assigns a prefix to the keyed properties of an interface.
@@ -23,8 +22,6 @@ namespace Castle.Components.DictionaryAdapter
 	[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = true)]
 	public class KeyPrefixAttribute : DictionaryBehaviorAttribute, IDictionaryKeyBuilder
 	{
-		private String keyPrefix;
-
 		/// <summary>
 		/// Initializes a default instance of the <see cref="KeyPrefixAttribute"/> class.
 		/// </summary>
@@ -38,21 +35,17 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="keyPrefix">The prefix for the keyed properties of the interface.</param>
 		public KeyPrefixAttribute(String keyPrefix)
 		{
-			this.keyPrefix = keyPrefix;
+			this.KeyPrefix = keyPrefix;
 		}
 
 		/// <summary>
 		/// Gets the prefix key added to the properties of the interface.
 		/// </summary>
-		public String KeyPrefix
-		{
-			get { return keyPrefix; }
-			set { keyPrefix = value; }
-		}
+		public String KeyPrefix { get; set; }
 
 		String IDictionaryKeyBuilder.GetKey(IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor property)
 		{
-			return keyPrefix + key;
+			return KeyPrefix + key;
 		}
 	}
 }

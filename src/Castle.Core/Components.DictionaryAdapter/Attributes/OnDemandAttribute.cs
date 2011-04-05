@@ -139,13 +139,12 @@ namespace Castle.Components.DictionaryAdapter
 			return storedValue;
 		}
 
-		private bool IsAcceptedType(Type type)
+		private static bool IsAcceptedType(Type type)
 		{
 			return type != null && type != typeof(String) && !type.IsPrimitive && !type.IsEnum;
 		}
 
-		private Type GetInferredType(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property,
-									 out IValueInitializer initializer)
+		private static Type GetInferredType(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, out IValueInitializer initializer)
 		{
 			Type type = null;
 			initializer = null;

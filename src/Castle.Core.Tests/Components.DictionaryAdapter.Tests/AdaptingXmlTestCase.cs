@@ -581,6 +581,55 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsNotNull(tagsNode);
 		}
 
+		[Test]
+		public void Can_Determine_If_Property_Defined_In_Xml()
+		{
+			var xml = @"<Season xmlns='RISE'>
+					 <Address xmlns='Common'>
+						<Line1>2922 South Highway 205</Line1>
+					 </Address>
+				  </Season>";
+
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			Assert.IsTrue(XPathAdapter.IsPropertyDefined("Location", season));
+			Assert.IsFalse(XPathAdapter.IsPropertyDefined("Name", season));
+		}
+
+		[Test]
+		public void Can_Determine_If_Collection_Defined_In_Xml()
+		{
+			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
+					 <League>
+						<Team name='Hit And Run'>
+						   <AmountDue>100.50</AmountDue>
+						</Team>
+						<Team name='Nemisis'>
+						   <AmountDue>250.00</AmountDue>
+						</Team>
+					 </League>
+				  </Season>";
+
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			Assert.IsTrue(XPathAdapter.IsPropertyDefined("Teams", season));
+			Assert.IsFalse(XPathAdapter.IsPropertyDefined("Tags", season));
+		}
+
+		[Test]
+		public void Can_Remove_Properties()
+		{
+			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
+					 <Name>Soccer Adult Spring II 2010</Name>
+				  </Season>";
+
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			Assert.IsTrue(XPathAdapter.IsPropertyDefined("Name", season));
+			season.Name = "";
+			Assert.IsFalse(XPathAdapter.IsPropertyDefined("Name", season));
+		}
+
 		private T CreateXmlAdapter<T>(string xml, ref XmlDocument document)
 		{
 			document = document ?? new XmlDocument();
@@ -638,6 +687,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		 XmlNamespace("RISE", "rise", Default = true)]
 		public interface ISeason : IDictionaryAdapter
 		{
+			[RemoveIf("")]
 			string Name { get; set; }
 			int MinimumAge { get; set; }
 			Division Division { get; set; }
@@ -744,6 +794,28 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void Can_Read_Array_Nillables_From_Standard_Xml_Serialization()
+		{
+			var group = new Group
+			{
+				Id = 2
+			};
+
+			using (var stream = new FileStream("out.xml", FileMode.Create))
+			{
+				var serializer = new XmlSerializer(typeof(Group));
+				serializer.Serialize(stream, group);
+				stream.Flush();
+			}
+
+			var document = new XmlDocument();
+			document.Load("out.xml");
+
+			var groupRead = CreateXmlAdapter<IGroup>(null, ref document);
+			Assert.IsNull(groupRead.ExtraInfo);
+		}
+
+		[Test]
 		public void Can_Write_To_Standard_Xml_Serialization()
 		{
 			XmlDocument document = null, mgr = null, emp = null;
@@ -825,7 +897,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[XmlIgnore]
 		string Comment { get; set; }
 
-		[XmlArrayItem(typeof(int), ElementName = "MyNumber"),
+		[XmlArray(IsNullable = true),
+		 XmlArrayItem(typeof(int), ElementName = "MyNumber"),
 		 XmlArrayItem(typeof(string), ElementName = "MyString"),
 		 XmlArrayItem(typeof(IManager))]
 		object[] ExtraInfo { get; set; }
@@ -871,7 +944,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[XmlIgnore]
 		public string Comment;
 
-		[XmlArray,
+		[XmlArray(IsNullable = true),
 		 XmlArrayItem(typeof(int), ElementName = "MyNumber"),
 		 XmlArrayItem(typeof(string), ElementName = "MyString"),
 		 XmlArrayItem(typeof(Manager))]

@@ -129,6 +129,12 @@ namespace Castle.Components.DictionaryAdapter
 			}	
 		}
 
+		public bool ShouldClearProperty(PropertyDescriptor property, object value)
+		{
+			return property == null ||
+				property.Behaviors.OfType<RemoveIfAttribute>().Where(remove => remove.ShouldRemove(value)).Any();
+		}
+
 		public override bool Equals(object obj)
 		{
 			var other = obj as IDictionaryAdapter;

@@ -15,7 +15,6 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
-	using System.Collections;
 
 	/// <summary>
 	/// Assigns a specific dictionary key.
@@ -23,15 +22,13 @@ namespace Castle.Components.DictionaryAdapter
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
 	public class KeyAttribute : DictionaryBehaviorAttribute, IDictionaryKeyBuilder
 	{
-		private readonly String key;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="KeyAttribute"/> class.
 		/// </summary>
 		/// <param name="key">The key.</param>
 		public KeyAttribute(String key)
 		{
-			this.key = key;
+			Key = key;
 		}
 
 		/// <summary>
@@ -40,13 +37,14 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="keys">The compound key.</param>
 		public KeyAttribute(String[] keys)
 		{
-			this.key = string.Join(",", keys);
+			Key = string.Join(",", keys);
 		}
 
 		public String Key { get; private set; }
+
 		String IDictionaryKeyBuilder.GetKey(IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor property)
 		{
-			return this.key;
+			return Key;
 		}
 	}
 }

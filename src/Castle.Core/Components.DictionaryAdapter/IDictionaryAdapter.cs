@@ -39,6 +39,8 @@ namespace Castle.Components.DictionaryAdapter
 
 		void ClearProperty(PropertyDescriptor property, string key);
 
+		bool ShouldClearProperty(PropertyDescriptor property, object value);
+
 		void CopyTo(IDictionaryAdapter other);
 
 		void CopyTo(IDictionaryAdapter other, Predicate<PropertyDescriptor> selector);
