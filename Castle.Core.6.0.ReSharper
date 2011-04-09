@@ -291,7 +291,13 @@ II.2.12 <HandlesEvent />
     </CSharp>
     <JavaScript>
       <FormatSettings />
-      <Naming2 />
+      <Naming2>
+        <UserRule Name="JS_LOCAL_VARIABLE" Inspect="True" Prefix="" Suffix="" Style="aaBb" />
+        <UserRule Name="JS_FUNCTION" Inspect="True" Prefix="" Suffix="" Style="aaBb" />
+        <UserRule Name="JS_PARAMETER" Inspect="True" Prefix="" Suffix="" Style="aaBb" />
+        <UserRule Name="JS_LABEL" Inspect="True" Prefix="" Suffix="" Style="aaBb" />
+        <UserRule Name="JS_PROPERTY" Inspect="True" Prefix="" Suffix="" Style="AaBb" />
+      </Naming2>
     </JavaScript>
     <VB>
       <FormatSettings />
@@ -310,7 +316,7 @@ II.2.12 <HandlesEvent />
     <Xaml>
       <Naming2 />
     </Xaml>
-    <FileHeader><![CDATA[Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+    <FileHeader><![CDATA[Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

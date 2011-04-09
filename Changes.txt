@@ -1,4 +1,5 @@
 ==================
+- fixed DYNPROXY-158 - Can't create class proxy with target and without target in same ProxyGenerator
 - implemented CORE-33 - Add lazy logging
 - removed obsolete members from ILogger and its implementations
 
