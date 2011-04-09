@@ -18,6 +18,6 @@ namespace Castle.Components.DictionaryAdapter
 
 	public interface IDictionaryCopyStrategy
 	{
-		object Copy(IDictionaryAdapter source, IDictionaryAdapter target, Predicate<PropertyDescriptor> selector);
+		bool Copy(IDictionaryAdapter source, IDictionaryAdapter target, ref Predicate<PropertyDescriptor> selector);
 	}
 }

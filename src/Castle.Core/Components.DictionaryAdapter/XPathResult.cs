@@ -68,23 +68,56 @@ namespace Castle.Components.DictionaryAdapter
 
 		public bool OmitPolymorphism { get; private set; }
 
+		public bool IsNullable
+		{
+			get
+			{
+				if (Result is XPathNavigator && ((XPathNavigator)Result).NodeType != XPathNodeType.Element)
+					return false;
+
+				if (matchingBehavior == null)
+					return Context.IsNullable;
+
+				if (matchingBehavior is XmlElementAttribute)
+					return ((XmlElementAttribute)matchingBehavior).IsNullable;
+
+				if (matchingBehavior is XmlArrayAttribute)
+					return ((XmlArrayAttribute)matchingBehavior).IsNullable;
+
+				if (matchingBehavior is XmlArrayItemAttribute)
+					return ((XmlArrayItemAttribute)matchingBehavior).IsNullable;
+
+				return Context.IsNullable;
+			}
+		}
+
 		public XPathNavigator GetNavigator(bool demand)
+		{
+			XPathNavigator node;
+			GetNavigator(demand, false, out node);
+			return node;
+		}
+
+		public bool GetNavigator(bool demand, bool nillable, out XPathNavigator result)
 		{
 			if (Result is XPathNavigator)
 			{
-				return (XPathNavigator)Result;
+				result = (XPathNavigator)Result;
+				return nillable ? GetNillable(ref result) : true;
 			}
 			else if (Result is XPathNodeIterator)
 			{
-				return ((XPathNodeIterator)Result).Cast<XPathNavigator>().FirstOrDefault();
+				result = ((XPathNodeIterator)Result).Cast<XPathNavigator>().FirstOrDefault();
+				return nillable ? GetNillable(ref result) : true;
 			}
 			if (demand && create != null)
 			{
- 				var result = create();
+ 				result = create();
 				Result = result;
-				return result;
-			}	 
-			return null;
+				return true;
+			}
+			result = null;
+			return true;
 		}
 
 		public XPathResult GetNodeAt(Type type, int index)
@@ -116,6 +149,8 @@ namespace Castle.Components.DictionaryAdapter
 				Container = Result as XPathNavigator;
 				if (IsContainer && Container != null)
 				{
+					if (Context.IsNil(Container))
+						return null;
 					if (Context.ListItemMeta != null)
 					{
 						return Context.ListItemMeta.SelectMany(item =>
@@ -123,7 +158,7 @@ namespace Castle.Components.DictionaryAdapter
 							string name, namespaceUri;
 							var xmlMeta = GetItemQualifedName(type, item, getXmlMeta, out name, out namespaceUri);
 							return Container.SelectChildren(name, namespaceUri).Cast<XPathNavigator>()
-								.Select(r => new XPathResult(item.Type ?? type, r, Context, matchingBehavior) { XmlMeta = xmlMeta });
+								.Select(r => new XPathResult(item.Type ?? type, r, Context, item) { XmlMeta = xmlMeta });
 						}).OrderBy(r => (XPathNavigator)r.Result, XPathPositionComparer.Instance);
 					}
 					else
@@ -140,6 +175,8 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				var parents = nodes.Cast<XPathNavigator>().ToList();
 				Container = parents.FirstOrDefault();
+				if (Context.IsNil(Container))
+					return null;
 
 				if (Context.ListItemMeta != null)
 				{
@@ -148,13 +185,12 @@ namespace Castle.Components.DictionaryAdapter
 						string name, namespaceUri;
 						var xmlMeta = GetItemQualifedName(type, item, getXmlMeta, out name, out namespaceUri);
 						return parents.SelectMany(p => p.SelectChildren(name, namespaceUri).Cast<XPathNavigator>())
-							.Select(r => new XPathResult(item.Type ?? type, r, Context, matchingBehavior) { XmlMeta = xmlMeta });
+							.Select(r => new XPathResult(item.Type ?? type, r, Context, item) { XmlMeta = xmlMeta });
 					}).OrderBy(r => (XPathNavigator)r.Result, XPathPositionComparer.Instance);
 				}
 				else
 				{
-					results = parents.SelectMany(p => p.SelectChildren(XPathNodeType.Element)
-						.Cast<XPathNavigator>());
+					results = parents.SelectMany(p => p.SelectChildren(XPathNodeType.Element).Cast<XPathNavigator>());
 				}
 			}
 			return results.Select(r => new XPathResult(type, r, Context, matchingBehavior));
@@ -162,11 +198,14 @@ namespace Castle.Components.DictionaryAdapter
 
 		public bool ReadObject(out object value)
 		{
-			var node = GetNavigator(false);
-			foreach (var serializer in Context.Serializers)
+			XPathNavigator node;
+			if (GetNavigator(false, true, out node) && node != null)
 			{
-				if (serializer.ReadObject(this, node, out value))
-					return true;
+				foreach (var serializer in Context.Serializers)
+				{
+					if (serializer.ReadObject(this, node, out value))
+						return true;
+				}
 			}
 			value = null;
 			return false;
@@ -213,8 +252,9 @@ namespace Castle.Components.DictionaryAdapter
 			string namespaceUri = null;
 			string typeNamespaceUri = null;
 			bool omitPolymorphism = false;
-			Type baseType = type;
+			var baseType = type;
 			var xmlMeta = getXmlMeta(type);
+			var itemBehavior = matchingBehavior;
 
 			if (xmlMeta != null)
 			{
@@ -246,6 +286,7 @@ namespace Castle.Components.DictionaryAdapter
 
 				if (listItem != null)
 				{
+					itemBehavior = listItem;
 					type = listItem.Type ?? baseType;
 
 					if (string.IsNullOrEmpty(listItem.ElementName))
@@ -298,23 +339,33 @@ namespace Castle.Components.DictionaryAdapter
 				Context.CreateNamespace(null, typeNamespaceUri, item);
 			}
 
-			return new XPathResult(type, item, Context, matchingBehavior)
+			return new XPathResult(type, item, Context, itemBehavior)
 			{
 				XmlMeta = xmlMeta,
 				OmitPolymorphism = omitPolymorphism
 			};
 		}
 
-		public void RemoveAt(int index)
+		public bool RemoveAt(int index)
 		{
-			GetNodeAt(null, index).Remove();
+			return GetNodeAt(null, index).Remove(true);
 		}
 
-		public void Remove()
+		public bool Remove(bool nillable)
 		{
 			if (Result is XPathNavigator)
 			{
-				((XPathNavigator)Result).DeleteSelf();
+				if (nillable && IsNullable)
+				{
+					RemoveChildren(XPathNodeType.All & ~XPathNodeType.Namespace);
+					Context.MakeNil((XPathNavigator)Result);
+					return false;
+				}
+				else
+				{
+					((XPathNavigator)Result).DeleteSelf();
+					return true;
+				}
 			}
 			else if (Result is XPathNodeIterator)
 			{
@@ -325,17 +376,43 @@ namespace Castle.Components.DictionaryAdapter
 				}
 			}
 			Result = null;
+			if (nillable && IsNullable)
+			{
+				var result = GetNavigator(true);
+				if (result != null)
+				{
+					Context.MakeNil(result);
+					Result = result;
+					return false;
+				}
+			}
+			return true;
 		}
 
 		public XPathNavigator RemoveChildren()
 		{
+			return RemoveChildren(XPathNodeType.All);
+		}
+
+		public XPathNavigator RemoveChildren(XPathNodeType nodeType)
+		{
 			var node = GetNavigator(true);
 			if (node != null)
 			{
-				var children = node.SelectChildren(XPathNodeType.All).Cast<XPathNavigator>();
+				var children = node.SelectChildren(nodeType).Cast<XPathNavigator>();
 				foreach (var child in children.ToArray()) child.DeleteSelf();
 			}
 			return node;
+		}
+
+		private bool GetNillable(ref XPathNavigator source)
+		{
+			if (source != null && IsNullable && Context.IsNil(source))
+			{
+				source = null;
+				return false;
+			}
+			return true;
 		}
 
 		#region Xml Primitive Data Types

@@ -27,6 +27,7 @@ namespace Castle.Components.DictionaryAdapter
 	public class XPathContext : XsltContext
 	{
 		private readonly XPathContext parent;
+		private XmlMetadata xmlMeta;
 		private string qualifiedNamespace;
 		private IDictionary<string, Func<IXsltContextFunction>> functions;
 		private List<IXPathSerializer> serializers;
@@ -73,6 +74,18 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
+		public bool IsNullable
+		{
+			get
+			{
+				if (xmlMeta != null && xmlMeta.IsNullable.HasValue)
+				{
+					return xmlMeta.IsNullable.Value;
+				}
+				return (parent != null) ? parent.IsNullable : false;
+			}
+		}
+
 		public XsltArgumentList Arguments { get; private set; }
 
 		public IEnumerable<XmlArrayItemAttribute> ListItemMeta { get; private set; }
@@ -87,26 +100,26 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		public XPathContext ApplyBehaviors(IEnumerable behaviors)
+		public XPathContext ApplyBehaviors(XmlMetadata xmlMeta, IEnumerable behaviors)
 		{
-			var qualified = behaviors.OfType<XmlQualifiedAttribute>().Any();
+			if (xmlMeta != null)
+			{
+				this.xmlMeta = xmlMeta;
+				if (string.IsNullOrEmpty(xmlMeta.XmlType.Namespace) == false)
+				{
+					if (xmlMeta.Qualified.GetValueOrDefault(false))
+					{
+						AddNamespace(xmlMeta.XmlType.Namespace);
+						qualifiedNamespace = xmlMeta.XmlType.Namespace;
+					}
+					else
+					{
+						AddNamespace(string.Empty, xmlMeta.XmlType.Namespace);
+					}
+				}
+			}
 
 			new BehaviorVisitor()
-				.OfType<XmlTypeAttribute>(attrib =>
-				{
-					if (string.IsNullOrEmpty(attrib.Namespace) == false)
-					{
-						if (qualified)
-						{
-							AddNamespace(attrib.Namespace);
-							qualifiedNamespace = attrib.Namespace;
-						}
-						else
-						{
-							AddNamespace(string.Empty, attrib.Namespace);
-						}
-					}
-				})
 				.OfType<XmlNamespaceAttribute>(attrib =>
 				{
 					AddNamespace(attrib.Prefix, attrib.NamespaceUri);
@@ -120,26 +133,20 @@ namespace Castle.Components.DictionaryAdapter
 					ListItemMeta = ListItemMeta ?? new List<XmlArrayItemAttribute>();
 					((List<XmlArrayItemAttribute>)ListItemMeta).Add(attrib);
 				})
-				.OfType<XPathFunctionAttribute>(attrib =>
-				{
-					AddFunction(attrib.Prefix, attrib.Name, attrib.Function);
-				})
-				.OfType<IXPathSerializer>(attrib =>
-				{
-					AddSerializer(attrib);
-				})
+				.OfType<XPathFunctionAttribute>(attrib => AddFunction(attrib.Prefix, attrib.Name, attrib.Function))
+				.OfType<IXPathSerializer>(attrib => AddSerializer(attrib))
 				.Apply(behaviors);
 			return this;
 		}
 
-		public XPathContext CreateChild(IEnumerable behaviors)
+		public XPathContext CreateChild(XmlMetadata xmlMeta, IEnumerable behaviors)
 		{
-			return new XPathContext(this).ApplyBehaviors(behaviors);
+			return new XPathContext(this).ApplyBehaviors(xmlMeta, behaviors);
 		}
 
-		public XPathContext CreateChild(params object[] behaviors)
+		public XPathContext CreateChild(XmlMetadata xmlMeta, params object[] behaviors)
 		{
-			return CreateChild((IEnumerable)behaviors);
+			return CreateChild(xmlMeta, (IEnumerable)behaviors);
 		}
 
 		public override bool HasNamespace(string prefix)
@@ -252,7 +259,8 @@ namespace Castle.Components.DictionaryAdapter
 
 				var existing = source.GetNamespace(prefix);
 				if (existing == namespaceUri) return prefix;
-				if (string.IsNullOrEmpty(existing) == false) return null;
+				if (string.IsNullOrEmpty(existing) == false)
+					return null;
 
 				source.CreateAttribute("xmlns", prefix, "", namespaceUri);
 			}
@@ -271,7 +279,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			name = XmlConvert.EncodeLocalName(name);
 			namespaceUri = GetEffectiveNamespace(namespaceUri);
-			source.AppendChildElement(LookupPrefix(namespaceUri), name, namespaceUri, "");
+			source.AppendChildElement(LookupPrefix(namespaceUri), name, namespaceUri, null);
 			return source.SelectSingleNode("*[position()=last()]");
 		}
 
@@ -294,6 +302,22 @@ namespace Castle.Components.DictionaryAdapter
 				return new XmlQualifiedName(name, namespaceUri);
 			}
 			return null;
+		}
+
+		public bool IsNil(XPathNavigator source)
+		{
+			return source.NodeType == XPathNodeType.Element && 
+				source.GetAttribute("nil", Xsi).Equals("true", StringComparison.OrdinalIgnoreCase);
+		}
+
+		public bool MakeNil(XPathNavigator source)
+		{
+			if (source.NodeType == XPathNodeType.Element && IsNil(source) == false)
+			{
+				source.CreateAttribute("xsi", "nil", Xsi, "true");
+				return true;
+			}
+			return false;
 		}
 
 		public string GetEffectiveNamespace(string namespaceUri)

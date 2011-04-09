@@ -207,9 +207,13 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			var adapterType = typeBuilder.CreateType();
+			var dictionaryDescriptor = descriptor as DictionaryDescriptor;
+			if (dictionaryDescriptor != null)
+			{
+				behaviors = behaviors.Union(dictionaryDescriptor.Behaviors).ToArray();
+			}
 			var metaBindings = BindingFlags.Public | BindingFlags.Static | BindingFlags.SetField;
-			var meta = new DictionaryAdapterMeta(type, initializers, metaInitializers, behaviors,
-												 propertyMap, descriptor as DictionaryDescriptor, this);
+			var meta = new DictionaryAdapterMeta(type, initializers, metaInitializers, behaviors, propertyMap, dictionaryDescriptor, this);
 			adapterType.InvokeMember("__meta", metaBindings, null, null, new[] { meta });
 
 			return typeBuilder.Assembly;

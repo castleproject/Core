@@ -25,7 +25,8 @@ namespace Castle.Components.DictionaryAdapter
 		void IDictionaryMetaInitializer.Initialize(IDictionaryAdapterFactory factory, DictionaryAdapterMeta dictionaryMeta)
 		{
 			var type = dictionaryMeta.Type;
-			bool qualified = false;
+			bool? qualified = null;
+			bool? isNullable = null;
 			string defaultNamespace = null;
 			XmlTypeAttribute xmlType = null;
 			XmlRootAttribute xmlRoot = null;
@@ -34,7 +35,11 @@ namespace Castle.Components.DictionaryAdapter
 			new BehaviorVisitor()
 				.OfType<XmlTypeAttribute>(attrib => xmlType = attrib)
 				.OfType<XmlRootAttribute>(attrib => xmlRoot = attrib)
-				.OfType<XmlQualifiedAttribute>(_ => qualified = true)
+				.OfType<XmlDefaultsAttribute>(attrib => 
+				{
+					qualified = attrib.Qualified;
+					isNullable = attrib.IsNullable;
+				})
 				.OfType<XmlNamespaceAttribute>(attrib =>
 				{
 					if (attrib.Default)
@@ -67,7 +72,7 @@ namespace Castle.Components.DictionaryAdapter
 			if (xmlType.Namespace == null)
 				xmlType.Namespace = defaultNamespace;
 
-			dictionaryMeta.SetXmlMeta(new XmlMetadata(type, qualified, xmlType, xmlRoot, xmlIncludes));
+			dictionaryMeta.SetXmlMeta(new XmlMetadata(type, qualified, isNullable, xmlType, xmlRoot, xmlIncludes));
 		}
 	}
 }
