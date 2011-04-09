@@ -25,7 +25,7 @@ namespace Castle.Components.DictionaryAdapter
 
 	public class XPathAdapter : DictionaryBehaviorAttribute, IDictionaryInitializer,
 								IDictionaryPropertyGetter, IDictionaryPropertySetter,
-								IDictionaryCreateStrategy
+								IDictionaryCreateStrategy, IDictionaryCopyStrategy
 	{
 		private readonly Func<XPathNavigator> createRoot;
 		private XPathNavigator root;
@@ -58,14 +58,14 @@ namespace Castle.Components.DictionaryAdapter
 		protected XPathAdapter(XPathNavigator source, XPathAdapter parent)
 		{
 			Parent = parent;
-			Context = parent.Context.CreateChild();
+			Context = parent.Context.CreateChild(null);
 			root = source.Clone();
 		}
 
 		protected XPathAdapter(Func<XPathNavigator> createSource, XPathAdapter parent)
 		{
 			Parent = parent;
-			Context = parent.Context.CreateChild();
+			Context = parent.Context.CreateChild(null);
 			createRoot = createSource;
 		}
 
@@ -80,9 +80,10 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			dictionaryAdapter.This.CreateStrategy = this;
+			dictionaryAdapter.This.CopyStrategy = this;
 
-			Context.ApplyBehaviors(behaviors);
 			xmlMeta = dictionaryAdapter.GetXmlMeta();
+			Context.ApplyBehaviors(xmlMeta, behaviors);
 
 			if (Parent == null)
 			{
@@ -164,6 +165,13 @@ namespace Castle.Components.DictionaryAdapter
 			return adapter.This.Factory.GetAdapter(type, dictionary, descriptor);
 		}
 
+		bool IDictionaryCopyStrategy.Copy(IDictionaryAdapter source, IDictionaryAdapter target, ref Predicate<PropertyDescriptor> selector)
+		{
+			var select = selector ?? (property => true);
+			selector = property => select(property) && XPathAdapter.IsPropertyDefined(property.PropertyName, source, this);
+			return false;
+		}
+
 		#endregion
 
 		#region Reading
@@ -193,7 +201,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		private object ReadFragment(XPathResult result)
 		{
-			var node = result.GetNavigator(false);
+			XPathNavigator node;
+			result.GetNavigator(false, true, out node);
+			if (node == null) return null;
 			if (result.Type == typeof(XmlElement))
 			{
 				var document = new XmlDocument();
@@ -205,48 +215,55 @@ namespace Castle.Components.DictionaryAdapter
 
 		private object ReadSimple(XPathResult result)
 		{
-			var node = result.GetNavigator(false);
-			if (node != null)
+			XPathNavigator node;
+			if (result.GetNavigator(false, true, out node))
 			{
-				Type underlyingType;
-				if (IsNullableType(result.Type, out underlyingType) == false)
+				if (node != null)
 				{
-					underlyingType = result.Type;
-				}
+					Type underlyingType;
+					if (IsNullableType(result.Type, out underlyingType) == false)
+					{
+						underlyingType = result.Type;
+					}
 
-				if (underlyingType.IsEnum)
-				{
-					return Enum.Parse(underlyingType, node.Value);
-				}
-				else if (underlyingType == typeof(Guid))
-				{
-					return new Guid(node.Value);
-				}
+					if (underlyingType.IsEnum)
+					{
+						return Enum.Parse(underlyingType, node.Value);
+					}
+					else if (underlyingType == typeof(Guid))
+					{
+						return new Guid(node.Value);
+					}
 
-				try
-				{
-					return node.ValueAs(underlyingType);
+					try
+					{
+						return node.ValueAs(underlyingType);
+					}
+					catch (InvalidCastException)
+					{
+						object value;
+						if (DefaultXmlSerializer.Instance.ReadObject(result, node, out value))
+							return value;
+					}
 				}
-				catch (InvalidCastException)
-				{
-					object value;
-					if (DefaultXmlSerializer.Instance.ReadObject(result, node, out value))
-						return value;
-				}
+				if (result.Result != null)
+					return Convert.ChangeType(result.Result, result.Type);
 			}
-			if (result.Result != null)
-				return Convert.ChangeType(result.Result, result.Type);
 
 			return null;
 		}
 
 		private object ReadComponent(XPathResult result, bool ifExists, IDictionaryAdapter dictionaryAdapter)
 		{
+			XPathNavigator source;
+			if (result.GetNavigator(false, true, out source) == false || (source == null && ifExists))
+			{
+				return null;
+			}
+
 			XPathAdapter xpathAdapter;
-			var source = result.GetNavigator(false);
-			if (source == null && ifExists) return null;
-		
 			var elementType = result.Type;
+
 			if (source != null)
 			{
 				if (result.XmlMeta != null)
@@ -291,8 +308,9 @@ namespace Castle.Components.DictionaryAdapter
 		private object ReadArray(XPathResult result, IDictionaryAdapter dictionaryAdapter)
 		{
 			var itemType = result.Type.GetElementType();
-			var items = result.GetNodes(itemType, type => dictionaryAdapter.GetXmlMeta(type))
-				.Select(node => ReadProperty(node, false, dictionaryAdapter)).ToArray();
+			var itemNodes = result.GetNodes(itemType, type => dictionaryAdapter.GetXmlMeta(type));
+			if (itemNodes == null) return null;
+			var items = itemNodes.Select(node => ReadProperty(node, false, dictionaryAdapter)).ToArray();
 			var array = Array.CreateInstance(itemType, items.Length);
 			items.CopyTo(array, 0);
 			return array;
@@ -304,6 +322,10 @@ namespace Castle.Components.DictionaryAdapter
 			var arguments = result.Type.GetGenericArguments();
 			var genericDef = result.Type.GetGenericTypeDefinition();
 			var itemType = arguments[0];
+
+			Func<Type, XmlMetadata> getXmlMeta = type => dictionaryAdapter.GetXmlMeta(type);
+			var itemNodes = result.GetNodes(itemType, getXmlMeta);
+			if (itemNodes == null) return null;
 
 			if (genericDef == typeof(IEnumerable<>) || genericDef == typeof(ICollection<>) || genericDef == typeof(List<>))
 			{
@@ -325,9 +347,9 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			
 			var list = (IList)Activator.CreateInstance(listType);
-			Func<Type, XmlMetadata> getXmlMeta = type => dictionaryAdapter.GetXmlMeta(type);
+		
 
-			foreach (var item in result.GetNodes(itemType, getXmlMeta))
+			foreach (var item in itemNodes)
 			{
 				list.Add(ReadProperty(item, false, dictionaryAdapter));
 			}
@@ -383,18 +405,18 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void WriteProperty(XPathResult result, object value, IDictionaryAdapter dictionaryAdapter)
 		{
-			var shouldRemove = false;
 			var propertyType = result.Type;
+			var shouldRemove = (value == null);
 
 			if (result.Property != null)
 			{
-				shouldRemove = value == null || dictionaryAdapter.ShouldClearProperty(result.Property, value);
+				shouldRemove |= dictionaryAdapter.ShouldClearProperty(result.Property, value);
 				dictionaryAdapter.This.ExtendedProperties.Remove(result.Property.PropertyName);
 			}
 
 			if (shouldRemove)
 			{
-				result.Remove();
+				result.Remove(true);
 				return;
 			}
 
@@ -484,7 +506,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void WriteCollection(XPathResult result, object value, IDictionaryAdapter dictionaryAdapter)
 		{
-			result.Remove();
+			result.Remove(value == null);
 
 			if (value != null)
 			{
@@ -583,8 +605,8 @@ namespace Castle.Components.DictionaryAdapter
 			object matchingBehavior = null;
 			Func<XPathNavigator> create = null;
 
-			object xmlType = dictionaryAdapter.GetXmlMeta(property.Property.DeclaringType).XmlType;
-			var keyContext = Context.CreateChild(Enumerable.Repeat(xmlType, 1).Union(property.Behaviors));
+			var xmlMeta = dictionaryAdapter.GetXmlMeta(property.Property.DeclaringType);
+			var keyContext = Context.CreateChild(xmlMeta, property.Behaviors);
 
 			foreach (var behavior in property.Behaviors)
 			{

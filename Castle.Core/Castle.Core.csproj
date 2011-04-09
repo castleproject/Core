@@ -203,7 +203,7 @@
     </Compile>
     <Compile Include="Compatibility\SilverlightHacks.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\RemoveIfAttribute.cs" />
-    <Compile Include="Components.DictionaryAdapter\Attributes\XmlQualifiedAttribute.cs" />
+    <Compile Include="Components.DictionaryAdapter\Attributes\XmlDefaultsAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\StringStorageAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\MemberwiseEqualityHashCodeStrategy.cs" />
     <Compile Include="Components.DictionaryAdapter\DictionaryAdapterBase.Copy.cs" />

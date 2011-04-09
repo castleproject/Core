@@ -721,7 +721,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			string LastName { get; set; }
 		}
 
-		[XmlQualified,
+		[XmlDefaults(Qualified = true),
 		 XmlNamespace("urn:www.castle.org:tags", "tags"),
 		 XmlType(Namespace = "urn:www.castle.org:tags")]
 		public interface ITagged
@@ -794,11 +794,13 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
-		public void Can_Read_Array_Nillables_From_Standard_Xml_Serialization()
+		public void Can_Read_Nillables_From_Standard_Xml_Serialization()
 		{
+			var manager = new Manager { Name = "Craig", Level = 1 };
 			var group = new Group
 			{
-				Id = 2
+				Id = 2,
+				Employees = new Employee[] { null, manager }
 			};
 
 			using (var stream = new FileStream("out.xml", FileMode.Create))
@@ -812,7 +814,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			document.Load("out.xml");
 
 			var groupRead = CreateXmlAdapter<IGroup>(null, ref document);
+			Assert.IsNull(groupRead.Owner);
 			Assert.IsNull(groupRead.ExtraInfo);
+			Assert.AreEqual(1, groupRead.Employees.Length);
 		}
 
 		[Test]
@@ -875,6 +879,28 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				Assert.AreEqual(manager.Level, managerExtra.Level);
 			}
 		}
+
+		[Test]
+		public void Can_Write_Nillables_To_Standard_Xml_Serialization()
+		{
+			XmlDocument document = null, mgr = null;
+			var manager = CreateXmlAdapter<IManager>(null, ref mgr);
+			manager.Name = "Craig";
+			manager.Level = 1;
+			var group = CreateXmlAdapter<IGroup>(null, ref document);
+			group.Id = 2;
+			group.Owner = null;
+			group.Employees = new IEmployee[] { null, manager };
+
+			document.Save("out.xml");
+
+			using (var stream = new FileStream("out.xml", FileMode.Open))
+			{
+				var serializer = new XmlSerializer(typeof(Group));
+				var groupRead = (Group)serializer.Deserialize(stream);
+				Assert.IsNull(group.Owner);
+			}
+		}
 	}
 
 	#region DA Serialization Model
@@ -884,10 +910,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	public interface IGroup
 	{
 		int Id { get; set; }
+
+		[XmlElement(IsNullable = true)]
 		IEmployee Owner { get; set; }
 
-		[XmlArrayItem("Dude", Type = typeof(IEmployee)),
-		 XmlArrayItem(Type = typeof(IManager))]
+		[XmlArrayItem("Dude", Type = typeof(IEmployee), IsNullable = true),
+		 XmlArrayItem(Type = typeof(IManager), IsNullable = true)]
 		IEmployee[] Employees { get; set; }
 
 		string[] Tags { get; set; }
@@ -931,10 +959,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	public class Group
 	{
 		public int Id;
+
+		[XmlElement(IsNullable = true)]
 		public Employee Owner;
 
-		[XmlArrayItem("Dude", Type = typeof(Employee)),
-		 XmlArrayItem(Type = typeof(Manager))]
+		[XmlArrayItem("Dude", Type = typeof(Employee), IsNullable = true),
+		 XmlArrayItem(Type = typeof(Manager), IsNullable = true)]
 		public Employee[] Employees;
 
 		public string[] Tags;

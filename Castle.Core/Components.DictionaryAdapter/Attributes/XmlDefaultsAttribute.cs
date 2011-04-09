@@ -17,7 +17,10 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 
 	[AttributeUsage(AttributeTargets.Interface)]
-	public class XmlQualifiedAttribute : Attribute
+	public class XmlDefaultsAttribute : Attribute
 	{
+		public bool Qualified { get; set; }
+
+		public bool IsNullable { get; set; }
 	}
 }

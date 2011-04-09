@@ -47,7 +47,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			Behaviors = NoBehaviors;
 		}
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PropertyDescriptor"/> class.
 		/// </summary>
@@ -59,6 +59,14 @@ namespace Castle.Components.DictionaryAdapter
 			Behaviors = behaviors ?? NoBehaviors;
 			IsDynamicProperty = typeof(IDynamicValue).IsAssignableFrom(property.PropertyType);
 			ObtainTypeConverter();
+		}
+
+		/// <summary>
+		/// Initializes a new instance <see cref="PropertyDescriptor"/> class.
+		/// </summary>
+		protected PropertyDescriptor(object[] behaviors)
+		{
+			Behaviors = behaviors ?? NoBehaviors;
 		}
 
 		/// <summary>
