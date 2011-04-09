@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -73,6 +73,14 @@ namespace Castle.DynamicProxy.Tests
 			var proxy = generator.CreateClassProxyWithTarget<AbstractClassWithMethod>(new InheritsAbstractClassWithMethod());
 			var result = proxy.Method();
 			Assert.AreEqual(42, result);
+		}
+
+		[Test]
+		public void Can_proxy_with_target_after_proxy_without_target_for_the_same_type()
+		{
+			generator.CreateClassProxy<SimpleClass>();
+
+			generator.CreateClassProxyWithTarget(new SimpleClass());
 		}
 
 		[Test]
