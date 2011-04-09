@@ -33,9 +33,8 @@ namespace Castle.Components.DictionaryAdapter
 					other.Meta.Type.FullName, Meta.Type.FullName));
 			}
 
-			if (This.CopyStrategy != null)
+			if (This.CopyStrategy != null && This.CopyStrategy.Copy(this, other, ref selector))
 			{
-				This.CopyStrategy.Copy(this, other, selector);
 				return;
 			}
 
@@ -44,8 +43,7 @@ namespace Castle.Components.DictionaryAdapter
 			foreach (var property in This.Properties.Values.Where(p => selector(p)))
 			{
 				var propertyValue = GetProperty(property.PropertyName, true);
-				if (propertyValue != null)
-					other.SetProperty(property.PropertyName, ref propertyValue);
+				other.SetProperty(property.PropertyName, ref propertyValue);
 			}
 		}
 	}

@@ -20,10 +20,12 @@ namespace Castle.Components.DictionaryAdapter
 
 	public class XmlMetadata
 	{
-		public XmlMetadata(Type type, bool qualified, XmlTypeAttribute xmlType, XmlRootAttribute xmlRoot, IEnumerable<Type> xmlIncludes)
+		public XmlMetadata(Type type, bool? qualified, bool? isNullable, XmlTypeAttribute xmlType,
+						   XmlRootAttribute xmlRoot, IEnumerable<Type> xmlIncludes)
 		{
 			Type = type;
 			Qualified = qualified;
+			IsNullable = isNullable;
 			XmlType = xmlType;
 			XmlRoot = xmlRoot;
 			XmlIncludes = xmlIncludes;
@@ -31,7 +33,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		public Type Type { get; private set; }
 
-		public bool Qualified { get; private set; }
+		public bool? Qualified { get; private set; }
+
+		public bool? IsNullable { get; private set; }
 
 		public XmlTypeAttribute XmlType { get; private set; }
 
