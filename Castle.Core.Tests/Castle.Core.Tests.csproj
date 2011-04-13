@@ -202,6 +202,7 @@
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Address.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Color.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IBook.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\MemberwiseEquaityHashCodeStrategyTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\IUseBehaviorBuilder.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\KeyBehaviorBuilderAttribute.cs" />

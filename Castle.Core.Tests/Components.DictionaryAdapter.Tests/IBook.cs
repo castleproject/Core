@@ -14,16 +14,25 @@
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
-	using System;
 	using System.Collections.Generic;
 
-	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property)]
-	public class KeyBehaviorBuilderAttribute : Attribute, IDictionaryBehaviorBuilder
+	public interface IBook
 	{
-		public IEnumerable<object> BuildBehaviors()
-		{
-			yield return new KeyPrefixAttribute("Foo ");
-			yield return new KeySubstitutionAttribute("_", " ");
-		}
+		IDeweyDecimalNumber DDC { get; set; }
+
+		string Title { get; set; }
+
+		bool Printed { get; set; }
+
+		ISet<IBook> RelatedBooks { get; set; }
+	}
+
+	public interface IDeweyDecimalNumber
+	{
+		int Category { get; set; }
+
+		int SubCategory { get; set; }
+
+		int SubDivision { get; set; }
 	}
 }
