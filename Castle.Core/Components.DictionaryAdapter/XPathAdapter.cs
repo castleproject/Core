@@ -114,40 +114,37 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region Behaviors
 
-		object IDictionaryPropertyGetter.GetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key, 
-														  object storedValue, PropertyDescriptor property, bool ifExists)
+		object IDictionaryPropertyGetter.GetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key, object storedValue,
+														  PropertyDescriptor property, bool ifExists)
 		{
-			if (ShouldIgnoreProperty(property))
-			{
-				return storedValue;
-			}
-
-			var cached = dictionaryAdapter.This.ExtendedProperties[property.PropertyName];
-			if (cached != null) return cached;
-
-			var result = EvaluateProperty(key, property, dictionaryAdapter);
-			return ReadProperty(result, ifExists, dictionaryAdapter);
-		}
-
-		bool IDictionaryPropertySetter.SetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key, 
-														ref object value, PropertyDescriptor property)
-		{
-			if (ShouldIgnoreProperty(property))
-			{
-				return true;
-			}
-
-			EnsureOffRoot();
-
-			if (root.CanEdit)
+			if (ShouldIgnoreProperty(property) == false &&
+				(storedValue == null || IsVolatileProperty(dictionaryAdapter, property)))
 			{
 				var result = EvaluateProperty(key, property, dictionaryAdapter);
-				if (result.CanWrite)
+				storedValue = ReadProperty(result, ifExists, dictionaryAdapter);
+				if (storedValue != null)
 				{
-					WriteProperty(result, value, dictionaryAdapter);
+					dictionaryAdapter.StoreProperty(property, key, storedValue);
 				}
 			}
+			return storedValue;
+		}
 
+		bool IDictionaryPropertySetter.SetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key, ref object value, PropertyDescriptor property)
+		{
+			if (ShouldIgnoreProperty(property) == false)
+			{
+				EnsureOffRoot();
+
+				if (root.CanEdit)
+				{
+					var result = EvaluateProperty(key, property, dictionaryAdapter);
+					if (result.CanWrite)
+					{
+						WriteProperty(result, ref value, dictionaryAdapter);
+					}
+				}
+			}
 			return true;
 		}
 
@@ -283,12 +280,7 @@ namespace Castle.Components.DictionaryAdapter
 				xpathAdapter = new XPathAdapter(createSource, this);
 			}
 
-			var component = Create(dictionaryAdapter, elementType, null, xpathAdapter);
-
-			if (result.Property != null)
-				dictionaryAdapter.This.ExtendedProperties[result.Property.PropertyName] = component;
-
-			return component;
+			return Create(dictionaryAdapter, elementType, null, xpathAdapter);
 		}
 
 		private object ReadCollection(XPathResult result, bool ifExists, IDictionaryAdapter dictionaryAdapter)
@@ -372,16 +364,18 @@ namespace Castle.Components.DictionaryAdapter
 					return ReadProperty(node, false, dictionaryAdapter);
 				};
 
-				Action<int, object> addAt = (index, item) =>
+				Func<int, object, object> addAt = (index, item) =>
 				{
 					var node = result.CreateNode(itemType, item, getXmlMeta);
-					WriteProperty(node, item, dictionaryAdapter);
+					WriteProperty(node, ref item, dictionaryAdapter);
+					return item;
 				};
 
-				Action<int, object> setAt = (index, item) =>
+				Func<int, object, object> setAt = (index, item) =>
 				{
 					var node = result.GetNodeAt(itemType, index);
-					WriteProperty(node, item, dictionaryAdapter);
+					WriteProperty(node, ref item, dictionaryAdapter);
+					return item;
 				};
 
 				Action<int> removeAt = index => result.RemoveAt(index);
@@ -403,7 +397,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region Writing
 
-		private void WriteProperty(XPathResult result, object value, IDictionaryAdapter dictionaryAdapter)
+		private void WriteProperty(XPathResult result, ref object value, IDictionaryAdapter dictionaryAdapter)
 		{
 			var propertyType = result.Type;
 			var shouldRemove = (value == null);
@@ -411,12 +405,12 @@ namespace Castle.Components.DictionaryAdapter
 			if (result.Property != null)
 			{
 				shouldRemove |= dictionaryAdapter.ShouldClearProperty(result.Property, value);
-				dictionaryAdapter.This.ExtendedProperties.Remove(result.Property.PropertyName);
 			}
 
 			if (shouldRemove)
 			{
 				result.Remove(true);
+				value = null;
 				return;
 			}
 
@@ -435,11 +429,11 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			else if (propertyType.IsArray || typeof(IEnumerable).IsAssignableFrom(propertyType))
 			{
-				WriteCollection(result, value, dictionaryAdapter);
+				WriteCollection(result, ref value, dictionaryAdapter);
 			}
 			else if (propertyType.IsInterface)
 			{
-				WriteComponent(result, value, dictionaryAdapter);
+				WriteComponent(result, ref value, dictionaryAdapter);
 			}
 			else
 			{
@@ -480,15 +474,12 @@ namespace Castle.Components.DictionaryAdapter
 				}
 				catch (InvalidCastException)
 				{
-					if (DefaultXmlSerializer.Instance.WriteObject(result, node, value) && result.Property != null)
-					{
-						dictionaryAdapter.This.ExtendedProperties[result.Property.PropertyName] = value;
-					}
+					DefaultXmlSerializer.Instance.WriteObject(result, node, value);
 				}
 			}
 		}
 
-		private void WriteComponent(XPathResult result, object value, IDictionaryAdapter dictionaryAdapter)
+		private void WriteComponent(XPathResult result, ref object value, IDictionaryAdapter dictionaryAdapter)
 		{
 			var source = value as IDictionaryAdapter;
 			if (source != null)
@@ -501,10 +492,11 @@ namespace Castle.Components.DictionaryAdapter
 				}
 				var element = (IDictionaryAdapter)ReadComponent(result, false, dictionaryAdapter);
 				source.CopyTo(element);
+				value = element;
 			}
 		}
 
-		private void WriteCollection(XPathResult result, object value, IDictionaryAdapter dictionaryAdapter)
+		private void WriteCollection(XPathResult result, ref object value, IDictionaryAdapter dictionaryAdapter)
 		{
 			result.Remove(value == null);
 
@@ -518,6 +510,10 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					WriteList(result, value, dictionaryAdapter);
 				}
+				if (result.Property != null)
+				{
+					value = dictionaryAdapter.GetProperty(result.Property.PropertyName, true);
+				}
 			}
 		}
 
@@ -528,8 +524,9 @@ namespace Castle.Components.DictionaryAdapter
 
 			foreach (var item in array)
 			{
-				var node = result.CreateNode(itemType, item, type => dictionaryAdapter.GetXmlMeta(type));
-				WriteProperty(node, item, dictionaryAdapter);
+				var element = item;
+				var node = result.CreateNode(itemType, element, type => dictionaryAdapter.GetXmlMeta(type));
+				WriteProperty(node, ref element, dictionaryAdapter);
 			}
 		}
 
@@ -540,22 +537,15 @@ namespace Castle.Components.DictionaryAdapter
 
 			foreach (var item in (IEnumerable)value)
 			{
-				var node = result.CreateNode(itemType, item, type => dictionaryAdapter.GetXmlMeta(type));
-				WriteProperty(node, item, dictionaryAdapter);
+				var element = item;
+				var node = result.CreateNode(itemType, element, type => dictionaryAdapter.GetXmlMeta(type));
+				WriteProperty(node, ref element, dictionaryAdapter);
 			}
 		}
 
 		private bool WriteCustom(XPathResult result, object value, IDictionaryAdapter dictionaryAdapter)
 		{
-			if (result.WriteObject(value))
-			{
-				if (result.Property != null)
-				{
-					dictionaryAdapter.This.ExtendedProperties[result.Property.PropertyName] = value;
-				}
-				return true;
-			}
-			return false;
+			return result.WriteObject(value);
 		}
 
 		#endregion
@@ -686,6 +676,11 @@ namespace Castle.Components.DictionaryAdapter
 		private static bool ShouldIgnoreProperty(PropertyDescriptor property)
 		{
 			return property.Behaviors.Any(behavior => behavior is XmlIgnoreAttribute);
+		}
+
+		private static bool IsVolatileProperty(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
+		{
+			return dictionaryAdapter.Meta.Behaviors.Union(property.Behaviors).Any(behavior => behavior is VolatileAttribute);
 		}
 
 		private static bool IsNullableType(Type type, out Type underlyingType)

@@ -16,18 +16,18 @@ namespace Castle.Components.DictionaryAdapter
 {
 #if !SILVERLIGHT
 	using System;
+	using System.Collections.Generic;
 	using System.ComponentModel;
 
 	public class BindingListInitializer<T> : IValueInitializer
 	{
-		private readonly Action<int, object> addAt;
 		private readonly Func<object> addNew;
-		private readonly Action<int, object> setAt;
+		private readonly Func<int, object, object> addAt;
+		private readonly Func<int, object, object> setAt;
 		private readonly Action<int> removeAt;
 		private bool addingNew;
 
-		public BindingListInitializer(Action<int, object> addAt, Func<object> addNew,
-									  Action<int, object> setAt, Action<int> removeAt)
+		public BindingListInitializer(Func<int, object, object> addAt, Func<object> addNew, Func<int, object, object> setAt, Action<int> removeAt)
 		{
 			this.addAt = addAt;
 			this.addNew = addNew;
@@ -53,14 +53,28 @@ namespace Castle.Components.DictionaryAdapter
 					case ListChangedType.ItemAdded:
 						if (addingNew == false && addAt != null)
 						{
-							addAt(args.NewIndex, bindingList[args.NewIndex]);
+							var item = addAt(args.NewIndex, bindingList[args.NewIndex]);
+							if (item != null)
+							{
+								using (new SuppressListChangedEvents(bindingList))
+								{
+									bindingList[args.NewIndex] = (T)item;									
+								}
+							}
 						}
 						addingNew = false;
 						break;
 					case ListChangedType.ItemChanged:
 						if (setAt != null)
 						{
-							setAt(args.NewIndex, bindingList[args.NewIndex]);
+							var item = setAt(args.NewIndex, bindingList[args.NewIndex]);
+							if (item != null)
+							{
+								using (new SuppressListChangedEvents(bindingList))
+								{
+									bindingList[args.NewIndex] = (T)item;
+								}
+							}
 						}
 						break;
 					case ListChangedType.ItemDeleted:
@@ -72,6 +86,25 @@ namespace Castle.Components.DictionaryAdapter
 				}
 			};
 		}
+
+		class SuppressListChangedEvents : IDisposable
+		{
+			private readonly bool raiseEvents;
+			private readonly BindingList<T> bindingList;
+
+			public SuppressListChangedEvents(BindingList<T> bindingList)
+			{
+				this.bindingList = bindingList;
+				raiseEvents = this.bindingList.RaiseListChangedEvents;
+				this.bindingList.RaiseListChangedEvents = false;
+			}
+
+			public void Dispose()
+			{
+				bindingList.RaiseListChangedEvents = raiseEvents;
+			}
+		}
 	}
+
 #endif
 }

@@ -465,7 +465,7 @@ namespace Castle.Components.DictionaryAdapter
 			return behaviors.SelectMany(behavior =>
 			{
 				if (behavior is IDictionaryBehaviorBuilder)
-					return ((IDictionaryBehaviorBuilder)behavior).BuildBehaviors().Cast<object>();
+					return ((IDictionaryBehaviorBuilder)behavior).BuildBehaviors();
 				return Enumerable.Repeat(behavior, 1);
 			});
 		}
