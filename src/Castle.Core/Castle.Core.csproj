@@ -202,6 +202,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Compatibility\SilverlightHacks.cs" />
+    <Compile Include="Components.DictionaryAdapter\Attributes\VolatileAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\RemoveIfAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\XmlDefaultsAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\StringStorageAttribute.cs" />

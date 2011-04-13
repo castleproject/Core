@@ -630,6 +630,39 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsFalse(XPathAdapter.IsPropertyDefined("Name", season));
 		}
 
+		[Test]
+		public void Can_Detect_Circularities()
+		{
+			var starWars = new[] 
+			{ 
+				"Star Wars Episode IV: A New Hope",
+				"Star Wars Episode V: The Empire Strikes Back",
+				"Star Wars Episode VI: Return of the Jedi",
+				"Star Wars Episode I: The Phantom Menace",
+				"Star Wars Episode II: Attack of the Clones",
+				"Star Wars Episode III: Revenge of the Sith",
+				"Star Wars: The Clone Wars"
+			};
+
+			var books = starWars.Select((title, i) =>
+			{
+				XmlDocument bookDoc = null;
+				var book = CreateXmlAdapter<IBook>(null, ref bookDoc);
+				book.Title = title;
+				book.DDC.Category = 8;
+				book.DDC.SubCategory = 1;
+				book.DDC.SubDivision = i;
+				book.Printed = i % 2 == 0;
+				return book;
+			}).ToList();
+
+			foreach (var book in books)
+			{
+				var relatedBooks = new HashSet<IBook>(books.Except(Enumerable.Repeat(book, 1)));
+				book.RelatedBooks = relatedBooks;
+			}
+		}
+
 		private T CreateXmlAdapter<T>(string xml, ref XmlDocument document)
 		{
 			document = document ?? new XmlDocument();
@@ -651,6 +684,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		 XPath("common:Address")]
 		public interface IAddress
 		{
+			[Volatile]
 			string Line1 { get; set; }
 			string City { get; set; }
 			string State { get; set; }
