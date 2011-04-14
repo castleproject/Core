@@ -122,6 +122,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public void ClearProperty(PropertyDescriptor property, string key)
 		{
+			key = key ?? GetKey(property.PropertyName);
 			if (property == null || ClearEditProperty(property, key) == false)
 			{
 				var dictionary = GetDictionary(This.Dictionary, ref key);

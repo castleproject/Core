@@ -25,25 +25,25 @@ namespace Castle.Components.DictionaryAdapter
 	public class XPathResult
 	{
 		public readonly bool CanWrite;
-		public readonly PropertyDescriptor Property;
 		private readonly object matchingBehavior;
 		private readonly Func<XPathNavigator> create;
 
-		public XPathResult(PropertyDescriptor property, object result, XPathContext context, object matchingBehavior)
-			: this(property, result, context, matchingBehavior, null)
+		public XPathResult(PropertyDescriptor property, string key, object result, XPathContext context, object matchingBehavior)
+			: this(property, key, result, context, matchingBehavior, null)
 		{
 		}
 
 		public XPathResult(Type type, object result, XPathContext context, object matchingBehavior)
-			: this(null, result, context, matchingBehavior, null)
+			: this(null, null, result, context, matchingBehavior, null)
 		{
 			Type = type;
 		}
 
-		public XPathResult(PropertyDescriptor property, object result, XPathContext context, object matchingBehavior, Func<XPathNavigator> create)
+		public XPathResult(PropertyDescriptor property, string key, object result, XPathContext context, object matchingBehavior, Func<XPathNavigator> create)
 		{
 			Result = result;
 			Property = property;
+			Key = key;
 			Type = (property != null) ? Property.PropertyType : null;
 			Context = context;
 			this.create = create;
@@ -57,6 +57,10 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		public Type Type { get; private set; }
+
+		public PropertyDescriptor Property { get; private set; }
+
+		public string Key { get; private set; }
 
 		public object Result { get; private set; }
 
