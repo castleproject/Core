@@ -512,7 +512,7 @@ namespace Castle.Components.DictionaryAdapter
 				}
 				if (result.Property != null)
 				{
-					value = dictionaryAdapter.GetProperty(result.Property.PropertyName, true);
+					value = ((IDictionaryPropertyGetter)this).GetPropertyValue(dictionaryAdapter, result.Key, null, result.Property, false);
 				}
 			}
 		}
@@ -654,7 +654,7 @@ namespace Castle.Components.DictionaryAdapter
 					if (keyContext.Evaluate(xpath, root, out result))
 					{
 						create = matchingCreate ?? create;
-						return new XPathResult(property, result, keyContext, behavior, create);
+						return new XPathResult(property, key, result, keyContext, behavior, create);
 					}
 				}
 
@@ -663,14 +663,14 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			if (xpath != null)
-				return new XPathResult(property, null, keyContext, matchingBehavior, create);
+				return new XPathResult(property, key, null, keyContext, matchingBehavior, create);
 
 			keyContext.Arguments.Clear();
 			keyContext.Arguments.AddParam("key", "", key);
 			keyContext.Arguments.AddParam("ns", "", XPathContext.IgnoreNamespace);
 			create = create ?? (() => keyContext.AppendElement(key, null, root));
 			keyContext.Evaluate(XPathElementOrAttribute, Root, out result);
-			return new XPathResult(property, result, keyContext, null, create);
+			return new XPathResult(property, key, result, keyContext, null, create);
 		}
 
 		private static bool ShouldIgnoreProperty(PropertyDescriptor property)
