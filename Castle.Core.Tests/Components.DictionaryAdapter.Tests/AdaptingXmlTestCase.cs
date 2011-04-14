@@ -617,6 +617,40 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void Can_Reassign_Arrays()
+		{
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(null, ref document);
+			season.Tags = new[] { "Hello", "Goodbye" };
+			season.Tags = new[] { "Alpha", "Beta" };
+			CollectionAssert.AreEqual(new[] { "Alpha", "Beta" }, season.Tags);
+		}
+
+		[Test]
+		public void Can_Reassign_Lists()
+		{
+			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
+					 <League>
+						<Team name='Hit And Run'>
+						   <AmountDue>100.50</AmountDue>
+						</Team>
+						<Team name='Nemisis'>
+						   <AmountDue>250.00</AmountDue>
+						</Team>
+					 </League>
+				  </Season>";
+
+			XmlDocument document = null, teamDoc = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			var team = CreateXmlAdapter<ITeam>(null, ref teamDoc);
+			team.Name = "Turfmonsters";
+			var newTeams = new BindingList<ITeam>();
+			newTeams.Add(team);
+			season.Teams = newTeams;
+			Assert.AreEqual(1, season.Teams.Count);
+		}
+
+		[Test]
 		public void Can_Remove_Properties()
 		{
 			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
