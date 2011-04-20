@@ -14,6 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -21,6 +22,7 @@ namespace Castle.Components.DictionaryAdapter
 	public class DictionaryAdapterInstance
 	{
 		private IDictionary extendedProperties;
+		private List<IDictionaryCopyStrategy> copyStrategies;
 
 		public DictionaryAdapterInstance(IDictionary dictionary, DictionaryAdapterMeta meta,
 										 PropertyDescriptor descriptor, IDictionaryAdapterFactory factory)
@@ -52,7 +54,24 @@ namespace Castle.Components.DictionaryAdapter
 
 		public IDictionaryCoerceStrategy CoerceStrategy { get; set; }
 
-		public IDictionaryCopyStrategy CopyStrategy { get; set; }
+		public IEnumerable<IDictionaryCopyStrategy> CopyStrategies
+		{
+			get
+			{
+				return copyStrategies ?? Enumerable.Empty<IDictionaryCopyStrategy>();
+			}
+		}
+
+		public void AddCopyStrategy(IDictionaryCopyStrategy copyStrategy)
+		{
+			if (copyStrategy == null)
+				throw new ArgumentNullException("copyStrategy");
+
+			if (copyStrategies == null)
+				copyStrategies = new List<IDictionaryCopyStrategy>();
+
+			copyStrategies.Add(copyStrategy);
+		}
 
 		public IDictionary ExtendedProperties
 		{
