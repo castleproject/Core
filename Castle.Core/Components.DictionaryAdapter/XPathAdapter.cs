@@ -80,7 +80,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			dictionaryAdapter.This.CreateStrategy = this;
-			dictionaryAdapter.This.CopyStrategy = this;
+			dictionaryAdapter.This.AddCopyStrategy(this);
 
 			xmlMeta = dictionaryAdapter.GetXmlMeta();
 			Context.ApplyBehaviors(xmlMeta, behaviors);

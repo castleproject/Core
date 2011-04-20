@@ -33,7 +33,7 @@ namespace Castle.Components.DictionaryAdapter
 					other.Meta.Type.FullName, Meta.Type.FullName));
 			}
 
-			if (This.CopyStrategy != null && This.CopyStrategy.Copy(this, other, ref selector))
+			if (This.CopyStrategies.Aggregate(false, (copied, s) => copied | s.Copy(this, other, ref selector)))
 			{
 				return;
 			}
