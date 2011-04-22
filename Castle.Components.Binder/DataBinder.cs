@@ -353,12 +353,12 @@ namespace Castle.Components.Binder
 					else
 					{
 						// if the property is an object, we look if it is already instantiated
-						object value = prop.GetValue(instance, null);
-
 						Node nestedNode = node.GetChildNode(paramName);
 
 						if (nestedNode != null)
 						{
+							object value = prop.GetValue(instance, null);
+
 							if (ShouldRecreateInstance(value, propType, paramName, nestedNode))
 							{
 								value = InternalBindObject(propType, paramName, nestedNode, out conversionSucceeded);
