@@ -207,13 +207,12 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			var adapterType = typeBuilder.CreateType();
-			var dictionaryDescriptor = descriptor as DictionaryDescriptor;
-			if (dictionaryDescriptor != null)
+			if (descriptor != null)
 			{
-				behaviors = behaviors.Union(dictionaryDescriptor.Behaviors).ToArray();
+				behaviors = behaviors.Union(descriptor.Behaviors).ToArray();
 			}
 			var metaBindings = BindingFlags.Public | BindingFlags.Static | BindingFlags.SetField;
-			var meta = new DictionaryAdapterMeta(type, initializers, metaInitializers, behaviors, propertyMap, dictionaryDescriptor, this);
+			var meta = new DictionaryAdapterMeta(type, initializers, metaInitializers, behaviors, propertyMap, descriptor as DictionaryDescriptor, this);
 			adapterType.InvokeMember("__meta", metaBindings, null, null, new[] { meta });
 
 			return typeBuilder.Assembly;
@@ -394,7 +393,7 @@ namespace Castle.Components.DictionaryAdapter
 			out IDictionaryMetaInitializer[] metaInitializers, out object[] typeBehaviors)
 		{
 			var propertyMap = new Dictionary<String, PropertyDescriptor>();
-			var interfaceBehaviors = typeBehaviors = ExpandBehaviors(GetInterfaceBehaviors<object>(type)).ToArray();
+			var interfaceBehaviors = typeBehaviors = ExpandBehaviors(AttributesUtil.GetTypeAttributes<object>(type)).ToArray();
 
 			typeInitializers = typeBehaviors.OfType<IDictionaryInitializer>().Prioritize().ToArray();
 			metaInitializers = typeBehaviors.OfType<IDictionaryMetaInitializer>().Prioritize().ToArray();
@@ -402,7 +401,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			CollectProperties(type, property =>
 			{
-				var propertyBehaviors = ExpandBehaviors(GetPropertyBehaviors<object>(property)).ToArray();
+				var propertyBehaviors = ExpandBehaviors(AttributesUtil.GetAttributes<object>(property)).ToArray();
 				var propertyDescriptor = new PropertyDescriptor(property, propertyBehaviors);
 
 				var descriptorInitializers = propertyBehaviors.OfType<IPropertyDescriptorInitializer>();
@@ -413,7 +412,7 @@ namespace Castle.Components.DictionaryAdapter
 
 				propertyDescriptor.AddKeyBuilders(
 					propertyBehaviors.OfType<IDictionaryKeyBuilder>().Prioritize(
-						GetInterfaceBehaviors<IDictionaryKeyBuilder>(property.ReflectedType))
+						ExpandBehaviors(AttributesUtil.GetTypeAttributes<object>(property.ReflectedType)).OfType<IDictionaryKeyBuilder>())
 					 );
 
 				propertyDescriptor.AddGetters(
@@ -428,6 +427,7 @@ namespace Castle.Components.DictionaryAdapter
 					);
 
 				bool? propertyFetch = (from b in propertyBehaviors.OfType<FetchAttribute>() select b.Fetch).FirstOrDefault();
+				propertyDescriptor.IfExists = propertyBehaviors.OfType<IfExistsAttribute>().Any();
 				propertyDescriptor.Fetch = propertyFetch.GetValueOrDefault(defaultFetch);
 
 				PropertyDescriptor existingDescriptor;
@@ -448,16 +448,6 @@ namespace Castle.Components.DictionaryAdapter
 			});
 
 			return propertyMap;
-		}
-
-		private static IEnumerable<T> GetInterfaceBehaviors<T>(Type type) where T : class
-		{
-			return AttributesUtil.GetTypeAttributes<T>(type);
-		}
-
-		private static IEnumerable<T> GetPropertyBehaviors<T>(MemberInfo member) where T : class
-		{
-			return AttributesUtil.GetAttributes<T>(member);
 		}
 
 		private static IEnumerable<object> ExpandBehaviors(IEnumerable<object> behaviors)
