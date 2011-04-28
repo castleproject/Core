@@ -1528,5 +1528,65 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.Name = null;
 			Assert.IsFalse(dictionary.Contains("Name"));
 		}
+
+		[Test]
+		public void Can_Remove_Null_Values()
+		{
+			var empty = factory.GetAdapter<IEmptyTest>(dictionary);
+			empty.StringValue = "Pizza";
+			Assert.IsTrue(dictionary.Contains("StringValue"));
+			empty.StringValue = null;
+			Assert.IsFalse(dictionary.Contains("StringValue"));
+		}
+
+		[Test]
+		public void Can_Remove_Empty_Strings()
+		{
+			var empty = factory.GetAdapter<IEmptyTest>(dictionary);
+			empty.StringValue = "Pizza";
+			Assert.IsTrue(dictionary.Contains("StringValue"));
+			empty.StringValue = "";
+			Assert.IsFalse(dictionary.Contains("StringValue"));
+		}
+
+		[Test]
+		public void Can_Remove_Empty_Guids()
+		{
+			var empty = factory.GetAdapter<IEmptyTest>(dictionary);
+			empty.GuidValue = Guid.NewGuid();
+			Assert.IsTrue(dictionary.Contains("GuidValue"));
+			empty.GuidValue = Guid.Empty;
+			Assert.IsFalse(dictionary.Contains("GuidValue"));
+		}
+
+		[Test]
+		public void Can_Remove_Empty_Arrays()
+		{
+			var empty = factory.GetAdapter<IEmptyTest>(dictionary);
+			empty.ArrayValue = new int[] { 1, 2, 3 };
+			Assert.IsTrue(dictionary.Contains("ArrayValue"));
+			empty.ArrayValue = new int[0];
+			Assert.IsFalse(dictionary.Contains("ArrayValue"));
+		}
+
+		[Test]
+		public void Can_Remove_Empty_Collections()
+		{
+			var empty = factory.GetAdapter<IEmptyTest>(dictionary);
+			empty.CollectionValue = new List<double>(new[] { 1.1, 2.2, 3.3 });
+			Assert.IsTrue(dictionary.Contains("CollectionValue"));
+			empty.CollectionValue = new List<double>();
+			Assert.IsFalse(dictionary.Contains("CollectionValue"));
+		}
+
+		[Test]
+		public void Can_Remove_Empty_Nullables()
+		{
+			var empty = factory.GetAdapter<IEmptyTest>(dictionary);
+			empty.NullableValue = 3.0F;
+			Assert.IsTrue(dictionary.Contains("NullableValue"));
+			empty.NullableValue = null;
+			Assert.IsFalse(dictionary.Contains("NullableValue"));
+		}
 	}
 }

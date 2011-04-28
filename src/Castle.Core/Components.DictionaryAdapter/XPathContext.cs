@@ -102,7 +102,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public XPathContext ApplyBehaviors(XmlMetadata xmlMeta, IEnumerable behaviors)
 		{
-			if (xmlMeta != null)
+			if (this.xmlMeta == null && xmlMeta != null)
 			{
 				this.xmlMeta = xmlMeta;
 				if (string.IsNullOrEmpty(xmlMeta.XmlType.Namespace) == false)

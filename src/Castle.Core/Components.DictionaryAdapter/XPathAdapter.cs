@@ -156,7 +156,7 @@ namespace Castle.Components.DictionaryAdapter
 		private static object Create(IDictionaryAdapter adapter, Type type, IDictionary dictionary, XPathAdapter xpathAdapter)
 		{
 			dictionary = dictionary ?? new Hashtable();
-			var descriptor = new DictionaryDescriptor();
+			var descriptor = new DictionaryDescriptor(adapter.Meta.Behaviors);
 			adapter.This.Descriptor.CopyBehaviors(descriptor, b => b is XPathAdapter == false);
 			descriptor.AddBehavior(xpathAdapter);
 			return adapter.This.Factory.GetAdapter(type, dictionary, descriptor);
@@ -583,7 +583,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			var key = dictionaryAdapter.GetKey(propertyName);
 			if (key == null) return false;
-			var property = dictionaryAdapter.Meta.Properties[propertyName];
+			var property = dictionaryAdapter.This.Properties[propertyName];
 			var result = xpath.EvaluateProperty(key, property, dictionaryAdapter);
 			return result.GetNavigator(false) != null;
 		}

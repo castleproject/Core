@@ -43,6 +43,11 @@ namespace Castle.Components.DictionaryAdapter
 			condition = new ValueCondition(values, comparer);
 		}
 
+		protected RemoveIfAttribute(ICondition condition) : this()
+		{
+			this.condition = condition;
+		}
+
 		public Type Condition
 		{
 			set { condition = Construct<ICondition>(value, "value"); }

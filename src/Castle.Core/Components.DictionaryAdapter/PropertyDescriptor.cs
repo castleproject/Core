@@ -82,6 +82,7 @@ namespace Castle.Components.DictionaryAdapter
 			TypeConverter = source.TypeConverter;
 			SuppressNotifications = source.SuppressNotifications;
 			state = source.state;
+			IfExists = source.IfExists;
 			Fetch = source.Fetch;
 
 			if (copyBehaviors)
@@ -146,6 +147,11 @@ namespace Castle.Components.DictionaryAdapter
 		/// Determines if property should be fetched.
 		/// </summary>
 		public bool Fetch { get; set; }
+
+		/// <summary>
+		/// Determines if property must exist first.
+		/// </summary>
+		public bool IfExists { get; set; }
 
 		/// <summary>
 		/// Determines if notifications should occur.
@@ -297,7 +303,7 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				foreach (var getter in getters)
 				{
-					storedValue = getter.GetPropertyValue(dictionaryAdapter, key, storedValue, this, ifExists);
+					storedValue = getter.GetPropertyValue(dictionaryAdapter, key, storedValue, this, IfExists || ifExists);
 				}
 			}
 
@@ -389,7 +395,7 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					if (setter.SetPropertyValue(dictionaryAdapter, key, ref value, this) == false)
 					{
-						return true;
+						return false;
 					}
 				}
 			}

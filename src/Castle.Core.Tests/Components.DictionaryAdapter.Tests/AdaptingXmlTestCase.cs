@@ -782,10 +782,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		public interface ICanDoTranslations
 		{
-			[XPath("Name/Names/*/text()")]
+			[XPath("Name/Names/*")]
 			string FirstName { get; set; }
 
-			[XPath("Name/Surnames/*/text()")]
+			[XPath("Name/Surnames/*")]
 			string LastName { get; set; }
 		}
 
@@ -969,6 +969,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				Assert.IsNull(group.Owner);
 			}
 		}
+
+		[Test]
+		public void Will_Return_Null_if_Must_Exist()
+		{
+			XmlDocument document = null;
+			var employee = CreateXmlAdapter<IEmployee>(null, ref document);
+			Assert.IsNull(employee.Supervisor);
+		}
 	}
 
 	#region DA Serialization Model
@@ -1006,6 +1014,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	public interface IEmployee
 	{
 		string Name { get; set; }
+		[IfExists]
 		IEmployee Supervisor { get; set; }
 		Employment Job { get; set; }
 		Metadata Metadata { get; set; }
