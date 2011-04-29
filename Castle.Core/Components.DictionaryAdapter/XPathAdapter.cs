@@ -28,8 +28,9 @@ namespace Castle.Components.DictionaryAdapter
 								IDictionaryCreateStrategy, IDictionaryCopyStrategy
 	{
 		private readonly Func<XPathNavigator> createRoot;
+		private Dictionary<Type, XPathContext> overlays;
+		private XmlMetadata rootXmlMeta;
 		private XPathNavigator root;
-		private XmlMetadata xmlMeta;
 
 		public XPathNavigator Root
 		{
@@ -79,34 +80,51 @@ namespace Castle.Components.DictionaryAdapter
 					"Did you forget to add an XPathBehavior?", meta.Type.FullName));
 			}
 
-			dictionaryAdapter.This.CreateStrategy = this;
-			dictionaryAdapter.This.AddCopyStrategy(this);
+			var xmlMeta = dictionaryAdapter.GetXmlMeta();
 
-			xmlMeta = dictionaryAdapter.GetXmlMeta();
-			Context.ApplyBehaviors(xmlMeta, behaviors);
-
-			if (Parent == null)
+			if (rootXmlMeta == null)
 			{
-				foreach (var behavior in behaviors)
-				{
-					if (behavior is XPathAttribute)
-					{
-						var attrib = (XPathAttribute)behavior;
-						var compiledExpression = attrib.CompiledExpression;
-						if (MoveOffRoot(root, XPathNodeType.Element) == false || Context.Matches(compiledExpression, root))
-						{
-							break;
-						}
+				rootXmlMeta = xmlMeta;
+				Context.ApplyBehaviors(rootXmlMeta, behaviors);
 
-						var navigator = Context.SelectSingleNode(compiledExpression, root);
-						if (navigator != null)
+				dictionaryAdapter.This.CreateStrategy = this;
+				dictionaryAdapter.This.AddCopyStrategy(this);
+
+				if (Parent == null)
+				{
+					foreach (var behavior in behaviors)
+					{
+						if (behavior is XPathAttribute)
 						{
-							root = navigator;
-							break;
+							var attrib = (XPathAttribute)behavior;
+							var compiledExpression = attrib.CompiledExpression;
+							if (MoveOffRoot(root, XPathNodeType.Element) == false || Context.Matches(compiledExpression, root))
+							{
+								break;
+							}
+
+							var navigator = Context.SelectSingleNode(compiledExpression, root);
+							if (navigator != null)
+							{
+								root = navigator;
+								break;
+							}
 						}
 					}
+					MoveOffRoot(root, XPathNodeType.Element);
 				}
-				MoveOffRoot(root, XPathNodeType.Element);
+			}
+			else
+			{
+				if (overlays == null)
+					overlays = new Dictionary<Type, XPathContext>();
+
+				XPathContext overlay;
+				if (overlays.TryGetValue(meta.Type, out overlay) == false)
+				{
+					overlay = new XPathContext().ApplyBehaviors(xmlMeta, behaviors);
+					overlays.Add(meta.Type, overlay);
+				}
 			}
 		}
 
@@ -253,6 +271,9 @@ namespace Castle.Components.DictionaryAdapter
 		private object ReadComponent(XPathResult result, bool ifExists, IDictionaryAdapter dictionaryAdapter)
 		{
 			XPathNavigator source;
+			if (result.Property != null)
+				ifExists = ifExists || dictionaryAdapter.Meta.Type.IsAssignableFrom(result.Property.PropertyType);
+
 			if (result.GetNavigator(false, true, out source) == false || (source == null && ifExists))
 			{
 				return null;
@@ -269,7 +290,7 @@ namespace Castle.Components.DictionaryAdapter
 				}
 				else
 				{
-					var xmlType = Context.GetXmlType(source);
+					var xmlType = GetEffectiveContext(dictionaryAdapter).GetXmlType(source);
 					elementType = dictionaryAdapter.GetXmlSubclass(xmlType, elementType) ?? elementType;
 				}
 				xpathAdapter = new XPathAdapter(source, this);
@@ -404,7 +425,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (result.Property != null)
 			{
-				shouldRemove |= dictionaryAdapter.ShouldClearProperty(result.Property, value);
+				shouldRemove = shouldRemove || dictionaryAdapter.ShouldClearProperty(result.Property, value);
 			}
 
 			if (shouldRemove)
@@ -488,7 +509,8 @@ namespace Castle.Components.DictionaryAdapter
 				if (result.Type != source.Meta.Type && result.OmitPolymorphism == false)
 				{
 					var xmlType = source.GetXmlMeta().XmlType;
-					Context.SetXmlType(xmlType.TypeName, xmlType.Namespace, node);
+					var context = GetEffectiveContext(dictionaryAdapter);
+					context.SetXmlType(xmlType.TypeName, xmlType.Namespace, node);
 				}
 				var element = (IDictionaryAdapter)ReadComponent(result, false, dictionaryAdapter);
 				source.CopyTo(element);
@@ -588,6 +610,17 @@ namespace Castle.Components.DictionaryAdapter
 			return result.GetNavigator(false) != null;
 		}
 
+		private XPathContext GetEffectiveContext(IDictionaryAdapter dictionaryAdapter)
+		{
+			if (overlays != null)
+			{
+				XPathContext context;
+				if (overlays.TryGetValue(dictionaryAdapter.Meta.Type, out context))
+					return context;
+			}
+			return Context;
+		}
+
 		private XPathResult EvaluateProperty(string key, PropertyDescriptor property, IDictionaryAdapter dictionaryAdapter)
 		{
 			object result;
@@ -595,8 +628,9 @@ namespace Castle.Components.DictionaryAdapter
 			object matchingBehavior = null;
 			Func<XPathNavigator> create = null;
 
+			var context = GetEffectiveContext(dictionaryAdapter);
 			var xmlMeta = dictionaryAdapter.GetXmlMeta(property.Property.DeclaringType);
-			var keyContext = Context.CreateChild(xmlMeta, property.Behaviors);
+			var keyContext = context.CreateChild(xmlMeta, property.Behaviors);
 
 			foreach (var behavior in property.Behaviors)
 			{
@@ -651,7 +685,7 @@ namespace Castle.Components.DictionaryAdapter
 					keyContext.Arguments.Clear();
 					keyContext.Arguments.AddParam("key", "", name);
 					keyContext.Arguments.AddParam("ns", "", ns ?? XPathContext.IgnoreNamespace);
-					if (keyContext.Evaluate(xpath, root, out result))
+					if (keyContext.Evaluate(xpath, Root, out result))
 					{
 						create = matchingCreate ?? create;
 						return new XPathResult(property, key, result, keyContext, behavior, create);
@@ -705,7 +739,7 @@ namespace Castle.Components.DictionaryAdapter
             {
 				string elementName;
 				string namespaceUri = "";
-				var xmlRoot = xmlMeta.XmlRoot;
+				var xmlRoot = rootXmlMeta.XmlRoot;
 				if (xmlRoot != null)
 				{
 					elementName = xmlRoot.ElementName;
@@ -713,7 +747,7 @@ namespace Castle.Components.DictionaryAdapter
 				}
 				else
 				{
-					elementName = xmlMeta.XmlType.TypeName;
+					elementName = rootXmlMeta.XmlType.TypeName;
 				}
 				root = Context.AppendElement(elementName, namespaceUri, root);
 				Context.AddStandardNamespaces(root);
