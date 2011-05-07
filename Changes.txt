@@ -1,6 +1,9 @@
 ==================
+- fixed CORE-37 - TAB characters in the XML Configuration of a component parameter is read as String.Empty 
 - fixed DYNPROXY-158 - Can't create class proxy with target and without target in same ProxyGenerator
+
 - implemented CORE-33 - Add lazy logging
+
 - removed obsolete members from ILogger and its implementations
 
 2.5.2 (2010-11-15)
