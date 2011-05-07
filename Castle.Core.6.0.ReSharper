@@ -3,6 +3,10 @@
     <ExternalPath IsNull="False">
     </ExternalPath>
     <Sharing>SOLUTION</Sharing>
+    <CSS>
+      <FormatSettings />
+      <Naming2 />
+    </CSS>
     <CSharp>
       <FormatSettings>
         <ANONYMOUS_METHOD_DECLARATION_BRACES>NEXT_LINE</ANONYMOUS_METHOD_DECLARATION_BRACES>

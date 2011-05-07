@@ -12,7 +12,7 @@
     <ProjectGuid>{087AD3BF-5E40-450D-8138-FBB5F57AC474}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Castle</RootNamespace>
+    <RootNamespace>CastleTests</RootNamespace>
     <AssemblyName>Castle.Core.Tests</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <FileUpgradeFlags>
@@ -198,6 +198,7 @@
     <Compile Include="BasePEVerifyTestCase.cs" />
     <Compile Include="BasicClassProxyTestCase.cs" />
     <Compile Include="BasicInterfaceProxyTestCase.cs" />
+    <Compile Include="BugAttribute.cs" />
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Address.cs" />
@@ -290,6 +291,7 @@
     <Compile Include="MethodsWithAttributesOnParametersTestCase.cs" />
     <Compile Include="MixinTestCase.cs" />
     <Compile Include="ThrowingInterceptorException.cs" />
+    <Compile Include="XmlConfigurationDeserializerTests.cs" />
     <Compile Include="XmlSerializationTestCase.cs" />
   </ItemGroup>
   <Choose>
