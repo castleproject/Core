@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,36 +13,44 @@
 // limitations under the License.
 
 #if !SILVERLIGHT
-
 namespace Castle.Core.Configuration.Xml
 {
 	using System.Text;
 	using System.Xml;
 
-	/// <summary>
-	/// Pendent
-	/// </summary>
 	public class XmlConfigurationDeserializer
 	{
 		/// <summary>
-		/// Deserializes the specified node into an abstract representation of configuration.
+		///   Deserializes the specified node into an abstract representation of configuration.
 		/// </summary>
-		/// <param name="node">The node.</param>
+		/// <param name = "node">The node.</param>
 		/// <returns></returns>
 		public IConfiguration Deserialize(XmlNode node)
 		{
-			return Deserialize(node);
+			return GetDeserializedNode(node);
+		}
+
+		/// <summary>
+		///   If a config value is an empty string we return null, this is to keep
+		///   backward compability with old code
+		/// </summary>
+		public static string GetConfigValue(string value)
+		{
+			if (value == string.Empty)
+			{
+				return null;
+			}
+			return value;
 		}
 
 		public static IConfiguration GetDeserializedNode(XmlNode node)
 		{
-			ConfigurationCollection configChilds = new ConfigurationCollection();
+			var configChilds = new ConfigurationCollection();
 
-			StringBuilder configValue = new StringBuilder();
-
+			var configValue = new StringBuilder();
 			if (node.HasChildNodes)
 			{
-				foreach(XmlNode child in node.ChildNodes)
+				foreach (XmlNode child in node.ChildNodes)
 				{
 					if (IsTextNode(child))
 					{
@@ -55,9 +63,8 @@ namespace Castle.Core.Configuration.Xml
 				}
 			}
 
-			MutableConfiguration config = new MutableConfiguration(node.Name, GetConfigValue(configValue.ToString()));
-
-			foreach(XmlAttribute attribute in node.Attributes)
+			var config = new MutableConfiguration(node.Name, GetConfigValue(configValue.ToString()));
+			foreach (XmlAttribute attribute in node.Attributes)
 			{
 				config.Attributes.Add(attribute.Name, attribute.Value);
 			}
@@ -65,15 +72,6 @@ namespace Castle.Core.Configuration.Xml
 			config.Children.AddRange(configChilds);
 
 			return config;
-		}
-
-		/// <summary>
-		/// If a config value is an empty string we return null, this is to keep
-		/// backward compability with old code
-		/// </summary>
-		public static string GetConfigValue(string value)
-		{
-			return string.IsNullOrEmpty(value) ? null : value.Trim();
 		}
 
 		public static bool IsTextNode(XmlNode node)

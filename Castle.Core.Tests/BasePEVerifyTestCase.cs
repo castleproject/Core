@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,20 +14,23 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+#if !MONO && !SILVERLIGHT
 	using System;
 	using System.Diagnostics;
 	using System.IO;
+
+	using CastleTests.Properties;
+
 	using NUnit.Framework;
 
-#if !MONO && !SILVERLIGHT // mono doesn't have PEVerify
+	// mono doesn't have PEVerify
 	[SetUpFixture]
 	public class FindPeVerify
 	{
 		[SetUp]
 		public void FindPeVerifySetUp()
 		{
-			
-			var peVerifyProbingPaths = Properties.Settings.Default.PeVerifyProbingPaths;
+			var peVerifyProbingPaths = Settings.Default.PeVerifyProbingPaths;
 			foreach (var path in peVerifyProbingPaths)
 			{
 				var file = Path.Combine(path, "peverify.exe");
@@ -79,7 +82,8 @@ namespace Castle.DynamicProxy.Tests
 			get { return verificationDisabled; }
 		}
 
-#if !MONO && !SILVERLIGHT // mono doesn't have PEVerify
+#if !MONO && !SILVERLIGHT
+		// mono doesn't have PEVerify
 		[TearDown]
 		public virtual void TearDown()
 		{
@@ -88,7 +92,9 @@ namespace Castle.DynamicProxy.Tests
 				// Note: only supports one generated assembly at the moment
 				var path = ((PersistentProxyBuilder)builder).SaveAssembly();
 				if (path != null)
+				{
 					RunPEVerifyOnGeneratedAssembly(path);
+				}
 			}
 		}
 
@@ -107,10 +113,10 @@ namespace Castle.DynamicProxy.Tests
 					}
 			};
 			process.Start();
-			string processOutput = process.StandardOutput.ReadToEnd();
+			var processOutput = process.StandardOutput.ReadToEnd();
 			process.WaitForExit();
 
-			string result = process.ExitCode + " code ";
+			var result = process.ExitCode + " code ";
 
 			Console.WriteLine(GetType().FullName + ": " + result);
 
