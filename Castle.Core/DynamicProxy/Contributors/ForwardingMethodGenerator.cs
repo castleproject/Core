@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,13 +22,15 @@ namespace Castle.DynamicProxy.Contributors
 	{
 		private readonly GetTargetReferenceDelegate getTargetReference;
 
-		public ForwardingMethodGenerator(MetaMethod method, OverrideMethodDelegate overrideMethod, GetTargetReferenceDelegate getTargetReference)
+		public ForwardingMethodGenerator(MetaMethod method, OverrideMethodDelegate overrideMethod,
+		                                 GetTargetReferenceDelegate getTargetReference)
 			: base(method, overrideMethod)
 		{
 			this.getTargetReference = getTargetReference;
 		}
 
-		protected override MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
+		protected override MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class,
+		                                                        ProxyGenerationOptions options, INamingScope namingScope)
 		{
 			var targetReference = getTargetReference(@class, MethodToOverride);
 			var arguments = ArgumentsUtil.ConvertToArgumentReferenceExpression(MethodToOverride.GetParameters());

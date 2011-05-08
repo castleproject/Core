@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,11 +24,17 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public AsTypeReference(Reference reference, Type type)
 		{
-			if (reference == null) throw new ArgumentNullException("reference");
-			if (type == null) throw new ArgumentNullException("type");
+			if (reference == null)
+			{
+				throw new ArgumentNullException("reference");
+			}
+			if (type == null)
+			{
+				throw new ArgumentNullException("type");
+			}
 			this.reference = reference;
 			this.type = type;
-			if(reference == OwnerReference)
+			if (reference == OwnerReference)
 			{
 				OwnerReference = null;
 			}

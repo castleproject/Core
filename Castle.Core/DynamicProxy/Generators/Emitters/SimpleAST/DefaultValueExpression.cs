@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			{
 				OpCodeUtil.EmitLoadOpCodeForDefaultValueOfType(gen, type);
 			}
-			else if(type.IsValueType || type.IsGenericParameter)
+			else if (type.IsValueType || type.IsGenericParameter)
 			{
 				// TODO: handle decimal explicitly
 				var local = gen.DeclareLocal(type);
@@ -49,15 +49,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			{
 				throw new ProxyGenerationException("Can't emit default value for type " + type);
 			}
-		}
-
-		private bool IsPrimitiveOrClass(Type type)
-		{
-			if ((type.IsPrimitive && type != typeof(IntPtr)))
-				return true;
-			return ((type.IsClass || type.IsInterface) &&
-			        type.IsGenericParameter == false &&
-			        type.IsByRef == false);
 		}
 
 		private void EmitByRef(ILGenerator gen)
@@ -76,6 +67,17 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			{
 				throw new ProxyGenerationException("Can't emit default value for reference of type " + elementType);
 			}
+		}
+
+		private bool IsPrimitiveOrClass(Type type)
+		{
+			if ((type.IsPrimitive && type != typeof(IntPtr)))
+			{
+				return true;
+			}
+			return ((type.IsClass || type.IsInterface) &&
+			        type.IsGenericParameter == false &&
+			        type.IsByRef == false);
 		}
 	}
 }

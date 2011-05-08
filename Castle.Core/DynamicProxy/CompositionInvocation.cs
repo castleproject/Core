@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,44 +33,31 @@ namespace Castle.DynamicProxy
 		}
 
 		protected CompositionInvocation(
-			object target, 
+			object target,
 			object proxy,
-			IInterceptor[] interceptors, 
-			MethodInfo proxiedMethod, 
-			object[] arguments, 
-			IInterceptorSelector selector, 
+			IInterceptor[] interceptors,
+			MethodInfo proxiedMethod,
+			object[] arguments,
+			IInterceptorSelector selector,
 			ref IInterceptor[] methodInterceptors)
 			: base(proxy, GetTargetType(target), interceptors, proxiedMethod, arguments, selector, ref methodInterceptors)
 		{
 			this.target = target;
 		}
 
-		private static Type GetTargetType(object targetObject)
+		public override object InvocationTarget
 		{
-			if (targetObject == null)
-			{
-				return null;
-			}
-
-			return targetObject.GetType();
+			get { return target; }
 		}
 
-		protected void EnsureValidTarget()
+		public override MethodInfo MethodInvocationTarget
 		{
-			if (target == null)
-			{
-				ThrowOnNoTarget();
-			}
+			get { return InvocationHelper.GetMethodOnObject(target, Method); }
+		}
 
-			if (!ReferenceEquals(target, proxyObject))
-			{
-				return;
-			}
-
-			string message = "This is a DynamicProxy2 error: target of invocation has been set to the proxy itself. " +
-			                 "This may result in recursively calling the method over and over again until stack overflow, which may destabilize your program." +
-			                 "This usually signifies a bug in the calling code. Make sure no interceptor sets proxy as its invocation target.";
-			throw new InvalidOperationException(message);
+		public override Type TargetType
+		{
+			get { return GetTargetType(target); }
 		}
 
 		protected void EnsureValidProxyTarget(object newTarget)
@@ -86,27 +73,37 @@ namespace Castle.DynamicProxy
 			}
 
 			var message = "This is a DynamicProxy2 error: target of proxy has been set to the proxy itself. " +
-						  "This would result in recursively calling proxy methods over and over again until stack overflow, which may destabilize your program." +
-						  "This usually signifies a bug in the calling code. Make sure no interceptor sets proxy as its own target.";
+			              "This would result in recursively calling proxy methods over and over again until stack overflow, which may destabilize your program." +
+			              "This usually signifies a bug in the calling code. Make sure no interceptor sets proxy as its own target.";
 			throw new InvalidOperationException(message);
 		}
 
-		public override object InvocationTarget
+		protected void EnsureValidTarget()
 		{
-			get { return target; }
-		}
-
-		public override Type TargetType
-		{
-			get
+			if (target == null)
 			{
-				return GetTargetType(target);
+				ThrowOnNoTarget();
 			}
+
+			if (!ReferenceEquals(target, proxyObject))
+			{
+				return;
+			}
+
+			var message = "This is a DynamicProxy2 error: target of invocation has been set to the proxy itself. " +
+			              "This may result in recursively calling the method over and over again until stack overflow, which may destabilize your program." +
+			              "This usually signifies a bug in the calling code. Make sure no interceptor sets proxy as its invocation target.";
+			throw new InvalidOperationException(message);
 		}
 
-		public override MethodInfo MethodInvocationTarget
+		private static Type GetTargetType(object targetObject)
 		{
-			get { return InvocationHelper.GetMethodOnObject(target, Method); }
+			if (targetObject == null)
+			{
+				return null;
+			}
+
+			return targetObject.GetType();
 		}
 	}
 }

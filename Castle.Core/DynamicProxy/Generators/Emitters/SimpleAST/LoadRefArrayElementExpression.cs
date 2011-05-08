@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	public class LoadRefArrayElementExpression : Expression
 	{
-		private readonly ConstReference index;
 		private readonly Reference arrayReference;
+		private readonly ConstReference index;
 
 		public LoadRefArrayElementExpression(int index, Reference arrayReference)
 			: this(new ConstReference(index), arrayReference)

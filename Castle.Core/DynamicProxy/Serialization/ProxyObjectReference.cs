@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #if !SILVERLIGHT
+
 namespace Castle.DynamicProxy.Serialization
 {
 	using System;
@@ -20,16 +22,15 @@ namespace Castle.DynamicProxy.Serialization
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
-#if DOTNET40
 	using System.Security;
-#endif
 
-	using Castle.DynamicProxy;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
+#if DOTNET40
+#endif
 
 	/// <summary>
-	/// Handles the deserialization of proxies.
+	///   Handles the deserialization of proxies.
 	/// </summary>
 	[Serializable]
 	public class ProxyObjectReference : IObjectReference, ISerializable, IDeserializationCallback
@@ -48,33 +49,40 @@ namespace Castle.DynamicProxy.Serialization
 		private bool delegateToBase;
 
 		/// <summary>
-		/// Resets the <see cref="ModuleScope"/> used for deserialization to a new scope.
+		///   Resets the <see cref = "ModuleScope" /> used for deserialization to a new scope.
 		/// </summary>
-		/// <remarks>This is useful for test cases.</remarks>
+		/// <remarks>
+		///   This is useful for test cases.
+		/// </remarks>
 		public static void ResetScope()
 		{
 			SetScope(new ModuleScope());
 		}
 
 		/// <summary>
-		/// Resets the <see cref="ModuleScope"/> used for deserialization to a given <paramref name="scope"/>.
+		///   Resets the <see cref = "ModuleScope" /> used for deserialization to a given <paramref name = "scope" />.
 		/// </summary>
-		/// <param name="scope">The scope to be used for deserialization.</param>
-		/// <remarks>By default, the deserialization process uses a different scope than the rest of the application, which can lead to multiple proxies
-		/// being generated for the same type. By explicitly setting the deserialization scope to the application's scope, this can be avoided.</remarks>
+		/// <param name = "scope">The scope to be used for deserialization.</param>
+		/// <remarks>
+		///   By default, the deserialization process uses a different scope than the rest of the application, which can lead to multiple proxies
+		///   being generated for the same type. By explicitly setting the deserialization scope to the application's scope, this can be avoided.
+		/// </remarks>
 		public static void SetScope(ModuleScope scope)
 		{
 			if (scope == null)
+			{
 				throw new ArgumentNullException("scope");
+			}
 			ProxyObjectReference.scope = scope;
 		}
 
 		/// <summary>
-		/// Gets the <see cref="ModuleScope"/> used for deserialization.
+		///   Gets the <see cref = "ModuleScope" /> used for deserialization.
 		/// </summary>
-		/// <value>As <see cref="ProxyObjectReference"/> has no way of automatically determining the scope used by the application (and the application
-		/// might use more than one scope at the same time), <see cref="ProxyObjectReference"/> uses a dedicated scope instance for deserializing proxy
-		/// types. This instance can be reset and set to a specific value via <see cref="ResetScope"/> and <see cref="SetScope"/>.</value>
+		/// <value>As <see cref = "ProxyObjectReference" /> has no way of automatically determining the scope used by the application (and the application
+		///   might use more than one scope at the same time), <see cref = "ProxyObjectReference" /> uses a dedicated scope instance for deserializing proxy
+		///   types. This instance can be reset and set to a specific value via <see cref = "ResetScope" /> and <see
+		///    cref = "SetScope" />.</value>
 		public static ModuleScope ModuleScope
 		{
 			get { return scope; }
@@ -90,14 +98,16 @@ namespace Castle.DynamicProxy.Serialization
 
 			baseType = DeserializeTypeFromString("__baseType");
 
-			String[] _interfaceNames = (String[]) info.GetValue("__interfaces", typeof (String[]));
+			var _interfaceNames = (String[])info.GetValue("__interfaces", typeof(String[]));
 			interfaces = new Type[_interfaceNames.Length];
 
-			for (int i = 0; i < _interfaceNames.Length; i++)
+			for (var i = 0; i < _interfaceNames.Length; i++)
+			{
 				interfaces[i] = Type.GetType(_interfaceNames[i]);
+			}
 
 			proxyGenerationOptions =
-				(ProxyGenerationOptions) info.GetValue("__proxyGenerationOptions", typeof (ProxyGenerationOptions));
+				(ProxyGenerationOptions)info.GetValue("__proxyGenerationOptions", typeof(ProxyGenerationOptions));
 			proxy = RecreateProxy();
 
 			// We'll try to deserialize as much of the proxy state as possible here. This is just best effort; due to deserialization dependency reasons,
@@ -135,7 +145,6 @@ namespace Castle.DynamicProxy.Serialization
 #endif
 		private object RecreateClassProxyWithTarget()
 		{
-
 			var generator = new ClassProxyWithTargetGenerator(scope, baseType, interfaces, proxyGenerationOptions);
 			var proxyType = generator.GetGeneratedType();
 			return InstantiateClassProxy(proxyType);
@@ -179,7 +188,6 @@ namespace Castle.DynamicProxy.Serialization
 #endif
 		public object RecreateClassProxy()
 		{
-
 			var generator = new ClassProxyGenerator(scope, baseType);
 			var proxyType = generator.GenerateCode(interfaces, proxyGenerationOptions);
 			return InstantiateClassProxy(proxyType);
@@ -193,7 +201,7 @@ namespace Castle.DynamicProxy.Serialization
 			delegateToBase = GetValue<bool>("__delegateToBase");
 			if (delegateToBase)
 			{
-				return Activator.CreateInstance(proxy_type, new object[] {info, context});
+				return Activator.CreateInstance(proxy_type, new object[] { info, context });
 			}
 			else
 			{
@@ -248,14 +256,17 @@ namespace Castle.DynamicProxy.Serialization
 		{
 			var proxyType = proxy.GetType();
 			var members = FormatterServices.GetSerializableMembers(proxyType);
-			
+
 			var deserializedMembers = new List<MemberInfo>();
 			var deserializedValues = new List<Object>();
-			for (int i = 0; i < members.Length; i++)
+			for (var i = 0; i < members.Length; i++)
 			{
 				var member = members[i] as FieldInfo;
 				// we get some inherited members...
-				if (member.DeclaringType != proxyType) continue;
+				if (member.DeclaringType != proxyType)
+				{
+					continue;
+				}
 
 				Debug.Assert(member != null);
 				var value = info.GetValue(member.Name, member.FieldType);
@@ -278,7 +289,7 @@ namespace Castle.DynamicProxy.Serialization
 			else if (!delegateToBase)
 			{
 				var baseMemberData = GetValue<object[]>("__data");
-				MemberInfo[] members = FormatterServices.GetSerializableMembers(baseType);
+				var members = FormatterServices.GetSerializableMembers(baseType);
 
 				// Sort to keep order on both serialize and deserialize side the same, c.f DYNPROXY-ISSUE-127
 				members = TypeUtil.Sort(members);
@@ -289,7 +300,7 @@ namespace Castle.DynamicProxy.Serialization
 
 		private void SetTarget(object target)
 		{
-			FieldInfo targetField = proxy.GetType().GetField("__target");
+			var targetField = proxy.GetType().GetField("__target");
 			if (targetField == null)
 			{
 				throw new SerializationException(
@@ -301,7 +312,7 @@ namespace Castle.DynamicProxy.Serialization
 
 		private void SetInterceptors(IInterceptor[] interceptors)
 		{
-			FieldInfo interceptorField = proxy.GetType().GetField("__interceptors");
+			var interceptorField = proxy.GetType().GetField("__interceptors");
 			if (interceptorField == null)
 			{
 				throw new SerializationException(
@@ -317,4 +328,5 @@ namespace Castle.DynamicProxy.Serialization
 		}
 	}
 }
+
 #endif

@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection.Emit;
 
 	/// <summary>
-	/// 
 	/// </summary>
 	public class ReferencesToObjectArrayExpression : Expression
 	{
@@ -31,18 +30,18 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			LocalBuilder local = gen.DeclareLocal(typeof (object[]));
+			var local = gen.DeclareLocal(typeof(object[]));
 
 			gen.Emit(OpCodes.Ldc_I4, args.Length);
-			gen.Emit(OpCodes.Newarr, typeof (object));
+			gen.Emit(OpCodes.Newarr, typeof(object));
 			gen.Emit(OpCodes.Stloc, local);
 
-			for (int i = 0; i < args.Length; i++)
+			for (var i = 0; i < args.Length; i++)
 			{
 				gen.Emit(OpCodes.Ldloc, local);
 				gen.Emit(OpCodes.Ldc_I4, i);
 
-				TypeReference reference = args[i];
+				var reference = args[i];
 
 				ArgumentsUtil.EmitLoadOwnerAndReference(reference, gen);
 

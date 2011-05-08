@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,23 +19,28 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
+
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	public abstract class AbstractTypeEmitter
 	{
-		private const MethodAttributes defaultAttributes = MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public;
-		private readonly TypeBuilder typebuilder;
-		private readonly ConstructorCollection constructors;
-		private readonly MethodCollection methods;
-		private readonly PropertiesCollection properties;
-		private readonly EventCollection events;
-		private readonly NestedClassCollection nested;
-		private readonly Dictionary<String, GenericTypeParameterBuilder> name2GenericType;
+		private const MethodAttributes defaultAttributes =
+			MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public;
 
-		private GenericTypeParameterBuilder[] genericTypeParams;
+		private readonly ConstructorCollection constructors;
+		private readonly EventCollection events;
 
 		private readonly IDictionary<string, FieldReference> fields =
 			new Dictionary<string, FieldReference>(StringComparer.OrdinalIgnoreCase);
+
+		private readonly MethodCollection methods;
+
+		private readonly Dictionary<String, GenericTypeParameterBuilder> name2GenericType;
+		private readonly NestedClassCollection nested;
+		private readonly PropertiesCollection properties;
+		private readonly TypeBuilder typebuilder;
+
+		private GenericTypeParameterBuilder[] genericTypeParams;
 
 		protected AbstractTypeEmitter(TypeBuilder typeBuilder)
 		{
@@ -48,44 +53,43 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			name2GenericType = new Dictionary<String, GenericTypeParameterBuilder>();
 		}
 
-		public Type GetGenericArgument(String genericArgumentName)
+		public Type BaseType
 		{
-			return name2GenericType[genericArgumentName];
+			get
+			{
+				if (TypeBuilder.IsInterface)
+				{
+					throw new InvalidOperationException("This emitter represents an interface; interfaces have no base types.");
+				}
+				return TypeBuilder.BaseType;
+			}
 		}
 
-		public Type[] GetGenericArgumentsFor(Type genericType)
+		public TypeConstructorEmitter ClassConstructor { get; private set; }
+
+		public ConstructorCollection Constructors
 		{
-			List<Type> types = new List<Type>();
-
-			foreach (Type genType in genericType.GetGenericArguments())
-			{
-				if (genType.IsGenericParameter)
-				{
-					types.Add(name2GenericType[genType.Name]);
-				}
-				else
-				{
-					types.Add(genType);
-				}
-			}
-
-			return types.ToArray();
+			get { return constructors; }
 		}
 
-		public Type[] GetGenericArgumentsFor(MethodInfo genericMethod)
+		public GenericTypeParameterBuilder[] GenericTypeParams
 		{
-			List<Type> types = new List<Type>();
-			foreach (Type genType in genericMethod.GetGenericArguments())
-			{
-				types.Add(name2GenericType[genType.Name]);
-			}
+			get { return genericTypeParams; }
+		}
 
-			return types.ToArray();
+		public NestedClassCollection Nested
+		{
+			get { return nested; }
+		}
+
+		public TypeBuilder TypeBuilder
+		{
+			get { return typebuilder; }
 		}
 
 		public void AddCustomAttributes(ProxyGenerationOptions proxyGenerationOptions)
 		{
-			foreach (Attribute attr in proxyGenerationOptions.attributesToAddToGeneratedTypes)
+			foreach (var attr in proxyGenerationOptions.attributesToAddToGeneratedTypes)
 			{
 				var customAttributeBuilder = AttributeUtil.CreateBuilder(attr);
 				if (customAttributeBuilder != null)
@@ -100,33 +104,84 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public void CreateDefaultConstructor()
+		public virtual Type BuildType()
 		{
-			if (TypeBuilder.IsInterface)
-				throw new InvalidOperationException ("Interfaces cannot have constructors.");
+			EnsureBuildersAreInAValidState();
 
-			constructors.Add(new ConstructorEmitter(this));
+			var type = CreateType(typebuilder);
+
+			foreach (var builder in nested)
+			{
+				builder.BuildType();
+			}
+
+			return type;
+		}
+
+		public void CopyGenericParametersFromMethod(MethodInfo methodToCopyGenericsFrom)
+		{
+			// big sanity check
+			if (genericTypeParams != null)
+			{
+				throw new ProxyGenerationException("CopyGenericParametersFromMethod: cannot invoke me twice");
+			}
+
+			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typebuilder, name2GenericType));
 		}
 
 		public ConstructorEmitter CreateConstructor(params ArgumentReference[] arguments)
 		{
 			if (TypeBuilder.IsInterface)
-				throw new InvalidOperationException ("Interfaces cannot have constructors.");
+			{
+				throw new InvalidOperationException("Interfaces cannot have constructors.");
+			}
 
 			var member = new ConstructorEmitter(this, arguments);
 			constructors.Add(member);
 			return member;
 		}
 
-		public ConstructorEmitter CreateTypeConstructor()
+		public void CreateDefaultConstructor()
 		{
-			var member = new TypeConstructorEmitter(this);
-			constructors.Add(member);
-			ClassConstructor = member;
-			return member;
+			if (TypeBuilder.IsInterface)
+			{
+				throw new InvalidOperationException("Interfaces cannot have constructors.");
+			}
+
+			constructors.Add(new ConstructorEmitter(this));
 		}
 
-		public TypeConstructorEmitter ClassConstructor { get; private set; }
+		public EventEmitter CreateEvent(string name, EventAttributes atts, Type type)
+		{
+			var eventEmitter = new EventEmitter(this, name, atts, type);
+			events.Add(eventEmitter);
+			return eventEmitter;
+		}
+
+		public FieldReference CreateField(string name, Type fieldType)
+		{
+			return CreateField(name, fieldType, true);
+		}
+
+		public FieldReference CreateField(string name, Type fieldType, bool serializable)
+		{
+			var atts = FieldAttributes.Public;
+
+			if (!serializable)
+			{
+				atts |= FieldAttributes.NotSerialized;
+			}
+
+			return CreateField(name, fieldType, atts);
+		}
+
+		public FieldReference CreateField(string name, Type fieldType, FieldAttributes atts)
+		{
+			var fieldBuilder = typebuilder.DefineField(name, fieldType, atts);
+			var reference = new FieldReference(fieldBuilder);
+			fields[name] = reference;
+			return reference;
+		}
 
 		public MethodEmitter CreateMethod(string name, MethodAttributes attrs, Type returnType, params Type[] argumentTypes)
 		{
@@ -152,6 +207,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return method;
 		}
 
+		public PropertyEmitter CreateProperty(string name, PropertyAttributes attributes, Type propertyType, Type[] arguments)
+		{
+			var propEmitter = new PropertyEmitter(this, name, attributes, propertyType, arguments);
+			properties.Add(propEmitter);
+			return propEmitter;
+		}
+
 		public FieldReference CreateStaticField(string name, Type fieldType)
 		{
 			return CreateStaticField(name, fieldType, FieldAttributes.Public);
@@ -163,55 +225,22 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return CreateField(name, fieldType, atts);
 		}
 
-		public FieldReference CreateField(string name, Type fieldType)
+		public ConstructorEmitter CreateTypeConstructor()
 		{
-			return CreateField(name, fieldType, true);
+			var member = new TypeConstructorEmitter(this);
+			constructors.Add(member);
+			ClassConstructor = member;
+			return member;
 		}
 
-		public FieldReference CreateField(string name, Type fieldType, bool serializable)
-		{
-			FieldAttributes atts = FieldAttributes.Public;
-
-			if (!serializable)
-			{
-				atts |= FieldAttributes.NotSerialized;
-			}
-
-			return CreateField(name, fieldType, atts);
-		}
-
-		public FieldReference CreateField(string name, Type fieldType, FieldAttributes atts)
-		{
-			FieldBuilder fieldBuilder = typebuilder.DefineField(name, fieldType, atts);
-			var reference = new FieldReference(fieldBuilder);
-			fields[name] = reference;
-			return reference;
-		}
-
-		public PropertyEmitter CreateProperty(string name, PropertyAttributes attributes, Type propertyType, Type[] arguments)
-		{
-			PropertyEmitter propEmitter = new PropertyEmitter(this, name, attributes, propertyType, arguments);
-			properties.Add(propEmitter);
-			return propEmitter;
-		}
-
-
-		public EventEmitter CreateEvent(string name, EventAttributes atts, Type type)
-		{
-			EventEmitter eventEmitter = new EventEmitter(this, name, atts, type);
-			events.Add(eventEmitter);
-			return eventEmitter;
-		}
-
-		
 		public void DefineCustomAttribute(CustomAttributeBuilder attribute)
 		{
 			typebuilder.SetCustomAttribute(attribute);
 		}
 
-		public void DefineCustomAttribute<TAttribute>(object[] constructorArguments) where TAttribute:Attribute
+		public void DefineCustomAttribute<TAttribute>(object[] constructorArguments) where TAttribute : Attribute
 		{
-			var customAttributeBuilder = AttributeUtil.CreateBuilder(typeof (TAttribute), constructorArguments);
+			var customAttributeBuilder = AttributeUtil.CreateBuilder(typeof(TAttribute), constructorArguments);
 			typebuilder.SetCustomAttribute(customAttributeBuilder);
 		}
 
@@ -225,68 +254,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			var customAttributeBuilder = AttributeUtil.CreateBuilder<TAttribute>();
 			var fieldbuilder = field.Fieldbuilder;
-			if(fieldbuilder==null)
+			if (fieldbuilder == null)
 			{
-				throw new ArgumentException("Invalid field reference.This reference does not point to field on type being generated","field");
+				throw new ArgumentException(
+					"Invalid field reference.This reference does not point to field on type being generated", "field");
 			}
 			fieldbuilder.SetCustomAttribute(customAttributeBuilder);
-		}
-
-
-		public ConstructorCollection Constructors
-		{
-			get { return constructors; }
-		}
-
-		public NestedClassCollection Nested
-		{
-			get { return nested; }
-		}
-
-		public TypeBuilder TypeBuilder
-		{
-			get { return typebuilder; }
-		}
-
-		public Type BaseType
-		{
-			get 
-			{
-				if (TypeBuilder.IsInterface)
-					throw new InvalidOperationException ("This emitter represents an interface; interfaces have no base types.");
-				return TypeBuilder.BaseType; 
-			}
-		}
-
-		public GenericTypeParameterBuilder[] GenericTypeParams
-		{
-			get { return genericTypeParams; }
-		}
-
-		public void SetGenericTypeParameters(GenericTypeParameterBuilder[] genericTypeParameterBuilders)
-		{
-			this.genericTypeParams = genericTypeParameterBuilders;
-		}
-
-		public void CopyGenericParametersFromMethod (MethodInfo methodToCopyGenericsFrom)
-		{
-			// big sanity check
-			if (genericTypeParams != null)
-			{
-				throw new ProxyGenerationException("CopyGenericParametersFromMethod: cannot invoke me twice");
-			}
-
-			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typebuilder, name2GenericType));
-		}
-
-		public FieldReference GetField(string name)
-		{
-			if(string.IsNullOrEmpty(name))
-				return null;
-
-			FieldReference value;
-			fields.TryGetValue(name, out value);
-			return value;
 		}
 
 		public IEnumerable<FieldReference> GetAllFields()
@@ -294,47 +267,56 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return fields.Values;
 		}
 
-		public virtual Type BuildType()
+		public FieldReference GetField(string name)
 		{
-			EnsureBuildersAreInAValidState();
-
-			Type type = CreateType(typebuilder);
-
-			foreach (NestedClassEmitter builder in nested)
+			if (string.IsNullOrEmpty(name))
 			{
-				builder.BuildType();
+				return null;
 			}
 
-			return type;
+			FieldReference value;
+			fields.TryGetValue(name, out value);
+			return value;
 		}
 
-		protected virtual void EnsureBuildersAreInAValidState()
+		public Type GetGenericArgument(String genericArgumentName)
 		{
-			if (!typebuilder.IsInterface && constructors.Count == 0)
+			return name2GenericType[genericArgumentName];
+		}
+
+		public Type[] GetGenericArgumentsFor(Type genericType)
+		{
+			var types = new List<Type>();
+
+			foreach (var genType in genericType.GetGenericArguments())
 			{
-				CreateDefaultConstructor();
+				if (genType.IsGenericParameter)
+				{
+					types.Add(name2GenericType[genType.Name]);
+				}
+				else
+				{
+					types.Add(genType);
+				}
 			}
 
-			foreach (IMemberEmitter builder in properties)
+			return types.ToArray();
+		}
+
+		public Type[] GetGenericArgumentsFor(MethodInfo genericMethod)
+		{
+			var types = new List<Type>();
+			foreach (var genType in genericMethod.GetGenericArguments())
 			{
-				builder.EnsureValidCodeBlock();
-				builder.Generate();
+				types.Add(name2GenericType[genType.Name]);
 			}
-			foreach (IMemberEmitter builder in events)
-			{
-				builder.EnsureValidCodeBlock();
-				builder.Generate();
-			}
-			foreach (IMemberEmitter builder in constructors)
-			{
-				builder.EnsureValidCodeBlock();
-				builder.Generate();
-			}
-			foreach (IMemberEmitter builder in methods)
-			{
-				builder.EnsureValidCodeBlock();
-				builder.Generate();
-			}
+
+			return types.ToArray();
+		}
+
+		public void SetGenericTypeParameters(GenericTypeParameterBuilder[] genericTypeParameterBuilders)
+		{
+			genericTypeParams = genericTypeParameterBuilders;
 		}
 
 		protected Type CreateType(TypeBuilder type)
@@ -368,6 +350,35 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				var exception = new ProxyGenerationException(message);
 				exception.Data.Add("ProxyType", type.ToString());
 				throw exception;
+			}
+		}
+
+		protected virtual void EnsureBuildersAreInAValidState()
+		{
+			if (!typebuilder.IsInterface && constructors.Count == 0)
+			{
+				CreateDefaultConstructor();
+			}
+
+			foreach (IMemberEmitter builder in properties)
+			{
+				builder.EnsureValidCodeBlock();
+				builder.Generate();
+			}
+			foreach (IMemberEmitter builder in events)
+			{
+				builder.EnsureValidCodeBlock();
+				builder.Generate();
+			}
+			foreach (IMemberEmitter builder in constructors)
+			{
+				builder.EnsureValidCodeBlock();
+				builder.Generate();
+			}
+			foreach (IMemberEmitter builder in methods)
+			{
+				builder.EnsureValidCodeBlock();
+				builder.Generate();
 			}
 		}
 	}

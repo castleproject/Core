@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		public FieldReference(FieldBuilder fieldbuilder)
 		{
 			this.fieldbuilder = fieldbuilder;
-			this.field = fieldbuilder;
+			field = fieldbuilder;
 			if ((fieldbuilder.Attributes & FieldAttributes.Static) != 0)
 			{
 				isStatic = true;
@@ -54,6 +54,18 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		public FieldInfo Reference
 		{
 			get { return field; }
+		}
+
+		public override void LoadAddressOfReference(ILGenerator gen)
+		{
+			if (isStatic)
+			{
+				gen.Emit(OpCodes.Ldsflda, Reference);
+			}
+			else
+			{
+				gen.Emit(OpCodes.Ldflda, Reference);
+			}
 		}
 
 		public override void LoadReference(ILGenerator gen)
@@ -77,18 +89,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			else
 			{
 				gen.Emit(OpCodes.Stfld, Reference);
-			}
-		}
-
-		public override void LoadAddressOfReference(ILGenerator gen)
-		{
-			if (isStatic)
-			{
-				gen.Emit(OpCodes.Ldsflda, Reference);
-			}
-			else
-			{
-				gen.Emit(OpCodes.Ldflda, Reference);
 			}
 		}
 	}

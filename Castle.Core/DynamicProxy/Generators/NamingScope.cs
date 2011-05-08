@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators
 
 	public class NamingScope : INamingScope
 	{
-		private readonly IDictionary<string,int> names = new Dictionary<string, int>();
+		private readonly IDictionary<string, int> names = new Dictionary<string, int>();
 		private readonly INamingScope parentScope;
 
 		public NamingScope()
@@ -29,6 +29,11 @@ namespace Castle.DynamicProxy.Generators
 		private NamingScope(INamingScope parent)
 		{
 			parentScope = parent;
+		}
+
+		public INamingScope ParentScope
+		{
+			get { return parentScope; }
 		}
 
 		public string GetUniqueName(string suggestedName)
@@ -51,11 +56,6 @@ namespace Castle.DynamicProxy.Generators
 		public INamingScope SafeSubScope()
 		{
 			return new NamingScope(this);
-		}
-
-		public INamingScope ParentScope
-		{
-			get { return parentScope;}
 		}
 	}
 }

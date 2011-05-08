@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,8 +18,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Collections.Generic;
 	using System.Reflection.Emit;
 
-	/// <summary>s
-	/// Provides appropriate Ldc.X opcode for the type of primitive value to be loaded.
+	/// <summary>
+	///   s
+	///   Provides appropriate Ldc.X opcode for the type of primitive value to be loaded.
 	/// </summary>
 	public sealed class LdcOpCodesDictionary : Dictionary<Type, OpCode>
 	{
@@ -49,19 +50,21 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get
 			{
 				if (ContainsKey(type))
+				{
 					return base[type];
+				}
 				return EmptyOpCode;
 			}
-		}
-
-		public static LdcOpCodesDictionary Instance
-		{
-			get { return dict; }
 		}
 
 		public static OpCode EmptyOpCode
 		{
 			get { return emptyOpCode; }
+		}
+
+		public static LdcOpCodesDictionary Instance
+		{
+			get { return dict; }
 		}
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,16 +15,17 @@
 namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 {
 	using System;
-	using System.Reflection.Emit;
-	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using System.Collections.Generic;
+	using System.Reflection.Emit;
+
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	public abstract class AbstractCodeBuilder
 	{
-		private bool isEmpty;
 		private readonly ILGenerator generator;
-		private readonly List<Statement> stmts;
 		private readonly List<Reference> ilmarkers;
+		private readonly List<Statement> stmts;
+		private bool isEmpty;
 
 		protected AbstractCodeBuilder(ILGenerator generator)
 		{
@@ -40,6 +41,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			get { return generator; }
 		}
 
+		internal bool IsEmpty
+		{
+			get { return isEmpty; }
+		}
+
 		public AbstractCodeBuilder AddStatement(Statement stmt)
 		{
 			SetNonEmpty();
@@ -49,7 +55,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 
 		public LocalReference DeclareLocal(Type type)
 		{
-			LocalReference local = new LocalReference(type);
+			var local = new LocalReference(type);
 			ilmarkers.Add(local);
 			return local;
 		}
@@ -59,19 +65,14 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			isEmpty = false;
 		}
 
-		internal bool IsEmpty
-		{
-			get { return isEmpty; }
-		}
-
 		internal void Generate(IMemberEmitter member, ILGenerator il)
 		{
-			foreach (Reference local in ilmarkers)
+			foreach (var local in ilmarkers)
 			{
 				local.Generate(il);
 			}
 
-			foreach (Statement stmt in stmts)
+			foreach (var stmt in stmts)
 			{
 				stmt.Emit(member, il);
 			}

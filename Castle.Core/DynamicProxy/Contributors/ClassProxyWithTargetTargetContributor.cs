@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,10 +27,11 @@ namespace Castle.DynamicProxy.Contributors
 
 	public class ClassProxyWithTargetTargetContributor : CompositeTypeContributor
 	{
-		private readonly Type targetType;
 		private readonly IList<MethodInfo> methodsToSkip;
+		private readonly Type targetType;
 
-		public ClassProxyWithTargetTargetContributor(Type targetType, IList<MethodInfo> methodsToSkip, INamingScope namingScope)
+		public ClassProxyWithTargetTargetContributor(Type targetType, IList<MethodInfo> methodsToSkip,
+		                                             INamingScope namingScope)
 			: base(namingScope)
 		{
 			this.targetType = targetType;
@@ -55,9 +56,14 @@ namespace Castle.DynamicProxy.Contributors
 			}
 		}
 
-		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options, OverrideMethodDelegate overrideMethod)
+		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
+		                                                      ProxyGenerationOptions options,
+		                                                      OverrideMethodDelegate overrideMethod)
 		{
-			if (methodsToSkip.Contains(method.Method)) return null;
+			if (methodsToSkip.Contains(method.Method))
+			{
+				return null;
+			}
 
 			if (!method.Proxyable)
 			{
@@ -79,6 +85,26 @@ namespace Castle.DynamicProxy.Contributors
 			                                         overrideMethod,
 			                                         null);
 		}
+
+		private Type BuildInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
+		{
+			if (!method.HasTarget)
+			{
+				return new InheritanceInvocationTypeGenerator(targetType,
+				                                              method,
+				                                              null, null)
+					.Generate(@class, options, namingScope)
+					.BuildType();
+			}
+			return new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
+			                                              method,
+			                                              method.Method,
+			                                              false,
+			                                              null)
+				.Generate(@class, options, namingScope)
+				.BuildType();
+		}
+
 		private IInvocationCreationContributor GetContributor(Type @delegate, MetaMethod method)
 		{
 			if (@delegate.IsGenericType == false)
@@ -86,23 +112,8 @@ namespace Castle.DynamicProxy.Contributors
 				return new InvocationWithDelegateContributor(@delegate, targetType, method, namingScope);
 			}
 			return new InvocationWithGenericDelegateContributor(@delegate,
-																method,
-																new FieldReference(InvocationMethods.ProxyObject));
-		}
-
-		private MethodGenerator IndirectlyCalledMethodGenerator(MetaMethod method, ClassEmitter proxy, ProxyGenerationOptions options, OverrideMethodDelegate overrideMethod)
-		{
-			var @delegate = GetDelegateType(method, proxy, options);
-			var contributor = GetContributor(@delegate, method);
-			var invocation = new CompositionInvocationTypeGenerator(targetType, method, null, false, contributor)
-				.Generate(proxy, options, namingScope)
-				.BuildType();
-			return new MethodWithInvocationGenerator(method,
-			                                             proxy.GetField("__interceptors"),
-			                                             invocation,
-														 (c, m) => c.GetField("__target").ToExpression(),
-			                                             overrideMethod,
-			                                             contributor);
+			                                                    method,
+			                                                    new FieldReference(InvocationMethods.ProxyObject));
 		}
 
 		private Type GetDelegateType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
@@ -118,7 +129,9 @@ namespace Castle.DynamicProxy.Contributors
 
 			var type = scope.GetFromCache(key);
 			if (type != null)
+			{
 				return type;
+			}
 
 			type = new DelegateTypeGenerator(method, targetType)
 				.Generate(@class, options, namingScope)
@@ -127,11 +140,6 @@ namespace Castle.DynamicProxy.Contributors
 			scope.RegisterInCache(key, type);
 
 			return type;
-		}
-
-		private bool IsDirectlyAccessible(MetaMethod method)
-		{
-			return method.MethodOnTarget.IsPublic;
 		}
 
 		private Type GetInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
@@ -155,23 +163,26 @@ namespace Castle.DynamicProxy.Contributors
 			return invocation;
 		}
 
-		private Type BuildInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
+		private MethodGenerator IndirectlyCalledMethodGenerator(MetaMethod method, ClassEmitter proxy,
+		                                                        ProxyGenerationOptions options,
+		                                                        OverrideMethodDelegate overrideMethod)
 		{
-			if (!method.HasTarget)
-			{
-				return new InheritanceInvocationTypeGenerator(targetType,
-				                                        method,
-				                                        null, null)
-					.Generate(@class, options, namingScope)
-					.BuildType();
-			}
-			return new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
-			                                              method,
-			                                              method.Method,
-			                                              false,
-			                                              null)
-				.Generate(@class, options, namingScope)
+			var @delegate = GetDelegateType(method, proxy, options);
+			var contributor = GetContributor(@delegate, method);
+			var invocation = new CompositionInvocationTypeGenerator(targetType, method, null, false, contributor)
+				.Generate(proxy, options, namingScope)
 				.BuildType();
+			return new MethodWithInvocationGenerator(method,
+			                                         proxy.GetField("__interceptors"),
+			                                         invocation,
+			                                         (c, m) => c.GetField("__target").ToExpression(),
+			                                         overrideMethod,
+			                                         contributor);
+		}
+
+		private bool IsDirectlyAccessible(MetaMethod method)
+		{
+			return method.MethodOnTarget.IsPublic;
 		}
 	}
 }

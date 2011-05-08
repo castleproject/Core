@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Contributors
 		private readonly GetTargetExpressionDelegate getTargetExpression;
 
 		public MixinContributor(INamingScope namingScope, bool canChangeTarget)
-			:base(namingScope)
+			: base(namingScope)
 		{
 			this.canChangeTarget = canChangeTarget;
 			getTargetExpression = BuildGetTargetExpression();
@@ -41,26 +41,15 @@ namespace Castle.DynamicProxy.Contributors
 			get { return fields.Values; }
 		}
 
-		private GetTargetExpressionDelegate BuildGetTargetExpression()
+		public void AddEmptyInterface(Type @interface)
 		{
-			if (!canChangeTarget)
-			{
-				return (c, m) => fields[m.DeclaringType].ToExpression();
-			}
-
-			return (c, m) => new NullCoalescingOperatorExpression(
-			                 	new AsTypeReference(c.GetField("__target"), m.DeclaringType).ToExpression(),
-			                 	fields[m.DeclaringType].ToExpression());
-		}
-
-		protected override IEnumerable<MembersCollector> CollectElementsToProxyInternal(IProxyGenerationHook hook)
-		{
-			foreach (var @interface in interfaces)
-			{
-				var item = new InterfaceMembersCollector(@interface);
-				item.CollectMembersToProxy(hook);
-				yield return item;
-			}
+			Debug.Assert(@interface != null, "@interface == null", "Shouldn't be adding empty interfaces...");
+			Debug.Assert(@interface.IsInterface, "@interface.IsInterface", "Should be adding interfaces only...");
+			Debug.Assert(!interfaces.Contains(@interface), "!interfaces.Contains(@interface)",
+			             "Shouldn't be adding same interface twice...");
+			Debug.Assert(!empty.Contains(@interface), "!empty.Contains(@interface)",
+			             "Shouldn't be adding same interface twice...");
+			empty.Add(@interface);
 		}
 
 		public override void Generate(ClassEmitter @class, ProxyGenerationOptions options)
@@ -78,16 +67,19 @@ namespace Castle.DynamicProxy.Contributors
 			base.Generate(@class, options);
 		}
 
-		public void AddEmptyInterface(Type @interface)
+		protected override IEnumerable<MembersCollector> CollectElementsToProxyInternal(IProxyGenerationHook hook)
 		{
-			Debug.Assert(@interface != null, "@interface == null", "Shouldn't be adding empty interfaces...");
-			Debug.Assert(@interface.IsInterface, "@interface.IsInterface", "Should be adding interfaces only...");
-			Debug.Assert(!interfaces.Contains(@interface), "!interfaces.Contains(@interface)", "Shouldn't be adding same interface twice...");
-			Debug.Assert(!empty.Contains(@interface), "!empty.Contains(@interface)", "Shouldn't be adding same interface twice...");
-			empty.Add(@interface);
+			foreach (var @interface in interfaces)
+			{
+				var item = new InterfaceMembersCollector(@interface);
+				item.CollectMembersToProxy(hook);
+				yield return item;
+			}
 		}
 
-		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options, OverrideMethodDelegate overrideMethod)
+		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
+		                                                      ProxyGenerationOptions options,
+		                                                      OverrideMethodDelegate overrideMethod)
 		{
 			if (!method.Proxyable)
 			{
@@ -105,6 +97,24 @@ namespace Castle.DynamicProxy.Contributors
 			                                         null);
 		}
 
+		private GetTargetExpressionDelegate BuildGetTargetExpression()
+		{
+			if (!canChangeTarget)
+			{
+				return (c, m) => fields[m.DeclaringType].ToExpression();
+			}
+
+			return (c, m) => new NullCoalescingOperatorExpression(
+			                 	new AsTypeReference(c.GetField("__target"), m.DeclaringType).ToExpression(),
+			                 	fields[m.DeclaringType].ToExpression());
+		}
+
+		private FieldReference BuildTargetField(ClassEmitter @class, Type type)
+		{
+			var name = "__mixin_" + type.FullName.Replace(".", "_");
+			return @class.CreateField(namingScope.GetUniqueName(name), type);
+		}
+
 		private Type GetInvocationType(MetaMethod method, ClassEmitter emitter, ProxyGenerationOptions options)
 		{
 			var scope = emitter.ModuleScope;
@@ -115,7 +125,6 @@ namespace Castle.DynamicProxy.Contributors
 			}
 			else
 			{
-
 				invocationInterfaces = new[] { typeof(IInvocation) };
 			}
 			var key = new CacheKey(method.Method, CompositionInvocationTypeGenerator.BaseType, invocationInterfaces, null);
@@ -139,12 +148,6 @@ namespace Castle.DynamicProxy.Contributors
 			scope.RegisterInCache(key, invocation);
 
 			return invocation;
-		}
-
-		private FieldReference BuildTargetField(ClassEmitter @class, Type type)
-		{
-			var name = "__mixin_" + type.FullName.Replace(".", "_");
-			return @class.CreateField(namingScope.GetUniqueName(name), type);
 		}
 	}
 }

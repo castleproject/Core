@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,9 +35,14 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			set { owner = value; }
 		}
 
-		public virtual Expression ToExpression()
+		public abstract void LoadAddressOfReference(ILGenerator gen);
+
+		public abstract void LoadReference(ILGenerator gen);
+
+		public abstract void StoreReference(ILGenerator gen);
+
+		public virtual void Generate(ILGenerator gen)
 		{
-			return new ReferenceExpression(this);
 		}
 
 		public virtual Expression ToAddressOfExpression()
@@ -45,14 +50,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			return new AddressOfReferenceExpression(this);
 		}
 
-		public virtual void Generate(ILGenerator gen)
+		public virtual Expression ToExpression()
 		{
+			return new ReferenceExpression(this);
 		}
-
-		public abstract void LoadAddressOfReference(ILGenerator gen);
-
-		public abstract void LoadReference(ILGenerator gen);
-
-		public abstract void StoreReference(ILGenerator gen);
 	}
 }

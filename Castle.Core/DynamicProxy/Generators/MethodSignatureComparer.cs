@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,35 +15,12 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
-	using System.Reflection;
 	using System.Collections.Generic;
+	using System.Reflection;
 
 	public class MethodSignatureComparer : IEqualityComparer<MethodInfo>
 	{
 		public static readonly MethodSignatureComparer Instance = new MethodSignatureComparer();
-
-		public bool Equals(MethodInfo x, MethodInfo y)
-		{
-			if (x == null && y == null)
-			{
-				return true;
-			}
-
-			if (x == null || y == null)
-			{
-				return false;
-			}
-
-			return EqualNames(x, y) &&
-			       EqualGenericParameters(x, y) &&
-			       EqualSignatureTypes(x.ReturnType, y.ReturnType) &&
-			       EqualParameters(x, y);
-		}
-
-		private bool EqualNames(MethodInfo x, MethodInfo y)
-		{
-			return x.Name == y.Name;
-		}
 
 		public bool EqualGenericParameters(MethodInfo x, MethodInfo y)
 		{
@@ -54,15 +31,15 @@ namespace Castle.DynamicProxy.Generators
 
 			if (x.IsGenericMethod)
 			{
-				Type[] xArgs = x.GetGenericArguments();
-				Type[] yArgs = y.GetGenericArguments();
+				var xArgs = x.GetGenericArguments();
+				var yArgs = y.GetGenericArguments();
 
 				if (xArgs.Length != yArgs.Length)
 				{
 					return false;
 				}
 
-				for (int i = 0; i < xArgs.Length; ++i)
+				for (var i = 0; i < xArgs.Length; ++i)
 				{
 					if (xArgs[i].IsGenericParameter != yArgs[i].IsGenericParameter)
 					{
@@ -81,15 +58,15 @@ namespace Castle.DynamicProxy.Generators
 
 		public bool EqualParameters(MethodInfo x, MethodInfo y)
 		{
-			ParameterInfo[] xArgs = x.GetParameters();
-			ParameterInfo[] yArgs = y.GetParameters();
+			var xArgs = x.GetParameters();
+			var yArgs = y.GetParameters();
 
 			if (xArgs.Length != yArgs.Length)
 			{
 				return false;
 			}
 
-			for (int i = 0; i < xArgs.Length; ++i)
+			for (var i = 0; i < xArgs.Length; ++i)
 			{
 				if (!EqualSignatureTypes(xArgs[i].ParameterType, yArgs[i].ParameterType))
 				{
@@ -124,9 +101,32 @@ namespace Castle.DynamicProxy.Generators
 			return true;
 		}
 
+		public bool Equals(MethodInfo x, MethodInfo y)
+		{
+			if (x == null && y == null)
+			{
+				return true;
+			}
+
+			if (x == null || y == null)
+			{
+				return false;
+			}
+
+			return EqualNames(x, y) &&
+			       EqualGenericParameters(x, y) &&
+			       EqualSignatureTypes(x.ReturnType, y.ReturnType) &&
+			       EqualParameters(x, y);
+		}
+
 		public int GetHashCode(MethodInfo obj)
 		{
 			return obj.Name.GetHashCode() ^ obj.GetParameters().Length; // everything else would be too cumbersome
+		}
+
+		private bool EqualNames(MethodInfo x, MethodInfo y)
+		{
+			return x.Name == y.Name;
 		}
 	}
 }

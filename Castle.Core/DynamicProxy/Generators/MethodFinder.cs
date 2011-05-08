@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ namespace Castle.DynamicProxy.Generators
 	using System.Reflection;
 
 	/// <summary>
-	/// Returns the methods implemented by a type. Use this instead of Type.GetMethods() to work around a CLR issue
-	/// where duplicate MethodInfos are returned by Type.GetMethods() after a token of a generic type's method was loaded.
+	///   Returns the methods implemented by a type. Use this instead of Type.GetMethods() to work around a CLR issue
+	///   where duplicate MethodInfos are returned by Type.GetMethods() after a token of a generic type's method was loaded.
 	/// </summary>
 	public class MethodFinder
 	{
@@ -30,7 +30,9 @@ namespace Castle.DynamicProxy.Generators
 		public static MethodInfo[] GetAllInstanceMethods(Type type, BindingFlags flags)
 		{
 			if ((flags & ~(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) != 0)
+			{
 				throw new ArgumentException("MethodFinder only supports the Public, NonPublic, and Instance binding flags.", "flags");
+			}
 
 			MethodInfo[] methodsInCache;
 
@@ -42,25 +44,12 @@ namespace Castle.DynamicProxy.Generators
 					cachedMethodInfosByType.Add(
 						type,
 						RemoveDuplicates(type.GetMethods(
-											BindingFlags.Public | BindingFlags.NonPublic
-											| BindingFlags.Instance)));
+							BindingFlags.Public | BindingFlags.NonPublic
+							| BindingFlags.Instance)));
 				}
 				methodsInCache = (MethodInfo[])cachedMethodInfosByType[type];
 			}
 			return MakeFilteredCopy(methodsInCache, flags & (BindingFlags.Public | BindingFlags.NonPublic));
-		}
-
-		private static object RemoveDuplicates(MethodInfo[] infos)
-		{
-			Dictionary<MethodInfo, object> uniqueInfos = new Dictionary<MethodInfo, object>(MethodSignatureComparer.Instance);
-			foreach (MethodInfo info in infos)
-			{
-				if (!uniqueInfos.ContainsKey(info))
-					uniqueInfos.Add(info, null);
-			}
-			MethodInfo[] result = new MethodInfo[uniqueInfos.Count];
-			uniqueInfos.Keys.CopyTo(result, 0);
-			return result;
 		}
 
 		private static MethodInfo[] MakeFilteredCopy(MethodInfo[] methodsInCache, BindingFlags visibilityFlags)
@@ -70,13 +59,13 @@ namespace Castle.DynamicProxy.Generators
 				throw new ArgumentException("Only supports BindingFlags.Public and NonPublic.", "visibilityFlags");
 			}
 
-			bool includePublic = (visibilityFlags & BindingFlags.Public) == BindingFlags.Public;
-			bool includeNonPublic = (visibilityFlags & BindingFlags.NonPublic) == BindingFlags.NonPublic;
+			var includePublic = (visibilityFlags & BindingFlags.Public) == BindingFlags.Public;
+			var includeNonPublic = (visibilityFlags & BindingFlags.NonPublic) == BindingFlags.NonPublic;
 
 			// Return a copy of the cached array, only returning the public methods unless requested otherwise
-			List<MethodInfo> result = new List<MethodInfo>(methodsInCache.Length);
+			var result = new List<MethodInfo>(methodsInCache.Length);
 
-			foreach (MethodInfo method in methodsInCache)
+			foreach (var method in methodsInCache)
 			{
 				if ((method.IsPublic && includePublic) || (!method.IsPublic && includeNonPublic))
 				{
@@ -85,6 +74,21 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			return result.ToArray();
+		}
+
+		private static object RemoveDuplicates(MethodInfo[] infos)
+		{
+			var uniqueInfos = new Dictionary<MethodInfo, object>(MethodSignatureComparer.Instance);
+			foreach (var info in infos)
+			{
+				if (!uniqueInfos.ContainsKey(info))
+				{
+					uniqueInfos.Add(info, null);
+				}
+			}
+			var result = new MethodInfo[uniqueInfos.Count];
+			uniqueInfos.Keys.CopyTo(result, 0);
+			return result;
 		}
 	}
 }
