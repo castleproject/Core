@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,21 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using NUnit.Framework;
-
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
+
+	using CastleTests;
+
+	using NUnit.Framework;
+
 	[TestFixture]
-	public class CanDefineAdditionalCustomAttributes
+	public class CanDefineAdditionalCustomAttributes : BasePEVerifyTestCase
 	{
+		[Test]
+		[Bug("DYNPROXY-151")]
+		public void Can_clone_attributes_with_array_ints()
+		{
+			generator.CreateInterfaceProxyWithoutTarget(typeof(IHasAttributeWithIntArray));
+		}
+
+		[Test]
+		[Bug("DYNPROXY-151")]
+		public void Can_clone_attributes_with_array_types()
+		{
+			generator.CreateInterfaceProxyWithoutTarget(typeof(IHasAttributeWithTypeArray));
+		}
+
 		[Test]
 		public void On_class()
 		{
-			ProxyGenerationOptions options = new ProxyGenerationOptions();
+			var options = new ProxyGenerationOptions();
 			options.AdditionalAttributes.Add(AttributeUtil.CreateBuilder<__Protect>());
 
-			object proxy = new ProxyGenerator().CreateClassProxy(typeof(CanDefineAdditionalCustomAttributes), options);
+			var proxy = generator.CreateClassProxy(typeof(CanDefineAdditionalCustomAttributes), options);
 
 			Assert.IsTrue(proxy.GetType().IsDefined(typeof(__Protect), false));
 		}
@@ -34,13 +51,39 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void On_interfaces()
 		{
-			ProxyGenerationOptions options = new ProxyGenerationOptions();
+			var options = new ProxyGenerationOptions();
 			options.AdditionalAttributes.Add(AttributeUtil.CreateBuilder<__Protect>());
-		
-			object proxy = new ProxyGenerator().CreateInterfaceProxyWithoutTarget(typeof(IDisposable), new Type[0], options);
+
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(IDisposable), new Type[0], options);
 
 			Assert.IsTrue(proxy.GetType().IsDefined(typeof(__Protect), false));
 		}
+	}
+
+	[AttributeUsage(AttributeTargets.All, Inherited = false)]
+	public sealed class AttributeWithTypeArrayArgument : Attribute
+	{
+		public AttributeWithTypeArrayArgument(params Type[] attributeTypes)
+		{
+		}
+	}
+
+	[AttributeUsage(AttributeTargets.All, Inherited = false)]
+	public sealed class AttributeWithIntArrayArgument : Attribute
+	{
+		public AttributeWithIntArrayArgument(params int[] ints)
+		{
+		}
+	}
+
+	[AttributeWithTypeArrayArgument(typeof(string))]
+	public interface IHasAttributeWithTypeArray
+	{
+	}
+
+	[AttributeWithIntArrayArgument(1, 2, 3)]
+	public interface IHasAttributeWithIntArray
+	{
 	}
 
 	public class __Protect : Attribute
