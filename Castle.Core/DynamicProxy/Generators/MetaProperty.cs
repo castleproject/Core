@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,29 +18,36 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
+
 	using Castle.DynamicProxy.Generators.Emitters;
 
 	public class MetaProperty : MetaTypeElement, IEquatable<MetaProperty>
 	{
-		private string name;
-		private readonly Type type;
-		private readonly MetaMethod getter;
-		private readonly MetaMethod setter;
+		private readonly Type[] arguments;
 		private readonly PropertyAttributes attributes;
 		private readonly IEnumerable<CustomAttributeBuilder> customAttributes;
-		private readonly Type[] arguments;
+		private readonly MetaMethod getter;
+		private readonly MetaMethod setter;
+		private readonly Type type;
 		private PropertyEmitter emitter;
+		private string name;
 
-		public MetaProperty(string name, Type propertyType, Type declaringType, MetaMethod getter, MetaMethod setter, IEnumerable<CustomAttributeBuilder> customAttributes,Type[] arguments)
-			:base(declaringType)
+		public MetaProperty(string name, Type propertyType, Type declaringType, MetaMethod getter, MetaMethod setter,
+		                    IEnumerable<CustomAttributeBuilder> customAttributes, Type[] arguments)
+			: base(declaringType)
 		{
 			this.name = name;
-			this.type = propertyType;
+			type = propertyType;
 			this.getter = getter;
 			this.setter = setter;
-			this.attributes = PropertyAttributes.None;
+			attributes = PropertyAttributes.None;
 			this.customAttributes = customAttributes;
 			this.arguments = arguments ?? Type.EmptyTypes;
+		}
+
+		public Type[] Arguments
+		{
+			get { return arguments; }
 		}
 
 		public bool CanRead
@@ -53,37 +60,28 @@ namespace Castle.DynamicProxy.Generators
 			get { return setter != null; }
 		}
 
+		public PropertyEmitter Emitter
+		{
+			get
+			{
+				if (emitter == null)
+				{
+					throw new InvalidOperationException(
+						"Emitter is not initialized. You have to initialize it first using 'BuildPropertyEmitter' method");
+				}
+				return emitter;
+			}
+		}
+
 		public MethodInfo GetMethod
 		{
 			get
 			{
-				if(!CanRead)
+				if (!CanRead)
 				{
 					throw new InvalidOperationException();
 				}
 				return getter.Method;
-			}
-		}
-
-		public MethodInfo SetMethod
-		{
-			get
-			{
-				if(!CanWrite)
-				{
-					throw new InvalidOperationException();
-				}
-				return setter.Method;
-			}
-		}
-
-		public PropertyEmitter Emitter
-		{
-			get {
-				if (emitter == null)
-					throw new InvalidOperationException(
-						"Emitter is not initialized. You have to initialize it first using 'BuildPropertyEmitter' method");
-				return emitter;
 			}
 		}
 
@@ -92,9 +90,60 @@ namespace Castle.DynamicProxy.Generators
 			get { return getter; }
 		}
 
+		public MethodInfo SetMethod
+		{
+			get
+			{
+				if (!CanWrite)
+				{
+					throw new InvalidOperationException();
+				}
+				return setter.Method;
+			}
+		}
+
 		public MetaMethod Setter
 		{
 			get { return setter; }
+		}
+
+		public void BuildPropertyEmitter(ClassEmitter classEmitter)
+		{
+			if (emitter != null)
+			{
+				throw new InvalidOperationException("Emitter is already created. It is illegal to invoke this method twice.");
+			}
+
+			emitter = classEmitter.CreateProperty(name, attributes, type, arguments);
+			foreach (var attribute in customAttributes)
+			{
+				emitter.DefineCustomAttribute(attribute);
+			}
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj))
+			{
+				return false;
+			}
+			if (ReferenceEquals(this, obj))
+			{
+				return true;
+			}
+			if (obj.GetType() != typeof(MetaProperty))
+			{
+				return false;
+			}
+			return Equals((MetaProperty)obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				return ((GetMethod != null ? GetMethod.GetHashCode() : 0)*397) ^ (SetMethod != null ? SetMethod.GetHashCode() : 0);
+			}
 		}
 
 		public bool Equals(MetaProperty other)
@@ -122,7 +171,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				return false;
 			}
-			for (int i = 0; i < Arguments.Length; i++)
+			for (var i = 0; i < Arguments.Length; i++)
 			{
 				if (Arguments[i].Equals(other.Arguments[i]) == false)
 				{
@@ -133,56 +182,14 @@ namespace Castle.DynamicProxy.Generators
 			return true;
 		}
 
-		public Type[] Arguments
-		{
-			get { return arguments; }
-		}
-
-		public override bool Equals(object obj)
-		{
-			if (ReferenceEquals(null, obj))
-			{
-				return false;
-			}
-			if (ReferenceEquals(this, obj))
-			{
-				return true;
-			}
-			if (obj.GetType() != typeof(MetaProperty))
-			{
-				return false;
-			}
-			return Equals((MetaProperty) obj);
-		}
-
-		public override int GetHashCode()
-		{
-			unchecked
-			{
-				return ((GetMethod != null ? GetMethod.GetHashCode() : 0) * 397) ^ (SetMethod != null ? SetMethod.GetHashCode() : 0);
-			}
-		}
-
-		public void BuildPropertyEmitter(ClassEmitter classEmitter)
-		{
-			if (emitter != null)
-				throw new InvalidOperationException("Emitter is already created. It is illegal to invoke this method twice.");
-
-			emitter = classEmitter.CreateProperty(name, attributes, type, arguments);
-			foreach (var attribute in customAttributes)
-			{
-				emitter.DefineCustomAttribute(attribute);
-			}
-		}
-
 		internal override void SwitchToExplicitImplementation()
 		{
 			name = string.Format("{0}.{1}", sourceType.Name, name);
-			if(setter!=null)
+			if (setter != null)
 			{
 				setter.SwitchToExplicitImplementation();
 			}
-			if(getter!=null)
+			if (getter != null)
 			{
 				getter.SwitchToExplicitImplementation();
 			}

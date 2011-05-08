@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Xml.Serialization;
+
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
@@ -37,6 +38,42 @@ namespace Castle.DynamicProxy.Generators
 			return ObtainProxyType(cacheKey, GenerateType);
 		}
 
+		protected virtual IEnumerable<Type> GetTypeImplementerMapping(out IEnumerable<ITypeContributor> contributors,
+		                                                              INamingScope namingScope)
+		{
+			var methodsToSkip = new List<MethodInfo>();
+			var proxyInstance = new ClassProxyInstanceContributor(targetType, methodsToSkip, Type.EmptyTypes,
+			                                                      ProxyTypeConstants.ClassWithTarget);
+			var proxyTarget = new DelegateProxyTargetContributor(targetType, namingScope) { Logger = Logger };
+			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
+
+			// Order of interface precedence:
+			// 1. first target, target is not an interface so we do nothing
+			// 2. then mixins - we support none so we do nothing
+			// 3. then additional interfaces - we support none so we do nothing
+#if !SILVERLIGHT
+			// 4. plus special interfaces
+			if (targetType.IsSerializable)
+			{
+				AddMappingForISerializable(typeImplementerMapping, proxyInstance);
+			}
+#endif
+			AddMappingNoCheck(typeof(IProxyTargetAccessor), proxyInstance, typeImplementerMapping);
+
+			contributors = new List<ITypeContributor>
+			{
+				proxyTarget,
+				proxyInstance
+			};
+			return typeImplementerMapping.Keys;
+		}
+
+		private FieldReference CreateTargetField(ClassEmitter emitter)
+		{
+			var targetField = emitter.CreateField("__target", targetType);
+			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(targetField);
+			return targetField;
+		}
 
 		private Type GenerateType(string name, INamingScope namingScope)
 		{
@@ -51,7 +88,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 			ProxyGenerationOptions.Hook.MethodsInspected();
 
-			var emitter = BuildClassEmitter(name, typeof (object), implementedInterfaces);
+			var emitter = BuildClassEmitter(name, typeof(object), implementedInterfaces);
 
 			CreateFields(emitter);
 			CreateTypeAttributes(emitter);
@@ -60,7 +97,7 @@ namespace Castle.DynamicProxy.Generators
 			var cctor = GenerateStaticConstructor(emitter);
 
 			var targetField = CreateTargetField(emitter);
-			var constructorArguments = new List<FieldReference> {targetField};
+			var constructorArguments = new List<FieldReference> { targetField };
 
 			foreach (var contributor in contributors)
 			{
@@ -87,44 +124,6 @@ namespace Castle.DynamicProxy.Generators
 			var proxyType = emitter.BuildType();
 			InitializeStaticFields(proxyType);
 			return proxyType;
-		}
-
-		protected virtual IEnumerable<Type> GetTypeImplementerMapping(out IEnumerable<ITypeContributor> contributors,
-		                                                              INamingScope namingScope)
-		{
-			var methodsToSkip = new List<MethodInfo>();
-			var proxyInstance = new ClassProxyInstanceContributor(targetType, methodsToSkip, Type.EmptyTypes,
-			                                                      ProxyTypeConstants.ClassWithTarget);
-			var proxyTarget = new DelegateProxyTargetContributor(targetType, namingScope) {Logger = Logger};
-			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
-
-			// Order of interface precedence:
-			// 1. first target, target is not an interface so we do nothing
-			// 2. then mixins - we support none so we do nothing
-			// 3. then additional interfaces - we support none so we do nothing
-#if !SILVERLIGHT
-			// 4. plus special interfaces
-			if (targetType.IsSerializable)
-			{
-				AddMappingForISerializable(typeImplementerMapping, proxyInstance);
-			}
-#endif
-			AddMappingNoCheck(typeof (IProxyTargetAccessor), proxyInstance, typeImplementerMapping);
-
-			contributors = new List<ITypeContributor>
-			               	{
-			               		proxyTarget,
-			               		proxyInstance
-			               	};
-			return typeImplementerMapping.Keys;
-		}
-
-
-		private FieldReference CreateTargetField(ClassEmitter emitter)
-		{
-			var targetField = emitter.CreateField("__target", targetType);
-			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(targetField);
-			return targetField;
 		}
 	}
 }

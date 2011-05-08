@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,13 +22,13 @@ namespace Castle.DynamicProxy.Contributors
 
 	public class MinimialisticMethodGenerator : MethodGenerator
 	{
-
 		public MinimialisticMethodGenerator(MetaMethod method, OverrideMethodDelegate overrideMethod)
 			: base(method, overrideMethod)
 		{
 		}
 
-		protected override MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
+		protected override MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class,
+		                                                        ProxyGenerationOptions options, INamingScope namingScope)
 		{
 			InitOutParameters(emitter, MethodToOverride.GetParameters());
 
@@ -46,7 +46,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		private void InitOutParameters(MethodEmitter emitter, ParameterInfo[] parameters)
 		{
-			for (int index = 0; index < parameters.Length; index++)
+			for (var index = 0; index < parameters.Length; index++)
 			{
 				var parameter = parameters[index];
 				if (parameter.IsOut)

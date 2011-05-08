@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@ namespace Castle.DynamicProxy.Generators
 
 	public static class GeneratorUtil
 	{
-		public static void CopyOutAndRefParameters(TypeReference[] dereferencedArguments, LocalReference invocation, MethodInfo method, MethodEmitter emitter)
+		public static void CopyOutAndRefParameters(TypeReference[] dereferencedArguments, LocalReference invocation,
+		                                           MethodInfo method, MethodEmitter emitter)
 		{
 			var parameters = method.GetParameters();
 			if (!ArgumentsUtil.IsAnyByRef(parameters))
@@ -32,17 +33,15 @@ namespace Castle.DynamicProxy.Generators
 
 			var arguments = StoreInvocationArgumentsInLocal(emitter, invocation);
 
-			for (int i = 0; i < parameters.Length; i++)
+			for (var i = 0; i < parameters.Length; i++)
 			{
-				if (!parameters[i].ParameterType.IsByRef) continue;
+				if (!parameters[i].ParameterType.IsByRef)
+				{
+					continue;
+				}
 
 				emitter.CodeBuilder.AddStatement(AssignArgument(dereferencedArguments, i, arguments));
 			}
-		}
-
-		private static AssignStatement AssignArgument(TypeReference[] dereferencedArguments, int i, LocalReference invocationArgs)
-		{
-			return new AssignStatement(dereferencedArguments[i], Argument(i, invocationArgs, dereferencedArguments));
 		}
 
 		private static ConvertExpression Argument(int i, LocalReference invocationArgs, TypeReference[] arguments)
@@ -50,16 +49,22 @@ namespace Castle.DynamicProxy.Generators
 			return new ConvertExpression(arguments[i].Type, new LoadRefArrayElementExpression(i, invocationArgs));
 		}
 
-		private static LocalReference StoreInvocationArgumentsInLocal(MethodEmitter emitter, LocalReference invocation)
+		private static AssignStatement AssignArgument(TypeReference[] dereferencedArguments, int i,
+		                                              LocalReference invocationArgs)
 		{
-			var invocationArgs = emitter.CodeBuilder.DeclareLocal(typeof(object[]));
-			emitter.CodeBuilder.AddStatement(GetArguments(invocationArgs, invocation));
-			return invocationArgs;
+			return new AssignStatement(dereferencedArguments[i], Argument(i, invocationArgs, dereferencedArguments));
 		}
 
 		private static AssignStatement GetArguments(LocalReference invocationArgs, LocalReference invocation)
 		{
 			return new AssignStatement(invocationArgs, new MethodInvocationExpression(invocation, InvocationMethods.GetArguments));
+		}
+
+		private static LocalReference StoreInvocationArgumentsInLocal(MethodEmitter emitter, LocalReference invocation)
+		{
+			var invocationArgs = emitter.CodeBuilder.DeclareLocal(typeof(object[]));
+			emitter.CodeBuilder.AddStatement(GetArguments(invocationArgs, invocation));
+			return invocationArgs;
 		}
 	}
 }

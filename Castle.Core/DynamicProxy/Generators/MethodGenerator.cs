@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,14 +21,8 @@ namespace Castle.DynamicProxy.Generators
 
 	public abstract class MethodGenerator : IGenerator<MethodEmitter>
 	{
-		protected MethodInfo MethodToOverride
-		{
-			get { return method.Method; }
-		}
-		protected MethodInfo MethodOnTarget
-		{
-			get { return method.MethodOnTarget; }
-		}
+		private readonly MetaMethod method;
+		private readonly OverrideMethodDelegate overrideMethod;
 
 		protected MethodGenerator(MetaMethod method, OverrideMethodDelegate overrideMethod)
 		{
@@ -36,8 +30,18 @@ namespace Castle.DynamicProxy.Generators
 			this.overrideMethod = overrideMethod;
 		}
 
-		private readonly MetaMethod method;
-		private readonly OverrideMethodDelegate overrideMethod;
+		protected MethodInfo MethodOnTarget
+		{
+			get { return method.MethodOnTarget; }
+		}
+
+		protected MethodInfo MethodToOverride
+		{
+			get { return method.Method; }
+		}
+
+		protected abstract MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class,
+		                                                        ProxyGenerationOptions options, INamingScope namingScope);
 
 		public MethodEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
 		{
@@ -51,7 +55,5 @@ namespace Castle.DynamicProxy.Generators
 
 			return proxiedMethod;
 		}
-
-		protected abstract MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope);
 	}
 }

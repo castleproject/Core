@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,26 +16,28 @@ namespace Castle.DynamicProxy
 {
 #if !SILVERLIGHT
 	/// <summary>
-	/// ProxyBuilder that persists the generated type.
+	///   ProxyBuilder that persists the generated type.
 	/// </summary>
 	/// <remarks>
-	/// The saved assembly contains just the last generated type.
+	///   The saved assembly contains just the last generated type.
 	/// </remarks>
 	public class PersistentProxyBuilder : DefaultProxyBuilder
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="PersistentProxyBuilder"/> class.
+		///   Initializes a new instance of the <see cref = "PersistentProxyBuilder" /> class.
 		/// </summary>
 		public PersistentProxyBuilder() : base(new ModuleScope(true))
 		{
 		}
 
 		/// <summary>
-		/// Saves the generated assembly to a physical file. Note that this renders the <see cref="PersistentProxyBuilder"/> unusable.
+		///   Saves the generated assembly to a physical file. Note that this renders the <see cref = "PersistentProxyBuilder" /> unusable.
 		/// </summary>
 		/// <returns>The path of the generated assembly file, or null if no assembly has been generated.</returns>
-		/// <remarks>This method does not support saving multiple files. If both a signed and an unsigned module have been generated, use the 
-		/// respective methods of the <see cref="ModuleScope"/>.</remarks>
+		/// <remarks>
+		///   This method does not support saving multiple files. If both a signed and an unsigned module have been generated, use the 
+		///   respective methods of the <see cref = "ModuleScope" />.
+		/// </remarks>
 		public string SaveAssembly()
 		{
 			return ModuleScope.SaveAssembly();

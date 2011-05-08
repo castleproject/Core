@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #if !SILVERLIGHT
+
 namespace Castle.DynamicProxy.Tokens
 {
 	using System;
@@ -28,4 +30,5 @@ namespace Castle.DynamicProxy.Tokens
 			typeof(FormatterServices).GetMethod("GetSerializableMembers", new[] { typeof(Type) });
 	}
 }
+
 #endif

@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy
 			             "proxiedMethod.DeclaringType.IsAssignableFrom(type)");
 			using (var locker = @lock.ForReadingUpgradeable())
 			{
-				MethodInfo methodOnTarget = GetFromCache(proxiedMethod, type);
+				var methodOnTarget = GetFromCache(proxiedMethod, type);
 				if (methodOnTarget != null)
 				{
 					return methodOnTarget;
@@ -65,8 +65,15 @@ namespace Castle.DynamicProxy
 				methodOnTarget = ObtainMethod(proxiedMethod, type);
 				PutToCache(proxiedMethod, type, methodOnTarget);
 				return methodOnTarget;
-
 			}
+		}
+
+		private static MethodInfo GetFromCache(MethodInfo methodInfo, Type type)
+		{
+			var key = new KeyValuePair<MethodInfo, Type>(methodInfo, type);
+			MethodInfo method;
+			cache.TryGetValue(key, out method);
+			return method;
 		}
 
 		private static MethodInfo ObtainMethod(MethodInfo proxiedMethod, Type type)
@@ -77,12 +84,12 @@ namespace Castle.DynamicProxy
 				genericArguments = proxiedMethod.GetGenericArguments();
 				proxiedMethod = proxiedMethod.GetGenericMethodDefinition();
 			}
-			Type declaringType = proxiedMethod.DeclaringType;
+			var declaringType = proxiedMethod.DeclaringType;
 			MethodInfo methodOnTarget = null;
 			if (declaringType.IsInterface)
 			{
 				var mapping = type.GetInterfaceMap(declaringType);
-				int index = Array.IndexOf(mapping.InterfaceMethods, proxiedMethod);
+				var index = Array.IndexOf(mapping.InterfaceMethods, proxiedMethod);
 				Debug.Assert(index != -1);
 				methodOnTarget = mapping.TargetMethods[index];
 			}
@@ -92,13 +99,12 @@ namespace Castle.DynamicProxy
 				var methods = MethodFinder.GetAllInstanceMethods(type, BindingFlags.Public | BindingFlags.NonPublic);
 				foreach (var method in methods)
 				{
-
 					if (MethodSignatureComparer.Instance.Equals(method.GetBaseDefinition(), proxiedMethod))
 					{
 						methodOnTarget = method;
 						break;
 					}
-				}	
+				}
 			}
 			if (methodOnTarget == null)
 			{
@@ -118,14 +124,6 @@ namespace Castle.DynamicProxy
 		{
 			var key = new KeyValuePair<MethodInfo, Type>(methodInfo, type);
 			cache.Add(key, value);
-		}
-
-		private static MethodInfo GetFromCache(MethodInfo methodInfo, Type type)
-		{
-			var key = new KeyValuePair<MethodInfo, Type>(methodInfo, type);
-			MethodInfo method;
-			cache.TryGetValue(key, out method);
-			return method;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #if !SILVERLIGHT
+
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -34,9 +36,8 @@ namespace Castle.DynamicProxy
 
 		protected RemotableInvocation(SerializationInfo info, StreamingContext context)
 		{
-			parent = (IInvocation) info.GetValue("invocation", typeof (IInvocation));
+			parent = (IInvocation)info.GetValue("invocation", typeof(IInvocation));
 		}
-
 
 		public void SetArgumentValue(int index, object value)
 		{
@@ -54,7 +55,6 @@ namespace Castle.DynamicProxy
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <returns></returns>
 		public void Proceed()
@@ -83,7 +83,6 @@ namespace Castle.DynamicProxy
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		public MethodInfo Method
 		{
@@ -96,8 +95,8 @@ namespace Castle.DynamicProxy
 		}
 
 		/// <summary>
-		/// For interface proxies, this will point to the
-		/// <see cref="MethodInfo"/> on the target class
+		///   For interface proxies, this will point to the
+		///   <see cref = "MethodInfo" /> on the target class
 		/// </summary>
 		public MethodInfo MethodInvocationTarget
 		{
@@ -120,9 +119,10 @@ namespace Castle.DynamicProxy
 #endif
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
-			info.SetType(typeof (RemotableInvocation));
+			info.SetType(typeof(RemotableInvocation));
 			info.AddValue("invocation", new RemotableInvocation(this));
 		}
 	}
 }
+
 #endif

@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,12 +39,12 @@ namespace Castle.DynamicProxy
 #else
 		[NonSerialized]
 #endif
-		private MixinData mixinData; // this is calculated dynamically on proxy type creation
+			private MixinData mixinData; // this is calculated dynamically on proxy type creation
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ProxyGenerationOptions"/> class.
+		///   Initializes a new instance of the <see cref = "ProxyGenerationOptions" /> class.
 		/// </summary>
-		/// <param name="hook">The hook.</param>
+		/// <param name = "hook">The hook.</param>
 		public ProxyGenerationOptions(IProxyGenerationHook hook)
 		{
 			BaseTypeForInterfaceProxy = typeof(object);
@@ -52,7 +52,7 @@ namespace Castle.DynamicProxy
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ProxyGenerationOptions"/> class.
+		///   Initializes a new instance of the <see cref = "ProxyGenerationOptions" /> class.
 		/// </summary>
 		public ProxyGenerationOptions()
 			: this(new AllMethodsHook())
@@ -79,7 +79,8 @@ namespace Castle.DynamicProxy
 				}
 				catch (ArgumentException ex)
 				{
-					throw new InvalidMixinConfigurationException("There is a problem with the mixins added to this ProxyGenerationOptions: " + ex.Message, ex);
+					throw new InvalidMixinConfigurationException(
+						"There is a problem with the mixins added to this ProxyGenerationOptions: " + ex.Message, ex);
 				}
 			}
 		}
@@ -103,7 +104,8 @@ namespace Castle.DynamicProxy
 
 		public Type BaseTypeForInterfaceProxy { get; set; }
 
-		[Obsolete("This property is obsolete and will be removed in future versions. Use AdditionalAttributes property instead. " + 
+		[Obsolete(
+			"This property is obsolete and will be removed in future versions. Use AdditionalAttributes property instead. " +
 			"You can use AttributeUtil class to simplify creating CustomAttributeBuilder instances for common cases.")]
 		public IList<Attribute> AttributesToAddToGeneratedTypes
 		{
@@ -120,7 +122,9 @@ namespace Castle.DynamicProxy
 			get
 			{
 				if (mixinData == null)
+				{
 					throw new InvalidOperationException("Call Initialize before accessing the MixinData property.");
+				}
 				return mixinData;
 			}
 		}
@@ -143,7 +147,10 @@ namespace Castle.DynamicProxy
 
 		public object[] MixinsAsArray()
 		{
-			if (mixins == null) return new object[0];
+			if (mixins == null)
+			{
+				return new object[0];
+			}
 
 			return mixins.ToArray();
 		}
@@ -155,19 +162,37 @@ namespace Castle.DynamicProxy
 
 		public override bool Equals(object obj)
 		{
-			if (ReferenceEquals(this, obj)) return true;
+			if (ReferenceEquals(this, obj))
+			{
+				return true;
+			}
 
 			var proxyGenerationOptions = obj as ProxyGenerationOptions;
-			if (ReferenceEquals(proxyGenerationOptions, null)) return false;
+			if (ReferenceEquals(proxyGenerationOptions, null))
+			{
+				return false;
+			}
 
 			// ensure initialization before accessing MixinData
 			Initialize();
 			proxyGenerationOptions.Initialize();
 
-			if (!Equals(Hook, proxyGenerationOptions.Hook)) return false;
-			if (!Equals(Selector == null, proxyGenerationOptions.Selector == null )) return false;
-			if (!Equals(MixinData, proxyGenerationOptions.MixinData)) return false;
-			if (!Equals(BaseTypeForInterfaceProxy, proxyGenerationOptions.BaseTypeForInterfaceProxy)) return false;
+			if (!Equals(Hook, proxyGenerationOptions.Hook))
+			{
+				return false;
+			}
+			if (!Equals(Selector == null, proxyGenerationOptions.Selector == null))
+			{
+				return false;
+			}
+			if (!Equals(MixinData, proxyGenerationOptions.MixinData))
+			{
+				return false;
+			}
+			if (!Equals(BaseTypeForInterfaceProxy, proxyGenerationOptions.BaseTypeForInterfaceProxy))
+			{
+				return false;
+			}
 			return true;
 		}
 
@@ -176,10 +201,10 @@ namespace Castle.DynamicProxy
 			// ensure initialization before accessing MixinData
 			Initialize();
 
-			int result = Hook != null ? Hook.GetType().GetHashCode() : 0;
-			result = 29 * result + (Selector != null ? 1 : 0);
-			result = 29 * result + MixinData.GetHashCode();
-			result = 29 * result + (BaseTypeForInterfaceProxy != null ? BaseTypeForInterfaceProxy.GetHashCode() : 0);
+			var result = Hook != null ? Hook.GetType().GetHashCode() : 0;
+			result = 29*result + (Selector != null ? 1 : 0);
+			result = 29*result + MixinData.GetHashCode();
+			result = 29*result + (BaseTypeForInterfaceProxy != null ? BaseTypeForInterfaceProxy.GetHashCode() : 0);
 			return result;
 		}
 	}

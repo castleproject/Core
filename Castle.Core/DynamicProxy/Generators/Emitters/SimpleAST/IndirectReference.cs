@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,8 +18,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection.Emit;
 
 	/// <summary>
-	/// Wraps a reference that is passed 
-	/// ByRef and provides indirect load/store support.
+	///   Wraps a reference that is passed 
+	///   ByRef and provides indirect load/store support.
 	/// </summary>
 	public class IndirectReference : TypeReference
 	{
@@ -32,24 +32,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 		}
 
-		// TODO: Better name
-		public static TypeReference WrapIfByRef(TypeReference reference)
+		public override void LoadAddressOfReference(ILGenerator gen)
 		{
-			return reference.Type.IsByRef ? new IndirectReference(reference) : reference;
+			// Load of owner reference takes care of this.
 		}
 
 		// TODO: Better name
-		public static TypeReference[] WrapIfByRef(TypeReference[] references)
-		{
-			TypeReference[] result = new TypeReference[references.Length];
-
-			for (int i = 0; i < references.Length; i++)
-			{
-				result[i] = WrapIfByRef(references[i]);
-			}
-
-			return result;
-		}
 
 		public override void LoadReference(ILGenerator gen)
 		{
@@ -61,9 +49,22 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			OpCodeUtil.EmitStoreIndirectOpCodeForType(gen, Type);
 		}
 
-		public override void LoadAddressOfReference(ILGenerator gen)
+		public static TypeReference WrapIfByRef(TypeReference reference)
 		{
-			// Load of owner reference takes care of this.
+			return reference.Type.IsByRef ? new IndirectReference(reference) : reference;
+		}
+
+		// TODO: Better name
+		public static TypeReference[] WrapIfByRef(TypeReference[] references)
+		{
+			var result = new TypeReference[references.Length];
+
+			for (var i = 0; i < references.Length; i++)
+			{
+				result[i] = WrapIfByRef(references[i]);
+			}
+
+			return result;
 		}
 	}
 }

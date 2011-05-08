@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System;
 	using System.Reflection;
 	using System.Reflection.Emit;
+
 	using Castle.DynamicProxy.Tokens;
 
 	public class PropertyEmitter : IMemberEmitter
@@ -28,20 +29,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		// private ParameterInfo[] indexParameters;
 
-		private delegate PropertyBuilder DefineProperty_Clr2_0(
-			string name, PropertyAttributes attributes, Type propertyType, Type[] parameters);
-
-		public delegate PropertyBuilder DefineProperty_Clr_2_0_SP1(string name,
-		                                                           PropertyAttributes attributes,
-		                                                           CallingConventions callingConvention,
-		                                                           Type returnType,
-		                                                           Type[] returnTypeRequiredCustomModifiers,
-		                                                           Type[] returnTypeOptionalCustomModifiers,
-		                                                           Type[] parameterTypes,
-		                                                           Type[][] parameterTypeRequiredCustomModifiers,
-		                                                           Type[][] parameterTypeOptionalCustomModifiers);
-
-		public PropertyEmitter(AbstractTypeEmitter parentTypeEmitter, string name, PropertyAttributes attributes, Type propertyType, Type[] arguments)
+		public PropertyEmitter(AbstractTypeEmitter parentTypeEmitter, string name, PropertyAttributes attributes,
+		                       Type propertyType, Type[] arguments)
 		{
 			this.parentTypeEmitter = parentTypeEmitter;
 
@@ -58,17 +47,28 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 			else
 			{
-				DefineProperty_Clr_2_0_SP1 newDefinedProperty = (DefineProperty_Clr_2_0_SP1)
-				                                                Delegate.CreateDelegate(typeof (DefineProperty_Clr_2_0_SP1),
-				                                                                        parentTypeEmitter.TypeBuilder,
-				                                                                        TypeBuilderMethods.DefineProperty);
+				var newDefinedProperty = (DefineProperty_Clr_2_0_SP1)
+				                         Delegate.CreateDelegate(typeof(DefineProperty_Clr_2_0_SP1),
+				                                                 parentTypeEmitter.TypeBuilder,
+				                                                 TypeBuilderMethods.DefineProperty);
 				builder = newDefinedProperty(
 					name, attributes, CallingConventions.HasThis, propertyType,
 					null, null, arguments, null, null);
 			}
 		}
 
-		public MethodEmitter CreateGetMethod(string name, MethodAttributes attrs, MethodInfo methodToOverride, params Type[] parameters)
+		public MemberInfo Member
+		{
+			get { return null; }
+		}
+
+		public Type ReturnType
+		{
+			get { return builder.PropertyType; }
+		}
+
+		public MethodEmitter CreateGetMethod(string name, MethodAttributes attrs, MethodInfo methodToOverride,
+		                                     params Type[] parameters)
 		{
 			if (getMethod != null)
 			{
@@ -84,7 +84,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return CreateGetMethod(name, attributes, methodToOverride, Type.EmptyTypes);
 		}
 
-		public MethodEmitter CreateSetMethod(string name, MethodAttributes attrs, MethodInfo methodToOverride, params Type[] parameters)
+		public MethodEmitter CreateSetMethod(string name, MethodAttributes attrs, MethodInfo methodToOverride,
+		                                     params Type[] parameters)
 		{
 			if (setMethod != null)
 			{
@@ -101,14 +102,22 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return method;
 		}
 
-		public MemberInfo Member
+		public void DefineCustomAttribute(CustomAttributeBuilder attribute)
 		{
-			get { return null; }
+			builder.SetCustomAttribute(attribute);
 		}
 
-		public Type ReturnType
+		public void EnsureValidCodeBlock()
 		{
-			get { return builder.PropertyType; }
+			if (setMethod != null)
+			{
+				setMethod.EnsureValidCodeBlock();
+			}
+
+			if (getMethod != null)
+			{
+				getMethod.EnsureValidCodeBlock();
+			}
 		}
 
 		public void Generate()
@@ -126,22 +135,17 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public void EnsureValidCodeBlock()
-		{
-			if (setMethod != null)
-			{
-				setMethod.EnsureValidCodeBlock();
-			}
+		public delegate PropertyBuilder DefineProperty_Clr_2_0_SP1(string name,
+		                                                           PropertyAttributes attributes,
+		                                                           CallingConventions callingConvention,
+		                                                           Type returnType,
+		                                                           Type[] returnTypeRequiredCustomModifiers,
+		                                                           Type[] returnTypeOptionalCustomModifiers,
+		                                                           Type[] parameterTypes,
+		                                                           Type[][] parameterTypeRequiredCustomModifiers,
+		                                                           Type[][] parameterTypeOptionalCustomModifiers);
 
-			if (getMethod != null)
-			{
-				getMethod.EnsureValidCodeBlock();
-			}
-		}
-
-		public void DefineCustomAttribute(CustomAttributeBuilder attribute)
-		{
-			builder.SetCustomAttribute(attribute);
-		}
+		private delegate PropertyBuilder DefineProperty_Clr2_0(
+			string name, PropertyAttributes attributes, Type propertyType, Type[] parameters);
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,17 +23,17 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 		}
 
+		public override void LoadAddressOfReference(ILGenerator gen)
+		{
+			throw new NotSupportedException();
+		}
+
 		public override void LoadReference(ILGenerator gen)
 		{
 		}
 
 		public override void StoreReference(ILGenerator gen)
 		{
-		}
-
-		public override void LoadAddressOfReference(ILGenerator gen)
-		{
-			throw new NotSupportedException();
 		}
 	}
 }

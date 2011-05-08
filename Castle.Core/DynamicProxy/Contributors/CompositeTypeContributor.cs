@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,14 +22,15 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 
-	public abstract class CompositeTypeContributor: ITypeContributor
+	public abstract class CompositeTypeContributor : ITypeContributor
 	{
 		protected readonly INamingScope namingScope;
+
 		protected readonly ICollection<Type> interfaces =
 #if SL3
 		new List<Type>();
 #else
-		new HashSet<Type>();
+			new HashSet<Type>();
 #endif
 		private ILogger logger = NullLogger.Instance;
 		private readonly ICollection<MetaProperty> properties = new TypeElementCollection<MetaProperty>();
@@ -95,14 +96,14 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				ImplementEvent(@class, @event, options);
 			}
-
 		}
 
 		public void AddInterfaceToProxy(Type @interface)
 		{
 			Debug.Assert(@interface != null, "@interface == null", "Shouldn't be adding empty interfaces...");
 			Debug.Assert(@interface.IsInterface, "@interface.IsInterface", "Should be adding interfaces only...");
-			Debug.Assert(!interfaces.Contains(@interface), "!interfaces.ContainsKey(@interface)", "Shouldn't be adding same interface twice...");
+			Debug.Assert(!interfaces.Contains(@interface), "!interfaces.ContainsKey(@interface)",
+			             "Shouldn't be adding same interface twice...");
 
 			interfaces.Add(@interface);
 		}
@@ -112,7 +113,6 @@ namespace Castle.DynamicProxy.Contributors
 			@event.BuildEventEmitter(emitter);
 			ImplementMethod(@event.Adder, emitter, options, @event.Emitter.CreateAddMethod);
 			ImplementMethod(@event.Remover, emitter, options, @event.Emitter.CreateRemoveMethod);
-
 		}
 
 		private void ImplementProperty(ClassEmitter emitter, MetaProperty property, ProxyGenerationOptions options)
@@ -126,21 +126,24 @@ namespace Castle.DynamicProxy.Contributors
 			if (property.CanWrite)
 			{
 				ImplementMethod(property.Setter, emitter, options, property.Emitter.CreateSetMethod);
-
 			}
 		}
 
 		protected abstract MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
-		                                           ProxyGenerationOptions options, OverrideMethodDelegate overrideMethod);
+		                                                      ProxyGenerationOptions options,
+		                                                      OverrideMethodDelegate overrideMethod);
 
 		private void ImplementMethod(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options,
-		                                        OverrideMethodDelegate overrideMethod)
+		                             OverrideMethodDelegate overrideMethod)
 		{
 			{
 				var generator = GetMethodGenerator(method, @class, options, overrideMethod);
-				if (generator == null) return;
+				if (generator == null)
+				{
+					return;
+				}
 				var proxyMethod = generator.Generate(@class, options, namingScope);
-				foreach (var attribute in AttributeUtil.GetNonInheritableAttributes(method.Method))
+				foreach (var attribute in method.Method.GetNonInheritableAttributes())
 				{
 					proxyMethod.DefineCustomAttribute(attribute);
 				}

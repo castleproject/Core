@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.InteropServices;
-    using System.Security.Permissions;
+	using System.Security.Permissions;
 
 	public static class AttributesToAvoidReplicating
 	{
@@ -37,12 +37,14 @@ namespace Castle.DynamicProxy.Generators
 		public static void Add(Type attribute)
 		{
 			if (attributes.Contains(attribute) == false)
+			{
 				attributes.Add(attribute);
+			}
 		}
 
 		public static void Add<T>()
 		{
-			Add(typeof (T));
+			Add(typeof(T));
 		}
 
 		public static bool Contains(Type type)

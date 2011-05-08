@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -61,7 +61,9 @@ namespace Castle.DynamicProxy.Contributors
 		                                                      OverrideMethodDelegate overrideMethod)
 		{
 			if (methodsToSkip.Contains(method.Method))
+			{
 				return null;
+			}
 
 			if (!method.Proxyable)
 			{
@@ -113,7 +115,9 @@ namespace Castle.DynamicProxy.Contributors
 			var callBackMethod = emitter.CreateMethod(namingScope.GetUniqueName(methodInfo.Name + "_callback"), targetMethod);
 
 			if (targetMethod.IsGenericMethod)
+			{
 				targetMethod = targetMethod.MakeGenericMethod(callBackMethod.GenericTypeParams);
+			}
 
 			var exps = new Expression[callBackMethod.Arguments.Length];
 			for (var i = 0; i < callBackMethod.Arguments.Length; i++)
@@ -147,11 +151,11 @@ namespace Castle.DynamicProxy.Contributors
 				.Generate(@class, options, namingScope)
 				.BuildType();
 			return new MethodWithInvocationGenerator(method,
-			                                             @class.GetField("__interceptors"),
-			                                             invocation,
-			                                             (c, m) => new TypeTokenExpression(targetType),
-			                                             overrideMethod,
-			                                             contributor);
+			                                         @class.GetField("__interceptors"),
+			                                         invocation,
+			                                         (c, m) => new TypeTokenExpression(targetType),
+			                                         overrideMethod,
+			                                         contributor);
 		}
 
 		private IInvocationCreationContributor GetContributor(Type @delegate, MetaMethod method)
@@ -178,7 +182,9 @@ namespace Castle.DynamicProxy.Contributors
 
 			var type = scope.GetFromCache(key);
 			if (type != null)
+			{
 				return type;
+			}
 
 			type = new DelegateTypeGenerator(method, targetType)
 				.Generate(@class, options, namingScope)

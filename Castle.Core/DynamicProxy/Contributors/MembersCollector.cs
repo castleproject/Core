@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Contributors
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
+
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
 
@@ -35,7 +36,7 @@ namespace Castle.DynamicProxy.Contributors
 		private readonly IDictionary<PropertyInfo, MetaProperty> properties = new Dictionary<PropertyInfo, MetaProperty>();
 		private readonly IDictionary<EventInfo, MetaEvent> events = new Dictionary<EventInfo, MetaEvent>();
 		private readonly IDictionary<MethodInfo, MetaMethod> methods = new Dictionary<MethodInfo, MetaMethod>();
-		
+
 		protected readonly Type type;
 
 		protected MembersCollector(Type type)
@@ -70,7 +71,7 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				throw new InvalidOperationException(
 					string.Format("Can't call 'CollectMembersToProxy' method twice. This usually signifies a bug in custom {0}.",
-					              typeof (ITypeContributor)));
+					              typeof(ITypeContributor)));
 			}
 			CollectProperties(hook);
 			CollectEvents(hook);
@@ -84,8 +85,8 @@ namespace Castle.DynamicProxy.Contributors
 
 		private void CollectProperties(IProxyGenerationHook hook)
 		{
-			PropertyInfo[] propertiesFound = type.GetProperties(Flags);
-			foreach (PropertyInfo property in propertiesFound)
+			var propertiesFound = type.GetProperties(Flags);
+			foreach (var property in propertiesFound)
 			{
 				AddProperty(property, hook);
 			}
@@ -93,8 +94,8 @@ namespace Castle.DynamicProxy.Contributors
 
 		private void CollectEvents(IProxyGenerationHook hook)
 		{
-			EventInfo[] eventsFound = type.GetEvents(Flags);
-			foreach (EventInfo @event in eventsFound)
+			var eventsFound = type.GetEvents(Flags);
+			foreach (var @event in eventsFound)
 			{
 				AddEvent(@event, hook);
 			}
@@ -102,8 +103,8 @@ namespace Castle.DynamicProxy.Contributors
 
 		private void CollectMethods(IProxyGenerationHook hook)
 		{
-			MethodInfo[] methodsFound = MethodFinder.GetAllInstanceMethods(type, Flags);
-			foreach (MethodInfo method in methodsFound)
+			var methodsFound = MethodFinder.GetAllInstanceMethods(type, Flags);
+			foreach (var method in methodsFound)
 			{
 				AddMethod(method, hook, true);
 			}
@@ -116,22 +117,22 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (property.CanRead)
 			{
-				MethodInfo getMethod = property.GetGetMethod(true);
+				var getMethod = property.GetGetMethod(true);
 				getter = AddMethod(getMethod, hook, false);
 			}
 
 			if (property.CanWrite)
 			{
-				MethodInfo setMethod = property.GetSetMethod(true);
+				var setMethod = property.GetSetMethod(true);
 				setter = AddMethod(setMethod, hook, false);
 			}
 
-			if (setter==null && getter == null)
+			if (setter == null && getter == null)
 			{
 				return;
 			}
 
-			var nonInheritableAttributes = AttributeUtil.GetNonInheritableAttributes(property);
+			var nonInheritableAttributes = property.GetNonInheritableAttributes();
 			var arguments = property.GetIndexParameters();
 
 			properties[property] = new MetaProperty(property.Name,
@@ -145,8 +146,8 @@ namespace Castle.DynamicProxy.Contributors
 
 		private void AddEvent(EventInfo @event, IProxyGenerationHook hook)
 		{
-			MethodInfo addMethod = @event.GetAddMethod(true);
-			MethodInfo removeMethod = @event.GetRemoveMethod(true);
+			var addMethod = @event.GetAddMethod(true);
+			var removeMethod = @event.GetRemoveMethod(true);
 			MetaMethod adder = null;
 			MetaMethod remover = null;
 
@@ -160,10 +161,13 @@ namespace Castle.DynamicProxy.Contributors
 				remover = AddMethod(removeMethod, hook, false);
 			}
 
-			if (adder == null && remover == null) return;
+			if (adder == null && remover == null)
+			{
+				return;
+			}
 
 			events[@event] = new MetaEvent(@event.Name,
-												 @event.DeclaringType, @event.EventHandlerType, adder, remover, EventAttributes.None);
+			                               @event.DeclaringType, @event.EventHandlerType, adder, remover, EventAttributes.None);
 		}
 
 		private MetaMethod AddMethod(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
@@ -190,9 +194,9 @@ namespace Castle.DynamicProxy.Contributors
 		protected abstract MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone);
 
 		/// <summary>
-		/// Checks if the method is public or protected.
+		///   Checks if the method is public or protected.
 		/// </summary>
-		/// <param name="method"></param>
+		/// <param name = "method"></param>
 		/// <returns></returns>
 		protected bool IsAccessible(MethodBase method)
 		{
@@ -213,7 +217,7 @@ namespace Castle.DynamicProxy.Contributors
 				return true;
 			}
 #else
-			// Explicitly implemented interface method on class
+	// Explicitly implemented interface method on class
 			if (method.IsPrivate && method.IsFinal)
 			{
 				Logger.Debug(
@@ -225,23 +229,24 @@ namespace Castle.DynamicProxy.Contributors
 		}
 
 		/// <summary>
-		/// Performs some basic screening and invokes the <see cref="IProxyGenerationHook"/>
-		/// to select methods.
+		///   Performs some basic screening and invokes the <see cref = "IProxyGenerationHook" />
+		///   to select methods.
 		/// </summary>
-		/// <param name="method"></param>
-		/// <param name="onlyVirtuals"></param>
-		/// <param name="hook"></param>
+		/// <param name = "method"></param>
+		/// <param name = "onlyVirtuals"></param>
+		/// <param name = "hook"></param>
 		/// <returns></returns>
 		protected bool AcceptMethod(MethodInfo method, bool onlyVirtuals, IProxyGenerationHook hook)
 		{
 			// we can never intercept a sealed (final) method
 			if (method.IsFinal)
 			{
-				Logger.DebugFormat("Excluded sealed method {0} on {1} because it cannot be intercepted.", method.Name, method.DeclaringType.FullName);
+				Logger.DebugFormat("Excluded sealed method {0} on {1} because it cannot be intercepted.", method.Name,
+				                   method.DeclaringType.FullName);
 				return false;
 			}
 
-			bool isInternalsAndNotVisibleToDynamicProxy = InternalsHelper.IsInternal(method);
+			var isInternalsAndNotVisibleToDynamicProxy = InternalsHelper.IsInternal(method);
 			if (isInternalsAndNotVisibleToDynamicProxy)
 			{
 				isInternalsAndNotVisibleToDynamicProxy = InternalsHelper.IsInternalToDynamicProxy(method.DeclaringType.Assembly) ==
@@ -249,7 +254,9 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			if (isInternalsAndNotVisibleToDynamicProxy)
+			{
 				return false;
+			}
 
 			if (onlyVirtuals && !method.IsVirtual)
 			{
@@ -257,7 +264,8 @@ namespace Castle.DynamicProxy.Contributors
 				if (method.DeclaringType != typeof(MarshalByRefObject))
 #endif
 				{
-					Logger.DebugFormat("Excluded non-virtual method {0} on {1} because it cannot be intercepted.", method.Name, method.DeclaringType.FullName);
+					Logger.DebugFormat("Excluded non-virtual method {0} on {1} because it cannot be intercepted.", method.Name,
+					                   method.DeclaringType.FullName);
 					hook.NonProxyableMemberNotification(type, method);
 				}
 				return false;
@@ -265,8 +273,9 @@ namespace Castle.DynamicProxy.Contributors
 
 			//can only proxy methods that are public or protected (or internals that have already been checked above)
 			if ((method.IsPublic || method.IsFamily || method.IsAssembly || method.IsFamilyOrAssembly) == false)
+			{
 				return false;
-
+			}
 
 #if !SILVERLIGHT
 			if (method.DeclaringType == typeof(MarshalByRefObject))

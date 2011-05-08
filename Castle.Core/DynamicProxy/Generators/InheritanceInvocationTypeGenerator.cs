@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,22 +24,15 @@ namespace Castle.DynamicProxy.Generators
 	{
 		public static readonly Type BaseType = typeof(InheritanceInvocation);
 
-		public InheritanceInvocationTypeGenerator(Type targetType, MetaMethod method, MethodInfo callback, IInvocationCreationContributor contributor)
-			: base(targetType, method, callback, false,contributor)
+		public InheritanceInvocationTypeGenerator(Type targetType, MetaMethod method, MethodInfo callback,
+		                                          IInvocationCreationContributor contributor)
+			: base(targetType, method, callback, false, contributor)
 		{
 		}
 
-		protected override FieldReference GetTargetReference()
-		{
-			return new FieldReference(InvocationMethods.ProxyObject);
-		}
-
-		protected override Type GetBaseType()
-		{
-			return BaseType;
-		}
-
-		protected override ArgumentReference[] GetBaseCtorArguments(Type targetFieldType, ProxyGenerationOptions proxyGenerationOptions, out ConstructorInfo baseConstructor)
+		protected override ArgumentReference[] GetBaseCtorArguments(Type targetFieldType,
+		                                                            ProxyGenerationOptions proxyGenerationOptions,
+		                                                            out ConstructorInfo baseConstructor)
 		{
 			if (proxyGenerationOptions.Selector == null)
 			{
@@ -65,6 +58,16 @@ namespace Castle.DynamicProxy.Generators
 				new ArgumentReference(typeof(IInterceptorSelector)),
 				new ArgumentReference(typeof(IInterceptor[]).MakeByRefType())
 			};
+		}
+
+		protected override Type GetBaseType()
+		{
+			return BaseType;
+		}
+
+		protected override FieldReference GetTargetReference()
+		{
+			return new FieldReference(InvocationMethods.ProxyObject);
 		}
 	}
 }

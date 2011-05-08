@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,12 +18,13 @@ namespace Castle.DynamicProxy.Generators
 
 	public class MetaType
 	{
-		private readonly ICollection<MetaProperty> properties = new TypeElementCollection<MetaProperty>();
 		private readonly ICollection<MetaEvent> events = new TypeElementCollection<MetaEvent>();
 		private readonly ICollection<MetaMethod> methods = new TypeElementCollection<MetaMethod>();
+		private readonly ICollection<MetaProperty> properties = new TypeElementCollection<MetaProperty>();
 
-		public MetaType()
+		public IEnumerable<MetaEvent> Events
 		{
+			get { return events; }
 		}
 
 		public IEnumerable<MetaMethod> Methods
@@ -37,19 +38,14 @@ namespace Castle.DynamicProxy.Generators
 			get { return properties; }
 		}
 
-		public IEnumerable<MetaEvent> Events
+		public void AddEvent(MetaEvent @event)
 		{
-			get { return events; }
+			events.Add(@event);
 		}
 
 		public void AddMethod(MetaMethod method)
 		{
 			methods.Add(method);
-		}
-
-		public void AddEvent(MetaEvent @event)
-		{
-			events.Add(@event);
 		}
 
 		public void AddProperty(MetaProperty property)

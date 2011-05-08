@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,17 +18,18 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	public class BindDelegateExpression:Expression
+	public class BindDelegateExpression : Expression
 	{
 		private readonly ConstructorInfo delegateCtor;
-		private readonly Expression owner;
 		private readonly MethodInfo methodToBindTo;
+		private readonly Expression owner;
 
-		public BindDelegateExpression(Type @delegate, Expression owner, MethodInfo methodToBindTo, GenericTypeParameterBuilder[] genericTypeParams)
+		public BindDelegateExpression(Type @delegate, Expression owner, MethodInfo methodToBindTo,
+		                              GenericTypeParameterBuilder[] genericTypeParams)
 		{
 			delegateCtor = @delegate.GetConstructors()[0];
 			this.methodToBindTo = methodToBindTo;
-			if(@delegate.IsGenericTypeDefinition)
+			if (@delegate.IsGenericTypeDefinition)
 			{
 				var closedDelegate = @delegate.MakeGenericType(genericTypeParams);
 				delegateCtor = TypeBuilder.GetConstructor(closedDelegate, delegateCtor);
@@ -50,7 +51,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				gen.Emit(OpCodes.Ldvirtftn, methodToBindTo);
 			}
 			gen.Emit(OpCodes.Newobj, delegateCtor);
-
 		}
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	public class MethodInvocationExpression : Expression
 	{
-		protected readonly MethodInfo method;
 		protected readonly Expression[] args;
+		protected readonly MethodInfo method;
 		protected readonly Reference owner;
 
 		public MethodInvocationExpression(MethodInfo method, params Expression[] args) :
@@ -51,7 +51,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			ArgumentsUtil.EmitLoadOwnerAndReference(owner, gen);
 
-			foreach (Expression exp in args)
+			foreach (var exp in args)
 			{
 				exp.Emit(member, gen);
 			}
