@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy.Tests.Interceptors
 {
 	using System;
-	using System.Reflection;
 
 	public class KeepDataInterceptor : IInterceptor
 	{
@@ -29,14 +28,14 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 		public void Intercept(IInvocation invocation)
 		{
 			this.invocation = invocation;
-			MethodInfo concreteMethod = invocation.GetConcreteMethod();
+			var concreteMethod = invocation.GetConcreteMethod();
 
 			if (invocation.MethodInvocationTarget != null)
 			{
 				invocation.Proceed();
 			}
 			else if (concreteMethod.ReturnType.IsValueType && !concreteMethod.ReturnType.Equals(typeof(void)))
-			// ensure valid return value
+				// ensure valid return value
 			{
 				invocation.ReturnValue = Activator.CreateInstance(concreteMethod.ReturnType);
 			}

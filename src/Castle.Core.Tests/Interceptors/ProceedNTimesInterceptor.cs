@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Interceptors
+namespace Castle.DynamicProxy.Tests.Interceptors
 {
-	using Castle.DynamicProxy;
-
-	public class ThrowingInterceptor : IInterceptor
+	public class ProceedNTimesInterceptor : IInterceptor
 	{
+		private readonly int retries;
+
+		public ProceedNTimesInterceptor(int retries)
+		{
+			this.retries = retries;
+		}
+
 		public void Intercept(IInvocation invocation)
 		{
-			throw new ThrowingInterceptorException("Because I feel like it");
+			for (var i = 0; i < retries; i++)
+			{
+				try
+				{
+					invocation.Proceed();
+				}
+				catch
+				{
+					// gulp
+				}
+			}
 		}
 	}
 }
