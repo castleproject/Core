@@ -82,14 +82,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				try
 				{
 					var attributes = originalGenericArguments[i].GenericParameterAttributes;
-					var types = originalGenericArguments[i].GetGenericParameterConstraints();
-
 					newGenericParameters[i].SetGenericParameterAttributes(attributes);
+					var types = AdjustGenericConstraints(methodToCopyGenericsFrom, newGenericParameters, originalGenericArguments,
+					                                                   originalGenericArguments[i].GetGenericParameterConstraints());
 
 #if SILVERLIGHT
-						Type[] interfacesConstraints = Castle.Core.Extensions.SilverlightExtensions.FindAll(types, delegate(Type type) { return type.IsInterface; });
+					Type[] interfacesConstraints = Castle.Core.Extensions.SilverlightExtensions.FindAll(types, delegate(Type type) { return type.IsInterface; });
 
-						Type baseClassConstraint = Castle.DynamicProxy.SilverlightExtensions.Extensions.Find(types, delegate(Type type) { return type.IsClass; });
+					Type baseClassConstraint = Castle.DynamicProxy.SilverlightExtensions.Extensions.Find(types, delegate(Type type) { return type.IsClass; });
 #else
 					var interfacesConstraints = Array.FindAll(types, type => type.IsInterface);
 					var baseClassConstraint = Array.Find(types, type => type.IsClass);
@@ -97,19 +97,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 					if (interfacesConstraints.Length != 0)
 					{
-						for (int j = 0; j < interfacesConstraints.Length; ++j)
-						{
-							interfacesConstraints[j] =
-								AdjustConstraintToNewGenericParameters(interfacesConstraints[j], methodToCopyGenericsFrom,
-								                                       originalGenericArguments, newGenericParameters);
-						}
 						newGenericParameters[i].SetInterfaceConstraints(interfacesConstraints);
 					}
 
 					if (baseClassConstraint != null)
 					{
-						baseClassConstraint = AdjustConstraintToNewGenericParameters(baseClassConstraint, methodToCopyGenericsFrom,
-						                                                             originalGenericArguments, newGenericParameters);
 						newGenericParameters[i].SetBaseTypeConstraint(baseClassConstraint);
 					}
 					CopyNonInheritableAttributes(newGenericParameters[i], originalGenericArguments[i]);
@@ -127,9 +119,24 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return newGenericParameters;
 		}
 
+		private static Type[] AdjustGenericConstraints(MethodInfo methodToCopyGenericsFrom,
+		                                                             GenericTypeParameterBuilder[] newGenericParameters,
+		                                                             Type[] originalGenericArguments,
+		                                                             Type[] constraints)
+		{
+			for (var i = 0; i < constraints.Length; i++)
+			{
+				constraints[i] = AdjustConstraintToNewGenericParameters(constraints[i],
+				                                                        methodToCopyGenericsFrom,
+				                                                        originalGenericArguments,
+				                                                        newGenericParameters);
+			}
+			return constraints;
+		}
+
 		private static void CopyNonInheritableAttributes(GenericTypeParameterBuilder newGenericParameter, Type originalGenericArgument)
 		{
-			foreach (var attribute in AttributeUtil.GetNonInheritableAttributes(originalGenericArgument))
+			foreach (var attribute in originalGenericArgument.GetNonInheritableAttributes())
 			{
 				newGenericParameter.SetCustomAttribute(attribute);
 			}
