@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,8 +23,8 @@ namespace Castle.DynamicProxy.Contributors
 
 	public class InterfaceProxyTargetContributor : CompositeTypeContributor
 	{
-		private readonly Type proxyTargetType;
 		private readonly bool canChangeTarget;
+		private readonly Type proxyTargetType;
 
 		public InterfaceProxyTargetContributor(Type proxyTargetType, bool canChangeTarget, INamingScope namingScope)
 			: base(namingScope)
@@ -51,7 +51,9 @@ namespace Castle.DynamicProxy.Contributors
 			return new InterfaceMembersOnClassCollector(@interface, false, proxyTargetType.GetInterfaceMap(@interface));
 		}
 
-		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options, OverrideMethodDelegate overrideMethod)
+		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
+		                                                      ProxyGenerationOptions options,
+		                                                      OverrideMethodDelegate overrideMethod)
 		{
 			if (!method.Proxyable)
 			{
@@ -75,13 +77,12 @@ namespace Castle.DynamicProxy.Contributors
 			var scope = @class.ModuleScope;
 
 			Type[] invocationInterfaces;
-			if(canChangeTarget)
+			if (canChangeTarget)
 			{
 				invocationInterfaces = new[] { typeof(IInvocation), typeof(IChangeProxyTarget) };
 			}
 			else
 			{
-
 				invocationInterfaces = new[] { typeof(IInvocation) };
 			}
 

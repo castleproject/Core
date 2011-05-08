@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@ namespace Castle.DynamicProxy.Tokens
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators.Emitters;
-	
+
 #if !SILVERLIGHT
 	public static class TypeUtilMethods
 	{
-		public static readonly MethodInfo Sort = typeof(TypeUtil).GetMethod("Sort",BindingFlags.Public | BindingFlags.Static);
+		public static readonly MethodInfo Sort = typeof(TypeUtil).GetMethod("Sort", BindingFlags.Public | BindingFlags.Static);
 	}
 #endif
 }

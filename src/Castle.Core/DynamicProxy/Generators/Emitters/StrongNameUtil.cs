@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private static readonly bool canStrongNameAssembly;
 #endif
 		private static readonly object lockObject = new object();
-		
+
 #if !SILVERLIGHT
 #if DOTNET40
 		[SecuritySafeCritical]
@@ -50,35 +50,37 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		}
 #endif
 
-		public static bool IsAssemblySigned(Assembly assembly)
+		public static bool IsAssemblySigned(this Assembly assembly)
 		{
 			lock (lockObject)
 			{
 				if (signedAssemblyCache.ContainsKey(assembly) == false)
 				{
-					bool isSigned = ContainsPublicKey(assembly);
+					var isSigned = assembly.ContainsPublicKey();
 					signedAssemblyCache.Add(assembly, isSigned);
 				}
 				return signedAssemblyCache[assembly];
 			}
 		}
 
-		private static bool ContainsPublicKey(Assembly assembly)
+		private static bool ContainsPublicKey(this Assembly assembly)
 		{
 			// Pulled from a comment on http://www.flawlesscode.com/post/2008/08/Mocking-and-IOC-in-Silverlight-2-Castle-Project-and-Moq-ports.aspx
 			if (assembly.FullName != null)
+			{
 				return !assembly.FullName.Contains("PublicKeyToken=null");
+			}
 			return false;
 		}
 
 		public static bool IsAnyTypeFromUnsignedAssembly(IEnumerable<Type> types)
 		{
-			return types.Any(t => IsAssemblySigned(t.Assembly) == false);
+			return types.Any(t => t.Assembly.IsAssemblySigned() == false);
 		}
 
 		public static bool IsAnyTypeFromUnsignedAssembly(Type baseType, IEnumerable<Type> interfaces)
 		{
-			if (baseType != null && IsAssemblySigned(baseType.Assembly) == false)
+			if (baseType != null && baseType.Assembly.IsAssemblySigned() == false)
 			{
 				return true;
 			}

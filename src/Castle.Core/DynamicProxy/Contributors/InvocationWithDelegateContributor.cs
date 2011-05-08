@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,11 +26,12 @@ namespace Castle.DynamicProxy.Contributors
 	public class InvocationWithDelegateContributor : IInvocationCreationContributor
 	{
 		private readonly Type delegateType;
-		private readonly Type targetType;
 		private readonly MetaMethod method;
 		private readonly INamingScope namingScope;
+		private readonly Type targetType;
 
-		public InvocationWithDelegateContributor(Type delegateType, Type targetType,MetaMethod method, INamingScope namingScope)
+		public InvocationWithDelegateContributor(Type delegateType, Type targetType, MetaMethod method,
+		                                         INamingScope namingScope)
 		{
 			Debug.Assert(delegateType.IsGenericType == false, "delegateType.IsGenericType == false");
 			this.delegateType = delegateType;
@@ -49,17 +50,19 @@ namespace Castle.DynamicProxy.Contributors
 			return constructor;
 		}
 
-		public MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, Expression[] args, Reference targetField, MethodEmitter invokeMethodOnTarget)
+		public MethodInfo GetCallbackMethod()
+		{
+			return delegateType.GetMethod("Invoke");
+		}
+
+		public MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, Expression[] args,
+		                                                              Reference targetField,
+		                                                              MethodEmitter invokeMethodOnTarget)
 		{
 			var allArgs = GetAllArgs(args, targetField);
 			var @delegate = (Reference)invocation.GetField("delegate");
 
 			return new MethodInvocationExpression(@delegate, GetCallbackMethod(), allArgs);
-		}
-
-		public MethodInfo GetCallbackMethod()
-		{
-			return delegateType.GetMethod("Invoke");
 		}
 
 		public Expression[] GetConstructorInvocationArguments(Expression[] arguments, ClassEmitter proxy)
@@ -85,20 +88,20 @@ namespace Castle.DynamicProxy.Contributors
 			return callback;
 		}
 
-		private ArgumentReference[] GetArguments(ArgumentReference[] baseCtorArguments)
-		{
-			var arguments = new ArgumentReference[baseCtorArguments.Length + 1];
-			arguments[0] = new ArgumentReference(delegateType);
-			baseCtorArguments.CopyTo(arguments, 1);
-			return arguments;
-		}
-
 		private Expression[] GetAllArgs(Expression[] args, Reference targetField)
 		{
 			var allArgs = new Expression[args.Length + 1];
 			args.CopyTo(allArgs, 1);
 			allArgs[0] = new ConvertExpression(targetType, targetField.ToExpression());
 			return allArgs;
+		}
+
+		private ArgumentReference[] GetArguments(ArgumentReference[] baseCtorArguments)
+		{
+			var arguments = new ArgumentReference[baseCtorArguments.Length + 1];
+			arguments[0] = new ArgumentReference(delegateType);
+			baseCtorArguments.CopyTo(arguments, 1);
+			return arguments;
 		}
 	}
 }

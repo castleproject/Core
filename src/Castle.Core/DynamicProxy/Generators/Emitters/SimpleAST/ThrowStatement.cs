@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
-	using System.Reflection;
 	using System.Reflection.Emit;
 
 	public class ThrowStatement : Statement
 	{
-		private readonly Type exceptionType;
 		private readonly string errorMessage;
+		private readonly Type exceptionType;
 
 		public ThrowStatement(Type exceptionType, String errorMessage)
 		{
@@ -31,7 +30,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			ConstructorInfo ci = exceptionType.GetConstructor(new[] {typeof (String)});
+			var ci = exceptionType.GetConstructor(new[] { typeof(String) });
 			var constRef = new ConstReference(errorMessage);
 
 			var creationStmt = new NewInstanceExpression(ci, constRef.ToExpression());

@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Reflection;
+
 	using Castle.DynamicProxy.Generators;
 
 	public class InterfaceMembersCollector : MembersCollector
@@ -23,7 +24,6 @@ namespace Castle.DynamicProxy.Contributors
 		public InterfaceMembersCollector(Type @interface)
 			: base(@interface)
 		{
-
 		}
 
 		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
@@ -36,6 +36,5 @@ namespace Castle.DynamicProxy.Contributors
 			var proxyable = AcceptMethod(method, false, hook);
 			return new MetaMethod(method, method, isStandalone, proxyable, false);
 		}
-
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
+
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Serialization;
-
 
 	public class InterfaceProxyWithoutTargetGenerator : InterfaceProxyWithTargetGenerator
 	{
@@ -28,7 +28,14 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
-		protected override ITypeContributor AddMappingForTargetType(IDictionary<Type, ITypeContributor> interfaceTypeImplementerMapping, Type proxyTargetType, ICollection<Type> targetInterfaces, ICollection<Type> additionalInterfaces, INamingScope namingScope)
+		protected override string GeneratorType
+		{
+			get { return ProxyTypeConstants.InterfaceWithoutTarget; }
+		}
+
+		protected override ITypeContributor AddMappingForTargetType(
+			IDictionary<Type, ITypeContributor> interfaceTypeImplementerMapping, Type proxyTargetType,
+			ICollection<Type> targetInterfaces, ICollection<Type> additionalInterfaces, INamingScope namingScope)
 		{
 			var contributor = new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance)
 			{ Logger = Logger };
@@ -40,24 +47,23 @@ namespace Castle.DynamicProxy.Generators
 			return contributor;
 		}
 
-		protected override Type GenerateType(string typeName, Type proxyTargetType, Type[] interfaces, INamingScope namingScope)
+		protected override Type GenerateType(string typeName, Type proxyTargetType, Type[] interfaces,
+		                                     INamingScope namingScope)
 		{
 			IEnumerable<ITypeContributor> contributors;
-			var allInterfaces = GetTypeImplementerMapping(interfaces, targetType, out contributors,namingScope);
+			var allInterfaces = GetTypeImplementerMapping(interfaces, targetType, out contributors, namingScope);
 			var model = new MetaType();
 			// collect elements
 			foreach (var contributor in contributors)
 			{
-				contributor.CollectElementsToProxy(ProxyGenerationOptions.Hook,model);
+				contributor.CollectElementsToProxy(ProxyGenerationOptions.Hook, model);
 			}
 
 			ProxyGenerationOptions.Hook.MethodsInspected();
 
 			ClassEmitter emitter;
 			FieldReference interceptorsField;
-			Type baseType = Init(typeName, out emitter, proxyTargetType, out interceptorsField, allInterfaces);
-
-
+			var baseType = Init(typeName, out emitter, proxyTargetType, out interceptorsField, allInterfaces);
 
 			// Constructor
 
@@ -88,16 +94,10 @@ namespace Castle.DynamicProxy.Generators
 			CompleteInitCacheMethod(cctor.CodeBuilder);
 
 			// Crosses fingers and build type
-			Type generatedType = emitter.BuildType();
+			var generatedType = emitter.BuildType();
 
 			InitializeStaticFields(generatedType);
 			return generatedType;
-		}
-
-
-		protected override string GeneratorType
-		{
-			get { return ProxyTypeConstants.InterfaceWithoutTarget; }
 		}
 	}
 }

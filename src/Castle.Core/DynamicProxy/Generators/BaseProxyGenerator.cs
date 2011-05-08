@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Generators
 #if !SILVERLIGHT
 	using System.Xml.Serialization;
 #endif
-	using Castle.Components.DictionaryAdapter;
+
 	using Castle.Core.Internal;
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Contributors;
@@ -41,9 +41,8 @@ namespace Castle.DynamicProxy.Generators
 	/// </summary>
 	public abstract class BaseProxyGenerator
 	{
-		private readonly ModuleScope scope;
-
 		protected readonly Type targetType;
+		private readonly ModuleScope scope;
 		private ILogger logger = NullLogger.Instance;
 		private ProxyGenerationOptions proxyGenerationOptions;
 
@@ -84,14 +83,49 @@ namespace Castle.DynamicProxy.Generators
 			get { return scope; }
 		}
 
-		protected FieldReference CreateOptionsField(ClassEmitter emitter)
+		protected void AddMapping(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)
 		{
-			return emitter.CreateStaticField("proxyGenerationOptions", typeof(ProxyGenerationOptions));
+			Debug.Assert(implementer != null, "implementer != null");
+			Debug.Assert(@interface != null, "@interface != null");
+			Debug.Assert(@interface.IsInterface, "@interface.IsInterface");
+
+			if (!mapping.ContainsKey(@interface))
+			{
+				AddMappingNoCheck(@interface, implementer, mapping);
+			}
 		}
 
-		protected void InitializeStaticFields(Type builtType)
+		protected void AddMappingForISerializable(IDictionary<Type, ITypeContributor> typeImplementerMapping,
+		                                          ITypeContributor instance)
 		{
-			builtType.SetStaticField("proxyGenerationOptions", BindingFlags.Public, ProxyGenerationOptions);
+#if !SILVERLIGHT
+			AddMapping(typeof(ISerializable), instance, typeImplementerMapping);
+#endif
+		}
+
+		/// <summary>
+		///   It is safe to add mapping (no mapping for the interface exists)
+		/// </summary>
+		/// <param name = "implementer"></param>
+		/// <param name = "interface"></param>
+		/// <param name = "mapping"></param>
+		protected void AddMappingNoCheck(Type @interface, ITypeContributor implementer,
+		                                 IDictionary<Type, ITypeContributor> mapping)
+		{
+			mapping.Add(@interface, implementer);
+		}
+
+		protected void AddToCache(CacheKey key, Type type)
+		{
+			scope.RegisterInCache(key, type);
+		}
+
+		protected virtual ClassEmitter BuildClassEmitter(string typeName, Type parentType, IEnumerable<Type> interfaces)
+		{
+			CheckNotGenericTypeDefinition(parentType, "parentType");
+			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
+
+			return new ClassEmitter(Scope, typeName, parentType, interfaces);
 		}
 
 		protected void CheckNotGenericTypeDefinition(Type type, string argumentName)
@@ -104,19 +138,75 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void CheckNotGenericTypeDefinitions(IEnumerable<Type> types, string argumentName)
 		{
-			if (types == null) return;
+			if (types == null)
+			{
+				return;
+			}
 			foreach (var t in types)
 			{
 				CheckNotGenericTypeDefinition(t, argumentName);
 			}
 		}
 
-		protected virtual ClassEmitter BuildClassEmitter(string typeName, Type parentType, IEnumerable<Type> interfaces)
+		protected void CompleteInitCacheMethod(ConstructorCodeBuilder constCodeBuilder)
 		{
-			CheckNotGenericTypeDefinition(parentType, "parentType");
-			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
+			constCodeBuilder.AddStatement(new ReturnStatement());
+		}
 
-			return new ClassEmitter(Scope, typeName, parentType, interfaces);
+		protected virtual void CreateFields(ClassEmitter emitter)
+		{
+			CreateOptionsField(emitter);
+			CreateSelectorField(emitter);
+			CreateInterceptorsField(emitter);
+		}
+
+		protected void CreateInterceptorsField(ClassEmitter emitter)
+		{
+			var interceptorsField = emitter.CreateField("__interceptors", typeof(IInterceptor[]));
+
+#if !SILVERLIGHT
+			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(interceptorsField);
+#endif
+		}
+
+		protected FieldReference CreateOptionsField(ClassEmitter emitter)
+		{
+			return emitter.CreateStaticField("proxyGenerationOptions", typeof(ProxyGenerationOptions));
+		}
+
+		protected void CreateSelectorField(ClassEmitter emitter)
+		{
+			if (ProxyGenerationOptions.Selector == null)
+			{
+				return;
+			}
+
+			emitter.CreateField("__selector", typeof(IInterceptorSelector));
+			return;
+		}
+
+		protected virtual void CreateTypeAttributes(ClassEmitter emitter)
+		{
+			emitter.AddCustomAttributes(ProxyGenerationOptions);
+#if !SILVERLIGHT
+			emitter.DefineCustomAttribute<XmlIncludeAttribute>(new object[] { targetType });
+#endif
+		}
+
+		protected void EnsureOptionsOverrideEqualsAndGetHashCode(ProxyGenerationOptions options)
+		{
+			if (Logger.IsWarnEnabled)
+			{
+				// Check the proxy generation hook
+				if (!OverridesEqualsAndGetHashCode(options.Hook.GetType()))
+				{
+					Logger.WarnFormat("The IProxyGenerationHook type {0} does not override both Equals and GetHashCode. " +
+					                  "If these are not correctly overridden caching will fail to work causing performance problems.",
+					                  options.Hook.GetType().FullName);
+				}
+
+				// Interceptor selectors no longer need to override Equals and GetHashCode
+			}
 		}
 
 		protected void GenerateConstructor(ClassEmitter emitter, ConstructorInfo baseConstructor,
@@ -152,7 +242,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			var constructor = emitter.CreateConstructor(args);
-			if(baseConstructorParams != null && baseConstructorParams.Length != 0)
+			if (baseConstructorParams != null && baseConstructorParams.Length != 0)
 			{
 				var last = baseConstructorParams.Last();
 				if (last.ParameterType.IsArray && last.HasAttribute<ParamArrayAttribute>())
@@ -185,6 +275,22 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
+		}
+
+		protected void GenerateConstructors(ClassEmitter emitter, Type baseType, params FieldReference[] fields)
+		{
+			var constructors =
+				baseType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+
+			foreach (var constructor in constructors)
+			{
+				if (!IsConstructorVisible(constructor))
+				{
+					continue;
+				}
+
+				GenerateConstructor(emitter, constructor, fields);
+			}
 		}
 
 		/// <summary>
@@ -227,69 +333,14 @@ namespace Castle.DynamicProxy.Generators
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		protected void EnsureOptionsOverrideEqualsAndGetHashCode(ProxyGenerationOptions options)
+		protected ConstructorEmitter GenerateStaticConstructor(ClassEmitter emitter)
 		{
-			if (Logger.IsWarnEnabled)
-			{
-				// Check the proxy generation hook
-				if (!OverridesEqualsAndGetHashCode(options.Hook.GetType()))
-				{
-					Logger.WarnFormat("The IProxyGenerationHook type {0} does not override both Equals and GetHashCode. " +
-					            "If these are not correctly overridden caching will fail to work causing performance problems.",
-					            options.Hook.GetType().FullName);
-				}
-
-				// Interceptor selectors no longer need to override Equals and GetHashCode
-			}
+			return emitter.CreateTypeConstructor();
 		}
 
-		private bool OverridesEqualsAndGetHashCode(Type type)
+		protected Type GetFromCache(CacheKey key)
 		{
-			var equalsMethod = type.GetMethod("Equals", BindingFlags.Public | BindingFlags.Instance);
-			if (equalsMethod == null || equalsMethod.DeclaringType == typeof(object) || equalsMethod.IsAbstract)
-			{
-				return false;
-			}
-
-			var getHashCodeMethod = type.GetMethod("GetHashCode", BindingFlags.Public | BindingFlags.Instance);
-			if (getHashCodeMethod == null || getHashCodeMethod.DeclaringType == typeof(object) || getHashCodeMethod.IsAbstract)
-			{
-				return false;
-			}
-
-			return true;
-		}
-
-		protected void AddMapping(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)
-		{
-			Debug.Assert(implementer != null, "implementer != null");
-			Debug.Assert(@interface != null, "@interface != null");
-			Debug.Assert(@interface.IsInterface, "@interface.IsInterface");
-
-			if (!mapping.ContainsKey(@interface))
-			{
-				AddMappingNoCheck(@interface, implementer, mapping);
-			}
-		}
-
-		/// <summary>
-		///   It is safe to add mapping (no mapping for the interface exists)
-		/// </summary>
-		/// <param name = "implementer"></param>
-		/// <param name = "interface"></param>
-		/// <param name = "mapping"></param>
-		protected void AddMappingNoCheck(Type @interface, ITypeContributor implementer,
-		                                 IDictionary<Type, ITypeContributor> mapping)
-		{
-			mapping.Add(@interface, implementer);
-		}
-
-		protected void AddMappingForISerializable(IDictionary<Type, ITypeContributor> typeImplementerMapping,
-		                                          ITypeContributor instance)
-		{
-#if !SILVERLIGHT
-			AddMapping(typeof(ISerializable), instance, typeImplementerMapping);
-#endif
+			return scope.GetFromCache(key);
 		}
 
 		protected void HandleExplicitlyPassedProxyTargetAccessor(ICollection<Type> targetInterfaces,
@@ -329,42 +380,12 @@ namespace Castle.DynamicProxy.Generators
 			throw new ProxyGenerationException("This is a DynamicProxy2 error: " + message);
 		}
 
-		protected void CreateInterceptorsField(ClassEmitter emitter)
+		protected void InitializeStaticFields(Type builtType)
 		{
-			var interceptorsField = emitter.CreateField("__interceptors", typeof(IInterceptor[]));
-
-#if !SILVERLIGHT
-			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(interceptorsField);
-#endif
+			builtType.SetStaticField("proxyGenerationOptions", BindingFlags.Public, ProxyGenerationOptions);
 		}
 
-		protected void CreateSelectorField(ClassEmitter emitter)
-		{
-			if (ProxyGenerationOptions.Selector == null)
-			{
-				return;
-			}
-
-			emitter.CreateField("__selector", typeof(IInterceptorSelector));
-			return;
-		}
-
-		protected virtual void CreateTypeAttributes(ClassEmitter emitter)
-		{
-			emitter.AddCustomAttributes(ProxyGenerationOptions);
-#if !SILVERLIGHT
-			emitter.DefineCustomAttribute<XmlIncludeAttribute>(new object[] {targetType});
-#endif
-		}
-
-		protected virtual void CreateFields(ClassEmitter emitter)
-		{
-			CreateOptionsField(emitter);
-			CreateSelectorField(emitter);
-			CreateInterceptorsField(emitter);
-		}
-
-		protected Type ObtainProxyType(CacheKey cacheKey, Func<string,INamingScope, Type> factory)
+		protected Type ObtainProxyType(CacheKey cacheKey, Func<string, INamingScope, Type> factory)
 		{
 			using (var locker = Scope.Lock.ForReadingUpgradeable())
 			{
@@ -390,27 +411,11 @@ namespace Castle.DynamicProxy.Generators
 				Logger.DebugFormat("No cached proxy type was found for target type {0}.", targetType.FullName);
 				EnsureOptionsOverrideEqualsAndGetHashCode(ProxyGenerationOptions);
 
-
 				var name = Scope.NamingScope.GetUniqueName("Castle.Proxies." + targetType.Name + "Proxy");
 				var proxyType = factory.Invoke(name, Scope.NamingScope.SafeSubScope());
 
 				AddToCache(cacheKey, proxyType);
 				return proxyType;
-			}
-		}
-
-		#region Type tokens related operations
-
-		protected void GenerateConstructors(ClassEmitter emitter, Type baseType, params FieldReference[] fields)
-		{
-			var constructors =
-				baseType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-			foreach (var constructor in constructors)
-			{
-				if (!IsConstructorVisible(constructor)) continue;
-
-				GenerateConstructor(emitter, constructor, fields);
 			}
 		}
 
@@ -426,30 +431,21 @@ namespace Castle.DynamicProxy.Generators
 #endif
 		}
 
-		protected ConstructorEmitter GenerateStaticConstructor(ClassEmitter emitter)
+		private bool OverridesEqualsAndGetHashCode(Type type)
 		{
-			return emitter.CreateTypeConstructor();
+			var equalsMethod = type.GetMethod("Equals", BindingFlags.Public | BindingFlags.Instance);
+			if (equalsMethod == null || equalsMethod.DeclaringType == typeof(object) || equalsMethod.IsAbstract)
+			{
+				return false;
+			}
+
+			var getHashCodeMethod = type.GetMethod("GetHashCode", BindingFlags.Public | BindingFlags.Instance);
+			if (getHashCodeMethod == null || getHashCodeMethod.DeclaringType == typeof(object) || getHashCodeMethod.IsAbstract)
+			{
+				return false;
+			}
+
+			return true;
 		}
-
-		protected void CompleteInitCacheMethod(ConstructorCodeBuilder constCodeBuilder)
-		{
-			constCodeBuilder.AddStatement(new ReturnStatement());
-		}
-
-		#endregion
-
-		#region Cache related
-
-		protected Type GetFromCache(CacheKey key)
-		{
-			return scope.GetFromCache(key);
-		}
-
-		protected void AddToCache(CacheKey key, Type type)
-		{
-			scope.RegisterInCache(key, type);
-		}
-
-		#endregion
 	}
 }

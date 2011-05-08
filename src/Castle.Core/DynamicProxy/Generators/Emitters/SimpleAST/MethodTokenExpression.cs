@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System;
 	using System.Reflection;
 	using System.Reflection.Emit;
+
 	using Castle.DynamicProxy.Tokens;
 
 	public class MethodTokenExpression : Expression
@@ -25,6 +26,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 #if !MONO
 		private readonly Type declaringType;
 #endif
+
 		public MethodTokenExpression(MethodInfo method)
 		{
 			this.method = method;
@@ -44,14 +46,14 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			gen.Emit(OpCodes.Ldtoken, declaringType);
 #endif
 
-			MethodInfo minfo = MethodBaseMethods.GetMethodFromHandle1;
+			var minfo = MethodBaseMethods.GetMethodFromHandle1;
 
 #if !MONO
 			minfo = MethodBaseMethods.GetMethodFromHandle2;
 #endif
 
 			gen.Emit(OpCodes.Call, minfo);
-			gen.Emit(OpCodes.Castclass, typeof (MethodInfo));
+			gen.Emit(OpCodes.Castclass, typeof(MethodInfo));
 		}
 	}
 }

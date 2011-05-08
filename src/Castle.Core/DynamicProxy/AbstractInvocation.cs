@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -63,8 +64,8 @@ namespace Castle.DynamicProxy
 		}
 
 		private IInterceptor[] SelectMethodInterceptors(IInterceptorSelector selector,
-														IInterceptor[] methodInterceptors,
-														Type targetType)
+		                                                IInterceptor[] methodInterceptors,
+		                                                Type targetType)
 		{
 			return methodInterceptors ??
 			       selector.SelectInterceptors(targetType, Method, interceptors) ??
@@ -206,11 +207,11 @@ namespace Castle.DynamicProxy
 				methodKindDescription = "method without target";
 			}
 
-			string message = string.Format("This is a DynamicProxy2 error: {0} for method '{1}' which {2}. " +
-			                               "When calling {3} there is no implementation to 'proceed' to and " +
-			                               "it is the responsibility of the interceptor to mimic the implementation " +
-			                               "(set return value, out arguments etc)",
-			                               interceptorsMessage, Method, methodKindIs, methodKindDescription);
+			var message = string.Format("This is a DynamicProxy2 error: {0} for method '{1}' which {2}. " +
+			                            "When calling {3} there is no implementation to 'proceed' to and " +
+			                            "it is the responsibility of the interceptor to mimic the implementation " +
+			                            "(set return value, out arguments etc)",
+			                            interceptorsMessage, Method, methodKindIs, methodKindDescription);
 
 			throw new NotImplementedException(message);
 		}

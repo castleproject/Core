@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 
@@ -34,7 +33,8 @@ namespace Castle.DynamicProxy.Contributors
 		private readonly IList<FieldReference> serializedFields = new List<FieldReference>();
 #endif
 
-		public ClassProxyInstanceContributor(Type targetType, IList<MethodInfo> methodsToSkip, Type[] interfaces, string typeId)
+		public ClassProxyInstanceContributor(Type targetType, IList<MethodInfo> methodsToSkip, Type[] interfaces,
+		                                     string typeId)
 			: base(targetType, interfaces, typeId)
 		{
 #if !SILVERLIGHT
@@ -133,8 +133,8 @@ namespace Castle.DynamicProxy.Contributors
 		private void EmitCallToBaseGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo,
 		                                         ArgumentReference streamingContext)
 		{
-			MethodInfo baseGetObjectData = targetType.GetMethod("GetObjectData",
-			                                                    new[] { typeof(SerializationInfo), typeof(StreamingContext) });
+			var baseGetObjectData = targetType.GetMethod("GetObjectData",
+			                                             new[] { typeof(SerializationInfo), typeof(StreamingContext) });
 
 			codebuilder.AddStatement(new ExpressionStatement(
 			                         	new MethodInvocationExpression(baseGetObjectData,
@@ -159,9 +159,9 @@ namespace Castle.DynamicProxy.Contributors
 			var ctor = emitter.CreateConstructor(serializationInfo, streamingContext);
 
 			ctor.CodeBuilder.AddStatement(
-			                             	new ConstructorInvocationStatement(serializationConstructor,
-			                             	                                   serializationInfo.ToExpression(),
-			                             	                                   streamingContext.ToExpression()));
+				new ConstructorInvocationStatement(serializationConstructor,
+				                                   serializationInfo.ToExpression(),
+				                                   streamingContext.ToExpression()));
 
 			foreach (var field in serializedFields)
 			{
@@ -185,12 +185,11 @@ namespace Castle.DynamicProxy.Contributors
 				return false;
 			}
 
-			if(IsDelegate(baseType))
+			if (IsDelegate(baseType))
 			{
 				//working around bug in CLR which returns true for "does this type implement ISerializable" for delegates
 				return false;
 			}
-
 
 			// If base type implements ISerializable, we have to make sure
 			// the GetObjectData is marked as virtual
@@ -212,17 +211,17 @@ namespace Castle.DynamicProxy.Contributors
 			methodsToSkip.Add(getObjectDataMethod);
 
 			serializationConstructor = baseType.GetConstructor(
-			                                                  	BindingFlags.Instance | BindingFlags.Public |
-			                                                  	BindingFlags.NonPublic,
-			                                                  	null,
-			                                                  	new[] { typeof(SerializationInfo), typeof(StreamingContext) },
-			                                                  	null);
+				BindingFlags.Instance | BindingFlags.Public |
+				BindingFlags.NonPublic,
+				null,
+				new[] { typeof(SerializationInfo), typeof(StreamingContext) },
+				null);
 
 			if (serializationConstructor == null)
 			{
-				String message = String.Format("The type {0} implements ISerializable, " +
-				                               "but failed to provide a deserialization constructor",
-				                               baseType.FullName);
+				var message = String.Format("The type {0} implements ISerializable, " +
+				                            "but failed to provide a deserialization constructor",
+				                            baseType.FullName);
 				throw new ArgumentException(message);
 			}
 
@@ -231,7 +230,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		private bool IsDelegate(Type baseType)
 		{
-			return baseType.BaseType==typeof(MulticastDelegate);
+			return baseType.BaseType == typeof(MulticastDelegate);
 		}
 #endif
 	}

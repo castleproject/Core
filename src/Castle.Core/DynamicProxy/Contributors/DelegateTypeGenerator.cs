@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Reflection;
+
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
@@ -37,8 +38,6 @@ namespace Castle.DynamicProxy.Contributors
 			this.targetType = targetType;
 		}
 
-		#region IGenerator<AbstractTypeEmitter> Members
-
 		public AbstractTypeEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
 		{
 			var emitter = GetEmitter(@class, namingScope);
@@ -47,7 +46,12 @@ namespace Castle.DynamicProxy.Contributors
 			return emitter;
 		}
 
-		#endregion
+		private void BuildConstructor(AbstractTypeEmitter emitter)
+		{
+			var constructor = emitter.CreateConstructor(new ArgumentReference(typeof(object)),
+			                                            new ArgumentReference(typeof(IntPtr)));
+			constructor.ConstructorBuilder.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
+		}
 
 		private void BuildInvokeMethod(AbstractTypeEmitter @delegate)
 		{
@@ -60,6 +64,23 @@ namespace Castle.DynamicProxy.Contributors
 			                                    @delegate.GetClosedParameterType(method.MethodOnTarget.ReturnType),
 			                                    paramTypes);
 			invoke.MethodBuilder.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
+		}
+
+		private AbstractTypeEmitter GetEmitter(ClassEmitter @class, INamingScope namingScope)
+		{
+			var methodInfo = method.MethodOnTarget;
+			var suggestedName = string.Format("Castle.Proxies.Delegates.{0}_{1}",
+			                                  methodInfo.DeclaringType.Name,
+			                                  method.Method.Name);
+			var uniqueName = namingScope.ParentScope.GetUniqueName(suggestedName);
+
+			var @delegate = new ClassEmitter(@class.ModuleScope,
+			                                 uniqueName,
+			                                 typeof(MulticastDelegate),
+			                                 Type.EmptyTypes,
+			                                 DelegateFlags);
+			@delegate.CopyGenericParametersFromMethod(method.Method);
+			return @delegate;
 		}
 
 		private Type[] GetParamTypes(AbstractTypeEmitter @delegate)
@@ -82,30 +103,6 @@ namespace Castle.DynamicProxy.Contributors
 				paramTypes[i + 1] = @delegate.GetClosedParameterType(parameters[i].ParameterType);
 			}
 			return paramTypes;
-		}
-
-		private void BuildConstructor(AbstractTypeEmitter emitter)
-		{
-			var constructor = emitter.CreateConstructor(new ArgumentReference(typeof (object)),
-			                                            new ArgumentReference(typeof (IntPtr)));
-			constructor.ConstructorBuilder.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
-		}
-
-		private AbstractTypeEmitter GetEmitter(ClassEmitter @class, INamingScope namingScope)
-		{
-			var methodInfo = method.MethodOnTarget;
-			var suggestedName = string.Format("Castle.Proxies.Delegates.{0}_{1}",
-			                                  methodInfo.DeclaringType.Name,
-			                                  method.Method.Name);
-			var uniqueName = namingScope.ParentScope.GetUniqueName(suggestedName);
-
-			var @delegate = new ClassEmitter(@class.ModuleScope,
-			                                 uniqueName,
-			                                 typeof (MulticastDelegate),
-			                                 Type.EmptyTypes,
-			                                 DelegateFlags);
-			@delegate.CopyGenericParametersFromMethod(method.Method);
-			return @delegate;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		private Type target;
 
 		public ConvertExpression(Type targetType, Expression right)
-			: this(targetType, typeof (object), right)
+			: this(targetType, typeof(object), right)
 		{
 		}
 
@@ -82,7 +82,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				{
 					// Box conversion
 					gen.Emit(OpCodes.Box, fromType);
-					EmitCastIfNeeded(typeof (object), target, gen);
+					EmitCastIfNeeded(typeof(object), target, gen);
 				}
 				else
 				{

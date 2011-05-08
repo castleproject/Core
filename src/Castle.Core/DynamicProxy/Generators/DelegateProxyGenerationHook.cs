@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,32 +19,31 @@ namespace Castle.DynamicProxy.Generators
 
 	public class DelegateProxyGenerationHook : IProxyGenerationHook
 	{
-		#region IProxyGenerationHook Members
-
-		public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
+		public override bool Equals(object obj)
 		{
-			return methodInfo.Name.Equals("Invoke");
+			if (ReferenceEquals(null, obj))
+			{
+				return false;
+			}
+			return obj.GetType() == typeof(DelegateProxyGenerationHook);
 		}
 
-		public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
+		public override int GetHashCode()
 		{
+			return GetType().GetHashCode();
 		}
 
 		public void MethodsInspected()
 		{
 		}
 
-		#endregion
-
-		public override bool Equals(object obj)
+		public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
 		{
-			if (ReferenceEquals(null, obj)) return false;
-			return obj.GetType() == typeof (DelegateProxyGenerationHook);
 		}
 
-		public override int GetHashCode()
+		public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
 		{
-			return GetType().GetHashCode();
+			return methodInfo.Name.Equals("Invoke");
 		}
 	}
 }

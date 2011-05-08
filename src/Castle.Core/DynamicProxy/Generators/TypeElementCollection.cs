@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,18 +18,19 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections;
 	using System.Collections.Generic;
 
-	public class TypeElementCollection<TElement> : ICollection<TElement> where TElement : MetaTypeElement, IEquatable<TElement>
+	public class TypeElementCollection<TElement> : ICollection<TElement>
+		where TElement : MetaTypeElement, IEquatable<TElement>
 	{
 		private readonly ICollection<TElement> items = new List<TElement>();
 
-		public IEnumerator<TElement> GetEnumerator()
+		public int Count
 		{
-			return items.GetEnumerator();
+			get { return items.Count; }
 		}
 
-		IEnumerator IEnumerable.GetEnumerator()
+		bool ICollection<TElement>.IsReadOnly
 		{
-			return GetEnumerator();
+			get { return false; }
 		}
 
 		public void Add(TElement item)
@@ -39,32 +40,39 @@ namespace Castle.DynamicProxy.Generators
 				items.Add(item);
 				return;
 			}
-			if(Contains(item))
+			if (Contains(item))
 			{
 				item.SwitchToExplicitImplementation();
-				if(Contains(item))
+				if (Contains(item))
 				{
 					// there is something reaaaly wrong going on here
-					throw new ProxyGenerationException("Duplicate element: " + item.ToString());
+					throw new ProxyGenerationException("Duplicate element: " + item);
 				}
 			}
 			items.Add(item);
-		}
-
-		void ICollection<TElement>.Clear()
-		{
-			throw new NotSupportedException();
 		}
 
 		public bool Contains(TElement item)
 		{
 			foreach (var element in items)
 			{
-				if(element.Equals(item))
+				if (element.Equals(item))
+				{
 					return true;
+				}
 			}
 
 			return false;
+		}
+
+		public IEnumerator<TElement> GetEnumerator()
+		{
+			return items.GetEnumerator();
+		}
+
+		void ICollection<TElement>.Clear()
+		{
+			throw new NotSupportedException();
 		}
 
 		void ICollection<TElement>.CopyTo(TElement[] array, int arrayIndex)
@@ -77,14 +85,9 @@ namespace Castle.DynamicProxy.Generators
 			throw new NotSupportedException();
 		}
 
-		public int Count
+		IEnumerator IEnumerable.GetEnumerator()
 		{
-			get { return items.Count; }
-		}
-
-		bool ICollection<TElement>.IsReadOnly
-		{
-			get { return false; }
+			return GetEnumerator();
 		}
 	}
 }

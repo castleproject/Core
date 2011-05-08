@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
+
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
@@ -29,19 +30,6 @@ namespace Castle.DynamicProxy.Generators
 		{
 			CheckNotGenericTypeDefinition(targetType, "targetType");
 			EnsureDoesNotImplementIProxyTargetAccessor(targetType, "targetType");
-		}
-
-		private void EnsureDoesNotImplementIProxyTargetAccessor(Type type, string name)
-		{
-			if (!typeof (IProxyTargetAccessor).IsAssignableFrom(type))
-			{
-				return;
-			}
-			var message =
-				string.Format(
-					"Target type for the proxy implements {0} which is a DynamicProxy infrastructure interface and you should never implement it yourself. Are you trying to proxy an existing proxy?",
-					typeof (IProxyTargetAccessor));
-			throw new ArgumentException(message, name);
 		}
 
 		public Type GenerateCode(Type[] interfaces, ProxyGenerationOptions options)
@@ -73,7 +61,6 @@ namespace Castle.DynamicProxy.Generators
 
 			CreateFields(emitter);
 			CreateTypeAttributes(emitter);
-
 
 			// Constructor
 			var cctor = GenerateStaticConstructor(emitter);
@@ -107,12 +94,14 @@ namespace Castle.DynamicProxy.Generators
 
 			// Crosses fingers and build type
 
-			Type proxyType = emitter.BuildType();
+			var proxyType = emitter.BuildType();
 			InitializeStaticFields(proxyType);
 			return proxyType;
 		}
 
-		protected virtual IEnumerable<Type> GetTypeImplementerMapping(Type[] interfaces, out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
+		protected virtual IEnumerable<Type> GetTypeImplementerMapping(Type[] interfaces,
+		                                                              out IEnumerable<ITypeContributor> contributors,
+		                                                              INamingScope namingScope)
 		{
 			var methodsToSkip = new List<MethodInfo>();
 			var proxyInstance = new ClassProxyInstanceContributor(targetType, methodsToSkip, interfaces, ProxyTypeConstants.Class);
@@ -161,7 +150,10 @@ namespace Castle.DynamicProxy.Generators
 			{
 				if (targetInterfaces.Contains(@interface))
 				{
-					if (typeImplementerMapping.ContainsKey(@interface)) continue;
+					if (typeImplementerMapping.ContainsKey(@interface))
+					{
+						continue;
+					}
 
 					// we intercept the interface, and forward calls to the target type
 					AddMappingNoCheck(@interface, proxyTarget, typeImplementerMapping);
@@ -184,7 +176,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				AddMappingNoCheck(typeof(IProxyTargetAccessor), proxyInstance, typeImplementerMapping);
 			}
-			catch (ArgumentException )
+			catch (ArgumentException)
 			{
 				HandleExplicitlyPassedProxyTargetAccessor(targetInterfaces, additionalInterfaces);
 			}
@@ -197,6 +189,19 @@ namespace Castle.DynamicProxy.Generators
 				proxyInstance
 			};
 			return typeImplementerMapping.Keys;
+		}
+
+		private void EnsureDoesNotImplementIProxyTargetAccessor(Type type, string name)
+		{
+			if (!typeof(IProxyTargetAccessor).IsAssignableFrom(type))
+			{
+				return;
+			}
+			var message =
+				string.Format(
+					"Target type for the proxy implements {0} which is a DynamicProxy infrastructure interface and you should never implement it yourself. Are you trying to proxy an existing proxy?",
+					typeof(IProxyTargetAccessor));
+			throw new ArgumentException(message, name);
 		}
 	}
 }

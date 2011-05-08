@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	public class AssignArgumentStatement:Statement
+	public class AssignArgumentStatement : Statement
 	{
 		private readonly ArgumentReference argument;
 		private readonly Expression expression;
@@ -31,7 +31,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			ArgumentsUtil.EmitLoadOwnerAndReference(argument, gen);
 			expression.Emit(member, gen);
-			
 		}
 	}
 }

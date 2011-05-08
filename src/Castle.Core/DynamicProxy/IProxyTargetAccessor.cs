@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,15 +17,15 @@ namespace Castle.DynamicProxy
 	public interface IProxyTargetAccessor
 	{
 		/// <summary>
-		/// Get the proxy target (note that null is a valid target!)
+		///   Get the proxy target (note that null is a valid target!)
 		/// </summary>
 		/// <returns></returns>
 		object DynProxyGetTarget();
 
 		/// <summary>
-		/// Gets the interceptors for the proxy
+		///   Gets the interceptors for the proxy
 		/// </summary>
 		/// <returns></returns>
-		IInterceptor[] GetInterceptors();		
+		IInterceptor[] GetInterceptors();
 	}
 }
