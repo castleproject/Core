@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 namespace CastleTests.Properties {
-    
+#if !MONO && !SILVERLIGHT // mono doesn't have PEVerify
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "10.0.0.0")]
@@ -39,4 +39,5 @@ namespace CastleTests.Properties {
             }
         }
     }
+#endif
 }
