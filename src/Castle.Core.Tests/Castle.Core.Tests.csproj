@@ -250,6 +250,10 @@
     <Compile Include="ClassWithAttributesTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Explicit\TwoInterfacesExplicit.cs" />
     <Compile Include="DynamicProxy.Tests\InterfaceProxyWithTargetInterfaceAdditionalInterfacesTestCase.cs" />
+    <Compile Include="DynamicProxy.Tests\Interfaces\IGenericInterfaceWithGenericMethodWithCascadingConstraintOnAnyReferenceType.cs" />
+    <Compile Include="DynamicProxy.Tests\Interfaces\IGenericInterfaceWithGenericMethodWithCascadingConstraintOnAnyTypeWithDefaultConstructor.cs" />
+    <Compile Include="DynamicProxy.Tests\Interfaces\IGenericInterfaceWithGenericMethodWithCascadingConstraintOnClass.cs" />
+    <Compile Include="DynamicProxy.Tests\Interfaces\IGenericInterfaceWithGenericMethodWithCascadingConstraintOnInterface.cs" />
     <Compile Include="DynamicProxy.Tests\ProxyTypeCachingWithDifferentHooksTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\SerializableClassTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Serialization\C.cs" />

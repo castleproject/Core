@@ -1,6 +1,7 @@
 ==================
 - fixed CORE-37 - TAB characters in the XML Configuration of a component parameter is read as String.Empty 
 - fixed DYNPROXY-158 - Can't create class proxy with target and without target in same ProxyGenerator
+- fixed DYNPROXY-153 - When proxying a generic interface which has an interface as GenericType . No proxy can be created.
 
 - implemented CORE-33 - Add lazy logging
 
