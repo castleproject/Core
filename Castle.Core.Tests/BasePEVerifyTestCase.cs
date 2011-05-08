@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests
 {
-#if !MONO && !SILVERLIGHT
 	using System;
 	using System.Diagnostics;
 	using System.IO;
@@ -23,6 +22,7 @@ namespace Castle.DynamicProxy.Tests
 
 	using NUnit.Framework;
 
+#if !MONO && !SILVERLIGHT
 	// mono doesn't have PEVerify
 	[SetUpFixture]
 	public class FindPeVerify
