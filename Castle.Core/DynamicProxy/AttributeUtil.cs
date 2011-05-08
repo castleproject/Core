@@ -64,9 +64,9 @@ namespace Castle.DynamicProxy
 			FieldInfo[] fields;
 			object[] fieldValues;
 			GetSettersAndFields(attribute.NamedArguments, out properties, out propertyValues, out fields, out fieldValues);
-
+			var constructorArgs = GetCtorArguments(attribute.ConstructorArguments);
 			return new CustomAttributeBuilder(attribute.Constructor,
-			                                  GetCtorArguments(attribute.ConstructorArguments),
+			                                  constructorArgs,
 			                                  properties,
 			                                  propertyValues,
 			                                  fields,
@@ -78,10 +78,24 @@ namespace Castle.DynamicProxy
 			var arguments = new object[constructorArguments.Count];
 			for (var i = 0; i < constructorArguments.Count; i++)
 			{
-				arguments[i] = constructorArguments[i].Value;
+				arguments[i] = ReadAttributeValue(constructorArguments[i]);
 			}
 
 			return arguments;
+		}
+
+		private static object ReadAttributeValue(CustomAttributeTypedArgument argument)
+		{
+			var value = argument.Value;
+			if (argument.ArgumentType.IsArray == false)
+			{
+				return value;
+			}
+			//special case for handling arrays in attributes
+			var arguments = GetCtorArguments((IList<CustomAttributeTypedArgument>)value);
+			var array = Array.CreateInstance(argument.ArgumentType.GetElementType() ?? typeof(object), arguments.Length);
+			arguments.CopyTo(array, 0);
+			return array;
 		}
 
 		private static void GetSettersAndFields(IEnumerable<CustomAttributeNamedArgument> namedArguments,
