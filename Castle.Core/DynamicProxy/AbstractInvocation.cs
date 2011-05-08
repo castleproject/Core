@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
+
 #if DOTNET40
 	using System.Security;
 #endif
@@ -31,7 +32,7 @@ namespace Castle.DynamicProxy
 	{
 		private readonly IInterceptor[] interceptors;
 		private readonly object[] arguments;
-		private int execIndex = -1;
+		private int currentInterceptorIndex = -1;
 		private Type[] genericMethodArguments;
 		private readonly MethodInfo proxiedMethod;
 		protected readonly object proxyObject;
@@ -138,33 +139,39 @@ namespace Castle.DynamicProxy
 				return;
 			}
 
-			execIndex++;
-
-			if (execIndex == interceptors.Length)
+			currentInterceptorIndex++;
+			try
 			{
-				InvokeMethodOnTarget();
-			}
-			else if (execIndex > interceptors.Length)
-			{
-				string interceptorsCount;
-				if (interceptors.Length > 1)
+				if (currentInterceptorIndex == interceptors.Length)
 				{
-					interceptorsCount = " each one of " + interceptors.Length + " interceptors";
+					InvokeMethodOnTarget();
+				}
+				else if (currentInterceptorIndex > interceptors.Length)
+				{
+					string interceptorsCount;
+					if (interceptors.Length > 1)
+					{
+						interceptorsCount = " each one of " + interceptors.Length + " interceptors";
+					}
+					else
+					{
+						interceptorsCount = " interceptor";
+					}
+
+					var message = "This is a DynamicProxy2 error: invocation.Proceed() has been called more times than expected." +
+					              "This usually signifies a bug in the calling code. Make sure that" + interceptorsCount +
+					              " selected for the method '" + Method + "'" +
+					              "calls invocation.Proceed() at most once.";
+					throw new InvalidOperationException(message);
 				}
 				else
 				{
-					interceptorsCount = " interceptor";
+					interceptors[currentInterceptorIndex].Intercept(this);
 				}
-
-				var message = "This is a DynamicProxy2 error: invocation.Proceed() has been called more times than expected." +
-				              "This usually signifies a bug in the calling code. Make sure that" + interceptorsCount +
-				              " selected for the method '" + Method + "'" +
-				              "calls invocation.Proceed() at most once.";
-				throw new InvalidOperationException(message);
 			}
-			else
+			finally
 			{
-				interceptors[execIndex].Intercept(this);
+				currentInterceptorIndex--;
 			}
 		}
 
