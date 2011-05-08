@@ -20,7 +20,6 @@ namespace Castle.DynamicProxy.Tests.Interfaces
 	{
 	}
 
-
 #if !SILVERLIGHT
 	[Serializable]
 #endif
