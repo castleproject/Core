@@ -24,7 +24,7 @@ namespace Castle.Components.DictionaryAdapter
 			CopyTo(other, null);
 		}
 
-		public void CopyTo(IDictionaryAdapter other, Predicate<PropertyDescriptor> selector)
+		public void CopyTo(IDictionaryAdapter other, Func<PropertyDescriptor, bool> selector)
 		{
 			if (Meta.Type.IsAssignableFrom(other.Meta.Type) == false)
 			{
@@ -38,9 +38,9 @@ namespace Castle.Components.DictionaryAdapter
 				return;
 			}
 
-			selector = selector ?? (p => true);
+			selector = selector ?? (property => true);
 
-			foreach (var property in This.Properties.Values.Where(p => selector(p)))
+			foreach (var property in This.Properties.Values.Where(property => selector(property)))
 			{
 				var propertyValue = GetProperty(property.PropertyName, true);
 				other.SetProperty(property.PropertyName, ref propertyValue);

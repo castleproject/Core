@@ -105,6 +105,18 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreNotEqual(person1, person2);
 		}
 
+		[Test]
+		public void Will_Handle_Circularities()
+		{
+			var person1 = GetAdapter<IPerson>();
+			PopulatePerson(person1);
+			person1.Friends.Add(person1);
+			var person2 = GetAdapter<IPerson>();
+			PopulatePerson(person2);
+			person2.Friends.Add(person2);
+			Assert.AreEqual(person1.GetHashCode(), person2.GetHashCode());
+		}
+
 		private void PopulatePerson(IPerson person)
 		{
 			person.Name = "Robin";

@@ -216,7 +216,7 @@ namespace Castle.Components.DictionaryAdapter
 		public bool Evaluate(XPathExpression xpath, XPathNavigator source, out object result)
 		{
 			xpath = (XPathExpression)xpath.Clone();
-			xpath.SetContext(this);
+			xpath.SetContext(new XPathContractContext(this));
 			result = source.Evaluate(xpath);
 			if (xpath.ReturnType == XPathResultType.NodeSet)	
 			{
@@ -229,14 +229,14 @@ namespace Castle.Components.DictionaryAdapter
 		public XPathNavigator SelectSingleNode(XPathExpression xpath, XPathNavigator source)
 		{
 			xpath = (XPathExpression)xpath.Clone();
-			xpath.SetContext(this);
+			xpath.SetContext(new XPathContractContext(this));
 			return source.SelectSingleNode(xpath);
 		}
 
 		public bool Matches(XPathExpression xpath, XPathNavigator source)
 		{
 			xpath = (XPathExpression)xpath.Clone();
-			xpath.SetContext(this);
+			xpath.SetContext(new XPathContractContext(this));
 			return source.Matches(xpath);
 		}
 
@@ -330,14 +330,14 @@ namespace Castle.Components.DictionaryAdapter
 			return 0;
 		}
 
-		public override bool Whitespace
-		{
-			get { return true; }
-		}
-
 		public override bool PreserveWhitespace(XPathNavigator node)
 		{
 			return true;
+		}
+
+		public override bool Whitespace
+		{
+			get { return true; }
 		}
 
 		private string GetUniquePrefix()
@@ -372,7 +372,61 @@ namespace Castle.Components.DictionaryAdapter
 				"Invalid qualified name {0}.  Expected [prefix:]name format", qualifiedName));
 		}
 
-		#region Nested Type: XPathVariable 
+		#region NestedType: XPathContractContext
+
+		class XPathContractContext : XsltContext
+		{
+			private readonly XPathContext xpathContext;
+
+			public XPathContractContext(XPathContext xpathContext)
+			{
+				this.xpathContext = xpathContext;
+			}
+
+			public override string DefaultNamespace
+			{
+				get { return string.Empty; }
+			}
+
+			public override string LookupNamespace(string prefix)
+			{
+				return (prefix.Length > 0) ? xpathContext.LookupNamespace(prefix) : string.Empty;
+			}
+
+			public XsltArgumentList Arguments
+			{
+				get { return xpathContext.Arguments; }
+			}
+
+			public override int CompareDocument(string baseUri, string nextbaseUri)
+			{
+				return xpathContext.CompareDocument(baseUri, nextbaseUri);
+			}
+
+			public override bool PreserveWhitespace(XPathNavigator node)
+			{
+				return xpathContext.PreserveWhitespace(node);
+			}
+
+			public override IXsltContextFunction ResolveFunction(string prefix, string name, XPathResultType[] argTypes)
+			{
+				return xpathContext.ResolveFunction(prefix, name, argTypes);
+			}
+
+			public override IXsltContextVariable ResolveVariable(string prefix, string name)
+			{
+				return xpathContext.ResolveVariable(prefix, name);
+			}
+
+			public override bool Whitespace
+			{
+				get { return xpathContext.Whitespace; }
+			}
+		}
+
+		#endregion
+
+		#region Nested Type: XPathVariable
 
 		public class XPathVariable : IXsltContextVariable
 		{
@@ -400,7 +454,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			public object Evaluate(XsltContext xsltContext)
 			{
-				var args = ((XPathContext)xsltContext).Arguments;
+				var args = ((XPathContractContext)xsltContext).Arguments;
 				return args.GetParam(name, null);
 			}
 		}
