@@ -138,7 +138,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 						<ZipCode>{8}</ZipCode>
 					 </Address>
 					 <League>
-						<Team name='{9}'>
+						<Team Name='{9}'>
 						   <AmountDue>{10}</AmountDue>
 						   <Roster>
 							  <Participant FirstName='{11}' lastName='{12}'>
@@ -147,7 +147,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 							  </Participant>
 						   </Roster>
 						</Team>
-						<Team name='{15}'>
+						<Team Name='{15}'>
 						   <AmountDue>{16}</AmountDue>
 						   <Roster>
 							  <Participant FirstName='{17}' lastName='{18}'>
@@ -209,12 +209,28 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(team2Name, season.TeamsArray[1].Name);
 			Assert.AreEqual(team2Balance, season.TeamsArray[1].Balance);
 			Assert.AreEqual(team1Balance + team2Balance, season.Balance);
+			Assert.AreEqual(team1Name, season.FirstTeamName);
 			Assert.AreEqual(3, season.Tags.Length);
 			Assert.Contains(tags[0], season.Tags);
 			Assert.Contains(tags[1], season.Tags);
 			Assert.Contains(tags[2], season.Tags);
 			Assert.IsNotNull(season.ExtraStuff);
 			Assert.AreEqual(licenseNo, season.ExtraStuff["LicenseNo", "RISE"].InnerText);
+		}
+
+		public interface IFoo
+		{
+			[XmlAttribute]
+			string Name { get; set; }
+		}
+
+		[XmlType(Namespace = "urn:fiz.com")]
+		[XmlNamespace("urn:fiz.com", "b")]
+		public interface IBar
+		{
+			IFoo Foo { get; set; }
+			[XPath("b:Foo/@Name")]
+			string FooName { get; }
 		}
 
 		[Test]
@@ -769,6 +785,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			BindingList<ITeam> Teams { get; set; }
 			[XPath("rise:League/rise:Team")]
 			ITeam[] TeamsArray { get; }
+			[XPath("rise:League/rise:Team[position()=1]/@Name")]
+			string FirstTeamName { get; }
 			[XmlElement("Tag")]
 			string[] Tags { get; set; }
 			XmlElement ExtraStuff { get; set; }
