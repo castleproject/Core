@@ -180,10 +180,9 @@ namespace Castle.Components.DictionaryAdapter
 			return adapter.This.Factory.GetAdapter(type, dictionary, descriptor);
 		}
 
-		bool IDictionaryCopyStrategy.Copy(IDictionaryAdapter source, IDictionaryAdapter target, ref Predicate<PropertyDescriptor> selector)
+		bool IDictionaryCopyStrategy.Copy(IDictionaryAdapter source, IDictionaryAdapter target, ref Func<PropertyDescriptor, bool> selector)
 		{
-			var select = selector ?? (property => true);
-			selector = property => select(property) && XPathAdapter.IsPropertyDefined(property.PropertyName, source, this);
+			selector = selector ?? (property => XPathAdapter.IsPropertyDefined(property.PropertyName, source, this));
 			return false;
 		}
 
@@ -738,7 +737,7 @@ namespace Castle.Components.DictionaryAdapter
             if (root != null && MoveOffRoot(root, XPathNodeType.Element) == false)
             {
 				string elementName;
-				string namespaceUri = "";
+				var namespaceUri = string.Empty;
 				var xmlRoot = rootXmlMeta.XmlRoot;
 				if (xmlRoot != null)
 				{
