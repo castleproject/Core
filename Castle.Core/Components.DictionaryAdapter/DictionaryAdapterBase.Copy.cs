@@ -26,6 +26,11 @@ namespace Castle.Components.DictionaryAdapter
 
 		public void CopyTo(IDictionaryAdapter other, Func<PropertyDescriptor, bool> selector)
 		{
+			if (ReferenceEquals(this, other))
+			{
+				return;
+			}
+
 			if (Meta.Type.IsAssignableFrom(other.Meta.Type) == false)
 			{
 				throw new ArgumentException(string.Format(

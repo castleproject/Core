@@ -216,7 +216,7 @@ namespace Castle.Components.DictionaryAdapter
 		public bool Evaluate(XPathExpression xpath, XPathNavigator source, out object result)
 		{
 			xpath = (XPathExpression)xpath.Clone();
-			xpath.SetContext(new XPathContractContext(this));
+			xpath.SetContext(new XPathSemantics(this));
 			result = source.Evaluate(xpath);
 			if (xpath.ReturnType == XPathResultType.NodeSet)	
 			{
@@ -229,14 +229,14 @@ namespace Castle.Components.DictionaryAdapter
 		public XPathNavigator SelectSingleNode(XPathExpression xpath, XPathNavigator source)
 		{
 			xpath = (XPathExpression)xpath.Clone();
-			xpath.SetContext(new XPathContractContext(this));
+			xpath.SetContext(new XPathSemantics(this));
 			return source.SelectSingleNode(xpath);
 		}
 
 		public bool Matches(XPathExpression xpath, XPathNavigator source)
 		{
 			xpath = (XPathExpression)xpath.Clone();
-			xpath.SetContext(new XPathContractContext(this));
+			xpath.SetContext(new XPathSemantics(this));
 			return source.Matches(xpath);
 		}
 
@@ -372,13 +372,13 @@ namespace Castle.Components.DictionaryAdapter
 				"Invalid qualified name {0}.  Expected [prefix:]name format", qualifiedName));
 		}
 
-		#region NestedType: XPathContractContext
+		#region Nested Type: XPathSemantics
 
-		class XPathContractContext : XsltContext
+		class XPathSemantics : XsltContext
 		{
 			private readonly XPathContext xpathContext;
 
-			public XPathContractContext(XPathContext xpathContext)
+			public XPathSemantics(XPathContext xpathContext)
 			{
 				this.xpathContext = xpathContext;
 			}
@@ -454,7 +454,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			public object Evaluate(XsltContext xsltContext)
 			{
-				var args = ((XPathContractContext)xsltContext).Arguments;
+				var args = ((XPathSemantics)xsltContext).Arguments;
 				return args.GetParam(name, null);
 			}
 		}
