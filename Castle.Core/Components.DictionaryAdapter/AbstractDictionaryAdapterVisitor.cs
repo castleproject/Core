@@ -26,18 +26,19 @@ namespace Castle.Components.DictionaryAdapter
 	/// </summary>
 	public abstract class AbstractDictionaryAdapterVisitor : IDictionaryAdapterVisitor
 	{
-		private readonly Stack<IDictionaryAdapter> scopes;
-		private bool cancelled;
+		private readonly Dictionary<IDictionaryAdapter, int> scopes;
 
 		protected AbstractDictionaryAdapterVisitor()
 		{
-			scopes = new Stack<IDictionaryAdapter>();
+			scopes = new Dictionary<IDictionaryAdapter, int>(ReferenceEqualityComparer<IDictionaryAdapter>.Instance);
 		}
 
 		protected AbstractDictionaryAdapterVisitor(AbstractDictionaryAdapterVisitor parent)
 		{
 			scopes = parent.scopes;
 		}
+
+		protected bool Cancelled { get; set; }
 
 		public virtual bool VisitDictionaryAdapter(IDictionaryAdapter dictionaryAdapter, object state)
 		{
@@ -55,7 +56,7 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				foreach (var property in dictionaryAdapter.This.Properties.Values)
 				{
-					if (cancelled) break;
+					if (Cancelled) break;
 
 					if (selector != null && selector(property) == false)
 					{
@@ -79,15 +80,10 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			finally
 			{
-				PopScope();
+				PopScope(dictionaryAdapter);
 			}
 
 			return true;
-		}
-
-		protected void CancelVisit()
-		{
-			cancelled = true;
 		}
 
 		void IDictionaryAdapterVisitor.VisitProperty(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, object state)
@@ -122,18 +118,17 @@ namespace Castle.Components.DictionaryAdapter
 
 		private bool PushScope(IDictionaryAdapter dictionaryAdapter)
 		{
-			if (scopes.Any(scope => ReferenceEquals(scope, dictionaryAdapter)))
+			if (scopes.ContainsKey(dictionaryAdapter))
 			{
 				return false;
 			}
-
-			scopes.Push(dictionaryAdapter);
+			scopes.Add(dictionaryAdapter, 0);
 			return true;
 		}
 
-		private void PopScope()
+		private void PopScope(IDictionaryAdapter dictionaryAdapter)
 		{
-			scopes.Pop();
+			scopes.Remove(dictionaryAdapter);
 		}
 
 		private static bool IsCollection(PropertyDescriptor property, out Type collectionItemType)
