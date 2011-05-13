@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy
+namespace Castle.DynamicProxy.Internal
 {
 	using System;
 	using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
 
-	internal static class InvocationHelper
+	public static class InvocationHelper
 	{
 		private static readonly Dictionary<KeyValuePair<MethodInfo, Type>, MethodInfo> cache =
 			new Dictionary<KeyValuePair<MethodInfo, Type>, MethodInfo>();

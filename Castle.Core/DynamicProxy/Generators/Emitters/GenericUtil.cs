@@ -20,6 +20,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
+	using Castle.DynamicProxy.Internal;
+
 #if SILVERLIGHT
 	using Castle.Core.Extensions;
 #endif

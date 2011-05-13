@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Contributors
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Internal;
 
 	public class WrappedClassMembersCollector : ClassMembersCollector
 	{
@@ -43,7 +44,7 @@ namespace Castle.DynamicProxy.Contributors
 				return null;
 			}
 #endif
-			if (!IsAccessible(method))
+			if (method.IsAccessible() == false)
 			{
 				return null;
 			}
