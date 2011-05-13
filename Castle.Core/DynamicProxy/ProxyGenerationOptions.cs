@@ -157,7 +157,7 @@ namespace Castle.DynamicProxy
 
 		public bool HasMixins
 		{
-			get { return mixins == null ? false : mixins.Count != 0; }
+			get { return mixins != null && mixins.Count != 0; }
 		}
 
 		public override bool Equals(object obj)

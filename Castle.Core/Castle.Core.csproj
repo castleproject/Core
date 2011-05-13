@@ -309,6 +309,7 @@
     <Compile Include="DynamicProxy\Contributors\OptionallyForwardingMethodGenerator.cs" />
     <Compile Include="DynamicProxy\Contributors\WrappedClassMembersCollector.cs" />
     <Compile Include="DynamicProxy\Generators\AttributeDisassembler.cs" />
+    <Compile Include="DynamicProxy\ProxyUtil.cs" />
     <Compile Include="DynamicProxy\Serialization\CacheMappingsAttribute.cs" />
     <Compile Include="DynamicProxy\Contributors\ClassMembersCollector.cs" />
     <Compile Include="DynamicProxy\Contributors\MinimialisticMethodGenerator.cs" />
