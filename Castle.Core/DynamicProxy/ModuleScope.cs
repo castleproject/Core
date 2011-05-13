@@ -23,6 +23,7 @@ namespace Castle.DynamicProxy
 
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Serialization;
 
 #if SILVERLIGHT
 	using Castle.DynamicProxy.SilverlightExtensions;

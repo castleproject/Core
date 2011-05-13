@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy
 
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Internal;
 
 #if SILVERLIGHT
 	using Castle.DynamicProxy.SilverlightExtensions;
@@ -165,7 +166,7 @@ namespace Castle.DynamicProxy
 			var isInternalNotNested = target.IsVisible == false && isTargetNested == false;
 
 			var internalAndVisibleToDynProxy = (isInternalNotNested || isNestedAndInternal) &&
-			                                   InternalsHelper.IsInternalToDynamicProxy(target.Assembly);
+			                                   InternalsUtil.IsInternalToDynamicProxy(target.Assembly);
 			return internalAndVisibleToDynProxy;
 		}
 #endif

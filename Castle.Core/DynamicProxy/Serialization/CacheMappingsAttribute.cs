@@ -15,7 +15,7 @@
 
 #if !SILVERLIGHT
 
-namespace Castle.DynamicProxy
+namespace Castle.DynamicProxy.Serialization
 {
 	using System;
 	using System.Collections.Generic;

@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Internal;
 
 	public abstract class AbstractTypeEmitter
 	{

@@ -299,7 +299,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="DynamicProxy\CompositionInvocation.cs" />
+    <Compile Include="DynamicProxy\Internal\CompositionInvocation.cs" />
     <Compile Include="DynamicProxy\Contributors\ClassProxyWithTargetTargetContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\CompositeTypeContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\DelegateTypeGenerator.cs" />
@@ -309,7 +309,7 @@
     <Compile Include="DynamicProxy\Contributors\OptionallyForwardingMethodGenerator.cs" />
     <Compile Include="DynamicProxy\Contributors\WrappedClassMembersCollector.cs" />
     <Compile Include="DynamicProxy\Generators\AttributeDisassembler.cs" />
-    <Compile Include="DynamicProxy\CacheMappingsAttribute.cs" />
+    <Compile Include="DynamicProxy\Serialization\CacheMappingsAttribute.cs" />
     <Compile Include="DynamicProxy\Contributors\ClassMembersCollector.cs" />
     <Compile Include="DynamicProxy\Contributors\MinimialisticMethodGenerator.cs" />
     <Compile Include="DynamicProxy\Contributors\InterfaceMembersCollector.cs" />
@@ -333,7 +333,7 @@
     <Compile Include="DynamicProxy\DefaultProxyBuilder.cs" />
     <Compile Include="DynamicProxy\Contributors\ClassProxyInstanceContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\ClassProxyTargetContributor.cs" />
-    <Compile Include="DynamicProxy\AttributeUtil.cs" />
+    <Compile Include="DynamicProxy\Internal\AttributeUtil.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\AssignArgumentStatement.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\AsTypeReference.cs" />
     <Compile Include="DynamicProxy\Generators\AttributesToAvoidReplicating.cs" />
@@ -512,10 +512,10 @@
     <Compile Include="DynamicProxy\Generators\MetaTypeElement.cs" />
     <Compile Include="DynamicProxy\Generators\TypeElementCollection.cs" />
     <Compile Include="DynamicProxy\Generators\MetaType.cs" />
-    <Compile Include="DynamicProxy\InheritanceInvocation.cs" />
-    <Compile Include="DynamicProxy\InternalsHelper.cs" />
+    <Compile Include="DynamicProxy\Internal\InheritanceInvocation.cs" />
+    <Compile Include="DynamicProxy\Internal\InternalsUtil.cs" />
     <Compile Include="DynamicProxy\InvalidMixinConfigurationException.cs" />
-    <Compile Include="DynamicProxy\InvocationHelper.cs" />
+    <Compile Include="DynamicProxy\Internal\InvocationHelper.cs" />
     <Compile Include="DynamicProxy\IProxyBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -532,7 +532,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DynamicProxy\ProxyGenerator.cs" />
-    <Compile Include="DynamicProxy\RemotableInvocation.cs" />
+    <Compile Include="DynamicProxy\Serialization\RemotableInvocation.cs" />
     <Compile Include="DynamicProxy\Serialization\ProxyTypeConstants.cs" />
     <Compile Include="DynamicProxy\Serialization\ProxyObjectReference.cs" />
     <Compile Include="Core\Extensions\SilverlightExtensions.cs" />

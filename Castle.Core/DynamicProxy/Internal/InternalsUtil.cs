@@ -12,15 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy
+namespace Castle.DynamicProxy.Internal
 {
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
 
 	using Castle.Core.Internal;
 
-	public class InternalsHelper
+	public static class InternalsUtil
 	{
 		private static readonly IDictionary<Assembly, bool> internalsToDynProxy = new Dictionary<Assembly, bool>();
 		private static readonly Lock internalsToDynProxyLock = Lock.Create();
@@ -32,7 +33,7 @@ namespace Castle.DynamicProxy
 		/// <returns>
 		///   <c>true</c> if the specified method is internal; otherwise, <c>false</c>.
 		/// </returns>
-		public static bool IsInternal(MethodInfo method)
+		public static bool IsInternal(this MethodBase method)
 		{
 			return method.IsAssembly || (method.IsFamilyAndAssembly
 			                             && !method.IsFamilyOrAssembly);
@@ -42,7 +43,7 @@ namespace Castle.DynamicProxy
 		///   Determines whether this assembly has internals visible to dynamic proxy.
 		/// </summary>
 		/// <param name = "asm">The assembly to inspect.</param>
-		public static bool IsInternalToDynamicProxy(Assembly asm)
+		public static bool IsInternalToDynamicProxy(this Assembly asm)
 		{
 			using (var locker = internalsToDynProxyLock.ForReadingUpgradeable())
 			{
@@ -58,24 +59,52 @@ namespace Castle.DynamicProxy
 					return internalsToDynProxy[asm];
 				}
 
-				var atts = (InternalsVisibleToAttribute[])
-				           asm.GetCustomAttributes(typeof(InternalsVisibleToAttribute), false);
-
-				var found = false;
-
-				foreach (var internals in atts)
-				{
-					if (internals.AssemblyName.Contains(ModuleScope.DEFAULT_ASSEMBLY_NAME))
-					{
-						found = true;
-						break;
-					}
-				}
+				var internalsVisibleTo = asm.GetAttributes<InternalsVisibleToAttribute>();
+				var found = internalsVisibleTo.Any(VisibleToDynamicProxy);
 
 				internalsToDynProxy.Add(asm, found);
-
 				return found;
 			}
+		}
+
+		private static bool VisibleToDynamicProxy(InternalsVisibleToAttribute attribute)
+		{
+			return attribute.AssemblyName.Contains(ModuleScope.DEFAULT_ASSEMBLY_NAME);
+		}
+
+		/// <summary>
+		///   Checks if the method is public or protected.
+		/// </summary>
+		/// <param name = "method"></param>
+		/// <returns></returns>
+		public static bool IsAccessible(this MethodBase method)
+		{
+			// Accessibility supported by the full framework and CoreCLR
+			if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly)
+			{
+				return true;
+			}
+
+#if !SILVERLIGHT
+			// Accessibility not supported by the CoreCLR
+			if (method.IsFamilyAndAssembly)
+			{
+				return true;
+			}
+			if (method.DeclaringType.Assembly.IsInternalToDynamicProxy() && method.IsAssembly)
+			{
+				return true;
+			}
+#else
+	// Explicitly implemented interface method on class
+			if (method.IsPrivate && method.IsFinal)
+			{
+				Logger.Debug(
+					string.Format("Excluded explicitly implemented interface method {0} on type {1} because it cannot be intercepted.",
+					              method.Name, method.DeclaringType.FullName));
+			}
+#endif
+			return false;
 		}
 	}
 }

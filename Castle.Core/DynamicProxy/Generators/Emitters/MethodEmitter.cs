@@ -22,6 +22,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Internal;
 
 	[DebuggerDisplay("{builder.Name}")]
 	public class MethodEmitter : IMemberEmitter
