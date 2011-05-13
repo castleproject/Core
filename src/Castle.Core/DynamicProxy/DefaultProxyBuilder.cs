@@ -61,18 +61,6 @@ namespace Castle.DynamicProxy
 			get { return scope; }
 		}
 
-		[Obsolete("Use CreateClassProxyType method instead.")]
-		public Type CreateClassProxy(Type classToProxy, ProxyGenerationOptions options)
-		{
-			return CreateClassProxyType(classToProxy, Type.EmptyTypes, options);
-		}
-
-		[Obsolete("Use CreateClassProxyType method instead.")]
-		public Type CreateClassProxy(Type classToProxy, Type[] additionalInterfacesToProxy, ProxyGenerationOptions options)
-		{
-			return CreateClassProxyType(classToProxy, additionalInterfacesToProxy, options);
-		}
-
 		public Type CreateClassProxyType(Type classToProxy, Type[] additionalInterfacesToProxy, ProxyGenerationOptions options)
 		{
 			AssertValidType(classToProxy);
