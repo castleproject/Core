@@ -59,8 +59,7 @@ namespace Castle.DynamicProxy
 						interface2Mixin[inter] = mixin;
 					}
 				}
-				sortedMixedInterfaceTypes.Sort(
-					delegate(Type x, Type y) { return x.FullName.CompareTo(y.FullName); });
+				sortedMixedInterfaceTypes.Sort((x, y) => x.FullName.CompareTo(y.FullName));
 
 				for (var i = 0; i < sortedMixedInterfaceTypes.Count; i++)
 				{

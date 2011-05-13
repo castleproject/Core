@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Internal;
 
 	public abstract class CompositeTypeContributor : ITypeContributor
 	{

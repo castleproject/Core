@@ -30,6 +30,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Internal;
 
 #if SILVERLIGHT
 	using Castle.DynamicProxy.SilverlightExtensions;
@@ -425,7 +426,7 @@ namespace Castle.DynamicProxy.Generators
 			       || constructor.IsFamily
 			       || constructor.IsFamilyOrAssembly
 #if !Silverlight
-			       || (constructor.IsAssembly && InternalsHelper.IsInternalToDynamicProxy(constructor.DeclaringType.Assembly));
+			       || (constructor.IsAssembly && InternalsUtil.IsInternalToDynamicProxy(constructor.DeclaringType.Assembly));
 #else
             ;
 #endif

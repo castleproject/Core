@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Contributors
 
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Internal;
 
 	public abstract class MembersCollector
 	{
@@ -193,40 +194,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected abstract MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone);
 
-		/// <summary>
-		///   Checks if the method is public or protected.
-		/// </summary>
-		/// <param name = "method"></param>
-		/// <returns></returns>
-		protected bool IsAccessible(MethodBase method)
-		{
-			// Accessibility supported by the full framework and CoreCLR
-			if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly)
-			{
-				return true;
-			}
 
-#if !SILVERLIGHT
-			// Accessibility not supported by the CoreCLR
-			if (method.IsFamilyAndAssembly)
-			{
-				return true;
-			}
-			if (InternalsHelper.IsInternalToDynamicProxy(method.DeclaringType.Assembly) && method.IsAssembly)
-			{
-				return true;
-			}
-#else
-	// Explicitly implemented interface method on class
-			if (method.IsPrivate && method.IsFinal)
-			{
-				Logger.Debug(
-					string.Format("Excluded explicitly implemented interface method {0} on type {1} because it cannot be intercepted.",
-					              method.Name, method.DeclaringType.FullName));
-			}
-#endif
-			return false;
-		}
 
 		/// <summary>
 		///   Performs some basic screening and invokes the <see cref = "IProxyGenerationHook" />
@@ -246,14 +214,7 @@ namespace Castle.DynamicProxy.Contributors
 				return false;
 			}
 
-			var isInternalsAndNotVisibleToDynamicProxy = InternalsHelper.IsInternal(method);
-			if (isInternalsAndNotVisibleToDynamicProxy)
-			{
-				isInternalsAndNotVisibleToDynamicProxy = InternalsHelper.IsInternalToDynamicProxy(method.DeclaringType.Assembly) ==
-				                                         false;
-			}
-
-			if (isInternalsAndNotVisibleToDynamicProxy)
+			if (IsInternalAndNotVisibleToDynamicProxy(method))
 			{
 				return false;
 			}
@@ -289,6 +250,12 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			return hook.ShouldInterceptMethod(type, method);
+		}
+
+		private static bool IsInternalAndNotVisibleToDynamicProxy(MethodInfo method)
+		{
+			return method.IsInternal() &&
+			       method.DeclaringType.Assembly.IsInternalToDynamicProxy() == false;
 		}
 	}
 }

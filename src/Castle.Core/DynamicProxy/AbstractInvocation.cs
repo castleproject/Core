@@ -21,6 +21,9 @@ namespace Castle.DynamicProxy
 
 #if DOTNET40
 	using System.Security;
+
+	using Castle.DynamicProxy.Serialization;
+
 #endif
 
 #if SILVERLIGHT
