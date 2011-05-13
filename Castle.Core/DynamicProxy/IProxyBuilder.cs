@@ -37,45 +37,6 @@ namespace Castle.DynamicProxy
 		ModuleScope ModuleScope { get; }
 
 		/// <summary>
-		///   Creates a proxy type for given <paramref name = "classToProxy" />, using <paramref name = "options" /> provided.
-		/// </summary>
-		/// <param name = "classToProxy">The class type to proxy.</param>
-		/// <param name = "options">The proxy generation options.</param>
-		/// <returns>The generated proxy type.</returns>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "classToProxy" /> is a generic type definition.</exception>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "classToProxy" /> is not public.
-		///   Note that to avoid this exception, you can mark offending type internal, and define <see
-		///    cref = "InternalsVisibleToAttribute" /> 
-		///   pointing to Castle Dynamic Proxy assembly, in assembly containing that type, if this is appropriate.</exception>
-		/// <seealso cref = "ClassProxyGenerator" />
-		[Obsolete("Use CreateClassProxyType method instead.")]
-		Type CreateClassProxy(Type classToProxy, ProxyGenerationOptions options);
-
-		/// <summary>
-		///   Creates a proxy type for given <paramref name = "classToProxy" />, implementing <paramref
-		///    name = "additionalInterfacesToProxy" />, using <paramref name = "options" /> provided.
-		/// </summary>
-		/// <param name = "classToProxy">The class type to proxy.</param>
-		/// <param name = "additionalInterfacesToProxy">Additional interface types to proxy.</param>
-		/// <param name = "options">The proxy generation options.</param>
-		/// <returns>The generated proxy type.</returns>
-		/// <remarks>
-		///   Implementers should return a proxy type for the specified class and interfaces.
-		///   Additional interfaces should be only 'mark' interfaces, that is, they should work like interface proxy without target. (See <see
-		///    cref = "CreateInterfaceProxyTypeWithoutTarget" /> method.)
-		/// </remarks>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "classToProxy" /> or any of <paramref
-		///    name = "additionalInterfacesToProxy" /> is a generic type definition.</exception>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "classToProxy" /> or any of <paramref
-		///    name = "additionalInterfacesToProxy" /> is not public.
-		///   Note that to avoid this exception, you can mark offending type internal, and define <see
-		///    cref = "InternalsVisibleToAttribute" /> 
-		///   pointing to Castle Dynamic Proxy assembly, in assembly containing that type, if this is appropriate.</exception>
-		/// <seealso cref = "ClassProxyGenerator" />
-		[Obsolete("Use CreateClassProxyType method instead.")]
-		Type CreateClassProxy(Type classToProxy, Type[] additionalInterfacesToProxy, ProxyGenerationOptions options);
-
-		/// <summary>
 		///   Creates a proxy type for given <paramref name = "classToProxy" />, implementing <paramref
 		///    name = "additionalInterfacesToProxy" />, using <paramref name = "options" /> provided.
 		/// </summary>
