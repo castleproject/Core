@@ -31,7 +31,7 @@ namespace Castle.Components.DictionaryAdapter
 				return;
 			}
 
-			if (Meta.Type.IsAssignableFrom(other.Meta.Type) == false)
+			if (other.Meta.Type.IsAssignableFrom(Meta.Type) == false)
 			{
 				throw new ArgumentException(string.Format(
 					"Unable to copy to {0}.  The type must be assignable from {1}.",
