@@ -291,23 +291,24 @@ namespace Castle.Components.DictionaryAdapter
 				if (listItem != null)
 				{
 					itemBehavior = listItem;
-					type = listItem.Type ?? baseType;
+					if (listItem.Type != null)
+					{
+						type = listItem.Type;
+						xmlMeta = getXmlMeta(listItem.Type);
+					}
+					else
+						type = baseType;
 
 					if (string.IsNullOrEmpty(listItem.ElementName))
 					{
-						if (listItem.Type != null)
+						if (xmlMeta != null)
 						{
-							xmlMeta = getXmlMeta(listItem.Type);
-
-							if (xmlMeta != null)
-							{
-								name = xmlMeta.XmlType.TypeName;
-								typeNamespaceUri = xmlMeta.XmlType.Namespace;
-							}
-							else
-							{
-								name = GetDataType(listItem.Type);
-							}
+							name = xmlMeta.XmlType.TypeName;
+							typeNamespaceUri = xmlMeta.XmlType.Namespace;
+						}
+						else
+						{
+							name = GetDataType(type);
 						}
 					}
 					else
