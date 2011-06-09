@@ -456,6 +456,74 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void Can_Clear_Collections()
+		{
+			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
+					 <Name>Soccer Adult Spring II 2010</Name>
+					 <MinimumAge>16</MinimumAge>
+					 <Division>Male</Division>
+					 <League>
+						<Team name='Hit And Run' GamesPlayed='2'>
+						   <AmountDue>100.50</AmountDue>
+						</Team>
+						<Team name='Nemisis'>
+						   <AmountDue>250.00</AmountDue>
+						</Team>
+					 </League>
+				  </Season>";
+
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			season.Teams.Clear();
+			Assert.AreEqual(0, season.Teams.Count);
+			var teams = document.GetElementsByTagName("Team", "RISE");
+			Assert.AreEqual(0, teams.Count);
+		}
+
+		[Test]
+		public void Can_Clear_Empty_Collections()
+		{
+			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
+					 <Name>Soccer Adult Spring II 2010</Name>
+					 <MinimumAge>16</MinimumAge>
+					 <Division>Male</Division>
+				  </Season>";
+
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			season.Teams.Clear();
+			var teams = document.GetElementsByTagName("Team", "RISE");
+			Assert.AreEqual(0, teams.Count);
+		}
+
+		[Test]
+		public void Can_Clear_Collections_With_Nil()
+		{
+				var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
+						<League>
+							<Team name='Hit And Run'>
+								<Roster>
+									<Participant FirstName='Mickey' lastName='Mouse'>
+									</Participant>
+									<Participant FirstName='Donald' lastName='Ducks'>
+									</Participant>
+								</Roster>
+							</Team>
+						</League>
+					</Season>";
+
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			season.Teams[0].Players.Clear();
+			Assert.AreEqual(0, season.Teams[0].Players.Count);
+			var roster = document.GetElementsByTagName("Roster", "RISE");
+			Assert.AreEqual(1, roster.Count);
+			var nil = roster[0].Attributes["nil", "http://www.w3.org/2001/XMLSchema-instance"];
+			Assert.IsNotNull(nil);
+			Assert.AreEqual("true", nil.Value);
+		}
+
+		[Test]
 		public void Can_Read_Nullable_Attribute()
 		{
 			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
@@ -720,7 +788,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			{
 				document.LoadXml(xml);
 			}
-			return factory.GetAdapter<T>(document);
+			return (T)factory.GetAdapter(typeof(T), document);
 		}
 
 		public enum Division
@@ -763,7 +831,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			int? MaxPlayers { get; set; }
 			[XmlElement("AmountDue")]
 			decimal Balance { get; set; }
-			[XmlArray("Roster"), XmlArrayItem("Participant")]
+			[XmlArray("Roster", IsNullable = true), XmlArrayItem("Participant"), RemoveIfEmpty]
 			BindingList<IPlayer> Players { get; }
 		}
 

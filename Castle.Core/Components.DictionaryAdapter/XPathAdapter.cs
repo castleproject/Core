@@ -359,7 +359,6 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			
 			var list = (IList)Activator.CreateInstance(listType);
-		
 
 			foreach (var item in itemNodes)
 			{
@@ -400,8 +399,14 @@ namespace Castle.Components.DictionaryAdapter
 
 				Action<int> removeAt = index => result.RemoveAt(index);
 
+				Action<IEnumerable> reset = collection =>
+				{
+					object value = collection;
+					WriteProperty(result, ref value, dictionaryAdapter);
+				};
+
 				var initializer = (IValueInitializer)Activator.CreateInstance(
-					initializerType, addAt, addNew, setAt, removeAt);
+					initializerType, addAt, addNew, setAt, removeAt, reset);
 				initializer.Initialize(dictionaryAdapter, list);
 			}
 
