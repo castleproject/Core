@@ -16,7 +16,7 @@ namespace Castle.Components.DictionaryAdapter
 {
 #if !SILVERLIGHT
 	using System;
-	using System.Collections.Generic;
+	using System.Collections;
 	using System.ComponentModel;
 
 	public class BindingListInitializer<T> : IValueInitializer
@@ -25,14 +25,18 @@ namespace Castle.Components.DictionaryAdapter
 		private readonly Func<int, object, object> addAt;
 		private readonly Func<int, object, object> setAt;
 		private readonly Action<int> removeAt;
+		private readonly Action<IEnumerable> reset;
+
 		private bool addingNew;
 
-		public BindingListInitializer(Func<int, object, object> addAt, Func<object> addNew, Func<int, object, object> setAt, Action<int> removeAt)
+		public BindingListInitializer(Func<int, object, object> addAt, Func<object> addNew, Func<int, object, object> setAt,
+									  Action<int> removeAt, Action<IEnumerable> reset)
 		{
 			this.addAt = addAt;
 			this.addNew = addNew;
 			this.setAt = setAt;
 			this.removeAt = removeAt;
+			this.reset = reset;
 		}
 
 		public void Initialize(IDictionaryAdapter dictionaryAdapter, object value)
@@ -64,6 +68,7 @@ namespace Castle.Components.DictionaryAdapter
 						}
 						addingNew = false;
 						break;
+
 					case ListChangedType.ItemChanged:
 						if (setAt != null)
 						{
@@ -77,11 +82,15 @@ namespace Castle.Components.DictionaryAdapter
 							}
 						}
 						break;
+
 					case ListChangedType.ItemDeleted:
 						if (removeAt != null)
-						{
 							removeAt(args.NewIndex);
-						}
+						break;
+
+					case ListChangedType.Reset:
+						if (reset != null)
+							reset(bindingList);
 						break;
 				}
 			};
