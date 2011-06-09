@@ -186,7 +186,7 @@ namespace Castle.Components.DictionaryAdapter
 						Func<object> addNew = () => dictionaryAdapter.Create(genericArg);
 						initializer = (IValueInitializer)Activator.CreateInstance(
 							typeof(BindingListInitializer<>).MakeGenericType(genericArg),
-							null, addNew, null, null);
+							null, addNew, null, null, null);
 					}
 #endif
 				}
