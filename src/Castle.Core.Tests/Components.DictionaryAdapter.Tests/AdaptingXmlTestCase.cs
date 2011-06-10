@@ -508,6 +508,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 									<Participant FirstName='Donald' lastName='Ducks'>
 									</Participant>
 								</Roster>
+								<AmountDue>100.50</AmountDue>
 							</Team>
 						</League>
 					</Season>";
@@ -518,6 +519,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(0, season.Teams[0].Players.Count);
 			var roster = document.GetElementsByTagName("Roster", "RISE");
 			Assert.AreEqual(1, roster.Count);
+			Assert.AreEqual(0, roster[0].ChildNodes.Count);
 			var nil = roster[0].Attributes["nil", "http://www.w3.org/2001/XMLSchema-instance"];
 			Assert.IsNotNull(nil);
 			Assert.AreEqual("true", nil.Value);
