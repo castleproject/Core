@@ -360,25 +360,37 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (Result is XPathNavigator)
 			{
+				var node = (XPathNavigator)Result;
 				if (nillable && IsNullable)
 				{
-					RemoveChildren(XPathNodeType.All & ~XPathNodeType.Namespace);
-					Context.MakeNil((XPathNavigator)Result);
+					RemoveChildren(node);
+					Context.MakeNil(node);
 					return false;
 				}
 				else
 				{
-					((XPathNavigator)Result).DeleteSelf();
+					node.DeleteSelf();
 					return true;
 				}
 			}
 			else if (Result is XPathNodeIterator)
 			{
+				var nilled = false;
 				var nodes = ((XPathNodeIterator)Result).Cast<XPathNavigator>().ToArray();
 				for (int i = 0; i < nodes.Length; ++i)
 				{
-					nodes[i].DeleteSelf();
+					if (i == 0 && nillable && IsNullable)
+					{
+						RemoveChildren(nodes[0]);
+						Context.MakeNil(nodes[0]);
+						nilled = true;
+					}
+					else
+					{
+						nodes[i].DeleteSelf();
+					}
 				}
+				if (nilled) return false;
 			}
 			Result = null;
 			if (nillable && IsNullable)
@@ -396,18 +408,20 @@ namespace Castle.Components.DictionaryAdapter
 
 		public XPathNavigator RemoveChildren()
 		{
-			return RemoveChildren(XPathNodeType.All);
+			var node = GetNavigator(true);
+			RemoveChildren(node);
+			return node;
 		}
 
-		public XPathNavigator RemoveChildren(XPathNodeType nodeType)
+		private static void RemoveChildren(XPathNavigator node)
 		{
-			var node = GetNavigator(true);
 			if (node != null)
 			{
-				var children = node.SelectChildren(nodeType).Cast<XPathNavigator>();
+				var children = node.SelectChildren(XPathNodeType.All)
+					.Cast<XPathNavigator>()
+					.Where(child => child.NodeType != XPathNodeType.Namespace);
 				foreach (var child in children.ToArray()) child.DeleteSelf();
 			}
-			return node;
 		}
 
 		private bool GetNillable(ref XPathNavigator source)
