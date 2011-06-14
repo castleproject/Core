@@ -456,6 +456,69 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void Can_Remove_From_Collections()
+		{
+			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
+					 <Name>Soccer Adult Spring II 2010</Name>
+					 <MinimumAge>16</MinimumAge>
+					 <Division>Male</Division>
+					 <League>
+						<Team name='Hit And Run' GamesPlayed='2'>
+						   <AmountDue>100.50</AmountDue>
+						</Team>
+						<Team name='Nemisis'>
+						   <AmountDue>250.00</AmountDue>
+						</Team>
+					 </League>
+				  </Season>";
+
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			foreach (var team in season.Teams.ToArray())
+			{
+				season.Teams.Remove(team);								
+			}
+			Assert.AreEqual(0, season.Teams.Count);
+			var teams = document.GetElementsByTagName("Team", "RISE");
+			Assert.AreEqual(0, teams.Count);
+			var league = document.GetElementsByTagName("League", "RISE");
+			Assert.AreEqual(1, league.Count);
+			Assert.AreEqual(0, league[0].ChildNodes.Count);
+		}
+
+		[Test]
+		public void Can_Remove_Collections_With_Nil()
+		{
+			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
+						<League>
+							<Team name='Hit And Run'>
+								<Roster>
+									<Participant FirstName='Mickey' lastName='Mouse'>
+									</Participant>
+									<Participant FirstName='Donald' lastName='Ducks'>
+									</Participant>
+								</Roster>
+								<AmountDue>100.50</AmountDue>
+							</Team>
+						</League>
+					</Season>";
+
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			foreach (var player in season.Teams[0].Players.ToArray())
+			{
+				season.Teams[0].Players.Remove(player);
+			}
+			Assert.AreEqual(0, season.Teams[0].Players.Count);
+			var roster = document.GetElementsByTagName("Roster", "RISE");
+			Assert.AreEqual(1, roster.Count);
+			Assert.AreEqual(0, roster[0].ChildNodes.Count);
+			var nil = roster[0].Attributes["nil", "http://www.w3.org/2001/XMLSchema-instance"];
+			Assert.IsNotNull(nil);
+			Assert.AreEqual("true", nil.Value);
+		}
+
+		[Test]
 		public void Can_Clear_Collections()
 		{
 			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>

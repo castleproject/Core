@@ -397,12 +397,26 @@ namespace Castle.Components.DictionaryAdapter
 					return item;
 				};
 
-				Action<int> removeAt = index => result.RemoveAt(index);
-
-				Action<IEnumerable> reset = collection =>
+				Action<int> removeAt = index =>
 				{
-					object value = collection;
-					WriteProperty(result, ref value, dictionaryAdapter);
+					object value = list;
+					if (dictionaryAdapter.ShouldClearProperty(result.Property, value))
+					{
+						result.Remove(true);
+						return;
+					}
+					result.RemoveAt(index);
+				};
+
+				Action reset = () =>
+				{
+					object value = list;
+					if (dictionaryAdapter.ShouldClearProperty(result.Property, value))
+					{
+						result.Remove(true);
+						return;
+					}
+					WriteCollection(result, ref value, dictionaryAdapter);
 				};
 
 				var initializer = (IValueInitializer)Activator.CreateInstance(

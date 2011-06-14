@@ -139,7 +139,7 @@ namespace Castle.Components.DictionaryAdapter
 				var nodes = ((XPathNodeIterator)Result).Cast<XPathNavigator>().ToArray();
 				node = nodes[index];
 			}
-			return new XPathResult(type, node, Context, matchingBehavior);
+			return new XPathResult(type, node, Context, Context.ListItemMeta ?? matchingBehavior);
 		}
 
 		public IEnumerable<XPathResult> GetNodes(Type type, Func<Type, XmlMetadata> getXmlMeta)
