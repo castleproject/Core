@@ -226,8 +226,7 @@ namespace Castle.Components.DictionaryAdapter
 			return false;
 		}
 
-		private XmlMetadata GetItemQualifedName(Type type, XmlArrayItemAttribute item, Func<Type, XmlMetadata> getXmlMeta,
-												out string name, out string namespaceUri)
+		private XmlMetadata GetItemQualifedName(Type type, XmlArrayItemAttribute item, Func<Type, XmlMetadata> getXmlMeta, out string name, out string namespaceUri)
 		{
 			name = item.ElementName;
 			namespaceUri = item.Namespace;
