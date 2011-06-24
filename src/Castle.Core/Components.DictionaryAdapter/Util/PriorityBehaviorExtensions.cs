@@ -34,8 +34,9 @@ namespace Castle.Components.DictionaryAdapter
 
 			public int CompareTo(PriorityBehavior<T> other)
 			{
-				var order = Behavior.ExecutionOrder - other.Behavior.ExecutionOrder;
-				return (order == 0) ? Priority - other.Priority : order;
+				if (Behavior.ExecutionOrder == other.Behavior.ExecutionOrder)
+					return Priority - other.Priority;
+				return Behavior.ExecutionOrder > other.Behavior.ExecutionOrder ? 1 : -1;
 			}
 		}
 

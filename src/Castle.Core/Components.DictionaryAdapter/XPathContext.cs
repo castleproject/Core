@@ -242,7 +242,6 @@ namespace Castle.Components.DictionaryAdapter
 
 		public void AddStandardNamespaces(XPathNavigator source)
 		{
-			CreateNamespace("xsi", Xsi, source);
 			CreateNamespace("xsd", Xsd, source);
 		}
 
@@ -314,6 +313,8 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (source.NodeType == XPathNodeType.Element && IsNil(source) == false)
 			{
+				if (source.LookupPrefix(Xsi) != "xsi")
+					CreateNamespace("xsi", Xsi, source);
 				source.CreateAttribute("xsi", "nil", Xsi, "true");
 				return true;
 			}
