@@ -92,7 +92,7 @@ namespace Castle.DynamicProxy
 		}
 
 #if MONO
-#pragma warning disable 1584 // Mono chokes on cref with generic arguments
+#pragma warning disable 1584, 1580, 1574 // Mono chokes on cref with generic arguments
 #endif
 
 		/// <summary>
@@ -162,7 +162,7 @@ namespace Castle.DynamicProxy
 		}
 
 #if MONO
-#pragma warning restore 1584
+#pragma warning restore 1584, 1580, 1574
 #endif
 
 		/// <summary>
