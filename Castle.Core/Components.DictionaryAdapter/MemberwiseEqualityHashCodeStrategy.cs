@@ -18,13 +18,98 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections;
 	using System.Collections.Generic;
 
-	using Castle.Core;
-
 	public class MemberwiseEqualityHashCodeStrategy : DictionaryBehaviorAttribute,
 		IDictionaryEqualityHashCodeStrategy, IDictionaryInitializer, IEqualityComparer<IDictionaryAdapter>
 	{
-		[ThreadStatic]
-		private static Dictionary<object, int> visited;
+		class HashCodeVisitor : AbstractDictionaryAdapterVisitor
+		{
+			private int hashCode;
+
+			public int CalculateHashCode(IDictionaryAdapter dictionaryAdapter)
+			{
+				if (dictionaryAdapter == null)
+					return 0;
+
+				hashCode = 27;
+				return VisitDictionaryAdapter(dictionaryAdapter, null) ? hashCode : 0;
+			}
+
+			protected override void VisitProperty(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, object state)
+			{
+				var value = dictionaryAdapter.GetProperty(property.PropertyName, true);
+				CollectHashCode(property, GetValueHashCode(value));
+			}
+
+			protected override void VisitInterface(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, object state)
+			{
+				var nested = (IDictionaryAdapter)dictionaryAdapter.GetProperty(property.PropertyName, true);
+				CollectHashCode(property, GetNestedHashCode(nested));
+			}
+
+			protected override void VisitCollection(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, Type collectionItemType, object state)
+			{
+				var collection = (IEnumerable)dictionaryAdapter.GetProperty(property.PropertyName, true);
+				CollectHashCode(property, GetCollectionHashcode(collection));
+			}
+
+			private int GetValueHashCode(object value)
+			{
+				if (value == null)
+				{
+					return 0;
+				}
+
+				if (value is IDictionaryAdapter)
+				{
+					return GetNestedHashCode((IDictionaryAdapter)value);
+				}
+
+				if ((value is IEnumerable) && (value is string) == false)
+				{
+					return GetCollectionHashcode((IEnumerable)value);
+				}
+
+				return value.GetHashCode();
+			}
+
+			private int GetNestedHashCode(IDictionaryAdapter nested)
+			{
+				var currentHashCode = hashCode;
+				var nestedHashCode = CalculateHashCode(nested);
+				hashCode = currentHashCode;
+				return nestedHashCode;
+			}
+
+			private int GetCollectionHashcode(IEnumerable collection)
+			{
+				if (collection == null)
+				{
+					return 0;
+				}
+
+				var collectionHashCode = 0;
+
+				foreach (var value in collection)
+				{
+					var valueHashCode = GetValueHashCode(value);
+					unchecked
+					{
+						collectionHashCode = (13 * collectionHashCode) + valueHashCode;
+					}
+				}
+
+				return collectionHashCode;
+			}
+
+			private void CollectHashCode(PropertyDescriptor property, int valueHashCode)
+			{
+				unchecked
+				{
+					hashCode = (13 * hashCode) + property.PropertyName.GetHashCode();
+					hashCode = (13 * hashCode) + valueHashCode;
+				}
+			}
+		}
 
 		public bool Equals(IDictionaryAdapter adapter1, IDictionaryAdapter adapter2)
 		{
@@ -32,14 +117,17 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				return true;
 			}
+
 			if ((adapter1 == null) ^ (adapter2 == null))
 			{
 				return false;
 			}
+
 			if (adapter1.Meta.Type != adapter2.Meta.Type)
 			{
 				return false;
 			}
+
 			return GetHashCode(adapter1) == GetHashCode(adapter2);
 		}
 
@@ -52,84 +140,8 @@ namespace Castle.Components.DictionaryAdapter
 
 		public bool GetHashCode(IDictionaryAdapter adapter, out int hashCode)
 		{
-			if (adapter == null)
-			{
-				hashCode = 0;
-				return true;
-			}
-
-			var clear = false;
-			var visitedLocal = visited;
-			try
-			{
-				if (visitedLocal == null)
-				{
-					visited = visitedLocal = new Dictionary<object, int>(ReferenceEqualityComparer<object>.Instance);
-					clear = true;
-				}
-				else
-				{
-					if (visitedLocal.TryGetValue(this, out hashCode))
-					{
-						return true;
-					}
-					visitedLocal.Add(this, 0);
-				}
-				hashCode = 27;
-				foreach (var property in adapter.Meta.Properties)
-				{
-					var value = adapter.GetProperty(property.Key, true);
-					var valueHashCode = GetValueHashCode(value);
-					unchecked
-					{
-						hashCode = (13 * hashCode) + property.Key.GetHashCode();
-						hashCode = (13 * hashCode) + valueHashCode;
-					}
-				}
-				visitedLocal[this] = hashCode;
-				return true;
-			}
-			finally
-			{
-				if (clear)
-				{
-					visited = null;
-				}
-			}
-		}
-
-		private int GetValueHashCode(object value)
-		{
-			if (value == null)
-			{
-				return 0;
-			}
-
-			if (value is IDictionaryAdapter)
-			{
-				return GetHashCode((IDictionaryAdapter)value);
-			}
-
-			if ((value is IEnumerable) && (value is string) == false)
-			{
-				return GetEnumerableHashcode((IEnumerable)value);
-			}
-
-			return value.GetHashCode();
-		}
-
-		private int GetEnumerableHashcode(IEnumerable enumerable)
-		{
-			var hashCode = 0;
-			foreach (var value in enumerable)
-			{
-				var valueHashCode = GetValueHashCode(value);
-				unchecked
-				{
-					hashCode = (13 * hashCode) + valueHashCode;
-				}
-			}
-			return hashCode;
+			hashCode = new HashCodeVisitor().CalculateHashCode(adapter);
+			return true;
 		}
 
 		void IDictionaryInitializer.Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors)

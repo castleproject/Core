@@ -199,8 +199,8 @@ namespace Castle.Components.DictionaryAdapter
 			if (other is DictionaryDescriptor)
 			{
 				var otherDict = (DictionaryDescriptor)other;
-#if DOTNET35 || SL4
-				// no co-contra variance support in .NET 3.5 and SL4
+#if DOTNET35 || SL4 || MONO
+				// no co-contra variance support in .NET 3.5, SL4 or mono
 				CopyMetaInitializers(otherDict, i => selector(i)).CopyInitializers(otherDict, i => selector(i));
 #else
 				CopyMetaInitializers(otherDict, selector).CopyInitializers(otherDict, selector);
