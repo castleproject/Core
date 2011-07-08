@@ -14,6 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
+#if !SILVERLIGHT
 	using System.Collections.Generic;
 
 	public interface IBook
@@ -35,4 +36,5 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		int SubDivision { get; set; }
 	}
+#endif
 }

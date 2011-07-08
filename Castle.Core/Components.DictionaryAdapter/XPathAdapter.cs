@@ -180,10 +180,9 @@ namespace Castle.Components.DictionaryAdapter
 			return adapter.This.Factory.GetAdapter(type, dictionary, descriptor);
 		}
 
-		bool IDictionaryCopyStrategy.Copy(IDictionaryAdapter source, IDictionaryAdapter target, ref Predicate<PropertyDescriptor> selector)
+		bool IDictionaryCopyStrategy.Copy(IDictionaryAdapter source, IDictionaryAdapter target, ref Func<PropertyDescriptor, bool> selector)
 		{
-			var select = selector ?? (property => true);
-			selector = property => select(property) && XPathAdapter.IsPropertyDefined(property.PropertyName, source, this);
+			selector = selector ?? (property => XPathAdapter.IsPropertyDefined(property.PropertyName, source, this));
 			return false;
 		}
 
@@ -360,7 +359,6 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			
 			var list = (IList)Activator.CreateInstance(listType);
-		
 
 			foreach (var item in itemNodes)
 			{
@@ -399,10 +397,30 @@ namespace Castle.Components.DictionaryAdapter
 					return item;
 				};
 
-				Action<int> removeAt = index => result.RemoveAt(index);
+				Action<int> removeAt = index =>
+				{
+					object value = list;
+					if (dictionaryAdapter.ShouldClearProperty(result.Property, value))
+					{
+						result.Remove(true);
+						return;
+					}
+					result.RemoveAt(index);
+				};
+
+				Action reset = () =>
+				{
+					object value = list;
+					if (dictionaryAdapter.ShouldClearProperty(result.Property, value))
+					{
+						result.Remove(true);
+						return;
+					}
+					WriteCollection(result, ref value, dictionaryAdapter);
+				};
 
 				var initializer = (IValueInitializer)Activator.CreateInstance(
-					initializerType, addAt, addNew, setAt, removeAt);
+					initializerType, addAt, addNew, setAt, removeAt, reset);
 				initializer.Initialize(dictionaryAdapter, list);
 			}
 
@@ -738,7 +756,7 @@ namespace Castle.Components.DictionaryAdapter
             if (root != null && MoveOffRoot(root, XPathNodeType.Element) == false)
             {
 				string elementName;
-				string namespaceUri = "";
+				var namespaceUri = string.Empty;
 				var xmlRoot = rootXmlMeta.XmlRoot;
 				if (xmlRoot != null)
 				{
