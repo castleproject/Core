@@ -82,13 +82,16 @@ namespace Castle.Components.DictionaryAdapter
 
 			var xmlMeta = dictionaryAdapter.GetXmlMeta();
 
+			if (dictionaryAdapter.This.CreateStrategy == null)
+			{
+				dictionaryAdapter.This.CreateStrategy = this;
+				dictionaryAdapter.This.AddCopyStrategy(this);
+			}
+
 			if (rootXmlMeta == null)
 			{
 				rootXmlMeta = xmlMeta;
 				Context.ApplyBehaviors(rootXmlMeta, behaviors);
-
-				dictionaryAdapter.This.CreateStrategy = this;
-				dictionaryAdapter.This.AddCopyStrategy(this);
 
 				if (Parent == null)
 				{
@@ -175,7 +178,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			dictionary = dictionary ?? new Hashtable();
 			var descriptor = new DictionaryDescriptor(adapter.Meta.Behaviors);
-			adapter.This.Descriptor.CopyBehaviors(descriptor, b => b is XPathAdapter == false);
+			adapter.This.Descriptor.CopyBehaviors(descriptor);
 			descriptor.AddBehavior(xpathAdapter);
 			return adapter.This.Factory.GetAdapter(type, dictionary, descriptor);
 		}
@@ -184,6 +187,11 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			selector = selector ?? (property => XPathAdapter.IsPropertyDefined(property.PropertyName, source, this));
 			return false;
+		}
+
+		public override IDictionaryBehavior Copy()
+		{
+			return null;
 		}
 
 		#endregion
@@ -523,6 +531,15 @@ namespace Castle.Components.DictionaryAdapter
 			var source = value as IDictionaryAdapter;
 			if (source != null)
 			{
+				var sourceAdapter = For(source);
+				if (sourceAdapter != null)
+				{
+					var sourceRoot = sourceAdapter.Root;
+					var resultNode = result.GetNavigator(false);
+					if (sourceRoot != null && resultNode != null && sourceRoot.IsSamePosition(resultNode))
+						return;
+				}
+
 				var node = result.RemoveChildren();
 				if (result.Type != source.Meta.Type && result.OmitPolymorphism == false)
 				{
@@ -530,6 +547,7 @@ namespace Castle.Components.DictionaryAdapter
 					var context = GetEffectiveContext(dictionaryAdapter);
 					context.SetXmlType(xmlType.TypeName, xmlType.Namespace, node);
 				}
+
 				var element = (IDictionaryAdapter)ReadComponent(result, false, dictionaryAdapter);
 				source.CopyTo(element);
 				value = element;

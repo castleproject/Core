@@ -390,6 +390,24 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void Will_Ignore_If_Reassigned_Same_Component()
+		{
+			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
+						 <Address xmlns='Common'>
+							<Line1>2922 South Highway 205</Line1>
+							<City>Rockwall</City>
+							<State>TX</State>
+							<ZipCode>75032</ZipCode>
+						 </Address>
+					 </Season>";
+
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(xml, ref document);
+			season.Location = season.Location;
+			Assert.AreEqual("Rockwall", season.Location.City);
+		}
+
+		[Test]
 		public void Adapter_OnXml_CanCreate_Other_Adapter()
 		{
 			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>

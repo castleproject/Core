@@ -30,10 +30,11 @@ namespace Castle.Components.DictionaryAdapter
 	[DebuggerDisplay("{Property.DeclaringType.FullName,nq}.{PropertyName,nq}")]
 	public class PropertyDescriptor : IDictionaryKeyBuilder, IDictionaryPropertyGetter, IDictionaryPropertySetter
 	{
+		private IDictionary state;
+		private IDictionary extendedProperties;
 		private List<IDictionaryPropertyGetter> getters;
 		private List<IDictionaryPropertySetter> setters;
 		private List<IDictionaryKeyBuilder> keyBuilders;
-		private IDictionary state;
 
 		private static readonly object[] NoBehaviors = new object[0];
 		private static readonly ICollection<IDictionaryKeyBuilder> NoKeysBuilders = new IDictionaryKeyBuilder[0];
@@ -170,6 +171,21 @@ namespace Castle.Components.DictionaryAdapter
 		public TypeConverter TypeConverter { get; private set; }
 
 		/// <summary>
+		/// Gets the extended properties.
+		/// </summary>
+		public IDictionary ExtendedProperties
+		{
+			get
+			{
+				if (extendedProperties == null)
+				{
+					extendedProperties = new Dictionary<object, object>();
+				}
+				return extendedProperties;
+			}
+		}
+
+		/// <summary>
 		/// Gets the key builders.
 		/// </summary>
 		/// <value>The key builders.</value>
@@ -256,26 +272,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (keyBuilders != null)
 			{
-				other.AddKeyBuilders(keyBuilders);
-			}
-			return this;
-		}
-
-		/// <summary>
-		/// Copies the selected key builders to the other <see cref="PropertyDescriptor"/>
-		/// </summary>
-		/// <param name="other"></param>
-		/// <param name="selector"></param>
-		/// <returns></returns>
-		public PropertyDescriptor CopyKeyBuilders(PropertyDescriptor other, Func<IDictionaryKeyBuilder, bool> selector)
-		{
-			if (selector == null)
-			{
-				throw new ArgumentNullException("selector");
-			}
-			if (keyBuilders != null)
-			{
-				other.AddKeyBuilders(keyBuilders.Where(selector));
+				other.AddKeyBuilders(keyBuilders.Select(builder => builder.Copy()).OfType<IDictionaryKeyBuilder>());
 			}
 			return this;
 		}
@@ -348,26 +345,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (getters != null)
 			{
-				other.AddGetters(getters);
-			}
-			return this;
-		}
-
-		/// <summary>
-		/// Copies the selected property getters to the other <see cref="PropertyDescriptor"/>
-		/// </summary>
-		/// <param name="other"></param>
-		/// <param name="selector"></param>
-		/// <returns></returns>
-		public PropertyDescriptor CopyGetters(PropertyDescriptor other, Func<IDictionaryPropertyGetter, bool> selector)
-		{
-			if (selector == null)
-			{
-				throw new ArgumentNullException("selector");
-			}
-			if (getters != null)
-			{
-				other.AddGetters(getters.Where(selector));
+				other.AddGetters(getters.Select(getter => getter.Copy()).OfType<IDictionaryPropertyGetter>());
 			}
 			return this;
 		}
@@ -442,26 +420,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (setters != null)
 			{
-				other.AddSetters(setters);
-			}
-			return this;
-		}
-
-		/// <summary>
-		/// Copies the selected property setters to the other <see cref="PropertyDescriptor"/>
-		/// </summary>
-		/// <param name="other"></param>
-		/// <param name="selector"></param>
-		/// <returns></returns>
-		public PropertyDescriptor CopySetters(PropertyDescriptor other, Func<IDictionaryPropertySetter, bool> selector)
-		{
-			if (selector == null)
-			{
-				throw new ArgumentNullException("selector");
-			}
-			if (setters != null)
-			{
-				other.AddSetters(setters.Where(selector));
+				other.AddSetters(setters.Select(setter => setter.Copy()).OfType<IDictionaryPropertySetter>());
 			}
 			return this;
 		}
@@ -517,20 +476,12 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		/// <summary>
-		/// Copies the behaviors to the other <see cref="PropertyDescriptor"/>
+		/// Copies the <see cref="PropertyDescriptor"/>
 		/// </summary>
-		/// <param name="other"></param>
-		/// <param name="selector"></param>
 		/// <returns></returns>
-		public virtual PropertyDescriptor CopyBehaviors(PropertyDescriptor other, Func<IDictionaryBehavior, bool> selector)
+		public IDictionaryBehavior Copy()
 		{
-			if (selector == null)
-			{
-				throw new ArgumentNullException("selector");
-			}
-			return CopyKeyBuilders(other, key => selector(key))
-				  .CopyGetters(other, getter => selector(getter))
-				  .CopySetters(other, setter => selector(setter));
+			return new PropertyDescriptor(this, true);
 		}
 
 		protected virtual void InternalAddBehavior(IDictionaryBehavior behavior)
