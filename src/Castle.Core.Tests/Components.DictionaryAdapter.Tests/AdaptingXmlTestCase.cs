@@ -714,6 +714,17 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void Can_Promote_Namespace_To_Document()
+		{
+			XmlDocument document = null;
+			var season = CreateXmlAdapter<ISeason>(null, ref document);
+			season.Location.Line1 = "100 Hershey Park";
+			season.Location.City = "Hershey";
+			season.Location.State = "PA";
+			Assert.AreEqual("common", document.DocumentElement.GetPrefixOfNamespace("Common"));
+		}
+
+		[Test]
 		public void Can_Coerce_Xml_With_Namespace()
 		{
 			var xml = @"<Season xmlns='RISE'>
@@ -881,7 +892,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Coed
 		}
 
-		[XmlNamespace("Common", "common"),
+		[XmlNamespace("Common", "common", Root = true),
 		 XPath("common:Address")]
 		public interface IAddress
 		{
