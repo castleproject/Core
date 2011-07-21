@@ -676,35 +676,32 @@ namespace Castle.Components.DictionaryAdapter
 				if (behavior is XmlElementAttribute)
 				{
 					xpath = XPathElement;
-					var node = root.Clone();
 					var attrib = (XmlElementAttribute)behavior;
 					if (string.IsNullOrEmpty(attrib.ElementName) == false)
 						name = attrib.ElementName;
 					if (string.IsNullOrEmpty(attrib.Namespace) == false)
 						ns = attrib.Namespace;
-					matchingCreate = () => keyContext.AppendElement(name, ns, node);
+					matchingCreate = () => keyContext.AppendElement(name, ns, root.Clone());
 				}
 				else if (behavior is XmlAttributeAttribute)
 				{
 					xpath = XPathAttribute;
-					var node = root.Clone();
 					var attrib = (XmlAttributeAttribute)behavior;
 					if (string.IsNullOrEmpty(attrib.AttributeName) == false)
 						name = attrib.AttributeName;
 					if (string.IsNullOrEmpty(attrib.Namespace) == false)
 						ns = attrib.Namespace;
-					matchingCreate = () => keyContext.CreateAttribute(name, ns, node);
+					matchingCreate = () => keyContext.CreateAttribute(name, ns, root.Clone());
 				}
 				else if (behavior is XmlArrayAttribute)
 				{
 					xpath = XPathElement;
-					var node = root.Clone();
 					var attrib = (XmlArrayAttribute)behavior;
 					if (string.IsNullOrEmpty(attrib.ElementName) == false)
 						name = attrib.ElementName;
 					if (string.IsNullOrEmpty(attrib.Namespace) == false)
 						ns = attrib.Namespace;
-					matchingCreate = () => keyContext.AppendElement(name, ns, node);
+					matchingCreate = () => keyContext.AppendElement(name, ns, root.Clone());
 				}
 				else if (behavior is XPathAttribute)
 				{
