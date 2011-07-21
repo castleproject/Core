@@ -29,7 +29,8 @@ namespace Castle.Components.DictionaryAdapter
 		private readonly XPathContext parent;
 		private XmlMetadata xmlMeta;
 		private string qualifiedNamespace;
-		private IDictionary<string, Func<IXsltContextFunction>> functions;
+		private Dictionary<string, Func<IXsltContextFunction>> functions;
+		private Dictionary<string, string> rootNamespaces;
 		private List<IXPathSerializer> serializers;
 		private int prefixCount;
 
@@ -48,7 +49,6 @@ namespace Castle.Components.DictionaryAdapter
 			: base(nameTable)
 		{
 			Arguments = new XsltArgumentList();
-			functions = new Dictionary<string, Func<IXsltContextFunction>>();
 			AddNamespace("xsi", Xsi);
 			AddNamespace("xsd", Xsd);
 			AddNamespace(Prefix, NamespaceUri);
@@ -60,7 +60,6 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			this.parent = parent;
 			Arguments = new XsltArgumentList();
-			functions = new Dictionary<string, Func<IXsltContextFunction>>();
 		}
 
 		public override string DefaultNamespace
@@ -79,9 +78,7 @@ namespace Castle.Components.DictionaryAdapter
 			get
 			{
 				if (xmlMeta != null && xmlMeta.IsNullable.HasValue)
-				{
 					return xmlMeta.IsNullable.Value;
-				}
 				return (parent != null) ? parent.IsNullable : false;
 			}
 		}
@@ -124,9 +121,9 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					AddNamespace(attrib.Prefix, attrib.NamespaceUri);
 					if (attrib.Default)
-					{
 						AddNamespace(string.Empty, attrib.NamespaceUri);
-					}
+					if (attrib.Root)
+						AddRootNamespace(attrib.NamespaceUri, attrib.Prefix);
 				})
 				.OfType<XmlArrayItemAttribute>(attrib =>
 				{
@@ -190,21 +187,28 @@ namespace Castle.Components.DictionaryAdapter
 
 		public XPathContext AddFunction(string prefix, string name, IXsltContextFunction function)
 		{
+			if (functions == null)
+				functions = new Dictionary<string, Func<IXsltContextFunction>>();
 			functions[GetQualifiedName(prefix, name)] = () => function;
 			return this;
 		}
 
 		public XPathContext AddFunction(string prefix, string name, Func<IXsltContextFunction> function)
 		{
+			if (functions == null)
+				functions = new Dictionary<string, Func<IXsltContextFunction>>();
 			functions[GetQualifiedName(prefix, name)] = function;
 			return this;
 		}
 
 		public override IXsltContextFunction ResolveFunction(string prefix, string name, XPathResultType[] argTypes)
 		{
-			Func<IXsltContextFunction> function;
-			if (functions.TryGetValue(GetQualifiedName(prefix, name), out function))
-				return function();
+			if (functions != null)
+			{
+				Func<IXsltContextFunction> function;
+				if (functions.TryGetValue(GetQualifiedName(prefix, name), out function))
+					return function();
+			}
 			return (parent != null) ? parent.ResolveFunction(prefix, name, argTypes) : null;
 		}
 
@@ -266,19 +270,49 @@ namespace Castle.Components.DictionaryAdapter
 			return prefix;
 		}
 
+		private bool IsRootNamespace(string namespaceUri, out string prefix)
+		{
+			prefix = null;
+			if (string.IsNullOrEmpty(namespaceUri))
+				return false;
+			if (parent != null)
+				return parent.IsRootNamespace(namespaceUri, out prefix);
+			if (rootNamespaces == null)
+				return false;
+			return rootNamespaces.TryGetValue(namespaceUri, out prefix);
+		}
+
+		private void AddRootNamespace(string namespaceUri, string prefix)
+		{
+			if (parent != null)
+				parent.AddRootNamespace(namespaceUri, prefix);
+			else
+			{
+				if (rootNamespaces == null)
+					rootNamespaces = new Dictionary<string, string>();
+				rootNamespaces.Add(namespaceUri, prefix);
+			}
+		}
+
 		public XPathNavigator CreateAttribute(string name, string namespaceUri, XPathNavigator source)
 		{
+			string prefix;
 			name = XmlConvert.EncodeLocalName(name);
-			source.CreateAttribute(null, name, namespaceUri, "");
+			if (IsRootNamespace(namespaceUri, out prefix))
+				prefix = CreateNamespace(prefix, namespaceUri, source);
+			source.CreateAttribute(prefix, name, namespaceUri, "");
 			source.MoveToAttribute(name, namespaceUri ?? "");
 			return source;
 		}
 
 		public XPathNavigator AppendElement(string name, string namespaceUri, XPathNavigator source)
 		{
+			string prefix;
 			name = XmlConvert.EncodeLocalName(name);
 			namespaceUri = GetEffectiveNamespace(namespaceUri);
-			source.AppendChildElement(LookupPrefix(namespaceUri), name, namespaceUri, null);
+			if (IsRootNamespace(namespaceUri, out prefix))
+				prefix = CreateNamespace(prefix, namespaceUri, source);
+			source.AppendChildElement(prefix ?? LookupPrefix(namespaceUri), name, namespaceUri, null);
 			return source.SelectSingleNode("*[position()=last()]");
 		}
 
