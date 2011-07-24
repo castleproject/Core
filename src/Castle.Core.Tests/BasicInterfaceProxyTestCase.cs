@@ -118,11 +118,7 @@ namespace Castle.DynamicProxy.Tests
 			options.BaseTypeForInterfaceProxy = typeof (SimpleClass);
 			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof (IService), Type.EmptyTypes, options);
 
-#if(!SILVERLIGHT)
-			Assert.NotNull(proxy as SimpleClass);
-#else
-            Assert.IsNotNull(proxy as SimpleClass);
-#endif
+			Assert.IsInstanceOf<SimpleClass>(proxy);
 		}
 
 		[Test]
