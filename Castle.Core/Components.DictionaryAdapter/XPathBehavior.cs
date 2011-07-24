@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
+#if !SILVERLIGHT
 	using System;
 	using System.Collections.Generic;
 	using System.Xml.Serialization;
@@ -35,7 +36,7 @@ namespace Castle.Components.DictionaryAdapter
 			new BehaviorVisitor()
 				.OfType<XmlTypeAttribute>(attrib => xmlType = attrib)
 				.OfType<XmlRootAttribute>(attrib => xmlRoot = attrib)
-				.OfType<XmlDefaultsAttribute>(attrib => 
+				.OfType<XmlDefaultsAttribute>(attrib =>
 				{
 					qualified = attrib.Qualified;
 					isNullable = attrib.IsNullable;
@@ -43,7 +44,9 @@ namespace Castle.Components.DictionaryAdapter
 				.OfType<XmlNamespaceAttribute>(attrib =>
 				{
 					if (attrib.Default)
+					{
 						defaultNamespace = attrib.NamespaceUri;
+					}
 				})
 				.OfType<XmlIncludeAttribute>(attrib =>
 				{
@@ -70,9 +73,12 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			if (xmlType.Namespace == null)
+			{
 				xmlType.Namespace = defaultNamespace;
+			}
 
 			dictionaryMeta.SetXmlMeta(new XmlMetadata(type, qualified, isNullable, xmlType, xmlRoot, xmlIncludes));
 		}
 	}
+#endif
 }

@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
+#if !SILVERLIGHT
 	using System;
 	using System.Linq;
 	using System.Xml;
@@ -37,6 +38,25 @@ namespace Castle.Components.DictionaryAdapter
 			return null;
 		}
 
+		public static Type GetXmlSubclass(this IDictionaryAdapter dictionaryAdapter, XmlQualifiedName xmlType, Type otherType)
+		{
+			if (xmlType == null)
+			{
+				return null;
+			}
+			var xmlIncludes = dictionaryAdapter.GetXmlMeta(otherType).XmlIncludes;
+			if (xmlIncludes != null)
+			{
+				var subClass = from xmlInclude in xmlIncludes
+				               let xmlIncludeType = dictionaryAdapter.GetXmlMeta(xmlInclude).XmlType
+				               where xmlIncludeType.TypeName == xmlType.Name &&
+				                     xmlIncludeType.Namespace == xmlType.Namespace
+				               select xmlInclude;
+				return subClass.FirstOrDefault();
+			}
+			return null;
+		}
+
 		internal static XmlMetadata GetXmlMeta(this DictionaryAdapterMeta dictionaryAdapterMeta)
 		{
 			return (XmlMetadata)dictionaryAdapterMeta.ExtendedProperties[XmlMetaKey];
@@ -45,23 +65,6 @@ namespace Castle.Components.DictionaryAdapter
 		internal static void SetXmlMeta(this DictionaryAdapterMeta dictionaryAdapterMeta, XmlMetadata xmlMeta)
 		{
 			dictionaryAdapterMeta.ExtendedProperties[XmlMetaKey] = xmlMeta;
-		}
-
-		public static Type GetXmlSubclass(this IDictionaryAdapter dictionaryAdapter, XmlQualifiedName xmlType, Type otherType)
-		{
-			if (xmlType == null) return null;
-			var xmlIncludes = dictionaryAdapter.GetXmlMeta(otherType).XmlIncludes;
-			if (xmlIncludes != null)
-			{
-				var subClass = from xmlInclude in xmlIncludes
-							   let xmlIncludeType = dictionaryAdapter.GetXmlMeta(xmlInclude).XmlType
-							   where xmlIncludeType.TypeName == xmlType.Name &&
-									 xmlIncludeType.Namespace == xmlType.Namespace
-							   select xmlInclude;
-				return subClass.FirstOrDefault();
-
-			}
-			return null;
 		}
 
 		private static DictionaryAdapterMeta GetDictionaryMeta(IDictionaryAdapter dictionaryAdapter, Type otherType)
@@ -76,4 +79,5 @@ namespace Castle.Components.DictionaryAdapter
 			return meta;
 		}
 	}
+#endif
 }
