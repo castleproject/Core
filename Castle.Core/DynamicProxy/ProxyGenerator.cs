@@ -23,10 +23,10 @@ namespace Castle.DynamicProxy
 	using System.Runtime.Remoting;
 	using System.Security;
 	using System.Security.Permissions;
+	using Castle.Core.Internal;
 #endif
 	using System.Text;
 
-	using Castle.Core.Internal;
 	using Castle.Core.Logging;
 
 	/// <summary>

@@ -17,9 +17,7 @@ namespace Castle.Core.Logging
 	using System;
 	using System.Runtime.Serialization;
 
-#if !SILVERLIGHT
 	[Serializable]
-#endif
 	public class LoggerException : Exception
 	{
 		public LoggerException()

@@ -14,40 +14,10 @@
 
 #if SILVERLIGHT
 
-namespace Castle.Core.Extensions
-{
-	using System;
-	using System.Collections.Generic;
-
-	public static class SilverlightExtensions
-	{
-		public static T[] FindAll<T>(this T[] array, Predicate<T> match)
-		{
-			if (array == null)
-			{
-				throw new ArgumentNullException("array");
-			}
-			if (match == null)
-			{
-				throw new ArgumentNullException("match");
-			}
-			List<T> list = new List<T>();
-			for (int i = 0; i < array.Length; i++)
-			{
-				if (match(array[i]))
-				{
-					list.Add(array[i]);
-				}
-			}
-			return list.ToArray();
-		}
-	}
-}
 namespace Castle.DynamicProxy.SilverlightExtensions
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Reflection;
 
 	public class SilverlightAssertException : Exception
@@ -86,75 +56,6 @@ namespace Castle.DynamicProxy.SilverlightExtensions
 		public static bool IsNested(this Type type)
 		{
 			return type.DeclaringType != null;
-		}
-
-		public static T Find<T>(this T[] array, Predicate<T> match)
-		{
-			if (array == null)
-				throw new ArgumentNullException("array");
-
-			if (match == null)
-				throw new ArgumentNullException("match");
-
-			for (int i = 0; i < array.Length; i++)
-			{
-				if (match(array[i]))
-					return array[i];
-			}
-
-			return default(T);
-		}
-	}
-
-	/// <summary>
-	/// http://www.dolittle.com/blogs/einar/archive/2008/01/13/missing-enum-getvalues-when-doing-silverlight-for-instance.aspx
-	/// </summary>
-	public static class EnumHelper
-	{
-		public static T[] GetValues<T>()
-		{
-			Type enumType = typeof(T);
-
-			if (!enumType.IsEnum)
-			{
-				throw new ArgumentException("Type '" + enumType.Name + "' is not an enum");
-			}
-
-			List<T> values = new List<T>();
-
-			var fields = from field in enumType.GetFields()
-						 where field.IsLiteral
-						 select field;
-
-			foreach (FieldInfo field in fields)
-			{
-				object value = field.GetValue(enumType);
-				values.Add((T)value);
-			}
-
-			return values.ToArray();
-		}
-
-		public static object[] GetValues(Type enumType)
-		{
-			if (!enumType.IsEnum)
-			{
-				throw new ArgumentException("Type '" + enumType.Name + "' is not an enum");
-			}
-
-			List<object> values = new List<object>();
-
-			var fields = from field in enumType.GetFields()
-						 where field.IsLiteral
-						 select field;
-
-			foreach (FieldInfo field in fields)
-			{
-				object value = field.GetValue(enumType);
-				values.Add(value);
-			}
-
-			return values.ToArray();
 		}
 	}
 }
@@ -237,16 +138,6 @@ namespace System.ComponentModel
 		{
 			converters[forType] = converter;
 		}
-	}
-}
-#endif
-#if SL3 && SILVERLIGHT
-namespace System.ComponentModel
-{
-	public interface IDataErrorInfo
-	{
-		string this[string columnName] { get; }
-		string Error { get; }
 	}
 }
 #endif

@@ -17,9 +17,7 @@ namespace Castle.Core.Resource
 	using System;
 	using System.Text;
 
-#if !SILVERLIGHT
 	[Serializable]
-#endif
 	public sealed class CustomUri
 	{
 		public static readonly String SchemeDelimiter = "://";
@@ -133,11 +131,10 @@ namespace Castle.Core.Resource
 				}
 			}
 
-#if !SILVERLIGHT
-			path = Environment.ExpandEnvironmentVariables(sb.ToString());
-#endif
 #if SILVERLIGHT
 			path = sb.ToString();
+#else
+			path = Environment.ExpandEnvironmentVariables(sb.ToString());
 #endif
 		}
 	}

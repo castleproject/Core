@@ -37,13 +37,11 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
 		{
-#if SILVERLIGHT
-			if(method.IsPublic == false)
+			if(method.IsFamily)
 			{
 				// we can't proxy protected methods like this on Silverlight
 				return null;
 			}
-#endif
 			if (method.IsAccessible() == false)
 			{
 				return null;

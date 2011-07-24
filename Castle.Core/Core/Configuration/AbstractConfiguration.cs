@@ -25,9 +25,7 @@ namespace Castle.Core.Configuration
 	/// <para><b>AbstractConfiguration</b> makes easier to implementers 
 	/// to create a new version of <see cref="IConfiguration"/></para>
 	/// </remarks>
-#if !SILVERLIGHT
 	[Serializable]
-#endif
 	public abstract class AbstractConfiguration : IConfiguration
 	{
 		private readonly ConfigurationAttributeCollection attributes = new ConfigurationAttributeCollection();

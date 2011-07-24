@@ -20,11 +20,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
+	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Internal;
-
-#if SILVERLIGHT
-	using Castle.Core.Extensions;
-#endif
 
 	internal delegate GenericTypeParameterBuilder[] ApplyGenArgs(String[] argumentNames);
 
@@ -206,14 +203,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					var types = AdjustGenericConstraints(methodToCopyGenericsFrom, newGenericParameters, originalGenericArguments,
 					                                     originalGenericArguments[i].GetGenericParameterConstraints());
 
-#if SILVERLIGHT
-					Type[] interfacesConstraints = Castle.Core.Extensions.SilverlightExtensions.FindAll(types, delegate(Type type) { return type.IsInterface; });
-
-					Type baseClassConstraint = Castle.DynamicProxy.SilverlightExtensions.Extensions.Find(types, delegate(Type type) { return type.IsClass; });
-#else
-					var interfacesConstraints = Array.FindAll(types, type => type.IsInterface);
-					var baseClassConstraint = Array.Find(types, type => type.IsClass);
-#endif
+					var interfacesConstraints = types.FindAll(type => type.IsInterface);
+					var baseClassConstraint = types.Find(type => type.IsClass);
 
 					if (interfacesConstraints.Length != 0)
 					{
