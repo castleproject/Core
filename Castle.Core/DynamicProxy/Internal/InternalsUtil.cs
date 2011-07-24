@@ -91,19 +91,12 @@ namespace Castle.DynamicProxy.Internal
 			{
 				return true;
 			}
+			
+#endif
 			if (method.DeclaringType.Assembly.IsInternalToDynamicProxy() && method.IsAssembly)
 			{
 				return true;
 			}
-#else
-	// Explicitly implemented interface method on class
-			if (method.IsPrivate && method.IsFinal)
-			{
-				Logger.Debug(
-					string.Format("Excluded explicitly implemented interface method {0} on type {1} because it cannot be intercepted.",
-					              method.Name, method.DeclaringType.FullName));
-			}
-#endif
 			return false;
 		}
 	}

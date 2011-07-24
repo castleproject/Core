@@ -12,21 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests
+namespace CastleTests
 {
 	using System;
 	using System.Reflection;
 	using System.Reflection.Emit;
 
+	using Castle.DynamicProxy;
 	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Tests;
 	using Castle.DynamicProxy.Tests.BugsReported;
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.InterClasses;
-	using ClassWithIndexer = Castle.DynamicProxy.Tests.Classes.ClassWithIndexer;
 	using Castle.DynamicProxy.Generators.Emitters;
+
 	using NUnit.Framework;
+
 	using System.Collections.Generic;
+
+	using ClassWithIndexer = Castle.DynamicProxy.Tests.Classes.ClassWithIndexer;
 
 	[TestFixture]
 	public class BasicClassProxyTestCase : BasePEVerifyTestCase
@@ -73,7 +78,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 #if !MONO
-
 		[Test]
 		public void ProxyForNonPublicClass()
 		{
@@ -83,15 +87,9 @@ namespace Castle.DynamicProxy.Tests
 			var type = Type.GetType("System.AppDomainInitializerInfo, mscorlib");
 			var exception = Assert.Throws(typeof(GeneratorException),
 			                              () => generator.CreateClassProxy(type, new StandardInterceptor()));
-#if !SILVERLIGHT
 			Assert.AreEqual(
 				"Type System.AppDomainInitializerInfo is not visible to DynamicProxy. Can not create proxy for types that are not accessible. Make the type public, or internal and mark your assembly with [assembly: InternalsVisibleTo(InternalsVisible.ToDynamicProxyGenAssembly2)] attribute.",
 				exception.Message);
-#else
-			Assert.AreEqual(
-				"Type System.AppDomainInitializerInfo is not public. Can not create proxy for types that are not accessible.",
-				exception.Message);
-#endif
 		}
 #endif
 
@@ -315,12 +313,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyForBaseTypeFromSignedAssembly()
 		{
-#if SILVERLIGHT
-			
-			const bool shouldBeSigned = false;
-#else
 			const bool shouldBeSigned = true;
-#endif
 			Type t = typeof(List<object>);
 			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t.Assembly));
 			object proxy = generator.CreateClassProxy(t, new StandardInterceptor());
@@ -330,11 +323,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyForBaseTypeAndInterfaceFromSignedAssembly()
 		{
-#if SILVERLIGHT //Silverlight does not allow us to sign generated assemblies
-			const bool shouldBeSigned = false;
-#else
 			const bool shouldBeSigned = true;
-#endif
 			Type t1 = typeof(List<object>);
 			Type t2 = typeof(IServiceProvider);
 			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t1.Assembly));
@@ -441,7 +430,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("Something", ((ClassWithDefaultConstructor)proxy2).SomeString);
 		}
 
-#if !SILVERLIGHT // Silverlight does not allow us to access internal constructors
 		[Test]
 		public void ClassProxyShouldHaveDefaultConstructorWhenBaseClassHasInternal()
 		{
@@ -456,7 +444,7 @@ namespace Castle.DynamicProxy.Tests
 			object proxy2 = Activator.CreateInstance(proxy.GetType());
 			Assert.AreEqual("Something", ((ClassWithInternalDefaultConstructor)proxy2).SomeString);
 		}
-#endif
+
 		[Test]
 		public void ClassProxyShouldHaveDefaultConstructorWhenBaseClassHasProtected()
 		{
