@@ -1474,8 +1474,9 @@ namespace Castle.DynamicProxy
 				{
 					message.AppendLine("Could not find a constructor that would match given arguments:");
 					foreach (var argument in constructorArguments)
-					{
-						message.AppendLine(argument.GetType().ToString());
+                    {
+                        var argumentText = argument == null ? "<null>" : argument.GetType().ToString();
+                        message.AppendLine(argumentText);
 					}
 				}
 				throw new ArgumentException(message.ToString(), "constructorArguments");

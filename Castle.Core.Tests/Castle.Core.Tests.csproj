@@ -199,6 +199,7 @@
     <Compile Include="BasicClassProxyTestCase.cs" />
     <Compile Include="BasicInterfaceProxyTestCase.cs" />
     <Compile Include="BugAttribute.cs" />
+    <Compile Include="BugsReported\Core40.cs" />
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Address.cs" />

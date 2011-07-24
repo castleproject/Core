@@ -23,5 +23,11 @@ namespace Castle.Components.DictionaryAdapter
 		/// Determines relative order to apply related behaviors.
 		/// </summary>
 		int ExecutionOrder { get; }
+
+		/// <summary>
+		/// Copies the dictionary behavior.
+		/// </summary>
+		/// <returns>null if should not be copied.  Otherwise copy.</returns>
+		IDictionaryBehavior Copy();
 	}
 }

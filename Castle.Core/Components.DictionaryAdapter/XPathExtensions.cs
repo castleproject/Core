@@ -73,7 +73,7 @@ namespace Castle.Components.DictionaryAdapter
 			if (otherType != null && otherType != meta.Type)
 			{
 				var descriptor = new DictionaryDescriptor();
-				dictionaryAdapter.This.Descriptor.CopyBehaviors(descriptor, b => b is XPathAdapter == false);
+				dictionaryAdapter.This.Descriptor.CopyBehaviors(descriptor);
 				meta = dictionaryAdapter.This.Factory.GetAdapterMeta(otherType, descriptor);
 			}
 			return meta;
