@@ -30,9 +30,11 @@ namespace Castle.Components.DictionaryAdapter
 			ExecutionOrder = DefaultExecutionOrder;
 		}
 
-		/// <summary>
-		/// Determines relative order to apply related behaviors.
-		/// </summary>
 		public int ExecutionOrder { get; set; }
+
+		public virtual IDictionaryBehavior Copy()
+		{
+			return this;
+		}
 	}
 }

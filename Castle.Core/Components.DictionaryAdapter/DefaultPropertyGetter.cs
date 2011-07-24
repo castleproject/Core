@@ -64,5 +64,10 @@ namespace Castle.Components.DictionaryAdapter
 
 			return storedValue;
 		}
+
+		public IDictionaryBehavior Copy()
+		{
+			return this;
+		}
 	}
 }
