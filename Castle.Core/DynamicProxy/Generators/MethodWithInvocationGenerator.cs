@@ -22,6 +22,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Xml.Serialization;
 #endif
 
+	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
@@ -123,12 +124,7 @@ namespace Castle.DynamicProxy.Generators
 
 		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Reference invocationLocal)
 		{
-#if SILVERLIGHT
-			Type[] genericParameters =
-				Castle.Core.Extensions.SilverlightExtensions.FindAll(method.GetGenericArguments(), t => t.IsGenericParameter);
-#else
-			var genericParameters = Array.FindAll(method.GetGenericArguments(), t => t.IsGenericParameter);
-#endif
+			var genericParameters = method.GetGenericArguments().FindAll(t => t.IsGenericParameter);
 			var genericParamsArrayLocal = methodEmitter.CodeBuilder.DeclareLocal(typeof(Type[]));
 			methodEmitter.CodeBuilder.AddStatement(
 				new AssignStatement(genericParamsArrayLocal, new NewArrayExpression(genericParameters.Length, typeof(Type))));

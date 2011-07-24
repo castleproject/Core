@@ -18,9 +18,7 @@ namespace Castle.DynamicProxy
 	using System.Collections.Generic;
 	using System.Reflection;
 
-#if !SILVERLIGHT
 	[Serializable]
-#endif
 	public class AllMethodsHook : IProxyGenerationHook
 	{
 		protected static readonly ICollection<Type> SkippedTypes = new[]

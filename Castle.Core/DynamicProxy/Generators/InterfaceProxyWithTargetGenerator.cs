@@ -87,14 +87,14 @@ namespace Castle.DynamicProxy.Generators
 			}
 			return contributor;
 		}
-
+		
+#if (!SILVERLIGHT)
 		protected override void CreateTypeAttributes(ClassEmitter emitter)
 		{
 			base.CreateTypeAttributes(emitter);
-#if (!SILVERLIGHT)
 			emitter.DefineCustomAttribute<SerializableAttribute>();
-#endif
 		}
+#endif
 
 		protected virtual Type GenerateType(string typeName, Type proxyTargetType, Type[] interfaces, INamingScope namingScope)
 		{

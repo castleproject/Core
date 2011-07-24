@@ -35,11 +35,10 @@ namespace Castle.DynamicProxy
 		internal readonly IList<Attribute> attributesToAddToGeneratedTypes = new List<Attribute>();
 		private readonly IList<CustomAttributeBuilder> additionalAttributes = new List<CustomAttributeBuilder>();
 
-#if SILVERLIGHT
-#else
+#if !SILVERLIGHT
 		[NonSerialized]
 #endif
-			private MixinData mixinData; // this is calculated dynamically on proxy type creation
+		private MixinData mixinData; // this is calculated dynamically on proxy type creation
 
 		/// <summary>
 		///   Initializes a new instance of the <see cref = "ProxyGenerationOptions" /> class.
