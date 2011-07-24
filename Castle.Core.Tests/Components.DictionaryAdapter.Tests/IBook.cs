@@ -14,9 +14,9 @@
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
-#if !SILVERLIGHT
 	using System.Collections.Generic;
 
+#if !SILVERLIGHT && !DOTNET35
 	public interface IBook
 	{
 		IDeweyDecimalNumber DDC { get; set; }
@@ -27,6 +27,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		ISet<IBook> RelatedBooks { get; set; }
 	}
+#endif
 
 	public interface IDeweyDecimalNumber
 	{
@@ -36,5 +37,4 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		int SubDivision { get; set; }
 	}
-#endif
 }

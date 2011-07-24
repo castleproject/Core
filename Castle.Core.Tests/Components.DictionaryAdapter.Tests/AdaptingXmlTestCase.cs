@@ -842,6 +842,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsFalse(XPathAdapter.IsPropertyDefined("Name", season));
 		}
 
+#if !DOTNET35
 		[Test]
 		public void Can_Detect_Circularities()
 		{
@@ -874,6 +875,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				book.RelatedBooks = relatedBooks;
 			}
 		}
+#endif
 
 		private T CreateXmlAdapter<T>(string xml, ref XmlDocument document)
 		{
