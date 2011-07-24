@@ -25,6 +25,8 @@ namespace Castle.Components.DictionaryAdapter
 			Prefix = prefix;
 		}
 
+		public bool Root { get; set; }
+
 		public bool Default { get; set; }
 
 		public string NamespaceUri { get; private set; }

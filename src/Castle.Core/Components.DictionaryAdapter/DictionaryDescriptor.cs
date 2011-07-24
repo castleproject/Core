@@ -14,7 +14,6 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System;
 	using System.Linq;
 	using System.Collections.Generic;
 	using System.Reflection;
@@ -97,26 +96,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (initializers != null)
 			{
-				other.AddInitializers(initializers);
-			}
-			return this;
-		}
-
-		/// <summary>
-		/// Copies the filtered initializers to the other <see cref="PropertyDescriptor"/>
-		/// </summary>
-		/// <param name="other"></param>
-		/// <param name="selector"></param>
-		/// <returns></returns>
-		public DictionaryDescriptor CopyInitializers(DictionaryDescriptor other, Func<IDictionaryInitializer, bool> selector)
-		{
-			if (selector == null)
-			{
-				throw new ArgumentNullException("selector");
-			}
-			if (initializers != null)
-			{
-				other.AddInitializers(initializers.Where(selector));
+				other.AddInitializers(initializers.Select(init => init.Copy()).OfType<IDictionaryInitializer>());
 			}
 			return this;
 		}
@@ -159,27 +139,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (metaInitializers != null)
 			{
-				other.AddMetaInitializers(metaInitializers);
-			}
-			return this;
-		}
-
-		/// <summary>
-		/// Copies the filtered meta-initializers to the other <see cref="PropertyDescriptor"/>
-		/// </summary>
-		/// <param name="other"></param>
-		/// <param name="selector"></param>
-		/// <returns></returns>
-		public DictionaryDescriptor CopyMetaInitializers(DictionaryDescriptor other,
-														 Func<IDictionaryMetaInitializer, bool> selector)
-		{
-			if (selector == null)
-			{
-				throw new ArgumentNullException("selector");
-			}
-			if (metaInitializers != null)
-			{
-				other.AddMetaInitializers(metaInitializers.Where(selector));
+				other.AddMetaInitializers(metaInitializers.Select(meta => meta.Copy()).OfType<IDictionaryMetaInitializer>());
 			}
 			return this;
 		}
@@ -192,21 +152,6 @@ namespace Castle.Components.DictionaryAdapter
 				CopyMetaInitializers(otherDict).CopyInitializers(otherDict);
 			}
 			return base.CopyBehaviors(other);
-		}
-
-		public override PropertyDescriptor CopyBehaviors(PropertyDescriptor other, Func<IDictionaryBehavior, bool> selector)
-		{
-			if (other is DictionaryDescriptor)
-			{
-				var otherDict = (DictionaryDescriptor)other;
-#if DOTNET35 || SL4 || MONO
-				// no co-contra variance support in .NET 3.5, SL4 or mono
-				CopyMetaInitializers(otherDict, i => selector(i)).CopyInitializers(otherDict, i => selector(i));
-#else
-				CopyMetaInitializers(otherDict, selector).CopyInitializers(otherDict, selector);
-#endif
-			}
-			return base.CopyBehaviors(other, selector);
 		}
 
 		protected override void InternalAddBehavior(IDictionaryBehavior behavior)
