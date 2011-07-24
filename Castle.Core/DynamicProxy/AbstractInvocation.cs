@@ -18,12 +18,10 @@ namespace Castle.DynamicProxy
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
+	using Castle.DynamicProxy.Serialization;
 
 #if DOTNET40
 	using System.Security;
-
-	using Castle.DynamicProxy.Serialization;
-
 #endif
 
 #if SILVERLIGHT
