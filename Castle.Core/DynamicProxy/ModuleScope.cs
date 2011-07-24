@@ -26,6 +26,7 @@ namespace Castle.DynamicProxy
 	using Castle.DynamicProxy.Serialization;
 
 #if SILVERLIGHT
+	using System.Globalization;
 	using Castle.DynamicProxy.SilverlightExtensions;
 #endif
 
@@ -338,18 +339,15 @@ namespace Castle.DynamicProxy
 		private ModuleBuilder CreateModule(bool signStrongName)
 		{
 			var assemblyName = GetAssemblyName(signStrongName);
-
 			var moduleName = signStrongName ? StrongNamedModuleName : WeakNamedModuleName;
 #if !SILVERLIGHT
-			var moduleDirectory = signStrongName ? StrongNamedModuleDirectory : WeakNamedModuleDirectory;
-
 			if (savePhysicalAssembly)
 			{
 				AssemblyBuilder assemblyBuilder;
 				try
 				{
 					assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-						assemblyName, AssemblyBuilderAccess.RunAndSave, moduleDirectory);
+						assemblyName, AssemblyBuilderAccess.RunAndSave, signStrongName ? StrongNamedModuleDirectory : WeakNamedModuleDirectory);
 				}
 				catch (ArgumentException e)
 				{
@@ -386,16 +384,28 @@ namespace Castle.DynamicProxy
 				Name = signStrongName ? strongAssemblyName : weakAssemblyName
 			};
 
-#if !SILVERLIGHT
 			if (signStrongName)
 			{
 				var keyPairStream = GetKeyPair();
 				if (keyPairStream != null)
 				{
-					assemblyName.KeyPair = new StrongNameKeyPair(keyPairStream);
+#if SILVERLIGHT
+					// we can only set the public key.. but for our needs it appears to be working (workaround found by Jeff Nevins, see issue 161 for DP in the issue tracker for more details)
+					var startIndex = InternalsVisible.ToDynamicProxyGenAssembly2.IndexOf("PublicKey=") + "PublicKey=".Length;
+					var publicKeyBytes = new List<byte>(160);
+					for (var i = startIndex; i < InternalsVisible.ToDynamicProxyGenAssembly2.Length; i += 2)
+					{
+						publicKeyBytes.Add(byte.Parse(InternalsVisible.ToDynamicProxyGenAssembly2.Substring(i, 2), NumberStyles.HexNumber));
+						
+					}
+					assemblyName.SetPublicKey(publicKeyBytes.ToArray());
+#else
+					var keyPair = new StrongNameKeyPair(keyPairStream);
+					assemblyName.KeyPair = keyPair;
+
+#endif
 				}
 			}
-#endif
 			return assemblyName;
 		}
 

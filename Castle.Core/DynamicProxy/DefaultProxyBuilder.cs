@@ -21,9 +21,6 @@ namespace Castle.DynamicProxy
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Internal;
 
-#if SILVERLIGHT
-	using Castle.DynamicProxy.SilverlightExtensions;
-#endif
 
 	/// <summary>
 	///   Default implementation of <see cref = "IProxyBuilder" /> interface producing in-memory proxy assemblies.
@@ -118,20 +115,12 @@ namespace Castle.DynamicProxy
 				throw new GeneratorException("Type " + target.FullName + " is a generic type definition. " +
 				                             "Can not create proxy for open generic types.");
 			}
-			if (IsPublic(target) == false)
+			if (IsPublic(target) == false && IsAccessible(target) == false)
 			{
-#if !SILVERLIGHT
-				if (IsAccessible(target) == false)
-				{
-					throw new GeneratorException("Type " + target.FullName + " is not visible to DynamicProxy. " +
-					                             "Can not create proxy for types that are not accessible. " +
-					                             "Make the type public, or internal and mark your assembly with " +
-					                             "[assembly: InternalsVisibleTo(InternalsVisible.ToDynamicProxyGenAssembly2)] attribute.");
-				}
-#else
-				throw new GeneratorException("Type " + target.FullName + " is not public. " +
-				                             "Can not create proxy for types that are not accessible.");
-#endif
+				throw new GeneratorException("Type " + target.FullName + " is not visible to DynamicProxy. " +
+				                             "Can not create proxy for types that are not accessible. " +
+				                             "Make the type public, or internal and mark your assembly with " +
+				                             "[assembly: InternalsVisibleTo(InternalsVisible.ToDynamicProxyGenAssembly2)] attribute.");
 			}
 		}
 
@@ -146,22 +135,23 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-#if !SILVERLIGHT
 		private bool IsAccessible(Type target)
+		{
+			return IsInternal(target) && target.Assembly.IsInternalToDynamicProxy();
+		}
+
+		private bool IsPublic(Type target)
+		{
+			return target.IsPublic || target.IsNestedPublic;
+		}
+
+		private static bool IsInternal(Type target)
 		{
 			var isTargetNested = target.IsNested;
 			var isNestedAndInternal = isTargetNested && (target.IsNestedAssembly || target.IsNestedFamORAssem);
 			var isInternalNotNested = target.IsVisible == false && isTargetNested == false;
 
-			var internalAndVisibleToDynProxy = (isInternalNotNested || isNestedAndInternal) &&
-			                                   InternalsUtil.IsInternalToDynamicProxy(target.Assembly);
-			return internalAndVisibleToDynProxy;
-		}
-#endif
-
-		private bool IsPublic(Type target)
-		{
-			return target.IsPublic || target.IsNestedPublic;
+			return isInternalNotNested || isNestedAndInternal;
 		}
 	}
 }
