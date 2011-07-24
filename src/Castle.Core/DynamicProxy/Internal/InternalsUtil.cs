@@ -85,14 +85,11 @@ namespace Castle.DynamicProxy.Internal
 				return true;
 			}
 
-#if !SILVERLIGHT
-			// Accessibility not supported by the CoreCLR
 			if (method.IsFamilyAndAssembly)
 			{
 				return true;
 			}
-			
-#endif
+
 			if (method.DeclaringType.Assembly.IsInternalToDynamicProxy() && method.IsAssembly)
 			{
 				return true;

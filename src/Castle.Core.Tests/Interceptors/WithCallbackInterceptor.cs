@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,20 +15,19 @@
 namespace Castle.DynamicProxy.Tests.Interceptors
 {
 	public class WithCallbackInterceptor : IInterceptor
-    {
-        public delegate void InterceptorCallback(IInvocation invocation);
+	{
+		private readonly InterceptorCallback callback;
 
-        private InterceptorCallback callback;
+		public WithCallbackInterceptor(InterceptorCallback interceptorCallback)
+		{
+			callback = interceptorCallback;
+		}
 
-        public WithCallbackInterceptor(InterceptorCallback interceptorCallback)
-        {
-            this.callback = interceptorCallback;
-        }
+		public void Intercept(IInvocation invocation)
+		{
+			callback(invocation);
+		}
 
-
-        public void Intercept(IInvocation invocation)
-        {
-            callback(invocation);
-        }
-    }
+		public delegate void InterceptorCallback(IInvocation invocation);
+	}
 }

@@ -19,9 +19,7 @@ namespace Castle.Core.Configuration
 	/// <summary>
 	/// Summary description for MutableConfiguration.
 	/// </summary>
-#if !SILVERLIGHT
 	[Serializable]
-#endif
 	public class MutableConfiguration : AbstractConfiguration
 	{
 		/// <summary>

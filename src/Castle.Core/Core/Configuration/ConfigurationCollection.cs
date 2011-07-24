@@ -20,9 +20,7 @@ namespace Castle.Core.Configuration
 	/// <summary>
 	/// A collection of <see cref="IConfiguration"/> objects.
 	/// </summary>
-#if !SILVERLIGHT
 	[Serializable]
-#endif
 	public class ConfigurationCollection : List<IConfiguration>
 	{
 		/// <summary>
@@ -54,17 +52,5 @@ namespace Castle.Core.Configuration
 				return null;
 			}
 		}
-
-//		/// <summary>
-//		/// Adds an array of <see cref="IConfiguration"/>.
-//		/// </summary>
-//		/// <param name="value">The Array of <see cref="IConfiguration"/> to add.</param>
-//		public void AddRange(IEnumerable<IConfiguration> value)
-//		{
-//			foreach(IConfiguration configuration in value)
-//			{
-//				Add(configuration);
-//			}
-//		}
 	}
 }

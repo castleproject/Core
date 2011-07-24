@@ -17,9 +17,7 @@ namespace Castle.Core.Resource
 	using System;
 	using System.Runtime.Serialization;
 
-#if !SILVERLIGHT
 	[Serializable]
-#endif
 	public class ResourceException : Exception
 	{
 		public ResourceException()

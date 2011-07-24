@@ -22,9 +22,7 @@ namespace Castle.DynamicProxy.Generators
 
 	using Castle.DynamicProxy.Internal;
 
-#if !SILVERLIGHT
 	[Serializable]
-#endif
 	public class AttributeDisassembler : IAttributeDisassembler
 	{
 		public CustomAttributeBuilder Disassemble(Attribute attribute)
@@ -231,11 +229,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 			if (type.IsEnum)
 			{
-#if SILVERLIGHT
-				return Castle.DynamicProxy.SilverlightExtensions.EnumHelper.GetValues(type).GetValue(0);
-#else
-				return Enum.GetValues(type).GetValue(0);
-#endif
+				return Enum.ToObject(type, 0);
 			}
 			if (type == typeof(char))
 			{

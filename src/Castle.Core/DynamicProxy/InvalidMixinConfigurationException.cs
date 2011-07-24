@@ -17,9 +17,7 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Runtime.Serialization;
 
-#if !SILVERLIGHT
 	[Serializable]
-#endif
 	public class InvalidMixinConfigurationException : Exception
 	{
 		public InvalidMixinConfigurationException(string message)
