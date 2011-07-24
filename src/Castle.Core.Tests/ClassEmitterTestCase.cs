@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -69,11 +69,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ForceUnsignedFalseWithSignedTypes()
 		{
-#if SILVERLIGHT // Silverlight does not allow us to sign generated assemblies
-			const bool shouldBeSigned = false;
-#else
 			const bool shouldBeSigned = true;
-#endif
 			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes,
 			                                        TypeAttributes.Public, false);
 			Type t = emitter.BuildType();
