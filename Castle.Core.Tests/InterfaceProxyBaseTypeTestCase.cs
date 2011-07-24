@@ -53,7 +53,6 @@ namespace Castle.DynamicProxy.Tests
 					typeof(ISomething)), exception.Message);
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		public void Class_with_no_default_ctor_as_base_type()
 		{
@@ -68,7 +67,7 @@ namespace Castle.DynamicProxy.Tests
 					"Please use some other valid type.",
 					typeof(NoDefaultCtor)), exception.Message);
 		}
-		// we dont check this in SL for now, as SL2 does not have the overload we need for this. SL3 does.
+
 		[Test]
 		public void Class_with_private_default_ctor_as_base_type()
 		{
@@ -83,7 +82,7 @@ namespace Castle.DynamicProxy.Tests
 					"Please use some other valid type.",
 					typeof(DefaultPrivateCtor)), exception.Message);
 		}
-#endif
+
 		[Test]
 		public void Same_Class_as_base_and_target_works_fine()
 		{

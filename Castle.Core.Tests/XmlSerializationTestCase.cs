@@ -16,7 +16,6 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System.IO;
-	using System.Xml.Serialization;
 
 	using Castle.DynamicProxy.Tests.Classes;
 	using NUnit.Framework;
