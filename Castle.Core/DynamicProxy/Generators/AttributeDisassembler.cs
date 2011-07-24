@@ -65,22 +65,17 @@ namespace Castle.DynamicProxy.Generators
 			throw new ProxyGenerationException(message, exception);
 		}
 
-		private static object[] GetConstructorAndArgs(Type attType, Attribute attribute, out ConstructorInfo ci)
+		private static object[] GetConstructorAndArgs(Type attributeType, Attribute attribute, out ConstructorInfo ctor)
 		{
-			var ctorArgs = new object[0];
+			ctor = attributeType.GetConstructors()[0];
 
-			ci = attType.GetConstructors()[0];
-
-			var constructorParams = ci.GetParameters();
-
-			if (constructorParams.Length != 0)
+			var constructorParams = ctor.GetParameters();
+			if (constructorParams.Length == 0)
 			{
-				ctorArgs = new object[constructorParams.Length];
-
-				InitializeConstructorArgs(attType, attribute, ctorArgs, constructorParams);
+				return new object[0];
 			}
 
-			return ctorArgs;
+			return InitializeConstructorArgs(attributeType, attribute, constructorParams);
 		}
 
 		private static object[] GetPropertyValues(Type attType, out PropertyInfo[] properties, Attribute original,
@@ -138,49 +133,49 @@ namespace Castle.DynamicProxy.Generators
 		///   a/ we first try to match all the properties on the attributes by name (case insensitive) to the argument
 		///   b/ if we fail we try to match them by property type, with some smarts about convertions (i,e: can use Guid for string).
 		/// </summary>
-		private static void InitializeConstructorArgs(Type attType, Attribute attribute, object[] args,
-		                                              ParameterInfo[] parameterInfos)
+		private static object[] InitializeConstructorArgs(Type attributeType, Attribute attribute, ParameterInfo[] parameters)
 		{
+
+			var args = new object[parameters.Length];
 			for (var i = 0; i < args.Length; i++)
 			{
-				args[i] = GetArgValue(attType, attribute, parameterInfos[i]);
+				args[i] = GetArgumentValue(attributeType, attribute, parameters[i]);
 			}
+			return args;
 		}
 
-		private static object GetArgValue(Type attType, Attribute attribute, ParameterInfo parameterInfo)
+		private static object GetArgumentValue(Type attributeType, Attribute attribute, ParameterInfo parameter)
 		{
-			var paramType = parameterInfo.ParameterType;
-
-			var propertyInfos = attType.GetProperties();
+			var properties = attributeType.GetProperties();
 			//first try to find a property with 
-			foreach (var propertyInfo in propertyInfos)
+			foreach (var property in properties)
 			{
-				if (propertyInfo.CanRead == false && propertyInfo.GetIndexParameters().Length != 0)
+				if (property.CanRead == false && property.GetIndexParameters().Length != 0)
 				{
 					continue;
 				}
 
-				if (String.Compare(propertyInfo.Name, parameterInfo.Name, StringComparison.CurrentCultureIgnoreCase) == 0)
+				if (String.Compare(property.Name, parameter.Name, StringComparison.CurrentCultureIgnoreCase) == 0)
 				{
-					return ConvertValue(propertyInfo.GetValue(attribute, null), paramType);
+					return ConvertValue(property.GetValue(attribute, null), parameter.ParameterType);
 				}
 			}
 
 			PropertyInfo bestMatch = null;
 			//now we try to find it by type
-			foreach (var propertyInfo in propertyInfos)
+			foreach (var property in properties)
 			{
-				if (propertyInfo.CanRead == false && propertyInfo.GetIndexParameters().Length != 0)
+				if (property.CanRead == false && property.GetIndexParameters().Length != 0)
 				{
 					continue;
 				}
-				bestMatch = ReplaceIfBetterMatch(parameterInfo, propertyInfo, bestMatch);
+				bestMatch = ReplaceIfBetterMatch(parameter, property, bestMatch);
 			}
 			if (bestMatch != null)
 			{
-				return ConvertValue(bestMatch.GetValue(attribute, null), paramType);
+				return ConvertValue(bestMatch.GetValue(attribute, null), parameter.ParameterType);
 			}
-			return GetDefaultValueFor(paramType);
+			return GetDefaultValueFor(parameter);
 		}
 
 		/// <summary>
@@ -221,8 +216,9 @@ namespace Castle.DynamicProxy.Generators
 			return obj;
 		}
 
-		private static object GetDefaultValueFor(Type type)
+		private static object GetDefaultValueFor(ParameterInfo parameter)
 		{
+			var type = parameter.ParameterType;
 			if (type == typeof(bool))
 			{
 				return false;
@@ -238,6 +234,10 @@ namespace Castle.DynamicProxy.Generators
 			if (type.IsPrimitive)
 			{
 				return 0;
+			}
+			if(type.IsArray && parameter.IsDefined(typeof(ParamArrayAttribute), true))
+			{
+				return Array.CreateInstance(type.GetElementType(), 0);
 			}
 
 			return null;
