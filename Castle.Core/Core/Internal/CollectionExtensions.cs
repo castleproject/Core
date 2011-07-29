@@ -16,6 +16,7 @@ namespace Castle.Core.Internal
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.ComponentModel;
 
 #if SILVERLIGHT
@@ -32,6 +33,16 @@ namespace Castle.Core.Internal
 #else
 			return Array.ConvertAll(items, transformation);
 #endif
+		}
+
+		public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
+		{
+			if (items == null) return;
+
+			foreach (var item in items)
+			{
+				action(item);
+			}
 		}
 
 		public static T Find<T>(this T[] items, Predicate<T> predicate)
