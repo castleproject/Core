@@ -546,7 +546,6 @@
     <Compile Include="DynamicProxy\Tokens\SerializationInfoMethods.cs" />
     <Compile Include="DynamicProxy\Tokens\TypeBuilderMethods.cs" />
     <Compile Include="DynamicProxy\Tokens\TypeMethods.cs" />
-    <Compile Include="Core\CollectionExtensions.cs" />
     <Compile Include="DynamicProxy\IAttributeDisassembler.cs" />
     <Compile Include="DynamicProxy\IInterceptorSelector.cs" />
     <Compile Include="DynamicProxy\Tokens\TypeUtilMethods.cs" />
