@@ -988,7 +988,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				Name = "Dave",
 				Supervisor = manager,
 				Job = new Employment { Title = "Consultant", Salary = 100000M },
-				Metadata = new Metadata { Tag = "Cool!" }
+				Metadata = new Metadata { Tag = "Cool!" },
+				Key = new byte[] { 0x01, 0x02, 0x03 }
 			};
 			var group = new Group
 			{
@@ -1023,6 +1024,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(employee.Job.Title, employeesRead[0].Job.Title);
 			Assert.AreEqual(employee.Job.Salary, employeesRead[0].Job.Salary);
 			Assert.AreEqual(employee.Metadata.Tag, employeesRead[0].Metadata.Tag);
+			CollectionAssert.AreEqual(employee.Key, employeesRead[0].Key);
 			Assert.AreEqual(manager.Name, employeesRead[1].Name);
 			Assert.IsInstanceOf<IManager>(employeesRead[1]);
 			var managerEmplRead = (IManager)employeesRead[1];
@@ -1086,6 +1088,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				Salary = 100000M
 			};
 			employee.Metadata = new Metadata { Tag = "Cool!" };
+			employee.Key = new byte[] { 0x01, 0x02, 0x03 };
 
 			var group = CreateXmlAdapter<IGroup>(null, ref document);
 			group.Id = 2;
@@ -1114,6 +1117,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				Assert.AreEqual(employee.Job.Title, employeesRead[0].Job.Title);
 				Assert.AreEqual(employee.Job.Salary, employeesRead[0].Job.Salary);
 				Assert.AreEqual(employee.Metadata.Tag, employeesRead[0].Metadata.Tag);
+				CollectionAssert.AreEqual(employee.Key, employeesRead[0].Key);
 				Assert.AreEqual(manager.Name, employeesRead[1].Name);
 				Assert.IsInstanceOf<Manager>(employeesRead[1]);
 				var managerEmplRead = (Manager)employeesRead[1];
@@ -1200,6 +1204,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		IEmployee Supervisor { get; set; }
 		Employment Job { get; set; }
 		Metadata Metadata { get; set; }
+		byte[] Key { get; set; }
 	}
 
 	//[XmlRoot(ElementName = "BarRoot")]
@@ -1249,6 +1254,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		public Employee Supervisor;
 		public Employment Job;
 		public Metadata Metadata;
+		public byte[] Key;
 	}
 
 	//[XmlRoot(ElementName = "BarRoot")]
