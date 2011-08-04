@@ -327,6 +327,15 @@ namespace Castle.Components.DictionaryAdapter
 
 		private object ReadArray(XPathResult result, IDictionaryAdapter dictionaryAdapter)
 		{
+			if (result.Type == typeof(byte[]))
+			{
+				XPathNavigator node;
+				if (result.GetNavigator(false, true, out node) && node != null)
+				{
+					return Convert.FromBase64String(node.InnerXml);
+				}
+				return null;
+			}
 			var itemType = result.Type.GetElementType();
 			var itemNodes = result.GetNodes(itemType, type => dictionaryAdapter.GetXmlMeta(type));
 			if (itemNodes == null) return null;
@@ -556,6 +565,13 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void WriteCollection(XPathResult result, ref object value, IDictionaryAdapter dictionaryAdapter)
 		{
+			if (value is byte[])
+			{
+				var node = result.GetNavigator(true);
+				node.SetValue(Convert.ToBase64String((byte[])value));
+				return;
+			}
+
 			result.Remove(value == null);
 
 			if (value != null)
