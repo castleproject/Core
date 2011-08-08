@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -23,13 +23,28 @@ namespace Castle.Core.Logging
 	public class ConsoleFactory : MarshalByRefObject, ILoggerFactory
 #endif
 	{
+		private LoggerLevel? level;
+
+		public ConsoleFactory()
+		{
+		}
+
+		public ConsoleFactory(LoggerLevel level)
+		{
+			this.level = level;
+		}
+
 		public ILogger Create(Type type)
 		{
-			return new ConsoleLogger(type.FullName);
+			return Create(type.FullName);
 		}
 
 		public ILogger Create(String name)
 		{
+			if (level.HasValue)
+			{
+				return Create(name, level.Value);
+			}
 			return new ConsoleLogger(name);
 		}
 
