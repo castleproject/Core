@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
 #if !SILVERLIGHT
+
 namespace Castle.Core.Configuration.Xml
 {
 	using System.Text;
@@ -32,7 +34,7 @@ namespace Castle.Core.Configuration.Xml
 
 		/// <summary>
 		///   If a config value is an empty string we return null, this is to keep
-		///   backward compability with old code
+		///   backward compatibility with old code
 		/// </summary>
 		public static string GetConfigValue(string value)
 		{

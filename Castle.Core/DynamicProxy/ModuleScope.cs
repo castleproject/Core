@@ -357,7 +357,7 @@ namespace Castle.DynamicProxy
 					}
 					var message =
 						string.Format(
-							"There was an error creating dynamic assembly for your proxies - you don't have permissions required to sing the assembly. To workaround it you can enfornce generating non-signed assembly only when creating {0}. ALternatively ensure that your account has all the required permissions.",
+							"There was an error creating dynamic assembly for your proxies - you don't have permissions required to sign the assembly. To workaround it you can enforce generating non-signed assembly only when creating {0}. ALternatively ensure that your account has all the required permissions.",
 							GetType());
 					throw new ArgumentException(message, e);
 				}
