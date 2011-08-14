@@ -26,7 +26,7 @@ namespace Castle.Core.Resource
 	{
 		/// <summary>
 		/// This returns a new stream instance each time it is called.
-		/// It is the responsability of the caller to dispose of this stream
+		/// It is the responsibility of the caller to dispose of this stream
 		/// </summary>
 		private StreamFactory createStream;
 
