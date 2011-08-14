@@ -162,8 +162,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static MemberInfo[] Sort(MemberInfo[] members)
 		{
-			Array.Sort(members, (l, r) => string.Compare(l.Name, r.Name));
-			return members;
+			var sortedMembers = new MemberInfo[members.Length];
+			Array.Copy(members, sortedMembers, members.Length);
+			Array.Sort(sortedMembers, (l, r) => string.Compare(l.Name, r.Name));
+			return sortedMembers;
 		}
 
 		private static bool CloseGenericParametersIfAny(AbstractTypeEmitter emitter, Type[] arguments)
