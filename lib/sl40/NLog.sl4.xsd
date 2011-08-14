@@ -216,7 +216,7 @@
   <xs:complexType name="Filter" abstract="true"></xs:complexType>
   <xs:simpleType name="SimpleLayoutAttribute">
     <xs:restriction base="xs:string">
-      <xs:pattern value="((\$\{[a-zA-Z][a-zA-Z0-9\-]*(\:[a-zA-Z][a-zA-Z0-9\-]*\=([^\\\:]|\\.)*)*\})|([^\$])|(\$[^\{]))*" />
+      <xs:pattern value=".*" />
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="Condition">
@@ -320,8 +320,8 @@
       <xs:extension base="Target">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
-          <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="encoding" minOccurs="0" maxOccurs="1" type="xs:string" />
+          <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="maxMessageSize" minOccurs="0" maxOccurs="1" type="xs:integer" />
           <xs:element name="newLine" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="onOverflow" minOccurs="0" maxOccurs="1" type="NLog.Targets.NetworkTargetOverflowAction" />
@@ -330,6 +330,7 @@
           <xs:element name="includeMdc" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="includeNdc" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="includeNLogData" minOccurs="0" maxOccurs="1" type="xs:boolean" />
+          <xs:element name="ndcItemSeparator" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.NLogViewerParameterInfo" />
           <xs:element name="address" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="connectionCacheSize" minOccurs="0" maxOccurs="1" type="xs:integer" />
@@ -340,14 +341,14 @@
             <xs:documentation>Name of the target.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="layout" type="SimpleLayoutAttribute">
-          <xs:annotation>
-            <xs:documentation>Layout used to format log messages.</xs:documentation>
-          </xs:annotation>
-        </xs:attribute>
         <xs:attribute name="encoding" type="xs:string">
           <xs:annotation>
             <xs:documentation>Encoding to be used.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="layout" type="SimpleLayoutAttribute">
+          <xs:annotation>
+            <xs:documentation>Instance of  that is used to format log messages.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:attribute name="maxMessageSize" type="xs:integer">
@@ -388,6 +389,11 @@
         <xs:attribute name="includeNLogData" type="xs:boolean">
           <xs:annotation>
             <xs:documentation>Indicates whether to include NLog-specific extensions to log4j schema.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="ndcItemSeparator" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>NDC item separator.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:attribute name="address" type="SimpleLayoutAttribute">
@@ -752,6 +758,7 @@
           <xs:element name="endpointAddress" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="endpointConfigurationName" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="clientId" minOccurs="0" maxOccurs="1" type="Layout" />
+          <xs:element name="includeEventProperties" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.MethodCallParameter" />
           <xs:element name="useBinaryEncoding" minOccurs="0" maxOccurs="1" type="xs:boolean" />
         </xs:choice>
@@ -773,6 +780,11 @@
         <xs:attribute name="clientId" type="SimpleLayoutAttribute">
           <xs:annotation>
             <xs:documentation>Client ID.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="includeEventProperties" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>Indicates whether to include per-event properties in the payload sent to the server.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:attribute name="useBinaryEncoding" type="xs:boolean">
@@ -945,8 +957,8 @@
       <xs:extension base="Target">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
-          <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="encoding" minOccurs="0" maxOccurs="1" type="xs:string" />
+          <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="maxMessageSize" minOccurs="0" maxOccurs="1" type="xs:integer" />
           <xs:element name="newLine" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="onOverflow" minOccurs="0" maxOccurs="1" type="NLog.Targets.NetworkTargetOverflowAction" />
@@ -955,6 +967,7 @@
           <xs:element name="includeMdc" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="includeNdc" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="includeNLogData" minOccurs="0" maxOccurs="1" type="xs:boolean" />
+          <xs:element name="ndcItemSeparator" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.NLogViewerParameterInfo" />
           <xs:element name="address" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="connectionCacheSize" minOccurs="0" maxOccurs="1" type="xs:integer" />
@@ -965,14 +978,14 @@
             <xs:documentation>Name of the target.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="layout" type="SimpleLayoutAttribute">
-          <xs:annotation>
-            <xs:documentation>Layout used to format log messages.</xs:documentation>
-          </xs:annotation>
-        </xs:attribute>
         <xs:attribute name="encoding" type="xs:string">
           <xs:annotation>
             <xs:documentation>Encoding to be used.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="layout" type="SimpleLayoutAttribute">
+          <xs:annotation>
+            <xs:documentation>Instance of  that is used to format log messages.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:attribute name="maxMessageSize" type="xs:integer">
@@ -1013,6 +1026,11 @@
         <xs:attribute name="includeNLogData" type="xs:boolean">
           <xs:annotation>
             <xs:documentation>Indicates whether to include NLog-specific extensions to log4j schema.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="ndcItemSeparator" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>NDC item separator.</xs:documentation>
           </xs:annotation>
         </xs:attribute>
         <xs:attribute name="address" type="SimpleLayoutAttribute">
@@ -1184,6 +1202,59 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+  <xs:complexType name="WebService">
+    <xs:complexContent>
+      <xs:extension base="Target">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
+          <xs:element name="encoding" minOccurs="0" maxOccurs="1" type="xs:string" />
+          <xs:element name="methodName" minOccurs="0" maxOccurs="1" type="xs:string" />
+          <xs:element name="namespace" minOccurs="0" maxOccurs="1" type="xs:string" />
+          <xs:element name="protocol" minOccurs="0" maxOccurs="1" type="NLog.Targets.WebServiceProtocol" />
+          <xs:element name="url" minOccurs="0" maxOccurs="1" type="xs:anyURI" />
+          <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.MethodCallParameter" />
+        </xs:choice>
+        <xs:attribute name="name" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Name of the target.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="encoding" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Encoding.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="methodName" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Web service method name.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="namespace" type="xs:string">
+          <xs:annotation>
+            <xs:documentation>Web service namespace.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="protocol" type="NLog.Targets.WebServiceProtocol">
+          <xs:annotation>
+            <xs:documentation>Protocol to be used when calling web service.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="url" type="xs:anyURI">
+          <xs:annotation>
+            <xs:documentation>Web service URL.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:simpleType name="NLog.Targets.WebServiceProtocol">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Soap11" />
+      <xs:enumeration value="Soap12" />
+      <xs:enumeration value="HttpPost" />
+      <xs:enumeration value="HttpGet" />
+    </xs:restriction>
+  </xs:simpleType>
   <xs:complexType name="CsvLayout">
     <xs:complexContent>
       <xs:extension base="Layout">

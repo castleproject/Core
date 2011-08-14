@@ -191,8 +191,8 @@
             <summary>
             Writes the specified logging event to the ASP.NET Trace facility. 
             If the log level is greater than or equal to <see cref="F:NLog.LogLevel.Warn"/> it uses the
-            <see cref="M:System.Web.TraceContext.Warn(System.String,System.String)"/> method, otherwise it uses
-            <see cref="M:System.Web.TraceContext.Write(System.String,System.String)"/> method.
+            System.Web.TraceContext.Warn method, otherwise it uses
+            System.Web.TraceContext.Write method.
             </summary>
             <param name="logEvent">The logging event.</param>
         </member>
