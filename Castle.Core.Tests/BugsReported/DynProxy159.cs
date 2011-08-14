@@ -12,13 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests.BugsReported
+namespace CastleTests.BugsReported
 {
+#if !SILVERLIGHT
 	using System;
 	using System.IO;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 	using System.Runtime.Serialization.Formatters.Binary;
+
+	using Castle.DynamicProxy.Tests;
 
 	using NUnit.Framework;
 
@@ -78,4 +81,5 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 		public double? yyy { get; set; }
 		public int? zzz { get; set; }
 	}
+#endif
 }
