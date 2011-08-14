@@ -128,6 +128,7 @@ limitations under the License.
 		<!-- Picks up TeamCity's Build_Number property, or default to zero when not running under TeamCity -->
 		<Build_Number Condition="'$(Build_Number)' == ''">0</Build_Number>
 		<Build_Revision>$(Build_Number)</Build_Revision>
+		<BuildName Condition="'$(BuildName)' == ''">.$(Build_Revision)</BuildName>
 	</PropertyGroup>
 
 	
@@ -191,7 +192,7 @@ limitations under the License.
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Reflection.AssemblyProduct("$(AssemblyProduct)")]' />
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Reflection.AssemblyVersion("$(AssemblyVersion_Major).$(AssemblyVersion_Minor).$(AssemblyVersion_Build).0")]' />
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Reflection.AssemblyFileVersion("$(Project_Major).$(Project_Minor).$(Project_Build).$(Build_Revision)")]' />
-		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Reflection.AssemblyInformationalVersion("$(Project_Major).$(Project_Minor).$(Project_Build).$(Build_Revision)")]' />
+		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Reflection.AssemblyInformationalVersion("$(Project_Major).$(Project_Minor).$(Project_Build)$(BuildName)")]' />
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Security.AllowPartiallyTrustedCallers]' Condition="$(AllowPartiallyTrustedCallers) and $(BuildConfigKey) != 'NET40'" />
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Security.AllowPartiallyTrustedCallers(PartialTrustVisibilityLevel=System.Security.PartialTrustVisibilityLevel.NotVisibleByDefault)]' Condition="$(AllowPartiallyTrustedCallers) and $(BuildConfigKey) == 'NET40'" />
 		<WriteLinesToFile File="$(AssemblyInfoFile)" Lines='[assembly: System.Security.SecurityRules(System.Security.SecurityRuleSet.Level2)]' Condition="$(AllowPartiallyTrustedCallers) and $(BuildConfigKey) == 'NET40'" />

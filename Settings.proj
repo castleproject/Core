@@ -33,6 +33,8 @@ limitations under the License.
 	<PropertyGroup>
 		<ProjectName>Castle.Core</ProjectName>
 		
+		<!-- Used for display purposes. Should start with a space to look better -->
+		<BuildName> beta 1</BuildName>
 		<!-- Versioning -->
 		<Project_Major>3</Project_Major>
 		<Project_Minor>0</Project_Minor>
