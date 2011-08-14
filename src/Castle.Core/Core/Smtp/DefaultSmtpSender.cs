@@ -78,7 +78,7 @@ namespace Castle.Core.Smtp
 
 		/// <summary>
 		/// Gets or sets a value which is used to 
-		/// configure if emails are going to be sent asyncrhonously or not.
+		/// configure if emails are going to be sent asynchronously or not.
 		/// </summary>
 		public bool AsyncSend
 		{
@@ -150,7 +150,7 @@ namespace Castle.Core.Smtp
 
 			if (asyncSend)
 			{
-				// The MailMessage must be diposed after sending the email.
+				// The MailMessage must be disposed after sending the email.
 				// The code creates a delegate for deleting the mail and adds
 				// it to the smtpClient.
 				// After the mail is sent, the message is disposed and the

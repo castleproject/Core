@@ -28,8 +28,8 @@ namespace Castle.DynamicProxy
 		///   - Sort them by full name
 		///   - Return them by position
 		/// 
-		///   The idea is to have reproducable behavior for the case that mixins are registered in different orders.
-		///   This method is here because it is required
+		/// The idea is to have reproducible behavior for the case that mixins are registered in different orders.
+		/// This method is here because it is required 
 		/// </summary>
 		public MixinData(IEnumerable<object> mixinInstances)
 		{
