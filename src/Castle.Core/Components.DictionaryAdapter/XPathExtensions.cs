@@ -121,26 +121,36 @@ namespace Castle.Components.DictionaryAdapter
 						if      (c == '/')  { state = 1; }
 						else if (c == '[')  { return false; }
 						else if (c == ']')  { return false; }
+						else if (c == '(')  { state = 14; brace++; start = -1; }
+						else if (c == ')')  { return false; }
 						else                { state = 3; start = index; }
 						break;
 					case 1: // after [...] '/'
 						if      (c == '/')  { state = 2; }
 						else if (c == '[')  { return false; }
 						else if (c == ']')  { return false; }
+						else if (c == '(')  { state = 14; brace++; start = -1; }
+						else if (c == ')')  { return false; }
 						else                { state = 3; start = index; }
 						break;
 					case 2: // after [...] '/' '/'
 						if      (c == '/')  { return false; }
 						else if (c == '[')  { return false; }
 						else if (c == ']')  { return false; }
+						else if (c == '(')  { state = 14; brace++; start = -1; }
+						else if (c == ')')  { return false; }
 						else                { state = 3; start = index - 2; }
 						break;
 					case 3: // after [[...] '/'] ['/'] * [...]
 						if      (c == '/')  { goto case 8; }
 						else if (c == '[')  { state = 4; brace++; }
 						else if (c == ']')  { return false; }
+						else if (c == '(')  { state = 14; brace++; }
+						else if (c == ')')  { return false; }
 						else                { /* NOP */ }
 						break;
+
+					// Brackets
 					case 4: // after [[...] '/'] ['/'] * [...] '['
 						if      (c == '[')  { brace++; }
 						else if (c == ']')  { brace--; if (brace == 0) state = 7; }
@@ -148,23 +158,44 @@ namespace Castle.Components.DictionaryAdapter
 						else if (c == '\"') { state = 6; }
 						else                { /* NOP */ }
 						break;
-					case 5: // after [[...] '/'] ['/'] * [...] '[' [...] '''
+					case 5: // after [[...] '/'] ['/'] * [...] '[' [...] ''' [...]
 						if      (c == '\'') { state = 4; }
 						else                { /* NOP */ }
 						break;
-					case 6: // after [[...] '/'] ['/'] * [...] '[' [...] '"'
+					case 6: // after [[...] '/'] ['/'] * [...] '[' [...] '"' [...]
 						if      (c == '\"') { state = 4; }
 						else                { /* NOP */ }
 						break;
-					case 7: // after [[...] '/'] ['/'] * [...] '[' [...] ']'
+
+					case 7: // after [[...] '/'] ['/'] * [...] ('['|'(') [...] (']'|')')
 						if      (c == '/')  { goto case 8; }
-						else if (c == '[')  { state = 4; brace++; }
+						else if (c == '[')  { state =  4; brace++; }
+						else if (c == '(')  { state = 14; brace++; }
 						else                { return false; }
 						break;
 					case 8: // Capture
-						consumer(start, index);
+						if (start >= 0)
+							consumer(start, index);
 						state = 1;
 						break;
+
+					// Parentheses
+					case 14: // after [[...] '/'] ['/'] * [...] '('
+						if      (c == '(')  { brace++; }
+						else if (c == ')')  { brace--; if (brace == 0) state = 7; }
+						else if (c == '\'') { state = 15; }
+						else if (c == '\"') { state = 16; }
+						else                { /* NOP */ }
+						break;
+					case 15: // after [[...] '/'] ['/'] * [...] '(' [...] ''' [...]
+						if      (c == '\'') { state = 14; }
+						else                { /* NOP */ }
+						break;
+					case 16: // after [[...] '/'] ['/'] * [...] '(' [...] '"' [...]
+						if      (c == '\"') { state = 14; }
+						else                { /* NOP */ }
+						break;
+
 					default:
 						throw new InvalidOperationException();
 				}
