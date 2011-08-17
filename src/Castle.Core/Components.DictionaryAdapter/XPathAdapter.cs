@@ -100,7 +100,7 @@ namespace Castle.Components.DictionaryAdapter
 						if (behavior is XPathAttribute)
 						{
 							var attrib = (XPathAttribute)behavior;
-							var compiledExpression = attrib.CompiledExpression;
+							var compiledExpression = attrib.Path.Expression;
 							if (MoveOffRoot(root, XPathNodeType.Element) == false || Context.Matches(compiledExpression, root))
 							{
 								break;
@@ -664,13 +664,11 @@ namespace Castle.Components.DictionaryAdapter
 
 		private XPathContext GetEffectiveContext(IDictionaryAdapter dictionaryAdapter)
 		{
-			if (overlays != null)
-			{
-				XPathContext context;
-				if (overlays.TryGetValue(dictionaryAdapter.Meta.Type, out context))
-					return context;
-			}
-			return Context;
+			XPathContext overlayContext;
+			return overlays != null
+				&& overlays.TryGetValue(dictionaryAdapter.Meta.Type, out overlayContext)
+				? overlayContext
+				: Context;
 		}
 
 		private XPathResult EvaluateProperty(string key, PropertyDescriptor property, IDictionaryAdapter dictionaryAdapter)
@@ -722,7 +720,7 @@ namespace Castle.Components.DictionaryAdapter
 				else if (behavior is XPathAttribute)
 				{
 					var attrib = (XPathAttribute)behavior;
-					xpath = attrib.CompiledExpression;
+					xpath = attrib.Path.Expression;
 				}
 				else
 				{
@@ -734,7 +732,7 @@ namespace Castle.Components.DictionaryAdapter
 					keyContext.Arguments.Clear();
 					keyContext.Arguments.AddParam("key", "", name);
 					keyContext.Arguments.AddParam("ns", "", ns ?? XPathContext.IgnoreNamespace);
-					if (keyContext.Evaluate(xpath, Root, out result))
+					if (keyContext.TryEvaluate(xpath, Root, out result))
 					{
 						create = matchingCreate ?? create;
 						return new XPathResult(property, key, result, keyContext, behavior, create);
@@ -752,7 +750,7 @@ namespace Castle.Components.DictionaryAdapter
 			keyContext.Arguments.AddParam("key", "", key);
 			keyContext.Arguments.AddParam("ns", "", XPathContext.IgnoreNamespace);
 			create = create ?? (() => keyContext.AppendElement(key, null, root));
-			keyContext.Evaluate(XPathElementOrAttribute, Root, out result);
+			keyContext.TryEvaluate(XPathElementOrAttribute, Root, out result);
 			return new XPathResult(property, key, result, keyContext, null, create);
 		}
 

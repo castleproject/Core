@@ -16,20 +16,36 @@ namespace Castle.Components.DictionaryAdapter
 {
 #if !SILVERLIGHT
 	using System;
+	using System.Collections.Generic;
+	using System.Xml.XPath;
 
-	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = true)]
-	public class XPathAttribute : Attribute
+	public class CompiledPath : ICompiledPath
 	{
-		private readonly CompiledPath path;
+		private readonly XPathExpression   expression;
+		private readonly XPathExpression[] expressionParts;
 
-		public XPathAttribute(string path)
+		public CompiledPath(string path)
 		{
-			this.path = new CompiledPath(path);
+			if (null == path)
+				throw new ArgumentNullException("path");
+
+			expression = XPathExpression.Compile(path);
+			expressionParts = expression.Split();
 		}
 
-		public ICompiledPath Path
+		public string Path
 		{
-			get { return path; }
+			get { return expression.Expression; }
+		}
+
+		public XPathExpression Expression
+		{
+			get { return expression; }
+		}
+
+		public IList<XPathExpression> ExpressionParts
+		{
+			get { return expressionParts; }
 		}
 	}
 #endif

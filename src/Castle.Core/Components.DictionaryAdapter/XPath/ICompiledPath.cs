@@ -15,22 +15,14 @@
 namespace Castle.Components.DictionaryAdapter
 {
 #if !SILVERLIGHT
-	using System;
+	using System.Collections.Generic;
+	using System.Xml.XPath;
 
-	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = true)]
-	public class XPathAttribute : Attribute
+	public interface ICompiledPath
 	{
-		private readonly CompiledPath path;
-
-		public XPathAttribute(string path)
-		{
-			this.path = new CompiledPath(path);
-		}
-
-		public ICompiledPath Path
-		{
-			get { return path; }
-		}
+		string Path { get; }
+		XPathExpression Expression { get; }
+		IList<XPathExpression> ExpressionParts { get; }
 	}
 #endif
 }

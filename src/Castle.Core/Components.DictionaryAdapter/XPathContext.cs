@@ -217,31 +217,39 @@ namespace Castle.Components.DictionaryAdapter
 			return new XPathVariable(name);
 		}
 
-		public bool Evaluate(XPathExpression xpath, XPathNavigator source, out object result)
+		public bool TryEvaluate(XPathExpression expression, XPathNavigator source, out object result)
 		{
-			xpath = (XPathExpression)xpath.Clone();
-			xpath.SetContext(new XPathSemantics(this));
-			result = source.Evaluate(xpath);
-			if (xpath.ReturnType == XPathResultType.NodeSet)	
+			expression = SetContext(expression);
+			result = source.Evaluate(expression);
+			// ^ should never return null, according to ILSpy spelunking
+
+			if (expression.ReturnType == XPathResultType.NodeSet)
 			{
-				if (((XPathNodeIterator)result).Count == 0)
-					result = null;
+				var iterator = (XPathNodeIterator) result;
+				var hasItems = iterator.Clone().MoveNext();
+				if (!hasItems) result = null;
 			}
+
 			return result != null;
 		}
 
-		public XPathNavigator SelectSingleNode(XPathExpression xpath, XPathNavigator source)
+		public XPathNavigator SelectSingleNode(XPathExpression expression, XPathNavigator source)
 		{
-			xpath = (XPathExpression)xpath.Clone();
-			xpath.SetContext(new XPathSemantics(this));
-			return source.SelectSingleNode(xpath);
+			expression = SetContext(expression);
+			return source.SelectSingleNode(expression);
 		}
 
-		public bool Matches(XPathExpression xpath, XPathNavigator source)
+		public bool Matches(XPathExpression expression, XPathNavigator source)
 		{
-			xpath = (XPathExpression)xpath.Clone();
-			xpath.SetContext(new XPathSemantics(this));
-			return source.Matches(xpath);
+			expression = SetContext(expression);
+			return source.Matches(expression);
+		}
+
+		private XPathExpression SetContext(XPathExpression expression)
+		{
+			expression = (XPathExpression) expression.Clone();
+			expression.SetContext(new XPathSemantics(this));
+			return expression;
 		}
 
 		public void AddStandardNamespaces(XPathNavigator source)

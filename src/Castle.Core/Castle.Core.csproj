@@ -192,6 +192,9 @@
     <Compile Include="Components.DictionaryAdapter\Util\ICondition.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\PriorityBehaviorExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\XmlMetadata.cs" />
+    <Compile Include="Components.DictionaryAdapter\XPath\CompiledPath.cs" />
+    <Compile Include="Components.DictionaryAdapter\XPath\ICompiledPath.cs" />
+    <Compile Include="Components.DictionaryAdapter\XPath\XPath.cs" />
     <Compile Include="Core\Internal\CollectionExtensions.cs" />
     <Compile Include="Core\ReferenceEqualityComparer.cs" />
     <Compile Include="Core\Extensions\SimpleConverter.cs" />
@@ -506,6 +509,7 @@
       <Link>CastleKey.snk</Link>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition="($(MSBuildTargets) == '') Or ($(MSBuildTargets) == 'CSharp')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 4.0'" />
   <Import Project="$(RootPath)\Settings.proj" />
