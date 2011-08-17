@@ -93,41 +93,47 @@ namespace Castle.Components.DictionaryAdapter
 				rootXmlMeta = xmlMeta;
 				Context.ApplyBehaviors(rootXmlMeta, behaviors);
 
-				if (Parent == null)
-				{
+				if (Parent == null && MoveOffRoot(root, XPathNodeType.Element))
 					foreach (var behavior in behaviors)
-					{
-						if (behavior is XPathAttribute)
-						{
-							var attrib = (XPathAttribute)behavior;
-							var compiledExpression = attrib.Path.Expression;
-							if (MoveOffRoot(root, XPathNodeType.Element) == false || Context.Matches(compiledExpression, root))
-							{
-								break;
-							}
-
-							var navigator = Context.SelectSingleNode(compiledExpression, root);
-							if (navigator != null)
-							{
-								root = navigator;
-								break;
-							}
-						}
-					}
-					MoveOffRoot(root, XPathNodeType.Element);
-				}
+						if (TryInitWithXPathAttribute(behavior))
+							break;
 			}
 			else
 			{
-				if (overlays == null)
-					overlays = new Dictionary<Type, XPathContext>();
+				InitOverlay(meta, xmlMeta, behaviors);
+			}
+		}
 
-				XPathContext overlay;
-				if (overlays.TryGetValue(meta.Type, out overlay) == false)
-				{
-					overlay = new XPathContext().ApplyBehaviors(xmlMeta, behaviors);
-					overlays.Add(meta.Type, overlay);
-				}
+		private bool TryInitWithXPathAttribute(object behavior)
+		{
+			var attribute = behavior as XPathAttribute;
+			if (attribute == null)
+				return false;
+
+			var compiledExpression = attribute.Path.Expression;
+
+			if (Context.Matches(compiledExpression, root))
+				return true;
+
+			var navigator = Context.SelectSingleNode(compiledExpression, root);
+			if (navigator == null)
+				return false;
+
+			root = navigator;
+			MoveOffRoot(root, XPathNodeType.Element);
+			return true;
+		}
+
+		private void InitOverlay(DictionaryAdapterMeta meta, XmlMetadata xmlMeta, object[] behaviors)
+		{
+			if (overlays == null)
+				overlays = new Dictionary<Type, XPathContext>();
+
+			XPathContext overlay;
+			if (overlays.TryGetValue(meta.Type, out overlay) == false)
+			{
+				overlay = new XPathContext().ApplyBehaviors(xmlMeta, behaviors);
+				overlays.Add(meta.Type, overlay);
 			}
 		}
 
@@ -720,7 +726,7 @@ namespace Castle.Components.DictionaryAdapter
 				else if (behavior is XPathAttribute)
 				{
 					var attrib = (XPathAttribute)behavior;
-					xpath = attrib.Path.Expression;
+					return new XPathResultForXPath(property, key, keyContext, attrib, Root);
 				}
 				else
 				{

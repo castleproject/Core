@@ -24,14 +24,14 @@ namespace Castle.Components.DictionaryAdapter
 
 	public class XPathResult
 	{
-		public readonly bool CanWrite;
 		private readonly object matchingBehavior;
-		private readonly Func<XPathNavigator> create;
+		protected Func<XPathNavigator> create; // TODO: was private readonly
 
-		public XPathResult(PropertyDescriptor property, string key, object result, XPathContext context, object matchingBehavior)
-			: this(property, key, result, context, matchingBehavior, null)
-		{
-		}
+		// TODO: Not referenced. Can this be removed?
+		//public XPathResult(PropertyDescriptor property, string key, object result, XPathContext context, object matchingBehavior)
+		//    : this(property, key, result, context, matchingBehavior, null)
+		//{
+		//}
 
 		public XPathResult(Type type, object result, XPathContext context, object matchingBehavior)
 			: this(null, null, result, context, matchingBehavior, null)
@@ -62,7 +62,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public string Key { get; private set; }
 
-		public object Result { get; private set; }
+		public object Result { get; protected set; } // TODO: was private set
 
 		public XPathContext Context { get; private set; }
 
@@ -72,7 +72,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		public bool OmitPolymorphism { get; private set; }
 
-		public bool IsNullable
+		public bool CanWrite { get; protected set; } // TODO: was private readonly field
+
+		public virtual bool IsNullable
 		{
 			get
 			{
@@ -95,14 +97,14 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		public XPathNavigator GetNavigator(bool demand)
+		public virtual XPathNavigator GetNavigator(bool demand)
 		{
 			XPathNavigator node;
 			GetNavigator(demand, false, out node);
 			return node;
 		}
 
-		public bool GetNavigator(bool demand, bool nillable, out XPathNavigator result)
+		public virtual bool GetNavigator(bool demand, bool nillable, out XPathNavigator result)
 		{
 			if (Result is XPathNavigator)
 			{
@@ -122,9 +124,11 @@ namespace Castle.Components.DictionaryAdapter
 			}
 			result = null;
 			return true;
+
+			// return false only if result is some special nil value
 		}
 
-		public XPathResult GetNodeAt(Type type, int index)
+		public virtual XPathResult GetNodeAt(Type type, int index)
 		{
 			var node = Container;
 			if (IsContainer)
@@ -142,7 +146,7 @@ namespace Castle.Components.DictionaryAdapter
 			return new XPathResult(type, node, Context, Context.ListItemMeta ?? matchingBehavior);
 		}
 
-		public IEnumerable<XPathResult> GetNodes(Type type, Func<Type, XmlMetadata> getXmlMeta)
+		public virtual IEnumerable<XPathResult> GetNodes(Type type, Func<Type, XmlMetadata> getXmlMeta)
 		{
 			Container = null;
 			var nodes = Result as XPathNodeIterator;
@@ -200,7 +204,7 @@ namespace Castle.Components.DictionaryAdapter
 			return results.Select(r => new XPathResult(type, r, Context, matchingBehavior));
 		}
 
-		public bool ReadObject(out object value)
+		public virtual bool ReadObject(out object value)
 		{
 			XPathNavigator node;
 			if (GetNavigator(false, true, out node) && node != null)
@@ -215,7 +219,7 @@ namespace Castle.Components.DictionaryAdapter
 			return false;
 		}
 
-		public bool WriteObject(object value)
+		public virtual bool WriteObject(object value)
 		{
 			var node = GetNavigator(true);
 			foreach (var serializer in Context.Serializers)
@@ -249,7 +253,7 @@ namespace Castle.Components.DictionaryAdapter
 			return xmlMeta;
 		}
 
-		public XPathResult CreateNode(Type type, object value, Func<Type, XmlMetadata> getXmlMeta)
+		public virtual XPathResult CreateNode(Type type, object value, Func<Type, XmlMetadata> getXmlMeta)
 		{
 			string name = null;
 			string namespaceUri = null;
@@ -350,12 +354,12 @@ namespace Castle.Components.DictionaryAdapter
 			};
 		}
 
-		public bool RemoveAt(int index)
+		public virtual bool RemoveAt(int index)
 		{
 			return GetNodeAt(null, index).Remove(true);
 		}
 
-		public bool Remove(bool nillable)
+		public virtual bool Remove(bool nillable)
 		{
 			if (Result is XPathNavigator)
 			{
@@ -405,7 +409,7 @@ namespace Castle.Components.DictionaryAdapter
 			return true;
 		}
 
-		public XPathNavigator RemoveChildren()
+		public virtual XPathNavigator RemoveChildren()
 		{
 			var node = GetNavigator(true);
 			RemoveChildren(node);

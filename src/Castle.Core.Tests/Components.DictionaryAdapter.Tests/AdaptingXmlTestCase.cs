@@ -155,6 +155,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 						   </Roster>
 						</Team>
 					 </League>
+					 <Documentation xmlns=''>
+					  <Notes>notes</Notes>
+					 </Documentation>
 					 <Tag>{19}</Tag>
 					 <Tag>{20}</Tag>
 					 <Tag>{21}</Tag>
@@ -210,6 +213,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(team2Balance, season.TeamsArray[1].Balance);
 			Assert.AreEqual(team1Balance + team2Balance, season.Balance);
 			Assert.AreEqual(team1Name, season.FirstTeamName);
+			Assert.AreEqual("notes", season.Notes); // TODO: Improve
 			Assert.AreEqual(3, season.Tags.Length);
 			Assert.Contains(tags[0], season.Tags);
 			Assert.Contains(tags[1], season.Tags);
@@ -249,6 +253,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var team1Balance = 450.00M;
 			var team3Name = "Barcelona";
 			var team3Balance = 175.15M;
+			var notes = "Some Notes";
 
 			var xml = string.Format(
 				@"<Season xmlns='RISE' xmlns:rise='RISE'>
@@ -290,6 +295,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var team3 = season.Teams.AddNew();
 			team3.Name = team3Name;
 			team3.Balance = team3Balance;
+			season.Notes = notes;
 
 			Assert.AreEqual(name, season.Name);
 			Assert.AreEqual(minAge, season.MinimumAge);
@@ -305,6 +311,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(team1Balance, season.Teams[0].Balance);
 			Assert.AreEqual(team3Name, season.Teams[2].Name);
 			Assert.AreEqual(team3Balance, season.Teams[2].Balance);
+			Assert.AreEqual(notes, season.Notes);
 
 			season.Teams.RemoveAt(1);
 			Assert.AreEqual(2, season.Teams.Count);
@@ -951,6 +958,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			ITeam[] TeamsArray { get; }
 			[XPath("rise:League/rise:Team[position()=1]/@Name")]
 			string FirstTeamName { get; }
+			[XPath("Documentation/Notes")]
+			string Notes { get; set; }
 			[XmlElement("Tag")]
 			string[] Tags { get; set; }
 			XmlElement ExtraStuff { get; set; }

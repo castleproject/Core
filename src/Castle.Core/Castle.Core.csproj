@@ -192,9 +192,13 @@
     <Compile Include="Components.DictionaryAdapter\Util\ICondition.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\PriorityBehaviorExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\XmlMetadata.cs" />
+    <Compile Include="Components.DictionaryAdapter\XPathResultForXPath.cs" />
     <Compile Include="Components.DictionaryAdapter\XPath\CompiledPath.cs" />
     <Compile Include="Components.DictionaryAdapter\XPath\ICompiledPath.cs" />
+    <Compile Include="Components.DictionaryAdapter\XPath\SimpleIterator.cs" />
     <Compile Include="Components.DictionaryAdapter\XPath\XPath.cs" />
+    <Compile Include="Components.DictionaryAdapter\XPath\XPathBufferedNodeIterator.cs" />
+    <Compile Include="Components.DictionaryAdapter\XPath\XPathMutableIterator.cs" />
     <Compile Include="Core\Internal\CollectionExtensions.cs" />
     <Compile Include="Core\ReferenceEqualityComparer.cs" />
     <Compile Include="Core\Extensions\SimpleConverter.cs" />
