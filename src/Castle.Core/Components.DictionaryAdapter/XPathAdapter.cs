@@ -643,6 +643,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (dictionaryAdapter != null && dictionaryAdapter.This.Descriptor != null)
 			{
+
 				XPathAdapter xpathAdapter = null;
 				var getters = dictionaryAdapter.This.Descriptor.Getters;
 				if (getters != null)

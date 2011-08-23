@@ -1,58 +1,73 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml.XPath;
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.f
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-namespace Castle.Components.DictionaryAdapter
+#if !SILVERLIGHT
+namespace Castle.Components.DictionaryAdapter.Xml
 {
-	internal class XPathMutableIterator : SimpleIterator<XPathNavigator>
+	using System;
+	using System.Collections.Generic;
+	using System.Xml.XPath;
+
+	internal class XPathMutableIterator : Iterator<XPathNavigator>
 	{
-		private readonly XPathNavigator _parent;
-		private readonly IList<XPathExpression> _paths;
-		private readonly XPathNodeIterator _iterator;
-		private readonly bool _singleItem;
+		private readonly XPathNavigator parent;
+		private readonly IList<XPathExpression> paths;
+		private readonly XPathNodeIterator iterator;
+		private readonly bool multiple;
 
-		private XPathNavigator _node;
-		private int _depth;
-		private int _position;
+		private XPathNavigator node;
+		private int depth;
+		private int position;
 
-		public XPathMutableIterator(XPathNavigator parent, ICompiledPath path, bool singleItem = false)
+		public XPathMutableIterator(XPathNavigator parent, ICompiledPath path, bool multiple)
 		{
 			if (null == parent)
 				throw new ArgumentNullException("parent");
 			if (null == path)
 				throw new ArgumentNullException("path");
 
-			_parent = parent;
-			_singleItem = singleItem;
-			_position = -1;
+			this.parent   = parent;
+			this.multiple = multiple;
+			this.position = -1;
 
-			_paths = path.ExpressionParts;
+			paths = path.ExpressionParts;
 			RequireSupportedPath(path);
 
-			_iterator = parent.Select(_paths[0]);
-			_iterator = new XPathBufferedNodeIterator(_iterator);
+			iterator = parent.Select(paths[0]);
+			iterator = new XPathBufferedNodeIterator(iterator);
 		}
 
 		public int Position
 		{
-			get { return _position; }
+			get { return position; }
 		}
 
-		public bool HasCurrent
+		public override bool HasCurrent
 		{
-			get { return _depth == _paths.Count; }
+			get { return depth == paths.Count; }
 		}
 
 		public bool HasPartialOrCurrent
 		{
-			get { return null != _node; } // (_depth > 0 works also)
+			get { return null != node; } // (_depth > 0 works also)
 		}
 
 		public override XPathNavigator Current
 		{
 			get
 			{
-				return HasCurrent          ? _node
+				return HasCurrent          ? node
 					 : HasPartialOrCurrent ? null
 					 : OnNoCurrent();
 			}
@@ -62,83 +77,83 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			ResetCurrent();
 
-			if (!_iterator.MoveNext())
+			if (!iterator.MoveNext())
 				return false;
 
-			Consume(_iterator, _singleItem);
+			Consume(iterator, !multiple);
 			SeekCurrent();
-			_position++;
+			position++;
 			return true;
 		}
 
 		private void SeekCurrent()
 		{
-			while (_depth < _paths.Count)
+			while (depth < paths.Count)
 			{
-				var iterator = _node.Select(_paths[_depth]);
+				var iterator = node.Select(paths[depth]);
 				if (!iterator.MoveNext())
 					return;
 
-				Consume(iterator, singleItem: true);
+				Consume(iterator, true);
 			}
 		}
 
-		private void Consume(XPathNodeIterator iterator, bool singleItem)
+		private void Consume(XPathNodeIterator iterator, bool single)
 		{
 			var candidate = iterator.Current;
 			RequireElement(candidate);
-			if (singleItem) RequireAtEnd(iterator);
-			_node = candidate;
-			_depth++;
+			if (single) RequireAtEnd(iterator);
+			node = candidate;
+			depth++;
 		}
 
-		public XPathNavigator Create()
+		public override XPathNavigator Create()
 		{
 			if (HasCurrent)
 				ResetCurrent();
 
 			var isNewItem = !HasPartialOrCurrent;
 			if (isNewItem)
-				_node = _parent.Clone();
+				node = parent.Clone();
 
-			for (var i = _depth; i < _paths.Count; i++)
+			for (var i = depth; i < paths.Count; i++)
 				RequireCreatable(GetPath(i));
 
-			using (var writer = _node.AppendChild())
-				for (var i = _depth; i < _paths.Count; i++)
+			using (var writer = node.AppendChild())
+				for (var i = depth; i < paths.Count; i++)
 					writer.WriteStartElement(GetPath(i));
 
 			var addedNode = SeekCurrentAfterCreate();
 
 			if (isNewItem)
-				_position++;
+				position++;
 
 			return addedNode;
 		}
 
 		private XPathNavigator SeekCurrentAfterCreate()
 		{
-			RequireMoved(_node.MoveToLastChild());
-			if (++_depth == _paths.Count)
-				return _node;
+			RequireMoved(node.MoveToLastChild());
+			if (++depth == paths.Count)
+				return node;
 
-			var addedNode = _node.Clone();
+			var addedNode = node.Clone();
 
-			do RequireMoved(_node.MoveToFirstChild());
-			while (++_depth < _paths.Count);
+			do RequireMoved(node.MoveToFirstChild());
+			while (++depth < paths.Count);
 
 			return addedNode;
 		}
 
-		public XPathNavigator Remove()
+		public override XPathNavigator Remove()
 		{
 			RequireRemovable();
 
-			for (; _depth > 1; _depth--)
-				_node.MoveToParent();
+			for (; depth > 1; depth--)
+				node.MoveToParent();
 
-			_node.SetToNil();
-			var removedNode = _node;
+			node.SetToNil();
+			var removedNode = node;
 
 			ResetCurrent();
 			return removedNode;
@@ -146,18 +161,18 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void ResetCurrent()
 		{
-			_node = null;
-			_depth = 0;
+			node = null;
+			depth = 0;
 		}
 
 		private string GetPath(int index)
 		{
-			return _paths[index].Expression;
+			return paths[index].Expression;
 		}
 
 		private void RequireSupportedPath(ICompiledPath path)
 		{
-			if (null == _paths || _paths.Count == 0)
+			if (null == paths || paths.Count == 0)
 			{
 				var message = string.Format(
 					"The path '{0}' is not a supported XPath path expression.",
@@ -172,7 +187,7 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				var message = string.Format(
 					"The path component '{0}' selected a non-element node.",
-					GetPath(_depth));
+					GetPath(depth));
 				throw new XPathException(message);
 			}
 		}
@@ -183,7 +198,7 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				var message = string.Format(
 					"The path component '{0}' selected multiple nodes, but only one was expected.",
-					GetPath(_depth));
+					GetPath(depth));
 				throw new XPathException(message);
 			}
 		}
@@ -217,9 +232,10 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				var message = string.Format(
 					"Failed navigation to {0} element after creation.",
-					GetPath(_depth));
+					GetPath(depth));
 				throw new XPathException(message);
 			}
 		}
 	}
 }
+#endif

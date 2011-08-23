@@ -21,6 +21,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Xml;
 	using System.Xml.Serialization;
 	using System.Xml.XPath;
+	using Castle.Components.DictionaryAdapter.Xml;
 
 	public class XPathResultForXPath : XPathResult
 	{
@@ -46,9 +47,11 @@ namespace Castle.Components.DictionaryAdapter
 
 		private XPathNavigator InternalCreate()
 		{
-			var i = new XPathMutableIterator(root, path, singleItem: true);
+			var iterator = new XPathMutableIterator(root, path, false);
 
-			return i.MoveNext() ? i.Current : i.Create();
+			if (!iterator.MoveNext())
+				iterator.Create();
+			return iterator.Current;
 
 //			return Context.AppendElement(Key, null, root);
 		}

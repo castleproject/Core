@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -8,19 +8,21 @@
 // 
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.f
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.DictionaryAdapter
+#if !SILVERLIGHT
+namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Xml;
+	using System.Xml.XPath;
 
-	/// <summary>
-	/// Indicates that underlying values are changeable and should not be cached.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = false)]
-	public class VolatileAttribute : Attribute
+	public class XmlAttributePropertyAccessor
 	{
 	}
 }
+#endif
