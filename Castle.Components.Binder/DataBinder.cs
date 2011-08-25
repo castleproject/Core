@@ -197,6 +197,17 @@ namespace Castle.Components.Binder
 			excludedPropertyList = CreateNormalizedList(excludedProperties);
 			allowedPropertyList = CreateNormalizedList(allowedProperties);
 
+			if (instance != null)
+			{
+				var instanceType = instance.GetType();
+				if (IsGenericList(instanceType))
+				{
+					bool success;
+					var elemType = instanceType.GetGenericArguments()[0];
+					ConvertToGenericList((IList)instance, elemType, prefix, treeRoot.GetChildNode(prefix), out success);
+				}
+			}
+
 			InternalRecursiveBindObjectInstance(instance, prefix, treeRoot.GetChildNode(prefix));
 		}
 
@@ -265,7 +276,7 @@ namespace Castle.Components.Binder
 			}
 			if (IsGenericList(instanceType))
 			{
-				return InternalBindGenericList(instanceType, paramPrefix, node, out succeeded);
+				return ConvertToGenericList(instanceType, paramPrefix, node, out succeeded);
 			}
 			succeeded = true;
 			object instance = CreateInstance(instanceType, paramPrefix, node);
@@ -542,18 +553,6 @@ namespace Castle.Components.Binder
 			return listType.IsAssignableFrom(instanceType);
 		}
 
-		private object InternalBindGenericList(Type instanceType, string paramPrefix, Node node, out bool succeeded)
-		{
-			succeeded = false;
-
-			if (node == null)
-			{
-				return CreateInstance(instanceType, paramPrefix, node);
-			}
-
-			return ConvertToGenericList(instanceType, paramPrefix, node, out succeeded);
-		}
-
 		#endregion
 
 		#region CreateInstance
@@ -802,16 +801,31 @@ namespace Castle.Components.Binder
 
 			Type elemType = genericArgs[0];
 
+			Type desiredImplType = desiredType.IsInterface
+				? typeof (List<>).MakeGenericType(elemType)
+				: desiredType;
+			var target = (IList) CreateInstance(desiredImplType, key, node);
+			ConvertToGenericList(target, elemType, key, node, out conversionSucceeded);
+			return target;
+		}
+
+		private void ConvertToGenericList(IList target, Type elemType, String key, Node node, out bool conversionSucceeded)
+		{
+			conversionSucceeded = false;
 			if (node == null)
-			{
-				conversionSucceeded = false;
-				return CreateInstance(desiredType, key, node);
-			}
+				return;
 			else if (node.NodeType == NodeType.Leaf)
 			{
 				var leafNode = node as LeafNode;
-
-				return Converter.Convert(desiredType, leafNode.ValueType, leafNode.Value, out conversionSucceeded);
+				var values = leafNode.Value as Array;
+				if (values == null)
+					return;
+				for(var i = 0; i < values.Length; i++)
+				{
+					var result = Converter.Convert(elemType, leafNode.ValueType, values.GetValue(i), out conversionSucceeded);
+					if (result != null)
+						target.Add(result);
+				}
 			}
 			else if (node.NodeType == NodeType.Indexed)
 			{
@@ -828,18 +842,11 @@ namespace Castle.Components.Binder
 					convertedNodes = ConvertComplexNodesToList(elemType, indexedNode, out conversionSucceeded);
 				}
 
-				Type desiredImplType = desiredType.IsInterface
-				                       	? typeof (List<>).MakeGenericType(elemType)
-				                       	: desiredType;
-				var target = (IList) CreateInstance(desiredImplType, key, node);
-
 				foreach (object elem in convertedNodes)
 				{
 					if (elem != null)
 						target.Add(elem);
 				}
-
-				return target;
 			}
 			else
 			{

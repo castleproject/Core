@@ -46,7 +46,6 @@ namespace Castle.Components.Binder.Tests
 			int expectedValue = 12;
 
 			var myList = new List<int>();
-			myList.Add(expectedValue);
 
 			var binder = new DataBinder();
 			CompositeNode paramsNode = GetParamsNode(expectedValue);
