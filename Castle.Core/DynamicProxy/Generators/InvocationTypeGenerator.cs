@@ -156,6 +156,10 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 
+
+            invokeMethodOnTarget.CodeBuilder.AddStatement(new TryStatement());
+
+
 			var methodOnTargetInvocationExpression = GetCallbackMethodInvocation(invocation, args, callbackMethod, targetField,
 			                                                                     invokeMethodOnTarget);
 
@@ -170,6 +174,10 @@ namespace Castle.DynamicProxy.Generators
 			{
 				invokeMethodOnTarget.CodeBuilder.AddStatement(new ExpressionStatement(methodOnTargetInvocationExpression));
 			}
+
+            invokeMethodOnTarget.CodeBuilder.AddStatement(new CatchStatement());
+
+            invokeMethodOnTarget.CodeBuilder.AddStatement(new FinalStatement());
 
 			foreach (var byRefArgument in byRefArguments)
 			{
@@ -187,6 +195,8 @@ namespace Castle.DynamicProxy.Generators
 						                                                     	(localReference)))
 						));
 			}
+
+            invokeMethodOnTarget.CodeBuilder.AddStatement(new EndExceptionStatement());
 
 			if (callbackMethod.ReturnType != typeof(void))
 			{
