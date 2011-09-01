@@ -19,10 +19,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Collections.Generic;
 	using System.Xml.XPath;
 
-	internal class XPathMutableIterator : Iterator<XPathNavigator>
+	internal class XPathMutableIterator : XmlIterator
 	{
 		private readonly XPathNavigator parent;
 		private readonly IList<XPathExpression> paths;
+//		private readonly IXmlTypeMap predicate;
 		private readonly XPathNodeIterator iterator;
 		private readonly bool multiple;
 
@@ -63,12 +64,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return null != node; } // (_depth > 0 works also)
 		}
 
-		public override XPathNavigator Current
+		public override XmlTypedNode Current
 		{
 			get
 			{
-				return HasCurrent          ? node
-					 : HasPartialOrCurrent ? null
+				return HasCurrent          ? new XmlTypedNode(node, null)  //node
+					 : HasPartialOrCurrent ? default(XmlTypedNode) //null
 					 : OnNoCurrent();
 			}
 		}
@@ -107,7 +108,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			depth++;
 		}
 
-		public override XPathNavigator Create()
+		public override XPathNavigator Create(Type type)
 		{
 			if (HasCurrent)
 				ResetCurrent();

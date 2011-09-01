@@ -15,33 +15,12 @@
 #if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	using System;
-
-	public class SingleIterator<T> : Iterator<T>
+	public abstract class XmlCollectionSerializer : XmlTypeSerializer
 	{
-		private readonly T item;
-		private int position;
+		protected XmlCollectionSerializer() { }
 
-		public SingleIterator(T item)
-		{
-			this.item     = item;
-			this.position = -1;
-		}
-
-		public override bool HasCurrent
-		{
-			get { return 0 == position; }
-		}
-
-		public override T Current
-		{
-			get { return HasCurrent ? item : OnNoCurrent(); }
-		}
-
-		public override bool MoveNext()
-		{
-			return 0 == ++position;
-		}
+		public override bool IsCollection            { get { return true;  } }
+		public override bool CanSerializeAsAttribute { get { return false; } }
 	}
 }
 #endif

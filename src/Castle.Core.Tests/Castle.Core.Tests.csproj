@@ -176,7 +176,7 @@
     <Compile Include="BugsReported\DynProxy159.cs" />
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
-    <Compile Include="Components.DictionaryAdapter.Tests\AdaptingXmlTestCaseNew.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Xml\AdaptingXmlTestCaseNew.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Address.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Color.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\XmlEquivalent.cs" />
@@ -208,6 +208,7 @@
     <Compile Include="Components.DictionaryAdapter.Tests\Phone.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\PhoneConverter.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\XmlStructureComparer.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlSerializerCacheTestCase.cs" />
     <Compile Include="Core.Tests\Internal\PermissionUtilTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\AbstractClassWithMethod.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasCtorWithParamsStrings.cs" />

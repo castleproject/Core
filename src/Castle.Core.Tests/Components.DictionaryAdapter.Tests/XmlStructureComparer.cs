@@ -56,18 +56,24 @@ namespace Castle.Components.DictionaryAdapter.Tests
         private IEnumerable<Tuple<XmlNode, XmlNode>> GetChildTuples(Tuple<XmlNode, XmlNode> tuple)
         {
             return ZipOuter(
-                GetChildElementsAndAttributes(tuple.Item1).OrderBy(n => n.Name, comparer),
-                GetChildElementsAndAttributes(tuple.Item2).OrderBy(n => n.Name, comparer),
+                GetChildElementsAndAttributes(tuple.Item1)
+					.OrderBy(n => n.LocalName,    comparer)
+					.ThenBy (n => n.NamespaceURI, comparer),
+                GetChildElementsAndAttributes(tuple.Item2)
+					.OrderBy(n => n.LocalName,    comparer)
+					.ThenBy (n => n.NamespaceURI, comparer),
                 (n1, n2) => Tuple.Create(n1, n2));
         }
 
         private bool VisitChildForHashCode(XmlNode node, ref int hashCode)
         {
-            var part = comparer.GetHashCode(node.Name);
+			var part0 = comparer.GetHashCode(node.LocalName);
+			var part1 = comparer.GetHashCode(node.NamespaceURI);
 
             unchecked
             {
-                hashCode = (hashCode << 1 | hashCode >> 31) ^ part;
+                hashCode = (hashCode << 3 | hashCode >> 29) ^ part0;
+				hashCode = (hashCode << 7 | hashCode >> 25) ^ part1;
             }
             return false;
         }
@@ -79,18 +85,22 @@ namespace Castle.Components.DictionaryAdapter.Tests
                 equal =
                     (null != tuple.Item1) &&
                     (null != tuple.Item2) &&
-                    comparer.Equals(tuple.Item1.Name, tuple.Item2.Name)
+                    comparer.Equals(tuple.Item1.LocalName,    tuple.Item2.LocalName   ) &&
+                    comparer.Equals(tuple.Item1.NamespaceURI, tuple.Item2.NamespaceURI)
             );
         }
 
         private bool VisitChildForCompare(Tuple<XmlNode, XmlNode> tuple, ref int result)
         {
+			int r;
             return 0 !=
             (
                 result =
                     (null == tuple.Item1) ? -1 :
                     (null == tuple.Item2) ? +1 :
-                    comparer.Compare(tuple.Item1.Name, tuple.Item2.Name)
+                    0 != (r = comparer.Compare(tuple.Item1.LocalName,    tuple.Item2.LocalName   )) ? r :
+					0 != (r = comparer.Compare(tuple.Item1.NamespaceURI, tuple.Item2.NamespaceURI)) ? r :
+					0
             );
         }
 
@@ -184,7 +194,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
         private static IEnumerable<XmlNode> GetElementChildNodes(XmlNode node)
         {
             return Enumerable.Concat(
-                (IEnumerable<XmlNode>) node.Attributes.OfType<XmlAttribute>(),
+                (IEnumerable<XmlNode>) node.Attributes.OfType<XmlAttribute>().Where(a => !IsNamespace(a)),
                 (IEnumerable<XmlNode>) node.ChildNodes.OfType<XmlElement>());
         }
 
@@ -194,6 +204,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
             if (null == element) yield break;
             yield return element;
         }
+
+		private static bool IsNamespace(XmlAttribute attribute)
+		{
+			return attribute.LocalName == "xmlns"
+				|| attribute.Prefix    == "xmlns";
+		}
 
 		[DebuggerStepThrough]
 		private static IEnumerable<TResult> ZipOuter<TSource1, TSource2, TResult>(

@@ -15,14 +15,33 @@
 #if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Xml;
-	using System.Xml.XPath;
+    using System;
 
-	public class XmlAttributePropertyAccessor
-	{
-	}
+    public class XmlSelfIterator : XmlIterator
+    {
+        private readonly XmlTypedNode item;
+        private int position;
+
+        public XmlSelfIterator(XmlTypedNode item)
+        {
+            this.item     = item;
+            this.position = -1;
+        }
+
+        public override bool HasCurrent
+        {
+            get { return 0 == position; }
+        }
+
+        public override XmlTypedNode Current
+        {
+            get { return HasCurrent ? item : OnNoCurrent(); }
+        }
+
+        public override bool MoveNext()
+        {
+            return 0 == ++position;
+        }
+    }
 }
 #endif

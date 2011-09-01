@@ -91,6 +91,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			throw new NotSupportedException();
 		}
+
+		internal static Exception NotXmlKnownType()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static Exception ValueNotAssignableToProperty()
+		{
+			return new InvalidCastException();
+		}
+
+		internal static Exception UnsupportedCollectionType()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
 #endif

@@ -15,14 +15,22 @@
 #if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Xml;
-	using System.Xml.XPath;
-
-	public class XmlArrayPropertyAccessor
+	public class XmlSimpleSerializer : XmlTypeSerializer
 	{
+		public static readonly XmlSimpleSerializer
+			Instance = new XmlSimpleSerializer();
+
+		protected XmlSimpleSerializer() { }
+
+		public override object GetValue(XmlTypedNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
+		{
+			return node.Node.ValueAs(node.Type);
+		}
+
+		public override void SetValue(XmlTypedNode node, IXmlAccessor accessor, object value)
+		{
+			node.Node.SetTypedValue(value);
+		}
 	}
 }
 #endif

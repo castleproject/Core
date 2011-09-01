@@ -15,10 +15,12 @@
 #if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	public interface ILazy<T>
-	{
-		bool HasValue { get; }
-		T    Value    { get; }
-	}
+	public delegate TAccessor
+	XmlAccessorFactory<TAccessor>
+	(
+		PropertyDescriptor property,
+		IXmlKnownTypeMap knownTypes
+	)
+	where TAccessor : XmlAccessor;
 }
 #endif

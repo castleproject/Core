@@ -17,10 +17,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System.Xml.XPath;
 
-	public class XmlElementIterator : XmlIterator
+	public class XmlElementIterator : XmlNodeIterator
 	{
-		public XmlElementIterator(XPathNavigator parent, string localName, string namespaceUri, bool multiple)
-			: base(parent, localName, namespaceUri, multiple) { }
+		public XmlElementIterator(XPathNavigator parent, IXmlKnownTypeMap predicate, bool multiple)
+			: base(parent, predicate, multiple) { }
 
 		protected override bool MoveToFirstAttribute()
 		{

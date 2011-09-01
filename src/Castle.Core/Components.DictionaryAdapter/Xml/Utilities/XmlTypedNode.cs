@@ -18,25 +18,20 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Xml.XPath;
 
-	public class XmlSelfAccessor : XmlPropertyAccessor
+	public struct XmlTypedNode
 	{
-		public XmlSelfAccessor(Type type)
-			: base(type) { }
+		public readonly XPathNavigator Node;
+		public readonly Type Type;
 
-		protected override Iterator<XPathNavigator> SelectPropertyNode(XPathNavigator node, bool create)
+		public XmlTypedNode(XPathNavigator node, Type type)
 		{
-			return new SingleIterator<XPathNavigator>(node);
+			Node = node;
+			Type = type;
 		}
 
-		protected override Iterator<XPathNavigator> SelectCollectionNode(XPathNavigator node, bool create)
+		public XmlTypedNode Clone()
 		{
-			return SelectPropertyNode(node, create);
-		}
-
-		protected override Iterator<XPathNavigator> SelectCollectionItems(XPathNavigator node, bool create)
-		{
-			var name = GetLocalName(PropertyType.GetElementType());
-			return new XmlIterator(node, name, null, true);
+			return new XmlTypedNode(Node.Clone(), Type);
 		}
 	}
 }

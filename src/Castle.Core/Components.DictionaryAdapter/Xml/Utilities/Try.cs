@@ -8,37 +8,38 @@
 // 
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.f
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
 #if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	using System;
 	using System.Collections.Generic;
-	using System.Linq;
-	using System.Xml;
-	using System.Xml.XPath;
+	using System.Diagnostics;
 
-	public static class XmlExtensions
-	{
-		public static XmlMetadata GetXmlMeta(this DictionaryAdapterMeta meta)
-		{
-			return (XmlMetadata) meta.ExtendedProperties[XmlMetaKey];
-		}
+    public static class Try
+    {
+        [DebuggerHidden]
+        public static bool Failure<T>(out T result)
+        {
+            result = default(T);
+            return false;
+        }
 
-		public static void SetXmlMeta(this DictionaryAdapterMeta meta, XmlMetadata xmlMeta)
-		{
-			meta.ExtendedProperties[XmlMetaKey] = xmlMeta;
-		}
+        [DebuggerHidden]
+        public static bool Success<T>(out T result, T value)
+        {
+            result = value;
+            return true;
+        }
 
-		public static bool HasXmlMeta(this DictionaryAdapterMeta meta)
-		{
-			return meta.ExtendedProperties.Contains(XmlMetaKey);
-		}
-
-		private const string XmlMetaKey = "XmlMeta";
-	}
+        [DebuggerHidden]
+        public static bool Depends<T>(out T result, T value)
+        {
+            result = value;
+            return ! EqualityComparer<T>.Default.Equals(value, default(T));
+        }
+    }
 }
 #endif

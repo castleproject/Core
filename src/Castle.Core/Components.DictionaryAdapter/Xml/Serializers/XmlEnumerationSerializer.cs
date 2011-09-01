@@ -16,25 +16,17 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
-	using System.Xml.XPath;
 
-	public class XmlAttributeIterator : XmlNodeIterator
+	public class XmlEnumerationSerializer : XmlStringSerializer
 	{
-		public XmlAttributeIterator(XPathNavigator parent, IXmlKnownTypeMap predicate, bool multiple)
-			: base(parent, predicate, false)
-		{
-			if (multiple)
-				throw Error.MultipleAttributesNotSupported();
-		}
+		public static readonly new XmlEnumerationSerializer
+			Instance = new XmlEnumerationSerializer();
 
-		protected override bool MoveToFirstElement()
-		{
-			return false;
-		}
+		protected XmlEnumerationSerializer() { }
 
-		public override XPathNavigator Create(Type type)
+		public override object GetValue(XmlTypedNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-			return CreateAttribute(type);
+			return Enum.Parse(node.Type, node.Node.Value, true);
 		}
 	}
 }

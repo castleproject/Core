@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.DictionaryAdapter
+namespace Castle.Components.DictionaryAdapter.Xml
 {
 #if !SILVERLIGHT
 	using System;
@@ -45,13 +45,13 @@ namespace Castle.Components.DictionaryAdapter
 				&& part.Skip(1).All(XmlConvert.IsNCNameChar);
 		}
 
-		public static bool IsCollectionItem(string path)
-		{
-			return path.Length > 3
-				&& path[0]               == WildcardChar
-				&& path[1]               == PredicateStartChar
-				&& path[path.Length - 1] == PredicateEndChar;
-		}
+		//public static bool IsCollectionItem(string path)
+		//{
+		//    return path.Length > 3
+		//        && path[0]               == WildcardChar
+		//        && path[1]               == PredicateStartChar
+		//        && path[path.Length - 1] == PredicateEndChar;
+		//}
 
 		public static bool MoveToLastChild(this XPathNavigator navigator)
 		{
@@ -65,11 +65,11 @@ namespace Castle.Components.DictionaryAdapter
 			return true;
 		}
 
-		public static XmlElement GetXmlElement(this XPathNavigator navigator)
-		{
-			var obj = (IHasXmlNode) navigator;
-			return (XmlElement) obj.GetNode();
-		}
+		//public static XmlElement GetXmlElement(this XPathNavigator navigator)
+		//{
+		//    var obj = (IHasXmlNode) navigator;
+		//    return (XmlElement) obj.GetNode();
+		//}
 
 		public static void SetToNil(this XPathNavigator node)
 		{
@@ -79,18 +79,10 @@ namespace Castle.Components.DictionaryAdapter
 
 		public static void DeleteChildren(this XPathNavigator node)
 		{
-			if (node.HasChildren)
-			{
-				var n = node.Clone();
-				while (n.MoveToFirstChild())
-					n.DeleteSelf();
-			}
-			if (node.HasAttributes)
-			{
-				var n = node.Clone();
-				while (n.MoveToFirstAttribute())
-					n.DeleteSelf();
-			}
+			while (node.MoveToFirstChild())
+				node.DeleteSelf();
+			while (node.MoveToFirstAttribute())
+				node.DeleteSelf();
 		}
 
 		public const char

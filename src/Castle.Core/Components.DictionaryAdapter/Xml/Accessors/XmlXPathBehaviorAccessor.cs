@@ -18,15 +18,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Xml.XPath;
 
-	public class XmlXPathPropertyAccessor : XmlPropertyAccessor
+	public class XmlXPathBehaviorAccessor : XmlAccessor,
+		IConfigurable<XPathAttribute>
 	{
-	    private readonly ICompiledPath path;
+	    private ICompiledPath path;
 
-	    public XmlXPathPropertyAccessor(Type type, ICompiledPath path)
-	        : base(type)
-	    {
-	        this.path = path;
-	    }
+	    public XmlXPathBehaviorAccessor(PropertyDescriptor property, IXmlKnownTypeMap knownTypes)
+	        : base(property.PropertyType, knownTypes) { }
 
 	    public ICompiledPath Path
 	    {
@@ -36,6 +34,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public bool SelectsNodes
 		{
 			get { return path.Expression.ReturnType == XPathResultType.NodeSet; }
+		}
+
+		public void Configure(XPathAttribute behavior)
+		{
+			path = behavior.Path;
+		}
+
+		public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
+		{
+			return new XmlSubaccessor(this, itemType);
 		}
 
 		public override object GetPropertyValue(XPathNavigator node, IDictionaryAdapter da, bool ifExists)
@@ -56,20 +64,20 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private object Evaluate(XPathNavigator node)
 		{
 			var value = node.Evaluate(path.Expression);
-			return Convert.ChangeType(value, PropertyType);
+			return Convert.ChangeType(value, ClrType);
 		}
 
-		protected override Iterator<XPathNavigator> SelectPropertyNode(XPathNavigator node, bool create)
+		protected internal override XmlIterator SelectPropertyNode(XPathNavigator node, bool create)
 		{
 			return new XPathMutableIterator(node, path, false);
 		}
 
-		protected override Iterator<XPathNavigator> SelectCollectionNode(XPathNavigator node, bool create)
+		protected internal override XmlIterator SelectCollectionNode(XPathNavigator node, bool create)
 		{
-			return new SingleIterator<XPathNavigator>(node);
+			return SelectSelf(node);
 		}
 
-		protected override Iterator<XPathNavigator> SelectCollectionItems(XPathNavigator node, bool create)
+		protected internal override XmlIterator SelectCollectionItems(XPathNavigator node, bool create)
 		{
 			return new XPathMutableIterator(node, path, true);
 		}

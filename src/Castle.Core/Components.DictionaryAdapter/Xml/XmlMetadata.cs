@@ -16,98 +16,141 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
-	using System.Collections.Generic;
+	using System.Xml;
 	using System.Xml.Serialization;
-using System.Xml.XPath;
+	using System.Xml.XPath;
 
-	public class XmlMetadata
+	public class XmlMetadata : IXmlKnownTypeMap, IXmlKnownType
 	{
 		private readonly Type type;
-		private readonly XmlDefaultsAttribute xmlDefaults;
-		private readonly XmlRootAttribute xmlRoot;
-		private readonly XmlTypeAttribute xmlType;
-		private readonly XPathAttribute xPath;
-		private readonly Type[] includes;
+		private readonly bool? qualified;
+		private readonly bool? isNullable;
+		private readonly string rootLocalName;
+		private readonly string rootNamespaceUri;
+		private readonly string childNamespaceUri;
+		private readonly ICompiledPath path;
+		private readonly XmlKnownTypeSet knownTypes;
 
 		public XmlMetadata(DictionaryAdapterMeta meta)
 		{
-			type = meta.Type;
+			type       = meta.Type;
+			knownTypes = new XmlKnownTypeSet();
 
-			XmlIncludeAttribute xmlInclude;
-			var includes = new List<Type>();
+			var xmlDefaults = null as XmlDefaultsAttribute;
+			var xmlRoot     = null as XmlRootAttribute;
+			var xmlType     = null as XmlTypeAttribute;
+			var xPath       = null as XPathAttribute;
+			var xmlInclude  = null as XmlIncludeAttribute;
 
 			foreach (var behavior in meta.Behaviors)
 			{
-				if      (TryCast(behavior, out xmlDefaults)) { /* NOP */ }
-				else if (TryCast(behavior, out xmlRoot    )) { /* NOP */ }
-				else if (TryCast(behavior, out xmlType    )) { /* NOP */ }
-				else if (TryCast(behavior, out xmlInclude )) { includes.Add(xmlInclude.Type); }
-				else if (TryCast(behavior, out xPath      )) { /* NOP */ }
+				if      (TryCast(behavior, ref xmlDefaults)) { }
+				else if (TryCast(behavior, ref xmlRoot    )) { }
+				else if (TryCast(behavior, ref xmlType    )) { }
+				else if (TryCast(behavior, ref xmlInclude )) { knownTypes.Add(xmlInclude); }
+				else if (TryCast(behavior, ref xPath      )) { }
 			}
 
-			this.includes = includes.ToArray();
+			if (xmlDefaults != null)
+			{
+				qualified  = xmlDefaults.Qualified;
+				isNullable = xmlDefaults.IsNullable;
+			}
+
+			if (xPath != null)
+			{
+				path = xPath.Path;
+			}
+
+			rootLocalName = XmlConvert.EncodeLocalName
+			(
+				(xmlRoot == null ? null : xmlRoot.ElementName) ??
+				(xmlType == null ? null : xmlType.TypeName   ) ??
+				type.GetLocalName()
+			);
+
+			rootNamespaceUri =
+			(
+				(xmlRoot == null ? null : xmlRoot.Namespace) ??
+				null
+			);
+
+			childNamespaceUri =
+			(
+				(xmlType == null ? null : xmlType.Namespace) ??
+				(xmlRoot == null ? null : xmlRoot.Namespace) ??
+				null
+			);
 		}
 
-		private static bool TryCast<T>(object obj, out T behavior)
+		public Type ClrType                { get { return type; } }
+		public bool? Qualified             { get { return qualified; } }
+		public bool? IsNullable            { get { return isNullable; } }
+		public string RootLocalName        { get { return rootLocalName; } }
+		public string RootNamespaceUri	   { get { return rootNamespaceUri; } }
+		public string ChildNamespaceUri	   { get { return childNamespaceUri; } }
+		public ICompiledPath Path          { get { return path; } }
+		public IXmlKnownTypeMap KnownTypes { get { return knownTypes; } }
+
+		string IXmlKnownType.LocalName     { get { return rootLocalName; } }
+		string IXmlKnownType.NamespaceUri  { get { return rootNamespaceUri; } }
+		string IXmlKnownType.XsiType       { get { return null; } }
+		Type   IXmlKnownType.ClrType       { get { return type; } }
+
+		public bool MoveToBase(XPathNavigator node, bool create)
+		{
+			if (node.NodeType == XPathNodeType.Element)
+				return true;
+			if (node.NodeType != XPathNodeType.Root)
+				return false;
+
+			var iterator = SelectBase(node);
+			if (!Materialize(iterator, create))
+				return false;
+
+			node.MoveTo(iterator.Current.Node);
+			return true;
+		}
+
+		private XmlIterator SelectBase(XPathNavigator node)
+		{
+			return path == null
+				? (XmlIterator) new XmlElementIterator  (node, this, false)
+				: (XmlIterator) new XPathMutableIterator(node, path, false);
+		}
+
+		private bool Materialize(XmlIterator iterator, bool create)
+		{
+			if (iterator.MoveNext())
+				return true;
+			if (!create)
+				return false;
+
+			iterator.Create(type);
+			return true;
+		}
+
+		public bool TryRecognizeType(XPathNavigator node, out Type type)
+		{
+			return node.HasNameLike(rootLocalName, rootNamespaceUri)
+				? Try.Success(out type, ClrType)
+				: Try.Failure(out type);
+		}
+
+		public IXmlKnownType GetXmlKnownType(Type type)
+		{
+			return this;
+		}
+
+		private static bool TryCast<T>(object obj, ref T result)
 			where T : class
 		{
-			return null != (behavior = obj as T);
-		}
+			var value = obj as T;
+			if (null == value) return false;
 
-		public Type Type
-		{
-			get { return type; }
-		}
-
-		public bool? Qualified
-		{
-			get { return xmlDefaults == null ? null as bool? : xmlDefaults.Qualified; }
-		}
-
-		public bool? IsNullable
-		{
-			get { return xmlDefaults == null ? null as bool? : xmlDefaults.IsNullable; }
-		}
-
-		public string RootLocalName
-		{
-			get
-			{
-				return (xmlRoot == null ? null : xmlRoot.ElementName)
-					?? (xmlType == null ? null : xmlType.TypeName)
-					?? type.Name;
-			}
-		}
-
-		public string RootNamespaceUri
-		{
-			get
-			{
-				return (xmlRoot == null ? null : xmlRoot.Namespace)
-					?? string.Empty;
-			}
-		}
-
-		public string ChildNamespaceUri
-		{
-			get
-			{
-				return (xmlType == null ? null : xmlType.Namespace)
-					?? (xmlRoot == null ? null : xmlRoot.Namespace)
-					?? string.Empty;
-			}
-		}
-
-		public ICompiledPath Path
-		{
-			get { return xPath == null ? null : xPath.Path; }
-		}
-
-		public Type[] Includes
-		{
-			get { return includes; }
+			result = value;
+			return true;
 		}
 	}
 }
 #endif
-	

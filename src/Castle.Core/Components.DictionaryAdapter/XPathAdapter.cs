@@ -727,7 +727,7 @@ namespace Castle.Components.DictionaryAdapter
 				else if (behavior is XPathAttribute)
 				{
 					var attrib = (XPathAttribute)behavior;
-					return new XPathResultForXPath(property, key, keyContext, attrib, Root);
+					xpath = attrib.Path.Expression;
 				}
 				else
 				{

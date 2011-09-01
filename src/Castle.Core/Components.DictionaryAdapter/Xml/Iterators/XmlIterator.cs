@@ -18,222 +18,42 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Xml.XPath;
 
-	public class XmlIterator : Iterator<XPathNavigator>
+	public abstract class XmlIterator
 	{
-		private readonly string localName;
-		private readonly string namespaceUri;
-		private readonly bool multiple;
+		protected XmlIterator() { }
 
-		private XPathNavigator current;
-		private State state;
+		public Type BaseType { get { return typeof(object); } } // TODO: Make this work
 
-		protected enum State
+		public abstract bool MoveNext();
+		public abstract bool HasCurrent { get; }
+		public abstract XmlTypedNode Current { get; }
+
+		public virtual bool IsMutable
 		{
-			AtEnd        = -1,
-			Initial      =  0,
-			InElements   =  1,
-			InAttributes =  2,
-			InCreated    =  3
+			get { return false; }
 		}
 
-		public XmlIterator(XPathNavigator parent, string localName, string namespaceUri, bool multiple)
+		public virtual XPathNavigator Create(Type type)
 		{
-			if (null == parent)
-				throw new ArgumentNullException("parent");
-			if (null == localName)
-				throw new ArgumentNullException("localName");
-
-			this.current      = parent.Clone();
-			this.localName    = localName;
-			this.namespaceUri = namespaceUri;
-			this.multiple     = multiple;
+			throw Error.IteratorNotMutable();
 		}
 
-		public override bool HasCurrent
+		public virtual XPathNavigator Remove()
 		{
-			get { return (int) state > 0; }
+			throw Error.IteratorNotMutable();
 		}
 
-		public override XPathNavigator Current
+		protected static XmlTypedNode OnNoCurrent()
 		{
-			get { return HasCurrent ? current : OnNoCurrent(); }
+			throw Error.NoCurrentItem();
 		}
 
-		public override bool MoveNext()
+		public bool TryGetNext(out XmlTypedNode node)
 		{
-			return MoveNextCore()
-				&& (multiple || RequireAtEnd());
+			return MoveNext()
+				? Try.Success(out node, Current)
+				: Try.Failure(out node);
 		}
-
-		private bool MoveNextCore()
-		{
-			while (Advance())
-				if (IsMatch) return true;
-
-			return false;
-		}
-
-		private bool Advance()
-		{
-			for (;;)
-			{
-				switch (state)
-				{
-					case State.Initial:      return MoveToFirstElement()  || MoveToFirstAttribute() || MoveToEnd();
-					case State.InElements:   return MoveToNextElement()   || MoveToFirstAttribute() || MoveToEnd();
-					case State.InAttributes: return MoveToNextAttribute() || MoveToEnd();
-					case State.InCreated:    return MoveToParent()        || MoveToEnd();
-					case State.AtEnd:        return false;
-				}
-			}
-		}
-
-		protected virtual bool MoveToFirstElement()
-		{
-			if (current.MoveToFirstChild())
-			{
-				state = State.InElements;
-				return IsElement || MoveToNextElement();
-			}
-			return false;
-		}
-
-		private bool MoveToNextElement()
-		{
-			while (current.MoveToNext())
-				if (IsElement) return true;
-
-			return MoveToParent();
-		}
-
-		protected virtual bool MoveToFirstAttribute()
-		{
-			if (current.MoveToFirstAttribute())
-			{
-				state = State.InAttributes;
-				return true;
-			}
-			return false;
-		}
-
-		private bool MoveToNextAttribute()
-		{
-			if (current.MoveToNextAttribute())
-				return true;
-
-			return MoveToParent();
-		}
-
-		private bool MoveToParent()
-		{
-			current.MoveToParent();
-			return false;
-		}
-
-		private bool MoveToEnd()
-		{
-			state = State.AtEnd;
-			return false;
-		}
-
-		private bool RequireAtEnd()
-		{
-			var priorState = state;
-			var priorCurrent = current.Clone();
-
-			var hasNext = MoveNextCore();
-
-			current.MoveTo(priorCurrent);
-			state = priorState;
-
-			if (hasNext)
-				throw Error.SelectedMultipleNodes();
-
-			return true;
-		}
-
-		private bool IsElement
-		{
-			get { return current.NodeType == XPathNodeType.Element; }
-		}
-
-		private bool IsMatch
-		{
-			get
-			{
-				return
-					DefaultComparer.Equals(current.LocalName, localName) &&
-					(
-						namespaceUri == null ||
-						DefaultComparer.Equals(current.NamespaceURI, namespaceUri)
-					);
-			}
-		}
-
-		public override XPathNavigator Create()
-		{
-			return CreateElement();
-		}
-
-		protected XPathNavigator CreateElement()
-		{
-			RequireCreatable();
-
-			var uri = namespaceUri ?? current.NamespaceURI;
-
-			current.AppendChildElement(null, localName, uri, null);
-			current.MoveToLastChild();
-
-			state = State.InCreated;
-			return current;
-		}
-
-		protected XPathNavigator CreateAttribute()
-		{
-			RequireCreatable();
-
-			var uri = namespaceUri ?? current.NamespaceURI;
-
-			current.CreateAttribute(null, localName, uri, null);
-			current.MoveToAttribute(localName, uri);
-
-			state = State.InCreated;
-			return current;
-		}
-
-		private void RequireCreatable()
-		{
-			switch (state)
-			{
-				case State.InCreated: current.MoveToParent(); return;
-				case State.AtEnd:     return;
-				default:              throw Error.IteratorNotInCreatableState();
-			}
-		}
-
-		public override XPathNavigator Remove()
-		{
-			RequireRemovable();
-
-			current.DeleteSelf();
-
-			state = State.AtEnd;
-			return current;
-		}
-
-		private void RequireRemovable()
-		{
-			switch (state)
-			{
-				case State.InElements:   // Same as next
-				case State.InAttributes: // Same as next
-				case State.InCreated:    return;
-				default:                 throw Error.IteratorNotInRemovableState();
-			}
-		}
-
-		protected static readonly StringComparer
-			DefaultComparer = StringComparer.OrdinalIgnoreCase;
 	}
 }
 #endif

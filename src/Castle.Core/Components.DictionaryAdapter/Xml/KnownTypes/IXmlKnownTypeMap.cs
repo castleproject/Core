@@ -18,24 +18,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Xml.XPath;
 
-	public class XmlAttributeIterator : XmlNodeIterator
+	public interface IXmlKnownTypeMap
 	{
-		public XmlAttributeIterator(XPathNavigator parent, IXmlKnownTypeMap predicate, bool multiple)
-			: base(parent, predicate, false)
-		{
-			if (multiple)
-				throw Error.MultipleAttributesNotSupported();
-		}
-
-		protected override bool MoveToFirstElement()
-		{
-			return false;
-		}
-
-		public override XPathNavigator Create(Type type)
-		{
-			return CreateAttribute(type);
-		}
+		bool TryRecognizeType(XPathNavigator node, out Type type);
+		IXmlKnownType GetXmlKnownType(Type type);
 	}
 }
 #endif

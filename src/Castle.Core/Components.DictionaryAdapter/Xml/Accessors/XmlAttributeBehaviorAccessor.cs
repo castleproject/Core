@@ -16,26 +16,13 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Xml;
 	using System.Xml.XPath;
 
-	public class XmlAttributeIterator : XmlNodeIterator
+	public class XmlAttributeBehaviorAccessor
 	{
-		public XmlAttributeIterator(XPathNavigator parent, IXmlKnownTypeMap predicate, bool multiple)
-			: base(parent, predicate, false)
-		{
-			if (multiple)
-				throw Error.MultipleAttributesNotSupported();
-		}
-
-		protected override bool MoveToFirstElement()
-		{
-			return false;
-		}
-
-		public override XPathNavigator Create(Type type)
-		{
-			return CreateAttribute(type);
-		}
 	}
 }
 #endif

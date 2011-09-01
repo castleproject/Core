@@ -18,16 +18,32 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Xml.XPath;
 
-	public class XmlElementPropertyAccessor : XmlPropertyAccessor
+	public class XmlKnownType : IXmlKnownType
 	{
 		private readonly string localName;
 		private readonly string namespaceUri;
+		private readonly string xsiType;
+		private readonly Type   clrType;
 
-		public XmlElementPropertyAccessor(Type type, string localName, string namespaceUri)
-			: base(type)
+		public XmlKnownType(string localName, string namespaceUri, Type clrType)
 		{
+			this.clrType      = clrType;
 			this.localName    = localName;
 			this.namespaceUri = namespaceUri;
+		}
+
+		public XmlKnownType(string localName, string namespaceUri, string xsiType, Type clrType)
+		{
+			this.xsiType      = xsiType;
+			this.clrType      = clrType;
+			this.localName    = localName;
+			this.namespaceUri = namespaceUri;
+		}
+
+		public XmlKnownType(Type clrType)
+		{
+			this.clrType = clrType;
+			this.xsiType = clrType.Name;
 		}
 
 		public string LocalName
@@ -40,19 +56,29 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return namespaceUri; }
 		}
 
-		protected override Iterator<XPathNavigator> SelectPropertyNode(XPathNavigator node, bool create)
+		public string XsiType
 		{
-			return new XmlElementIterator(node, localName, namespaceUri, false);
+			get { return xsiType; }
 		}
 
-		protected override Iterator<XPathNavigator> SelectCollectionNode(XPathNavigator node, bool create)
+		public Type ClrType
 		{
-			return new SingleIterator<XPathNavigator>(node);
+			get { return clrType; }
 		}
 
-		protected override Iterator<XPathNavigator> SelectCollectionItems(XPathNavigator node, bool create)
+		public bool TryRecognizeType(XPathNavigator node, out Type type)
 		{
-			return new XmlElementIterator(node, localName, namespaceUri, true);
+			return node.HasNameLike(localName, namespaceUri)
+				&& (string.IsNullOrEmpty(xsiType) || node.HasXsiType(xsiType))
+				? Try.Success(out type, clrType)
+				: Try.Failure(out type);
+		}
+
+		public IXmlKnownType GetXmlKnownType(Type type)
+		{
+			if (type == clrType)
+				return this;
+			throw Error.NotXmlKnownType();
 		}
 	}
 }

@@ -15,6 +15,9 @@
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.Linq;
 	using System.Xml;
 	using System.Xml.Serialization;
 	using System.Xml.XPath;
@@ -36,6 +39,15 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				byte[] E { get; set; }
 				int[]  F { get; set; }
 				IBar   G { get; set; }
+
+				IList      <string> SL { get; set; }
+				ICollection<string> SC { get; set; }
+				IEnumerable<string> SE { get; set; }
+				ISet       <string> SS { get; set; }
+				BindingList<string> SB { get; set; }
+
+				FakeStandardXmlSerializable X { get; set; }
+				FakeCustomXmlSerializable   Y { get; set; }
 			}
 
 			public interface IBar : IDictionaryAdapter
@@ -181,36 +193,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-			public void GetProperty_DefaultBehavior_Array_Element()
-			{
-				var array = new[] { 1, 2 };
-				var foo = Create<IFoo>("<Foo> <F> <int>1</int> <int>2</int> </F> </Foo>");
-
-				Assert.That(foo.F, Is.EquivalentTo(array));
-			}
-
-			[Test]
-			public void GetProperty_DefaultBehavior_Array_Attribute()
-			{
-				var array = new[] { 1, 2 };
-				var foo = Create<IFoo>("<Foo F='1'/>");
-
-				Assert.That(foo.F, Is.Null | Is.Empty);
-			}
-
-			[Test]
-			public void SetProperty_DefaultBehavior_Array()
-			{
-				var array = new[] { 1, 2 };
-				var xml = Xml("<Foo/>");
-				var foo = Create<IFoo>(xml);
-
-				foo.F = array;
-
-				Assert.That(xml, XmlEquivalent.To("<Foo> <F> <int>1</int> <int>2</int> </F> </Foo>"));
-			}
-
-			[Test]
 			public void GetProperty_DefaultBehavior_Component_Element()
 			{
 				var foo = Create<IFoo>("<Foo> <G> <X>x</X> </G> </Foo>");
@@ -236,6 +218,98 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				Assert.That(xml, XmlEquivalent.To("<Foo> <G> <X>x</X> </G> </Foo>"));
 			}
+
+			[Test]
+			public void GetProperty_DefaultBehavior_Array_Element()
+			{
+				var array = new[] { 1, 2 };
+				var foo = Create<IFoo>("<Foo> <F> <int>1</int> <int>2</int> </F> </Foo>");
+
+				Assert.That(foo.F, Is.EquivalentTo(array));
+			}
+
+			[Test]
+			public void GetProperty_DefaultBehavior_Array_Attribute()
+			{
+				var array = new[] { 1, 2 };
+				var foo = Create<IFoo>("<Foo F='1'/>");
+
+				Assert.That(foo.F, Is.Not.Null & Is.Empty);
+			}
+
+			[Test]
+			public void SetProperty_DefaultBehavior_Array()
+			{
+				var array = new[] { 1, 2 };
+				var xml = Xml("<Foo/>");
+				var foo = Create<IFoo>(xml);
+
+				foo.F = array;
+
+				Assert.That(xml, XmlEquivalent.To("<Foo> <F> <int>1</int> <int>2</int> </F> </Foo>"));
+			}
+
+
+
+			[Test]
+			public void GetProperty_DefaultBehavior_List_Element()
+			{
+				var foo = Create<IFoo>("<Foo> <SL> <string>a</string> <string>b</string> </SL> </Foo>");
+
+				var items = foo.SL.ToArray();
+
+				Assert.That(items, Is.EquivalentTo(new[] { "a", "b" }));
+			}
+
+			[Test]
+			public void GetProperty_DefaultBehavior_List_Attribute()
+			{
+				var array = new[] { 1, 2 };
+				var foo = Create<IFoo>("<Foo F='1'/>");
+
+				Assert.That(foo.SL, Is.Empty);
+			}
+
+			[Test]
+			public void SetProperty_DefaultBehavior_List()
+			{
+				var xml = Xml("<Foo/>");
+				var foo = Create<IFoo>(xml);
+
+				foo.SL = new List<string> { "a", "b" };
+
+				Assert.That(xml, XmlEquivalent.To("<Foo> <SL> <string>a</string> <string>b</string> </SL> </Foo>"));
+			}
+
+
+
+			[Test]
+			public void GetProperty_DefaultBehavior_XmlSerializable_Element()
+			{
+				var foo = Create<IFoo>("<Foo> <X> <Text>hello</Text> </X> </Foo>");
+
+				Assert.That(foo.X,      Is.Not.Null);
+				Assert.That(foo.X.Text, Is.EqualTo("hello"));
+			}
+
+			[Test]
+			public void GetProperty_DefaultBehavior_XmlSerializable_Attribute()
+			{
+				var foo = Create<IFoo>("<Foo X='hello'/>");
+
+				Assert.That(foo.X, Is.Null);
+			}
+
+			[Test, Ignore("Don't feel like working this right now")]
+			public void SetProperty_DefaultBehavior_XmlSerializable()
+			{
+				var xml = Xml("<Foo/>");
+				var foo = Create<IFoo>(xml);
+
+				foo.X = new FakeStandardXmlSerializable { Text = "hello" };
+
+				Assert.That(xml, XmlEquivalent.To("<Foo> <X> <Text>hello</Text> </X> </Foo>"));
+			}
 		}
 		#endregion
 
@@ -247,7 +321,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			[Test]
 			public void GetProperty_ElementBehavior_String_Element()
 			{
-				var foo = Create<IFooElement>("<Foo> <A>a</A> </Foo>");
+				var foo = Create<IFoo>("<Foo> <A>a</A> </Foo>");
 
 				Assert.That(foo.A, Is.EqualTo("a"));
 			}
@@ -255,7 +329,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			[Test]
 			public void GetProperty_ElementBehavior_String_Attribute()
 			{
-				var foo = Create<IFooElement>("<Foo A='a'/>");
+				var foo = Create<IFoo>("<Foo A='a'/>");
 
 				Assert.That(foo.A, Is.EqualTo(default(string)));
 			}
@@ -264,17 +338,17 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			public void SetProperty_ElementBehavior_String()
 			{
 				var xml = Xml("<Foo/>");
-				var foo = Create<IFooElement>(xml);
+				var foo = Create<IFoo>(xml);
 
 				foo.A = "a";
 
-				Assert.That(xml.OuterXml, Contains.Substring("<A>a</A>"));
+				Assert.That(xml, XmlEquivalent.To("<Foo> <A>a</A> </Foo>"));
 			}
 
 			[Test]
 			public void GetProperty_ElementBehavior_Number_Element()
 			{
-				var foo = Create<IFooElement>("<Foo> <B>1</B> </Foo>");
+				var foo = Create<IFoo>("<Foo> <B>1</B> </Foo>");
 
 				Assert.That(foo.B, Is.EqualTo(1));
 			}
@@ -282,7 +356,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			[Test]
 			public void GetProperty_ElementBehavior_Number_Attribute()
 			{
-				var foo = Create<IFooElement>("<Foo B='1'/>");
+				var foo = Create<IFoo>("<Foo B='1'/>");
 
 				Assert.That(foo.B, Is.EqualTo(default(int)));
 			}
@@ -291,14 +365,14 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			public void SetProperty_ElementBehavior_Number()
 			{
 				var xml = Xml("<Foo/>");
-				var foo = Create<IFooElement>(xml);
+				var foo = Create<IFoo>(xml);
 
 				foo.B = 1;
 
-				Assert.That(xml.OuterXml, Contains.Substring("<B>1</B>"));
+				Assert.That(xml, XmlEquivalent.To("<Foo> <B>1</B> </Foo>"));
 			}
 
-			public interface IFooElement : IDictionaryAdapter
+			public interface IFoo : IDictionaryAdapter
 			{
 				[XmlElement]
 				string A { get; set; }
@@ -306,6 +380,85 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				[XmlElement]
 				int B { get; set; }
 			}
+		}
+		#endregion
+
+		#region Multiple [XmlElement] Behavior
+		[TestFixture]
+		public class MultiElementBehavior : TestCase
+		{
+			[Test]
+			public void GetProperty_ElementBehavior_Array_Element()
+			{
+				var foo = Create<IRoot>("<Root> <A X='1'/> <B X='1'/> </Root>");
+
+				Assert.That(foo.Items, Is.Not.Null & Has.Length.EqualTo(2));
+				Assert.That((IDerived1)foo.Items[0], Is.InstanceOf<IDerived1>());
+				Assert.That((IDerived2)foo.Items[1], Is.InstanceOf<IDerived2>());
+			}
+
+			//[Test]
+			//public void SetProperty_ArrayBehavior_Array()
+			//{
+			//    var array = new[] { 1, 2 };
+			//    var xml = Xml("<Foo/>");
+			//    var foo = Create<IRoot>(xml);
+
+			//    foo.F = array;
+
+			//    Assert.That(xml, XmlEquivalent.To("<Foo> <F> <int>1</int> <int>2</int> </F> </Foo>"));
+			//}
+
+			public interface IRoot
+			{
+				[XmlElement("A", typeof(IDerived1))]
+				[XmlElement("B", typeof(IDerived2))]
+				IBase[] Items { get; set; }
+			}
+
+			public interface IBase { }
+			public interface IDerived1 : IBase { int    X { get; set; } }
+			public interface IDerived2 : IBase { string X { get; set; } } 
+		}
+		#endregion
+
+		#region [XmlArray] Behavior
+		[TestFixture]
+		public class ArrayBehavior : TestCase
+		{
+			[Test]
+			public void GetProperty_ArrayBehavior_Array_Element()
+			{
+				var foo = Create<IRoot>("<Root> <X> <A X='1'/> <B X='1'/> </X> </Root>");
+
+				Assert.That(foo.Items, Is.Not.Null & Has.Length.EqualTo(2));
+				Assert.That(foo.Items[0], Is.InstanceOf<IDerived1>());
+				Assert.That(foo.Items[1], Is.InstanceOf<IDerived2>());
+			}
+
+			//[Test]
+			//public void SetProperty_ArrayBehavior_Array()
+			//{
+			//    var array = new[] { 1, 2 };
+			//    var xml = Xml("<Foo/>");
+			//    var foo = Create<IRoot>(xml);
+
+			//    foo.F = array;
+
+			//    Assert.That(xml, XmlEquivalent.To("<Foo> <F> <int>1</int> <int>2</int> </F> </Foo>"));
+			//}
+
+			public interface IRoot
+			{
+				[XmlArray("X")]
+				[XmlArrayItem("A", typeof(IDerived1))]
+				[XmlArrayItem("B", typeof(IDerived2))]
+				IBase[] Items { get; set; }
+			}
+
+			public interface IBase { }
+			public interface IDerived1 : IBase { int    X { get; set; } }
+			public interface IDerived2 : IBase { string X { get; set; } } 
 		}
 		#endregion
 
@@ -371,6 +524,20 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 					new DictionaryDescriptor()
 						.AddBehavior(XmlMetadataBehavior.Instance)
 						.AddBehavior(xmlAdapter));
+			}
+
+			public class FakeStandardXmlSerializable
+			{
+				public string Text { get; set; }
+			}
+
+			public class FakeCustomXmlSerializable : IXmlSerializable
+			{
+				public string Text { get; set; }
+
+				System.Xml.Schema.XmlSchema IXmlSerializable.GetSchema() { return null; }
+				void IXmlSerializable.ReadXml(XmlReader reader) { Text = reader.ReadString(); }
+				void IXmlSerializable.WriteXml(XmlWriter writer) { writer.WriteString(Text); }
 			}
 
 			protected const string

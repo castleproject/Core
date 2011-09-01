@@ -15,26 +15,28 @@
 #if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	using System;
-	using System.Xml.XPath;
-
-	public class XmlAttributeIterator : XmlNodeIterator
+	internal struct XmlCollectionItem
 	{
-		public XmlAttributeIterator(XPathNavigator parent, IXmlKnownTypeMap predicate, bool multiple)
-			: base(parent, predicate, false)
+		public readonly XmlTypedNode Node;
+		public readonly object Value;
+
+		public XmlCollectionItem(XmlTypedNode node)
+			: this(node, null) { }
+
+		public XmlCollectionItem(XmlTypedNode node, object value)
 		{
-			if (multiple)
-				throw Error.MultipleAttributesNotSupported();
+			Node  = node;
+			Value = value;
 		}
 
-		protected override bool MoveToFirstElement()
+		public bool HasValue
 		{
-			return false;
+			get { return null != Value; }
 		}
 
-		public override XPathNavigator Create(Type type)
+		public XmlCollectionItem WithValue(object value)
 		{
-			return CreateAttribute(type);
+			return new XmlCollectionItem(Node, value);
 		}
 	}
 }

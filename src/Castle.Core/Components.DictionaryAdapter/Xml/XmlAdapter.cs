@@ -28,8 +28,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IDictionaryPropertySetter,
 		IXPathNavigable
 	{
-		private readonly ILazy<XPathNavigator> node;
-//		private readonly XmlAdapter parent;
+		private XPathNavigator node;
+		private XmlIterator source;
 		private XmlMetadata primaryXmlMeta;
 		private Dictionary<Type, XmlMetadata> secondaryXmlMetas;
 
@@ -37,26 +37,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			: this(new XmlDocument()) { }
 
 		public XmlAdapter(IXPathNavigable storage)
-			: this(GetNode(storage), null) { }
-
-		internal XmlAdapter(ILazy<XPathNavigator> node)
-			: this(node, null) { }
-
-		protected XmlAdapter(ILazy<XPathNavigator> node, XmlAdapter parent)
-		{
-			this.node   = node;
-//			this.parent = parent;
-		}
-
-		private static ILazy<XPathNavigator> GetNode(IXPathNavigable storage)
 		{
 			if (storage == null)
 				throw new ArgumentNullException("storage");
 
-			var node = storage.CreateNavigator();
-			var lazy = new SingleIterator<XPathNavigator>(node);
-			lazy.MoveNext();
-			return lazy;
+			this.node = storage.CreateNavigator();
+		}
+
+		internal XmlAdapter(XmlIterator source)
+		{
+			if (source == null)
+				throw new ArgumentNullException("source");
+			if (source.HasCurrent)
+				throw Error.NotSupported();
+
+			this.source = source;
 		}
 
 		public static XmlAdapter For(object obj)
@@ -86,7 +81,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XPathNavigator CreateNavigator()
 		{
 			if (SeekNode(false))
-				return node.Value.Clone();
+				return node.Clone();
 			else
 				throw Error.NoCurrentItem();
 		}
@@ -117,59 +112,46 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				secondaryXmlMetas[meta.Type] = meta.GetXmlMeta();
 		}
 
-		public override IDictionaryBehavior Copy()
-		{
-			return null;
-		}
-
 		object IDictionaryPropertyGetter.GetPropertyValue(IDictionaryAdapter dictionaryAdapter,
 			string key, object storedValue, PropertyDescriptor property, bool ifExists)
 		{
-			XmlPropertyAccessor accessor;
+			XmlAccessor accessor;
 			return SeekNode(false) && TryGetAccessor(property, null != storedValue, out accessor)
-				? accessor.GetPropertyValue(node.Value, dictionaryAdapter, ifExists)
+				? accessor.GetPropertyValue(node, dictionaryAdapter, !ifExists)
 				: storedValue;
 		}
 
 		bool IDictionaryPropertySetter.SetPropertyValue(IDictionaryAdapter dictionaryAdapter,
 			string key, ref object value, PropertyDescriptor property)
 		{
-			XmlPropertyAccessor accessor;
+			XmlAccessor accessor;
 			if (TryGetAccessor(property, false, out accessor) && SeekNode(true))
-				accessor.SetPropertyValue(node.Value, value);
+				accessor.SetPropertyValue(node, value);
 			return true;
 		}
 
-		// TODO: Get this out of here ... it's a cohesion problem
-		private bool SeekNode(bool required)
+		private bool SeekNode(bool create)
 		{
-			if (!node.HasValue && !required)
-				return false;
+			return Materialize(create)
+				&& primaryXmlMeta.MoveToBase(node, create);
+		}
 
-			var n = node.Value;
-			if (n.NodeType == XPathNodeType.Element)
+		private bool Materialize(bool create)
+		{
+			if (node != null)
 				return true;
-			if (n.NodeType != XPathNodeType.Root)
+			if (!create)
 				return false;
-			if (n.MoveToChild(XPathNodeType.Element))
-				return true;
-			if (!required)
-				return false;
-
-			var accessor = new XmlElementPropertyAccessor(
-				typeof(string),
-			    primaryXmlMeta.RootLocalName,
-			    primaryXmlMeta.RootNamespaceUri);
-
-			var newNode = accessor.EnsurePropertyNode(n);
-			n.MoveTo(newNode);
+			node = source.Create(primaryXmlMeta.ClrType);
 			return true;
 		}
 
-		private bool TryGetAccessor(PropertyDescriptor property, bool requireVolatile, out XmlPropertyAccessor accessor)
+		private bool TryGetAccessor(PropertyDescriptor property, bool requireVolatile, out XmlAccessor accessor)
 		{
+			if (property.HasAccessor())
+				return Try.Success(out accessor, property.GetAccessor());
+
 			accessor = null;
-			var count = 0;
 
 			foreach (var behavior in property.Behaviors)
 			{
@@ -177,38 +159,50 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					return false;
 				else if (IsVolatileBehavior(behavior))
 					requireVolatile = false;
-				else if (TryGetAccessor(property, behavior, ref accessor))
-					count++;
+				TryApplyBehavior(property, behavior, ref accessor);
 			}
 
-			if (count > 1)
-				throw Error.AttributeConflict(property);
 			if (requireVolatile)
 				return false;
-			if (count == 0)
-				accessor = new XmlDefaultPropertyAccessor(property.PropertyType, property.PropertyName);
+			if (accessor == null)
+				accessor = new XmlDefaultBehaviorAccessor(property, primaryXmlMeta.KnownTypes);
+
+			accessor.Prepare();
+			property.SetAccessor(accessor);
 			return true;
 		}
 
-		private bool TryGetAccessor(PropertyDescriptor property, object behavior, ref XmlPropertyAccessor accessor)
-		{
-			return TryGetXmlElementAccessor(property, behavior, ref accessor);
+		private bool TryApplyBehavior(PropertyDescriptor property, object behavior, ref XmlAccessor accessor)
+		{	
+			return
+				TryApplyBehavior<XmlElementAttribute, XmlElementBehaviorAccessor>
+					(property, behavior, ref accessor, XmlElementBehaviorAccessor.Factory)
+				||
+				TryApplyBehavior<XmlArrayAttribute, XmlArrayBehaviorAccessor>
+					(property, behavior, ref accessor, XmlArrayBehaviorAccessor.Factory)
+				||
+				TryApplyBehavior<XmlArrayItemAttribute, XmlArrayBehaviorAccessor>
+					(property, behavior, ref accessor, XmlArrayBehaviorAccessor.Factory)
+				;
 		}
 
-		private bool TryGetXmlElementAccessor(PropertyDescriptor property, object behavior, ref XmlPropertyAccessor accessor)
+		private bool TryApplyBehavior<TBehavior, TAccessor>(PropertyDescriptor property, object behavior, ref XmlAccessor accessor,
+			XmlAccessorFactory<TAccessor> factory)
+			where TBehavior : class
+			where TAccessor : XmlAccessor, IConfigurable<TBehavior>
 		{
-			var attribute = behavior as XmlElementAttribute;
-			if (attribute == null) return false;
+			var typedBehavior = behavior as TBehavior;
+			if (typedBehavior == null)
+				return false;
 
-			var localName = string.IsNullOrEmpty(attribute.ElementName)
-				? property.PropertyName
-				: attribute.ElementName;
+			if (accessor == null)
+				accessor = factory(property, primaryXmlMeta.KnownTypes);
 
-			var namespaceUri = string.IsNullOrEmpty(attribute.Namespace)
-				? null
-				: attribute.Namespace;				
+			var typedAccessor = accessor as TAccessor;
+			if (typedAccessor == null)
+				throw Error.AttributeConflict(property);
 
-			accessor = new XmlElementPropertyAccessor(property.PropertyType, localName, namespaceUri);
+			typedAccessor.Configure(typedBehavior);
 			return true;
 		}
 
@@ -220,6 +214,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private static bool IsVolatileBehavior(object behavior)
 		{
 			return behavior is VolatileAttribute;
+		}
+
+		public override IDictionaryBehavior Copy()
+		{
+			return null;
 		}
 	}
 }
