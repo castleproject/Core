@@ -301,7 +301,6 @@
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\TryStatement.cs" />
-    <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\CatchStatement.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\FinalStatement.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\EndExceptionStatement.cs" />
     <Compile Include="DynamicProxy\Internal\CompositionInvocation.cs" />
