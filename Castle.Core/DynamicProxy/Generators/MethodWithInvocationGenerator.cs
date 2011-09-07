@@ -90,6 +90,8 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			var dereferencedArguments = IndirectReference.WrapIfByRef(emitter.Arguments);
+			bool hasByRefArguments = this.HasByRefArguments(emitter.Arguments);
+
 			var arguments = GetCtorArguments(@class, namingScope, proxiedMethodTokenExpression,
 			                                 dereferencedArguments);
 			var ctorArguments = ModifyArguments(@class, arguments);
@@ -103,10 +105,25 @@ namespace Castle.DynamicProxy.Generators
 				EmitLoadGenricMethodArguments(emitter, MethodToOverride.MakeGenericMethod(genericArguments), invocationLocal);
 			}
 
+			if (hasByRefArguments)
+			{
+				emitter.CodeBuilder.AddStatement(new TryStatement());
+			}
+
 			var proceed = new ExpressionStatement(new MethodInvocationExpression(invocationLocal, InvocationMethods.Proceed));
 			emitter.CodeBuilder.AddStatement(proceed);
 
+			if (hasByRefArguments)
+			{
+				emitter.CodeBuilder.AddStatement(new FinalStatement());
+			}
+
 			GeneratorUtil.CopyOutAndRefParameters(dereferencedArguments, invocationLocal, MethodToOverride, emitter);
+
+			if (hasByRefArguments)
+			{
+				emitter.CodeBuilder.AddStatement(new EndExceptionStatement());
+			}
 
 			if (MethodToOverride.ReturnType != typeof(void))
 			{
@@ -176,6 +193,19 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			return contributor.GetConstructorInvocationArguments(arguments, @class);
+		}
+
+		private bool HasByRefArguments(ArgumentReference[] arguments)
+		{
+			for (int i = 0; i < arguments.Length; i++ )
+			{
+				if (arguments[i].Type.IsByRef)
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 	}
 }
