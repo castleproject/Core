@@ -14,13 +14,13 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
-    using System.Reflection.Emit;
+	using System.Reflection.Emit;
 
-    public class TryStatement : Statement
-    {
-        public override void Emit(IMemberEmitter member, ILGenerator gen)
-        {
-            gen.BeginExceptionBlock();
-        }
-    }
+	public class TryStatement : Statement
+	{
+		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		{
+			gen.BeginExceptionBlock();
+		}
+	}
 }
