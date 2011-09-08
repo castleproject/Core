@@ -22,14 +22,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		protected XmlStringSerializer() { }
 
-		public override object GetValue(XmlTypedNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
+		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-			return node.Node.Value;
+			return node.Value;
 		}
 
-		public override void SetValue(XmlTypedNode node, IXmlAccessor accessor, object value)
+		public override void SetValue(IXmlNode node, IXmlAccessor accessor, object value)
 		{
-			node.Node.SetValue(value.ToString());
+			node.Value = value.ToString();
 		}
 	}
 }

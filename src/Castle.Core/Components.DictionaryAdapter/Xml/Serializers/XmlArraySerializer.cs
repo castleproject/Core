@@ -28,30 +28,30 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override bool CanGetStub { get { return true; } }
 
-		public override object GetStub(XmlIterator iterator, IDictionaryAdapter parent, IXmlAccessor accessor)
+		public override object GetStub(IXmlCursor cursor, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
 			var itemType = accessor.ClrType.GetElementType();
 
 			return Array.CreateInstance(itemType, 0);
 		}
 
-		public override object GetValue(XmlTypedNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
+		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
 			var items    = new ArrayList();
-			var itemType = node.Type.GetElementType();
+			var itemType = accessor.ClrType.GetElementType();
 
 			accessor.GetCollectionAccessor(itemType)
-				.GetCollectionItems(node.Node, parent, items);
+				.GetCollectionItems(node, parent, items);
 
 			return items.ToArray(itemType);
 		}
 
-		public override void SetValue(XmlTypedNode node, IXmlAccessor accessor, object value)
+		public override void SetValue(IXmlNode node, IXmlAccessor accessor, object value)
 		{
 			var itemType = value.GetType().GetElementType();
 
 			accessor.GetCollectionAccessor(itemType)
-				.SetCollectionItems(node.Node, (IEnumerable) value);
+				.SetCollectionItems(node, (IEnumerable) value);
 		}
 	}
 }

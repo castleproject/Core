@@ -18,25 +18,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Threading;
 	using System.Xml;
-	using System.Xml.XPath;
 
-    // DEPTH:               ROOT STATES:
+	// DEPTH:               ROOT STATES:
     // 0: <?xml>            [Start, Prolog]
     // 1: <Root>            [Element, Attribute]
     // 2:   <Foo>...</Foo>  [Content]
 
     public class XmlSubtreeWriter : XmlWriter
     {
-        private readonly XPathNavigator node;
+        private readonly IXmlNode node;
         private XmlWriter rootWriter;
         private XmlWriter childWriter;
         private WriteState state;
         private int depth;
 
-        public XmlSubtreeWriter(IXPathNavigable source)
-			: this(source.CreateNavigatorSafe()) { }
-
-        public XmlSubtreeWriter(XPathNavigator node)
+        public XmlSubtreeWriter(IXmlNode node)
         {
             if (node == null)
                 throw new ArgumentNullException("node");
@@ -69,12 +65,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
         private XmlWriter RootWriter
         {
-            get { return rootWriter ?? (rootWriter = node.CreateAttributes()); }
+            get { return rootWriter ?? (rootWriter = node.WriteAttributes()); }
         }
 
         private XmlWriter ChildWriter
         {
-            get { return childWriter ?? (childWriter = node.AppendChild()); }
+            get { return childWriter ?? (childWriter = node.WriteChildren()); }
         }
 
         private bool IsInRootAttribute
@@ -128,7 +124,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
                 else // is in prolog
                 {
                     RequireState(WriteState.Start, WriteState.Prolog);
-                    node.DeleteChildren();
+                    node.Clear();
                     state = WriteState.Element;
                 }
                 depth++;

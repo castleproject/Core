@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
-	using System.Xml.XPath;
 
 	public class XmlSubaccessor : XmlAccessor
 	{
@@ -41,20 +39,19 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new XmlElementBehaviorAccessor(itemType);
 		}
 
-		protected internal override XmlIterator SelectPropertyNode(XPathNavigator node, bool create)
+		public override IXmlCursor SelectPropertyNode(IXmlNode node, bool mutable)
 		{
-			return accessor.SelectPropertyNode(node, create);
+			return accessor.SelectPropertyNode(node, mutable);
 		}
 
-		protected internal override XmlIterator SelectCollectionNode(XPathNavigator node, bool create)
+		public override IXmlCursor SelectCollectionNode(IXmlNode node, bool mutable)
 		{
-			return accessor.SelectCollectionNode(node, create);
+			return accessor.SelectCollectionNode(node, mutable);
 		}
 
-		protected internal override XmlIterator SelectCollectionItems(XPathNavigator node, bool create)
+		public override IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable)
 		{
-			return accessor.SelectCollectionItems(node, create);
+			return accessor.SelectCollectionItems(node, mutable);
 		}
 	}
 }
-#endif

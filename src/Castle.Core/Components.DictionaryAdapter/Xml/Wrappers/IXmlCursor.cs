@@ -12,22 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
+	using System.Xml;
 
-	public class XmlGuidSerializer : XmlStringSerializer
+	public interface IXmlCursor : IXmlNode
 	{
-		public static readonly new XmlGuidSerializer
-			Instance = new XmlGuidSerializer();
+		void Reset();
+		bool MoveNext();
+		void MakeNext(Type type);
+		void MoveTo(IXmlNode node);
+		void MoveToEnd();
 
-		protected XmlGuidSerializer() { }
+		void Create(Type type);
+		void Coerce(Type type);
+		void Remove();
+		void RemoveToEnd();
 
-		public override object GetValue(XmlTypedNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
-		{
-			return Guid.Parse(node.Node.Value);
-		}
+		IXmlNode Save();
 	}
 }
-#endif

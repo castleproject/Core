@@ -106,6 +106,36 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			throw new NotImplementedException();
 		}
+
+		internal static Exception CannotSetXsiTypeOnAttribute()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static Exception CursorNotInCoercibleState()
+		{
+			return new InvalidOperationException();
+		}
+
+		internal static Exception CursorCannotMoveToThatNode()
+		{
+			return new InvalidOperationException();
+		}
+
+		internal static Exception MustBeXmlNodeBasedCursor()
+		{
+			return new ArgumentException();
+		}
+
+		internal static Exception CursorNotInManifestableState()
+		{
+			return new InvalidOperationException();
+		}
+
+		internal static Exception OperationNotValidOnAttribute()
+		{
+			return new InvalidOperationException();
+		}
 	}
 }
 #endif

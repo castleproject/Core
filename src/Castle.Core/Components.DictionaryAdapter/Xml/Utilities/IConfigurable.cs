@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	public interface IConfigurable<T>
@@ -20,4 +19,3 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		void Configure(T value);
 	}
 }
-#endif

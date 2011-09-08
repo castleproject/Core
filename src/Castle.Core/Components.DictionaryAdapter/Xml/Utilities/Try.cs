@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	using System.Collections.Generic;
 	using System.Diagnostics;
 
     public static class Try
@@ -33,13 +31,5 @@ namespace Castle.Components.DictionaryAdapter.Xml
             result = value;
             return true;
         }
-
-        [DebuggerHidden]
-        public static bool Depends<T>(out T result, T value)
-        {
-            result = value;
-            return ! EqualityComparer<T>.Default.Equals(value, default(T));
-        }
     }
 }
-#endif

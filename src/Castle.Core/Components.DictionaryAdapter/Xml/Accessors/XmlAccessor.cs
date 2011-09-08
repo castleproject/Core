@@ -12,12 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 	using System.Collections;
-	using System.Xml.XPath;
 
 	public abstract class XmlAccessor : IXmlPropertyAccessor, IXmlCollectionAccessor
 	{
@@ -27,7 +25,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		protected XmlAccessor(Type type, IXmlKnownTypeMap knownTypes)
 		{
-			this.clrType    = UnwrapNullable(type);
+			this.clrType    = type.NonNullable();
 			this.serializer = XmlTypeSerializer.For(clrType);
 			this.knownTypes = knownTypes ?? DefaultXmlKnownTypeSet.Instance;
 		}
@@ -54,119 +52,102 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public virtual void Prepare() { }
 
-		private static Type UnwrapNullable(Type type)
-		{
-			return type.IsGenericType
-				&& type.GetGenericTypeDefinition() == typeof(Nullable<>)
-				? type.GetGenericArguments()[0]
-				: type;
-		}
-
-		protected IXmlKnownType MakeXmlKnownType(Type type)
-		{
-			var localName = type.GetLocalName();
-			return new XmlKnownType(localName, null, type);
-		}
-
 		public abstract IXmlCollectionAccessor GetCollectionAccessor(Type itemType);
 
-		protected internal abstract XmlIterator SelectPropertyNode   (XPathNavigator node, bool create);
-		protected internal abstract XmlIterator SelectCollectionNode (XPathNavigator node, bool create);
-		protected internal abstract XmlIterator SelectCollectionItems(XPathNavigator node, bool create);
+		public abstract IXmlCursor SelectPropertyNode   (IXmlNode node, bool mutable);
+		public abstract IXmlCursor SelectCollectionNode (IXmlNode node, bool mutable);
+		public abstract IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable);
 
-		protected XmlIterator SelectSelf(XPathNavigator node)
-		{
-			return new XmlSelfIterator(new XmlTypedNode(node, clrType));
-		}
-
-		public virtual object GetPropertyValue(XPathNavigator parentNode, IDictionaryAdapter parentObject, bool orStub)
+		public virtual object GetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, bool orStub)
 		{
 			if (orStub) orStub &= serializer.CanGetStub;
 
-			var iterator = Serializer.IsCollection
-				? SelectCollectionNode(parentNode, orStub && serializer.CanGetStub)
-				: SelectPropertyNode  (parentNode, false);
+			var cursor = Serializer.IsCollection
+				? SelectCollectionNode(parentNode, orStub)
+				: SelectPropertyNode  (parentNode, orStub);
 
-			if (iterator.MoveNext())
-				return serializer.GetValue(iterator.Current, parentObject, this);
+			if (cursor.MoveNext() && !cursor.IsNil)
+				return serializer.GetValue(cursor, parentObject, this);
 			if (orStub)
-				return serializer.GetStub(iterator, parentObject, this);
+				return serializer.GetStub (cursor, parentObject, this);
 			return null;
 		}
 
-		public virtual void SetPropertyValue(XPathNavigator parentNode, object value)
+		public virtual void SetPropertyValue(IXmlNode parentNode, object value)
 		{
-			var iterator = serializer.IsCollection
+			var cursor = serializer.IsCollection
 				? SelectCollectionNode(parentNode, true)
 				: SelectPropertyNode  (parentNode, true);
 
 			if (null != value)
 			{
-				Serializer.SetValue(iterator, this, value);
+				cursor.MakeNext(value.GetType());
+				Serializer.SetValue(cursor, this, value);
 			}
 			else if (IsNillable)
 			{
-				if (!iterator.MoveNext())
-					iterator.Create(ClrType);
-				iterator.Current.Node.SetToNil();
+				cursor.MakeNext(clrType);
+				cursor.IsNil = true;
 			}
 			else
 			{
-				if (iterator.MoveNext())
-					iterator.Remove();
+				cursor.RemoveToEnd();
 			}
 		}
 
-		public void GetCollectionItems(XPathNavigator parentNode, IDictionaryAdapter parentObject, IConfigurable<XmlTypedNode> collection)
+		public void GetCollectionItems(IXmlNode parentNode, IDictionaryAdapter parentObject, IConfigurable<IXmlNode> collection)
 		{
-			var iterator = SelectCollectionItems(parentNode, false);
+			var cursor = SelectCollectionItems(parentNode, false);
 
-			while (iterator.MoveNext())
-				collection.Configure(iterator.Current.Clone());
+			while (cursor.MoveNext())
+			{
+				var node = cursor.Save();
+				collection.Configure(node);
+			}
 		}
 
-		public void GetCollectionItems(XPathNavigator parentNode, IDictionaryAdapter parentObject, IList values)
+		public void GetCollectionItems(IXmlNode parentNode, IDictionaryAdapter parentObject, IList values)
 		{
-			var iterator = SelectCollectionItems(parentNode, false);
+			var cursor = SelectCollectionItems(parentNode, false);
 
-			while (iterator.MoveNext())
-				values.Add(serializer.GetValue(iterator.Current, parentObject, this));
+			while (cursor.MoveNext())
+			{
+				var value = serializer.GetValue(cursor, parentObject, this);
+				values.Add(value);
+			}
 		}
 
-		public void SetCollectionItems(XPathNavigator parentNode, IEnumerable collection)
+		public void SetCollectionItems(IXmlNode parentNode, IEnumerable collection)
 		{
-			var iterator = SelectCollectionItems(parentNode, true);
+			var cursor = SelectCollectionItems(parentNode, true);
 
 			foreach (var item in collection)
 			{
-				if (!iterator.MoveNext())
-					iterator.Create(item.GetType());
-				serializer.SetValue(iterator.Current, this, item);
+				cursor.MakeNext(item.GetType());
+				serializer.SetValue(cursor, this, item);
 			}
 
-			while (iterator.MoveNext())
-				iterator.Remove();
+			cursor.RemoveToEnd();
 		}
 
-		public XmlTypedNode AddCollectionItem(XmlTypedNode parentNode, IDictionaryAdapter parentObject, object value)
-		{
-			throw new NotImplementedException();
-		}
+		//public IXmlNode AddCollectionItem(IXmlNode parentNode, IDictionaryAdapter parentObject, object value)
+		//{
+		//    throw new NotImplementedException();
+		//}
 
-		public XmlTypedNode InsertCollectionItem(XmlTypedNode xmlTypedNode, IDictionaryAdapter parentObject, object value)
-		{
-			throw new NotImplementedException();
-		}
+		//public IXmlNode InsertCollectionItem(IXmlNode xmlTypedNode, IDictionaryAdapter parentObject, object value)
+		//{
+		//    throw new NotImplementedException();
+		//}
 
-		public void RemoveCollectionItem(XmlTypedNode xmlTypedNode)
-		{
-			throw new NotImplementedException();
-		}
+		//public void RemoveCollectionItem(IXmlNode xmlTypedNode)
+		//{
+		//    throw new NotImplementedException();
+		//}
 
-		public void RemoveAllCollectionItems(XmlTypedNode parentNode)
-		{
-			throw new NotImplementedException();
-		}
+		//public void RemoveAllCollectionItems(IXmlNode parentNode)
+		//{
+		//    throw new NotImplementedException();
+		//}
 	}
 }
-#endif

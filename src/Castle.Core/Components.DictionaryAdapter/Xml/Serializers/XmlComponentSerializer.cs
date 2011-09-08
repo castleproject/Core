@@ -28,32 +28,32 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override bool CanGetStub              { get { return true;  } }
 		public override bool CanSerializeAsAttribute { get { return false; } }
 
-		public override object GetStub(XmlIterator iterator, IDictionaryAdapter parent, IXmlAccessor accessor)
+		public override object GetStub(IXmlCursor cursor, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-            var adapter = new XmlAdapter(iterator);
+			var adapter = new XmlAdapter(cursor);
 			return CreateComponent(accessor.ClrType, adapter, parent);
 		}
 
-		public override object GetValue(XmlTypedNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
+		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-            var adapter = new XmlAdapter(node.Node);
-			return CreateComponent(node.Type, adapter, parent);
+			var adapter = new XmlAdapter(node);
+			return CreateComponent(node.ClrType, adapter, parent);
 		}
 
-		public override void SetValue(XmlTypedNode node, IXmlAccessor accessor, object value)
+		public override void SetValue(IXmlNode node, IXmlAccessor accessor, object value)
 		{
 			throw new System.NotImplementedException();
 		}
 
 		public object CreateComponent(Type type, XmlAdapter adapter, IDictionaryAdapter parent)
 		{
-			var dictionary = new Hashtable();
+		    var dictionary = new Hashtable();
 
-			var descriptor = new DictionaryDescriptor(parent.Meta.Behaviors);
-			parent.This.Descriptor.CopyBehaviors(descriptor);
-			descriptor.AddBehavior(adapter);
+		    var descriptor = new DictionaryDescriptor(parent.Meta.Behaviors);
+		    parent.This.Descriptor.CopyBehaviors(descriptor);
+		    descriptor.AddBehavior(adapter);
 
-			return parent.This.Factory.GetAdapter(type, dictionary, descriptor);
+		    return parent.This.Factory.GetAdapter(type, dictionary, descriptor);
 		}
 	}
 }

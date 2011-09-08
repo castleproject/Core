@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	public class XmlMetadataBehavior : DictionaryBehaviorAttribute, IDictionaryMetaInitializer
@@ -27,4 +26,3 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 	}
 }
-#endif

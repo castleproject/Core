@@ -51,9 +51,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return clrType; }
 		}
 
-		public bool TryRecognizeType(XPathNavigator node, out Type type)
+		Type IXmlKnownTypeMap.BaseType
 		{
-			return node.HasXsiType(xsiTypeLocalName)
+			get { return clrType; }
+		}
+
+		public bool TryRecognizeType(IXmlNode node, out Type type)
+		{
+			return node.XsiType == xsiTypeLocalName
 				? Try.Success(out type, clrType)
 				: Try.Failure(out type);
 		}

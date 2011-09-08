@@ -27,24 +27,20 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override bool CanSerializeAsAttribute { get { return false; } }
 
-		public override object GetValue(XmlTypedNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
+		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-            var serializable = (IXmlSerializable) Activator.CreateInstance(node.Type);
+            var serializable = (IXmlSerializable) Activator.CreateInstance(node.ClrType);
 
-            using (var reader = node.Node.ReadSubtree())
-            {
-                reader.MoveToContent();
+            using (var reader = new XmlSubtreeReader(node, XmlDefaultSerializer.Root))
                 serializable.ReadXml(reader);
-            }
 
             return serializable;
 		}
 
-		public override void SetValue(XmlTypedNode node, IXmlAccessor accessor, object value)
+		public override void SetValue(IXmlNode node, IXmlAccessor accessor, object value)
 		{
 		    var serializable = (IXmlSerializable) value;
-		    node.Node.DeleteChildren();
-		    using (var writer = node.Node.AppendChild())
+		    using (var writer = new XmlSubtreeWriter(node))
 		        serializable.WriteXml(writer);
 		}
 	}

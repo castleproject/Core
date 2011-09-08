@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -27,28 +26,24 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override bool CanGetStub { get { return true; } }
 
-		public override object GetStub(XmlIterator iterator, IDictionaryAdapter parent, IXmlAccessor accessor)
+		public override object GetStub(IXmlCursor cursor, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-			var itemType    = accessor.ClrType.GetGenericArguments()[0];
-			var listType    = typeof(XmlNodeList<>).MakeGenericType(itemType);
-			var subaccessor = accessor.GetCollectionAccessor(itemType);
-			return Activator.CreateInstance(listType, iterator, parent, subaccessor);
+			return GetValue((IXmlNode) cursor, parent, accessor);
 		}
 
-		public override object GetValue(XmlTypedNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
+		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-			var itemType    = node.Type.GetGenericArguments()[0];
+			var itemType    = node.ClrType.GetGenericArguments()[0];
 			var listType    = typeof(XmlNodeList<>).MakeGenericType(itemType);
 			var subaccessor = accessor.GetCollectionAccessor(itemType);
 			return Activator.CreateInstance(listType, node, parent, subaccessor);
 		}
 
-		public override void SetValue(XmlTypedNode node, IXmlAccessor accessor, object value)
+		public override void SetValue(IXmlNode node, IXmlAccessor accessor, object value)
 		{
 			var itemType    = value.GetType().GetGenericArguments()[0];
 			var subaccessor = accessor.GetCollectionAccessor(itemType);
-			subaccessor.SetCollectionItems(node.Node, (IEnumerable) value);
+			subaccessor.SetCollectionItems(node, (IEnumerable) value);
 		}
 	}
 }
-#endif

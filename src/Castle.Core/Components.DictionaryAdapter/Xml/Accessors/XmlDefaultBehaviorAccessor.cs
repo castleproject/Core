@@ -12,12 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	using System.Xml;
-	using System.Xml.XPath;
 	using System;
+	using System.Xml;
 
 	public class XmlDefaultBehaviorAccessor : XmlNodeAccessor
 	{
@@ -39,29 +37,28 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new XmlElementBehaviorAccessor(itemType);
 		}
 
-		protected internal override XmlIterator SelectPropertyNode(XPathNavigator node, bool create)
+		public override IXmlCursor SelectPropertyNode(IXmlNode node, bool mutable)
 		{
-			return Serializer.CanSerializeAsAttribute
-				? new XmlNodeIterator   (node, this, false)
-				: new XmlElementIterator(node, this, false);
+			var flags = Serializer.CanSerializeAsAttribute
+				? CursorFlags.AllNodes
+				: CursorFlags.Elements;
+			return node.SelectChildren(this, flags.MutableIf(mutable));
 		}
 
-		protected internal override XmlIterator SelectCollectionNode(XPathNavigator node, bool create)
+		public override IXmlCursor SelectCollectionNode(IXmlNode node, bool mutable)
 		{
-			return Serializer.CanSerializeAsAttribute
-				? new XmlNodeIterator   (node, this, false)
-				: new XmlElementIterator(node, this, false);
+			return SelectPropertyNode(node, mutable);
 		}
 
-		protected internal override XmlIterator SelectCollectionItems(XPathNavigator node, bool create)
+		public override IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable)
 		{
-			throw Error.NotSupported();
+			var flags = CursorFlags.Elements | CursorFlags.Multiple;
+			return node.SelectChildren(this, flags.MutableIf(mutable));
 		}
 
-		protected override bool IsMatch(XPathNavigator node)
+		protected override bool IsMatch(IXmlNode node)
 		{
 			return node.HasNameLike(localName);
 		}
 	}
 }
-#endif

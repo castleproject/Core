@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
+#if !SL3
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -46,14 +46,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new XmlSubaccessor(this, itemType);
 		}
 
-		public override object GetPropertyValue(XPathNavigator node, IDictionaryAdapter da, bool ifExists)
+		public override object GetPropertyValue(IXmlNode node, IDictionaryAdapter da, bool ifExists)
 		{
 			return SelectsNodes
 				? base.GetPropertyValue(node, da, ifExists)
 				: Evaluate(node);
 		}
 
-		public override void SetPropertyValue(XPathNavigator node, object value)
+		public override void SetPropertyValue(IXmlNode node, object value)
 		{
 			if (SelectsNodes)
 				base.SetPropertyValue(node, value);
@@ -61,25 +61,26 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				throw Error.NotSupported();
 		}
 
-		private object Evaluate(XPathNavigator node)
+		private object Evaluate(IXmlNode node)
 		{
-			var value = node.Evaluate(path.Expression);
+			var value = node.Evaluate(path);
 			return Convert.ChangeType(value, ClrType);
 		}
 
-		protected internal override XmlIterator SelectPropertyNode(XPathNavigator node, bool create)
+		protected internal override IXmlCursor SelectPropertyNode(IXmlNode node, bool create)
 		{
-			return new XPathMutableIterator(node, path, false);
+			var flags = CursorFlags.AllNodes.MutableIf(create);
+			return node.Select(path, flags);
 		}
 
-		protected internal override XmlIterator SelectCollectionNode(XPathNavigator node, bool create)
+		protected internal override IXmlCursor SelectCollectionNode(IXmlNode node, bool create)
 		{
-			return SelectSelf(node);
+			return node.SelectSelf();
 		}
 
-		protected internal override XmlIterator SelectCollectionItems(XPathNavigator node, bool create)
+		protected internal override IXmlCursor SelectCollectionItems(IXmlNode node, bool create)
 		{
-			return new XPathMutableIterator(node, path, true);
+			return node.Select(path, CursorFlags.AllNodes.MutableIf(create) | CursorFlags.Multiple);
 		}
 	}
 }

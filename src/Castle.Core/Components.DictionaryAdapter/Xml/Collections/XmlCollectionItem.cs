@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	internal struct XmlCollectionItem
 	{
-		public readonly XmlTypedNode Node;
+		public readonly IXmlNode Node;
 		public readonly object Value;
 
-		public XmlCollectionItem(XmlTypedNode node)
+		public XmlCollectionItem(IXmlNode node)
 			: this(node, null) { }
 
-		public XmlCollectionItem(XmlTypedNode node, object value)
+		public XmlCollectionItem(IXmlNode node, object value)
 		{
 			Node  = node;
 			Value = value;
@@ -40,4 +39,3 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 	}
 }
-#endif

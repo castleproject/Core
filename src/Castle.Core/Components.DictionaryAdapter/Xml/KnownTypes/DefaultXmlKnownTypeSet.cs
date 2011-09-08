@@ -24,6 +24,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Instance = new DefaultXmlKnownTypeSet();
 
 		private DefaultXmlKnownTypeSet()
+			: base(typeof(object))
 		{
 			Add(new XmlKnownType(null, null, "xsd:anyType",       typeof(object)));
 			Add(new XmlKnownType(null, null, "xsd:string",        typeof(string)));

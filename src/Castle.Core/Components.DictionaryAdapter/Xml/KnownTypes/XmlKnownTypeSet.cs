@@ -24,15 +24,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	public class XmlKnownTypeSet : IXmlKnownTypeMap, IEnumerable<IXmlKnownType>
 	{
 		private readonly List<IXmlKnownType> items;
+		private readonly Type baseType;
 		private IXmlKnownTypeMap parent;
 
-		public XmlKnownTypeSet()
-			: this(null) { }
+		public XmlKnownTypeSet(Type baseType)
+			: this(baseType, null) { }
 
-		public XmlKnownTypeSet(IXmlKnownTypeMap parent)
+		public XmlKnownTypeSet(Type baseType, IXmlKnownTypeMap parent)
 		{
-			items  = new List<IXmlKnownType>();
+			this.items    = new List<IXmlKnownType>();
+			this.baseType = baseType;
 			Parent = parent;
+		}
+
+		public Type BaseType
+		{
+			get { return baseType; }
 		}
 
 		public IXmlKnownTypeMap Parent
@@ -81,7 +88,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			items.Add(knownType);
 		}
 
-		public bool TryRecognizeType(XPathNavigator node, out Type type)
+		public bool TryRecognizeType(IXmlNode node, out Type type)
 		{
 			foreach (var item in items)
 				if (item.TryRecognizeType(node, out type))

@@ -38,20 +38,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return false; }
 		}
 
-		public virtual void SetValue(XmlIterator iterator, IXmlAccessor accessor, object value)
-		{
-			if (!iterator.MoveNext())
-				iterator.Create(value.GetType());
-			SetValue(iterator.Current, accessor, value);
-		}
-
-		public virtual  object GetStub (XmlIterator iterator, IDictionaryAdapter parent, IXmlAccessor accessor) { throw Error.NotSupported(); }
-		public abstract object GetValue(XmlTypedNode node,    IDictionaryAdapter parent, IXmlAccessor accessor);
-		public abstract void   SetValue(XmlTypedNode node,                               IXmlAccessor accessor, object value);
+		public virtual  object GetStub (IXmlCursor cursor, IDictionaryAdapter parent, IXmlAccessor accessor) { throw Error.NotSupported(); }
+		public abstract object GetValue(IXmlNode node,    IDictionaryAdapter parent, IXmlAccessor accessor);
+		public abstract void   SetValue(IXmlNode node,                               IXmlAccessor accessor, object value);
 
 		public static XmlTypeSerializer For(Type type)
 		{
-			return XmlTypeSerializerCache.Instance[type];
+		    return XmlTypeSerializerCache.Instance[type];
 		}
 	}
 }

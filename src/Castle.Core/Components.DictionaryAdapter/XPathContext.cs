@@ -225,8 +225,8 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (expression.ReturnType == XPathResultType.NodeSet)
 			{
-				var iterator = (XPathNodeIterator) result;
-				var hasItems = iterator.Clone().MoveNext();
+				var cursor = (XPathNodeIterator) result;
+				var hasItems = cursor.Clone().MoveNext();
 				if (!hasItems) result = null;
 			}
 

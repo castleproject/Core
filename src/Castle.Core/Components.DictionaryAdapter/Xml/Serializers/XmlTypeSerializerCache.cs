@@ -26,32 +26,46 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Instance = new XmlTypeSerializerCache();
 
 		private XmlTypeSerializerCache()
-			: base(CreateSerializer) { }
+			: base(CreateSerializer)
+		{
+			this[typeof(String)]         = XmlStringSerializer.Instance;
+			this[typeof(Boolean)]        = XmlSimpleSerializer.ForBoolean;
+			this[typeof(Char)]           = XmlSimpleSerializer.ForChar;
+			this[typeof(SByte)]          = XmlSimpleSerializer.ForSByte;
+			this[typeof(Int16)]          = XmlSimpleSerializer.ForInt16;
+			this[typeof(Int32)]          = XmlSimpleSerializer.ForInt32;
+			this[typeof(Int64)]          = XmlSimpleSerializer.ForInt64;
+			this[typeof(Byte)]           = XmlSimpleSerializer.ForByte;
+			this[typeof(UInt16)]         = XmlSimpleSerializer.ForUInt16;
+			this[typeof(UInt32)]         = XmlSimpleSerializer.ForUInt32;
+			this[typeof(UInt64)]         = XmlSimpleSerializer.ForUInt64;
+			this[typeof(Single)]         = XmlSimpleSerializer.ForSingle;
+			this[typeof(Double)]         = XmlSimpleSerializer.ForDouble;
+			this[typeof(Decimal)]        = XmlSimpleSerializer.ForDecimal;
+			this[typeof(TimeSpan)]       = XmlSimpleSerializer.ForTimeSpan;
+			this[typeof(DateTime)]       = XmlSimpleSerializer.ForDateTime;
+			this[typeof(DateTimeOffset)] = XmlSimpleSerializer.ForDateTimeOffset;
+			this[typeof(Guid)]           = XmlSimpleSerializer.ForGuid;
+			this[typeof(Byte[])]         = XmlSimpleSerializer.ForByteArray;
+			this[typeof(Uri)]            = XmlSimpleSerializer.ForUri;
+		}
 
 		private static XmlTypeSerializer CreateSerializer(Type type)
 		{
-		    if (type == typeof(string))
-		        return XmlStringSerializer.Instance;
-			if (type == typeof(object))
-				return XmlDynamicSerializer.Instance;
-		    if (type == typeof(Guid))
-		        return XmlGuidSerializer.Instance;
-		    if (type.IsSimpleType())
-		        return XmlSimpleSerializer.Instance;
 		    if (type.IsArray)
 		        return XmlArraySerializer.Instance;
 
 		    if (type.IsGenericType)
 		    {
-		        var genericType = type.GetGenericTypeDefinition();
-		        if (genericType == typeof(IList<>)       ||
-		            genericType == typeof(ICollection<>) ||
-		            genericType == typeof(IEnumerable<>) )
-		            return XmlListSerializer.Instance;
-		        if (genericType == typeof(ISet<>))
-		            return XmlListSerializer.Instance; // TODO
-		        if (genericType == typeof(BindingList<>))
-		            return XmlListSerializer.Instance; // TODO
+				var genericType = type.GetGenericTypeDefinition();
+				if (genericType == typeof(IList<>)       ||
+				    genericType == typeof(ICollection<>) ||
+				    genericType == typeof(IEnumerable<>) )
+				    return XmlListSerializer.Instance;
+				//if (genericType == typeof(ISet<>))
+				//    return XmlListSerializer.Instance; // TODO
+				//if (genericType == typeof(BindingList<>))
+				//    return XmlListSerializer.Instance; // TODO
 		        if (genericType == typeof(IDictionary<,>)      ||
 		            genericType == typeof(List<>)              ||
 		            genericType == typeof(Dictionary<,>)       ||
@@ -65,8 +79,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		            throw Error.UnsupportedCollectionType();
 		    }
 
-		    if (type.IsInterface)
-		        return XmlComponentSerializer.Instance;
+			if (type.IsInterface)
+			    return XmlComponentSerializer.Instance;
 		    if (type.IsEnum)
 		        return XmlEnumerationSerializer.Instance;
 			if (type.IsCustomSerializable())

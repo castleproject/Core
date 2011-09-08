@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 	using System.Xml;
 	using System.Xml.Serialization;
-	using System.Xml.XPath;
 
 	public class XmlArrayBehaviorAccessor : XmlNodeAccessor,
 		IConfigurable<XmlArrayAttribute>,
@@ -67,7 +65,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void Configure(XmlArrayItemAttribute attribute)
 		{
 			if (knownTypes == null)
-				knownTypes = new XmlKnownTypeSet();
+				knownTypes = new XmlKnownTypeSet(ClrType);
 			knownTypes.Add(attribute);
 		}
 
@@ -76,25 +74,28 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new XmlSubaccessor(this, itemType);
 		}
 
-		protected internal override XmlIterator SelectPropertyNode(XPathNavigator node, bool create)
+		public override IXmlCursor SelectPropertyNode(IXmlNode node, bool mutable)
 		{
-			return new XmlElementIterator(node, this, false);
+			return node.SelectChildren(this, PropertyFlags.MutableIf(mutable));
 		}
 
-		protected internal override XmlIterator SelectCollectionNode(XPathNavigator node, bool create)
+		public override IXmlCursor SelectCollectionNode(IXmlNode node, bool mutable)
 		{
-			return new XmlElementIterator(node, this, false);
+			return SelectPropertyNode(node, mutable);
 		}
 
-		protected internal override XmlIterator SelectCollectionItems(XPathNavigator node, bool create)
+		public override IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable)
 		{
-			return new XmlElementIterator(node, KnownTypes, true);
+			return node.SelectChildren(KnownTypes, CollectionItemFlags.MutableIf(mutable));
 		}
 
-		protected override bool IsMatch(XPathNavigator node)
+		protected override bool IsMatch(IXmlNode node)
 		{
 			return node.HasNameLike(localName, namespaceUri);
 		}
+
+		private const CursorFlags
+			PropertyFlags       = CursorFlags.Elements,
+			CollectionItemFlags = CursorFlags.Elements | CursorFlags.Multiple;
 	}
 }
-#endif

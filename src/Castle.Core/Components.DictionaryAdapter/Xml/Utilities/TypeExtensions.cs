@@ -12,36 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-    using System;
+	using System;
 
-    public class XmlSelfIterator : XmlIterator
-    {
-        private readonly XmlTypedNode item;
-        private int position;
-
-        public XmlSelfIterator(XmlTypedNode item)
-        {
-            this.item     = item;
-            this.position = -1;
-        }
-
-        public override bool HasCurrent
-        {
-            get { return 0 == position; }
-        }
-
-        public override XmlTypedNode Current
-        {
-            get { return HasCurrent ? item : OnNoCurrent(); }
-        }
-
-        public override bool MoveNext()
-        {
-            return 0 == ++position;
-        }
-    }
+	public static class TypeExtensions
+	{
+		public static Type NonNullable(this Type type)
+		{
+			return type.IsGenericType
+				&& type.GetGenericTypeDefinition() == typeof(Nullable<>)
+				? type.GetGenericArguments()[0]
+				: type;
+		}
+	}
 }
-#endif

@@ -24,9 +24,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		protected XmlEnumerationSerializer() { }
 
-		public override object GetValue(XmlTypedNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
+		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-			return Enum.Parse(node.Type, node.Node.Value, true);
+			return Enum.Parse(node.ClrType, node.Value, true);
 		}
 	}
 }

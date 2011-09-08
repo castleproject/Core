@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -28,19 +27,23 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private readonly string rootLocalName;
 		private readonly string rootNamespaceUri;
 		private readonly string childNamespaceUri;
-		private readonly ICompiledPath path;
 		private readonly XmlKnownTypeSet knownTypes;
+#if !SL3
+		private readonly ICompiledPath path;
+#endif
 
 		public XmlMetadata(DictionaryAdapterMeta meta)
 		{
 			type       = meta.Type;
-			knownTypes = new XmlKnownTypeSet();
+			knownTypes = new XmlKnownTypeSet(type);
 
-			var xmlDefaults = null as XmlDefaultsAttribute;
 			var xmlRoot     = null as XmlRootAttribute;
 			var xmlType     = null as XmlTypeAttribute;
-			var xPath       = null as XPathAttribute;
+			var xmlDefaults = null as XmlDefaultsAttribute;
 			var xmlInclude  = null as XmlIncludeAttribute;
+#if !SL3
+			var xPath       = null as XPathAttribute;
+#endif
 
 			foreach (var behavior in meta.Behaviors)
 			{
@@ -48,7 +51,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				else if (TryCast(behavior, ref xmlRoot    )) { }
 				else if (TryCast(behavior, ref xmlType    )) { }
 				else if (TryCast(behavior, ref xmlInclude )) { knownTypes.Add(xmlInclude); }
+#if !SL3
 				else if (TryCast(behavior, ref xPath      )) { }
+#endif
 			}
 
 			if (xmlDefaults != null)
@@ -57,10 +62,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				isNullable = xmlDefaults.IsNullable;
 			}
 
+#if !SL3
 			if (xPath != null)
 			{
 				path = xPath.Path;
 			}
+#endif
 
 			rootLocalName = XmlConvert.EncodeLocalName
 			(
@@ -84,53 +91,57 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 
 		public Type ClrType                { get { return type; } }
+		Type IXmlKnownTypeMap.BaseType     { get { return type; } }
+
 		public bool? Qualified             { get { return qualified; } }
 		public bool? IsNullable            { get { return isNullable; } }
 		public string RootLocalName        { get { return rootLocalName; } }
 		public string RootNamespaceUri	   { get { return rootNamespaceUri; } }
 		public string ChildNamespaceUri	   { get { return childNamespaceUri; } }
-		public ICompiledPath Path          { get { return path; } }
 		public IXmlKnownTypeMap KnownTypes { get { return knownTypes; } }
+#if !SL3
+		public ICompiledPath Path          { get { return path; } }
+#endif
 
 		string IXmlKnownType.LocalName     { get { return rootLocalName; } }
 		string IXmlKnownType.NamespaceUri  { get { return rootNamespaceUri; } }
 		string IXmlKnownType.XsiType       { get { return null; } }
 		Type   IXmlKnownType.ClrType       { get { return type; } }
 
-		public bool MoveToBase(XPathNavigator node, bool create)
+		public bool MoveToBase(ref IXmlNode node, bool create)
 		{
-			if (node.NodeType == XPathNodeType.Element)
-				return true;
-			if (node.NodeType != XPathNodeType.Root)
+			if ( node.IsElement) return true;
+			if (!node.IsRoot)    return false;
+
+			var cursor = SelectBase(node);
+			if (!Materialize(cursor, create))
 				return false;
 
-			var iterator = SelectBase(node);
-			if (!Materialize(iterator, create))
-				return false;
-
-			node.MoveTo(iterator.Current.Node);
+			node = cursor.Save();
 			return true;
 		}
 
-		private XmlIterator SelectBase(XPathNavigator node)
+		public IXmlCursor SelectBase(IXmlNode node)
 		{
-			return path == null
-				? (XmlIterator) new XmlElementIterator  (node, this, false)
-				: (XmlIterator) new XPathMutableIterator(node, path, false);
+#if !SL3
+			//if (path != null)
+			//    return node.Select(path, CursorFlags.Elements | CursorFlags.Mutable);
+#endif
+			return node.SelectChildren(this, CursorFlags.Elements | CursorFlags.Mutable);
 		}
 
-		private bool Materialize(XmlIterator iterator, bool create)
+		private bool Materialize(IXmlCursor cursor, bool create)
 		{
-			if (iterator.MoveNext())
+			if (cursor.MoveNext())
 				return true;
 			if (!create)
 				return false;
 
-			iterator.Create(type);
+			cursor.Create(type);
 			return true;
 		}
 
-		public bool TryRecognizeType(XPathNavigator node, out Type type)
+		public bool TryRecognizeType(IXmlNode node, out Type type)
 		{
 			return node.HasNameLike(rootLocalName, rootNamespaceUri)
 				? Try.Success(out type, ClrType)
@@ -153,4 +164,3 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 	}
 }
-#endif

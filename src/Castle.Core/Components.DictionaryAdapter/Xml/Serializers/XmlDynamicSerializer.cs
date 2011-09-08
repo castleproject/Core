@@ -22,17 +22,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		protected XmlDynamicSerializer() { }
 
-		public override object GetValue(XmlTypedNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
+		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-			return node.Type == typeof(object)
+			return node.ClrType == typeof(object)
 				? new object()
-				: XmlTypeSerializer.For(node.Type).GetValue(node, parent, accessor);
+				: XmlTypeSerializer.For(node.ClrType).GetValue(node, parent, accessor);
 		}
 
-		public override void SetValue(XmlTypedNode node, IXmlAccessor accessor, object value)
+		public override void SetValue(IXmlNode node, IXmlAccessor accessor, object value)
 		{
-			if (node.Type != typeof(object))
-				XmlTypeSerializer.For(node.Type).SetValue(node, accessor, value);
+			if (node.ClrType != typeof(object))
+				XmlTypeSerializer.For(node.ClrType).SetValue(node, accessor, value);
 		}
 	}
 }

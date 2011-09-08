@@ -19,10 +19,60 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Collections.Generic;
 	using System.Xml;
 	using System.Xml.Serialization;
+#if !SL3
 	using System.Xml.XPath;
+#endif
 
 	public static class XmlExtensions
 	{
+		public static string GetAttribute(this XmlNode node, string localName, string namespaceUri)
+		{
+			var attribute = node.Attributes[localName, namespaceUri];
+			if (attribute == null)
+				return null;
+
+			var value = attribute.Value;
+			if (string.IsNullOrEmpty(value))
+				return null;
+
+			return value;
+		}
+
+		public static void SetAttribute(this XmlNode node, string localName, string namespaceUri, string value)
+		{
+			if (string.IsNullOrEmpty(value))
+			{
+				node.Attributes.RemoveNamedItem(localName, namespaceUri);
+			}
+			else
+			{
+				var attribute = node.Attributes[localName, namespaceUri];
+				if (attribute == null)
+				{
+					attribute = node.OwnerDocument.CreateAttribute(null, localName, namespaceUri);
+					node.Attributes.Append(attribute);
+				}
+				attribute.Value = value;
+			}
+		}
+
+		public static bool HasAttribute(this XmlNode node, string localName, string namespaceUri, string value)
+		{
+			var attribute = node.Attributes[localName, namespaceUri];
+			return attribute != null
+				&& attribute.Value == value;
+		}
+
+		public static bool IsNamespace(this XmlAttribute attribute)
+		{
+			return attribute.Prefix == XmlnsPrefix ||
+			(
+				string.IsNullOrEmpty(attribute.Prefix) &&
+				attribute.LocalName == XmlnsPrefix
+			);
+		}
+
+#if !SL3
 		public static XPathNavigator CreateNavigatorSafe(this IXPathNavigable source)
 		{
             if (source == null)
@@ -30,36 +80,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			return source.CreateNavigator();
 		}
+#endif
 
-		public static bool HasNameLike(this XPathNavigator node, string localName)
+		public static bool HasNameLike(this IXmlNode node, string localName)
 		{
 			return Comparer.Equals(localName, node.LocalName);
 		}
 
-		public static bool HasNameLike(this XPathNavigator node, string localName, string namespaceUri)
+		public static bool HasNameLike(this IXmlNode node, string localName, string namespaceUri)
 		{
 			return Comparer.Equals(localName, node.LocalName)
-				&& (namespaceUri == null || Comparer.Equals(namespaceUri, node.NamespaceURI));
-		}
-
-		public static bool HasXsiType(this XPathNavigator node, string type)
-		{
-			return type == node.GetXsiType();
-		}
-
-		public static string GetXsiType(this XPathNavigator node)
-		{
-			if (!node.MoveToAttribute("type", XsiNamespaceUri))
-				return null;
-
-			var value = node.Value;
-			node.MoveToParent();
-			return value == string.Empty ? null : value;
-		}
-
-		public static void SetXsiType(this XPathNavigator node, string type)
-		{
-			node.CreateAttribute(XsiPrefix, "type", XsiNamespaceUri, type);
+				&& (namespaceUri == null || Comparer.Equals(namespaceUri, node.NamespaceUri));
 		}
 
 		public static XmlMetadata GetXmlMeta(this DictionaryAdapterMeta meta)
@@ -79,12 +110,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public static XmlAccessor GetAccessor(this PropertyDescriptor property)
 		{
-			return (XmlAccessor) property.ExtendedProperties[XmlAccessorKey];
+		    return (XmlAccessor) property.ExtendedProperties[XmlAccessorKey];
 		}
 
 		public static void SetAccessor(this PropertyDescriptor property, XmlAccessor accessor)
 		{
-			property.ExtendedProperties[XmlAccessorKey] = accessor;
+		    property.ExtendedProperties[XmlAccessorKey] = accessor;
 		}
 
 		public static bool HasAccessor(this PropertyDescriptor property)
@@ -131,8 +162,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public const string
 			XmlnsPrefix       = "xmlns",
 			XmlnsNamespaceUri = "http://www.w3.org/2000/xmlns/",
-			XsiPrefix         = "xsi",
-			XsiNamespaceUri   = "http://www.w3.org/2001/XMLSchema-instance",
 			WsdlPrefix        = "wsdl", // For Guid
 			WsdlNamespaceUri  = "http://microsoft.com/wsdl/types/"; // For Guid
 

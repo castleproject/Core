@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -40,6 +39,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public TItem this[TKey key]
 		{
 			get { return GetOrCreate(key); }
+			protected set { items[key] = value; }
 		}
 
 		private TItem GetOrCreate(TKey key)
@@ -94,4 +94,3 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 	}
 }
-#endif

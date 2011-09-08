@@ -12,27 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
-	using System.Xml.XPath;
+	using System.Xml;
 
-	public struct XmlTypedNode
+	public interface IXmlNode : IXmlKnownType
 	{
-		public readonly XPathNavigator Node;
-		public readonly Type Type;
+		bool        IsElement    { get; }
+		bool        IsAttribute  { get; }
+		bool        IsRoot       { get; }
+		bool        IsNil        { get; set; }
+		string      Value        { get; set; } // Equivalent to InnerText
+		string      Xml          { get; }      // Equivalent to OuterXml
 
-		public XmlTypedNode(XPathNavigator node, Type type)
-		{
-			Node = node;
-			Type = type;
-		}
+		IXmlCursor SelectSelf();
+		IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags);
+#if !SL3
+		IXmlCursor Select  (ICompiledPath path, CursorFlags flags);
+		object     Evaluate(ICompiledPath path);
+#endif
 
-		public XmlTypedNode Clone()
-		{
-			return new XmlTypedNode(Node.Clone(), Type);
-		}
+		void Coerce(IXmlKnownType xmlType);
+		void Clear();
+		XmlReader ReadSubtree();
+		XmlWriter WriteAttributes();
+		XmlWriter WriteChildren();
 	}
 }
-#endif

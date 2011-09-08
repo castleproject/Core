@@ -18,8 +18,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Threading;
 	using System.Xml;
-	using System.Xml.XPath;
-using System.Xml.Serialization;
+	using System.Xml.Serialization;
 
     public class XmlSubtreeReader : XmlReader
     {
@@ -28,16 +27,10 @@ using System.Xml.Serialization;
 		private string underlyingNamespaceURI;
         private XmlReader reader;
 
-		public XmlSubtreeReader(IXPathNavigable source, XmlRootAttribute root)
-			: this(source.CreateNavigatorSafe(), root.ElementName, root.Namespace) { }
-
-		public XmlSubtreeReader(XPathNavigator node, XmlRootAttribute root)
+		public XmlSubtreeReader(IXmlNode node, XmlRootAttribute root)
 			: this(node, root.ElementName, root.Namespace) { }
 
-		public XmlSubtreeReader(IXPathNavigable source, string rootLocalName, string rootNamespaceUri)
-			: this(source.CreateNavigatorSafe(), rootLocalName, rootNamespaceUri) { }
-
-        public XmlSubtreeReader(XPathNavigator node, string rootLocalName, string rootNamespaceUri)
+        public XmlSubtreeReader(IXmlNode node, string rootLocalName, string rootNamespaceUri)
         {
             if (null == node)
                 throw new ArgumentNullException("node");

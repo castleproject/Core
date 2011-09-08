@@ -20,7 +20,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public interface IXmlKnownTypeMap
 	{
-		bool TryRecognizeType(XPathNavigator node, out Type type);
+		Type BaseType { get; }
+		bool TryRecognizeType(IXmlNode node, out Type type);
 		IXmlKnownType GetXmlKnownType(Type type);
 	}
 }

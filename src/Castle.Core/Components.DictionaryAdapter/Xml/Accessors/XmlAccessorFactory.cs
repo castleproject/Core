@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	public delegate TAccessor
@@ -21,6 +20,5 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		PropertyDescriptor property,
 		IXmlKnownTypeMap knownTypes
 	)
-	where TAccessor : XmlAccessor;
+	where TAccessor : XmlAccessor; // TODO: Interface?
 }
-#endif

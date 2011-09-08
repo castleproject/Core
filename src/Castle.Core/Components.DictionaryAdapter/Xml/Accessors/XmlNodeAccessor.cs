@@ -12,20 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
-	using System.Collections;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Xml.Serialization;
-	using System.Xml.XPath;
 
 	public abstract class XmlNodeAccessor : XmlAccessor, IXmlKnownTypeMap, IXmlKnownType
 	{
 		protected XmlNodeAccessor(Type type, IXmlKnownTypeMap knownTypes)
 			: base(type, knownTypes) { }
+
+		Type IXmlKnownTypeMap.BaseType
+		{
+			get { return ClrType; }
+		}
 
 		public abstract string LocalName
 		{
@@ -47,7 +46,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return this; }
 		}
 
-		protected virtual bool IsMatch(XPathNavigator node)
+		protected virtual bool IsMatch(IXmlNode node)
 		{
 			return node.HasNameLike(LocalName, NamespaceUri);
 		}
@@ -58,7 +57,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				|| (Serializer.IsCollection && ClrType.IsAssignableFrom(type));
 		}
 
-		bool IXmlKnownTypeMap.TryRecognizeType(XPathNavigator node, out Type type)
+		bool IXmlKnownTypeMap.TryRecognizeType(IXmlNode node, out Type type)
 		{
 			return IsMatch(node)
 				? Try.Success(out type, ClrType)
@@ -73,4 +72,3 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 	}
 }
-#endif
