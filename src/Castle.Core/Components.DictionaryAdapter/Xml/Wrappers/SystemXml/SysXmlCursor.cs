@@ -24,7 +24,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private State state;
 		private int index;
 
-		private readonly SysXmlNode parent;
+		private readonly ILazy<XmlNode> parent;
 		private readonly IXmlKnownTypeMap knownTypes;
 		private readonly CursorFlags flags;
 
@@ -39,7 +39,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Attribute       =  2  // An attribute is currently selected
 		}
 
-		public SysXmlCursor(SysXmlNode parent, IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public SysXmlCursor(ILazy<XmlNode> parent, IXmlKnownTypeMap knownTypes, CursorFlags flags)
 		{
 			if (null == parent)
 				throw new ArgumentNullException("parent");
@@ -51,8 +51,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.flags      = flags;
 			this.index      = -1;
 
-			if (parent.Exists)
-				node = parent.GetNode();
+			if (parent.HasValue)
+				node = parent.Value;
 		}
 
 		public override bool Exists
@@ -125,7 +125,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public bool MoveNext()
 		{
 			return MoveNextCore()
-				&& (flags.AllowsMultipleItems() || RequireAtEnd());
+				&& (flags.AllowsMultipleItems() || IsAtEnd());
 		}
 
 		private bool MoveNextCore()
@@ -242,7 +242,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return false;
 		}
 
-		private bool RequireAtEnd()
+		private bool IsAtEnd()
 		{
 			var priorNode  = node;
 			var priorState = state;
@@ -259,16 +259,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void MoveTo(IXmlNode position)
 		{
-			var source = position as IHasXmlNode;
-			if (source == null)
+			var source = position as ILazy<XmlNode>;
+			if (source == null || !source.HasValue)
 				throw Error.CursorCannotMoveToThatNode();
 
 			Type sourceType;
 			if (!knownTypes.TryRecognizeType(position, out sourceType))
 				throw Error.CursorCannotMoveToThatNode();
 
-			node  = source.GetNode();
-			type  = sourceType;
+			node = source.Value;
+			type = sourceType;
 
 			if (IsElement)
 				SetMovedToElement();
@@ -333,7 +333,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (HasCurrent)
 				return;
 			if (state != State.Empty)
-				throw Error.CursorNotInManifestableState();
+				throw Error.CursorNotInRealizableState();
 			if (!flags.SupportsMutation())
 				throw Error.IteratorNotMutable();
 			Create(knownTypes.BaseType);
@@ -423,7 +423,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				case State.Element:   position = node; MoveToParentOfElement();   break;
 				case State.Attribute: position = node; MoveToParentOfAttribute(); break;
 				case State.End:       position = null; break;
-				case State.Empty:     position = null; parent.Realize(); node = parent.GetNode(); break;
+				case State.Empty:     position = null; node = parent.Value; break;
 				default:              throw Error.IteratorNotInCreatableState();
 			}
 			return position;

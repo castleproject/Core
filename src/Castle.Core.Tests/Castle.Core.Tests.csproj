@@ -208,9 +208,15 @@
     <Compile Include="Components.DictionaryAdapter.Tests\Phone.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\PhoneConverter.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\XmlStructureComparer.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Xml\Cursors\DummyLazy.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Xml\Cursors\XPathCursorTestCase.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Xml\Cursors\XPathMutableCursorTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\Cursors\DummyXmlNode.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\Cursors\SysXmlCursorTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\Cursors\SysXmlNodeTestCase.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Xml\Cursors\XmlNodeTestCase.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Xml\Cursors\XPathReadableCursorTestCase.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Xml\Cursors\XPathNodeTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlSerializerCacheTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlTypeSerializerTests.cs" />
     <Compile Include="Core.Tests\Internal\PermissionUtilTestCase.cs" />

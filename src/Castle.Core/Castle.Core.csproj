@@ -198,10 +198,12 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlAccessorFactory.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlArrayBehaviorAccessor.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlAttributeBehaviorAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlDefaultBehaviorAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlElementBehaviorAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlNodeAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlSubaccessor.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlXPathBehaviorAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Collections\XmlCollectionItem.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Collections\XmlNodeList.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\DefaultXmlKnownTypeSet.cs">
@@ -223,12 +225,14 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Serializers\XmlTypeSerializerCache.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components.DictionaryAdapter\Xml\Utilities\ILazy.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\TypeExtensions.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Utilities\Xsd.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\Xsi.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\IXmlType.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\IConfigurable.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\Try.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Utilities\XmlExtensions.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\SystemXml\SysXmlExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\XmlKnownType.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\XmlKnownTypeSet.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Error.cs" />
@@ -241,12 +245,18 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\CursorFlags.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\SystemXml\SysXmlNode.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\CompiledPath.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\ICompiledPath.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\IXPath.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XmlContext.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XmlSelfCursor.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\XPathBufferedNodeIterator.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\XPathExtensions.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\XPathMutableCursor.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\XPathNode.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\XPathReadOnlyCursor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlMetadata.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlMetadataBehavior.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\XPath.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\XPath.cs" />
     <Compile Include="Core\Internal\CollectionExtensions.cs" />
     <Compile Include="Core\ReferenceEqualityComparer.cs" />
     <Compile Include="Core\Extensions\SimpleConverter.cs" />
@@ -563,7 +573,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Components.DictionaryAdapter\Xml\Wrappers\XLinq\" />
-    <Folder Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition="($(MSBuildTargets) == '') Or ($(MSBuildTargets) == 'CSharp')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 4.0'" />

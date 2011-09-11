@@ -75,6 +75,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		internal static Exception SelectedMultipleNodes()
 		{
 			return new InvalidOperationException();
+				//var message = string.Format(
+				//    "The path '{0}' selected multiple nodes, but only one was expected.",
+				//    path.Expression);
+			//new XmlTransformException(message);
 		}
 
 		internal static Exception NotSupported()
@@ -127,7 +131,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new ArgumentException();
 		}
 
-		internal static Exception CursorNotInManifestableState()
+		internal static Exception CursorNotInRealizableState()
 		{
 			return new InvalidOperationException();
 		}
@@ -135,6 +139,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		internal static Exception OperationNotValidOnAttribute()
 		{
 			return new InvalidOperationException();
+		}
+
+		internal static Exception InvalidNamespaceUri()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static Exception NamespacePrefixIsRequired()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

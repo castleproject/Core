@@ -14,10 +14,13 @@
 
 namespace Castle.Components.DictionaryAdapter.Xml
 {
+#if !SILVERLIGHT
 	using System.Xml;
+#endif
 
 	public static class Xsi
 	{
+#if !SILVERLIGHT
 		public static string GetXsiType(this XmlNode node)
 		{
 			return node.GetAttribute(TypeLocalName, NamespaceUri);
@@ -49,6 +52,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return attribute.LocalName    == TypeLocalName
 				&& attribute.NamespaceURI == NamespaceUri;
 		}
+#endif
 
 		public const string
 			Prefix         = "xsi",

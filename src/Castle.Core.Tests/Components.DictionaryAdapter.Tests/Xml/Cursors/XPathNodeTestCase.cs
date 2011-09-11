@@ -20,35 +20,35 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class SysXmlNodeTestCase : XmlNodeTestCase
+	public class XPathNodeTestCase : XmlNodeTestCase
 	{
 		[Test]
 		public void Constructor_RequiresNode()
 		{
 			Assert.Throws<ArgumentNullException>(() =>
-				new SysXmlNode(null, typeof(T)));
+				new XPathNode(null, typeof(T)));
 		}
 
 		[Test]
 		public void Constructor_RequiresType()
 		{
 			Assert.Throws<ArgumentNullException>(() =>
-				new SysXmlNode(new XmlDocument(), null));
+				new XPathNode(new XmlDocument().CreateNavigator(), null));
 		}
 
 		protected override IXmlNode NodeForElement(params string[] xml)
 		{
-			return new SysXmlNode(Xml(xml), typeof(T));
+			return new XPathNode(Xml(xml).CreateNavigator(), typeof(T));
 		}
 
 		protected override IXmlNode NodeForAttribute(params string[] xml)
 		{
-			return new SysXmlNode(Xml(xml).Attributes[0], typeof(T));
+			return new XPathNode(Xml(xml).Attributes[0].CreateNavigator(), typeof(T));
 		}
 
 		protected override IXmlNode NodeForRoot()
 		{
-			return new SysXmlNode(new XmlDocument(), typeof(T));
+			return new XPathNode(new XmlDocument().CreateNavigator(), typeof(T));
 		}
 
 		private static XmlElement Xml(params string[] xml)

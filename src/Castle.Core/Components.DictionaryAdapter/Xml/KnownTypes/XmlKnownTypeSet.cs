@@ -76,6 +76,15 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			));
 		}
 
+		public void Add(XmlAttributeAttribute attribute)
+		{
+			Add(new XmlKnownType(
+				attribute.AttributeName,
+				attribute.Namespace,
+				attribute.Type
+			));
+		}
+
 		public void Add(XmlIncludeAttribute attribute)
 		{
 			Add(new XmlKnownType(

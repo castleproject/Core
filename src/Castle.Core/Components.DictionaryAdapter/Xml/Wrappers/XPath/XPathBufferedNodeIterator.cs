@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
+#if !SL3
 namespace Castle.Components.DictionaryAdapter.Xml
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Xml.XPath;
 
@@ -46,14 +47,33 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return items.Count - 1; }
 		}
 
+		public bool IsEmpty
+		{
+			get { return items.Count == 1; }
+		}
+
 		public override XPathNavigator Current
 		{
 			get { return items[index]; }
 		}
 
+		public void Reset()
+		{
+			index = 0;
+		}
+
 		public override bool MoveNext()
 		{
-			return ++index < items.Count;
+			if (++index < items.Count)
+				return true;
+			if (index > items.Count)
+				index--;
+			return false;
+		}
+
+		public void MoveToEnd()
+		{
+			index = items.Count;
 		}
 
 		public override XPathNodeIterator Clone()

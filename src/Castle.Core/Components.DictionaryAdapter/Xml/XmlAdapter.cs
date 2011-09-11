@@ -159,6 +159,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				||
 				TryApplyBehavior<XmlArrayItemAttribute, XmlArrayBehaviorAccessor>
 					(property, behavior, ref accessor, XmlArrayBehaviorAccessor.Factory)
+				||
+				TryApplyBehavior<XmlAttributeAttribute, XmlAttributeBehaviorAccessor>
+					(property, behavior, ref accessor, XmlAttributeBehaviorAccessor.Factory)
+#if !SL3
+				||
+				TryApplyBehavior<XPathAttribute, XmlXPathBehaviorAccessor>
+					(property, behavior, ref accessor, XmlXPathBehaviorAccessor.Factory)
+				||
+				TryApplyBehavior<XPathFunctionAttribute, XmlXPathBehaviorAccessor>
+					(property, behavior, ref accessor, XmlXPathBehaviorAccessor.Factory)
+#endif
 				;
 		}
 

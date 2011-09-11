@@ -73,13 +73,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 
 #if !SL3
-		public static XPathNavigator CreateNavigatorSafe(this IXPathNavigable source)
-		{
-            if (source == null)
-                throw new ArgumentNullException("source");
-
-			return source.CreateNavigator();
-		}
 #endif
 
 		public static bool HasNameLike(this IXmlNode node, string localName)

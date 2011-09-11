@@ -29,7 +29,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IXmlCursor SelectSelf();
 		IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags);
 #if !SL3
-		IXmlCursor Select  (ICompiledPath path, CursorFlags flags);
+		IXmlCursor Select  (ICompiledPath path, IXmlKnownTypeMap knownTypes, CursorFlags flags);
 		object     Evaluate(ICompiledPath path);
 #endif
 

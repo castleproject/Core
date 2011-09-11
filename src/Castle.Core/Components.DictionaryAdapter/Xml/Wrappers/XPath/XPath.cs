@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SL3
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-#if !SILVERLIGHT
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -77,14 +77,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			node.CreateAttribute(XPath.XsiPrefix, "nil", XPath.XsiNamespaceUri, "true");
 		}
 
-		public static void DeleteChildren(this XPathNavigator node)
-		{
-			while (node.MoveToFirstChild())
-				node.DeleteSelf();
-			while (node.MoveToFirstAttribute())
-				node.DeleteSelf();
-		}
-
 		public const char
 			SeparatorChar      = '/',
 			WildcardChar       = '*',
@@ -101,5 +93,5 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Separator         = "/",
 			SelfToken         = ".";
 	}
-#endif
 }
+#endif

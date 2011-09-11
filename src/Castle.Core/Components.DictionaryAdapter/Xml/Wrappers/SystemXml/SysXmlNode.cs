@@ -17,8 +17,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 	using System.Xml;
+	using System.Xml.XPath;
 
-	public class SysXmlNode : IXmlNode, IHasXmlNode
+	public class SysXmlNode : IXmlNode,
+		ILazy<XmlNode>,
+		ILazy<XPathNavigator>
 	{
 		protected XmlNode node;
 		protected Type    type;
@@ -139,9 +142,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				return null;
 		}
 
-		public IXmlCursor Select(ICompiledPath path, CursorFlags flags)
+		public IXmlCursor Select(ICompiledPath path, IXmlKnownTypeMap knownTypes, CursorFlags flags)
 		{
-			throw new NotImplementedException();
+			return flags.SupportsMutation()
+				? (IXmlCursor) new XPathMutableCursor (this, path, knownTypes, flags)
+				: (IXmlCursor) new XPathReadOnlyCursor(this, path, knownTypes, flags);
 		}
 
 		public object Evaluate(ICompiledPath path)
@@ -303,6 +308,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			if (!IsElement)
 				throw Error.OperationNotValidOnAttribute();
+		}
+
+		public bool HasValue
+		{
+			get { return Exists; }
+		}
+
+		XmlNode ILazy<XmlNode>.Value
+		{
+			get { Realize(); return node; }
+		}
+
+		XPathNavigator ILazy<XPathNavigator>.Value
+		{
+			get { Realize(); return node.CreateNavigator(); }
 		}
 	}
 }

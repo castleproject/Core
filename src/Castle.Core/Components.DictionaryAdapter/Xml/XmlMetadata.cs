@@ -17,7 +17,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Xml;
 	using System.Xml.Serialization;
-	using System.Xml.XPath;
 
 	public class XmlMetadata : IXmlKnownTypeMap, IXmlKnownType
 	{
@@ -28,31 +27,35 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private readonly string rootNamespaceUri;
 		private readonly string childNamespaceUri;
 		private readonly XmlKnownTypeSet knownTypes;
+		private readonly XmlContext context;
 #if !SL3
 		private readonly ICompiledPath path;
 #endif
-
+		
 		public XmlMetadata(DictionaryAdapterMeta meta)
 		{
 			type       = meta.Type;
 			knownTypes = new XmlKnownTypeSet(type);
+			context    = new XmlContext();
 
-			var xmlRoot     = null as XmlRootAttribute;
-			var xmlType     = null as XmlTypeAttribute;
-			var xmlDefaults = null as XmlDefaultsAttribute;
-			var xmlInclude  = null as XmlIncludeAttribute;
+			var xmlRoot      = null as XmlRootAttribute;
+			var xmlType      = null as XmlTypeAttribute;
+			var xmlDefaults  = null as XmlDefaultsAttribute;
+			var xmlNamespace = null as XmlNamespaceAttribute;
+			var xmlInclude   = null as XmlIncludeAttribute;
 #if !SL3
 			var xPath       = null as XPathAttribute;
 #endif
 
 			foreach (var behavior in meta.Behaviors)
 			{
-				if      (TryCast(behavior, ref xmlDefaults)) { }
-				else if (TryCast(behavior, ref xmlRoot    )) { }
-				else if (TryCast(behavior, ref xmlType    )) { }
-				else if (TryCast(behavior, ref xmlInclude )) { knownTypes.Add(xmlInclude); }
+				if      (TryCast(behavior, ref xmlDefaults )) { }
+				else if (TryCast(behavior, ref xmlRoot     )) { }
+				else if (TryCast(behavior, ref xmlType     )) { }
+				else if (TryCast(behavior, ref xmlNamespace)) { context.AddNamespace(xmlNamespace); }
+				else if (TryCast(behavior, ref xmlInclude  )) { knownTypes.Add(xmlInclude); }
 #if !SL3
-				else if (TryCast(behavior, ref xPath      )) { }
+				else if (TryCast(behavior, ref xPath       )) { }
 #endif
 			}
 
@@ -108,19 +111,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		string IXmlKnownType.XsiType       { get { return null; } }
 		Type   IXmlKnownType.ClrType       { get { return type; } }
 
-		public bool MoveToBase(ref IXmlNode node, bool create)
-		{
-			if ( node.IsElement) return true;
-			if (!node.IsRoot)    return false;
-
-			var cursor = SelectBase(node);
-			if (!Materialize(cursor, create))
-				return false;
-
-			node = cursor.Save();
-			return true;
-		}
-
 		public IXmlCursor SelectBase(IXmlNode node)
 		{
 #if !SL3
@@ -128,17 +118,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			//    return node.Select(path, CursorFlags.Elements | CursorFlags.Mutable);
 #endif
 			return node.SelectChildren(this, CursorFlags.Elements | CursorFlags.Mutable);
-		}
-
-		private bool Materialize(IXmlCursor cursor, bool create)
-		{
-			if (cursor.MoveNext())
-				return true;
-			if (!create)
-				return false;
-
-			cursor.Create(type);
-			return true;
 		}
 
 		public bool TryRecognizeType(IXmlNode node, out Type type)
