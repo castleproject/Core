@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.DictionaryAdapter
+#if !SL3
+namespace Castle.Components.DictionaryAdapter.Xml
 {
-#if !SILVERLIGHT
 	using System;
 	using System.Collections.Generic;
 	using System.Xml.XPath;
@@ -47,6 +47,14 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			get { return expressionParts; }
 		}
+
+		public void SetContext(XmlContext context)
+		{
+			expression.SetContext(context);
+
+			foreach (var part in expressionParts)
+				part.SetContext(context);
+		}
 	}
-#endif
 }
+#endif

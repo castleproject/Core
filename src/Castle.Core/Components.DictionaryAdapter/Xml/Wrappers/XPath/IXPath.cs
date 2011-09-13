@@ -13,7 +13,7 @@
 // limitations under the License.
 
 #if !SL3
-namespace Castle.Components.DictionaryAdapter
+namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System.Collections.Generic;
 	using System.Xml.XPath;
@@ -23,6 +23,8 @@ namespace Castle.Components.DictionaryAdapter
 		string Path { get; }
 		XPathExpression Expression { get; }
 		IList<XPathExpression> ExpressionParts { get; }
+
+		void SetContext(XmlContext context);
 	}
 }
 #endif

@@ -69,6 +69,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (xPath != null)
 			{
 				path = xPath.Path;
+				path.SetContext(context);
 			}
 #endif
 
@@ -107,13 +108,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public ICompiledPath Path           { get { return path; } }
 #endif
 
-		public IXmlCursor SelectBase(IXmlNode node)
+		public IXmlCursor SelectBase(IXmlNode node) // node is root
 		{
 #if !SL3
-			//if (path != null)
-			//    return node.Select(path, CursorFlags.Elements | CursorFlags.Mutable);
+			if (path != null)
+				return node.Select(path, this, RootFlags);
 #endif
-			return node.SelectChildren(this, CursorFlags.Elements | CursorFlags.Mutable);
+			return node.SelectChildren(this, RootFlags);
 		}
 
 		private void AddXmlInclude(XmlIncludeAttribute xmlInclude)
@@ -132,5 +133,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			result = value;
 			return true;
 		}
+
+		private const CursorFlags RootFlags
+			= CursorFlags.Elements
+			| CursorFlags.Mutable;
 	}
 }

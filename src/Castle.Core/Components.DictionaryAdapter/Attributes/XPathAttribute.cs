@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.DictionaryAdapter
+#if !SL3
+namespace Castle.Components.DictionaryAdapter.Xml
 {
-#if !SILVERLIGHT
 	using System;
 
 	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = true)]
@@ -32,5 +32,5 @@ namespace Castle.Components.DictionaryAdapter
 			get { return path; }
 		}
 	}
-#endif
 }
+#endif

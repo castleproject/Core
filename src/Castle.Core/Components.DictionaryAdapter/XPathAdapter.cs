@@ -106,7 +106,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private bool TryInitWithXPathAttribute(object behavior)
 		{
-			var attribute = behavior as XPathAttribute;
+			var attribute = behavior as Xml.XPathAttribute;
 			if (attribute == null)
 				return false;
 
@@ -724,9 +724,9 @@ namespace Castle.Components.DictionaryAdapter
 						ns = attrib.Namespace;
 					matchingCreate = () => keyContext.AppendElement(name, ns, root.Clone());
 				}
-				else if (behavior is XPathAttribute)
+				else if (behavior is Xml.XPathAttribute)
 				{
-					var attrib = (XPathAttribute)behavior;
+					var attrib = (Xml.XPathAttribute)behavior;
 					xpath = attrib.Path.Expression;
 				}
 				else

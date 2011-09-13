@@ -108,6 +108,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				return node;
 			if (node.IsAttribute)
 				throw Error.NotSupported();
+			// must be root
 			
 			var cursor = primaryXmlMeta.SelectBase(node);
 			return cursor.MoveNext()

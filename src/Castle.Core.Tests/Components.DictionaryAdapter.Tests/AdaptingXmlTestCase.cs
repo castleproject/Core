@@ -23,6 +23,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System.Xml;
 	using System.Xml.Schema;
 	using System.Xml.Serialization;
+	using Castle.Components.DictionaryAdapter.Xml;
 	using NUnit.Framework;
 
 	[TestFixture]

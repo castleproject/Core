@@ -16,9 +16,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
 	using System.Xml;
-	using System.Xml.Serialization;
 	using System.Xml.XPath;
-	using Castle.Components.DictionaryAdapter;
 	using Castle.Components.DictionaryAdapter.Xml;
 	using NUnit.Framework;
 

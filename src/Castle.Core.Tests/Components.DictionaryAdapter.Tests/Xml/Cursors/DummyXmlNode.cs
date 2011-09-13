@@ -16,7 +16,6 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
 	using System.Xml;
-	using Castle.Components.DictionaryAdapter;
 	using Castle.Components.DictionaryAdapter.Xml;
 
 	internal class DummyXmlNode : IXmlNode
