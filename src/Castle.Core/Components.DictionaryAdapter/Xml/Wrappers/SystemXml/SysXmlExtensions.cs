@@ -75,17 +75,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 #if !SL3
 #endif
 
-		public static bool HasNameLike(this IXmlNode node, string localName)
-		{
-			return Comparer.Equals(localName, node.LocalName);
-		}
-
-		public static bool HasNameLike(this IXmlNode node, string localName, string namespaceUri)
-		{
-			return Comparer.Equals(localName, node.LocalName)
-				&& (namespaceUri == null || Comparer.Equals(namespaceUri, node.NamespaceUri));
-		}
-
 		public static XmlMetadata GetXmlMeta(this DictionaryAdapterMeta meta)
 		{
 			return (XmlMetadata) meta.ExtendedProperties[XmlMetaKey];

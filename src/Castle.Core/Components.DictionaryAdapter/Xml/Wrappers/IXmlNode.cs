@@ -17,7 +17,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Xml;
 
-	public interface IXmlNode : IXmlKnownType
+	public interface IXmlNode : IXmlType
 	{
 		bool        IsElement    { get; }
 		bool        IsAttribute  { get; }
@@ -27,13 +27,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		string      Xml          { get; }      // Equivalent to OuterXml
 
 		IXmlCursor SelectSelf();
-		IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags);
+		IXmlCursor SelectChildren(IXmlTypeMap knownTypes, CursorFlags flags);
 #if !SL3
-		IXmlCursor Select  (ICompiledPath path, IXmlKnownTypeMap knownTypes, CursorFlags flags);
+		IXmlCursor Select  (ICompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags);
 		object     Evaluate(ICompiledPath path);
 #endif
 
-		void Coerce(IXmlKnownType xmlType);
+		void Coerce(IXmlType xmlType);
 		void Clear();
 		XmlReader ReadSubtree();
 		XmlWriter WriteAttributes();

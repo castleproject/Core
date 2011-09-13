@@ -26,7 +26,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class AdaptinXmlTestCase
+	public class XmlAdapterTestCase
 	{
 		private DictionaryAdapterFactory factory;
 

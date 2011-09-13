@@ -27,13 +27,23 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		internal static readonly XmlAccessorFactory<XmlXPathBehaviorAccessor>
 			Factory = (property, knownTypes) => new XmlXPathBehaviorAccessor(property, knownTypes);
 
-	    public XmlXPathBehaviorAccessor(PropertyDescriptor property, IXmlKnownTypeMap knownTypes)
+	    public XmlXPathBehaviorAccessor(PropertyDescriptor property, IXmlTypeMap knownTypes)
 	        : base(property.PropertyType, knownTypes) { }
 
 	    public ICompiledPath Path
 	    {
 	        get { return path; }
 	    }
+
+		public override string LocalName
+		{
+			get { return null; }
+		}
+
+		public override string NamespaceUri
+		{
+			get { return null; }
+		}
 
 		public bool SelectsNodes
 		{

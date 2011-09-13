@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -26,28 +25,27 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private DefaultXmlKnownTypeSet()
 			: base(typeof(object))
 		{
-			Add(new XmlKnownType(null, null, "xsd:anyType",       typeof(object)));
-			Add(new XmlKnownType(null, null, "xsd:string",        typeof(string)));
-			Add(new XmlKnownType(null, null, "xsd:boolean",       typeof(bool)));
-			Add(new XmlKnownType(null, null, "xsd:byte",          typeof(sbyte)));
-			Add(new XmlKnownType(null, null, "xsd:unsignedByte",  typeof(byte)));
-			Add(new XmlKnownType(null, null, "xsd:short",         typeof(short)));
-			Add(new XmlKnownType(null, null, "xsd:unsignedShort", typeof(ushort)));
-			Add(new XmlKnownType(null, null, "xsd:int",           typeof(int)));
-			Add(new XmlKnownType(null, null, "xsd:unsignedInt",   typeof(uint)));
-			Add(new XmlKnownType(null, null, "xsd:long",          typeof(long)));
-			Add(new XmlKnownType(null, null, "xsd:unsignedLong",  typeof(ulong)));
-			Add(new XmlKnownType(null, null, "xsd:float",         typeof(float)));
-			Add(new XmlKnownType(null, null, "xsd:double",        typeof(double)));
-			Add(new XmlKnownType(null, null, "xsd:decimal",       typeof(decimal)));
-			Add(new XmlKnownType(null, null, "wsdl:guid",         typeof(Guid)));           // XmlSerializer requires XmlInclude
-			Add(new XmlKnownType(null, null, "xsd:dateTime",      typeof(DateTime)));
-			Add(new XmlKnownType(null, null, "xsd:dateTime",      typeof(DateTimeOffset))); // Not XmlSerializer
-			Add(new XmlKnownType(null, null, "xsd:duration",      typeof(TimeSpan)));       // Not XmlSerializer
-			Add(new XmlKnownType(null, null, "xsd:base64Binary",  typeof(byte[])));
-			Add(new XmlKnownType(null, null, "xsd:anyURI",        typeof(Uri)));
-			Add(new XmlKnownType(null, null, "xsd:QName",         typeof(XmlQualifiedName)));
+			Add(new XmlIncludedType("xsd:anyType",       typeof(object)));
+			Add(new XmlIncludedType("xsd:string",        typeof(string)));
+			Add(new XmlIncludedType("xsd:boolean",       typeof(bool)));
+			Add(new XmlIncludedType("xsd:byte",          typeof(sbyte)));
+			Add(new XmlIncludedType("xsd:unsignedByte",  typeof(byte)));
+			Add(new XmlIncludedType("xsd:short",         typeof(short)));
+			Add(new XmlIncludedType("xsd:unsignedShort", typeof(ushort)));
+			Add(new XmlIncludedType("xsd:int",           typeof(int)));
+			Add(new XmlIncludedType("xsd:unsignedInt",   typeof(uint)));
+			Add(new XmlIncludedType("xsd:long",          typeof(long)));
+			Add(new XmlIncludedType("xsd:unsignedLong",  typeof(ulong)));
+			Add(new XmlIncludedType("xsd:float",         typeof(float)));
+			Add(new XmlIncludedType("xsd:double",        typeof(double)));
+			Add(new XmlIncludedType("xsd:decimal",       typeof(decimal)));
+			Add(new XmlIncludedType("wsdl:guid",         typeof(Guid)));           // XmlSerializer requires XmlInclude
+			Add(new XmlIncludedType("xsd:dateTime",      typeof(DateTime)));
+			Add(new XmlIncludedType("xsd:dateTime",      typeof(DateTimeOffset))); // Not XmlSerializer
+			Add(new XmlIncludedType("xsd:duration",      typeof(TimeSpan)));       // Not XmlSerializer
+			Add(new XmlIncludedType("xsd:base64Binary",  typeof(byte[])));
+			Add(new XmlIncludedType("xsd:anyURI",        typeof(Uri)));
+			Add(new XmlIncludedType("xsd:QName",         typeof(XmlQualifiedName)));
 		}
 	}
 }
-#endif

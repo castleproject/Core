@@ -30,7 +30,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		internal static readonly XmlAccessorFactory<XmlArrayBehaviorAccessor>
 			Factory = (property, knownTypes) => new XmlArrayBehaviorAccessor(property, knownTypes);
 
-		public XmlArrayBehaviorAccessor(PropertyDescriptor property, IXmlKnownTypeMap knownTypes)
+		public XmlArrayBehaviorAccessor(PropertyDescriptor property, IXmlTypeMap knownTypes)
 			: base(property.PropertyType, knownTypes)
 		{
 			this.localName = XmlConvert.EncodeLocalName(property.PropertyName);
@@ -46,9 +46,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return namespaceUri; }
 		}
 
-		public override IXmlKnownTypeMap KnownTypes
+		public override IXmlTypeMap KnownTypes
 		{
-			get { return (IXmlKnownTypeMap) knownTypes ?? this; }
+			get { return (IXmlTypeMap) knownTypes ?? this; }
 		}
 
 		public void Configure(XmlArrayAttribute attrbute)
@@ -66,7 +66,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			if (knownTypes == null)
 				knownTypes = new XmlKnownTypeSet(ClrType);
-			knownTypes.Add(attribute);
+			var knownType = new XmlNamedType(
+				attribute.ElementName,
+				attribute.Namespace,
+				attribute.Type);
+			knownTypes.Add(knownType);
 		}
 
 		public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
@@ -87,11 +91,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable)
 		{
 			return node.SelectChildren(KnownTypes, CollectionItemFlags.MutableIf(mutable));
-		}
-
-		protected override bool IsMatch(IXmlNode node)
-		{
-			return node.HasNameLike(localName, namespaceUri);
 		}
 
 		private const CursorFlags

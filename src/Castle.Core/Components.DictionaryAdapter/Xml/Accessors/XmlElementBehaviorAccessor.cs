@@ -36,7 +36,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.localName = type.GetLocalName();
 		}
 
-		public XmlElementBehaviorAccessor(PropertyDescriptor property, IXmlKnownTypeMap knownTypes)
+		public XmlElementBehaviorAccessor(PropertyDescriptor property, IXmlTypeMap knownTypes)
 			: base(property.PropertyType, knownTypes)
 		{
 			this.localName = XmlConvert.EncodeLocalName(property.PropertyName);
@@ -52,9 +52,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return namespaceUri; }
 		}
 
-		public override IXmlKnownTypeMap KnownTypes
+		public override IXmlTypeMap KnownTypes
 		{
-			get { return (IXmlKnownTypeMap) knownTypes ?? base.KnownTypes; }
+			get { return (IXmlTypeMap) knownTypes ?? this; }
 		}
 
 		public void Configure(XmlElementAttribute attribute)
@@ -73,7 +73,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{
 				if (knownTypes == null)
 					knownTypes = new XmlKnownTypeSet(ClrType);
-				knownTypes.Add(attribute);
+				var knownType = new XmlNamedType(
+					attribute.ElementName,
+					attribute.Namespace,
+					attribute.Type);
+				knownTypes.Add(knownType);
 			}
 		}
 
@@ -102,11 +106,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable)
 		{
 			return node.SelectChildren(KnownTypes, CursorFlags.Elements.MutableIf(mutable) | CursorFlags.Multiple);
-		}
-
-		protected override bool IsMatch(IXmlNode node)
-		{
-			return node.HasNameLike(localName, namespaceUri);
 		}
 	}
 }

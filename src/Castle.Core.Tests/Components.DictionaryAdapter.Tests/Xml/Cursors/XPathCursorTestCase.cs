@@ -273,26 +273,26 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			return new CompiledPath(path);
 		}
 
-		protected IXmlCursor Cursor(XPathNavigator parent, string pathText, IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		protected IXmlCursor Cursor(XPathNavigator parent, string pathText, IXmlTypeMap knownTypes, CursorFlags flags)
 		{
 			var lazyParent   = new DummyLazy<XPathNavigator> { Value = parent };
 			var compiledPath = new CompiledPath(pathText);
 			return Cursor(lazyParent, compiledPath, knownTypes, flags);
 		}
 
-		protected abstract IXmlCursor Cursor(ILazy<XPathNavigator> lazy, CompiledPath path, IXmlKnownTypeMap knownTypes, CursorFlags flags);
+		protected abstract IXmlCursor Cursor(ILazy<XPathNavigator> lazy, CompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags);
 
 		[TestFixtureSetUp]
 		public void SetUp()
 		{
-			ItemType   = new XmlKnownType("Item",  null, typeof(_ItemClrType ));
-			OtherType  = new XmlKnownType("Other", null, typeof(_OtherClrType));
+			ItemType   = new XmlNamedType("Item",  null, typeof(_ItemClrType ));
+			OtherType  = new XmlNamedType("Other", null, typeof(_OtherClrType));
 			ItemAndOtherType = new XmlKnownTypeSet(typeof(object));
-			ItemAndOtherType.Add(new XmlElementAttribute(ItemType .LocalName) { Type = typeof(_ItemClrType ) });
-			ItemAndOtherType.Add(new XmlElementAttribute(OtherType.LocalName) { Type = typeof(_OtherClrType) });
+			ItemAndOtherType.Add(new XmlNamedType(ItemType .LocalName, null, typeof(_ItemClrType )));
+			ItemAndOtherType.Add(new XmlNamedType(OtherType.LocalName, null, typeof(_OtherClrType)));
 		}
 
-		protected static XmlKnownType ItemType, OtherType;
+		protected static XmlNamedType ItemType, OtherType;
 		protected static XmlKnownTypeSet ItemAndOtherType;
 
 		private class _ItemClrType  { }

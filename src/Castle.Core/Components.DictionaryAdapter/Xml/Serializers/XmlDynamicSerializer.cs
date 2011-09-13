@@ -33,6 +33,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			if (node.ClrType != typeof(object))
 				XmlTypeSerializer.For(node.ClrType).SetValue(node, accessor, value);
+			else
+				node.Clear();
 		}
 	}
 }

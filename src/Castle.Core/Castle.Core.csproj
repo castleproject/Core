@@ -201,6 +201,7 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlAttributeBehaviorAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlDefaultBehaviorAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlElementBehaviorAccessor.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlIgnoreBehaviorAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlNodeAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlSubaccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlXPathBehaviorAccessor.cs" />
@@ -210,7 +211,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\XmlIncludedType.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\IXmlKnownTypeMap.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\IXmlTypeMap.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\XmlType.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Serializers\XmlArraySerializer.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Serializers\XmlCollectionSerializer.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Serializers\XmlComponentSerializer.cs" />
@@ -229,11 +231,11 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\TypeExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\Xsd.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\Xsi.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\IXmlType.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\IXmlType.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\IConfigurable.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\Try.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\SystemXml\SysXmlExtensions.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\XmlKnownType.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\XmNamedType.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\XmlKnownTypeSet.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Error.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\SystemXml\SysXmlCursor.cs" />

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -21,20 +20,23 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Xml.Serialization;
 	using System.Xml.XPath;
 
-	public class XmlKnownTypeSet : IXmlKnownTypeMap, IEnumerable<IXmlKnownType>
+	public class XmlKnownTypeSet : IXmlTypeMap, IEnumerable<IXmlType>
 	{
-		private readonly List<IXmlKnownType> items;
+		private readonly List<IXmlType> items;
 		private readonly Type baseType;
-		private IXmlKnownTypeMap parent;
+		private IXmlTypeMap parent;
 
 		public XmlKnownTypeSet(Type baseType)
 			: this(baseType, null) { }
 
-		public XmlKnownTypeSet(Type baseType, IXmlKnownTypeMap parent)
+		public XmlKnownTypeSet(Type baseType, IXmlTypeMap parent)
 		{
-			this.items    = new List<IXmlKnownType>();
+			if (baseType == null)
+				throw Error.ArgumentNull("baseType");
+
+			this.items    = new List<IXmlType>();
 			this.baseType = baseType;
-			Parent = parent;
+			this.Parent   = parent;
 		}
 
 		public Type BaseType
@@ -42,13 +44,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return baseType; }
 		}
 
-		public IXmlKnownTypeMap Parent
+		public IXmlTypeMap Parent
 		{
 			get { return parent; }
 			set { parent = value ?? DefaultXmlKnownTypeSet.Instance; }
 		}
 
-		public IEnumerator<IXmlKnownType> GetEnumerator()
+		public IEnumerator<IXmlType> GetEnumerator()
 		{
 			return items.GetEnumerator();
 		}
@@ -58,68 +60,58 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return items.GetEnumerator();
 		}
 
-		public void Add(XmlArrayItemAttribute attribute)
+		//public void Add(XmlArrayItemAttribute attribute)
+		//{
+		//    Add(new XmlNamedType(
+		//        attribute.ElementName,
+		//        attribute.Namespace,
+		//        attribute.Type
+		//    ));
+		//}
+
+		//public void Add(XmlElementAttribute attribute)
+		//{
+		//    Add(new XmlNamedType(
+		//        attribute.ElementName,
+		//        attribute.Namespace,
+		//        attribute.Type
+		//    ));
+		//}
+
+		//public void Add(XmlAttributeAttribute attribute)
+		//{
+		//    Add(new XmlNamedType(
+		//        attribute.AttributeName,
+		//        attribute.Namespace,
+		//        attribute.Type
+		//    ));
+		//}
+
+		public void Add(IXmlType xmlType)
 		{
-			Add(new XmlKnownType(
-				attribute.ElementName,
-				attribute.Namespace,
-				attribute.Type
-			));
+			items.Add(xmlType);
 		}
 
-		public void Add(XmlElementAttribute attribute)
-		{
-			Add(new XmlKnownType(
-				attribute.ElementName,
-				attribute.Namespace,
-				attribute.Type
-			));
-		}
-
-		public void Add(XmlAttributeAttribute attribute)
-		{
-			Add(new XmlKnownType(
-				attribute.AttributeName,
-				attribute.Namespace,
-				attribute.Type
-			));
-		}
-
-		public void Add(XmlIncludeAttribute attribute)
-		{
-			Add(new XmlKnownType(
-				attribute.Type
-			));
-		}
-
-		protected void Add(XmlKnownType knownType)
-		{
-			items.Add(knownType);
-		}
-
-		public bool TryRecognizeType(IXmlNode node, out Type type)
+		public bool TryGetClrType(IXmlType xmlType, out Type clrType)
 		{
 			foreach (var item in items)
-				if (item.TryRecognizeType(node, out type))
+				if (item.TryGetClrType(xmlType, out clrType))
 					return true;
 
-			if (parent != null)
-				return parent.TryRecognizeType(node, out type);
-
-			return Try.Failure(out type);
+			return (parent != null)
+				? parent.TryGetClrType(xmlType, out clrType)
+				: Try.Failure(out clrType);
 		}
 
-		public IXmlKnownType GetXmlKnownType(Type type)
+		public bool TryGetXmlType(Type clrType, out IXmlType xmlType)
 		{
 			foreach (var item in items)
-				if (item.ClrType == type)
-					return item;
+				if (item.TryGetXmlType(clrType, out xmlType))
+					return true;
 
-			if (parent != null)
-				return parent.GetXmlKnownType(type);
-
-			throw Error.NotXmlKnownType();
+			return (parent != null)
+				? parent.TryGetXmlType(clrType, out xmlType)
+				: Try.Failure(out xmlType);
 		}
 	}
 }
-#endif

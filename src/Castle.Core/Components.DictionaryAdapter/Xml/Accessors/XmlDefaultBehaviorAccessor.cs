@@ -21,7 +21,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		private readonly string localName;
 
-		public XmlDefaultBehaviorAccessor(PropertyDescriptor property, IXmlKnownTypeMap knownTypes)
+		public XmlDefaultBehaviorAccessor(PropertyDescriptor property, IXmlTypeMap knownTypes)
 			: base(property.PropertyType, knownTypes)
 		{
 			this.localName = XmlConvert.EncodeLocalName(property.PropertyName);
@@ -30,6 +30,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override string LocalName
 		{
 			get { return localName; }
+		}
+
+		public override string NamespaceUri
+		{
+			get { return null; }
 		}
 
 		public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
@@ -56,9 +61,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return node.SelectChildren(this, flags.MutableIf(mutable));
 		}
 
-		protected override bool IsMatch(IXmlNode node)
+		protected override bool IsMatch(IXmlType xmlType)
 		{
-			return node.HasNameLike(localName);
+			return NameComparer.Equals(localName, xmlType.LocalName);
 		}
 	}
 }

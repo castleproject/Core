@@ -12,17 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
-	using System.Xml.XPath;
 
-	public interface IXmlKnownTypeMap
+	public interface IXmlType : IXmlTypeMap
 	{
-		Type BaseType { get; }
-		bool TryRecognizeType(IXmlNode node, out Type type);
-		IXmlKnownType GetXmlKnownType(Type type);
+		string LocalName    { get; }
+		string NamespaceUri { get; }
+		string XsiType      { get; }
+		Type   ClrType      { get; }
 	}
 }
-#endif

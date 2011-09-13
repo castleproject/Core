@@ -28,6 +28,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private XmlTypeSerializerCache()
 			: base(CreateSerializer)
 		{
+			this[typeof(Object)]         = XmlDynamicSerializer.Instance;
 			this[typeof(String)]         = XmlStringSerializer.Instance;
 			this[typeof(Boolean)]        = XmlSimpleSerializer.ForBoolean;
 			this[typeof(Char)]           = XmlSimpleSerializer.ForChar;
@@ -64,8 +65,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				    return XmlListSerializer.Instance;
 				//if (genericType == typeof(ISet<>))
 				//    return XmlListSerializer.Instance; // TODO
-				//if (genericType == typeof(BindingList<>))
-				//    return XmlListSerializer.Instance; // TODO
 		        if (genericType == typeof(IDictionary<,>)      ||
 		            genericType == typeof(List<>)              ||
 		            genericType == typeof(Dictionary<,>)       ||
@@ -75,7 +74,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		            genericType == typeof(LinkedList<>)        ||
 		            genericType == typeof(SortedSet<>)         ||
 		            genericType == typeof(SortedDictionary<,>) ||
-		            genericType == typeof(SortedList<,>)       )
+		            genericType == typeof(SortedList<,>)       ||
+					genericType == typeof(BindingList<>)       )
 		            throw Error.UnsupportedCollectionType();
 		    }
 

@@ -25,7 +25,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private int index;
 
 		private readonly ILazy<XmlNode> parent;
-		private readonly IXmlKnownTypeMap knownTypes;
+		private readonly IXmlTypeMap knownTypes;
 		private readonly CursorFlags flags;
 
 		protected enum State
@@ -39,7 +39,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Attribute       =  2  // An attribute is currently selected
 		}
 
-		public SysXmlCursor(ILazy<XmlNode> parent, IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public SysXmlCursor(ILazy<XmlNode> parent, IXmlTypeMap knownTypes, CursorFlags flags)
 		{
 			if (null == parent)
 				throw new ArgumentNullException("parent");
@@ -65,9 +65,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return state > State.Initial; }
 		}
 
-		private IXmlKnownType DefaultKnownType
+		private IXmlType DefaultKnownType
 		{
-			get { return knownTypes.GetXmlKnownType(knownTypes.BaseType); }
+			get { return knownTypes.GetXmlType(knownTypes.BaseType); }
 		}
 
 		public override Type ClrType
@@ -138,7 +138,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private bool IsMatch()
 		{
-			return knownTypes.TryRecognizeType(this, out type);
+			return knownTypes.TryGetClrType(this, out type);
 		}
 
 		private bool Advance()
@@ -245,12 +245,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private bool IsAtEnd()
 		{
 			var priorNode  = node;
+			var priorType  = type;
 			var priorState = state;
 			var priorIndex = index;
 
 			var hasNext = MoveNextCore();
 
 			node  = priorNode;
+			type  = priorType;
 			state = priorState;
 			index = priorIndex;
 
@@ -264,7 +266,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				throw Error.CursorCannotMoveToThatNode();
 
 			Type sourceType;
-			if (!knownTypes.TryRecognizeType(position, out sourceType))
+			if (!knownTypes.TryGetClrType(position, out sourceType))
 				throw Error.CursorCannotMoveToThatNode();
 
 			node = source.Value;
@@ -351,7 +353,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			RequireCoercible();
 
-			var knownType = knownTypes.GetXmlKnownType(type);
+			var knownType = knownTypes.GetXmlType(type);
 
 			Coerce(knownType);
 		}
@@ -359,7 +361,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void Create(Type type)
 		{
 			var position  = RequireCreatable();
-			var knownType = knownTypes.GetXmlKnownType(type);
+			var knownType = knownTypes.GetXmlType(type);
 
 			if (flags.IncludesElements())
 			{

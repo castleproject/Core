@@ -30,7 +30,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		internal static readonly XmlAccessorFactory<XmlAttributeBehaviorAccessor>
 			Factory = (property, knownTypes) => new XmlAttributeBehaviorAccessor(property, knownTypes);
 
-		public XmlAttributeBehaviorAccessor(PropertyDescriptor property, IXmlKnownTypeMap knownTypes)
+		public XmlAttributeBehaviorAccessor(PropertyDescriptor property, IXmlTypeMap knownTypes)
 			: base(property.PropertyType, knownTypes)
 		{
 			this.localName = XmlConvert.EncodeLocalName(property.PropertyName);
@@ -46,9 +46,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return namespaceUri; }
 		}
 
-		public override IXmlKnownTypeMap KnownTypes
+		public override IXmlTypeMap KnownTypes
 		{
-			get { return (IXmlKnownTypeMap) knownTypes ?? base.KnownTypes; }
+			get { return (IXmlTypeMap) knownTypes ?? base.KnownTypes; }
 		}
 
 		public void Configure(XmlAttributeAttribute attribute)
@@ -67,7 +67,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{
 				if (knownTypes == null)
 					knownTypes = new XmlKnownTypeSet(ClrType);
-				knownTypes.Add(attribute);
+				var knownType = new XmlNamedType(
+					attribute.AttributeName,
+					attribute.Namespace,
+					attribute.Type);
+				knownTypes.Add(knownType);
 			}
 		}
 

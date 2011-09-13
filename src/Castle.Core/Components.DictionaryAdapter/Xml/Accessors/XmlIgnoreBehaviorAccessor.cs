@@ -16,18 +16,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 
-	public class XmlIncludedType : XmlType
+	public class XmlIgnoreBehaviorAccessor : XmlNodeAccessor
 	{
-		private readonly string xsiType;
-		private readonly Type   clrType;
+		public static readonly XmlIgnoreBehaviorAccessor
+			Instance = new XmlIgnoreBehaviorAccessor();
 
-		public XmlIncludedType(string xsiType, Type clrType)
+		private XmlIgnoreBehaviorAccessor()
+			: base(typeof(object), null) { }
+
+		public override bool IsIgnored
 		{
-			if (clrType == null)
-				throw Error.ArgumentNull("clrType");
-			
-			this.xsiType = xsiType;
-			this.clrType = clrType;
+			get { return true; }
 		}
 
 		public override string LocalName
@@ -40,24 +39,24 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return null; }
 		}
 
-		public override string XsiType
+		public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
 		{
-			get { return xsiType; }
+			throw Error.NotSupported();
 		}
 
-		public override Type ClrType
+		public override IXmlCursor SelectPropertyNode(IXmlNode node, bool mutable)
 		{
-			get { return clrType; }
+			throw Error.NotSupported();
 		}
 
-		protected override bool IsMatch(IXmlType xmlType)
+		public override IXmlCursor SelectCollectionNode(IXmlNode node, bool mutable)
 		{
-			return xmlType.XsiType == this.xsiType;
+			throw Error.NotSupported();
 		}
 
-		protected override bool IsMatch(Type clrType)
+		public override IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable)
 		{
-			return clrType == this.clrType;
+			throw Error.NotSupported();
 		}
 	}
 }

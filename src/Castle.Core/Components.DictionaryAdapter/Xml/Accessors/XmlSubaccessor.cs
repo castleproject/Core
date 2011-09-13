@@ -19,7 +19,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	public class XmlSubaccessor : XmlAccessor
 	{
 		private readonly XmlAccessor accessor;
-		private IXmlKnownTypeMap knownTypes;
+		private IXmlTypeMap knownTypes;
 
 		public XmlSubaccessor(XmlAccessor accessor, Type clrType)
 			: base(clrType, null)
@@ -28,7 +28,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.knownTypes = null;
 		}
 
-		public override IXmlKnownTypeMap KnownTypes
+		public override string LocalName
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override string NamespaceUri
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override IXmlTypeMap KnownTypes
 		{
 			get { return knownTypes ?? accessor.KnownTypes; }
 //			internal set { knownTypes = value; }

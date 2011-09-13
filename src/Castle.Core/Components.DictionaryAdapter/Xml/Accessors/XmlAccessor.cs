@@ -17,25 +17,25 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Collections;
 
-	public abstract class XmlAccessor : IXmlPropertyAccessor, IXmlCollectionAccessor
+	public abstract class XmlAccessor : XmlType, IXmlPropertyAccessor, IXmlCollectionAccessor
 	{
 		private readonly Type clrType;
 		private readonly XmlTypeSerializer serializer;
-		private readonly IXmlKnownTypeMap knownTypes;
+		private readonly IXmlTypeMap knownTypes;
 
-		protected XmlAccessor(Type type, IXmlKnownTypeMap knownTypes)
+		protected XmlAccessor(Type type, IXmlTypeMap knownTypes)
 		{
 			this.clrType    = type.NonNullable();
 			this.serializer = XmlTypeSerializer.For(clrType);
 			this.knownTypes = knownTypes ?? DefaultXmlKnownTypeSet.Instance;
 		}
 
-		public Type ClrType
+		public override Type ClrType
 		{
 			get { return clrType; }
 		}
 
-		public virtual IXmlKnownTypeMap KnownTypes
+		public virtual IXmlTypeMap KnownTypes
 		{
 			get { return knownTypes; }
 		}
@@ -50,10 +50,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return false; }
 		}
 
+		public virtual bool IsIgnored
+		{
+			get { return false; }
+		}
+
+		public bool IsVolatile { get; internal set; }
+
 		public virtual void Prepare() { }
 
 		public abstract IXmlCollectionAccessor GetCollectionAccessor(Type itemType);
-
 		public abstract IXmlCursor SelectPropertyNode   (IXmlNode node, bool mutable);
 		public abstract IXmlCursor SelectCollectionNode (IXmlNode node, bool mutable);
 		public abstract IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable);
@@ -95,17 +101,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
-		public void GetCollectionItems(IXmlNode parentNode, IDictionaryAdapter parentObject, IConfigurable<IXmlNode> collection)
-		{
-			var cursor = SelectCollectionItems(parentNode, false);
-
-			while (cursor.MoveNext())
-			{
-				var node = cursor.Save();
-				collection.Configure(node);
-			}
-		}
-
 		public void GetCollectionItems(IXmlNode parentNode, IDictionaryAdapter parentObject, IList values)
 		{
 			var cursor = SelectCollectionItems(parentNode, false);
@@ -130,24 +125,15 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			cursor.RemoveToEnd();
 		}
 
-		//public IXmlNode AddCollectionItem(IXmlNode parentNode, IDictionaryAdapter parentObject, object value)
+		//protected override bool IsMatch(IXmlType xmlType)
 		//{
-		//    throw new NotImplementedException();
+		//    return xmlType.HasNameLike(LocalName, NamespaceUri);
 		//}
 
-		//public IXmlNode InsertCollectionItem(IXmlNode xmlTypedNode, IDictionaryAdapter parentObject, object value)
-		//{
-		//    throw new NotImplementedException();
-		//}
-
-		//public void RemoveCollectionItem(IXmlNode xmlTypedNode)
-		//{
-		//    throw new NotImplementedException();
-		//}
-
-		//public void RemoveAllCollectionItems(IXmlNode parentNode)
-		//{
-		//    throw new NotImplementedException();
-		//}
+		protected override bool IsMatch(Type clrType)
+		{
+			return clrType == this.clrType
+				|| (serializer.IsCollection && this.clrType.IsAssignableFrom(clrType));
+		}
 	}
 }

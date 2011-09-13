@@ -35,7 +35,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		[Test]
 		public void BaseType()
 		{
-			var node = (IXmlKnownType) NodeForElement("<X/>");
+			var node = (IXmlType) NodeForElement("<X/>");
 
 			Assert.That(node.BaseType, Is.EqualTo(typeof(T)));
 		}
@@ -250,7 +250,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		public void SelectChildren()
 		{
 			var node = NodeForElement("<X> <A/> </X>");
-			var knownType = new XmlKnownType("A", null, typeof(T));
+			var knownType = new XmlNamedType("A", null, typeof(T));
 
 			var cursor = node.SelectChildren(knownType, CursorFlags.Elements);
 
@@ -265,7 +265,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		{
 			var node = NodeForElement("<X> <A/> </X>");
 			var path = new CompiledPath("A");
-			var knownType = new XmlKnownType("A", null, typeof(T));
+			var knownType = new XmlNamedType("A", null, typeof(T));
 
 			var cursor = node.Select(path, knownType, CursorFlags.Elements);
 

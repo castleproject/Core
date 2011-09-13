@@ -26,10 +26,10 @@ using System.Xml;
 
 		private readonly ILazy<XPathNavigator> parent;
 		private readonly ICompiledPath path;
-		private readonly IXmlKnownTypeMap knownTypes;
+		private readonly IXmlTypeMap knownTypes;
 		private readonly CursorFlags flags;
 
-		public XPathMutableCursor(ILazy<XPathNavigator> parent, ICompiledPath path, IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public XPathMutableCursor(ILazy<XPathNavigator> parent, ICompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags)
 		{
 			if (null == parent)
 				throw new ArgumentNullException("parent");
@@ -72,9 +72,9 @@ using System.Xml;
 			get { return null != node; } // (_depth > 0 works also)
 		}
 
-		private IXmlKnownType DefaultKnownType
+		private IXmlType DefaultKnownType
 		{
-			get { return knownTypes.GetXmlKnownType(knownTypes.BaseType); }
+			get { return knownTypes.GetXmlType(knownTypes.BaseType); }
 		}
 
 		public override Type ClrType
@@ -165,7 +165,7 @@ using System.Xml;
 					return false; // Problem: found multiple nodes
 			}
 
-			if (!knownTypes.TryRecognizeType(this, out type))
+			if (!knownTypes.TryGetClrType(this, out type))
 				type = knownTypes.BaseType;
 			return true; // Sought all the way
 		}
@@ -234,7 +234,7 @@ using System.Xml;
 
 		public void Coerce(Type type)
 		{
-			var knownType = knownTypes.GetXmlKnownType(type);
+			var knownType = knownTypes.GetXmlType(type);
 			Coerce(knownType);
 		}
 

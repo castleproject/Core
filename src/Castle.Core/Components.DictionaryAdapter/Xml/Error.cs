@@ -12,16 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
 
 	internal static class Error
 	{
+		internal static Exception ArgumentNull(string name)
+		{
+			return new ArgumentNullException(name);
+		}
+
+		internal static Exception ArgumentNotDictionaryAdapter(string name)
+		{
+			return new ArgumentException("The argument is not a dictionary adapter.", name);
+		}
+
+		internal static Exception NotSupported()
+		{
+			return new NotSupportedException();
+		}
+
 		internal static Exception AttributeConflict(PropertyDescriptor property)
 		{
 			throw new NotImplementedException();
@@ -30,11 +41,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		internal static Exception NoXmlMetadata(Type type)
 		{
 			throw new NotImplementedException();
-		}
-
-		internal static Exception ArgumentNotDictionaryAdapter(string paramName)
-		{
-			return new ArgumentException("The argument is not a dictionary adapter.", paramName);
 		}
 
 		internal static Exception NoInstanceDescriptor()
@@ -50,11 +56,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		internal static Exception NoXmlAdapter()
 		{
 			return new InvalidOperationException("The dictionary adapter does not have XmlAdapter behavior.");
-		}
-
-		internal static Exception ArgumentNull(string p)
-		{
-			return new ArgumentNullException("obj");
 		}
 
 		internal static Exception IteratorNotInCreatableState()
@@ -79,11 +80,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				//    "The path '{0}' selected multiple nodes, but only one was expected.",
 				//    path.Expression);
 			//new XmlTransformException(message);
-		}
-
-		internal static Exception NotSupported()
-		{
-			return new NotSupportedException();
 		}
 
 		internal static Exception NoCurrentItem()
@@ -152,4 +148,3 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 	}
 }
-#endif

@@ -31,6 +31,7 @@ namespace Castle.Components.DictionaryAdapter
 #endif
 	using System.Diagnostics;
 
+	using Castle.Components.DictionaryAdapter.Xml;
 	using Castle.Core.Internal;
 
 	/// <summary>
@@ -100,6 +101,21 @@ namespace Castle.Components.DictionaryAdapter
 			var xpath = new XPathAdapter(xpathNavigable);
 			return GetAdapter(type, new Hashtable(), new DictionaryDescriptor()
 				.AddBehavior(XPathBehavior.Instance).AddBehavior(xpath));
+		}
+
+		/// <inheritdoc />
+		public T GetAdapter<T>(System.Xml.XmlNode xmlNode)
+		{
+			return (T)GetAdapter(typeof(T), xmlNode);
+		}
+
+		/// <inheritdoc />
+		public object GetAdapter(Type type, System.Xml.XmlNode xmlNode)
+		{
+			var xml = new XmlAdapter(xmlNode);
+			return GetAdapter(type, new Hashtable(), new DictionaryDescriptor()
+				.AddBehavior(XmlMetadataBehavior.Instance)
+				.AddBehavior(xml));
 		}
 #endif
 

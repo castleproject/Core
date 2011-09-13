@@ -24,10 +24,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private readonly XPathNavigator parent;
 		private readonly XPathExpression path;
-		private readonly IXmlKnownTypeMap knownTypes;
+		private readonly IXmlTypeMap knownTypes;
 		private readonly CursorFlags flags;
 
-		public XPathReadOnlyCursor(ILazy<XPathNavigator> parent, ICompiledPath path, IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public XPathReadOnlyCursor(ILazy<XPathNavigator> parent, ICompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags)
 		{
 			if (parent == null)
 				throw new ArgumentNullException("parent");
@@ -69,7 +69,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private bool SetAtNext()
 		{
 			node = iterator.Current;
-			if (!knownTypes.TryRecognizeType(this, out type))
+			if (!knownTypes.TryGetClrType(this, out type))
 				type = knownTypes.BaseType;
 			return true;
 		}

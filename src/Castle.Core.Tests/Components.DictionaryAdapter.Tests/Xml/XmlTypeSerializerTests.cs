@@ -149,10 +149,21 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			TestSimpleSerializer(new Uri(text), text);
 		}
 
+		[Test]
+		public void Dynamic_Roundtrip()
+		{
+			TestSimpleSerializer(42, "42", typeof(object));
+		}
+
 		private void TestSimpleSerializer(object value, string text)
 		{
-			var serializer = XmlTypeSerializerCache.Instance[value.GetType()];
-			var node = new DummyXmlNode();
+			TestSimpleSerializer(value, text, value.GetType());
+		}
+
+		private void TestSimpleSerializer(object value, string text, Type serializerType)
+		{
+			var serializer = XmlTypeSerializerCache.Instance[serializerType];
+			var node = new DummyXmlNode(value.GetType());
 
 			serializer.SetValue(node, null, value);
 			Assert.That(node.Value, Is.EqualTo(text));

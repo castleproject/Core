@@ -16,59 +16,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 
-	public abstract class XmlNodeAccessor : XmlAccessor, IXmlKnownTypeMap, IXmlKnownType
+	public abstract class XmlNodeAccessor : XmlAccessor, IXmlTypeMap, IXmlType
 	{
-		protected XmlNodeAccessor(Type type, IXmlKnownTypeMap knownTypes)
+		protected XmlNodeAccessor(Type type, IXmlTypeMap knownTypes)
 			: base(type, knownTypes) { }
-
-		Type IXmlKnownTypeMap.BaseType
-		{
-			get { return ClrType; }
-		}
-
-		public abstract string LocalName
-		{
-			get;
-		}
-
-		public virtual string NamespaceUri
-		{
-			get { return null; }
-		}
-
-		string IXmlKnownType.XsiType
-		{
-			get { return null; }
-		}
-
-		public override IXmlKnownTypeMap KnownTypes
-		{
-			get { return this; }
-		}
-
-		protected virtual bool IsMatch(IXmlNode node)
-		{
-			return node.HasNameLike(LocalName, NamespaceUri);
-		}
-
-		protected virtual bool IsMatch(Type type)
-		{
-			return type == ClrType
-				|| (Serializer.IsCollection && ClrType.IsAssignableFrom(type));
-		}
-
-		bool IXmlKnownTypeMap.TryRecognizeType(IXmlNode node, out Type type)
-		{
-			return IsMatch(node)
-				? Try.Success(out type, ClrType)
-				: base.KnownTypes.TryRecognizeType(node, out type);
-		}
-
-		IXmlKnownType IXmlKnownTypeMap.GetXmlKnownType(Type type)
-		{
-			return IsMatch(type)
-				? this
-				: base.KnownTypes.GetXmlKnownType(type);
-		}
 	}
 }

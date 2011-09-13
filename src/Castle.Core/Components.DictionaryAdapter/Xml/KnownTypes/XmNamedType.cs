@@ -16,33 +16,35 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 
-	public class XmlIncludedType : XmlType
+	public class XmlNamedType : XmlType
 	{
-		private readonly string xsiType;
+		private readonly string localName;
+		private readonly string namespaceUri;
 		private readonly Type   clrType;
 
-		public XmlIncludedType(string xsiType, Type clrType)
+		public XmlNamedType(string localName, string namespaceUri, Type clrType)
 		{
 			if (clrType == null)
 				throw Error.ArgumentNull("clrType");
 			
-			this.xsiType = xsiType;
-			this.clrType = clrType;
+			this.clrType      = clrType;
+			this.localName    = localName;
+			this.namespaceUri = namespaceUri;
 		}
 
 		public override string LocalName
 		{
-			get { return null; }
+			get { return localName; }
 		}
 
 		public override string NamespaceUri
 		{
-			get { return null; }
+			get { return namespaceUri; }
 		}
 
 		public override string XsiType
 		{
-			get { return xsiType; }
+			get { return null; }
 		}
 
 		public override Type ClrType
@@ -52,12 +54,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		protected override bool IsMatch(IXmlType xmlType)
 		{
-			return xmlType.XsiType == this.xsiType;
-		}
-
-		protected override bool IsMatch(Type clrType)
-		{
-			return clrType == this.clrType;
+			return (                        NameComparer.Equals(localName,    xmlType.LocalName   ))
+				&& (namespaceUri == null || NameComparer.Equals(namespaceUri, xmlType.NamespaceUri));
 		}
 	}
 }

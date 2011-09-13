@@ -19,7 +19,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Xml;
 	using System.Xml.XPath;
 
-	public class XPathNode : IXmlNode, ILazy<XPathNavigator>
+	public class XPathNode : XmlType, IXmlNode, ILazy<XPathNavigator>
 #if !SILVERLIGHT
 		, ILazy<XmlNode>
 #endif
@@ -45,27 +45,27 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return true; }
 		}
 
-		public virtual Type ClrType
+		public override Type ClrType
 		{
 			get { return type; }
 		}
 
-		Type IXmlKnownTypeMap.BaseType
+		Type IXmlTypeMap.BaseType
 		{
 			get { return ClrType; }
 		}
 
-		public virtual string LocalName
+		public override string LocalName
 		{
 			get { return node.LocalName; }
 		}
 
-		public virtual string NamespaceUri
+		public override string NamespaceUri
 		{
 			get { return node.NamespaceURI; }
 		}
 
-		public virtual string XsiType
+		public override string XsiType
 		{
 			get { return IsElement ? node.GetXsiType() : null; }
 		}
@@ -107,7 +107,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new XmlSelfCursor(this);
 		}
 
-		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor SelectChildren(IXmlTypeMap knownTypes, CursorFlags flags)
 		{
 #if !SILVERLIGHT
 			return new SysXmlCursor(this, knownTypes, flags);
@@ -116,7 +116,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 #endif
 		}
 
-		public IXmlCursor Select(ICompiledPath path, IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor Select(ICompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags)
 		{
 			return flags.SupportsMutation()
 				? (IXmlCursor) new XPathMutableCursor (this, path, knownTypes, flags)
@@ -148,7 +148,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			// Default nodes are realized already
 		}
 
-		public virtual void Coerce(IXmlKnownType xmlType)
+		public virtual void Coerce(IXmlType xmlType)
 		{
 			var xsiType = (xmlType.ClrType == ClrType)
 				? null
@@ -160,22 +160,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public virtual void Clear()
 		{
 			node.DeleteChildren();
-		}
-
-		public virtual bool TryRecognizeType(IXmlNode node, out Type type)
-		{
-			if (node.HasNameLike(LocalName, NamespaceUri))
-				return Try.Success(out type, ClrType);
-			else
-				return Try.Failure(out type);
-		}
-
-		public virtual IXmlKnownType GetXmlKnownType(Type type)
-		{
-			if (type == ClrType)
-				return this;
-			else
-				return null;
 		}
 
 		private void RequireElement()

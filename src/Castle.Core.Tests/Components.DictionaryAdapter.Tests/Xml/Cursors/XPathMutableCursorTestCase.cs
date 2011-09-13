@@ -58,7 +58,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(root.Xml, XmlEquivalent.To("<X> <Item><Other>1</Other></Item> </X>"));
 		}
 
-		protected override IXmlCursor Cursor(ILazy<XPathNavigator> parent, CompiledPath path, IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		protected override IXmlCursor Cursor(ILazy<XPathNavigator> parent, CompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags)
 		{
 			return new XPathMutableCursor(parent, path, knownTypes, flags);
 		}

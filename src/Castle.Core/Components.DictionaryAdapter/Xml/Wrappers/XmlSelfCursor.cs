@@ -53,7 +53,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return node.ClrType; }
 		}
 
-		Type IXmlKnownTypeMap.BaseType
+		Type IXmlTypeMap.BaseType
 		{
 			get { return node.ClrType; }
 		}
@@ -121,13 +121,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return this;
 		}
 
-		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor SelectChildren(IXmlTypeMap knownTypes, CursorFlags flags)
 		{
 			return node.SelectChildren(knownTypes, flags);
 		}
 
 #if !SL3
-		public IXmlCursor Select(ICompiledPath path, IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor Select(ICompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags)
 		{
 			return node.Select(path, knownTypes, flags);
 		}
@@ -153,14 +153,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return node.WriteChildren();
 		}
 
-		public bool TryRecognizeType(IXmlNode node, out Type type)
+		public bool TryGetClrType(IXmlType xmlType, out Type clrType)
 		{
-			return node.TryRecognizeType(node, out type);
+			return xmlType.TryGetClrType(xmlType, out clrType);
 		}
 
-		public IXmlKnownType GetXmlKnownType(Type type)
+		public bool TryGetXmlType(Type clrType, out IXmlType xmlType)
 		{
-			return node.GetXmlKnownType(type);
+			return node.TryGetXmlType(clrType, out xmlType);
 		}
 
 		public void MakeNext(Type type)
@@ -178,7 +178,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			throw Error.NotSupported();
 		}
 
-		public void Coerce(IXmlKnownType xmlType)
+		public void Coerce(IXmlType xmlType)
 		{
 			node.Coerce(xmlType);
 		}

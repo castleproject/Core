@@ -21,14 +21,19 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 	internal class DummyXmlNode : IXmlNode
 	{
-		public XmlNodeType NodeType
+		private Type clrType;
+
+		public DummyXmlNode()
+			: this(typeof(object)) { }
+
+		public DummyXmlNode(Type clrType)
 		{
-			get { throw new NotImplementedException(); }
+			this.clrType = clrType;
 		}
 
 		public Type ClrType
 		{
-			get { throw new NotImplementedException(); }
+			get { return clrType; }
 		}
 
 		public Type BaseType
@@ -79,12 +84,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			throw new NotImplementedException();
 		}
 
-		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor SelectChildren(IXmlTypeMap knownTypes, CursorFlags flags)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IXmlCursor Select(ICompiledPath path, IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor Select(ICompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags)
 		{
 			throw new NotImplementedException();
 		}
@@ -94,7 +99,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			throw new NotImplementedException();
 		}
 
-		public void Coerce(IXmlKnownType xmlType)
+		public void Coerce(IXmlType xmlType)
 		{
 			throw new NotImplementedException();
 		}
@@ -119,12 +124,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			throw new NotImplementedException();
 		}
 
-		public bool TryRecognizeType(IXmlNode node, out Type type)
+		public bool TryGetClrType(IXmlType node, out Type type)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IXmlKnownType GetXmlKnownType(Type type)
+		public bool TryGetXmlType(Type type, out IXmlType xmlType)
 		{
 			throw new NotImplementedException();
 		}

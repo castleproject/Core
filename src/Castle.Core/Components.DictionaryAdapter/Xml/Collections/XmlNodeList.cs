@@ -17,14 +17,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 
-	internal class XmlNodeList<T> : IList<T>,
-		IConfigurable<IXmlNode>
+	internal class XmlNodeList<T> : IList<T>, IBindingList,
+		ICancelAddNew, IEditableObject, IRevertibleChangeTracking, IRaiseItemChangedEvents
 	{
-		private readonly List<XmlCollectionItem> items;
+		private List<XmlCollectionItem> items;
+		private List<XmlCollectionItem> snapshot;
+		private int addedIndex   = -1;
+		private int changedIndex = -1;
+
 		private readonly IXmlCursor cursor;
 		private readonly IXmlCollectionAccessor accessor;
 		private readonly IDictionaryAdapter parentObject;
+		private PropertyChangedEventHandler propertyHandler;
+
+		private static PropertyDescriptorCollection itemProperties;
 
 		public XmlNodeList(
 			IXmlNode node,
@@ -41,20 +49,26 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				items.Add(new XmlCollectionItem(cursor.Save()));
 		}
 
-		public void Configure(IXmlNode node)
-		{
-			items.Add(new XmlCollectionItem(node));
-		}
-
-		public bool IsReadOnly
-		{
-			get { return false; }
-		}
-
 		public int Count
 		{
 			get { return items.Count; }
 		}
+
+		bool IBindingList.AllowEdit                          { get { return true;  } }
+		bool IBindingList.AllowNew                           { get { return true;  } }
+		bool IBindingList.AllowRemove                        { get { return true;  } }
+		bool IBindingList.SupportsChangeNotification         { get { return true;  } }
+		bool IBindingList.SupportsSearching                  { get { return false; } }
+		bool IBindingList.SupportsSorting                    { get { return false; } }
+		bool IBindingList.IsSorted                           { get { return false; } }
+		bool IList.IsFixedSize                               { get { return false; } }
+		bool IList.IsReadOnly                                { get { return false; } }
+		bool ICollection<T>.IsReadOnly                       { get { return false; } }
+		bool ICollection.IsSynchronized                      { get { return false; } }
+		bool IRaiseItemChangedEvents.RaisesItemChangedEvents { get { return true;  } }
+		object ICollection.SyncRoot                          { get { return this;  } }
+		PropertyDescriptor IBindingList.SortProperty         { get { return null;  } }
+		ListSortDirection  IBindingList.SortDirection        { get { return ListSortDirection.Ascending; } }
 
 		public T this[int index]
 		{
@@ -73,9 +87,20 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
+		object IList.this[int index]
+		{
+			get { return this[index]; }
+			set { this[index] = (T) value; }
+		}
+
 		public bool Contains(T item)
 		{
 			return IndexOf(item) >= 0;
+		}
+
+		bool IList.Contains(object value)
+		{
+			return Contains((T) value);
 		}
 
 		public int IndexOf(T item)
@@ -89,10 +114,20 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return -1;
 		}
 
+		int IList.IndexOf(object value)
+		{
+			return IndexOf((T) value);
+		}
+
 		public void CopyTo(T[] array, int index)
 		{
 			for (int i = 0, j = index; i < Count; i++, j++)
 				array[j] = this[i];
+		}
+
+		void ICollection.CopyTo(Array array, int index)
+		{
+			CopyTo((T[]) array, index);
 		}
 
 		public IEnumerator<T> GetEnumerator()
@@ -106,10 +141,49 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return GetEnumerator();
 		}
 
+		public T AddNew()
+		{
+			cursor.MoveToEnd();
+			cursor.Create(typeof(T));
+			var node = cursor.Save();
+			var value = GetValue(node);
+			var item = new XmlCollectionItem(node, value);
+			addedIndex = items.Count;
+			items.Add(item);
+			RegisterItemPropertyChanged(value);
+			return (T) value;
+		}
+
+		object IBindingList.AddNew()
+		{
+			return AddNew();
+		}
+
+		public void EndNew(int index)
+		{
+			if (addedIndex == index)
+				addedIndex = -1;
+		}
+
+		public void CancelNew(int index)
+		{
+			if (addedIndex == index && addedIndex >= 0)
+			{
+				RemoveAt(addedIndex);
+				addedIndex = -1;
+			}
+		}
+
 		public void Add(T value)
 		{
 			cursor.MoveToEnd();
 			items.Add(Create(value));
+		}
+
+		int IList.Add(object value)
+		{
+			Add((T) value);
+			return IndexOf((T) value);
 		}
 
 		public void Insert(int index, T value)
@@ -123,6 +197,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
+		void IList.Insert(int index, object value)
+		{
+			Insert(index, (T) value);
+		}
+
 		private XmlCollectionItem Create(T value)
 		{
 			var type = (null == value)
@@ -132,6 +211,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			cursor.Create(type);
 			var item = new XmlCollectionItem(cursor.Save(), value);
 			SetValue(item.Node, value);
+			RegisterItemPropertyChanged(value);
 			return item;
 		}
 
@@ -143,15 +223,24 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return true;
 		}
 
+		void IList.Remove(object value)
+		{
+			Remove((T) value);
+		}
+
 		public void RemoveAt(int index)
 		{
-			cursor.MoveTo(items[index].Node);
+			var item = items[index];
+			UnregisterItemPropertyChanged(item.Value);
+			cursor.MoveTo(item.Node);
 			cursor.Remove();
 			items.RemoveAt(index);
 		}
 
 		public void Clear()
 		{
+			foreach (var item in items)
+				UnregisterItemPropertyChanged(item.Value);
 			cursor.Reset();
 			cursor.RemoveToEnd();
 			items.Clear();
@@ -165,6 +254,188 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void SetValue(IXmlNode node, object value)
 		{
 			accessor.Serializer.SetValue(node, accessor, value);
+		}
+
+		void IBindingList.AddIndex(PropertyDescriptor property)
+		{
+			// Do nothing
+		}
+
+		void IBindingList.RemoveIndex(PropertyDescriptor property)
+		{
+			// Do nothing
+		}
+
+		int IBindingList.Find(PropertyDescriptor property, object key)
+		{
+			throw Error.NotSupported();
+		}
+
+		void IBindingList.ApplySort(PropertyDescriptor property, ListSortDirection direction)
+		{
+			throw Error.NotSupported();
+		}
+
+		void IBindingList.RemoveSort()
+		{
+			throw Error.NotSupported();
+		}
+
+		public bool IsChanged
+		{
+			get
+			{
+				if (snapshot == null)
+					return false;
+				if (snapshot.Count != items.Count)
+					return true;
+
+				var a = items   .GetEnumerator();
+				var b = snapshot.GetEnumerator();
+
+				while (a.MoveNext() && b.MoveNext())
+				{
+					if (!ReferenceEquals(a.Current, b.Current))
+						return true;
+
+					var tracked = a.Current.Value as IChangeTracking;
+					if (tracked != null && tracked.IsChanged)
+						return true;
+				}
+
+				return false;
+			}
+		}
+
+		public void BeginEdit()
+		{
+			if (snapshot == null)
+				snapshot = new List<XmlCollectionItem>(items);
+		}
+
+		public void EndEdit()
+		{
+			snapshot = null;
+		}
+
+		public void CancelEdit()
+		{
+			if (snapshot != null)
+			{
+				items = snapshot;
+				snapshot = null;
+				OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
+			}
+		}
+
+		public void AcceptChanges()
+		{
+			BeginEdit();
+		}
+
+		public void RejectChanges()
+		{
+			CancelEdit();
+		}
+
+		private void RegisterItemPropertyChanged(object item)
+		{
+			var notifier = item as INotifyPropertyChanged;
+			if (notifier == null)
+				return;
+
+			if (propertyHandler == null)
+				propertyHandler = HandlePropertyChanged;
+
+			notifier.PropertyChanged += propertyHandler;
+		}
+
+		private void UnregisterItemPropertyChanged(object item)
+		{
+			var notifier = item as INotifyPropertyChanged;
+			if (notifier == null || propertyHandler == null)
+				return;
+
+			notifier.PropertyChanged -= propertyHandler;
+		}
+
+		private void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			T item;
+
+			if (!CanHandle(sender, e))
+				return;
+			if (!TryGetChangedItem(sender, out item))
+				return;
+			if (!TryGetChangedIndex(item))
+				return;
+
+			var property = GetChangedProperty(e);
+			var change = new ListChangedEventArgs(ListChangedType.ItemChanged, changedIndex, property);
+			OnListChanged(change);
+		}
+
+		private bool CanHandle(object sender, PropertyChangedEventArgs e)
+		{
+			if (sender == null || e == null || string.IsNullOrEmpty(e.PropertyName))
+			{
+				NotifyListReset();
+				return false;
+			}
+			return true;
+		}
+
+		private bool TryGetChangedItem(object sender, out T item)
+		{
+			try
+			{
+				item = (T) sender;
+				return true;
+			}
+			catch (InvalidCastException)
+			{
+				NotifyListReset();
+				item = default(T);
+				return false;
+			}
+		}
+
+		private bool TryGetChangedIndex(T item)
+		{
+			var isSameItem
+				=  changedIndex >= 0
+				&& changedIndex <  items.Count
+				&& EqualityComparer<T>.Default.Equals(this[changedIndex], item);
+			if (isSameItem)
+				return true;
+			
+			changedIndex = IndexOf(item);
+			if (changedIndex >= 0)
+				return true;
+
+			UnregisterItemPropertyChanged(item);
+			NotifyListReset();
+			return false;
+		}
+
+		private static PropertyDescriptor GetChangedProperty(PropertyChangedEventArgs e)
+		{
+			if (itemProperties == null)
+				itemProperties = TypeDescriptor.GetProperties(typeof(T));
+
+			return itemProperties.Find(e.PropertyName, true);
+		}
+
+		public event ListChangedEventHandler ListChanged;
+		protected virtual void OnListChanged(ListChangedEventArgs args)
+		{
+			if (ListChanged != null)
+				ListChanged(this, args);
+		}
+
+		protected virtual void NotifyListReset()
+		{
+			OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
 		}
 	}
 }

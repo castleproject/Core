@@ -19,7 +19,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Xml;
 	using System.Xml.XPath;
 
-	public class SysXmlNode : IXmlNode,
+	public class SysXmlNode : XmlType, IXmlNode,
 		ILazy<XmlNode>,
 		ILazy<XPathNavigator>
 	{
@@ -44,27 +44,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return true; }
 		}
 
-		public virtual Type ClrType
+		public override Type ClrType
 		{
 			get { return type; }
 		}
 
-		Type IXmlKnownTypeMap.BaseType
-		{
-			get { return ClrType; }
-		}
-
-		public virtual string LocalName
+		public override string LocalName
 		{
 			get { return node.LocalName; }
 		}
 
-		public virtual string NamespaceUri
+		public override string NamespaceUri
 		{
 			get { return node.NamespaceURI; }
 		}
 
-		public virtual string XsiType
+		public override string XsiType
 		{
 			get { return IsElement ? node.GetXsiType() : null; }
 		}
@@ -106,7 +101,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new XmlSelfCursor(this);
 		}
 
-		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor SelectChildren(IXmlTypeMap knownTypes, CursorFlags flags)
 		{
 			return new SysXmlCursor(this, knownTypes, flags);
 		}
@@ -126,23 +121,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return node.CreateNavigator().AppendChild();
 		}
 
-		public bool TryRecognizeType(IXmlNode node, out Type type)
-		{
-			if (node.HasNameLike(LocalName, NamespaceUri))
-				return Try.Success(out type, this.type);
-			else
-				return Try.Failure(out type);
-		}
-
-		public IXmlKnownType GetXmlKnownType(Type type)
-		{
-			if (type == this.type)
-				return this;
-			else
-				return null;
-		}
-
-		public IXmlCursor Select(ICompiledPath path, IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor Select(ICompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags)
 		{
 			return flags.SupportsMutation()
 				? (IXmlCursor) new XPathMutableCursor (this, path, knownTypes, flags)
@@ -164,7 +143,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			// Default nodes are realized already
 		}
 
-		public void Coerce(IXmlKnownType knownType)
+		public void Coerce(IXmlType knownType)
 		{
 			if (IsElement)
 				CoerceElement  (knownType);
@@ -172,7 +151,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				CoerceAttribute(knownType);
 		}
 
-		private void CoerceElement(IXmlKnownType knownType)
+		private void CoerceElement(IXmlType knownType)
 		{
 			var oldNode = (XmlElement) node;
 			var parent  = oldNode.ParentNode;
@@ -187,7 +166,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
-		private void CoerceAttribute(IXmlKnownType knownType)
+		private void CoerceAttribute(IXmlType knownType)
 		{
 			var oldNode = (XmlAttribute) node;
 			var parent  = oldNode.OwnerElement;
@@ -205,7 +184,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
-		private static string GetEffectiveNamespaceUri(XmlNode parent, IXmlKnownType knownType)
+		private static string GetEffectiveNamespaceUri(XmlNode parent, IXmlType knownType)
 		{
 			var uri = knownType.NamespaceUri;
 			return
@@ -214,7 +193,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				string.Empty;
 		}
 
-		protected void CreateElement(IXmlKnownType knownType, XmlNode position)
+		protected void CreateElement(IXmlType knownType, XmlNode position)
 		{
 			var parent = node;
 			var namespaceUri = GetEffectiveNamespaceUri(parent, knownType);
@@ -222,7 +201,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			parent.InsertBefore(element, position);
 		}
 
-		protected void CreateAttribute(IXmlKnownType knownType, XmlNode position)
+		protected void CreateAttribute(IXmlType knownType, XmlNode position)
 		{
 			RequireNoXsiType(knownType);
 			var parent = node;
@@ -231,7 +210,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			parent.Attributes.InsertBefore(attribute, (XmlAttribute) position);
 		}
 
-		private XmlElement CreateElementCore(XmlNode parent, IXmlKnownType knownType, string namespaceUri)
+		private XmlElement CreateElementCore(XmlNode parent, IXmlType knownType, string namespaceUri)
 		{
 			var document = parent.OwnerDocument ?? (XmlDocument) parent;
 			var prefix   = parent.GetPrefixOfNamespace(namespaceUri);
@@ -245,7 +224,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return element;
 		}
 
-		private XmlAttribute CreateAttributeCore(XmlNode parent, IXmlKnownType knownType, string namespaceUri)
+		private XmlAttribute CreateAttributeCore(XmlNode parent, IXmlType knownType, string namespaceUri)
 		{
 			var document  = parent.OwnerDocument ?? (XmlDocument) parent;
 			var prefix    = parent.GetPrefixOfNamespace(namespaceUri);
@@ -256,13 +235,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return attribute;
 		}
 
-		private void ChangeType(IXmlKnownType knownType)
+		private void ChangeType(IXmlType knownType)
 		{
 			node.SetXsiType(knownType.XsiType);
 			type = knownType.ClrType; // TODO
 		}
 
-		private void RequireNoXsiType(IXmlKnownType knownType)
+		private void RequireNoXsiType(IXmlType knownType)
 		{
 			if (knownType.XsiType != null)
 				throw Error.CannotSetXsiTypeOnAttribute();

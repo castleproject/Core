@@ -82,9 +82,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			string key, object storedValue, PropertyDescriptor property, bool ifExists)
 		{
 			XmlAccessor accessor;
-			return TryGetAccessor(property, null != storedValue, out accessor)
-				? accessor.GetPropertyValue(node, dictionaryAdapter, !ifExists)
-				: storedValue;
+			if (TryGetAccessor(property, null != storedValue, out accessor))
+			{
+				storedValue = accessor.GetPropertyValue(node, dictionaryAdapter, !ifExists);
+				if (null != storedValue)
+					dictionaryAdapter.StoreProperty(property, key, storedValue);
+			}
+			return storedValue;
 		}
 
 		bool IDictionaryPropertySetter.SetPropertyValue(IDictionaryAdapter dictionaryAdapter,
@@ -124,28 +128,38 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private bool TryGetAccessor(PropertyDescriptor property, bool requireVolatile, out XmlAccessor accessor)
 		{
-			if (property.HasAccessor())
-				return Try.Success(out accessor, property.GetAccessor());
+			accessor = property.HasAccessor()
+				? property.GetAccessor()
+				: CreateAccessor(property);
 
-			accessor = null;
+			if (accessor.IsIgnored)
+			    return Try.Failure(out accessor);
+			if (requireVolatile && !accessor.IsVolatile)
+			    return Try.Failure(out accessor);
+			return true;
+		}
+
+		private XmlAccessor CreateAccessor(PropertyDescriptor property)
+		{
+			var accessor   = null as XmlAccessor;
+			var isVolatile = false;
 
 			foreach (var behavior in property.Behaviors)
 			{
 				if (IsIgnoreBehavior(behavior))
-					return false;
+					return XmlIgnoreBehaviorAccessor.Instance;
 				else if (IsVolatileBehavior(behavior))
-					requireVolatile = false;
+					isVolatile = true;
 				TryApplyBehavior(property, behavior, ref accessor);
 			}
 
-			if (requireVolatile)
-				return false;
 			if (accessor == null)
 				accessor = new XmlDefaultBehaviorAccessor(property, primaryXmlMeta.KnownTypes);
 
+			accessor.IsVolatile = isVolatile;
 			accessor.Prepare();
 			property.SetAccessor(accessor);
-			return true;
+			return accessor;
 		}
 
 		private bool TryApplyBehavior(PropertyDescriptor property, object behavior, ref XmlAccessor accessor)

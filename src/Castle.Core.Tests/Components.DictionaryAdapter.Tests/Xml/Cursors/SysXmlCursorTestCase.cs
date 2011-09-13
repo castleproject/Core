@@ -555,11 +555,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[TestFixtureSetUp]
 		public void SetUp()
 		{
-			ItemType   = new XmlKnownType("Item",  null, typeof(ItemClrType ));
-			OtherType  = new XmlKnownType("Other", null, typeof(OtherClrType));
+			ItemType   = new XmlNamedType("Item",  null, typeof(_ItemClrType ));
+			OtherType  = new XmlNamedType("Other", null, typeof(_OtherClrType));
 			ItemAndOtherType = new XmlKnownTypeSet(typeof(object));
-			ItemAndOtherType.Add(new XmlElementAttribute(ItemType .LocalName) { Type = typeof(ItemClrType ) });
-			ItemAndOtherType.Add(new XmlElementAttribute(OtherType.LocalName) { Type = typeof(OtherClrType) });
+			ItemAndOtherType.Add(new XmlNamedType(ItemType .LocalName, null, typeof(_ItemClrType )));
+			ItemAndOtherType.Add(new XmlNamedType(OtherType.LocalName, null, typeof(_OtherClrType)));
 		}
 
 		protected static SysXmlNode Xml(params string[] xml)
@@ -569,10 +569,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			return new SysXmlNode(document.DocumentElement, typeof(object));
 		}
 
-		private static XmlKnownType ItemType, OtherType;
+		private static XmlNamedType ItemType, OtherType;
 		private static XmlKnownTypeSet ItemAndOtherType;
 
-		private class ItemClrType  { }
-		private class OtherClrType { }
+		private class _ItemClrType  { }
+		private class _OtherClrType { }
 	}
 }
