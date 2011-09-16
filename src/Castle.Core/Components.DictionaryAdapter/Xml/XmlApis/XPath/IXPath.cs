@@ -17,6 +17,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System.Collections.Generic;
 	using System.Xml.XPath;
+	using System.Xml.Xsl;
 
 	public interface ICompiledPath
 	{
@@ -24,7 +25,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		XPathExpression Expression { get; }
 		IList<XPathExpression> ExpressionParts { get; }
 
-		void SetContext(XmlContext context);
+		void SetContext(XsltContext context);
 	}
 }
 #endif

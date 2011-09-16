@@ -18,6 +18,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Collections.Generic;
 	using System.Xml.XPath;
+	using System.Xml.Xsl;
 
 	public class CompiledPath : ICompiledPath
 	{
@@ -48,7 +49,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return expressionParts; }
 		}
 
-		public void SetContext(XmlContext context)
+		public void SetContext(XsltContext context)
 		{
 			expression.SetContext(context);
 

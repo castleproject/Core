@@ -59,6 +59,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 
 #if !SL3
+		private XPathContext xPathContext;
+
+		public XsltContext WithXPathSemantics
+		{
+			get { return xPathContext ?? (xPathContext = new XPathContext(this)); }
+		}
+
 		public override bool Whitespace
 		{
 			get { return true; }

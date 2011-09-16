@@ -254,6 +254,29 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
                 int B { get; set; }
             }
         }
+
+		[TestFixture]
+		public class ElementBehavior_CollectionProperty : TestCase
+		{
+			[Test]
+			public void GetProperty()
+			{
+				var xml = Xml("<Foo> <A>0</A> <A>1</A> </Foo>");
+				var foo = Create<IFoo>(xml);
+
+				var array = foo.Items;
+
+				Assert.That(array,    Is.Not.Null & Has.Length.EqualTo(2));
+				Assert.That(array[0], Is.EqualTo("0"));
+				Assert.That(array[1], Is.EqualTo("1"));
+			}
+
+			public interface IFoo : IDictionaryAdapter
+			{
+				[XmlElement("A")]
+				string[] Items { get; set; }
+			}
+		}
         #endregion
 
         #region Multiple [XmlElement] Behavior

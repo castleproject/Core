@@ -97,6 +97,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			public ItemAccessor(XmlNodeAccessor parent)
 				: base(parent.ClrType.GetCollectionItemType(), parent.Context)
 			{
+				ConfigureLocalName   (parent.LocalName   );
+				ConfigureNamespaceUri(parent.NamespaceUri);
+				ConfigureNillable    (parent.IsNillable  );
 				ConfigureKnownTypesFromParent(parent);
 			}
 

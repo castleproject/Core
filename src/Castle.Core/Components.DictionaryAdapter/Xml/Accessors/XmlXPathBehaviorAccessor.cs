@@ -79,7 +79,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override void Prepare()
 		{
-			path.SetContext(Context.XmlContext);
+			path.SetContext(Context.XmlContext.WithXPathSemantics);
 		}
 
 		public override object GetPropertyValue(IXmlNode node, IDictionaryAdapter da, bool ifExists)
