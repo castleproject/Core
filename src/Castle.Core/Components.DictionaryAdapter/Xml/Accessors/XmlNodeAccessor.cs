@@ -19,7 +19,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Collections.Generic;
 	using System.Xml;
 
-	public abstract class XmlNodeAccessor : XmlAccessor, IXmlType, IXmlTypeMap,
+	public abstract class XmlNodeAccessor : XmlAccessor, IXmlKnownType, IXmlKnownTypeMap,
 		IConfigurable<KeyAttribute>
 	{
 		private string localName;
@@ -54,19 +54,24 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return null; }
 		}
 
-		Type IXmlTypeMap.BaseType
+		IXmlKnownType IXmlKnownTypeMap.Default
 		{
-			get { return ClrType; }
+			get { return this; }
 		}
 
-		protected IXmlTypeMap KnownTypes
+		protected IXmlKnownTypeMap KnownTypes
 		{
-			get { return (IXmlTypeMap) knownTypes ?? this; }
+			get { return (IXmlKnownTypeMap) knownTypes ?? this; }
 		}
 
 		public override bool IsNillable
 		{
-			get { return 0 != (state & States.ConfiguredNillable); }
+			get { return 0 != (state & States.Nillable); }
+		}
+
+		public override bool IsVolatile
+		{
+			get { return 0 != (state & States.Volatile); }
 		}
 
 		protected virtual bool IsMatch(IXmlName xmlName)
@@ -83,24 +88,18 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				 && typeof(IEnumerable).IsAssignableFrom(clrType));
 		}
 
-		public bool TryGetClrType(IXmlName xmlName, out Type clrType)
+		public bool TryGet(IXmlName xmlName, out IXmlKnownType knownType)
 		{
-			return
-				knownTypes != null
-					? knownTypes.TryGetClrType(xmlName, out clrType) :
-				IsMatch(xmlName)
-					? Try.Success(out clrType, this.ClrType)
-					: Try.Failure(out clrType);
+			return IsMatch(xmlName)
+					? Try.Success(out knownType, this)
+					: Try.Failure(out knownType);
 		}
 
-		public bool TryGetXmlName(Type clrType, out IXmlName xmlName)
+		public bool TryGet(Type clrType, out IXmlKnownType knownType)
 		{
-			return
-				knownTypes != null
-					? knownTypes.TryGetXmlName(clrType, out xmlName) :
-				IsMatch(clrType)
-					? Try.Success(out xmlName, this)
-					: Try.Failure(out xmlName);
+			return IsMatch(clrType)
+					? Try.Success(out knownType, this)
+					: Try.Failure(out knownType);
 		}
 
 		public void Configure(KeyAttribute attrbute)
@@ -121,7 +120,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		protected void ConfigureNillable(bool nillable)
 		{
 			if (nillable)
-				state |= States.ConfiguredNillable;
+				state |= States.Nillable;
+		}
+
+		public override void ConfigureVolatile(bool isVolatile)
+		{
+			if (isVolatile)
+				state |= States.Volatile;
 		}
 
 		private void ConfigureField(ref string field, string value, States mask)
@@ -221,10 +226,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		[Flags]
 		private enum States
 		{
-			ConfiguredLocalName    = 0x1,
-			ConfiguredNamespaceUri = 0x2,
-			ConfiguredClrType      = 0x4,
-			ConfiguredNillable     = 0x8
+			ConfiguredLocalName    = 0x01,
+			ConfiguredNamespaceUri = 0x02,
+			ConfiguredClrType      = 0x04,
+			Nillable               = 0x08,
+			Volatile               = 0x10,
 		}
 
 		protected static readonly StringComparer

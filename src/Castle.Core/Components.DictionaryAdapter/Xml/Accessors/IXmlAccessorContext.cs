@@ -15,14 +15,13 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
-	using System.Linq;
+	using System.Collections.Generic;
 	using System.Xml;
 	using System.Xml.Serialization;
-	using System.Collections.Generic;
 
 	public interface IXmlAccessorContext
 	{
-		IEnumerable<XmlIncludedType> IncludedTypes { get; }
+		XmlIncludedTypeSet IncludedTypes { get; }
 		XmlContext XmlContext { get; }
 	}
 }

@@ -194,9 +194,11 @@
     <Compile Include="Components.DictionaryAdapter\Util\ICondition.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\PriorityBehaviorExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\IXmlAccessorContext.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\IXmlTypeFrom.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlIncludedType.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlIncludedTypeMap.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlTypeFrom.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlNodeAccessor.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\IXmlName.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlName.cs" />
     <Compile Include="Components.DictionaryAdapter\XmlMetadata.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\IXmlAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\IXmlCollectionAccessor.cs" />
@@ -211,11 +213,11 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlXPathBehaviorAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Collections\XmlCollectionItem.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Collections\XmlNodeList.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\IXmlType.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\IXmlTypeComparer.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\XmlIncludedType.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\IXmlTypeMap.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\XmlKnownType.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlKnownType.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Types\XmlIncludedType.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlKnownTypeMap.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Types\XmlIncludedTypeSet.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Types\XmlKnownType.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Serializers\XmlArraySerializer.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Serializers\XmlComponentSerializer.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Serializers\XmlCustomSerializer.cs" />
@@ -236,30 +238,30 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\Xsi.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\IConfigurable.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\Try.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\SystemXml\SysXmlExtensions.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\KnownTypes\XmlKnownTypeSet.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\SystemXml\SysXmlExtensions.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Types\XmlKnownTypeSet.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Error.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\SystemXml\SysXmlCursor.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\SystemXml\SysXmlCursor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\SingletonDispenser.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\XmlSubtreeReader.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\XmlSubtreeWriter.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\IXmlCursor.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\IXmlNode.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\CursorFlags.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\SystemXml\SysXmlNode.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\IXmlCursor.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\IXmlNode.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\CursorFlags.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\SystemXml\SysXmlNode.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\CompiledPath.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\IXPath.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XmlContext.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XmlSelfCursor.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\XPathBufferedNodeIterator.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\XPathExtensions.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\XPathMutableCursor.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\XPathNode.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\XPathReadOnlyCursor.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\IXPath.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XmlContext.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XmlSelfCursor.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\XPathBufferedNodeIterator.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\XPathExtensions.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\XPathMutableCursor.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\XPathNode.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\XPathReadOnlyCursor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlMetadata.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlMetadataBehavior.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Wrappers\XPath\XPath.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\XPath.cs" />
     <Compile Include="Core\Internal\CollectionExtensions.cs" />
     <Compile Include="Core\ReferenceEqualityComparer.cs" />
     <Compile Include="Core\Extensions\SimpleConverter.cs" />
@@ -575,7 +577,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Components.DictionaryAdapter\Xml\Wrappers\XLinq\" />
+    <Folder Include="Components.DictionaryAdapter\Xml\XmlApis\XLinq\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition="($(MSBuildTargets) == '') Or ($(MSBuildTargets) == 'CSharp')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 4.0'" />

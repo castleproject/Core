@@ -22,10 +22,5 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IXmlCursor SelectCollectionItems(IXmlNode parentNode, bool mutable);
 		void       GetCollectionItems   (IXmlNode parentNode, IDictionaryAdapter parentObject, IList values);
 		void       SetCollectionItems   (IXmlNode parentNode, IEnumerable values);
-
-		//IXmlNode AddCollectionItem       (IXmlNode parentNode, IDictionaryAdapter parentObject, object value);
-		//IXmlNode InsertCollectionItem    (IXmlNode beforeNode, IDictionaryAdapter parentObject, object value);
-		//void     RemoveCollectionItem    (IXmlNode actualNode);
-		//void     RemoveAllCollectionItems(IXmlNode parentNode);
 	}
 }

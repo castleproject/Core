@@ -18,28 +18,34 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Collections;
 	using System.Collections.Generic;
 
-	public class XmlKnownTypeSet : IXmlTypeMap, IEnumerable<IXmlType>
+	public class XmlKnownTypeSet : IXmlKnownTypeMap, IEnumerable<IXmlKnownType>
 	{
-		private readonly Dictionary<IXmlName, IXmlType> itemsByXmlName;
-		private readonly Dictionary<Type,     IXmlType> itemsByClrType;
-		private readonly Type baseType;
+		private readonly Dictionary<IXmlName, IXmlKnownType> itemsByXmlName;
+		private readonly Dictionary<Type,     IXmlKnownType> itemsByClrType;
+		private readonly Type defaultType;
 
-		public XmlKnownTypeSet(Type baseType)
+		public XmlKnownTypeSet(Type defaultType)
 		{
-			if (baseType == null)
-				throw Error.ArgumentNull("baseType");
+			if (defaultType == null)
+				throw Error.ArgumentNull("defaultType");
 
-			itemsByXmlName = new Dictionary<IXmlName, IXmlType>(XmlNameComparer.Instance);
-			itemsByClrType = new Dictionary<Type,     IXmlType>();
-			this.baseType  = baseType;
+			itemsByXmlName   = new Dictionary<IXmlName, IXmlKnownType>(XmlNameComparer.Instance);
+			itemsByClrType   = new Dictionary<Type,     IXmlKnownType>();
+			this.defaultType = defaultType;
 		}
 
-		public Type BaseType
+		public IXmlKnownType Default
 		{
-			get { return baseType; }
+			get
+			{
+				IXmlKnownType knownType;
+				if (defaultType == null || !TryGet(defaultType, out knownType))
+					throw Error.NoDefaultKnownType();
+				return knownType;
+			}
 		}
 
-		public void Add(IXmlType xmlType)
+		public void Add(IXmlKnownType xmlType)
 		{
 			// All XmlTypes are present here
 			itemsByXmlName.Add(xmlType, xmlType);
@@ -53,7 +59,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			// If there is only one xsi:type possible for a known local name and namespace URI,
 			// add another XmlType to recognize nodes that don't provide the xsi:type.
 
-			var bits = new Dictionary<IXmlType, bool>(
+			var bits = new Dictionary<IXmlKnownType, bool>(
 				itemsByXmlName.Count,
 				XmlNameGroupingComparer.Instance);
 
@@ -81,23 +87,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
-		public bool TryGetClrType(IXmlName xmlName, out Type clrType)
+		public bool TryGet(IXmlName xmlName, out IXmlKnownType xmlType)
 		{
-			IXmlType xmlType;
-			return itemsByXmlName.TryGetValue(xmlName, out xmlType)
-				? Try.Success(out clrType, xmlType.ClrType)
-				: Try.Failure(out clrType);
+			return itemsByXmlName.TryGetValue(xmlName, out xmlType);
 		}
 
-		public bool TryGetXmlName(Type clrType, out IXmlName xmlName)
+		public bool TryGet(Type clrType, out IXmlKnownType xmlType)
 		{
-			IXmlType xmlType;
-			return itemsByClrType.TryGetValue(clrType, out xmlType)
-				? Try.Success(out xmlName, xmlType)
-				: Try.Failure(out xmlName);
+			return itemsByClrType.TryGetValue(clrType, out xmlType);
 		}
 
-		public IEnumerator<IXmlType> GetEnumerator()
+		public IEnumerator<IXmlKnownType> GetEnumerator()
 		{
 			return itemsByXmlName.Values.GetEnumerator();
 		}

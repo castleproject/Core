@@ -69,15 +69,19 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return false; }
 		}
 
-		public bool IsVolatile
+		public virtual bool IsVolatile
 		{
-			get;
-			internal set;
+			get { return false; }
 		}
 
 		public IXmlAccessorContext Context
 		{
 			get { return context; }
+		}
+
+		public virtual void ConfigureVolatile(bool isVolatile)
+		{
+			// Do nothing
 		}
 
 		public virtual void Prepare()
@@ -128,7 +132,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			while (cursor.MoveNext())
 			{
-				var value = serializer.GetValue(cursor, parentObject, this);
+				var value = serializer.GetValue(cursor.Save(), parentObject, this); // TODO: Do Save() in serializer, only when needed
 				values.Add(value);
 			}
 		}
@@ -151,17 +155,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new XmlDefaultBehaviorAccessor(itemType, Context);
 		}
 
-		public virtual IXmlCursor SelectPropertyNode(IXmlNode node, bool mutable)
+		public virtual IXmlCursor SelectPropertyNode(IXmlNode parentNode, bool mutable)
 		{
 			throw Error.NotSupported();
 		}
 
-		public virtual IXmlCursor SelectCollectionNode(IXmlNode node, bool mutable)
+		public virtual IXmlCursor SelectCollectionNode(IXmlNode parentNode, bool mutable)
 		{
-			return SelectPropertyNode(node, mutable);
+			return SelectPropertyNode(parentNode, mutable);
 		}
 
-		public virtual IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable)
+		public virtual IXmlCursor SelectCollectionItems(IXmlNode parentNode, bool mutable)
 		{
 			throw Error.NotSupported();
 		}

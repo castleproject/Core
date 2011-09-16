@@ -257,7 +257,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 			var node = NodeForElement("<X> <A/> </X>");
 			var path = new CompiledPath("A");
 
-			var cursor = node.Select(path, KnownTypes, CursorFlags.Elements);
+			var cursor = node.Select(path, IncludedTypes, CursorFlags.Elements);
 
 			Assert.That(cursor,            Is.Not.Null);
 			Assert.That(cursor.MoveNext(), Is.True);
@@ -337,9 +337,15 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 				KnownTypes = new XmlKnownTypeSet(typeof(T));
 				KnownTypes.Add(new XmlKnownType("A", null, null, typeof(T)));
 			}
+
+			if (IncludedTypes == null)
+			{
+				IncludedTypes = new XmlIncludedTypeSet();
+			}
 		}
 
-		protected static XmlKnownTypeSet KnownTypes;
+		protected static XmlKnownTypeSet    KnownTypes;
+		protected static XmlIncludedTypeSet IncludedTypes;
 		protected sealed class T { }
 	}
 }

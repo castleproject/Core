@@ -14,10 +14,10 @@
 
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	using System;
-
-	public interface IXmlType : IXmlName
+	public interface IXmlName
 	{
-		Type ClrType { get; }
+		string LocalName    { get; }
+		string NamespaceUri { get; }
+		string XsiType      { get; }
 	}
 }

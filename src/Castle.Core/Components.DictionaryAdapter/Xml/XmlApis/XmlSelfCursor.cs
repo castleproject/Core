@@ -118,13 +118,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new XmlSelfCursor(node, clrType);
 		}
 
-		public IXmlCursor SelectChildren(IXmlTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags)
 		{
 			return node.SelectChildren(knownTypes, flags);
 		}
 
 #if !SL3
-		public IXmlCursor Select(ICompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor Select(ICompiledPath path, IXmlIncludedTypeMap knownTypes, CursorFlags flags)
 		{
 			return node.Select(path, knownTypes, flags);
 		}

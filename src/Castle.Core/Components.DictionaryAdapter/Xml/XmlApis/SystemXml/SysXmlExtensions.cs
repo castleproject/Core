@@ -107,7 +107,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public static string GetXsiType(this Type type)
 		{
-			return type.GetLocalName(); // TODO: This needs to change
+			return type.GetLocalName();
 		}
 
 		public static string GetLocalName(this Type type)
@@ -120,6 +120,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return type.IsInterface && name.IsInterfaceName()
 				? name.Substring(1)
 				: name;
+
+			// TODO: Need to return ListOfInt rather than List`1
 		}
 
 		internal static bool IsSimpleType(this Type type)

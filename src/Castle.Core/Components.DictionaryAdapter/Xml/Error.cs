@@ -151,5 +151,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			return new ArgumentException();
 		}
+
+		internal static Exception NoDefaultKnownType()
+		{
+			return new InvalidOperationException();
+		}
 	}
 }

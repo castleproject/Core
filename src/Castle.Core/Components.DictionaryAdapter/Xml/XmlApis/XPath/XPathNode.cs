@@ -107,7 +107,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new XmlSelfCursor(this, clrType);
 		}
 
-		public IXmlCursor SelectChildren(IXmlTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags)
 		{
 #if !SILVERLIGHT
 			return new SysXmlCursor(this, knownTypes, flags);
@@ -116,11 +116,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 #endif
 		}
 
-		public IXmlCursor Select(ICompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor Select(ICompiledPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
 		{
 			return flags.SupportsMutation()
-				? (IXmlCursor) new XPathMutableCursor (this, path, knownTypes, flags)
-				: (IXmlCursor) new XPathReadOnlyCursor(this, path, knownTypes, flags);
+				? (IXmlCursor) new XPathMutableCursor (this, path, includedTypes, flags)
+				: (IXmlCursor) new XPathReadOnlyCursor(this, path, includedTypes, flags);
 		}
 
 		public virtual object Evaluate(ICompiledPath path)
@@ -146,16 +146,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public virtual void Realize()
 		{
 			// Default nodes are realized already
-		}
-
-		public virtual void Coerce(IXmlName xmlType)
-		{
-			var xsiType = //(xmlType.ClrType == ClrType)
-				//	? null
-				//	: xmlType.XsiType;
-			xmlType.XsiType;
-
-			node.SetXsiType(xsiType);
 		}
 
 		public virtual void Clear()

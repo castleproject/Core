@@ -24,22 +24,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private readonly XPathNavigator parent;
 		private readonly XPathExpression path;
-		private readonly IXmlTypeMap knownTypes;
+		private readonly IXmlIncludedTypeMap includedTypes;
 		private readonly CursorFlags flags;
 
-		public XPathReadOnlyCursor(ILazy<XPathNavigator> parent, ICompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags)
+		public XPathReadOnlyCursor(ILazy<XPathNavigator> parent, ICompiledPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
 		{
 			if (parent == null)
 				throw new ArgumentNullException("parent");
 			if (path == null)
 				throw new ArgumentNullException("path");
-			if (knownTypes == null)
-				throw new ArgumentNullException("knownTypes");
+			if (includedTypes == null)
+				throw new ArgumentNullException("includedTypes");
 
-			this.parent     = parent.Value;
-			this.path       = path.Expression;
-			this.knownTypes = knownTypes;
-			this.flags      = flags;
+			this.parent        = parent.Value;
+			this.path          = path.Expression;
+			this.includedTypes = includedTypes;
+			this.flags         = flags;
 
 			Reset();
 		}
@@ -51,12 +51,18 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public bool MoveNext()
 		{
-			var hasNext
-				=  iterator != null
-				&& iterator.MoveNext()
-				&& (flags.AllowsMultipleItems() || !iterator.MoveNext());
+			for (;;)
+			{
+				var hasNext
+					= iterator != null
+					&& iterator.MoveNext()
+					&& (flags.AllowsMultipleItems() || !iterator.MoveNext());
 
-			return hasNext ? SetAtNext() : SetAtEnd();
+				if (!hasNext)
+					return SetAtEnd();
+				if (SetAtNext())
+					return true;
+			}
 		}
 
 		private bool SetAtEnd()
@@ -69,8 +75,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private bool SetAtNext()
 		{
 			node = iterator.Current;
-			if (!knownTypes.TryGetClrType(this, out type))
-				type = knownTypes.BaseType;
+
+			IXmlIncludedType includedType;
+			if (!includedTypes.TryGet(XsiType, out includedType))
+				return false;
+
+			type = includedType.ClrType;
 			return true;
 		}
 

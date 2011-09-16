@@ -16,8 +16,8 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
+	using System.Xml;
 	using System.Xml.XPath;
-using System.Xml;
 
 	internal class XPathMutableCursor : XPathNode, IXmlCursor
 	{
@@ -26,10 +26,10 @@ using System.Xml;
 
 		private readonly ILazy<XPathNavigator> parent;
 		private readonly ICompiledPath path;
-		private readonly IXmlTypeMap knownTypes;
+		private readonly IXmlIncludedTypeMap knownTypes;
 		private readonly CursorFlags flags;
 
-		public XPathMutableCursor(ILazy<XPathNavigator> parent, ICompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags)
+		public XPathMutableCursor(ILazy<XPathNavigator> parent, ICompiledPath path, IXmlIncludedTypeMap knownTypes, CursorFlags flags)
 		{
 			if (null == parent)
 				throw new ArgumentNullException("parent");
@@ -72,29 +72,24 @@ using System.Xml;
 			get { return null != node; } // (_depth > 0 works also)
 		}
 
-		private IXmlName DefaultKnownType
-		{
-			get { return knownTypes.GetXmlName(knownTypes.BaseType); }
-		}
-
 		public override Type ClrType
 		{
-			get { return HasCurrent ? base.ClrType : knownTypes.BaseType; }
+			get { return HasCurrent ? base.ClrType : knownTypes.Default.ClrType; }
 		}
 
 		public override string LocalName
 		{
-			get { return HasCurrent ? base.LocalName : DefaultKnownType.LocalName; }
+			get { return HasCurrent ? base.LocalName : null; }
 		}
 
 		public override string NamespaceUri
 		{
-			get { return HasCurrent ? base.NamespaceUri : DefaultKnownType.NamespaceUri; }
+			get { return HasCurrent ? base.NamespaceUri : null; }
 		}
 
 		public override string XsiType
 		{
-			get { return HasCurrent ? base.XsiType : DefaultKnownType.XsiType; }
+			get { return HasCurrent ? base.XsiType : knownTypes.Default.XsiType; }
 		}
 
 		public override bool IsElement
@@ -165,8 +160,11 @@ using System.Xml;
 					return false; // Problem: found multiple nodes
 			}
 
-			if (!knownTypes.TryGetClrType(this, out type))
-				type = knownTypes.BaseType;
+			IXmlIncludedType includedType;
+			if (!knownTypes.TryGet(XsiType, out includedType))
+				return false; // Problem: unrecognized xsi:type
+
+			type = includedType.ClrType;
 			return true; // Sought all the way
 		}
 
@@ -221,7 +219,7 @@ using System.Xml;
 				return;
 			if (iterator != null && !iterator.IsEmpty)
 				throw Error.CursorNotInRealizableState();
-			Create(knownTypes.BaseType);
+			Create(knownTypes.Default.ClrType);
 		}
 
 		public void MakeNext(Type type)
@@ -234,8 +232,11 @@ using System.Xml;
 
 		public void Coerce(Type type)
 		{
-			var knownType = knownTypes.GetXmlName(type);
-			Coerce(knownType);
+			IXmlIncludedType includedType;
+			if (!knownTypes.TryGet(type, out includedType))
+				throw Error.NotXmlKnownType();
+
+			node.SetXsiType(includedType.XsiType);
 		}
 
 		public void Create(Type type)

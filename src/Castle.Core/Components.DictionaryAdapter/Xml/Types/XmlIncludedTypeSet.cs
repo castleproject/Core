@@ -15,36 +15,59 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
-using System.Collections.Generic;
-using System.Xml;
+	using System.Collections;
+	using System.Collections.Generic;
 
-	public class XmlIncludedType
+	public class XmlIncludedTypeSet : IXmlIncludedTypeMap, IEnumerable<IXmlIncludedType>
 	{
-		private readonly string xsiType;
-		private readonly Type   clrType;
+		private readonly Dictionary<string, IXmlIncludedType> itemsByXsiType;
+		private readonly Dictionary<Type,   IXmlIncludedType> itemsByClrType;
 
-		public XmlIncludedType(string xsiType, Type clrType)
+		public XmlIncludedTypeSet()
 		{
-			if (xsiType == null)
-				throw Error.ArgumentNull("xsiType");
-			if (clrType == null)
-				throw Error.ArgumentNull("clrType");
+			itemsByXsiType = new Dictionary<string, IXmlIncludedType>();
+			itemsByClrType = new Dictionary<Type,   IXmlIncludedType>();
 
-			this.xsiType = xsiType;
-			this.clrType = clrType;
+			foreach (var includedType in DefaultEntries)
+				Add(includedType);
 		}
 
-		public string XsiType
+		IXmlIncludedType IXmlIncludedTypeMap.Default
 		{
-			get { return xsiType; }
+			get { throw Error.NoDefaultKnownType(); }
 		}
 
-		public Type ClrType
+		public void Add(IXmlIncludedType includedType)
 		{
-			get { return clrType; }
+			// Allow only one item per xsi:type
+			itemsByXsiType.Add(includedType.XsiType, includedType);
+
+			// Overwrite any prior entry for CLR type
+			itemsByClrType[includedType.ClrType] = includedType;
 		}
 
-		public static readonly IList<XmlIncludedType> DefaultSet = Array.AsReadOnly(new[]
+		public bool TryGet(string xsiType, out IXmlIncludedType includedType)
+		{
+			return itemsByXsiType.TryGetValue(xsiType, out includedType);
+		}
+
+		public bool TryGet(Type clrType, out IXmlIncludedType includedType)
+		{
+			return itemsByClrType.TryGetValue(clrType, out includedType);
+		}
+
+		public IEnumerator<IXmlIncludedType> GetEnumerator()
+		{
+			return itemsByXsiType.Values.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+
+		public static readonly IList<IXmlIncludedType> DefaultEntries
+			= Array.AsReadOnly(new IXmlIncludedType[]
 		{
 			new XmlIncludedType("xsd:anyType",       typeof(object)),
 			new XmlIncludedType("xsd:string",        typeof(string)),
@@ -62,11 +85,11 @@ using System.Xml;
 			new XmlIncludedType("xsd:decimal",       typeof(decimal)),
 			new XmlIncludedType("wsdl:guid",         typeof(Guid)),          
 			new XmlIncludedType("xsd:dateTime",      typeof(DateTime)),
-			new XmlIncludedType("xsd:dateTime",      typeof(DateTimeOffset)),
+//			new XmlIncludedType("xsd:dateTime",      typeof(DateTimeOffset)), TODO: Find a way to enable this without duplicate key exception.
 			new XmlIncludedType("xsd:duration",      typeof(TimeSpan)),      
 			new XmlIncludedType("xsd:base64Binary",  typeof(byte[])),
 			new XmlIncludedType("xsd:anyURI",        typeof(Uri)),
-			new XmlIncludedType("xsd:QName",         typeof(XmlQualifiedName))
+			new XmlIncludedType("xsd:QName",         typeof(System.Xml.XmlQualifiedName))
 		});
 	}
 }

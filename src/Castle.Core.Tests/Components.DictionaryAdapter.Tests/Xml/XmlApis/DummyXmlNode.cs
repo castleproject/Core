@@ -35,11 +35,6 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			get { return clrType; }
 		}
 
-		public Type BaseType
-		{
-			get { throw new NotImplementedException(); }
-		}
-
 		public string LocalName
 		{
 			get { throw new NotImplementedException(); }
@@ -54,6 +49,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			get { throw new NotImplementedException(); }
 		}
+
+		public bool IsNil   { get; set; }
+		public string Value { get; set; }
 
 		public bool IsElement
 		{
@@ -70,9 +68,6 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			get { throw new NotImplementedException(); }
 		}
 
-		public bool IsNil   { get; set; }
-		public string Value { get; set; }
-		
 		public string Xml
 		{
 			get { throw new NotImplementedException(); }
@@ -83,22 +78,17 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			throw new NotImplementedException();
 		}
 
-		public IXmlCursor SelectChildren(IXmlTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IXmlCursor Select(ICompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor Select(ICompiledPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
 		{
 			throw new NotImplementedException();
 		}
 
 		public object Evaluate(ICompiledPath path)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Coerce(IXmlType xmlType)
 		{
 			throw new NotImplementedException();
 		}
@@ -119,16 +109,6 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		public XmlWriter WriteChildren()
-		{
-			throw new NotImplementedException();
-		}
-
-		public bool TryGetClrType(IXmlType node, out Type type)
-		{
-			throw new NotImplementedException();
-		}
-
-		public bool TryGetXmlType(Type type, out IXmlType xmlType)
 		{
 			throw new NotImplementedException();
 		}

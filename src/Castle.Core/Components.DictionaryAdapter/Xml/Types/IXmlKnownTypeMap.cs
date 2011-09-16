@@ -16,21 +16,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 
-	public interface IXmlTypeMap
+	public interface IXmlKnownTypeMap
 	{
-		Type BaseType { get; }
+		IXmlKnownType Default { get; }
 
-		bool TryGetClrType(IXmlName xmlType, out Type     clrType);
-		bool TryGetXmlName(Type     clrType, out IXmlName xmlType);
+		bool TryGet(IXmlName xmlName, out IXmlKnownType knownType);
+		bool TryGet(Type     clrType, out IXmlKnownType knownType);
 	}
 
-	public static class XmlTypeMapExtensions
+	public static class XmlKnownTypeMapExtensions
 	{
-		public static IXmlName GetXmlName(this IXmlTypeMap map, Type clrType)
+		public static IXmlKnownType Require(this IXmlKnownTypeMap map, Type clrType)
 		{
-			IXmlName xmlName;
-			if (map.TryGetXmlName(clrType, out xmlName))
-				return xmlName;
+			IXmlKnownType knownType;
+			if (map.TryGet(clrType, out knownType))
+				return knownType;
 
 			throw Error.NotXmlKnownType();
 		}

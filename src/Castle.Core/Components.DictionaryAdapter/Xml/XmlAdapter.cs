@@ -156,7 +156,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (accessor == null)
 				accessor = new XmlDefaultBehaviorAccessor(property, primaryXmlMeta);
 
-			accessor.IsVolatile = isVolatile;
+			accessor.ConfigureVolatile(isVolatile);
 			accessor.Prepare();
 			property.SetAccessor(accessor);
 			return accessor;

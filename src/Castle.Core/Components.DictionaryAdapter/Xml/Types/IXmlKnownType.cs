@@ -16,12 +16,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 
-	public interface IXmlAccessor
+	public interface IXmlKnownType : IXmlName
 	{
 		Type ClrType { get; }
-		XmlTypeSerializer Serializer { get; }
-		IXmlAccessorContext Context { get; }
-
-		IXmlCollectionAccessor GetCollectionAccessor(Type itemType);
 	}
 }

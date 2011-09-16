@@ -19,7 +19,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Xml;
 	using System.Xml.Serialization;
 
-	public class XmlMetadata : IXmlType, IXmlTypeMap, IXmlAccessorContext
+	public class XmlMetadata : IXmlKnownType, IXmlKnownTypeMap, IXmlIncludedType, IXmlIncludedTypeMap, IXmlAccessorContext
 	{
 		private readonly Type clrType;
 		private readonly bool? qualified;
@@ -27,7 +27,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private readonly string rootLocalName;
 		private readonly string rootNamespaceUri;
 		private readonly string childNamespaceUri;
-		private readonly HashSet<XmlIncludedType> includedTypes;
+		private readonly XmlIncludedTypeSet includedTypes;
 		private readonly XmlContext context;
 #if !SL3
 		private readonly ICompiledPath path;
@@ -37,7 +37,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			clrType       = meta.Type;
 			context       = new XmlContext();
-			includedTypes = new HashSet<XmlIncludedType>(XmlIncludedType.DefaultSet);
+			includedTypes = new XmlIncludedTypeSet();
 
 			var xmlRoot      = null as XmlRootAttribute;
 			var xmlType      = null as XmlTypeAttribute;
@@ -97,9 +97,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return clrType; }
 		}
 
-		Type IXmlTypeMap.BaseType
+		IXmlKnownType IXmlKnownTypeMap.Default
 		{
-			get { return clrType; }
+			get { return this; }
 		}
 
 		public string LocalName
@@ -132,7 +132,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return childNamespaceUri; }
 		}
 
-		public IEnumerable<XmlIncludedType> IncludedTypes
+		public XmlIncludedTypeSet IncludedTypes
 		{
 			get { return includedTypes; }
 		}
@@ -167,18 +167,32 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return clrType == this.clrType;
 		}
 
-		public bool TryGetClrType(IXmlName xmlName, out Type clrType)
+		public bool TryGet(IXmlName xmlName, out IXmlKnownType knownType)
 		{
 			return IsMatch(xmlName)
-				? Try.Success(out clrType, this.clrType)
-				: Try.Failure(out clrType);
+				? Try.Success(out knownType, this)
+				: Try.Failure(out knownType);
 		}
 
-		public bool TryGetXmlName(Type clrType, out IXmlName xmlName)
+		public bool TryGet(Type clrType, out IXmlKnownType knownType)
 		{
 			return IsMatch(clrType)
-				? Try.Success(out xmlName, this)
-				: Try.Failure(out xmlName);
+				? Try.Success(out knownType, this)
+				: Try.Failure(out knownType);
+		}
+
+		public bool TryGet(string xsiType, out IXmlIncludedType includedType)
+		{
+			return xsiType == null
+				? Try.Success(out includedType, this)
+				: Try.Failure(out includedType);
+		}
+
+		public bool TryGet(Type clrType, out IXmlIncludedType includedType)
+		{
+			return clrType == this.clrType
+				? Try.Success(out includedType, this)
+				: Try.Failure(out includedType);
 		}
 
 		private void AddXmlInclude(XmlIncludeAttribute attribute)
@@ -204,5 +218,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private const CursorFlags RootFlags
 			= CursorFlags.Elements
 			| CursorFlags.Mutable;
+
+		IXmlIncludedType IXmlIncludedTypeMap.Default
+		{
+			get { throw new NotImplementedException(); }
+		}
 	}
 }

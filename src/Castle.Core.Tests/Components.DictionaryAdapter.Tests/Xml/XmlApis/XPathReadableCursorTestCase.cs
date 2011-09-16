@@ -12,16 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.DictionaryAdapter.Xml
+namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
+	using System.Xml.XPath;
+	using Castle.Components.DictionaryAdapter;
+	using Castle.Components.DictionaryAdapter.Xml;
+	using NUnit.Framework;
 
-	public interface IXmlAccessor
+	[TestFixture]
+	public class XPathMutableCursorTestCase : XPathCursorTestCase
 	{
-		Type ClrType { get; }
-		XmlTypeSerializer Serializer { get; }
-		IXmlAccessorContext Context { get; }
-
-		IXmlCollectionAccessor GetCollectionAccessor(Type itemType);
+		protected override IXmlCursor Cursor(ILazy<XPathNavigator> lazy, CompiledPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
+		{
+			return new XPathReadOnlyCursor(lazy, path, includedTypes, flags);
+		}
 	}
 }

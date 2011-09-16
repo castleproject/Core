@@ -15,11 +15,24 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
-	using System.Collections.Generic;
 
-	public interface IXmlTypeComparer :
-		IEqualityComparer<IXmlName>,
-		IEqualityComparer<Type>
+	public interface IXmlIncludedTypeMap
 	{
+		IXmlIncludedType Default { get; }
+
+		bool TryGet(string xsiType, out IXmlIncludedType includedType);
+		bool TryGet(Type   clrType, out IXmlIncludedType includedType);
+	}
+
+	public static class XmlIncludedTypeMapExtensions
+	{
+		public static IXmlIncludedType Require(this IXmlIncludedTypeMap includedTypes, Type clrType)
+		{
+			IXmlIncludedType includedType;
+			if (includedTypes.TryGet(clrType, out includedType))
+				return includedType;
+
+			throw Error.NotXmlKnownType();
+		}
 	}
 }

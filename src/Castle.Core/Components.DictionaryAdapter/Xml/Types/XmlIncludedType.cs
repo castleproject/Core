@@ -14,10 +14,32 @@
 
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	public interface IXmlName //: IXmlTypeMap
+	using System;
+
+	public class XmlIncludedType : IXmlIncludedType
 	{
-		string LocalName    { get; }
-		string NamespaceUri { get; }
-		string XsiType      { get; }
+		private readonly string xsiType;
+		private readonly Type   clrType;
+
+		public XmlIncludedType(string xsiType, Type clrType)
+		{
+			if (xsiType == null)
+				throw Error.ArgumentNull("xsiType");
+			if (clrType == null)
+				throw Error.ArgumentNull("clrType");
+
+			this.xsiType = xsiType;
+			this.clrType = clrType;
+		}
+
+		public string XsiType
+		{
+			get { return xsiType; }
+		}
+
+		public Type ClrType
+		{
+			get { return clrType; }
+		}
 	}
 }

@@ -25,7 +25,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private int index;
 
 		private readonly ILazy<XmlNode> parent;
-		private readonly IXmlTypeMap knownTypes;
+		private readonly IXmlKnownTypeMap knownTypes;
 		private readonly CursorFlags flags;
 
 		protected enum State
@@ -39,7 +39,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Attribute       =  2  // An attribute is currently selected
 		}
 
-		public SysXmlCursor(ILazy<XmlNode> parent, IXmlTypeMap knownTypes, CursorFlags flags)
+		public SysXmlCursor(ILazy<XmlNode> parent, IXmlKnownTypeMap knownTypes, CursorFlags flags)
 		{
 			if (null == parent)
 				throw new ArgumentNullException("parent");
@@ -65,29 +65,24 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return state > State.Initial; }
 		}
 
-		private IXmlName DefaultKnownType
-		{
-			get { return knownTypes.GetXmlName(knownTypes.BaseType); }
-		}
-
 		public override Type ClrType
 		{
-			get { return HasCurrent ? base.ClrType : knownTypes.BaseType; }
+			get { return HasCurrent ? base.ClrType : knownTypes.Default.ClrType; }
 		}
 
 		public override string LocalName
 		{
-			get { return HasCurrent ? base.LocalName : DefaultKnownType.LocalName; }
+			get { return HasCurrent ? base.LocalName : knownTypes.Default.LocalName; }
 		}
 
 		public override string NamespaceUri
 		{
-			get { return HasCurrent ? base.NamespaceUri : DefaultKnownType.NamespaceUri; }
+			get { return HasCurrent ? base.NamespaceUri : knownTypes.Default.NamespaceUri; }
 		}
 
 		public override string XsiType
 		{
-			get { return HasCurrent ? base.XsiType : DefaultKnownType.XsiType; }
+			get { return HasCurrent ? base.XsiType : knownTypes.Default.XsiType; }
 		}
 
 		public override bool IsElement
@@ -138,7 +133,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private bool IsMatch()
 		{
-			return knownTypes.TryGetClrType(this, out type);
+			IXmlKnownType knownType;
+			return knownTypes.TryGet(this, out knownType)
+				? Try.Success(out type, knownType.ClrType)
+				: Try.Failure(out type);
 		}
 
 		private bool Advance()
@@ -265,12 +263,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (source == null || !source.HasValue)
 				throw Error.CursorCannotMoveToThatNode();
 
-			Type sourceType;
-			if (!knownTypes.TryGetClrType(position, out sourceType))
+			IXmlKnownType knownType;
+			if (!knownTypes.TryGet(position, out knownType))
 				throw Error.CursorCannotMoveToThatNode();
 
 			node = source.Value;
-			type = sourceType;
+			type = knownType.ClrType;
 
 			if (IsElement)
 				SetMovedToElement();
@@ -338,41 +336,135 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				throw Error.CursorNotInRealizableState();
 			if (!flags.SupportsMutation())
 				throw Error.IteratorNotMutable();
-			Create(knownTypes.BaseType);
+			Create(knownTypes.Default.ClrType);
 		}
 
-		public void MakeNext(Type type)
+		public void MakeNext(Type clrType)
 		{
 			if (MoveNext())
-				Coerce(type);
+				Coerce(clrType);
 			else
-				Create(type);
+				Create(clrType);
 		}
 
-		public void Coerce(Type type)
+		public void Coerce(Type clrType)
 		{
 			RequireCoercible();
 
-			var knownType = knownTypes.GetXmlName(type);
+			var knownType = knownTypes.Require(clrType);
 
-			Coerce(knownType);
+			if (IsElement)
+				CoerceElement  (knownType);
+			else
+				CoerceAttribute(knownType);
+
+			this.type = knownType.ClrType;
+		}
+
+		private void CoerceElement(IXmlKnownType knownType)
+		{
+			var oldNode      = (XmlElement) node;
+			var parent       = oldNode.ParentNode;
+			var namespaceUri = GetEffectiveNamespaceUri(parent, knownType);
+
+			if (!HasName(knownType.LocalName, namespaceUri))
+			{
+				var newNode = CreateElementCore(parent, knownType, namespaceUri);
+				parent.ReplaceChild(newNode, oldNode);
+			}
+			else node.SetXsiType(knownType.XsiType);
+		}
+
+		private void CoerceAttribute(IXmlKnownType knownType)
+		{
+			RequireNoXsiType(knownType);
+
+			var oldNode      = (XmlAttribute) node;
+			var parent       = oldNode.OwnerElement;
+			var namespaceUri = GetEffectiveNamespaceUri(parent, knownType);
+
+			if (!HasName(knownType.LocalName, namespaceUri))
+			{
+				var newNode    = CreateAttributeCore(parent, knownType, namespaceUri);
+				var attributes = parent.Attributes;
+				attributes.RemoveNamedItem(newNode.LocalName, newNode.NamespaceURI);
+				attributes.InsertBefore(newNode, oldNode);
+				attributes.Remove(oldNode);
+			}
 		}
 
 		public void Create(Type type)
 		{
 			var position  = RequireCreatable();
-			var knownType = knownTypes.GetXmlName(type);
+			var knownType = knownTypes.Require(type);
 
 			if (flags.IncludesElements())
-			{
-				CreateElement(knownType, position);
-				state = State.Element;
-			}
+				CreateElement  (knownType, position);
 			else
-			{
 				CreateAttribute(knownType, position);
-				state = State.Attribute;
-			}
+
+			this.type = knownType.ClrType;
+		}
+
+		protected void CreateElement(IXmlKnownType knownType, XmlNode position)
+		{
+			var parent       = node;
+			var namespaceUri = GetEffectiveNamespaceUri(parent, knownType);
+			var element      = CreateElementCore(parent, knownType, namespaceUri);
+			parent.InsertBefore(element, position);
+			state = State.Element;
+		}
+
+		protected void CreateAttribute(IXmlKnownType knownType, XmlNode position)
+		{
+			RequireNoXsiType(knownType);
+
+			var parent       = node;
+			var namespaceUri = GetEffectiveNamespaceUri(parent, knownType);
+			var attribute    = CreateAttributeCore(parent, knownType, namespaceUri);
+			parent.Attributes.InsertBefore(attribute, (XmlAttribute) position);
+			state = State.Attribute;
+		}
+
+		private XmlElement CreateElementCore(XmlNode parent, IXmlKnownType knownType, string namespaceUri)
+		{
+			var document = parent.OwnerDocument ?? (XmlDocument) parent;
+			var prefix   = parent.GetPrefixOfNamespace(namespaceUri);
+			var element  = document.CreateElement(prefix, knownType.LocalName, namespaceUri);
+
+			if (knownType.XsiType != null)
+				element.SetXsiType(knownType.XsiType);
+
+			node = element;
+			return element;
+		}
+
+		private XmlAttribute CreateAttributeCore(XmlNode parent, IXmlKnownType knownType, string namespaceUri)
+		{
+			var document  = parent.OwnerDocument ?? (XmlDocument) parent;
+			var prefix    = parent.GetPrefixOfNamespace(namespaceUri);
+			var attribute = document.CreateAttribute(prefix, knownType.LocalName, namespaceUri);
+
+			node = attribute;
+			return attribute;
+		}
+
+		private void RequireNoXsiType(IXmlKnownType knownType)
+		{
+			if (knownType.XsiType != null)
+				throw Error.CannotSetXsiTypeOnAttribute();
+		}
+
+		private static string GetEffectiveNamespaceUri(XmlNode parent, IXmlName knownType)
+		{
+			return knownType.NamespaceUri
+				?? (parent != null ? parent.NamespaceURI : string.Empty);
+		}
+
+		private bool HasName(string localName, string namespaceUri)
+		{
+			return node.LocalName    == localName
+				&& node.NamespaceURI == namespaceUri;
 		}
 
 		public void RemoveToEnd()

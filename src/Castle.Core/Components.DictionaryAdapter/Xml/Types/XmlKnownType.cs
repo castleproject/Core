@@ -16,7 +16,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 
-	public class XmlKnownType : IXmlType
+	public class XmlKnownType : IXmlKnownType
 	{
 		private readonly Type clrType;
 		private readonly string localName;

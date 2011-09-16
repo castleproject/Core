@@ -65,7 +65,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					genericType == typeof(IBindingList<>) )
 					return XmlListSerializer.Instance;
 				//if (genericType == typeof(ISet<>))
-				//    return XmlListSerializer.Instance; // TODO
+				//    return XmlListSerializer.Instance; // TODO: Support XML-backed sets
 				if (genericType == typeof(IDictionary<,>)      ||
 					genericType == typeof(List<>)              ||
 					genericType == typeof(Dictionary<,>)       ||

@@ -275,10 +275,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var lazyParent   = new DummyLazy<XPathNavigator> { Value = parent };
 			var compiledPath = new CompiledPath(pathText);
-			return Cursor(lazyParent, compiledPath, KnownTypes, flags);
+			return Cursor(lazyParent, compiledPath, IncludedTypes, flags);
 		}
 
-		protected abstract IXmlCursor Cursor(ILazy<XPathNavigator> lazy, CompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags);
+		protected abstract IXmlCursor Cursor(ILazy<XPathNavigator> lazy, CompiledPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags);
 
 		[TestFixtureSetUp]
 		public virtual void OneTimeSetUp()
@@ -289,9 +289,16 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				KnownTypes.Add(ItemType);
 				KnownTypes.Add(OtherType);
 			}
+
+			if (IncludedTypes == null)
+			{
+				IncludedTypes = new MockXmlIncludedTypeMap();
+				IncludedTypes.DefaultClrType = typeof(_TypeA);
+			}
 		}
 
-		protected static XmlKnownTypeSet KnownTypes;
+		protected static XmlKnownTypeSet        KnownTypes;
+		protected static MockXmlIncludedTypeMap IncludedTypes;
 
 		protected static readonly XmlKnownType
 			ItemType  = new XmlKnownType("Item",  null, null, typeof(_TypeA)),
