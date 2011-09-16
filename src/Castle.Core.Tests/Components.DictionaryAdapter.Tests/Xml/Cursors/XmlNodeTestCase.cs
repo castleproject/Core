@@ -33,14 +33,6 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		}
 
 		[Test]
-		public void BaseType()
-		{
-			var node = (IXmlType) NodeForElement("<X/>");
-
-			Assert.That(node.BaseType, Is.EqualTo(typeof(T)));
-		}
-
-		[Test]
 		public void LocalName_WhenNotQualified()
 		{
 			var node = NodeForElement("<X/>");
@@ -238,7 +230,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		{
 			var node = NodeForElement("<X/>");
 
-			var cursor = node.SelectSelf();
+			var cursor = node.SelectSelf(typeof(T));
 
 			Assert.That(cursor,            Is.Not.Null);
 			Assert.That(cursor.MoveNext(), Is.True);
@@ -250,9 +242,8 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		public void SelectChildren()
 		{
 			var node = NodeForElement("<X> <A/> </X>");
-			var knownType = new XmlNamedType("A", null, typeof(T));
 
-			var cursor = node.SelectChildren(knownType, CursorFlags.Elements);
+			var cursor = node.SelectChildren(KnownTypes, CursorFlags.Elements);
 
 			Assert.That(cursor,            Is.Not.Null);
 			Assert.That(cursor.MoveNext(), Is.True);
@@ -265,9 +256,8 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		{
 			var node = NodeForElement("<X> <A/> </X>");
 			var path = new CompiledPath("A");
-			var knownType = new XmlNamedType("A", null, typeof(T));
 
-			var cursor = node.Select(path, knownType, CursorFlags.Elements);
+			var cursor = node.Select(path, KnownTypes, CursorFlags.Elements);
 
 			Assert.That(cursor,            Is.Not.Null);
 			Assert.That(cursor.MoveNext(), Is.True);
@@ -339,6 +329,17 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		protected abstract IXmlNode NodeForAttribute(params string[] xml);
 		protected abstract IXmlNode NodeForRoot();
 
+		[TestFixtureSetUp]
+		public void OneTimeSetUp()
+		{
+			if (KnownTypes == null)
+			{
+				KnownTypes = new XmlKnownTypeSet(typeof(T));
+				KnownTypes.Add(new XmlKnownType("A", null, null, typeof(T)));
+			}
+		}
+
+		protected static XmlKnownTypeSet KnownTypes;
 		protected sealed class T { }
 	}
 }

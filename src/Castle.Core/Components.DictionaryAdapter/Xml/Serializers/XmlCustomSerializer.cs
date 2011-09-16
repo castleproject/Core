@@ -25,7 +25,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private XmlCustomSerializer() { }
 
-		public override bool CanSerializeAsAttribute { get { return false; } }
+		public override XmlTypeKind Kind
+		{
+			get { return XmlTypeKind.Complex; }
+		}
 
 		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{

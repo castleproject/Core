@@ -25,25 +25,15 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	    private ICompiledPath path;
 
 		internal static readonly XmlAccessorFactory<XmlXPathBehaviorAccessor>
-			Factory = (property, knownTypes) => new XmlXPathBehaviorAccessor(property, knownTypes);
+			Factory = (property, context) => new XmlXPathBehaviorAccessor(property, context);
 
-	    public XmlXPathBehaviorAccessor(PropertyDescriptor property, IXmlTypeMap knownTypes)
-	        : base(property.PropertyType, knownTypes) { }
+	    public XmlXPathBehaviorAccessor(PropertyDescriptor property, IXmlAccessorContext context)
+	        : base(property.PropertyType, context) { }
 
 	    public ICompiledPath Path
 	    {
 	        get { return path; }
 	    }
-
-		public override string LocalName
-		{
-			get { return null; }
-		}
-
-		public override string NamespaceUri
-		{
-			get { return null; }
-		}
 
 		public bool SelectsNodes
 		{
@@ -62,9 +52,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 		}
 
-		public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
+		public override void Prepare()
 		{
-			return new XmlSubaccessor(this, itemType);
+			path.SetContext(Context.XmlContext);
 		}
 
 		public override object GetPropertyValue(IXmlNode node, IDictionaryAdapter da, bool ifExists)
@@ -96,7 +86,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override IXmlCursor SelectCollectionNode(IXmlNode node, bool create)
 		{
-			return node.SelectSelf();
+			return node.SelectSelf(ClrType);
 		}
 
 		public override IXmlCursor SelectCollectionItems(IXmlNode node, bool create)

@@ -12,26 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
-	using System.Xml.XPath;
-	using System.Xml.Serialization;
 
 	public abstract class XmlTypeSerializer
 	{
 		protected XmlTypeSerializer() { }
 
-		public virtual bool IsCollection
-		{
-			get { return false; }
-		}
-
-		public virtual bool CanSerializeAsAttribute
-		{
-			get { return true; }
-		}
+		public abstract XmlTypeKind Kind { get; }
 
 		public virtual bool CanGetStub
 		{
@@ -48,4 +37,3 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 	}
 }
-#endif

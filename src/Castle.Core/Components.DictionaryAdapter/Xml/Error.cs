@@ -146,5 +146,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			throw new NotImplementedException();
 		}
+
+		internal static Exception ArgumentNotCollectionType(string name)
+		{
+			return new ArgumentException();
+		}
 	}
 }

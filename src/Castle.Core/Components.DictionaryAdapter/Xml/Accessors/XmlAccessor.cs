@@ -17,27 +17,41 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Collections;
 
-	public abstract class XmlAccessor : XmlType, IXmlPropertyAccessor, IXmlCollectionAccessor
+	public abstract class XmlAccessor : IXmlPropertyAccessor, IXmlCollectionAccessor
 	{
-		private readonly Type clrType;
-		private readonly XmlTypeSerializer serializer;
-		private readonly IXmlTypeMap knownTypes;
+		private readonly Type   clrType;
+		private readonly string xsiType;
+		private readonly XmlTypeSerializer   serializer;
+		private readonly IXmlAccessorContext context;
 
-		protected XmlAccessor(Type type, IXmlTypeMap knownTypes)
+		protected XmlAccessor(Type clrType, IXmlAccessorContext context)
+			: this(clrType)
 		{
-			this.clrType    = type.NonNullable();
-			this.serializer = XmlTypeSerializer.For(clrType);
-			this.knownTypes = knownTypes ?? DefaultXmlKnownTypeSet.Instance;
+			if (context == null)
+				throw Error.ArgumentNull("context");
+
+			this.context = context;
+			this.xsiType = ClrType.GetXsiType();
 		}
 
-		public override Type ClrType
+		protected XmlAccessor(Type clrType)
+		{
+			if (clrType == null)
+				throw Error.ArgumentNull("clrType");
+
+			clrType = clrType.NonNullable();
+			this.clrType    = clrType;
+			this.serializer = XmlTypeSerializer.For(clrType);
+		}
+
+		public Type ClrType
 		{
 			get { return clrType; }
 		}
 
-		public virtual IXmlTypeMap KnownTypes
+		public string XsiType
 		{
-			get { return knownTypes; }
+			get { return xsiType; }
 		}
 
 		public XmlTypeSerializer Serializer
@@ -55,20 +69,27 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return false; }
 		}
 
-		public bool IsVolatile { get; internal set; }
+		public bool IsVolatile
+		{
+			get;
+			internal set;
+		}
 
-		public virtual void Prepare() { }
+		public IXmlAccessorContext Context
+		{
+			get { return context; }
+		}
 
-		public abstract IXmlCollectionAccessor GetCollectionAccessor(Type itemType);
-		public abstract IXmlCursor SelectPropertyNode   (IXmlNode node, bool mutable);
-		public abstract IXmlCursor SelectCollectionNode (IXmlNode node, bool mutable);
-		public abstract IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable);
+		public virtual void Prepare()
+		{
+			// Do nothing
+		}
 
 		public virtual object GetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, bool orStub)
 		{
 			if (orStub) orStub &= serializer.CanGetStub;
 
-			var cursor = Serializer.IsCollection
+			var cursor = Serializer.Kind == XmlTypeKind.Collection
 				? SelectCollectionNode(parentNode, orStub)
 				: SelectPropertyNode  (parentNode, orStub);
 
@@ -81,7 +102,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public virtual void SetPropertyValue(IXmlNode parentNode, object value)
 		{
-			var cursor = serializer.IsCollection
+			var cursor = serializer.Kind == XmlTypeKind.Collection
 				? SelectCollectionNode(parentNode, true)
 				: SelectPropertyNode  (parentNode, true);
 
@@ -125,15 +146,24 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			cursor.RemoveToEnd();
 		}
 
-		//protected override bool IsMatch(IXmlType xmlType)
-		//{
-		//    return xmlType.HasNameLike(LocalName, NamespaceUri);
-		//}
-
-		protected override bool IsMatch(Type clrType)
+		public virtual IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
 		{
-			return clrType == this.clrType
-				|| (serializer.IsCollection && this.clrType.IsAssignableFrom(clrType));
+			return new XmlDefaultBehaviorAccessor(itemType, Context);
+		}
+
+		public virtual IXmlCursor SelectPropertyNode(IXmlNode node, bool mutable)
+		{
+			throw Error.NotSupported();
+		}
+
+		public virtual IXmlCursor SelectCollectionNode(IXmlNode node, bool mutable)
+		{
+			return SelectPropertyNode(node, mutable);
+		}
+
+		public virtual IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable)
+		{
+			throw Error.NotSupported();
 		}
 	}
 }

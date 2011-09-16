@@ -12,15 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	public abstract class XmlCollectionSerializer : XmlTypeSerializer
+	public enum XmlTypeKind
 	{
-		protected XmlCollectionSerializer() { }
-
-		public override bool IsCollection            { get { return true;  } }
-		public override bool CanSerializeAsAttribute { get { return false; } }
+		Simple,
+		Complex,
+		Collection
 	}
 }
-#endif

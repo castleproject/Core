@@ -19,32 +19,15 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public class XmlDefaultBehaviorAccessor : XmlNodeAccessor
 	{
-		private readonly string localName;
+		public XmlDefaultBehaviorAccessor(Type type, IXmlAccessorContext context)
+			: base(type, context) { }
 
-		public XmlDefaultBehaviorAccessor(PropertyDescriptor property, IXmlTypeMap knownTypes)
-			: base(property.PropertyType, knownTypes)
-		{
-			this.localName = XmlConvert.EncodeLocalName(property.PropertyName);
-		}
-
-		public override string LocalName
-		{
-			get { return localName; }
-		}
-
-		public override string NamespaceUri
-		{
-			get { return null; }
-		}
-
-		public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
-		{
-			return new XmlElementBehaviorAccessor(itemType);
-		}
+		public XmlDefaultBehaviorAccessor(PropertyDescriptor property, IXmlAccessorContext context)
+			: base(property, context) { }
 
 		public override IXmlCursor SelectPropertyNode(IXmlNode node, bool mutable)
 		{
-			var flags = Serializer.CanSerializeAsAttribute
+			var flags = Serializer.Kind == XmlTypeKind.Simple
 				? CursorFlags.AllNodes
 				: CursorFlags.Elements;
 			return node.SelectChildren(this, flags.MutableIf(mutable));
@@ -59,11 +42,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			var flags = CursorFlags.Elements | CursorFlags.Multiple;
 			return node.SelectChildren(this, flags.MutableIf(mutable));
-		}
-
-		protected override bool IsMatch(IXmlType xmlType)
-		{
-			return NameComparer.Equals(localName, xmlType.LocalName);
 		}
 	}
 }

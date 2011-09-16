@@ -16,7 +16,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 
-	public class XmlIgnoreBehaviorAccessor : XmlNodeAccessor
+	public class XmlIgnoreBehaviorAccessor : XmlAccessor
 	{
 		public static readonly XmlIgnoreBehaviorAccessor
 			Instance = new XmlIgnoreBehaviorAccessor();
@@ -27,16 +27,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override bool IsIgnored
 		{
 			get { return true; }
-		}
-
-		public override string LocalName
-		{
-			get { return null; }
-		}
-
-		public override string NamespaceUri
-		{
-			get { return null; }
 		}
 
 		public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)

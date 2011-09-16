@@ -30,6 +30,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.getObject = getObject;
 		}
 
+		public override XmlTypeKind Kind
+		{
+			get { return XmlTypeKind.Simple; }
+		}
+
 		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
 			return getObject(node.Value);

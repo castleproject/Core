@@ -41,7 +41,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.source = node;
 		}
 #endif
-
 		public XmlAdapter(IXmlNode node)
 		{
 		    if (node == null)
@@ -155,7 +154,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 
 			if (accessor == null)
-				accessor = new XmlDefaultBehaviorAccessor(property, primaryXmlMeta.KnownTypes);
+				accessor = new XmlDefaultBehaviorAccessor(property, primaryXmlMeta);
 
 			accessor.IsVolatile = isVolatile;
 			accessor.Prepare();
@@ -168,6 +167,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return
 				TryApplyBehavior<XmlElementAttribute, XmlElementBehaviorAccessor>
 					(property, behavior, ref accessor, XmlElementBehaviorAccessor.Factory)
+				||
+				TryApplyBehavior<KeyAttribute, XmlArrayBehaviorAccessor>
+					(property, behavior, ref accessor, XmlArrayBehaviorAccessor.Factory)
 				||
 				TryApplyBehavior<XmlArrayAttribute, XmlArrayBehaviorAccessor>
 					(property, behavior, ref accessor, XmlArrayBehaviorAccessor.Factory)
@@ -198,7 +200,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				return false;
 
 			if (accessor == null)
-				accessor = factory(property, primaryXmlMeta.KnownTypes);
+				accessor = factory(property, primaryXmlMeta);
 
 			var typedAccessor = accessor as TAccessor;
 			if (typedAccessor == null)

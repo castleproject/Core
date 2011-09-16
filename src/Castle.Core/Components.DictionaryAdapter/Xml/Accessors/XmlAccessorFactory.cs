@@ -18,7 +18,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	XmlAccessorFactory<TAccessor>
 	(
 		PropertyDescriptor property,
-		IXmlTypeMap knownTypes
+		IXmlAccessorContext context
 	)
-	where TAccessor : XmlAccessor; // TODO: Interface?
+	where TAccessor : XmlAccessor;
 }

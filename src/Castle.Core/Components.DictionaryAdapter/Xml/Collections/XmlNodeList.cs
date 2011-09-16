@@ -19,8 +19,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Collections.Generic;
 	using System.ComponentModel;
 
-	internal class XmlNodeList<T> : IList<T>, IBindingList,
-		ICancelAddNew, IEditableObject, IRevertibleChangeTracking, IRaiseItemChangedEvents
+	internal class XmlNodeList<T> : IBindingList<T>, IBindingList, IEditableObject, IRevertibleChangeTracking
 	{
 		private List<XmlCollectionItem> items;
 		private List<XmlCollectionItem> snapshot;
@@ -54,21 +53,38 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return items.Count; }
 		}
 
-		bool IBindingList.AllowEdit                          { get { return true;  } }
-		bool IBindingList.AllowNew                           { get { return true;  } }
-		bool IBindingList.AllowRemove                        { get { return true;  } }
-		bool IBindingList.SupportsChangeNotification         { get { return true;  } }
-		bool IBindingList.SupportsSearching                  { get { return false; } }
-		bool IBindingList.SupportsSorting                    { get { return false; } }
-		bool IBindingList.IsSorted                           { get { return false; } }
-		bool IList.IsFixedSize                               { get { return false; } }
-		bool IList.IsReadOnly                                { get { return false; } }
-		bool ICollection<T>.IsReadOnly                       { get { return false; } }
-		bool ICollection.IsSynchronized                      { get { return false; } }
+		public IBindingList AsBindingList
+		{
+			get { return this; }
+		}
+
+		bool IBindingList<T>.AllowEdit                   { get { return true;  } }
+		bool IBindingList<T>.AllowNew                    { get { return true;  } }
+		bool IBindingList<T>.AllowRemove                 { get { return true;  } }
+		bool IBindingList<T>.SupportsChangeNotification  { get { return true;  } }
+		bool IBindingList<T>.SupportsSearching           { get { return false; } }
+		bool IBindingList<T>.SupportsSorting             { get { return false; } }
+		bool IBindingList<T>.IsSorted                    { get { return false; } }
+		PropertyDescriptor IBindingList<T>.SortProperty  { get { return null;  } }
+		ListSortDirection  IBindingList<T>.SortDirection { get { return ListSortDirection.Ascending; } }
+
+		bool IBindingList.AllowEdit                   { get { return true;  } }
+		bool IBindingList.AllowNew                    { get { return true;  } }
+		bool IBindingList.AllowRemove                 { get { return true;  } }
+		bool IBindingList.SupportsChangeNotification  { get { return true;  } }
+		bool IBindingList.SupportsSearching           { get { return false; } }
+		bool IBindingList.SupportsSorting             { get { return false; } }
+		bool IBindingList.IsSorted                    { get { return false; } }
+		PropertyDescriptor IBindingList.SortProperty  { get { return null;  } }
+		ListSortDirection  IBindingList.SortDirection { get { return ListSortDirection.Ascending; } }
+
 		bool IRaiseItemChangedEvents.RaisesItemChangedEvents { get { return true;  } }
-		object ICollection.SyncRoot                          { get { return this;  } }
-		PropertyDescriptor IBindingList.SortProperty         { get { return null;  } }
-		ListSortDirection  IBindingList.SortDirection        { get { return ListSortDirection.Ascending; } }
+
+		bool IList.IsFixedSize          { get { return false; } }
+		bool IList.IsReadOnly           { get { return false; } }
+		bool ICollection<T>.IsReadOnly  { get { return false; } }
+		bool ICollection.IsSynchronized { get { return false; } }
+		object ICollection.SyncRoot     { get { return this;  } }
 
 		public T this[int index]
 		{
@@ -256,7 +272,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			accessor.Serializer.SetValue(node, accessor, value);
 		}
 
+		void IBindingList<T>.AddIndex(PropertyDescriptor property)
+		{
+			// Do nothing
+		}
+
 		void IBindingList.AddIndex(PropertyDescriptor property)
+		{
+			// Do nothing
+		}
+
+		void IBindingList<T>.RemoveIndex(PropertyDescriptor property)
 		{
 			// Do nothing
 		}
@@ -266,12 +292,27 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			// Do nothing
 		}
 
+		int IBindingList<T>.Find(PropertyDescriptor property, object key)
+		{
+			throw Error.NotSupported();
+		}
+
 		int IBindingList.Find(PropertyDescriptor property, object key)
 		{
 			throw Error.NotSupported();
 		}
 
+		void IBindingList<T>.ApplySort(PropertyDescriptor property, ListSortDirection direction)
+		{
+			throw Error.NotSupported();
+		}
+
 		void IBindingList.ApplySort(PropertyDescriptor property, ListSortDirection direction)
+		{
+			throw Error.NotSupported();
+		}
+
+		void IBindingList<T>.RemoveSort()
 		{
 			throw Error.NotSupported();
 		}

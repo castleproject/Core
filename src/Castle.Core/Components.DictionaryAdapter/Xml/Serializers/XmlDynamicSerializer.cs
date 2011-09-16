@@ -22,6 +22,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		protected XmlDynamicSerializer() { }
 
+		public override XmlTypeKind Kind
+		{
+			get { return XmlTypeKind.Simple; }
+		}
+
 		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
 			return node.ClrType == typeof(object)

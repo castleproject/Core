@@ -19,7 +19,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	public interface IXmlAccessor
 	{
 		Type ClrType { get; }
-		IXmlTypeMap KnownTypes { get; }
+//		IXmlTypeMap KnownTypes { get; }
 		XmlTypeSerializer Serializer { get; }
 
 		IXmlCollectionAccessor GetCollectionAccessor(Type itemType);

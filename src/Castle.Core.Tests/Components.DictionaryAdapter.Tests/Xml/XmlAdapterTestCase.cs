@@ -85,18 +85,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             }
 
             [Test]
-            public void GetProperty_DefaultBehavior_Component_ReturnsSameElement()
-            {
-                var foo = Create<IFoo>("<Foo> <G> <X>x</X> </G> </Foo>");
-
-				var instanceA = foo.G;
-				var instanceB = foo.G;
-
-                Assert.That(instanceA, Is.SameAs(instanceB),
-					"Same component must be returned from successive calls.");
-            }
-
-            [Test]
             public void GetProperty_DefaultBehavior_Component_Element()
             {
                 var foo = Create<IFoo>("<Foo> <G> <X>x</X> </G> </Foo>");
@@ -110,6 +98,18 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
                 var foo = Create<IFoo>("<Foo G='1'/>");
 
                 Assert.That(foo.G.X, Is.Null);
+            }
+
+            [Test]
+            public void GetProperty_DefaultBehavior_Component_ReturnsSameElement()
+            {
+                var foo = Create<IFoo>("<Foo> <G> <X>x</X> </G> </Foo>");
+
+				var instanceA = foo.G;
+				var instanceB = foo.G;
+
+                Assert.That(instanceA, Is.SameAs(instanceB),
+					"Same component must be returned from successive calls.");
             }
 
             [Test]
@@ -265,9 +265,11 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             {
                 var foo = Create<IRoot>("<Root> <A X='1'/> <B X='1'/> </Root>");
 
-				Assert.That(foo.Items,    Is.Not.Null & Has.Length.EqualTo(2));
-				Assert.That(foo.Items[0], Is.InstanceOf<IDerived1>());
-				Assert.That(foo.Items[1], Is.InstanceOf<IDerived2>());
+				var array = foo.Items;
+
+				Assert.That(array,    Is.Not.Null & Has.Length.EqualTo(2));
+				Assert.That(array[0], Is.InstanceOf<IDerived1>());
+				Assert.That(array[1], Is.InstanceOf<IDerived2>());
             }
 
             //[Test]
@@ -304,9 +306,11 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             {
                 var foo = Create<IRoot>("<Root> <X> <A X='1'/> <B X='1'/> </X> </Root>");
 
-                Assert.That(foo.Items,    Is.Not.Null & Has.Length.EqualTo(2));
-                Assert.That(foo.Items[0], Is.InstanceOf<IDerived1>());
-                Assert.That(foo.Items[1], Is.InstanceOf<IDerived2>());
+				var array = foo.Items;
+
+                Assert.That(array,    Is.Not.Null & Has.Length.EqualTo(2));
+                Assert.That(array[0], Is.InstanceOf<IDerived1>());
+                Assert.That(array[1], Is.InstanceOf<IDerived2>());
             }
 
             //[Test]

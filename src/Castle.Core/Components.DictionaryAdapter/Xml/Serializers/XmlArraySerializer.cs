@@ -19,18 +19,26 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Collections;
 	using System.Collections.Generic;
 
-	public class XmlArraySerializer : XmlCollectionSerializer
+	public class XmlArraySerializer : XmlTypeSerializer
 	{
 		public static readonly XmlArraySerializer
 			Instance = new XmlArraySerializer();
 
 		protected XmlArraySerializer() { }
 
-		public override bool CanGetStub { get { return true; } }
+		public override XmlTypeKind Kind
+		{
+			get { return XmlTypeKind.Collection; }
+		}
+
+		public override bool CanGetStub
+		{
+			get { return true; }
+		}
 
 		public override object GetStub(IXmlCursor cursor, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-			var itemType = accessor.ClrType.GetElementType();
+			var itemType = cursor.ClrType.GetElementType();
 
 			return Array.CreateInstance(itemType, 0);
 		}
@@ -38,7 +46,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
 			var items    = new ArrayList();
-			var itemType = accessor.ClrType.GetElementType();
+			var itemType = node.ClrType.GetElementType();
 
 			accessor.GetCollectionAccessor(itemType)
 				.GetCollectionItems(node, parent, items);

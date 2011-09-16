@@ -17,14 +17,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Collections;
 
-	public class XmlListSerializer : XmlCollectionSerializer
+	public class XmlListSerializer : XmlTypeSerializer
 	{
 		public static readonly XmlListSerializer
 			Instance = new XmlListSerializer();
 
 		protected XmlListSerializer() { }
 
-		public override bool CanGetStub { get { return true; } }
+		public override XmlTypeKind Kind
+		{
+			get { return XmlTypeKind.Collection; }
+		}
+
+		public override bool CanGetStub
+		{
+			get { return true; }
+		}
 
 		public override object GetStub(IXmlCursor cursor, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{

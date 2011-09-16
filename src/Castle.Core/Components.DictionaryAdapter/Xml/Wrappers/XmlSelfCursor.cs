@@ -17,14 +17,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
     using System;
 	using System.Xml;
 
-    public class XmlSelfCursor : IXmlCursor
+    public class XmlSelfCursor : IXmlCursor //, IXmlTypeMap
     {
         private readonly IXmlNode node;
+		private readonly Type clrType;
         private int position;
 
-        public XmlSelfCursor(IXmlNode node)
+        public XmlSelfCursor(IXmlNode node, Type clrType)
         {
-            this.node = node;
+            this.node    = node;
+			this.clrType = clrType;
 			Reset();
         }
 
@@ -50,12 +52,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public Type ClrType
 		{
-			get { return node.ClrType; }
-		}
-
-		Type IXmlTypeMap.BaseType
-		{
-			get { return node.ClrType; }
+			get { return clrType ?? node.ClrType; }
 		}
 
 		public bool IsElement
@@ -116,9 +113,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return node;
 		}
 
-		public IXmlCursor SelectSelf()
+		public IXmlCursor SelectSelf(Type clrType)
 		{
-			return this;
+			return new XmlSelfCursor(node, clrType);
 		}
 
 		public IXmlCursor SelectChildren(IXmlTypeMap knownTypes, CursorFlags flags)
@@ -153,16 +150,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return node.WriteChildren();
 		}
 
-		public bool TryGetClrType(IXmlType xmlType, out Type clrType)
-		{
-			return xmlType.TryGetClrType(xmlType, out clrType);
-		}
-
-		public bool TryGetXmlType(Type clrType, out IXmlType xmlType)
-		{
-			return node.TryGetXmlType(clrType, out xmlType);
-		}
-
 		public void MakeNext(Type type)
 		{
 			throw Error.NotSupported();
@@ -176,11 +163,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void Coerce(Type type)
 		{
 			throw Error.NotSupported();
-		}
-
-		public void Coerce(IXmlType xmlType)
-		{
-			node.Coerce(xmlType);
 		}
 
 		public void Clear()

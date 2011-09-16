@@ -53,30 +53,31 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private static XmlTypeSerializer CreateSerializer(Type type)
 		{
-		    if (type.IsArray)
-		        return XmlArraySerializer.Instance;
+			if (type.IsArray)
+				return XmlArraySerializer.Instance;
 
-		    if (type.IsGenericType)
-		    {
+			if (type.IsGenericType)
+			{
 				var genericType = type.GetGenericTypeDefinition();
-				if (genericType == typeof(IList<>)       ||
-				    genericType == typeof(ICollection<>) ||
-				    genericType == typeof(IEnumerable<>) )
-				    return XmlListSerializer.Instance;
+				if (genericType == typeof(IList<>)        ||
+					genericType == typeof(ICollection<>)  ||
+					genericType == typeof(IEnumerable<>)  ||
+					genericType == typeof(IBindingList<>) )
+					return XmlListSerializer.Instance;
 				//if (genericType == typeof(ISet<>))
 				//    return XmlListSerializer.Instance; // TODO
-		        if (genericType == typeof(IDictionary<,>)      ||
-		            genericType == typeof(List<>)              ||
-		            genericType == typeof(Dictionary<,>)       ||
-		            genericType == typeof(HashSet<>)           ||
-		            genericType == typeof(Stack<>)             ||
-		            genericType == typeof(Queue<>)             ||
-		            genericType == typeof(LinkedList<>)        ||
-		            genericType == typeof(SortedSet<>)         ||
-		            genericType == typeof(SortedDictionary<,>) ||
-		            genericType == typeof(SortedList<,>)       ||
+				if (genericType == typeof(IDictionary<,>)      ||
+					genericType == typeof(List<>)              ||
+					genericType == typeof(Dictionary<,>)       ||
+					genericType == typeof(HashSet<>)           ||
+					genericType == typeof(Stack<>)             ||
+					genericType == typeof(Queue<>)             ||
+					genericType == typeof(LinkedList<>)        ||
+					genericType == typeof(SortedSet<>)         ||
+					genericType == typeof(SortedDictionary<,>) ||
+					genericType == typeof(SortedList<,>)       ||
 					genericType == typeof(BindingList<>)       )
-		            throw Error.UnsupportedCollectionType();
+					throw Error.UnsupportedCollectionType();
 		    }
 
 			if (type.IsInterface)

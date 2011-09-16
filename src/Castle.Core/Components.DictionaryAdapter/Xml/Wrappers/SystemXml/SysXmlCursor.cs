@@ -65,9 +65,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return state > State.Initial; }
 		}
 
-		private IXmlType DefaultKnownType
+		private IXmlName DefaultKnownType
 		{
-			get { return knownTypes.GetXmlType(knownTypes.BaseType); }
+			get { return knownTypes.GetXmlName(knownTypes.BaseType); }
 		}
 
 		public override Type ClrType
@@ -353,7 +353,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			RequireCoercible();
 
-			var knownType = knownTypes.GetXmlType(type);
+			var knownType = knownTypes.GetXmlName(type);
 
 			Coerce(knownType);
 		}
@@ -361,7 +361,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void Create(Type type)
 		{
 			var position  = RequireCreatable();
-			var knownType = knownTypes.GetXmlType(type);
+			var knownType = knownTypes.GetXmlName(type);
 
 			if (flags.IncludesElements())
 			{

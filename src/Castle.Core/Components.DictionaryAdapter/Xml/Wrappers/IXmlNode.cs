@@ -26,14 +26,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		string      Value        { get; set; } // Equivalent to InnerText
 		string      Xml          { get; }      // Equivalent to OuterXml
 
-		IXmlCursor SelectSelf();
+		IXmlCursor SelectSelf(Type clrType);
 		IXmlCursor SelectChildren(IXmlTypeMap knownTypes, CursorFlags flags);
 #if !SL3
 		IXmlCursor Select  (ICompiledPath path, IXmlTypeMap knownTypes, CursorFlags flags);
 		object     Evaluate(ICompiledPath path);
 #endif
 
-		void Coerce(IXmlType xmlType);
+	//	void Coerce(IXmlType xmlType);
 		void Clear();
 		XmlReader ReadSubtree();
 		XmlWriter WriteAttributes();

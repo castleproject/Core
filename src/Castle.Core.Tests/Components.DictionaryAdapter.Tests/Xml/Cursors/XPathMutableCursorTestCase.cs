@@ -31,7 +31,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			IXmlCursor cursor;
 
 			root = Node("<X/>");
-			cursor = root.Select(Path("Item"), ItemType, CursorFlags.Mutable);
+			cursor = root.Select(Path("Item"), KnownTypes, CursorFlags.Mutable);
 			cursor.MoveNext();
 			node = cursor;
 
@@ -47,9 +47,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			IXmlCursor cursor;
 
 			root = Node("<X/>");
-			cursor = root.Select(Path("Item"), ItemType, CursorFlags.Mutable);
+			cursor = root.Select(Path("Item"), KnownTypes, CursorFlags.Mutable);
 			cursor.MoveNext();
-			cursor = cursor.Select(Path("Other"), OtherType, CursorFlags.Mutable);
+			cursor = cursor.Select(Path("Other"), KnownTypes, CursorFlags.Mutable);
 			cursor.MoveNext();
 			node = cursor;
 

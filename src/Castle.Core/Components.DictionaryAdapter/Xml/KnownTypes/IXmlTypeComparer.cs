@@ -15,25 +15,11 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
-	using System.Linq;
+	using System.Collections.Generic;
 
-	public static class TypeExtensions
+	public interface IXmlTypeComparer :
+		IEqualityComparer<IXmlName>,
+		IEqualityComparer<Type>
 	{
-		public static Type NonNullable(this Type type)
-		{
-			return type.IsGenericType
-				&& type.GetGenericTypeDefinition() == typeof(Nullable<>)
-				? type.GetGenericArguments()[0]
-				: type;
-		}
-
-		public static Type GetCollectionItemType(this Type type)
-		{
-			if (type.IsArray)
-				return type.GetElementType();
-			if (type.IsGenericType)
-				return type.GetGenericArguments().Single();
-			throw Error.ArgumentNotCollectionType("type");
-		}
 	}
 }

@@ -17,7 +17,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 #if !SILVERLIGHT
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.IO;
 	using System.Linq;
 	using System.Xml;
@@ -937,7 +936,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			[XmlElement("AmountDue")]
 			decimal Balance { get; set; }
 			[XmlArray("Roster", IsNullable = true), XmlArrayItem("Participant"), RemoveIfEmpty]
-			BindingList<IPlayer> Players { get; }
+			IBindingList<IPlayer> Players { get; }
 		}
 
 		[XmlRoot("Season", Namespace = "RISE"),
@@ -955,7 +954,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			[XmlElement("Address", Namespace = "Common")]
 			IAddress Location { get; set; }
 			[Key("League"), XmlArrayItem("Team")]
-			BindingList<ITeam> Teams { get; set; }
+			IBindingList<ITeam> Teams { get; set; }
 			[XPath("rise:League/rise:Team")]
 			ITeam[] TeamsArray { get; }
 			[XPath("rise:League/rise:Team[position()=1]/@Name")]

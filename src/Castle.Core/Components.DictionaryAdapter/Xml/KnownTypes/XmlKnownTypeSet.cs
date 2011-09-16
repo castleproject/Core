@@ -17,26 +17,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Xml.Serialization;
-	using System.Xml.XPath;
 
 	public class XmlKnownTypeSet : IXmlTypeMap, IEnumerable<IXmlType>
 	{
-		private readonly List<IXmlType> items;
+		private readonly Dictionary<IXmlName, IXmlType> itemsByXmlName;
+		private readonly Dictionary<Type,     IXmlType> itemsByClrType;
 		private readonly Type baseType;
-		private IXmlTypeMap parent;
 
 		public XmlKnownTypeSet(Type baseType)
-			: this(baseType, null) { }
-
-		public XmlKnownTypeSet(Type baseType, IXmlTypeMap parent)
 		{
 			if (baseType == null)
 				throw Error.ArgumentNull("baseType");
 
-			this.items    = new List<IXmlType>();
-			this.baseType = baseType;
-			this.Parent   = parent;
+			itemsByXmlName = new Dictionary<IXmlName, IXmlType>(XmlNameComparer.Instance);
+			itemsByClrType = new Dictionary<Type,     IXmlType>();
+			this.baseType  = baseType;
 		}
 
 		public Type BaseType
@@ -44,74 +39,129 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return baseType; }
 		}
 
-		public IXmlTypeMap Parent
+		public void Add(IXmlType xmlType)
 		{
-			get { return parent; }
-			set { parent = value ?? DefaultXmlKnownTypeSet.Instance; }
+			// All XmlTypes are present here
+			itemsByXmlName.Add(xmlType, xmlType);
+
+			// Only contains the default XmlType for each ClrType
+			itemsByClrType[xmlType.ClrType] = xmlType;
+		}
+
+		public void AddXsiTypeDefaults()
+		{
+			// If there is only one xsi:type possible for a known local name and namespace URI,
+			// add another XmlType to recognize nodes that don't provide the xsi:type.
+
+			var bits = new Dictionary<IXmlType, bool>(
+				itemsByXmlName.Count,
+				XmlNameGroupingComparer.Instance);
+
+			foreach (var xmlType in itemsByXmlName.Values)
+			{
+				bool bit;
+				bits[xmlType] = bits.TryGetValue(xmlType, out bit)
+					? false                    // another by same name; can't add a default
+					: xmlType.XsiType != null; // first   by this name; can   add a default, if not already in default form
+			}
+
+			foreach (var pair in bits)
+			{
+				if (pair.Value)
+				{
+					var xmlType = pair.Key;
+					Add(new XmlKnownType
+					(
+						xmlType.LocalName,
+						xmlType.NamespaceUri,
+						null,
+						xmlType.ClrType
+					));
+				}
+			}
+		}
+
+		public bool TryGetClrType(IXmlName xmlName, out Type clrType)
+		{
+			IXmlType xmlType;
+			return itemsByXmlName.TryGetValue(xmlName, out xmlType)
+				? Try.Success(out clrType, xmlType.ClrType)
+				: Try.Failure(out clrType);
+		}
+
+		public bool TryGetXmlName(Type clrType, out IXmlName xmlName)
+		{
+			IXmlType xmlType;
+			return itemsByClrType.TryGetValue(clrType, out xmlType)
+				? Try.Success(out xmlName, xmlType)
+				: Try.Failure(out xmlName);
 		}
 
 		public IEnumerator<IXmlType> GetEnumerator()
 		{
-			return items.GetEnumerator();
+			return itemsByXmlName.Values.GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return items.GetEnumerator();
+			return itemsByXmlName.Values.GetEnumerator();
 		}
 
-		//public void Add(XmlArrayItemAttribute attribute)
-		//{
-		//    Add(new XmlNamedType(
-		//        attribute.ElementName,
-		//        attribute.Namespace,
-		//        attribute.Type
-		//    ));
-		//}
-
-		//public void Add(XmlElementAttribute attribute)
-		//{
-		//    Add(new XmlNamedType(
-		//        attribute.ElementName,
-		//        attribute.Namespace,
-		//        attribute.Type
-		//    ));
-		//}
-
-		//public void Add(XmlAttributeAttribute attribute)
-		//{
-		//    Add(new XmlNamedType(
-		//        attribute.AttributeName,
-		//        attribute.Namespace,
-		//        attribute.Type
-		//    ));
-		//}
-
-		public void Add(IXmlType xmlType)
+		private sealed class XmlNameComparer : IEqualityComparer<IXmlName>
 		{
-			items.Add(xmlType);
+			public static readonly XmlNameComparer
+				Instance = new XmlNameComparer();
+
+			private XmlNameComparer() { }
+
+			public bool Equals(IXmlName x, IXmlName y)
+			{
+				string xNamespaceUri, yNamespaceUri;
+				return NameComparer.Equals(x.LocalName, y.LocalName)
+					&& NameComparer.Equals(x.XsiType,   y.XsiType)
+					&& ((xNamespaceUri = x.NamespaceUri) == null
+					 || (yNamespaceUri = y.NamespaceUri) == null
+					 || NameComparer.Equals(xNamespaceUri, yNamespaceUri));
+			}
+
+			public int GetHashCode(IXmlName name)
+			{
+				var code = NameComparer.GetHashCode(name.LocalName);				
+				var xsiType = name.XsiType;
+				if (xsiType != null)
+					code = (code << 7 | code >> 25)
+					     ^ NameComparer.GetHashCode(xsiType);
+				return code;
+				// Do not include NamespaceUri in hash code.
+				// That would break 'null means any' behavior.
+			}
 		}
 
-		public bool TryGetClrType(IXmlType xmlType, out Type clrType)
+		private sealed class XmlNameGroupingComparer : IEqualityComparer<IXmlName>
 		{
-			foreach (var item in items)
-				if (item.TryGetClrType(xmlType, out clrType))
-					return true;
+			public static readonly XmlNameGroupingComparer
+				Instance = new XmlNameGroupingComparer();
 
-			return (parent != null)
-				? parent.TryGetClrType(xmlType, out clrType)
-				: Try.Failure(out clrType);
+			private XmlNameGroupingComparer() { }
+
+			public bool Equals(IXmlName x, IXmlName y)
+			{
+				return NameComparer.Equals(x.LocalName,    y.LocalName)
+					&& NameComparer.Equals(x.NamespaceUri, y.NamespaceUri);
+			}
+
+			public int GetHashCode(IXmlName name)
+			{
+				var code = NameComparer.GetHashCode(name.LocalName);
+				var namespaceUri = name.NamespaceUri;
+				if (namespaceUri != null)
+					code = (code << 7 | code >> 25)
+					     ^ NameComparer.GetHashCode(namespaceUri);
+				return code;
+			}
 		}
 
-		public bool TryGetXmlType(Type clrType, out IXmlType xmlType)
-		{
-			foreach (var item in items)
-				if (item.TryGetXmlType(clrType, out xmlType))
-					return true;
-
-			return (parent != null)
-				? parent.TryGetXmlType(clrType, out xmlType)
-				: Try.Failure(out xmlType);
-		}
+		private static readonly StringComparer
+			NameComparer = StringComparer.OrdinalIgnoreCase;
 	}
 }

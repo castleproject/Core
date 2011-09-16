@@ -25,8 +25,15 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		protected XmlComponentSerializer() { }
 
-		public override bool CanGetStub              { get { return true;  } }
-		public override bool CanSerializeAsAttribute { get { return false; } }
+		public override XmlTypeKind Kind
+		{
+			get { return XmlTypeKind.Complex; }
+		}
+
+		public override bool CanGetStub
+		{
+			get { return true; }
+		}
 
 		public override object GetStub(IXmlCursor cursor, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{

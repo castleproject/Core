@@ -105,6 +105,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return property.ExtendedProperties.Contains(XmlAccessorKey);
 		}
 
+		public static string GetXsiType(this Type type)
+		{
+			return type.GetLocalName(); // TODO: This needs to change
+		}
+
 		public static string GetLocalName(this Type type)
 		{
 			string name;

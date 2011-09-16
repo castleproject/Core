@@ -19,7 +19,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Xml;
 	using System.Xml.XPath;
 
-	public class XPathNode : XmlType, IXmlNode, ILazy<XPathNavigator>
+	public class XPathNode : IXmlNode, ILazy<XPathNavigator> //, IXmlTypeMap
 #if !SILVERLIGHT
 		, ILazy<XmlNode>
 #endif
@@ -45,27 +45,27 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return true; }
 		}
 
-		public override Type ClrType
+		public virtual Type ClrType
 		{
 			get { return type; }
 		}
 
-		Type IXmlTypeMap.BaseType
-		{
-			get { return ClrType; }
-		}
+		//Type IXmlTypeMap.BaseType
+		//{
+		//    get { return ClrType; }
+		//}
 
-		public override string LocalName
+		public virtual string LocalName
 		{
 			get { return node.LocalName; }
 		}
 
-		public override string NamespaceUri
+		public virtual string NamespaceUri
 		{
 			get { return node.NamespaceURI; }
 		}
 
-		public override string XsiType
+		public virtual string XsiType
 		{
 			get { return IsElement ? node.GetXsiType() : null; }
 		}
@@ -102,9 +102,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return node.OuterXml; }
 		}
 
-		public IXmlCursor SelectSelf()
+		public IXmlCursor SelectSelf(Type clrType)
 		{
-			return new XmlSelfCursor(this);
+			return new XmlSelfCursor(this, clrType);
 		}
 
 		public IXmlCursor SelectChildren(IXmlTypeMap knownTypes, CursorFlags flags)
@@ -148,11 +148,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			// Default nodes are realized already
 		}
 
-		public virtual void Coerce(IXmlType xmlType)
+		public virtual void Coerce(IXmlName xmlType)
 		{
-			var xsiType = (xmlType.ClrType == ClrType)
-				? null
-				: xmlType.XsiType;
+			var xsiType = //(xmlType.ClrType == ClrType)
+				//	? null
+				//	: xmlType.XsiType;
+			xmlType.XsiType;
 
 			node.SetXsiType(xsiType);
 		}

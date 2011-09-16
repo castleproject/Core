@@ -20,17 +20,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		Type BaseType { get; }
 
-		bool TryGetClrType(IXmlType xmlType, out Type     clrType);
-		bool TryGetXmlType(Type     clrType, out IXmlType xmlType);
+		bool TryGetClrType(IXmlName xmlType, out Type     clrType);
+		bool TryGetXmlName(Type     clrType, out IXmlName xmlType);
 	}
 
 	public static class XmlTypeMapExtensions
 	{
-		public static IXmlType GetXmlType(this IXmlTypeMap map, Type clrType)
+		public static IXmlName GetXmlName(this IXmlTypeMap map, Type clrType)
 		{
-			IXmlType xmlType;
-			if (map.TryGetXmlType(clrType, out xmlType))
-				return xmlType;
+			IXmlName xmlName;
+			if (map.TryGetXmlName(clrType, out xmlName))
+				return xmlName;
 
 			throw Error.NotXmlKnownType();
 		}

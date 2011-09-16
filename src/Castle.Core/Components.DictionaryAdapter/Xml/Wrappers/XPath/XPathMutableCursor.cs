@@ -72,9 +72,9 @@ using System.Xml;
 			get { return null != node; } // (_depth > 0 works also)
 		}
 
-		private IXmlType DefaultKnownType
+		private IXmlName DefaultKnownType
 		{
-			get { return knownTypes.GetXmlType(knownTypes.BaseType); }
+			get { return knownTypes.GetXmlName(knownTypes.BaseType); }
 		}
 
 		public override Type ClrType
@@ -234,7 +234,7 @@ using System.Xml;
 
 		public void Coerce(Type type)
 		{
-			var knownType = knownTypes.GetXmlType(type);
+			var knownType = knownTypes.GetXmlName(type);
 			Coerce(knownType);
 		}
 

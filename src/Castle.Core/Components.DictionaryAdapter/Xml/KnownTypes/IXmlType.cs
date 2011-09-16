@@ -16,11 +16,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 
-	public interface IXmlType : IXmlTypeMap
+	public interface IXmlType : IXmlName
 	{
-		string LocalName    { get; }
-		string NamespaceUri { get; }
-		string XsiType      { get; }
-		Type   ClrType      { get; }
+		Type ClrType { get; }
 	}
 }
