@@ -119,8 +119,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public bool MoveNext()
 		{
-			return MoveNextCore()
-				&& (flags.AllowsMultipleItems() || IsAtEnd());
+			var hadCurrent = HasCurrent;
+			var hasCurrent = MoveNextCore() &&
+			(
+				flags.AllowsMultipleItems() ||
+				IsAtEnd()
+			);
+
+			if (!(hasCurrent || hadCurrent))
+				state = State.Empty;
+
+			return hasCurrent;
 		}
 
 		private bool MoveNextCore()
@@ -145,7 +154,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{
 				switch (state)
 				{
-					case State.Initial:         return AdvanceToFirstElement()  || AdvanceToFirstAttribute() || Fail(State.Empty);
+					case State.Initial:         return AdvanceToFirstElement()  || AdvanceToFirstAttribute() || Fail(State.End);
 					case State.Element:         return AdvanceToNextElement()   || AdvanceToFirstAttribute() || Fail(State.End);
 					case State.Attribute:       return AdvanceToNextAttribute() || Fail(State.End);
 					case State.ElementPrimed:   return Succeed(State.Element);
