@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -59,26 +58,26 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (type.IsGenericType)
 			{
 				var genericType = type.GetGenericTypeDefinition();
-				if (genericType == typeof(IList<>)        ||
-					genericType == typeof(ICollection<>)  ||
-					genericType == typeof(IEnumerable<>)  ||
-					genericType == typeof(IBindingList<>) )
+				if (genericType == typeof(IList<>) ||
+					genericType == typeof(ICollection<>) ||
+					genericType == typeof(IEnumerable<>) ||
+					genericType == typeof(IBindingList<>))
 					return XmlListSerializer.Instance;
 				//if (genericType == typeof(ISet<>))
 				//    return XmlListSerializer.Instance; // TODO: Support XML-backed sets
-				if (genericType == typeof(IDictionary<,>)      ||
-					genericType == typeof(List<>)              ||
-					genericType == typeof(Dictionary<,>)       ||
-					genericType == typeof(HashSet<>)           ||
-					genericType == typeof(Stack<>)             ||
-					genericType == typeof(Queue<>)             ||
-					genericType == typeof(LinkedList<>)        ||
-					genericType == typeof(SortedSet<>)         ||
+				if (genericType == typeof(IDictionary<,>) ||
+					genericType == typeof(List<>) ||
+					genericType == typeof(Dictionary<,>) ||
+					genericType == typeof(HashSet<>) ||
+					genericType == typeof(Stack<>) ||
+					genericType == typeof(Queue<>) ||
+					genericType == typeof(LinkedList<>) ||
+					genericType == typeof(SortedSet<>) ||
 					genericType == typeof(SortedDictionary<,>) ||
-					genericType == typeof(SortedList<,>)       ||
-					genericType == typeof(BindingList<>)       )
+					genericType == typeof(SortedList<,>) ||
+					genericType == typeof(BindingList<>))
 					throw Error.UnsupportedCollectionType();
-		    }
+			}
 
 			if (type.IsInterface)
 			    return XmlComponentSerializer.Instance;
@@ -86,8 +85,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		        return XmlEnumerationSerializer.Instance;
 			if (type.IsCustomSerializable())
 				return XmlCustomSerializer.Instance;
+#if !SILVERLIGHT
+			if (typeof(System.Xml.XmlNode).IsAssignableFrom(type))
+				return XmlXmlNodeSerializer.Instance;
+#endif
 			return new XmlDefaultSerializer(type);
 		}
 	}
 }
-#endif
