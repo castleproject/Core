@@ -47,9 +47,24 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return CreateComponent(node.ClrType, adapter, parent);
 		}
 
-		public override void SetValue(IXmlNode node, IXmlAccessor accessor, object value)
+		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, ref object value)
 		{
-			throw new System.NotImplementedException();
+			// Require a dictionary adapter
+			var source = value as IDictionaryAdapter;
+			if (source == null)
+				throw Error.ArgumentNotDictionaryAdapter("value");
+
+			// Detect assignment of own value
+			var adapter = XmlAdapter.For(source, false);
+			if (adapter != null && node.PositionEquals(adapter.Node))
+				return;
+
+			// Create a fresh component
+			var component = (IDictionaryAdapter) GetValue(node, parent, accessor);
+
+			// Copy value onto fresh component
+			source.CopyTo(component);
+			value = component;
 		}
 
 		public object CreateComponent(Type type, XmlAdapter adapter, IDictionaryAdapter parent)

@@ -34,10 +34,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				: XmlTypeSerializer.For(node.ClrType).GetValue(node, parent, accessor);
 		}
 
-		public override void SetValue(IXmlNode node, IXmlAccessor accessor, object value)
+		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, ref object value)
 		{
 			if (node.ClrType != typeof(object))
-				XmlTypeSerializer.For(node.ClrType).SetValue(node, accessor, value);
+				XmlTypeSerializer.For(node.ClrType).SetValue(node, parent, accessor, ref value);
 			else
 				node.Clear();
 		}

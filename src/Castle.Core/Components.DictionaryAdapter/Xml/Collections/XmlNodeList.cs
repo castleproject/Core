@@ -19,33 +19,35 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Collections.Generic;
 	using System.ComponentModel;
 
-	internal class XmlNodeList<T> : IBindingList<T>, IBindingList, IEditableObject, IRevertibleChangeTracking
+	internal class XmlNodeList<T> : IBindingList<T>, IBindingList, IXmlCollection, IEditableObject, IRevertibleChangeTracking
 	{
-		private List<XmlCollectionItem> items;
-		private List<XmlCollectionItem> snapshot;
+		private List<XmlCollectionItem<T>> items;
+		private List<XmlCollectionItem<T>> snapshot;
 		private int addedIndex   = -1;
 		private int changedIndex = -1;
 
 		private readonly IXmlCursor cursor;
 		private readonly IXmlCollectionAccessor accessor;
+		private readonly IXmlNode parentNode;
 		private readonly IDictionaryAdapter parentObject;
 		private PropertyChangedEventHandler propertyHandler;
 
 		private static PropertyDescriptorCollection itemProperties;
 
 		public XmlNodeList(
-			IXmlNode node,
+			IXmlNode parentNode,
 			IDictionaryAdapter parentObject,
 			IXmlCollectionAccessor accessor)
 		{
-			items = new List<XmlCollectionItem>();
+			items = new List<XmlCollectionItem<T>>();
 
-			this.cursor       = accessor.SelectCollectionItems(node, true);
 			this.accessor     = accessor;
+			this.cursor       = accessor.SelectCollectionItems(parentNode, true);
+			this.parentNode   = parentNode;
 			this.parentObject = parentObject;
 
 			while (cursor.MoveNext())
-				items.Add(new XmlCollectionItem(cursor.Save()));
+				items.Add(new XmlCollectionItem<T>(cursor.Save()));
 		}
 
 		public int Count
@@ -56,6 +58,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public IBindingList AsBindingList
 		{
 			get { return this; }
+		}
+
+		IXmlNode IXmlCollection.Node
+		{
+			get { return parentNode; }
 		}
 
 		bool IBindingList<T>.AllowEdit                   { get { return true;  } }
@@ -93,12 +100,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				var item = items[index];
 				if (!item.HasValue)
 					items[index] = item = item.WithValue(GetValue(item.Node));
-				return (T) item.Value;
+				return item.Value;
 			}
 			set
 			{
 				var item = items[index];
-				SetValue(item.Node, value);
+				SetValue(item.Node, ref value);
 				items[index] = item.WithValue(value);
 			}
 		}
@@ -161,12 +168,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			cursor.MoveToEnd();
 			cursor.Create(typeof(T));
-			var node = cursor.Save();
-			var value = GetValue(node);
-			var item = new XmlCollectionItem(node, value);
+
+			var node   = cursor.Save();
+			var value  = GetValue(node);
+			var item   = new XmlCollectionItem<T>(node, value);
+
 			addedIndex = items.Count;
 			items.Add(item);
-			RegisterItemPropertyChanged(value);
+			AttachPropertyChanged(value);
 			return (T) value;
 		}
 
@@ -218,17 +227,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Insert(index, (T) value);
 		}
 
-		private XmlCollectionItem Create(T value)
+		private XmlCollectionItem<T> Create(T value)
 		{
-			var type = (null == value)
-				? typeof(T)
-				: value.GetType();
-
-			cursor.Create(type);
-			var item = new XmlCollectionItem(cursor.Save(), value);
-			SetValue(item.Node, value);
-			RegisterItemPropertyChanged(value);
-			return item;
+			cursor.Create(GetTypeOrDefault(value));
+			var node = cursor.Save();
+			SetValue(node, ref value);
+			AttachPropertyChanged(value);
+			return new XmlCollectionItem<T>(node, value);
 		}
 
 		public bool Remove(T item)
@@ -247,7 +252,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void RemoveAt(int index)
 		{
 			var item = items[index];
-			UnregisterItemPropertyChanged(item.Value);
+			DetachPropertyChanged(item.Value);
 			cursor.MoveTo(item.Node);
 			cursor.Remove();
 			items.RemoveAt(index);
@@ -256,20 +261,36 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void Clear()
 		{
 			foreach (var item in items)
-				UnregisterItemPropertyChanged(item.Value);
+				DetachPropertyChanged(item.Value);
 			cursor.Reset();
 			cursor.RemoveToEnd();
 			items.Clear();
 		}
 
-		private object GetValue(IXmlNode node)
+		void IXmlCollection.Replace(IEnumerable source)
 		{
-			return accessor.Serializer.GetValue(node, parentObject, accessor);
+			Clear();
+			foreach (T value in source)
+				Add(value);
 		}
 
-		private void SetValue(IXmlNode node, object value)
+		private T GetValue(IXmlNode node)
 		{
-			accessor.Serializer.SetValue(node, accessor, value);
+			return (T) accessor.Serializer.GetValue(node, parentObject, accessor);
+		}
+
+		private void SetValue(IXmlNode node, ref T value)
+		{
+			object obj = value;
+			accessor.Serializer.SetValue(node, parentObject, accessor, ref obj);
+			value = (T) obj;
+		}
+
+		private static Type GetTypeOrDefault(T value)
+		{
+			return (null == value)
+				? typeof(T)
+				: value.GetComponentType();
 		}
 
 		void IBindingList<T>.AddIndex(PropertyDescriptor property)
@@ -351,7 +372,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void BeginEdit()
 		{
 			if (snapshot == null)
-				snapshot = new List<XmlCollectionItem>(items);
+				snapshot = new List<XmlCollectionItem<T>>(items);
 		}
 
 		public void EndEdit()
@@ -379,9 +400,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			CancelEdit();
 		}
 
-		private void RegisterItemPropertyChanged(object item)
+		private void AttachPropertyChanged(T value)
 		{
-			var notifier = item as INotifyPropertyChanged;
+			if (typeof(T).IsValueType)
+				return;
+
+			var notifier = value as INotifyPropertyChanged;
 			if (notifier == null)
 				return;
 
@@ -391,9 +415,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			notifier.PropertyChanged += propertyHandler;
 		}
 
-		private void UnregisterItemPropertyChanged(object item)
+		private void DetachPropertyChanged(T value)
 		{
-			var notifier = item as INotifyPropertyChanged;
+			if (typeof(T).IsValueType)
+				return;
+
+			var notifier = value as INotifyPropertyChanged;
 			if (notifier == null || propertyHandler == null)
 				return;
 
@@ -454,7 +481,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (changedIndex >= 0)
 				return true;
 
-			UnregisterItemPropertyChanged(item);
+			DetachPropertyChanged(item);
 			NotifyListReset();
 			return false;
 		}

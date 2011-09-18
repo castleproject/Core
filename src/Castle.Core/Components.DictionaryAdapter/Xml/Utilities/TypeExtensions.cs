@@ -35,5 +35,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				return type.GetGenericArguments().Single();
 			throw Error.ArgumentNotCollectionType("type");
 		}
+
+		public static Type GetComponentType(this object obj)
+		{
+			var adapter = obj as IDictionaryAdapter;
+			return (adapter == null)
+				? obj.GetType()
+				: adapter.Meta.Type;
+		}
 	}
 }

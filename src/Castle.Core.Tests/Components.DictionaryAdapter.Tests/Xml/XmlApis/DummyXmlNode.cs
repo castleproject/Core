@@ -73,6 +73,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			get { throw new NotImplementedException(); }
 		}
 
+		public bool PositionEquals(IXmlNode node)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IXmlCursor SelectSelf(Type clrType)
 		{
 			throw new NotImplementedException();

@@ -102,6 +102,23 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return node.OuterXml; }
 		}
 
+		public bool PositionEquals(IXmlNode node)
+		{
+			var xPathNode = node as ILazy<XPathNavigator>;
+			if (xPathNode != null)
+				return xPathNode.HasValue
+					&& xPathNode.Value.IsSamePosition(this.node);
+#if !SILVERLIGHT
+			var sysXmlNode = node as ILazy<XmlNode>;
+			if (sysXmlNode != null)
+				return sysXmlNode.HasValue
+					&& sysXmlNode.Value == this.node.UnderlyingObject;
+#endif
+			// TODO: XNode-based
+
+			return false;
+		}
+
 		public IXmlCursor SelectSelf(Type clrType)
 		{
 			return new XmlSelfCursor(this, clrType);

@@ -40,7 +40,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
                     : null;
 		}
 
-		public override void SetValue(IXmlNode node, IXmlAccessor accessor, object value)
+		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, ref object value)
 		{
 		    using (var writer = new XmlSubtreeWriter(node))
 		        serializer.Serialize(writer, value);

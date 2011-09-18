@@ -15,10 +15,12 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
+	using System.Collections;
 
-	public interface IXmlPropertyAccessor : IXmlAccessor
+	public interface IXmlCollection
 	{
-		object GetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, bool orStub);
-		void   SetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, ref object value);
+		IXmlNode Node { get; }
+
+		void Replace(IEnumerable source);
 	}
 }

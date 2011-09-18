@@ -48,18 +48,46 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var items    = new ArrayList();
 			var itemType = node.ClrType.GetElementType();
 
-			accessor.GetCollectionAccessor(itemType)
+			accessor
+				.GetCollectionAccessor(itemType)
 				.GetCollectionItems(node, parent, items);
 
 			return items.ToArray(itemType);
 		}
 
-		public override void SetValue(IXmlNode node, IXmlAccessor accessor, object value)
+		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, ref object value)
 		{
-			var itemType = value.GetType().GetElementType();
+			var source      = (Array) value;
+			var target      = (Array) null;
+			var itemType    = source.GetType().GetElementType();
+			var subaccessor = accessor.GetCollectionAccessor(itemType);
+			var cursor      = subaccessor.SelectCollectionItems(node, true);
+			var serializer  = subaccessor.Serializer;
 
-			accessor.GetCollectionAccessor(itemType)
-				.SetCollectionItems(node, (IEnumerable) value);
+			for (var i = 0; i < source.Length; i++)
+			{
+				var originalItem = source.GetValue(i);
+				var assignedItem = originalItem;
+
+				cursor.MakeNext(originalItem.GetComponentType());
+				serializer.SetValue(cursor, parent, subaccessor, ref assignedItem);
+
+				if (target != null)
+				{
+					target.SetValue(assignedItem, i);
+				}
+				else if (!Equals(assignedItem, originalItem))
+				{
+					target = Array.CreateInstance(itemType, source.Length);
+					Array.Copy(source, target, i);
+					target.SetValue(assignedItem, i);
+				}
+			}
+
+			cursor.RemoveToEnd();
+
+			if (target != null)
+				value = target;
 		}
 	}
 }

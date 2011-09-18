@@ -95,7 +95,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			XmlAccessor accessor;
 			if (TryGetAccessor(property, false, out accessor))
-				accessor.SetPropertyValue(node, value);
+				accessor.SetPropertyValue(node, dictionaryAdapter, ref value);
 			return true;
 		}
 
@@ -220,30 +220,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return behavior is VolatileAttribute;
 		}
 
-		public static XmlAdapter For(object obj)
-		{
-			if (obj == null)
-				throw Error.ArgumentNull("obj");
-
-			var dictionaryAdapter = obj as IDictionaryAdapter;
-			if (dictionaryAdapter == null)
-				throw Error.ArgumentNotDictionaryAdapter("obj");
-
-			var descriptor = dictionaryAdapter.This.Descriptor;
-			if (descriptor == null)
-				throw Error.NoInstanceDescriptor();
-
-			var getters = descriptor.Getters;
-			if (getters == null)
-				throw Error.NoGetterOnInstanceDescriptor();
-
-			var xmlAdapter = getters.OfType<XmlAdapter>().SingleOrDefault();
-			if (xmlAdapter == null)
-				throw Error.NoXmlAdapter();
-
-			return xmlAdapter;
-		}
-
 		public IXmlNode Node
 		{
 			get { return node; }
@@ -252,6 +228,40 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override IDictionaryBehavior Copy()
 		{
 			return null;
+		}
+
+		public static XmlAdapter For(object obj)
+		{
+			return For(obj, true);
+		}
+
+		public static XmlAdapter For(object obj, bool required)
+		{
+			if (obj == null)
+				if (!required) return null;
+				else throw Error.ArgumentNull("obj");
+
+			var dictionaryAdapter = obj as IDictionaryAdapter;
+			if (dictionaryAdapter == null)
+				if (!required) return null;
+				else throw Error.ArgumentNotDictionaryAdapter("obj");
+
+			var descriptor = dictionaryAdapter.This.Descriptor;
+			if (descriptor == null)
+				if (!required) return null;
+				else throw Error.NoInstanceDescriptor();
+
+			var getters = descriptor.Getters;
+			if (getters == null)
+				if (!required) return null;
+				else throw Error.NoGetterOnInstanceDescriptor();
+
+			var xmlAdapter = getters.OfType<XmlAdapter>().SingleOrDefault();
+			if (xmlAdapter == null)
+				if (!required) return null;
+				else throw Error.NoXmlAdapter();
+
+			return xmlAdapter;
 		}
 	}
 }

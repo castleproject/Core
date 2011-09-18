@@ -87,6 +87,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return node.Xml; }
 		}
 
+		public bool PositionEquals(IXmlNode node)
+		{
+			return node.PositionEquals(node);
+		}
+
         public bool MoveNext()
         {
             return 0 == ++position;
@@ -152,7 +157,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void MakeNext(Type type)
 		{
-			throw Error.NotSupported();
+			if (!MoveNext())
+				throw Error.NotSupported();
 		}
 
 		public void Create(Type type)
@@ -162,7 +168,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void Coerce(Type type)
 		{
-			throw Error.NotSupported();
+			// Do nothing
 		}
 
 		public void Clear()
@@ -172,12 +178,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void Remove()
 		{
-			throw Error.NotSupported();
+			// Do nothing
 		}
 
 		public void RemoveToEnd()
 		{
-			throw Error.NotSupported();
+			// Do nothing
 		}
 	}
 }

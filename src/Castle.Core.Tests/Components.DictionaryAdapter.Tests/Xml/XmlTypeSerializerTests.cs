@@ -165,7 +165,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			var serializer = XmlTypeSerializerCache.Instance[serializerType];
 			var node = new DummyXmlNode(value.GetType());
 
-			serializer.SetValue(node, null, value);
+			serializer.SetValue(node, null, null, ref value);
 			Assert.That(node.Value, Is.EqualTo(text));
 
 			var actual = serializer.GetValue(node, null, null);

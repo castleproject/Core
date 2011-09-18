@@ -89,10 +89,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				: Evaluate(node);
 		}
 
-		public override void SetPropertyValue(IXmlNode node, object value)
+		public override void SetPropertyValue(IXmlNode node, IDictionaryAdapter da, ref object value)
 		{
 			if (SelectsNodes)
-				base.SetPropertyValue(node, value);
+				base.SetPropertyValue(node, da, ref value);
 			else
 				throw Error.NotSupported();
 		}

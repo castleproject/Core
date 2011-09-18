@@ -14,28 +14,28 @@
 
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	internal struct XmlCollectionItem
+	internal struct XmlCollectionItem<T>
 	{
 		public readonly IXmlNode Node;
-		public readonly object Value;
+		public readonly T        Value;
+		public readonly bool     HasValue;
 
 		public XmlCollectionItem(IXmlNode node)
-			: this(node, null) { }
+			: this(node, default(T), false) { }
 
-		public XmlCollectionItem(IXmlNode node, object value)
+		public XmlCollectionItem(IXmlNode node, T value)
+			: this(node, value, true) { }
+
+		private XmlCollectionItem(IXmlNode node, T value, bool hasValue)
 		{
-			Node  = node;
-			Value = value;
+			Node     = node;
+			Value    = value;
+			HasValue = hasValue;
 		}
 
-		public bool HasValue
+		public XmlCollectionItem<T> WithValue(T value)
 		{
-			get { return null != Value; }
-		}
-
-		public XmlCollectionItem WithValue(object value)
-		{
-			return new XmlCollectionItem(Node, value);
+			return new XmlCollectionItem<T>(Node, value);
 		}
 	}
 }

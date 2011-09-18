@@ -26,6 +26,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		string      Value        { get; set; } // Equivalent to InnerText
 		string      Xml          { get; }      // Equivalent to OuterXml
 
+		bool PositionEquals(IXmlNode node);
+
 		IXmlCursor SelectSelf(Type clrType);
 		IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags);
 #if !SL3
