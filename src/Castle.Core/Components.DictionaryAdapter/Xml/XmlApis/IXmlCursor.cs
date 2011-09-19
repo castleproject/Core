@@ -28,7 +28,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		void Create(Type type);
 		void Coerce(Type type);
 		void Remove();
-		void RemoveToEnd();
+		void RemoveAllNext();
 
 		IXmlNode Save();
 	}

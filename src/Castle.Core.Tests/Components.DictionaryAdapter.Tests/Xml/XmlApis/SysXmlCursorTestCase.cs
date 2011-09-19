@@ -547,7 +547,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			var cursor = new SysXmlCursor(xml, KnownTypes, CursorFlags.Elements | CursorFlags.Multiple);
 
 			cursor.MoveNext();
-			cursor.RemoveToEnd();
+			cursor.RemoveAllNext();
 
 			Assert.That(xml.GetNode(), XmlEquivalent.To("<X> <Item>1</Item> </X>"));
 		}

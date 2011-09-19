@@ -126,7 +126,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			throw Error.IteratorNotMutable();
 		}
 
-		public void RemoveToEnd()
+		public void RemoveAllNext()
 		{
 			throw Error.IteratorNotMutable();
 		}

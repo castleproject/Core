@@ -36,9 +36,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return true; }
 		}
 
-		public override object GetStub(IXmlCursor cursor, IDictionaryAdapter parent, IXmlAccessor accessor)
+		public override object GetStub(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-			var itemType = cursor.ClrType.GetElementType();
+			var itemType = node.ClrType.GetElementType();
 
 			return Array.CreateInstance(itemType, 0);
 		}
@@ -84,7 +84,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				}
 			}
 
-			cursor.RemoveToEnd();
+			cursor.RemoveAllNext();
 
 			if (target != null)
 				value = target;

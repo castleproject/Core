@@ -263,7 +263,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			foreach (var item in items)
 				DetachPropertyChanged(item.Value);
 			cursor.Reset();
-			cursor.RemoveToEnd();
+			cursor.RemoveAllNext();
 			items.Clear();
 		}
 

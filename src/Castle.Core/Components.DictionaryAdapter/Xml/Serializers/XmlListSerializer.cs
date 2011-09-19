@@ -34,9 +34,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return true; }
 		}
 
-		public override object GetStub(IXmlCursor cursor, IDictionaryAdapter parent, IXmlAccessor accessor)
+		public override object GetStub(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-			return GetValue((IXmlNode) cursor, parent, accessor);
+			return GetValue(node, parent, accessor);
 		}
 
 		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)

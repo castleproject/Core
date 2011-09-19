@@ -21,6 +21,5 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		IXmlCursor SelectCollectionItems(IXmlNode parentNode, bool mutable);
 		void       GetCollectionItems   (IXmlNode parentNode, IDictionaryAdapter parentObject, IList values);
-		void       SetCollectionItems   (IXmlNode parentNode, IDictionaryAdapter parentObject, IEnumerable values);
 	}
 }

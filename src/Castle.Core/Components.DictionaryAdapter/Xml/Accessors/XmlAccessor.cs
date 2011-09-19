@@ -74,6 +74,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return false; }
 		}
 
+		public bool IsCollection
+		{
+			get { return serializer.Kind == XmlTypeKind.Collection; }
+		}
+
 		public IXmlAccessorContext Context
 		{
 			get { return context; }
@@ -93,9 +98,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			if (orStub) orStub &= serializer.CanGetStub;
 
-			var cursor = Serializer.Kind == XmlTypeKind.Collection
-				? SelectCollectionNode(parentNode, orStub)
-				: SelectPropertyNode  (parentNode, orStub);
+			var cursor = IsCollection
+				? SelectCollectionNode(parentNode, true)
+				: SelectPropertyNode  (parentNode, true);
 
 			if (cursor.MoveNext() && !cursor.IsNil)
 				return serializer.GetValue(cursor, parentObject, this);
@@ -106,7 +111,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public virtual void SetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, ref object value)
 		{
-			var cursor = serializer.Kind == XmlTypeKind.Collection
+			var cursor = IsCollection
 				? SelectCollectionNode(parentNode, true)
 				: SelectPropertyNode  (parentNode, true);
 
@@ -115,14 +120,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				cursor.MakeNext(value.GetComponentType());
 				Serializer.SetValue(cursor, parentObject, this, ref value);
 			}
-			else if (IsNillable)
+			else
+			{
+				SetPropertyToNull(cursor);
+			}
+		}
+
+		protected virtual void SetPropertyToNull(IXmlCursor cursor)
+		{
+			if (IsNillable)
 			{
 				cursor.MakeNext(clrType);
 				cursor.IsNil = true;
 			}
 			else
 			{
-				cursor.RemoveToEnd();
+				cursor.RemoveAllNext();
 			}
 		}
 
@@ -137,17 +150,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
-		public void SetCollectionItems(IXmlNode parentNode, IDictionaryAdapter parentObject, IEnumerable collection)
+		protected void RemoveCollectionItems(IXmlNode parentNode)
 		{
-			//var cursor = SelectCollectionItems(parentNode, true);
-
-			//foreach (var item in collection)
-			//{
-			//    cursor.MakeNext(item.GetComponentType());
-			//    serializer.SetValue(cursor, parentObject, this, ref item);
-			//}
-
-			//cursor.RemoveToEnd();
+			var itemType = clrType.GetCollectionItemType();
+			var accessor = GetCollectionAccessor(itemType);
+			var cursor   = accessor.SelectCollectionItems(parentNode, true);
+			cursor.RemoveAllNext();
 		}
 
 		public virtual IXmlCollectionAccessor GetCollectionAccessor(Type itemType)

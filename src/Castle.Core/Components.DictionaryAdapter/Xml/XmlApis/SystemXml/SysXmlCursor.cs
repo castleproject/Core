@@ -476,7 +476,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				&& node.NamespaceURI == namespaceUri;
 		}
 
-		public void RemoveToEnd()
+		public void RemoveAllNext()
 		{
 			while (MoveNext())
 				Remove();

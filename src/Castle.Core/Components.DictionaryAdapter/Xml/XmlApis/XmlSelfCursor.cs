@@ -181,7 +181,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			// Do nothing
 		}
 
-		public void RemoveToEnd()
+		public void RemoveAllNext()
 		{
 			// Do nothing
 		}

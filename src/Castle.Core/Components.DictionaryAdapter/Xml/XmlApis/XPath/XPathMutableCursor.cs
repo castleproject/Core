@@ -297,7 +297,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			while (++depth < path.ExpressionParts.Count);
 		}
 
-		public void RemoveToEnd()
+		public void RemoveAllNext()
 		{
 			while (MoveNext())
 				Remove();
