@@ -251,13 +251,15 @@
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\IXmlNode.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\CursorFlags.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\SystemXml\SysXmlNode.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\CompiledPath.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\IXPath.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\CompiledXPath.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\CompiledXPathNode.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\CompiledXPathStep.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XmlContext.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XmlSelfCursor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\XPathBufferedNodeIterator.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\XPathContext.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\XPathExtensions.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\XPathCompiler.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\XPathMutableCursor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\XPathNode.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\XPathReadOnlyCursor.cs" />

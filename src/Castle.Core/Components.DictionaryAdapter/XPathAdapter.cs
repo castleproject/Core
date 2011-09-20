@@ -110,7 +110,7 @@ namespace Castle.Components.DictionaryAdapter
 			if (attribute == null)
 				return false;
 
-			var compiledExpression = attribute.Path.Expression;
+			var compiledExpression = attribute.Path.Path;
 
 			if (Context.Matches(compiledExpression, root))
 				return true;
@@ -727,7 +727,7 @@ namespace Castle.Components.DictionaryAdapter
 				else if (behavior is Xml.XPathAttribute)
 				{
 					var attrib = (Xml.XPathAttribute)behavior;
-					xpath = attrib.Path.Expression;
+					xpath = attrib.Path.Path;
 				}
 				else
 				{

@@ -23,7 +23,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 	[TestFixture]
 	public class XPathMutableCursorTestCase : XPathCursorTestCase
 	{
-		protected override IXmlCursor Cursor(ILazy<XPathNavigator> lazy, CompiledPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
+		protected override IXmlCursor Cursor(ILazy<XPathNavigator> lazy, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
 		{
 			return new XPathReadOnlyCursor(lazy, path, includedTypes, flags);
 		}

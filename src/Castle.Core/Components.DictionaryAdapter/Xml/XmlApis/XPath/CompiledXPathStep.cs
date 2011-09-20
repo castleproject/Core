@@ -15,17 +15,33 @@
 #if !SL3
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	using System.Collections.Generic;
+	using System;
 	using System.Xml.XPath;
 	using System.Xml.Xsl;
 
-	public interface ICompiledPath
+	public class CompiledXPathStep : CompiledXPathNode
 	{
-		string Path { get; }
-		XPathExpression Expression { get; }
-		IList<XPathExpression> ExpressionParts { get; }
+		private XPathExpression path;
 
-		void SetContext(XsltContext context);
+		internal CompiledXPathStep() { }
+
+		public XPathExpression Path
+		{
+			get { return path; }
+			internal set { path = value; }
+		}
+
+		public CompiledXPathStep NextStep
+		{
+			get { return (CompiledXPathStep) NextNode; }
+			internal set { NextNode = value; }
+		}
+
+		internal override void SetContext(XsltContext context)
+		{
+			path.SetContext(context);
+			base.SetContext(context);
+		}
 	}
 }
 #endif

@@ -27,7 +27,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private readonly IXmlIncludedTypeMap includedTypes;
 		private readonly CursorFlags flags;
 
-		public XPathReadOnlyCursor(ILazy<XPathNavigator> parent, ICompiledPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
+		public XPathReadOnlyCursor(ILazy<XPathNavigator> parent, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
 		{
 			if (parent == null)
 				throw new ArgumentNullException("parent");
@@ -37,7 +37,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				throw new ArgumentNullException("includedTypes");
 
 			this.parent        = parent.Value;
-			this.path          = path.Expression;
+			this.path          = path.Path;
 			this.includedTypes = includedTypes;
 			this.flags         = flags;
 

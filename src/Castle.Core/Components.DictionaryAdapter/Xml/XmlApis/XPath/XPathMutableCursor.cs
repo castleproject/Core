@@ -25,11 +25,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private int depth;
 
 		private readonly ILazy<XPathNavigator> parent;
-		private readonly ICompiledPath path;
+		private readonly CompiledXPath path;
 		private readonly IXmlIncludedTypeMap knownTypes;
 		private readonly CursorFlags flags;
 
-		public XPathMutableCursor(ILazy<XPathNavigator> parent, ICompiledPath path, IXmlIncludedTypeMap knownTypes, CursorFlags flags)
+		public XPathMutableCursor(ILazy<XPathNavigator> parent, CompiledXPath path, IXmlIncludedTypeMap knownTypes, CursorFlags flags)
 		{
 			if (null == parent)
 				throw new ArgumentNullException("parent");
@@ -53,7 +53,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			iterator = new XPathBufferedNodeIterator
 			(
-				parent.Value.Select(path.ExpressionParts[0])
+				parent.Value.Select(path.Steps[0].Path)
 			);
 		}
 
@@ -64,7 +64,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public bool HasCurrent
 		{
-			get { return depth == path.ExpressionParts.Count; }
+			get { return depth == path.Steps.Count; }
 		}
 
 		public bool HasPartialOrCurrent
@@ -151,9 +151,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private bool SeekCurrent()
 		{
-			while (depth < path.ExpressionParts.Count)
+			while (depth < path.Steps.Count)
 			{
-				var iterator = node.Select(path.ExpressionParts[depth]);
+				var iterator = node.Select(path.Steps[depth].Path);
 				if (!iterator.MoveNext())
 					return true; // Sought as far as possible
 				if (!Consume(iterator, false))
@@ -241,7 +241,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void Create(Type type)
 		{
-			for (var i = depth; i < path.ExpressionParts.Count; i++)
+			for (var i = depth; i < path.Steps.Count; i++)
 				RequireCreatable(GetPath(i));
 			
 			if (HasCurrent)
@@ -283,18 +283,18 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private void WriteParts(XmlWriter writer)
 		{
-			for (var i = depth; i < path.ExpressionParts.Count; i++)
+			for (var i = depth; i < path.Steps.Count; i++)
 				writer.WriteStartElement(GetPath(i));
 		}
 
 		private void SeekCurrentAfterCreate(bool moved)
 		{
 			RequireMoved(moved);
-			if (++depth == path.ExpressionParts.Count)
+			if (++depth == path.Steps.Count)
 				return;
 
 			do RequireMoved(node.MoveToFirstChild());
-			while (++depth < path.ExpressionParts.Count);
+			while (++depth < path.Steps.Count);
 		}
 
 		public void RemoveAllNext()
@@ -322,16 +322,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private string GetPath(int index)
 		{
-			return path.ExpressionParts[index].Expression;
+			return path.Steps[index].Path.Expression;
 		}
 
-		private void RequireSupportedPath(ICompiledPath path)
+		private void RequireSupportedPath(CompiledXPath path)
 		{
-			if (null == path.ExpressionParts || path.ExpressionParts.Count == 0)
+			if (null == path.Steps || path.Steps.Count == 0)
 			{
 				var message = string.Format(
 					"The path '{0}' is not a supported XPath path expression.",
-					path.Path);
+					path.Path.Expression);
 				throw new FormatException(message);
 			}
 		}

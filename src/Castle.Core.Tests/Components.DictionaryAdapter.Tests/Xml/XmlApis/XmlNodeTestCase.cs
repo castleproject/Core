@@ -255,7 +255,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		public void Select()
 		{
 			var node = NodeForElement("<X> <A/> </X>");
-			var path = new CompiledPath("A");
+			var path = XPathCompiler.Compile("A");
 
 			var cursor = node.Select(path, IncludedTypes, CursorFlags.Elements);
 
@@ -269,7 +269,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		public void Evaluate()
 		{
 			var node = NodeForElement("<X> <A/> </X>");
-			var path = new CompiledPath("count(A)");
+			var path = XPathCompiler.Compile("count(A)");
 
 			var value = node.Evaluate(path);
 

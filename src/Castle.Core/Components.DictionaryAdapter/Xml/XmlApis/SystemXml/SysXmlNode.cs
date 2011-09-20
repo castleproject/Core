@@ -136,16 +136,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return node.CreateNavigator().AppendChild();
 		}
 
-		public IXmlCursor Select(ICompiledPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
+		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
 		{
 			return flags.SupportsMutation()
 				? (IXmlCursor) new XPathMutableCursor (this, path, includedTypes, flags)
 				: (IXmlCursor) new XPathReadOnlyCursor(this, path, includedTypes, flags);
 		}
 
-		public object Evaluate(ICompiledPath path)
+		public object Evaluate(CompiledXPath path)
 		{
-			return node.CreateNavigator().Evaluate(path.Expression);
+			return node.CreateNavigator().Evaluate(path.Path);
 		}
 
 		public XmlNode GetNode()

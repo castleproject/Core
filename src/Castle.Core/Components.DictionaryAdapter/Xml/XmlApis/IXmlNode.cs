@@ -31,8 +31,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IXmlCursor SelectSelf(Type clrType);
 		IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags);
 #if !SL3
-		IXmlCursor Select  (ICompiledPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags);
-		object     Evaluate(ICompiledPath path);
+		IXmlCursor Select  (CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags);
+		object     Evaluate(CompiledXPath path);
 #endif
 
 		void Clear();

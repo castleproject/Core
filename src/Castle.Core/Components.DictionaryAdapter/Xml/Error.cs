@@ -156,5 +156,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			return new InvalidOperationException();
 		}
+
+		internal static Exception UnreachableState()
+		{
+			return new NotImplementedException();
+		}
 	}
 }

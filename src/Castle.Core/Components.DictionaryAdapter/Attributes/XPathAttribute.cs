@@ -20,14 +20,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = true)]
 	public class XPathAttribute : Attribute
 	{
-		private readonly CompiledPath path;
+		private readonly CompiledXPath path;
 
 		public XPathAttribute(string path)
 		{
-			this.path = new CompiledPath(path);
+			this.path = XPathCompiler.Compile(path);
 		}
 
-		public ICompiledPath Path
+		public CompiledXPath Path
 		{
 			get { return path; }
 		}

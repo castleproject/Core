@@ -266,19 +266,19 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			return new XPathNode(Xml(xml), typeof(object));
 		}
 
-		protected static ICompiledPath Path(string path)
+		protected static CompiledXPath Path(string path)
 		{
-			return new CompiledPath(path);
+			return XPathCompiler.Compile(path);
 		}
 
 		protected IXmlCursor Cursor(XPathNavigator parent, string pathText, CursorFlags flags)
 		{
 			var lazyParent   = new DummyLazy<XPathNavigator> { Value = parent };
-			var compiledPath = new CompiledPath(pathText);
+			var compiledPath = XPathCompiler.Compile(pathText);
 			return Cursor(lazyParent, compiledPath, IncludedTypes, flags);
 		}
 
-		protected abstract IXmlCursor Cursor(ILazy<XPathNavigator> lazy, CompiledPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags);
+		protected abstract IXmlCursor Cursor(ILazy<XPathNavigator> lazy, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags);
 
 		[TestFixtureSetUp]
 		public virtual void OneTimeSetUp()

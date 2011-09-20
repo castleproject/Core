@@ -133,16 +133,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 #endif
 		}
 
-		public IXmlCursor Select(ICompiledPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
+		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
 		{
 			return flags.SupportsMutation()
 				? (IXmlCursor) new XPathMutableCursor (this, path, includedTypes, flags)
 				: (IXmlCursor) new XPathReadOnlyCursor(this, path, includedTypes, flags);
 		}
 
-		public virtual object Evaluate(ICompiledPath path)
+		public virtual object Evaluate(CompiledXPath path)
 		{
-			return node.Evaluate(path.Expression);
+			return node.Evaluate(path.Path);
 		}
 
 		public virtual XmlReader ReadSubtree()

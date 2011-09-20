@@ -129,12 +129,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 
 #if !SL3
-		public IXmlCursor Select(ICompiledPath path, IXmlIncludedTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap knownTypes, CursorFlags flags)
 		{
 			return node.Select(path, knownTypes, flags);
 		}
 
-		public object Evaluate(ICompiledPath path)
+		public object Evaluate(CompiledXPath path)
 		{
 			return node.Evaluate(path);
 		}

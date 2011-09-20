@@ -77,9 +77,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			node.CreateAttribute(XPath.XsiPrefix, "nil", XPath.XsiNamespaceUri, "true");
 		}
 
+
 		public const char
-			SeparatorChar      = '/',
+			StepSeparatorChar      = '/',
 			WildcardChar       = '*',
+			NameSeparatorChar      = ':',
+			VariableStartChar  = '$',
 			PredicateStartChar = '[',
 			PredicateEndChar   = ']',
 			SingleQuoteChar    = '\'',

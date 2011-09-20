@@ -30,7 +30,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private readonly XmlIncludedTypeSet includedTypes;
 		private readonly XmlContext context;
 #if !SL3
-		private readonly ICompiledPath path;
+		private readonly CompiledXPath path;
 #endif
 		
 		public XmlMetadata(DictionaryAdapterMeta meta)
@@ -142,7 +142,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return context; }
 		}
 #if !SL3
-		public ICompiledPath Path
+		public CompiledXPath Path
 		{
 			get { return path; }
 		}

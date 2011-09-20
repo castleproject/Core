@@ -88,12 +88,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			throw new NotImplementedException();
 		}
 
-		public IXmlCursor Select(ICompiledPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
+		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
 		{
 			throw new NotImplementedException();
 		}
 
-		public object Evaluate(ICompiledPath path)
+		public object Evaluate(CompiledXPath path)
 		{
 			throw new NotImplementedException();
 		}

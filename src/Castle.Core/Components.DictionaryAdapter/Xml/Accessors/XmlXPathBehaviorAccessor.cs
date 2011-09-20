@@ -24,7 +24,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		private XmlAccessor itemAccessor;
 		private XmlIncludedTypeSet includedTypes;
-	    private ICompiledPath path;
+	    private CompiledXPath path;
 		private States state;
 
 		internal static readonly XmlAccessorFactory<XmlXPathBehaviorAccessor>
@@ -39,14 +39,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			includedTypes = context.IncludedTypes;
 		}
 
-	    public ICompiledPath Path
+	    public CompiledXPath Path
 	    {
 	        get { return path; }
 	    }
 
 		public bool SelectsNodes
 		{
-			get { return path.Expression.ReturnType == XPathResultType.NodeSet; }
+			get { return path.Path.ReturnType == XPathResultType.NodeSet; }
 		}
 
 		IXmlIncludedType IXmlIncludedTypeMap.Default
