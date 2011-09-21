@@ -76,12 +76,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			foreach (var child in dependencies)
 				child.Prepare();
+
+			if (next != null)
+				next.Prepare();
 		}
 
 		internal virtual void SetContext(XsltContext context)
 		{
 			if (value != null)
 				value.SetContext(context);
+
+			foreach (var child in dependencies)
+				child.SetContext(context);
+
+			if (next != null)
+				next.SetContext(context);
 		}
 	}
 }

@@ -37,14 +37,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XmlAdapter(XmlNode node)
 		{
 		    if (node == null)
-		        throw new ArgumentNullException("node");
+		        throw Error.ArgumentNull("node");
 			this.source = node;
 		}
 #endif
 		public XmlAdapter(IXmlNode node)
 		{
 		    if (node == null)
-		        throw new ArgumentNullException("node");
+		        throw Error.ArgumentNull("node");
 			this.node = node;
 		}
 

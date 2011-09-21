@@ -99,8 +99,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (orStub) orStub &= serializer.CanGetStub;
 
 			var cursor = IsCollection
-				? SelectCollectionNode(parentNode, true)
-				: SelectPropertyNode  (parentNode, true);
+				? SelectCollectionNode(parentNode, orStub)
+				: SelectPropertyNode  (parentNode, orStub);
 
 			if (cursor.MoveNext() && !cursor.IsNil)
 				return serializer.GetValue(cursor, parentObject, this);

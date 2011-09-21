@@ -81,7 +81,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			cursor.Create(TypeA.ClrType);
 			cursor.Value = "h";
 
-			Assert.That(xml, XmlEquivalent.To(
+			Assert.That(xml, XmlEquivalent.To
+			(
 				"<X>",
 					"<A>",
 						"<C H='h'>",
@@ -90,7 +91,30 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 						"</C>",
 						"<B>b</B>",
 					"</A>",
-				"</X>"));
+				"</X>"
+			));
+		}
+
+		[Test]
+		public void Create_WithVariable()
+		{
+		    var xml    = Xml("<X/>");
+		    var cursor = Cursor(xml, "A[B=$test:v]/C", CursorFlags.Multiple);
+
+		    Assert.That(cursor.MoveNext(), Is.False);
+
+			cursor.Create(TypeA.ClrType);
+			cursor.Value = "c";
+
+			Assert.That(xml, XmlEquivalent.To
+			(
+				"<X>",
+					"<A>",
+						"<C>c</C>",
+						"<B>VariableValue</B>",
+					"</A>",
+				"</X>"
+			));
 		}
 
 		protected override IXmlCursor Cursor(ILazy<XPathNavigator> parent, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)

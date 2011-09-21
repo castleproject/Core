@@ -36,6 +36,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			rootNamespaces = new Dictionary<string, string>();
 			AddNamespace(Xsd.Prefix, Xsd.NamespaceUri);
 			AddNamespace(Xsi.Prefix, Xsi.NamespaceUri);
+#if !SL3
+			functions = new Dictionary<XmlQualifiedName, IXsltContextFunction>();
+			variables = new Dictionary<XmlQualifiedName, IXsltContextVariable>();
+#endif
 		}
 
 		public void AddNamespace(XmlNamespaceAttribute attribute)
@@ -60,6 +64,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 #if !SL3
 		private XPathContext xPathContext;
+		private readonly Dictionary<XmlQualifiedName, IXsltContextFunction> functions;
+		private readonly Dictionary<XmlQualifiedName, IXsltContextVariable> variables;
 
 		public XsltContext WithXPathSemantics
 		{
@@ -81,14 +87,32 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return StringComparer.Ordinal.Compare(baseUriA, baseUriB);
 		}
 
-		public override IXsltContextFunction ResolveFunction(string prefix, string name, System.Xml.XPath.XPathResultType[] ArgTypes)
+		public void AddFunction(string prefix, string name, IXsltContextFunction function)
 		{
-			throw new NotImplementedException();
+			var key = new XmlQualifiedName(prefix, name);
+			functions[key] = function;
+		}
+
+		public void AddVariable(string prefix, string name, IXsltContextVariable variable)
+		{
+			var key = new XmlQualifiedName(prefix, name);
+			variables[key] = variable;
+		}
+
+		public override IXsltContextFunction ResolveFunction(string prefix, string name, XPathResultType[] ArgTypes)
+		{
+			IXsltContextFunction function;
+			var key = new XmlQualifiedName(prefix, name);
+			functions.TryGetValue(key, out function);
+			return function;
 		}
 
 		public override IXsltContextVariable ResolveVariable(string prefix, string name)
 		{
-			throw new NotImplementedException();
+			IXsltContextVariable variable;
+			var key = new XmlQualifiedName(prefix, name);
+			variables.TryGetValue(key, out variable);
+			return variable;
 		}
 #endif
 	}

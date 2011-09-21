@@ -251,6 +251,7 @@
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\IXmlNode.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\CursorFlags.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\SystemXml\SysXmlNode.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XmlQualifiedName.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\CompiledXPath.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\CompiledXPathNode.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\CompiledXPathStep.cs" />

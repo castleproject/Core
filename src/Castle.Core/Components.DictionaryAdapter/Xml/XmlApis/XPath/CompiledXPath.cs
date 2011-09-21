@@ -60,18 +60,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		internal void Prepare()
 		{
-			CompiledXPathNode node;
-			for (node = firstStep; node != null; node = node.NextNode)
-				node.Prepare();
+			if (firstStep != null)
+				firstStep.Prepare();
 		}
 
 		public void SetContext(XsltContext context)
 		{
 			path.SetContext(context);
 
-			CompiledXPathNode node;
-			for (node = firstStep; node != null; node = node.NextNode)
-				node.SetContext(context);
+			if (firstStep != null)
+				firstStep.SetContext(context);
 		}
 
 		private static readonly IList<CompiledXPathStep>

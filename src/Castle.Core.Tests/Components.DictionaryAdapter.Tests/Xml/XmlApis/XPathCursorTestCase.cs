@@ -316,6 +316,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			{
 				Context = new XmlContext();
 				Context.AddNamespace("p", "ns");
+				Context.AddVariable("test", "v", new MockXPathVariable("VariableValue"));
+				Context.AddFunction("test", "f", new MockXPathFunction("FunctionValue"));
 			}
 		}
 
