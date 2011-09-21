@@ -286,7 +286,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private void Complete()
 		{
-			using (var writer = node.AppendChild())
+			using (var writer = CreateWriterForAppend())
 				WriteNode(step, writer);
 
 			var moved = step.IsAttribute
@@ -295,11 +295,18 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			SeekCurrentAfterCreate(moved);
 		}
 
+		private XmlWriter CreateWriterForAppend()
+		{
+			return step.IsAttribute
+				? node.CreateAttributes()
+				: node.AppendChild();
+		}
+
 		private void WriteNode(CompiledXPathNode node, XmlWriter writer)
 		{
 			if (node.IsAttribute)
 				WriteAttribute(node, writer);
-			else if (node.Dependencies.Count == 0)
+			else if (node.IsSimple)
 				WriteSimpleElement(node, writer);
 			else
 				WriteComplexElement(node, writer);

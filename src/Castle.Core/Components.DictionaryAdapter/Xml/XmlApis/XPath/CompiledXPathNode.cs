@@ -53,6 +53,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			internal set { isAttribute = value; }
 		}
 
+		public bool IsSimple
+		{
+			get { return dependencies.Count == 0 && next == null; }
+		}
+
 		public XPathExpression Value
 		{
 			get { return value; }
