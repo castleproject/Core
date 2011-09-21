@@ -38,7 +38,11 @@ namespace Castle.Components.DictionaryAdapter
 
 		public override object this[object key]
 		{
-			get { return dictionary[GetKey(key)]; }
+			get 
+			{
+				TValue value;
+				return dictionary.TryGetValue(GetKey(key), out value) ? value : default(TValue);
+			}
 			set { dictionary[GetKey(key)] = (TValue)value; }
 		}
 
