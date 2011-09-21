@@ -71,7 +71,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 		    var dictionary = new Hashtable();
 
-		    var descriptor = new DictionaryDescriptor(parent.Meta.Behaviors);
+		    var descriptor = new DictionaryDescriptor(/*parent.Meta.Behaviors*/); // TODO: Ask Craig
 		    parent.This.Descriptor.CopyBehaviors(descriptor);
 		    descriptor.AddBehavior(adapter);
 

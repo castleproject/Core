@@ -28,15 +28,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private States state;
 
 		protected XmlNodeAccessor(Type type, IXmlAccessorContext context)
-			: base(type, context)
-		{
-			localName = type.GetLocalName();
-		}
+			: this(type.GetLocalName(), type, context) { }
 
 		protected XmlNodeAccessor(PropertyDescriptor property, IXmlAccessorContext context)
-			: base(property.PropertyType, context)
+			: this(property.PropertyName, property.PropertyType, context) { }
+
+		private XmlNodeAccessor(string key, Type type, IXmlAccessorContext context)
+			: base(type, context)
 		{
-			localName = XmlConvert.EncodeLocalName(property.PropertyName);
+			localName    = XmlConvert.EncodeLocalName(key);
+			namespaceUri = context.ChildNamespaceUri;
 		}
 
 		public string LocalName

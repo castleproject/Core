@@ -21,6 +21,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public interface IXmlAccessorContext
 	{
+		string ChildNamespaceUri { get; }
 		XmlIncludedTypeSet IncludedTypes { get; }
 		XmlContext XmlContext { get; }
 	}
