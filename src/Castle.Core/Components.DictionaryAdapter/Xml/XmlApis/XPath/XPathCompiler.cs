@@ -43,8 +43,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private static bool ParsePath(Tokenizer source, CompiledXPath path)
 		{
-			source.Read(); // First token
-
 			CompiledXPathStep next;
 			if (!ParseStep(source, out next))
 				return false;
@@ -59,7 +57,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					return false;
 				if (parent.IsAttribute)
 					return false;
-				source.Read();
+				source.Consume();
 
 				if (!ParseStep(source, out next))
 					return false;
@@ -71,20 +69,27 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private static bool ParseStep(Tokenizer source, out CompiledXPathStep step)
 		{
 			step = new CompiledXPathStep();
-			var start = source.StartIndex;
+			var start = source.Index;
 
-			if (Consume(source, Token.AttributeStart))
-				step.IsAttribute = true;
-
-			if (!ParseQualifiedName(source, step))
+			if (!ParseNodeCore(source, step))
 				return false;
 
-			if (!ParsePredicateList(source, step))
-				return false;
-
-			var limit = source.StartIndex;
-			var path  = source.Text(start, limit);
+			var path  = source.GetConsumedText(start);
 			step.Path = XPathExpression.Compile(path);
+			return true;
+		}
+
+		private static bool ParseNodeCore(Tokenizer source, CompiledXPathNode node)
+		{
+			if (Consume(source, Token.AttributeStart))
+				node.IsAttribute = true;
+
+			if (!ParseQualifiedName(source, node))
+				return false;
+
+			if (!ParsePredicateList(source, node))
+				return false;
+
 			return true;
 		}
 
@@ -101,8 +106,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private static bool ParsePredicate(Tokenizer source, IList<CompiledXPathNode> dependencies)
 		{
-			if (!Consume(source, Token.PredicateStart))
-				return false;
+			// Don't need to check this; caller must have already checked it.
+			//if (!Consume(source, Token.PredicateStart))
+			//    return false;
+			source.Consume();
 
 			if (!ParseAndExpression(source, dependencies))
 				return false;
@@ -122,9 +129,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					return false;
 				dependencies.Add(node);
 
-				if (source.Token != Token.Name || source.Text() != "and")
+				if (source.Token != Token.Name || source.Text != "and")
 					return true;
-				source.Read();
+				source.Consume();
 			}
 		}
 
@@ -192,21 +199,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			node = new CompiledXPathNode();
 
-			if (Consume(source, Token.AttributeStart))
-				node.IsAttribute = true;
-
-			if (!ParseQualifiedName(source, node))
-				return false;
-
-			if (!ParsePredicateList(source, node))
-				return false;
-
-			return true;
+			return ParseNodeCore(source, node);
 		}
 
 		private static bool ParseValue(Tokenizer source, out XPathExpression value)
 		{
-			var start = source.StartIndex;
+			var start = source.Index;
 
 			var parsed =
 				Consume(source, Token.StringLiteral) ||
@@ -217,8 +215,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (!parsed)
 				return Try.Failure(out value);
 
-			var limit = source.StartIndex;
-			var xpath = source.Text(start, limit);
+			var xpath = source.GetConsumedText(start);
 			value = XPathExpression.Compile(xpath);
 			return true;
 		}
@@ -252,8 +249,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			if (source.Token != Token.Name)
 				return Try.Failure(out name);
-			name = source.Text();
-			source.Read();
+			name = source.Text;
+			source.Consume();
 			return true;
 		}
 
@@ -261,7 +258,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			if (source.Token != token)
 				return false;
-			source.Read();
+			source.Consume();
 			return true;
 		}
 
@@ -302,46 +299,45 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			private Token token;
 			private int   index;
 			private int   start;
+			private int   prior;
 
 			public Tokenizer(string input)
 			{
 				this.input = input;
 				this.state = State.Initial;
 				this.index = -1;
+				Consume();
 			}
 
-			public string Input
-			{
-				get { return input; }
-			}
-
-			public int StartIndex
-			{
-				get { return start; }
-			}
-
-			public int Index
-			{
-				get { return index; }
-			}
-
+			// Type of the current token
 			public Token Token
 			{
 				get { return token; }
 			}
 
-			public string Text()
+			// Text of the current token
+			public string Text
 			{
-				return Text(start, index + 1);
+				get { return input.Substring(start, index - start + 1); }
 			}
 
-			public string Text(int start, int limit)
+			// Gets text that has been consumed previously
+			public string GetConsumedText(int start)
 			{
-				return input.Substring(start, limit - start);
+				return input.Substring(start, prior - start + 1);
 			}
 
-			public void Read()
+			// Index where current token starts
+			public int Index
 			{
+				get { return start; }
+			}
+
+			// Consider the current token consumed, and read next token
+			public void Consume()
+			{
+				prior = index;
+
 			    for(;;)
 			    {
 					var c = ReadChar();
@@ -392,9 +388,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 						case State.Failed:
 							token = Token.Error;
 							return;
-
-						default:
-							throw Error.UnreachableState();
 			        }
 			    }
 			}

@@ -23,6 +23,13 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 	public class XPathCompilerTestCase
 	{
 		[Test]
+		public void RequiresPath()
+		{
+			Assert.Throws<ArgumentNullException>(() =>
+				XPathCompiler.Compile(null));
+		}
+
+		[Test]
 		public void LocalName()
 		{
 			var p = XPathCompiler.Compile("aa");
@@ -477,6 +484,160 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(n.Value,           Is.Null);
 			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 			Assert.That(n.NextNode,        Is.Null);
+		}
+
+		[Test]
+		public void UnsupportedLocalName()
+		{
+			var p = XPathCompiler.Compile("*");
+
+			Assert.That(p.Path,            Is.Not.Null);
+			Assert.That(p.Path.Expression, Is.EqualTo("*"));
+			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.FirstStep,       Is.Null);
+		}
+
+		[Test]
+		public void UnsupportedLocalName_Attribute()
+		{
+			var p = XPathCompiler.Compile("@*");
+
+			Assert.That(p.Path,            Is.Not.Null);
+			Assert.That(p.Path.Expression, Is.EqualTo("@*"));
+			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.FirstStep,       Is.Null);
+		}
+
+		[Test]
+		public void UnsupportedLocalName_Child()
+		{
+			var p = XPathCompiler.Compile("a/*");
+
+			Assert.That(p.Path,            Is.Not.Null);
+			Assert.That(p.Path.Expression, Is.EqualTo("a/*"));
+			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.FirstStep,       Is.Null);
+		}
+
+		[Test]
+		public void UnsupportedLocalName_Predicate()
+		{
+			var p = XPathCompiler.Compile("a[*]");
+
+			Assert.That(p.Path,            Is.Not.Null);
+			Assert.That(p.Path.Expression, Is.EqualTo("a[*]"));
+			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.FirstStep,       Is.Null);
+		}
+
+		[Test]
+		public void UnsupportedLocalName_PredicateAttribute()
+		{
+			var p = XPathCompiler.Compile("a[@*]");
+
+			Assert.That(p.Path,            Is.Not.Null);
+			Assert.That(p.Path.Expression, Is.EqualTo("a[@*]"));
+			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.FirstStep,       Is.Null);
+		}
+
+		[Test]
+		public void UnsupportedLocalName_PredicateChild()
+		{
+			var p = XPathCompiler.Compile("a[b/*]");
+
+			Assert.That(p.Path,            Is.Not.Null);
+			Assert.That(p.Path.Expression, Is.EqualTo("a[b/*]"));
+			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.FirstStep,       Is.Null);
+		}
+
+		[Test]
+		public void UnsupportedQualifiedName()
+		{
+			var p = XPathCompiler.Compile("a:*");
+
+			Assert.That(p.Path,            Is.Not.Null);
+			Assert.That(p.Path.Expression, Is.EqualTo("a:*"));
+			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.FirstStep,       Is.Null);
+		}
+
+		[Test]
+		public void AttributeParent()
+		{
+			var p = XPathCompiler.Compile("@a/b");
+
+			Assert.That(p.Path,            Is.Not.Null);
+			Assert.That(p.Path.Expression, Is.EqualTo("@a/b"));
+			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.FirstStep,       Is.Null);
+		}
+
+		[Test]
+		public void AttributeParent_InPredicate()
+		{
+			var p = XPathCompiler.Compile("a[@b/c]");
+
+			Assert.That(p.Path,            Is.Not.Null);
+			Assert.That(p.Path.Expression, Is.EqualTo("a[@b/c]"));
+			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.FirstStep,       Is.Null);
+		}
+
+		[Test]
+		public void UnsupportedOperator_LeftToRight()
+		{
+			var p = XPathCompiler.Compile("a[b or c]");
+
+			Assert.That(p.Path,            Is.Not.Null);
+			Assert.That(p.Path.Expression, Is.EqualTo("a[b or c]"));
+			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.FirstStep,       Is.Null);
+		}
+
+		[Test]
+		public void UnsupportedComparand_LeftToRight()
+		{
+			var p = XPathCompiler.Compile("a[b=c]");
+
+			Assert.That(p.Path,            Is.Not.Null);
+			Assert.That(p.Path.Expression, Is.EqualTo("a[b=c]"));
+			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.FirstStep,       Is.Null);
+		}
+
+		[Test]
+		public void UnsupportedOperator_RightToLeft()
+		{
+			var p = XPathCompiler.Compile("a[$b or c]");
+
+			Assert.That(p.Path,            Is.Not.Null);
+			Assert.That(p.Path.Expression, Is.EqualTo("a[$b or c]"));
+			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.FirstStep,       Is.Null);
+		}
+
+		[Test]
+		public void UnsupportedComparand_RightToLeft()
+		{
+			var p = XPathCompiler.Compile("a[$b=$c]");
+
+			Assert.That(p.Path,            Is.Not.Null);	
+			Assert.That(p.Path.Expression, Is.EqualTo("a[$b=$c]"));
+			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.FirstStep,       Is.Null);
+		}
+
+		[Test]
+		public void UnsupportedTrailingOperators()
+		{
+			var p = XPathCompiler.Compile("f()");
+
+			Assert.That(p.Path,            Is.Not.Null);
+			Assert.That(p.Path.Expression, Is.EqualTo("f()"));
+			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.FirstStep,       Is.Null);
 		}
 	}
 }
