@@ -25,6 +25,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		private XPathExpression path;
 		private CompiledXPathStep firstStep;
+		private int depth;
 
 		internal CompiledXPath() { }
 
@@ -40,9 +41,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			internal set { firstStep = value; }
 		}
 
-		public IList<CompiledXPathStep> Steps
+		public int Depth
 		{
-			get { return null; } // TODO
+			get { return depth; }
+			internal set { depth = value; }
 		}
 
 		public bool IsCreatable
@@ -53,6 +55,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		internal void MakeNotCreatable()
 		{
 			firstStep = null;
+			depth = 0;
 		}
 
 		internal void Prepare()

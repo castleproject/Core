@@ -23,6 +23,63 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 	[TestFixture]
 	public class XPathMutableCursorTestCase : XPathCursorTestCase
 	{
+		[Test]
+		public void Iterate_AllNodes_WhenNoMatchExists()
+		{
+		    var xml    = Xml("<X Q='?'> foo <Q/> bar </X>");
+		    var cursor = Cursor(xml, "@A|A", CursorFlags.None);
+
+		    Assert.That(cursor.MoveNext(), Is.False);
+		}
+
+		[Test]
+		public void Iterate_AllNodes_WhenOneMatchExists_AsAttribute()
+		{
+		    var xml    = Xml("<X Q='?' A='1' R='?'> <Q/> </X>");
+		    var cursor = Cursor(xml, "@A|A", CursorFlags.None);
+
+		    Assert.That(cursor.MoveNext(), Is.True);
+		    Assert.That(cursor.LocalName,  Is.EqualTo("A"));
+		    Assert.That(cursor.Value,      Is.EqualTo("1"));
+		    Assert.That(cursor.MoveNext(), Is.False);
+		}
+
+		[Test]
+		public void Iterate_AllNodes_WhenOneMatchExists_AsElement()
+		{
+		    var xml    = Xml("<X Q='?'> <Q/> <A>1</A> <Q/> </X>");
+		    var cursor = Cursor(xml, "@A|A", CursorFlags.None);
+
+		    Assert.That(cursor.MoveNext(), Is.True);
+		    Assert.That(cursor.LocalName,  Is.EqualTo("A"));
+		    Assert.That(cursor.Value,      Is.EqualTo("1"));
+		    Assert.That(cursor.MoveNext(), Is.False);
+		}
+
+		[Test]
+		public void Iterate_AllNodes_WhenMultipleMatchesExist_InSingleMode()
+		{
+		    var xml    = Xml("<X Q='?' A='1' R='?'> <Q/> <A>2</A> <Q/> </X>");
+		    var cursor = Cursor(xml, "@A|A", CursorFlags.None);
+
+		    Assert.That(cursor.MoveNext(), Is.False);
+		}
+
+		[Test]
+		public void Iterate_AllNodes_WhenMultipleMatchesExist_InMultipleMode()
+		{
+		    var xml    = Xml("<X Q='?' A='1' R='?'> <Q/> <A>2</A> <Q/> </X>");
+		    var cursor = Cursor(xml, "@A|A", CursorFlags.Multiple);
+
+		    Assert.That(cursor.MoveNext(), Is.True);
+		    Assert.That(cursor.LocalName,  Is.EqualTo("A"));
+		    Assert.That(cursor.Value,      Is.EqualTo("1"));
+		    Assert.That(cursor.MoveNext(), Is.True);
+		    Assert.That(cursor.LocalName,  Is.EqualTo("A"));
+		    Assert.That(cursor.Value,      Is.EqualTo("2"));
+		    Assert.That(cursor.MoveNext(), Is.False);
+		}
+
 		protected override IXmlCursor Cursor(ILazy<XPathNavigator> lazy, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
 		{
 			return new XPathReadOnlyCursor(lazy, path, includedTypes, flags);

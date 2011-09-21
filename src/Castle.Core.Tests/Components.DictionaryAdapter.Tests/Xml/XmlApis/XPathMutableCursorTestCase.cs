@@ -58,6 +58,41 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(root.Xml, XmlEquivalent.To("<X> <Item><Other>1</Other></Item> </X>"));
 		}
 
+		[Test]
+		public void Iterate_ComplexPath_WhenPartialMatchesExist()
+		{
+		    var xml    = Xml("<X> <A><B/></A> </X>");
+		    var cursor = Cursor(xml, "A/B/@C", CursorFlags.Multiple);
+
+		    Assert.That(cursor.MoveNext(), Is.True);
+		    Assert.That(cursor.Value,      Is.Empty);
+			Assert.That(cursor.IsNil,      Is.True);
+		    Assert.That(cursor.MoveNext(), Is.False);
+		}
+
+		[Test]
+		public void Create()
+		{
+		    var xml    = Xml("<X/>");
+		    var cursor = Cursor(xml, "A[B='b']/C[D[E][F='f'] and G]/@H", CursorFlags.Multiple);
+
+		    Assert.That(cursor.MoveNext(), Is.False);
+
+			cursor.Create(TypeA.ClrType);
+			cursor.Value = "h";
+
+			Assert.That(xml, XmlEquivalent.To(
+				"<X>",
+					"<A>",
+						"<C H='h'>",
+							"<D> <E/> <F>f</F> </D>",
+							"<G/>",
+						"</C>",
+						"<B>b</B>",
+					"</A>",
+				"</X>"));
+		}
+
 		protected override IXmlCursor Cursor(ILazy<XPathNavigator> parent, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
 		{
 			return new XPathMutableCursor(parent, path, includedTypes, flags);

@@ -48,6 +48,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				return false;
 			path.FirstStep = next;
 			var parent = next;
+			path.Depth = 1;
 
 			for (;;)
 			{
@@ -63,6 +64,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					return false;
 				parent.NextStep = next;
 				parent = next;
+				path.Depth++;
 			}
 		}
 

@@ -27,7 +27,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		public void Iterate_WhenEmpty()
 		{
 			var xml    = Xml("<X/>");
-			var cursor = Cursor(xml, "A", CursorFlags.AllNodes);
+			var cursor = Cursor(xml, "A", CursorFlags.None);
 
 			Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -36,7 +36,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		public void Iterate_WhenAtEnd()
 		{
 			var xml    = Xml("<X/>");
-			var cursor = Cursor(xml, "A", CursorFlags.AllNodes);
+			var cursor = Cursor(xml, "A", CursorFlags.None);
 			cursor.MoveNext();
 
 			Assert.That(cursor.MoveNext(), Is.False);
@@ -45,8 +45,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Iterate_Element_WhenNoMatchExists()
 		{
-		    var xml    = Xml("<X Item='-'> foo <A/> bar </X>");
-		    var cursor = Cursor(xml, "Item", CursorFlags.None);
+		    var xml    = Xml("<X A='?'> foo <Q/> bar </X>");
+		    var cursor = Cursor(xml, "A", CursorFlags.None);
 
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -54,11 +54,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Iterate_Element_WhenOneMatchExists()
 		{
-		    var xml    = Xml("<X Item='-'> <A/> <Item>1</Item> <B/> </X>");
-		    var cursor = Cursor(xml, "Item", CursorFlags.None);
+		    var xml    = Xml("<X A='?'> <Q/> <A>1</A> <Q/> </X>");
+		    var cursor = Cursor(xml, "A", CursorFlags.None);
 
 		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+		    Assert.That(cursor.LocalName,  Is.EqualTo("A"));
 		    Assert.That(cursor.Value,      Is.EqualTo("1"));
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -66,8 +66,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Iterate_Element_WhenMultipleMatchesExist_InSingleMode()
 		{
-		    var xml    = Xml("<X Item='-'> <A/> <Item>1</Item> <B/> <Item>2</Item> <C/> </X>");
-		    var cursor = Cursor(xml, "Item", CursorFlags.None);
+		    var xml    = Xml("<X A='?'> <Q/> <A>1</A> <Q/> <A>2</A> <Q/> </X>");
+		    var cursor = Cursor(xml, "A", CursorFlags.None);
 
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -75,14 +75,14 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Iterate_Element_WhenMultipleMatchesExist_InMultipleMode()
 		{
-		    var xml    = Xml("<X Item='-'> <A/> <Item>1</Item> <B/> <Item>2</Item> <C/> </X>");
-		    var cursor = Cursor(xml, "Item", CursorFlags.Multiple);
+		    var xml    = Xml("<X A='?'> <Q/> <A>1</A> <Q/> <A>2</A> <Q/> </X>");
+		    var cursor = Cursor(xml, "A", CursorFlags.Multiple);
 
 		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+		    Assert.That(cursor.LocalName,  Is.EqualTo("A"));
 		    Assert.That(cursor.Value,      Is.EqualTo("1"));
 		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+		    Assert.That(cursor.LocalName,  Is.EqualTo("A"));
 		    Assert.That(cursor.Value,      Is.EqualTo("2"));
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -90,8 +90,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Iterate_Attribute_WhenNoMatchExists()
 		{
-		    var xml    = Xml("<X A='a'> <Item>-</Item> </X>");
-		    var cursor = Cursor(xml, "@Item", CursorFlags.None);
+		    var xml    = Xml("<X Q='?'> <A>?</A> </X>");
+		    var cursor = Cursor(xml, "@A", CursorFlags.None);
 
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -99,68 +99,56 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Iterate_Attribute_WhenOneMatchExists()
 		{
-		    var xml    = Xml("<X A='a' Item='1' B='b'> <Item>-</Item> </X>");
-		    var cursor = Cursor(xml, "@Item", CursorFlags.None);
+		    var xml    = Xml("<X Q='?' A='1' R='?'> <A>?</A> </X>");
+		    var cursor = Cursor(xml, "@A", CursorFlags.None);
 
 		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+		    Assert.That(cursor.LocalName,  Is.EqualTo("A"));
 		    Assert.That(cursor.Value,      Is.EqualTo("1"));
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
 
 		[Test]
-		public void Iterate_AllNodes_WhenNoMatchExists()
+		public void Iterate_ComplexPath_WhenNoMatchExists()
 		{
-		    var xml    = Xml("<X A='a'> foo <A/> bar </X>");
-		    var cursor = Cursor(xml, "@Item|Item", CursorFlags.None);
+		    var xml    = Xml("<X A='?'> foo <Q/> bar </X>");
+		    var cursor = Cursor(xml, "A/B/@C", CursorFlags.None);
 
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
 
 		[Test]
-		public void Iterate_AllNodes_WhenOneMatchExists_AsAttribute()
+		public void Iterate_ComplexPath_WhenOneMatchExists()
 		{
-		    var xml    = Xml("<X A='a' Item='1' B='b'> <A/> </X>");
-		    var cursor = Cursor(xml, "@Item|Item", CursorFlags.None);
+		    var xml    = Xml("<X A='?'> <Q/> <A><B C='1'/></A> <Q/> </X>");
+		    var cursor = Cursor(xml, "A/B/@C", CursorFlags.None);
 
 		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+		    Assert.That(cursor.LocalName,  Is.EqualTo("C"));
 		    Assert.That(cursor.Value,      Is.EqualTo("1"));
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
 
 		[Test]
-		public void Iterate_AllNodes_WhenOneMatchExists_AsElement()
+		public void Iterate_ComplexPath_WhenMultipleMatchesExist_InSingleMode()
 		{
-		    var xml    = Xml("<X A='a'> <A/> <Item>1</Item> <B/> </X>");
-		    var cursor = Cursor(xml, "@Item|Item", CursorFlags.None);
-
-		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
-		    Assert.That(cursor.Value,      Is.EqualTo("1"));
-		    Assert.That(cursor.MoveNext(), Is.False);
-		}
-
-		[Test]
-		public void Iterate_AllNodes_WhenMultipleMatchesExist_InSingleMode()
-		{
-		    var xml    = Xml("<X A='a' Item='2' B='b'> <A/> <Item>1</Item> <B/> </X>");
-		    var cursor = Cursor(xml, "@Item|Item", CursorFlags.None);
+		    var xml    = Xml("<X A='?'> <Q/> <A><B C='1'/></A> <Q/> <A><B C='2'/></A> <Q/> </X>");
+		    var cursor = Cursor(xml, "A/B/@C", CursorFlags.None);
 
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
 
 		[Test]
-		public void Iterate_AllNodes_WhenMultipleMatchesExist_InMultipleMode()
+		public void Iterate_ComplexPath_WhenMultipleMatchesExist_InMultipleMode()
 		{
-		    var xml    = Xml("<X A='a' Item='1' B='b'> <A/> <Item>2</Item> <B/> </X>");
-		    var cursor = Cursor(xml, "@Item|Item", CursorFlags.Multiple);
+		    var xml    = Xml("<X A='?'> <Q/> <A><B C='1'/></A> <Q/> <A><B C='2'/></A> <Q/> </X>");
+		    var cursor = Cursor(xml, "A/B/@C", CursorFlags.Multiple);
 
 		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+		    Assert.That(cursor.LocalName,  Is.EqualTo("C"));
 		    Assert.That(cursor.Value,      Is.EqualTo("1"));
 		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+		    Assert.That(cursor.LocalName,  Is.EqualTo("C"));
 		    Assert.That(cursor.Value,      Is.EqualTo("2"));
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -168,18 +156,18 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Reset()
 		{
-		    var xml    = Xml("<X> <Item>1</Item> </X>");
-		    var cursor = Cursor(xml, "Item", CursorFlags.None);
+		    var xml    = Xml("<X> <A>1</A> </X>");
+		    var cursor = Cursor(xml, "A", CursorFlags.Multiple);
 
 		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+		    Assert.That(cursor.LocalName,  Is.EqualTo("A"));
 		    Assert.That(cursor.Value,      Is.EqualTo("1"));
 		    Assert.That(cursor.MoveNext(), Is.False);
 
 		    cursor.Reset();
 
 		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+		    Assert.That(cursor.LocalName,  Is.EqualTo("A"));
 		    Assert.That(cursor.Value,      Is.EqualTo("1"));
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -187,8 +175,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void MoveToEnd()
 		{
-			var xml    = Xml("<X> <Item>1</Item> <Other>2</Other> </X>");
-			var cursor = Cursor(xml, "Item|Other", CursorFlags.Multiple);
+			var xml    = Xml("<X> <A>1</A> <A>2</A> </X>");
+			var cursor = Cursor(xml, "A", CursorFlags.Multiple);
 
 			cursor.MoveNext();
 			cursor.MoveToEnd();
@@ -200,7 +188,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		public void MoveTo_NotXPathNode_Fails()
 		{
 			var xml    = Xml("<X/>");
-			var cursor = Cursor(xml, "Item", CursorFlags.Elements);
+			var cursor = Cursor(xml, "A", CursorFlags.Multiple);
 
 			Assert.Throws<InvalidOperationException>(() =>
 				cursor.MoveTo(new DummyXmlNode()));
@@ -210,7 +198,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		public void MoveTo_NotARecognizedNode_Fails()
 		{
 			var xml    = Xml("<X/>");
-			var cursor = Cursor(xml, "Item", CursorFlags.Elements);
+			var cursor = Cursor(xml, "A", CursorFlags.Multiple);
 
 			var wrongNode = new XPathNode(Xml("<Q/>"), typeof(object));
 
@@ -221,37 +209,69 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void MoveTo_RecognizedNode_Succeeds_ForElement()
 		{
-			var xml    = Xml("<X> <Item>1</Item> <Other>2</Other> </X>");
-			var cursor = Cursor(xml, "Item|Other", CursorFlags.Elements | CursorFlags.Multiple);
+			var xml    = Xml("<X> <A>1</A> <A>2</A> </X>");
+			var cursor = Cursor(xml, "A", CursorFlags.Multiple);
 
+			cursor.MoveNext();
 			cursor.MoveNext();
 			var node = cursor.Save();
 			cursor.MoveToEnd();
 
 			cursor.MoveTo(node);
 
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
-			Assert.That(cursor.Value,      Is.EqualTo("1"));
-			Assert.That(cursor.MoveNext(), Is.True);
+			Assert.That(cursor.LocalName,  Is.EqualTo("A"));
+			Assert.That(cursor.Value,      Is.EqualTo("2"));
 			Assert.That(cursor.MoveNext(), Is.False);
 		}
 
 		[Test]
 		public void MoveTo_RecognizedNode_Succeeds_ForAttribute()
 		{
-			var xml    = Xml("<X Item='1' Other='2'/>");
-			var cursor = Cursor(xml, "@Item|@Other", CursorFlags.Attributes | CursorFlags.Multiple);
+			var xml    = Xml("<X A='1'/>");
+			var cursor = Cursor(xml, "@A", CursorFlags.None);
 
-			cursor.MoveNext();
 			cursor.MoveNext();
 			var node = cursor.Save();
 			cursor.MoveToEnd();
 
 			cursor.MoveTo(node);
 
-			Assert.That(cursor.LocalName,  Is.EqualTo(OtherType.LocalName));
-			Assert.That(cursor.Value,      Is.EqualTo("2"));
+			Assert.That(cursor.LocalName,  Is.EqualTo("A"));
+			Assert.That(cursor.Value,      Is.EqualTo("1"));
 			Assert.That(cursor.MoveNext(), Is.False);
+		}
+
+		[Test]
+		public void LocalNameAndNamespace_EmptyNamespace()
+		{
+			var xml    = Xml("<X> <A>1</A> </X>");
+			var cursor = Cursor(xml, "A", CursorFlags.None);
+
+			Assert.That(cursor.MoveNext(),   Is.True);
+			Assert.That(cursor.LocalName,    Is.EqualTo("A"));
+			Assert.That(cursor.NamespaceUri, Is.EqualTo(string.Empty));
+		}
+
+		[Test]
+		public void LocalNameAndNamespace_DefaultNamespace()
+		{
+			var xml    = Xml("<X xmlns='ns'> <A>1</A> </X>");
+			var cursor = Cursor(xml, "p:A", CursorFlags.None);
+
+			Assert.That(cursor.MoveNext(),   Is.True);
+			Assert.That(cursor.LocalName,    Is.EqualTo("A"));
+			Assert.That(cursor.NamespaceUri, Is.EqualTo("ns"));
+		}
+
+		[Test]
+		public void LocalNameAndNamespace_PrefixedNamespace()
+		{
+			var xml    = Xml("<X xmlns:n='ns'> <n:A>1</n:A> </X>");
+			var cursor = Cursor(xml, "p:A", CursorFlags.None);
+
+			Assert.That(cursor.MoveNext(),   Is.True);
+			Assert.That(cursor.LocalName,    Is.EqualTo("A"));
+			Assert.That(cursor.NamespaceUri, Is.EqualTo("ns"));
 		}
 
 		protected static XPathNavigator Xml(params string[] xml)
@@ -275,6 +295,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var lazyParent   = new DummyLazy<XPathNavigator> { Value = parent };
 			var compiledPath = XPathCompiler.Compile(pathText);
+			compiledPath.SetContext(Context);
 			return Cursor(lazyParent, compiledPath, IncludedTypes, flags);
 		}
 
@@ -283,26 +304,27 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[TestFixtureSetUp]
 		public virtual void OneTimeSetUp()
 		{
-			if (KnownTypes == null)
-			{
-				KnownTypes = new XmlKnownTypeSet(typeof(_TypeA));
-				KnownTypes.Add(ItemType);
-				KnownTypes.Add(OtherType);
-			}
-
 			if (IncludedTypes == null)
 			{
 				IncludedTypes = new MockXmlIncludedTypeMap();
-				IncludedTypes.DefaultClrType = typeof(_TypeA);
+				IncludedTypes.DefaultClrType = TypeA.ClrType;
+				IncludedTypes.InnerSet.Add(TypeA);
+				IncludedTypes.InnerSet.Add(TypeB);
+			}
+
+			if (Context == null)
+			{
+				Context = new XmlContext();
+				Context.AddNamespace("p", "ns");
 			}
 		}
 
-		protected static XmlKnownTypeSet        KnownTypes;
 		protected static MockXmlIncludedTypeMap IncludedTypes;
+		protected static readonly XmlIncludedType
+			TypeA = new XmlIncludedType("a", typeof(_TypeA)),
+			TypeB = new XmlIncludedType("b", typeof(_TypeB));
 
-		protected static readonly XmlKnownType
-			ItemType  = new XmlKnownType("Item",  null, null, typeof(_TypeA)),
-			OtherType = new XmlKnownType("Other", null, null, typeof(_TypeB));
+		protected static XmlContext Context;
 
 		private class _TypeA          { }
 		private class _TypeB : _TypeA { }

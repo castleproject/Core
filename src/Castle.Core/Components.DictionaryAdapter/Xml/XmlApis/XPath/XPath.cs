@@ -55,12 +55,20 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public static bool MoveToLastChild(this XPathNavigator navigator)
 		{
-			var uri = navigator.NamespaceURI;
-
 			if (!navigator.MoveToFirstChild())
 				return false;
 
 			while (navigator.MoveToNext()) { }
+
+			return true;
+		}
+
+		public static bool MoveToLastAttribute(this XPathNavigator navigator)
+		{
+			if (!navigator.MoveToFirstAttribute())
+				return false;
+
+			while (navigator.MoveToNextAttribute()) { }
 
 			return true;
 		}

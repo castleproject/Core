@@ -37,6 +37,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("aa"));
 			Assert.That(p.IsCreatable,     Is.True);
+			Assert.That(p.Depth,           Is.EqualTo(1));
 
 			var s = p.FirstStep;
 			Assert.That(s,                 Is.Not.Null);
@@ -58,6 +59,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("pp:aa"));
 			Assert.That(p.IsCreatable,     Is.True);
+			Assert.That(p.Depth,           Is.EqualTo(1));
 
 			var s = p.FirstStep;
 			Assert.That(s,                 Is.Not.Null);
@@ -79,6 +81,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("@pp:aa"));
 			Assert.That(p.IsCreatable,     Is.True);
+			Assert.That(p.Depth,           Is.EqualTo(1));
 
 			var s = p.FirstStep;
 			Assert.That(s,                 Is.Not.Null);
@@ -100,6 +103,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("aa/bb"));
 			Assert.That(p.IsCreatable,     Is.True);
+			Assert.That(p.Depth,           Is.EqualTo(2));
 
 			var s = p.FirstStep;
 			Assert.That(s,                 Is.Not.Null);
@@ -131,6 +135,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("aa[bb]"));
 			Assert.That(p.IsCreatable,     Is.True);
+			Assert.That(p.Depth,           Is.EqualTo(1));
 
 			var s = p.FirstStep;
 			Assert.That(s,                 Is.Not.Null);
@@ -161,6 +166,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("aa[pp:bb]"));
 			Assert.That(p.IsCreatable,     Is.True);
+			Assert.That(p.Depth,           Is.EqualTo(1));
 
 			var s = p.FirstStep;
 			Assert.That(s,                 Is.Not.Null);
@@ -191,6 +197,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("aa[@pp:bb]"));
 			Assert.That(p.IsCreatable,     Is.True);
+			Assert.That(p.Depth,           Is.EqualTo(1));
 
 			var s = p.FirstStep;
 			Assert.That(s,                 Is.Not.Null);
@@ -221,6 +228,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,             Is.Not.Null);
 			Assert.That(p.Path.Expression,  Is.EqualTo("aa[bb/cc='1']"));
 			Assert.That(p.IsCreatable,      Is.True);
+			Assert.That(p.Depth,            Is.EqualTo(1));
 
 			var s = p.FirstStep;
 			Assert.That(s,                  Is.Not.Null);
@@ -260,6 +268,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,             Is.Not.Null);
 			Assert.That(p.Path.Expression,  Is.EqualTo("aa[bb/cc=\"1\"]"));
 			Assert.That(p.IsCreatable,      Is.True);
+			Assert.That(p.Depth,            Is.EqualTo(1));
 
 			var s = p.FirstStep;
 			Assert.That(s,                  Is.Not.Null);
@@ -299,6 +308,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,             Is.Not.Null);
 			Assert.That(p.Path.Expression,  Is.EqualTo("aa[bb/cc=$dd]"));
 			Assert.That(p.IsCreatable,      Is.True);
+			Assert.That(p.Depth,            Is.EqualTo(1));
 
 			var s = p.FirstStep;
 			Assert.That(s,                  Is.Not.Null);
@@ -338,6 +348,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,             Is.Not.Null);
 			Assert.That(p.Path.Expression,  Is.EqualTo("aa[$dd=bb/cc]"));
 			Assert.That(p.IsCreatable,      Is.True);
+			Assert.That(p.Depth,            Is.EqualTo(1));
 
 			var s = p.FirstStep;
 			Assert.That(s,                  Is.Not.Null);
@@ -377,6 +388,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("aa[bb and cc]"));
 			Assert.That(p.IsCreatable,     Is.True);
+			Assert.That(p.Depth,           Is.EqualTo(1));
 
 			var s = p.FirstStep;
 			Assert.That(s,                 Is.Not.Null);
@@ -416,6 +428,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("aa[bb][cc]"));
 			Assert.That(p.IsCreatable,     Is.True);
+			Assert.That(p.Depth,           Is.EqualTo(1));
 
 			var s = p.FirstStep;
 			Assert.That(s,                 Is.Not.Null);
@@ -455,6 +468,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("aa[bb[cc]]"));
 			Assert.That(p.IsCreatable,     Is.True);
+			Assert.That(p.Depth,           Is.EqualTo(1));
 
 			var s = p.FirstStep;
 			Assert.That(s,                 Is.Not.Null);
@@ -494,6 +508,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("*"));
 			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.Depth,           Is.EqualTo(0));
 			Assert.That(p.FirstStep,       Is.Null);
 		}
 
@@ -505,6 +520,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("@*"));
 			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.Depth,           Is.EqualTo(0));
 			Assert.That(p.FirstStep,       Is.Null);
 		}
 
@@ -516,6 +532,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("a/*"));
 			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.Depth,           Is.EqualTo(0));
 			Assert.That(p.FirstStep,       Is.Null);
 		}
 
@@ -527,6 +544,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("a[*]"));
 			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.Depth,           Is.EqualTo(0));
 			Assert.That(p.FirstStep,       Is.Null);
 		}
 
@@ -538,6 +556,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("a[@*]"));
 			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.Depth,           Is.EqualTo(0));
 			Assert.That(p.FirstStep,       Is.Null);
 		}
 
@@ -549,6 +568,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("a[b/*]"));
 			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.Depth,           Is.EqualTo(0));
 			Assert.That(p.FirstStep,       Is.Null);
 		}
 
@@ -560,6 +580,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("a:*"));
 			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.Depth,           Is.EqualTo(0));
 			Assert.That(p.FirstStep,       Is.Null);
 		}
 
@@ -571,6 +592,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("@a/b"));
 			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.Depth,           Is.EqualTo(0));
 			Assert.That(p.FirstStep,       Is.Null);
 		}
 
@@ -582,6 +604,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("a[@b/c]"));
 			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.Depth,           Is.EqualTo(0));
 			Assert.That(p.FirstStep,       Is.Null);
 		}
 
@@ -593,6 +616,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("a[b or c]"));
 			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.Depth,           Is.EqualTo(0));
 			Assert.That(p.FirstStep,       Is.Null);
 		}
 
@@ -604,6 +628,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("a[b=c]"));
 			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.Depth,           Is.EqualTo(0));
 			Assert.That(p.FirstStep,       Is.Null);
 		}
 
@@ -615,6 +640,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("a[$b or c]"));
 			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.Depth,           Is.EqualTo(0));
 			Assert.That(p.FirstStep,       Is.Null);
 		}
 
@@ -626,6 +652,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);	
 			Assert.That(p.Path.Expression, Is.EqualTo("a[$b=$c]"));
 			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.Depth,           Is.EqualTo(0));
 			Assert.That(p.FirstStep,       Is.Null);
 		}
 
@@ -637,6 +664,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(p.Path,            Is.Not.Null);
 			Assert.That(p.Path.Expression, Is.EqualTo("f()"));
 			Assert.That(p.IsCreatable,     Is.False);
+			Assert.That(p.Depth,           Is.EqualTo(0));
 			Assert.That(p.FirstStep,       Is.Null);
 		}
 	}

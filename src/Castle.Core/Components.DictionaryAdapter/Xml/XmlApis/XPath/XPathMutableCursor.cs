@@ -22,6 +22,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	internal class XPathMutableCursor : XPathNode, IXmlCursor
 	{
 		private XPathBufferedNodeIterator iterator;
+		private CompiledXPathStep step;
 		private int depth;
 
 		private readonly ILazy<XPathNavigator> parent;
@@ -42,6 +43,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			this.parent     = parent;
 			this.path       = path;
+			this.step       = path.FirstStep;
 			this.knownTypes = knownTypes;
 			this.flags      = flags;
 
@@ -53,7 +55,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			iterator = new XPathBufferedNodeIterator
 			(
-				parent.Value.Select(path.Steps[0].Path)
+				parent.Value.Select(path.FirstStep.Path)
 			);
 		}
 
@@ -64,7 +66,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public bool HasCurrent
 		{
-			get { return depth == path.Steps.Count; }
+			get { return depth == path.Depth; }
 		}
 
 		public bool HasPartialOrCurrent
@@ -142,18 +144,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
-		private void ResetCurrent()
-		{
-			node = null;
-			type = null;
-			depth = 0;
-		}
-
 		private bool SeekCurrent()
 		{
-			while (depth < path.Steps.Count)
+			while (depth < path.Depth)
 			{
-				var iterator = node.Select(path.Steps[depth].Path);
+				var iterator = node.Select(step.Path);
 				if (!iterator.MoveNext())
 					return true; // Sought as far as possible
 				if (!Consume(iterator, false))
@@ -175,7 +170,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				return false;
 
 			node = candidate;
-			depth++;
+			Descend();
 			return true;
 		}
 
@@ -195,6 +190,25 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			ResetCurrent();
 			iterator.MoveToEnd();
+		}
+
+		private void ResetCurrent()
+		{
+			node = null;
+			type = null;
+			ResetDepth();
+		}
+
+		private void ResetDepth()
+		{
+			step = path.FirstStep;
+			depth = 0;
+		}
+
+		private int Descend()
+		{
+			step = step.NextStep;
+			return ++depth;
 		}
 
 		public void MoveTo(IXmlNode position)
@@ -241,9 +255,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void Create(Type type)
 		{
-			for (var i = depth; i < path.Steps.Count; i++)
-				RequireCreatable(GetPath(i));
-			
 			if (HasCurrent)
 				Insert();
 			else if (HasPartialOrCurrent)
@@ -256,11 +267,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private void Insert()
 		{
-			while (depth-- > 1)
+			while (--depth > 0)
 				node.MoveToParent();
+			ResetDepth();
 
 			using (var writer = node.InsertBefore())
-				WriteParts(writer);
+				WriteNode(step, writer);
 
 			var moved = node.MoveToPrevious();
 			SeekCurrentAfterCreate(moved);
@@ -275,26 +287,80 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void Complete()
 		{
 			using (var writer = node.AppendChild())
-				WriteParts(writer);
+				WriteNode(step, writer);
 
-			var moved = node.MoveToLastChild();
+			var moved = step.IsAttribute
+				? node.MoveToLastAttribute()
+				: node.MoveToLastChild();
 			SeekCurrentAfterCreate(moved);
 		}
 
-		private void WriteParts(XmlWriter writer)
+		private void WriteNode(CompiledXPathNode node, XmlWriter writer)
 		{
-			for (var i = depth; i < path.Steps.Count; i++)
-				writer.WriteStartElement(GetPath(i));
+			if (node.IsAttribute)
+				WriteAttribute(node, writer);
+			else if (node.Dependencies.Count == 0)
+				WriteSimpleElement(node, writer);
+			else
+				WriteComplexElement(node, writer);
+		}
+
+		private void WriteAttribute(CompiledXPathNode node, XmlWriter writer)
+		{
+			writer.WriteStartAttribute(node.Prefix, node.LocalName, null);
+			WriteValue(node, writer);
+			writer.WriteEndAttribute();
+		}
+
+		private void WriteSimpleElement(CompiledXPathNode node, XmlWriter writer)
+		{
+			writer.WriteStartElement(node.Prefix, node.LocalName, null);
+			WriteValue(node, writer);
+			writer.WriteEndElement();
+		}
+
+		private void WriteComplexElement(CompiledXPathNode node, XmlWriter writer)
+		{
+			writer.WriteStartElement(node.Prefix, node.LocalName, null);
+			WriteSubnodes(node, writer, true);
+			WriteSubnodes(node, writer, false);
+			writer.WriteEndElement();
+		}
+
+		private void WriteSubnodes(CompiledXPathNode parent, XmlWriter writer, bool attributes)
+		{
+			var next = parent.NextNode;
+			if (next != null && next.IsAttribute == attributes)
+				WriteNode(next, writer);
+
+			foreach (var node in parent.Dependencies)
+				if (node.IsAttribute == attributes)
+					WriteNode(node, writer);
+		}
+
+		private void WriteValue(CompiledXPathNode node, XmlWriter writer)
+		{
+			if (node.Value == null)
+				return;
+
+			var value = parent.Value.Evaluate(node.Value);
+			writer.WriteValue(value);
 		}
 
 		private void SeekCurrentAfterCreate(bool moved)
 		{
 			RequireMoved(moved);
-			if (++depth == path.Steps.Count)
+			if (Descend() == path.Depth)
 				return;
 
-			do RequireMoved(node.MoveToFirstChild());
-			while (++depth < path.Steps.Count);
+			do
+			{
+				moved = step.IsAttribute
+					? node.MoveToFirstAttribute()
+					: node.MoveToFirstChild();
+				RequireMoved(moved);
+			}
+			while (Descend() < path.Depth);
 		}
 
 		public void RemoveAllNext()
@@ -307,11 +373,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			RequireRemovable();
 
-			while (depth-- > 1)
+			while (--depth > 0)
 				node.MoveToParent();
 
 			node.DeleteSelf();
-
 			ResetCurrent();
 		}
 
@@ -320,42 +385,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return HasCurrent ? new XPathNode(node.Clone(), type) : this;
 		}
 
-		private string GetPath(int index)
-		{
-			return path.Steps[index].Path.Expression;
-		}
-
 		private void RequireSupportedPath(CompiledXPath path)
 		{
-			if (null == path.Steps || path.Steps.Count == 0)
+			if (!path.IsCreatable)
 			{
 				var message = string.Format(
 					"The path '{0}' is not a supported XPath path expression.",
 					path.Path.Expression);
 				throw new FormatException(message);
-			}
-		}
-
-		private void RequireElement(XPathNavigator candidate)
-		{
-			if (candidate.NodeType != XPathNodeType.Element)
-			{
-				var message = string.Format(
-					"The path component '{0}' selected a non-element node.",
-					GetPath(depth));
-				throw new XPathException(message);
-			}
-		}
-
-		private void RequireCreatable(string path)
-		{
-			if (!XPath.IsNCName(path))
-			{
-				ResetCurrent();
-				var message = string.Format(
-					"Cannot create an element for path component '{0}'. The path component is not a valid XML element name (NCName)",
-					path);
-				throw new XPathException(message);
 			}
 		}
 
@@ -365,7 +402,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{
 				var message = string.Format(
 					"Cannot remove current element at path component '{0}'. No current element is selected.",
-					GetPath(0));
+					path.FirstStep.Path.Expression);
 				throw new XPathException(message);
 			}
 		}
@@ -376,7 +413,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{
 				var message = string.Format(
 					"Failed navigation to {0} element after creation.",
-					GetPath(depth));
+					step.Path.Expression);
 				throw new XPathException(message);
 			}
 		}
