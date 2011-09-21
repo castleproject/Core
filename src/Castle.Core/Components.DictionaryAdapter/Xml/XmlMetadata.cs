@@ -73,8 +73,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 #endif
 			rootLocalName = XmlConvert.EncodeLocalName
 			(
-				(xmlRoot == null ? null : xmlRoot.ElementName) ??
-				(xmlType == null ? null : xmlType.TypeName   ) ??
+				(xmlRoot == null ? null : xmlRoot.ElementName.NonEmpty()) ??
+				(xmlType == null ? null : xmlType.TypeName   .NonEmpty()) ??
 				clrType.GetLocalName()
 			);
 

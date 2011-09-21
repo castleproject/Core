@@ -19,6 +19,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Linq;
 	using System.Xml;
 	using System.Xml.Serialization;
+	using IBindingList         = System.ComponentModel.IBindingList;
+	using ListChangedEventArgs = System.ComponentModel.ListChangedEventArgs;
+	using ListChangedType      = System.ComponentModel.ListChangedType;
 
 	public class XmlAdapter : DictionaryBehaviorAttribute,
 		IDictionaryInitializer,
@@ -85,7 +88,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{
 				storedValue = accessor.GetPropertyValue(node, dictionaryAdapter, !ifExists);
 				if (null != storedValue)
+				{
+					AttachObservers(storedValue, dictionaryAdapter, property);
 					dictionaryAdapter.StoreProperty(property, key, storedValue);
+				}
 			}
 			return storedValue;
 		}
@@ -95,8 +101,35 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			XmlAccessor accessor;
 			if (TryGetAccessor(property, false, out accessor))
+			{
+				if (value != null && dictionaryAdapter.ShouldClearProperty(property, value))
+					value = null;
 				accessor.SetPropertyValue(node, dictionaryAdapter, ref value);
+			}
 			return true;
+		}
+
+		private void AttachObservers(object value, IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
+		{
+			var bindingList = value as IBindingList;
+			if (bindingList != null)
+				bindingList.ListChanged += (s,e) => HandleListChanged(s, e, dictionaryAdapter, property);
+		}
+
+		private void HandleListChanged(object value, ListChangedEventArgs args, IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
+		{
+			var change = args.ListChangedType;
+			var changed
+				=  change == ListChangedType.ItemAdded
+				|| change == ListChangedType.ItemDeleted
+				|| change == ListChangedType.ItemMoved
+				|| change == ListChangedType.Reset;
+
+			if (changed && dictionaryAdapter.ShouldClearProperty(property, value))
+			{
+				value = null;
+				dictionaryAdapter.SetProperty(property.PropertyName, ref value);
+			}
 		}
 
 		private IXmlNode GetBaseNode()

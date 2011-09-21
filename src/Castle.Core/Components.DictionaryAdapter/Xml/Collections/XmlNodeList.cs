@@ -25,6 +25,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private List<XmlCollectionItem<T>> snapshot;
 		private int addedIndex   = -1;
 		private int changedIndex = -1;
+		private int suspendLevel =  0;
 
 		private readonly IXmlCursor cursor;
 		private readonly IXmlCollectionAccessor accessor;
@@ -107,6 +108,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				var item = items[index];
 				SetValue(item.Node, ref value);
 				items[index] = item.WithValue(value);
+				NotifyListChanged(ListChangedType.ItemChanged, index);
 			}
 		}
 
@@ -176,6 +178,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			addedIndex = items.Count;
 			items.Add(item);
 			AttachPropertyChanged(value);
+			NotifyListChanged(ListChangedType.ItemAdded, addedIndex);
 			return (T) value;
 		}
 
@@ -201,8 +204,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void Add(T value)
 		{
-			cursor.MoveToEnd();
-			items.Add(Create(value));
+			AddCore(Count, value);
 		}
 
 		int IList.Add(object value)
@@ -213,18 +215,30 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void Insert(int index, T value)
 		{
+			EndNew(addedIndex);
 			if (index == Count)
-				Add(value);
+				AddCore(index, value);
 			else
-			{
-				cursor.MoveTo(items[index].Node);
-				items.Insert(index, Create(value));
-			}
+				InsertCore(index, value);
 		}
 
 		void IList.Insert(int index, object value)
 		{
 			Insert(index, (T) value);
+		}
+
+		private void AddCore(int index, T value)
+		{
+			cursor.MoveToEnd();
+			items.Add(Create(value));
+			NotifyListChanged(ListChangedType.ItemAdded, index);
+		}
+
+		private void InsertCore(int index, T value)
+		{
+			cursor.MoveTo(items[index].Node);
+			items.Insert(index, Create(value));
+			NotifyListChanged(ListChangedType.ItemAdded, index);
 		}
 
 		private XmlCollectionItem<T> Create(T value)
@@ -251,27 +265,39 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void RemoveAt(int index)
 		{
+			EndNew(addedIndex);
 			var item = items[index];
 			DetachPropertyChanged(item.Value);
 			cursor.MoveTo(item.Node);
 			cursor.Remove();
 			items.RemoveAt(index);
+			NotifyListChanged(ListChangedType.ItemDeleted, index);
 		}
 
 		public void Clear()
 		{
+			EndNew(addedIndex);
 			foreach (var item in items)
 				DetachPropertyChanged(item.Value);
 			cursor.Reset();
 			cursor.RemoveAllNext();
 			items.Clear();
+			NotifyListReset();
 		}
 
 		void IXmlCollection.Replace(IEnumerable source)
 		{
-			Clear();
-			foreach (T value in source)
-				Add(value);
+			SuspendEvents();
+			try
+			{
+				Clear();
+				foreach (T value in source)
+					Add(value);
+			}
+			finally
+			{
+				ResumeEvents();
+			}
 		}
 
 		private T GetValue(IXmlNode node)
@@ -501,9 +527,38 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				ListChanged(this, args);
 		}
 
-		protected virtual void NotifyListReset()
+		protected void NotifyListChanged(ListChangedType type, int index)
 		{
-			OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
+			if (EventsEnabled)
+				OnListChanged(new ListChangedEventArgs(type, index));
+		}
+
+		protected void NotifyListReset()
+		{
+			if (EventsEnabled)
+				OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
+		}
+
+		public bool EventsEnabled
+		{
+			get { return suspendLevel == 0; }
+		}
+
+		public void SuspendEvents()
+		{
+			suspendLevel++;
+		}
+
+		public bool ResumeEvents()
+		{
+			var enabled 
+				=    suspendLevel == 0
+				|| --suspendLevel == 0;
+
+			if (enabled)
+				NotifyListReset();
+
+			return enabled;
 		}
 	}
 }

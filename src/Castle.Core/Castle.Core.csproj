@@ -235,6 +235,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\ILazy.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Utilities\StringExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\TypeExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\Xsd.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\Xsi.cs" />
