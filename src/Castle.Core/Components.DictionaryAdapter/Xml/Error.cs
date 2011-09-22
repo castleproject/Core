@@ -161,5 +161,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			return new NotImplementedException();
 		}
+
+		internal static Exception UnrecognizedType(Type type)
+		{
+			return new NotImplementedException();
+		}
 	}
 }

@@ -19,6 +19,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public class XmlDefaultBehaviorAccessor : XmlNodeAccessor
 	{
+		internal static readonly XmlAccessorFactory<XmlDefaultBehaviorAccessor>
+			Factory = (property, context) => new XmlDefaultBehaviorAccessor(property, context);
+
 		public XmlDefaultBehaviorAccessor(Type type, IXmlAccessorContext context)
 			: base(type, context) { }
 

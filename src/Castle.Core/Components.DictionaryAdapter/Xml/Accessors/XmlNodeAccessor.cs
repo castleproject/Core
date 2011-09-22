@@ -77,9 +77,30 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		protected virtual bool IsMatch(IXmlName xmlName)
 		{
-			return NameComparer.Equals(LocalName, xmlName.LocalName)
-				&& (NamespaceUri    == null || NameComparer.Equals(NamespaceUri, xmlName.NamespaceUri))
-				&& (xmlName.XsiType == null || NameComparer.Equals(XsiType,      xmlName.XsiType));
+			return NameComparer.Equals(localName, xmlName.LocalName)
+				&& IsMatchOnNamespaceUri(xmlName)
+				&& IsMatchOnXsiType     (xmlName);
+		}
+
+		private bool IsMatchOnNamespaceUri(IXmlName xmlName)
+		{
+			return namespaceUri == null
+				|| ShouldIgnoreAttributeNamespaceUri(xmlName)
+				|| NameComparer.Equals(namespaceUri, xmlName.NamespaceUri);
+		}
+
+		private bool IsMatchOnXsiType(IXmlName xmlName)
+		{
+			return xmlName.XsiType == null
+				|| NameComparer.Equals(XsiType, xmlName.XsiType);
+		}
+
+		private bool ShouldIgnoreAttributeNamespaceUri(IXmlName xmlName)
+		{
+			var xmlNode = xmlName as IXmlNode;
+			return xmlNode != null
+				&& xmlNode.IsAttribute
+				&& 0 == (state & States.ConfiguredNamespaceUri);
 		}
 
 		protected virtual bool IsMatch(Type clrType)
