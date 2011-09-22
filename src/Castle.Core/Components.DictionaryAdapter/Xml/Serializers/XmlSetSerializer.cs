@@ -16,16 +16,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 
-	public class XmlListSerializer : XmlCollectionSerializer
+	public class XmlSetSerializer : XmlCollectionSerializer
 	{
-		public static readonly XmlListSerializer
-			Instance = new XmlListSerializer();
+		public static readonly XmlSetSerializer
+			Instance = new XmlSetSerializer();
 
-		protected XmlListSerializer() { }
+		protected XmlSetSerializer() { }
 
 		public override Type ListTypeConstructor
 		{
-			get { return typeof(XmlNodeList<>); }
+			get { return typeof(XmlNodeSet<>); }
 		}
 	}
 }

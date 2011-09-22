@@ -177,6 +177,7 @@
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\AdaptingXmlTestCaseNew.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Xml\Collections\XmlNodeSetTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlAdapterTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Address.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Color.cs" />

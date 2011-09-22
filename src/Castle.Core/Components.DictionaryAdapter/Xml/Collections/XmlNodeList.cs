@@ -86,7 +86,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		PropertyDescriptor IBindingList.SortProperty  { get { return null;  } }
 		ListSortDirection  IBindingList.SortDirection { get { return ListSortDirection.Ascending; } }
 
-		bool IRaiseItemChangedEvents.RaisesItemChangedEvents { get { return true;  } }
+		bool IRaiseItemChangedEvents.RaisesItemChangedEvents { get { return true; } }
 
 		bool IList.IsFixedSize          { get { return false; } }
 		bool IList.IsReadOnly           { get { return false; } }
@@ -96,20 +96,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public T this[int index]
 		{
-			get
-			{
-				var item = items[index];
-				if (!item.HasValue)
-					items[index] = item = item.WithValue(GetValue(item.Node));
-				return item.Value;
-			}
-			set
-			{
-				var item = items[index];
-				SetValue(item.Node, ref value);
-				items[index] = item.WithValue(value);
-				NotifyListChanged(ListChangedType.ItemChanged, index);
-			}
+			get { return GetValueAt(index); }
+			set { SetValueAt(index, value); }
 		}
 
 		object IList.this[int index]
@@ -118,7 +106,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			set { this[index] = (T) value; }
 		}
 
-		public bool Contains(T item)
+		public virtual bool Contains(T item)
 		{
 			return IndexOf(item) >= 0;
 		}
@@ -166,19 +154,51 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return GetEnumerator();
 		}
 
-		public T AddNew()
+		private T GetValueAt(int index)
+		{
+			var item = items[index];
+
+			if (!item.HasValue)
+				items[index] = item = item.WithValue(GetValue(item.Node));
+
+			return item.Value;
+		}
+
+		private void SetValueAt(int index, T value)
+		{
+			var item = items[index];
+			SetValue(item.Node, ref value);
+
+			if (ShouldReplace(item.Value, value))
+			{
+				items[index] = item.WithValue(value);
+				DetachPropertyChanged(item.Value);
+				AttachPropertyChanged(value);
+				NotifyListChanged(ListChangedType.ItemChanged, index);
+			}
+			else
+			{
+				value = (T) item.Value;
+				SetValue(item.Node, ref value);
+				items[index] = item.WithValue(value);
+			}
+		}
+
+		protected virtual bool ShouldReplace(T oldValue, T newValue)
+		{
+			return true;
+		}
+
+		public virtual T AddNew()
 		{
 			cursor.MoveToEnd();
 			cursor.Create(typeof(T));
 
 			var node   = cursor.Save();
 			var value  = GetValue(node);
-			var item   = new XmlCollectionItem<T>(node, value);
-
 			addedIndex = items.Count;
-			items.Add(item);
-			AttachPropertyChanged(value);
-			NotifyListChanged(ListChangedType.ItemAdded, addedIndex);
+
+			CommitInsert(addedIndex, node, value, true);
 			return (T) value;
 		}
 
@@ -187,24 +207,35 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return AddNew();
 		}
 
-		public void EndNew(int index)
+		public bool IsNew(int index)
 		{
-			if (addedIndex == index)
+			return index == addedIndex
+				&& index >= 0;
+		}
+
+		public virtual void EndNew(int index)
+		{
+			if (IsNew(index))
 				addedIndex = -1;
 		}
 
-		public void CancelNew(int index)
+		public virtual void CancelNew(int index)
 		{
-			if (addedIndex == index && addedIndex >= 0)
+			if (IsNew(index))
 			{
-				RemoveAt(addedIndex);
+				RemoveCore(addedIndex);
 				addedIndex = -1;
 			}
 		}
 
-		public void Add(T value)
+		public virtual bool Add(T value)
 		{
-			AddCore(Count, value);
+			return InsertCore(Count, value, true);
+		}
+
+		void ICollection<T>.Add(T value)
+		{
+			Add(value);
 		}
 
 		int IList.Add(object value)
@@ -213,13 +244,18 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return IndexOf((T) value);
 		}
 
-		public void Insert(int index, T value)
+		public virtual bool Insert(int index, T value)
 		{
+			if (index < 0 || index > Count)
+				throw Error.ArgumentOutOfRange("index");
+
 			EndNew(addedIndex);
-			if (index == Count)
-				AddCore(index, value);
-			else
-				InsertCore(index, value);
+			return InsertCore(index, value, index == Count);
+		}
+
+		void IList<T>.Insert(int index, T value)
+		{
+			Insert(index, value);
 		}
 
 		void IList.Insert(int index, object value)
@@ -227,34 +263,52 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Insert(index, (T) value);
 		}
 
-		private void AddCore(int index, T value)
+		private bool InsertCore(int index, T value, bool append)
 		{
-			cursor.MoveToEnd();
-			items.Add(Create(value));
-			NotifyListChanged(ListChangedType.ItemAdded, index);
-		}
+			if (append)
+				cursor.MoveToEnd();
+			else
+				cursor.MoveTo(items[index].Node);
 
-		private void InsertCore(int index, T value)
-		{
-			cursor.MoveTo(items[index].Node);
-			items.Insert(index, Create(value));
-			NotifyListChanged(ListChangedType.ItemAdded, index);
-		}
-
-		private XmlCollectionItem<T> Create(T value)
-		{
 			cursor.Create(GetTypeOrDefault(value));
 			var node = cursor.Save();
 			SetValue(node, ref value);
-			AttachPropertyChanged(value);
-			return new XmlCollectionItem<T>(node, value);
+
+			return ShouldAdd(value)
+				? CommitInsert(index, node, value, append)
+				: RollbackInsert();
 		}
 
-		public bool Remove(T item)
+		private bool CommitInsert(int index, IXmlNode node, T value, bool append)
+		{
+			var item = new XmlCollectionItem<T>(node, value);
+
+			if (append)
+				items.Insert(index, item);
+			else
+				items.Add(item);
+
+			AttachPropertyChanged(value);
+			NotifyListChanged(ListChangedType.ItemAdded, index);
+			return true;
+		}
+
+		private bool RollbackInsert()
+		{
+			cursor.Remove();
+			return false;
+		}
+
+		protected virtual bool ShouldAdd(T value)
+		{
+			return true;
+		}
+
+		public virtual bool Remove(T item)
 		{
 			var index = IndexOf(item);
 			if (index < 0) return false;
-			RemoveAt(index);
+			RemoveCore(index);
 			return true;
 		}
 
@@ -263,7 +317,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Remove((T) value);
 		}
 
-		public void RemoveAt(int index)
+		public virtual void RemoveAt(int index)
+		{
+			RemoveCore(index);
+		}
+
+		private void RemoveCore(int index)
 		{
 			EndNew(addedIndex);
 			var item = items[index];
@@ -274,7 +333,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			NotifyListChanged(ListChangedType.ItemDeleted, index);
 		}
 
-		public void Clear()
+		public virtual void Clear()
 		{
 			EndNew(addedIndex);
 			foreach (var item in items)

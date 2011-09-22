@@ -63,18 +63,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					genericType == typeof(IEnumerable<>) ||
 					genericType == typeof(IBindingList<>))
 					return XmlListSerializer.Instance;
-				//if (genericType == typeof(ISet<>))
-				//    return XmlListSerializer.Instance; // TODO: Support XML-backed sets
-				if (genericType == typeof(IDictionary<,>) ||
-					genericType == typeof(List<>) ||
+				if (genericType == typeof(ISet<>))
+				    return XmlSetSerializer.Instance;
+				if (// Dictionaries are not supported
+					genericType == typeof(IDictionary<,>) ||
 					genericType == typeof(Dictionary<,>) ||
-					genericType == typeof(HashSet<>) ||
+					genericType == typeof(SortedDictionary<,>) ||
+					// Concrete list types are not supported
+					genericType == typeof(List<>) ||
 					genericType == typeof(Stack<>) ||
 					genericType == typeof(Queue<>) ||
 					genericType == typeof(LinkedList<>) ||
-					genericType == typeof(SortedSet<>) ||
-					genericType == typeof(SortedDictionary<,>) ||
 					genericType == typeof(SortedList<,>) ||
+					// Concrete set types are not supported
+					genericType == typeof(HashSet<>) ||
+					genericType == typeof(SortedSet<>) ||
+					// CLR binding list is not supported; use Castle version
 					genericType == typeof(BindingList<>))
 					throw Error.UnsupportedCollectionType();
 			}

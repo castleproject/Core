@@ -166,5 +166,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			return new NotImplementedException();
 		}
+
+		internal static Exception ArgumentOutOfRange(string p)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

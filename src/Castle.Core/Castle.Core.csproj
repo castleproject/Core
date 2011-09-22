@@ -195,6 +195,9 @@
     <Compile Include="Components.DictionaryAdapter\Util\PriorityBehaviorExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\IXmlAccessorContext.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Collections\IXmlCollection.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Collections\XmlNodeSet.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Serializers\XmlCollectionSerializer.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Serializers\XmlSetSerializer.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Serializers\XmlXmlNodeSerializer.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlIncludedType.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlIncludedTypeMap.cs" />
