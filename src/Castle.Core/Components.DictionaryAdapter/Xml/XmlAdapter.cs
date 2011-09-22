@@ -321,5 +321,25 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			return xmlAdapter;
 		}
+
+		public static bool IsPropertyDefined(string propertyName, IDictionaryAdapter dictionaryAdapter)
+		{
+			var xmlAdapter = XmlAdapter.For(dictionaryAdapter, true);
+			return xmlAdapter != null
+				&& xmlAdapter.HasProperty(propertyName, dictionaryAdapter);
+		}
+
+		public bool HasProperty(string propertyName, IDictionaryAdapter dictionaryAdapter)
+		{
+			var key = dictionaryAdapter.GetKey(propertyName);
+			if (key == null)
+				return false;
+
+			PropertyDescriptor property;
+			XmlAccessor accessor;
+			return dictionaryAdapter.This.Properties.TryGetValue(propertyName, out property)
+				&& TryGetAccessor(dictionaryAdapter, property, false, out accessor)
+				&& accessor.IsPropertyDefined(node);
+		}
 	}
 }

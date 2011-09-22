@@ -777,8 +777,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			XmlDocument document = null;
 			var season = CreateXmlAdapter<ISeason>(xml, ref document);
-			Assert.IsTrue(XPathAdapter.IsPropertyDefined("Location", season));
-			Assert.IsFalse(XPathAdapter.IsPropertyDefined("Name", season));
+			Assert.IsTrue(XmlAdapter.IsPropertyDefined("Location", season));
+			Assert.IsFalse(XmlAdapter.IsPropertyDefined("Name", season));
 		}
 
 		[Test]
@@ -797,8 +797,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			XmlDocument document = null;
 			var season = CreateXmlAdapter<ISeason>(xml, ref document);
-			Assert.IsTrue(XPathAdapter.IsPropertyDefined("Teams", season));
-			Assert.IsFalse(XPathAdapter.IsPropertyDefined("Tags", season));
+			Assert.IsTrue(XmlAdapter.IsPropertyDefined("Teams", season));
+
+			// TODO: Ask Craig what he wants to do about this
+			// In my POV, XmlElementBehavior means that collections are ALWAYS defined
+			//   since there is not an element representing the collection itself.
+//			Assert.IsFalse(XmlAdapter.IsPropertyDefined("Tags", season));
+			Assert.IsTrue(XmlAdapter.IsPropertyDefined("Tags", season));
 		}
 
 		[Test]
@@ -844,9 +849,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			XmlDocument document = null;
 			var season = CreateXmlAdapter<ISeason>(xml, ref document);
-			Assert.IsTrue(XPathAdapter.IsPropertyDefined("Name", season));
+			Assert.IsTrue(XmlAdapter.IsPropertyDefined("Name", season));
 			season.Name = "";
-			Assert.IsFalse(XPathAdapter.IsPropertyDefined("Name", season));
+			Assert.IsFalse(XmlAdapter.IsPropertyDefined("Name", season));
 		}
 
 #if !DOTNET35

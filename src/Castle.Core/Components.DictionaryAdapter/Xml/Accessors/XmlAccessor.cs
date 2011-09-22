@@ -94,6 +94,15 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			// Do nothing
 		}
 
+		public virtual bool IsPropertyDefined(IXmlNode parentNode)
+		{
+			var cursor = IsCollection
+				? SelectCollectionNode(parentNode, false)
+				: SelectPropertyNode  (parentNode, false);
+
+			return cursor.MoveNext();
+		}
+
 		public virtual object GetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, bool orStub)
 		{
 			if (orStub) orStub &= serializer.CanGetStub;
