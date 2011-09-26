@@ -54,23 +54,25 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		void IDictionaryInitializer.Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors)
 		{
 			if (primaryXmlMeta == null)
-				InitializePrimary  (dictionaryAdapter.Meta, behaviors);
+				InitializePrimary  (dictionaryAdapter.Meta);
 			else
-				InitializeSecondary(dictionaryAdapter.Meta, behaviors);
+				InitializeSecondary(dictionaryAdapter.Meta);
 		}
 
-		private void InitializePrimary(DictionaryAdapterMeta meta, object[] behaviors)
+		private void InitializePrimary(DictionaryAdapterMeta meta)
 		{
 			if (!meta.HasXmlMeta())
 				throw Error.NoXmlMetadata(meta.Type);
 
 			primaryXmlMeta = meta.GetXmlMeta();
 
+			InitializeBaseTypes(meta);
+
 			if (node == null)
 				node = GetBaseNode();
 		}
 
-		private void InitializeSecondary(DictionaryAdapterMeta meta, object[] behaviors)
+		private void InitializeSecondary(DictionaryAdapterMeta meta)
 		{
 			if (secondaryXmlMetas == null)
 				secondaryXmlMetas = new Dictionary<Type, XmlMetadata>();
@@ -78,6 +80,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			XmlMetadata item;
 			if (!secondaryXmlMetas.TryGetValue(meta.Type, out item))
 				secondaryXmlMetas[meta.Type] = meta.GetXmlMeta();
+		}
+
+		private void InitializeBaseTypes(DictionaryAdapterMeta meta)
+		{
+			foreach (var type in meta.Type.GetInterfaces())
+			{
+				var ns = type.Namespace;
+				if (ns == "Castle.Components.DictionaryAdapter")
+					continue;
+				if (ns == "System" || ns.StartsWith("System."))
+					continue;
+
+				var baseMeta = meta.GetDictionaryAdapterMeta(type);
+				InitializeSecondary(baseMeta);
+			}
 		}
 
 		object IDictionaryPropertyGetter.GetPropertyValue(IDictionaryAdapter dictionaryAdapter,
@@ -252,11 +269,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			PropertyDescriptor property)
 			where TAccessor : XmlAccessor
 		{
-			var xmlMeta = GetXmlMeta(dictionaryAdapter.Meta.Type);
+			var xmlMeta = GetXmlMetadata(property.Property.DeclaringType /* dictionaryAdapter.Meta.Type */);
 			return factory(property, xmlMeta);
 		}
 
-		private XmlMetadata GetXmlMeta(Type type)
+		private XmlMetadata GetXmlMetadata(Type type)
 		{
 			if (type == primaryXmlMeta.ClrType)
 				return primaryXmlMeta;

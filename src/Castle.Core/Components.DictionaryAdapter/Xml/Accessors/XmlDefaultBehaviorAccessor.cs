@@ -33,7 +33,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var flags = Serializer.Kind == XmlTypeKind.Simple
 				? CursorFlags.AllNodes
 				: CursorFlags.Elements;
-			return node.SelectChildren(this, flags.MutableIf(mutable));
+			return node.SelectChildren(KnownTypes, flags.MutableIf(mutable));
 		}
 
 		public override IXmlCursor SelectCollectionNode(IXmlNode node, bool mutable)
@@ -44,7 +44,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable)
 		{
 			var flags = CursorFlags.Elements | CursorFlags.Multiple;
-			return node.SelectChildren(this, flags.MutableIf(mutable));
+			return node.SelectChildren(KnownTypes, flags.MutableIf(mutable));
 		}
 	}
 }

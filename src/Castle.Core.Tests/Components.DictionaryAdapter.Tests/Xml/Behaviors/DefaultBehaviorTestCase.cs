@@ -160,7 +160,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[TestFixture]
-		public class Collection : XmlAdapterTestCase
+		public class CollectionProperty : XmlAdapterTestCase
 		{
 			public interface IFoo : IDictionaryAdapter
 			{

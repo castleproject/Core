@@ -118,35 +118,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Comparer = StringComparer.OrdinalIgnoreCase;
 
 		public const string
-			XmlnsPrefix       = "xmlns",
-			XmlnsNamespaceUri = "http://www.w3.org/2000/xmlns/",
-			WsdlPrefix        = "wsdl", // For Guid
-			WsdlNamespaceUri  = "http://microsoft.com/wsdl/types/"; // For Guid
-
-		internal static readonly Dictionary<Type, string>
-			XsdTypes = new Dictionary<Type,string>
-		{
-			{ typeof(object),           "anyType"       },
-			{ typeof(string),           "string"        },
-			{ typeof(bool),             "boolean"       },
-			{ typeof(sbyte),            "byte"          },
-			{ typeof(byte),             "unsignedByte"  },
-			{ typeof(short),            "short"         },
-			{ typeof(ushort),           "unsignedShort" },
-			{ typeof(int),              "int"           },
-			{ typeof(uint),             "unsignedInt"   },
-			{ typeof(long),             "long"          },
-			{ typeof(ulong),            "unsignedLong"  },
-			{ typeof(float),            "float"         },
-			{ typeof(double),           "double"        },
-			{ typeof(decimal),          "decimal"       },
-			{ typeof(Guid),             "guid"          },
-			{ typeof(DateTime),         "dateTime"      },
-			{ typeof(TimeSpan),         "duration"      },
-			{ typeof(byte[]),           "base64Binary"  },
-			{ typeof(Uri),              "anyURI"        },
-			{ typeof(XmlName), "QName"         }
-		};
+			XmlnsPrefix       = "xmlns";
 	}
 }
 #endif

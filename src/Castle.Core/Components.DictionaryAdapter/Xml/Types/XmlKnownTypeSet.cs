@@ -17,6 +17,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	public class XmlKnownTypeSet : IXmlKnownTypeMap, IEnumerable<IXmlKnownType>
 	{
@@ -94,6 +95,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public bool TryGet(Type clrType, out IXmlKnownType knownType)
 		{
 			return itemsByClrType.TryGetValue(clrType, out knownType);
+		}
+
+		public IXmlKnownType[] ToArray()
+		{
+			return itemsByXmlIdentity.Values.ToArray();
 		}
 
 		public IEnumerator<IXmlKnownType> GetEnumerator()

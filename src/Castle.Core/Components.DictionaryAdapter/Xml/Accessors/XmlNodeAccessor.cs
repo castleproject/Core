@@ -185,7 +185,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void ConfigureIncludedTypes()
 		{
 			if (knownTypes != null)
-				foreach (var knownType in knownTypes)
+				foreach (var knownType in knownTypes.ToArray())
 					ConfigureIncludedTypes(knownType);
 			else
 				ConfigureIncludedTypes(this);

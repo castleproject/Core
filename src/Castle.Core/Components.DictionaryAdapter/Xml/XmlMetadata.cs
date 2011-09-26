@@ -299,12 +299,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private XmlMetadata GetXmlMetadata(Type clrType)
 		{
-			var descriptor = new DictionaryDescriptor();
-			descriptor.AddInitializers    (source.Initializers);
-			descriptor.AddMetaInitializers(source.MetaInitializers);
-
-			return source.Factory
-				.GetAdapterMeta(clrType, descriptor)
+			return source
+				.GetDictionaryAdapterMeta(clrType)
 				.GetXmlMeta();
 		}
 

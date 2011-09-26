@@ -237,6 +237,7 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Serializers\XmlTypeSerializerCache.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Components.DictionaryAdapter\Xml\Utilities\DictionaryAdapterExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\ILazy.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\StringExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\TypeExtensions.cs" />
