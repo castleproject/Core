@@ -20,8 +20,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public class XmlKnownTypeSet : IXmlKnownTypeMap, IEnumerable<IXmlKnownType>
 	{
-		private readonly Dictionary<IXmlName, IXmlKnownType> itemsByXmlName;
-		private readonly Dictionary<Type,     IXmlKnownType> itemsByClrType;
+		private readonly Dictionary<IXmlIdentity, IXmlKnownType> itemsByXmlIdentity;
+		private readonly Dictionary<Type,         IXmlKnownType> itemsByClrType;
 		private readonly Type defaultType;
 
 		public XmlKnownTypeSet(Type defaultType)
@@ -29,9 +29,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (defaultType == null)
 				throw Error.ArgumentNull("defaultType");
 
-			itemsByXmlName   = new Dictionary<IXmlName, IXmlKnownType>(XmlNameComparer.Instance);
-			itemsByClrType   = new Dictionary<Type,     IXmlKnownType>();
-			this.defaultType = defaultType;
+			itemsByXmlIdentity = new Dictionary<IXmlIdentity, IXmlKnownType>(XmlIdentityComparer.Instance);
+			itemsByClrType     = new Dictionary<Type,         IXmlKnownType>();
+			this.defaultType   = defaultType;
 		}
 
 		public IXmlKnownType Default
@@ -45,13 +45,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
-		public void Add(IXmlKnownType xmlType)
+		public void Add(IXmlKnownType knownType)
 		{
 			// All XmlTypes are present here
-			itemsByXmlName.Add(xmlType, xmlType);
+			itemsByXmlIdentity.Add(knownType, knownType);
 
 			// Only contains the default XmlType for each ClrType
-			itemsByClrType[xmlType.ClrType] = xmlType;
+			itemsByClrType[knownType.ClrType] = knownType;
 		}
 
 		public void AddXsiTypeDefaults()
@@ -60,108 +60,112 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			// add another XmlType to recognize nodes that don't provide the xsi:type.
 
 			var bits = new Dictionary<IXmlKnownType, bool>(
-				itemsByXmlName.Count,
-				XmlNameGroupingComparer.Instance);
+				itemsByXmlIdentity.Count,
+				XmlKnownTypeNameComparer.Instance);
 
-			foreach (var xmlType in itemsByXmlName.Values)
+			foreach (var knownType in itemsByXmlIdentity.Values)
 			{
 				bool bit;
-				bits[xmlType] = bits.TryGetValue(xmlType, out bit)
-					? false                    // another by same name; can't add a default
-					: xmlType.XsiType != null; // first   by this name; can   add a default, if not already in default form
+				bits[knownType] = bits.TryGetValue(knownType, out bit)
+					? false                               // another by same name; can't add a default
+					: knownType.XsiType != XmlName.Empty; // first   by this name; can   add a default, if not already in default form
 			}
 
 			foreach (var pair in bits)
 			{
 				if (pair.Value)
 				{
-					var xmlType = pair.Key;
+					var knownType = pair.Key;
 					Add(new XmlKnownType
 					(
-						xmlType.LocalName,
-						xmlType.NamespaceUri,
-						null,
-						xmlType.ClrType
+						knownType.Name,
+						XmlName.Empty,
+						knownType.ClrType
 					));
 				}
 			}
 		}
 
-		public bool TryGet(IXmlName xmlName, out IXmlKnownType xmlType)
+		public bool TryGet(IXmlIdentity xmlIdentity, out IXmlKnownType knownType)
 		{
-			return itemsByXmlName.TryGetValue(xmlName, out xmlType);
+			return itemsByXmlIdentity.TryGetValue(xmlIdentity, out knownType);
 		}
 
-		public bool TryGet(Type clrType, out IXmlKnownType xmlType)
+		public bool TryGet(Type clrType, out IXmlKnownType knownType)
 		{
-			return itemsByClrType.TryGetValue(clrType, out xmlType);
+			return itemsByClrType.TryGetValue(clrType, out knownType);
 		}
 
 		public IEnumerator<IXmlKnownType> GetEnumerator()
 		{
-			return itemsByXmlName.Values.GetEnumerator();
+			return itemsByXmlIdentity.Values.GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return itemsByXmlName.Values.GetEnumerator();
+			return itemsByXmlIdentity.Values.GetEnumerator();
 		}
 
-		private sealed class XmlNameComparer : IEqualityComparer<IXmlName>
+		private sealed class XmlIdentityComparer : IEqualityComparer<IXmlIdentity>
 		{
-			public static readonly XmlNameComparer
-				Instance = new XmlNameComparer();
+			public static readonly XmlIdentityComparer
+				Instance = new XmlIdentityComparer();
 
-			private XmlNameComparer() { }
+			private XmlIdentityComparer() { }
 
-			public bool Equals(IXmlName x, IXmlName y)
+			public bool Equals(IXmlIdentity x, IXmlIdentity y)
 			{
-				string xNamespaceUri, yNamespaceUri;
-				return NameComparer.Equals(x.LocalName, y.LocalName)
-					&& NameComparer.Equals(x.XsiType,   y.XsiType)
-					&& ((xNamespaceUri = x.NamespaceUri) == null
-					 || (yNamespaceUri = y.NamespaceUri) == null
-					 || NameComparer.Equals(xNamespaceUri, yNamespaceUri));
+				var nameX = x.Name;
+				var nameY = y.Name;
+
+				if (!NameComparer.Equals(nameX.LocalName, nameY.LocalName))
+					return false;
+
+				if (!XsiTypeComparer.Equals(x.XsiType, y.XsiType))
+					return false;
+
+				return nameX.NamespaceUri == null
+					|| nameY.NamespaceUri == null
+					|| NameComparer.Equals(nameX.NamespaceUri, nameY.NamespaceUri);
 			}
 
-			public int GetHashCode(IXmlName name)
+			public int GetHashCode(IXmlIdentity name)
 			{
-				var code = NameComparer.GetHashCode(name.LocalName);				
-				var xsiType = name.XsiType;
-				if (xsiType != null)
+				var code = NameComparer.GetHashCode(name.Name.LocalName);
+
+				if (name.XsiType != XmlName.Empty)
 					code = (code << 7 | code >> 25)
-					     ^ NameComparer.GetHashCode(xsiType);
-				return code;
-				// Do not include NamespaceUri in hash code.
+					     ^ XsiTypeComparer.GetHashCode(name.XsiType);
+
+				// DO NOT include NamespaceUri in hash code.
 				// That would break 'null means any' behavior.
+
+				return code;
 			}
 		}
 
-		private sealed class XmlNameGroupingComparer : IEqualityComparer<IXmlName>
+		private sealed class XmlKnownTypeNameComparer : IEqualityComparer<IXmlKnownType>
 		{
-			public static readonly XmlNameGroupingComparer
-				Instance = new XmlNameGroupingComparer();
+			public static readonly XmlKnownTypeNameComparer
+				Instance = new XmlKnownTypeNameComparer();
 
-			private XmlNameGroupingComparer() { }
+			private XmlKnownTypeNameComparer() { }
 
-			public bool Equals(IXmlName x, IXmlName y)
+			public bool Equals(IXmlKnownType knownTypeA, IXmlKnownType knownTypeB)
 			{
-				return NameComparer.Equals(x.LocalName,    y.LocalName)
-					&& NameComparer.Equals(x.NamespaceUri, y.NamespaceUri);
+				return XmlNameComparer.IgnoreCase.Equals(knownTypeA.Name, knownTypeB.Name);
 			}
 
-			public int GetHashCode(IXmlName name)
+			public int GetHashCode(IXmlKnownType knownType)
 			{
-				var code = NameComparer.GetHashCode(name.LocalName);
-				var namespaceUri = name.NamespaceUri;
-				if (namespaceUri != null)
-					code = (code << 7 | code >> 25)
-					     ^ NameComparer.GetHashCode(namespaceUri);
-				return code;
+				return XmlNameComparer.IgnoreCase.GetHashCode(knownType.Name);
 			}
 		}
 
 		private static readonly StringComparer
 			NameComparer = StringComparer.OrdinalIgnoreCase;
+
+		private static readonly XmlNameComparer
+			XsiTypeComparer = XmlNameComparer.Default;
 	}
 }

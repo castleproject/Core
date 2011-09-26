@@ -201,9 +201,9 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Serializers\XmlXmlNodeSerializer.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlIncludedType.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlIncludedTypeMap.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlTypeFrom.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Accessors\IXmlBehaviorSemantics.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlNodeAccessor.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlName.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlIdentity.cs" />
     <Compile Include="Components.DictionaryAdapter\XmlMetadata.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\IXmlAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\IXmlCollectionAccessor.cs" />
@@ -240,6 +240,7 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\ILazy.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\StringExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\TypeExtensions.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Utilities\Wsdl.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\Xsd.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\Xsi.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\IConfigurable.cs" />
@@ -255,7 +256,8 @@
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\IXmlNode.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\CursorFlags.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\SystemXml\SysXmlNode.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XmlQualifiedName.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XmlName.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XmlNameComparer.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\CompiledXPath.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\CompiledXPathNode.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\CompiledXPathStep.cs" />
@@ -271,7 +273,6 @@
     <Compile Include="Components.DictionaryAdapter\Xml\XmlAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlMetadata.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlMetadataBehavior.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XPath\XPath.cs" />
     <Compile Include="Core\Internal\CollectionExtensions.cs" />
     <Compile Include="Core\ReferenceEqualityComparer.cs" />
     <Compile Include="Core\Extensions\SimpleConverter.cs" />

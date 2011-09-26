@@ -14,35 +14,9 @@
 
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	using System;
-
-	public class XmlIncludedType : IXmlIncludedType
+	public interface IXmlIdentity
 	{
-		private readonly XmlName xsiType;
-		private readonly Type    clrType;
-
-		public XmlIncludedType(XmlName xsiType, Type clrType)
-		{
-			if (xsiType.LocalName == null)
-				throw Error.ArgumentNull("xsiType.LocalName");
-			if (clrType == null)
-				throw Error.ArgumentNull("clrType");
-
-			this.xsiType = xsiType;
-			this.clrType = clrType;
-		}
-
-		public XmlIncludedType(string localName, string namespaceUri, Type clrType)
-			: this(new XmlName(localName, namespaceUri), clrType) { }
-
-		public XmlName XsiType
-		{
-			get { return xsiType; }
-		}
-
-		public Type ClrType
-		{
-			get { return clrType; }
-		}
+		XmlName Name    { get; }
+		XmlName XsiType { get; }
 	}
 }

@@ -62,25 +62,24 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
-		public static string GetXsiType(this XPathNavigator node)
+		public static bool MoveToLastChild(this XPathNavigator navigator)
 		{
-			return node.GetAttributeOrNull(Xsi.TypeLocalName, Xsi.NamespaceUri);
+			if (!navigator.MoveToFirstChild())
+				return false;
+
+			while (navigator.MoveToNext()) { }
+
+			return true;
 		}
 
-		public static void SetXsiType(this XPathNavigator node, string type)
+		public static bool MoveToLastAttribute(this XPathNavigator navigator)
 		{
-			node.SetAttribute(Xsi.TypeLocalName, Xsi.NamespaceUri, type);
-		}
+			if (!navigator.MoveToFirstAttribute())
+				return false;
 
-		public static bool IsXsiNil(this XPathNavigator node)
-		{
-			return node.HasAttribute(Xsi.NilLocalName, Xsi.NamespaceUri, Xsi.NilValue);
-		}
+			while (navigator.MoveToNextAttribute()) { }
 
-		public static void SetXsiNil(this XPathNavigator node, bool nil)
-		{
-			if (nil) node.DeleteChildren();
-			node.SetAttribute(Xsi.NilLocalName, Xsi.NamespaceUri, nil ? Xsi.NilValue : null);
+			return true;
 		}
 
 		public static void DeleteChildren(this XPathNavigator node)

@@ -14,21 +14,40 @@
 
 namespace Castle.Components.DictionaryAdapter.Xml
 {
+	using System;
 #if !SILVERLIGHT
 	using System.Xml;
+#endif
+#if !SL3
+	using System.Xml.XPath;
 #endif
 
 	public static class Xsi
 	{
-#if !SILVERLIGHT
-		public static string GetXsiType(this XmlNode node)
+#if !SILVERLIGHT		
+		public static XmlName GetXsiType(this XmlNode node)
 		{
-			return node.GetAttribute(TypeLocalName, NamespaceUri);
+			var type = node.GetAttribute(TypeLocalName, NamespaceUri);
+			if (type == null)
+				return XmlName.Empty;
+
+			var xsiType = XmlName.ParseQName(type);
+			if (xsiType.NamespaceUri != null)
+			{
+				var namespaceUri = node.GetNamespaceOfPrefix(xsiType.NamespaceUri);
+				xsiType = xsiType.WithNamespaceUri(namespaceUri);
+			}
+			return xsiType;
 		}
 
-		public static void SetXsiType(this XmlNode node, string type)
+		public static void SetXsiType(this XmlNode node, XmlName xsiType)
 		{
-			node.SetAttribute(TypeLocalName, NamespaceUri, type);
+			if (xsiType.NamespaceUri != null)
+			{
+				var prefix = node.GetPrefixOfNamespace(xsiType.NamespaceUri);
+				xsiType = xsiType.WithNamespaceUri(prefix);
+			}
+			node.SetAttribute(TypeLocalName, NamespaceUri, xsiType.ToString());
 		}
 
 		public static bool HasXsiType(this XmlNode node, string type)
@@ -51,6 +70,40 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			return attribute.LocalName    == TypeLocalName
 				&& attribute.NamespaceURI == NamespaceUri;
+		}
+#endif
+#if !SL3
+		public static XmlName GetXsiType(this XPathNavigator node)
+		{
+			var text = node.GetAttributeOrNull(TypeLocalName, NamespaceUri);
+			if (text == null)
+				return XmlName.Empty;
+
+			var xsiType = XmlName.ParseQName(text);
+			if (xsiType.NamespaceUri == null)
+				return xsiType;
+
+			var namespaceUri = node.LookupNamespace(xsiType.NamespaceUri);
+			return xsiType.WithNamespaceUri(namespaceUri);
+		}
+
+		public static void SetXsiType(this XPathNavigator node, XmlName xsiType)
+		{
+			var prefix = node.LookupPrefix(xsiType.NamespaceUri);
+			xsiType = xsiType.WithNamespaceUri(prefix);
+
+			node.SetAttribute(TypeLocalName, NamespaceUri, xsiType.ToString());
+		}
+
+		public static bool IsXsiNil(this XPathNavigator node)
+		{
+			return node.HasAttribute(NilLocalName, NamespaceUri, NilValue);
+		}
+
+		public static void SetXsiNil(this XPathNavigator node, bool nil)
+		{
+			if (nil) node.DeleteChildren();
+			node.SetAttribute(NilLocalName, NamespaceUri, nil ? NilValue : null);
 		}
 #endif
 

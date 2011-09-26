@@ -16,7 +16,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 
-	public interface IXmlKnownType : IXmlName
+	public interface IXmlKnownType : IXmlIdentity
 	{
 		Type ClrType { get; }
 	}

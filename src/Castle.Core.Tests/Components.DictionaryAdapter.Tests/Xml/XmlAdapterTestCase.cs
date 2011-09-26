@@ -24,11 +24,11 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
     using Castle.Components.DictionaryAdapter.Tests;
     using NUnit.Framework;
 
-    public class XmlAdapterTestCase
+    public class XmlAdapterTestCaseParent
     {
         #region Default Behavior
         [TestFixture]
-        public class DefaultBehavior : TestCase
+        public class DefaultBehavior : XmlAdapterTestCase
         {
             public interface IFoo : IDictionaryAdapter
             {
@@ -56,132 +56,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             }
 
             public enum AnEnum { A, B }
-
-            [Test]
-            public void GetProperty_DefaultBehavior_Simple_Element()
-            {
-                var foo = Create<IFoo>("<Foo> <A>a</A> </Foo>");
-
-                Assert.That(foo.A, Is.EqualTo("a"));
-            }
-
-            [Test]
-            public void GetProperty_DefaultBehavior_Simple_Attribute()
-            {
-                var foo = Create<IFoo>("<Foo A='a'/>");
-
-                Assert.That(foo.A, Is.EqualTo("a"));
-            }
-
-            [Test]
-            public void SetProperty_DefaultBehavior_Simple()
-            {
-                var xml = Xml("<Foo/>");
-                var foo = Create<IFoo>(xml);
-
-                foo.A = "a";
-
-                Assert.That(xml, XmlEquivalent.To("<Foo> <A>a</A> </Foo>"));
-            }
-
-            [Test]
-            public void GetProperty_DefaultBehavior_Component_Element()
-            {
-                var foo = Create<IFoo>("<Foo> <G> <X>x</X> </G> </Foo>");
-
-                Assert.That(foo.G.X, Is.EqualTo("x"));
-            }
-
-            [Test]
-            public void GetProperty_DefaultBehavior_Component_Attribute()
-            {
-                var foo = Create<IFoo>("<Foo G='1'/>");
-
-                Assert.That(foo.G.X, Is.Null);
-            }
-
-            [Test]
-            public void GetProperty_DefaultBehavior_Component_ReturnsSameElement()
-            {
-                var foo = Create<IFoo>("<Foo> <G> <X>x</X> </G> </Foo>");
-
-				var instanceA = foo.G;
-				var instanceB = foo.G;
-
-                Assert.That(instanceA, Is.SameAs(instanceB),
-					"Same component must be returned from successive calls.");
-            }
-
-            [Test]
-            public void SetProperty_DefaultBehavior_Component()
-            {
-                var xml = Xml("<Foo/>");
-                var foo = Create<IFoo>(xml);
-
-                foo.G.X = "x";
-
-                Assert.That(xml, XmlEquivalent.To("<Foo> <G> <X>x</X> </G> </Foo>"));
-            }
-
-            [Test]
-            public void GetProperty_DefaultBehavior_Array_Element()
-            {
-                var array = new[] { 1, 2 };
-                var foo = Create<IFoo>("<Foo> <F> <int>1</int> <int>2</int> </F> </Foo>");
-
-                Assert.That(foo.F, Is.EquivalentTo(array));
-            }
-
-            [Test]
-            public void GetProperty_DefaultBehavior_Array_Attribute()
-            {
-                var array = new[] { 1, 2 };
-                var foo = Create<IFoo>("<Foo F='1'/>");
-
-                Assert.That(foo.F, Is.Not.Null & Is.Empty);
-            }
-
-            [Test]
-            public void SetProperty_DefaultBehavior_Array()
-            {
-                var array = new[] { 1, 2 };
-                var xml = Xml("<Foo/>");
-                var foo = Create<IFoo>(xml);
-
-                foo.F = array;
-
-                Assert.That(xml, XmlEquivalent.To("<Foo> <F> <int>1</int> <int>2</int> </F> </Foo>"));
-            }
-
-            [Test]
-            public void GetProperty_DefaultBehavior_List_Element()
-            {
-                var foo = Create<IFoo>("<Foo> <SL> <string>a</string> <string>b</string> </SL> </Foo>");
-
-                var items = foo.SL.ToArray();
-
-                Assert.That(items, Is.EquivalentTo(new[] { "a", "b" }));
-            }
-
-            [Test]
-            public void GetProperty_DefaultBehavior_List_Attribute()
-            {
-                var array = new[] { 1, 2 };
-                var foo = Create<IFoo>("<Foo F='1'/>");
-
-                Assert.That(foo.SL, Is.Empty);
-            }
-
-            [Test]
-            public void SetProperty_DefaultBehavior_List()
-            {
-                var xml = Xml("<Foo/>");
-                var foo = Create<IFoo>(xml);
-
-                foo.SL = new List<string> { "a", "b" };
-
-                Assert.That(xml, XmlEquivalent.To("<Foo> <SL> <string>a</string> <string>b</string> </SL> </Foo>"));
-            }
 
             [Test]
             public void GetProperty_DefaultBehavior_XmlSerializable_Element()
@@ -215,7 +89,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
         #region [XmlElement] Behavior
         [TestFixture]
-        public class ElementBehavior : TestCase
+        public class ElementBehavior : XmlAdapterTestCase
         {
 
             [Test]
@@ -256,7 +130,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
         }
 
 		[TestFixture]
-		public class ElementBehavior_CollectionProperty : TestCase
+		public class ElementBehavior_CollectionProperty : XmlAdapterTestCase
 		{
 			[Test]
 			public void GetProperty()
@@ -281,7 +155,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
         #region Multiple [XmlElement] Behavior
         [TestFixture]
-        public class MultiElementBehavior : TestCase
+        public class MultiElementBehavior : XmlAdapterTestCase
         {
             [Test]
             public void GetProperty_ElementBehavior_Array_Element()
@@ -322,7 +196,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
         #region [XmlArray] Behavior
         [TestFixture]
-        public class ArrayBehavior : TestCase
+        public class ArrayBehavior : XmlAdapterTestCase
         {
             [Test]
             public void GetProperty_ArrayBehavior_Array_Element()
@@ -361,92 +235,70 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             public interface IDerived2 : IBase { string X { get; set; } } 
         }
         #endregion
+    }
 
-        #region [XmlRoot]
-        public class XmlRootBehavior : TestCase
+    public abstract class XmlAdapterTestCase
+    {
+        private DictionaryAdapterFactory factory;
+
+        protected XmlAdapterTestCase() { }
+
+        [SetUp]
+        public virtual void SetUp()
         {
-            [XmlRoot("XX", Namespace = "urn:a")]
-            public interface IA
-            {
-                string A { get; set; }
-            }
-
-            [Test]
-            public void Foo()
-            {
-                var foo = Create<IA>();
-
-                foo.A = "a";
-
-                Assert.That(
-                    XmlAdapter.For(foo).Node.Xml,
-                    XmlEquivalent.To("<XX xmlns='urn:a'> <A>a</A> </XX>"));
-            }
+            factory = new DictionaryAdapterFactory();
         }
-        #endregion
 
-        #region Base Test Case
-        public abstract class TestCase
+        protected static XmlDocument Xml(params string[] xml)
         {
-            private DictionaryAdapterFactory factory;
-
-            protected TestCase() { }
-
-            [SetUp]
-            public virtual void SetUp()
-            {
-                factory = new DictionaryAdapterFactory();
-            }
-
-            protected static XmlDocument Xml(params string[] xml)
-            {
-                var document = new XmlDocument();
-                document.LoadXml(string.Concat(xml));
-                return document;
-            }
-
-            protected T Create<T>()
-            {
-                return Create<T>(new XmlDocument());
-            }
-
-            protected T Create<T>(params string[] xml)
-            {
-                return Create<T>(Xml(xml));
-            }
-
-            protected T Create<T>(XmlNode storage)
-            {
-                var xmlAdapter = new XmlAdapter(storage);
-
-                return (T) factory.GetAdapter(typeof(T),
-                    new System.Collections.Hashtable(),
-                    new DictionaryDescriptor()
-                        .AddBehavior(XmlMetadataBehavior.Instance)
-                        .AddBehavior(xmlAdapter));
-            }
-
-            public class FakeStandardXmlSerializable
-            {
-                public string Text { get; set; }
-            }
-
-            public class FakeCustomXmlSerializable : IXmlSerializable
-            {
-                public string Text { get; set; }
-
-                System.Xml.Schema.XmlSchema IXmlSerializable.GetSchema() { return null; }
-                void IXmlSerializable.ReadXml(XmlReader reader) { Text = reader.ReadString(); }
-                void IXmlSerializable.WriteXml(XmlWriter writer) { writer.WriteString(Text); }
-            }
-
-            protected const string
-                Base64String = "VGVzdA==",
-                GuidString   = "c7da18ce-aa3f-452d-bf8f-8e3bb9cdec2b";
-
-            protected readonly byte[] Base64Bytes = Convert.FromBase64String(Base64String);
-            protected readonly Guid GuidValue = Guid.Parse(GuidString);
+            var document = new XmlDocument();
+			var text = string.Concat(xml)
+				.Replace("$xsd", "xmlns:xsd='http://www.w3.org/2001/XMLSchema'")
+				.Replace("$xsi", "xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'");
+            document.LoadXml(text);
+            return document;
         }
-        #endregion
+
+        protected T Create<T>()
+        {
+            return Create<T>(new XmlDocument());
+        }
+
+        protected T Create<T>(params string[] xml)
+        {
+            return Create<T>(Xml(xml));
+        }
+
+        protected T Create<T>(XmlNode storage)
+        {
+            var xmlAdapter = new XmlAdapter(storage);
+
+            return (T) factory.GetAdapter(typeof(T),
+                new System.Collections.Hashtable(),
+                new DictionaryDescriptor()
+                    .AddBehavior(XmlMetadataBehavior.Instance)
+                    .AddBehavior(xmlAdapter));
+        }
+
+        public class FakeStandardXmlSerializable
+        {
+            public string Text { get; set; }
+        }
+
+        public class FakeCustomXmlSerializable : IXmlSerializable
+        {
+            public string Text { get; set; }
+
+            System.Xml.Schema.XmlSchema IXmlSerializable.GetSchema() { return null; }
+            void IXmlSerializable.ReadXml(XmlReader reader) { Text = reader.ReadString(); }
+            void IXmlSerializable.WriteXml(XmlWriter writer) { writer.WriteString(Text); }
+        }
+
+        protected const string
+            Base64String = "VGVzdA==",
+            GuidString   = "c7da18ce-aa3f-452d-bf8f-8e3bb9cdec2b";
+
+        protected readonly byte[] Base64Bytes = Convert.FromBase64String(Base64String);
+        protected readonly Guid GuidValue = Guid.Parse(GuidString);
     }
 }

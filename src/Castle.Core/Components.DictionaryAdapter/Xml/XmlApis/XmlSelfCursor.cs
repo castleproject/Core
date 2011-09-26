@@ -35,17 +35,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return node.IsAttribute ? CursorFlags.Attributes : CursorFlags.Elements; }
 		}
 
-		public string LocalName
+		public XmlName Name
 		{
-			get { return node.LocalName; }
+			get { return node.Name; }
 		}
 
-		public string NamespaceUri
-		{
-			get { return node.NamespaceUri; }
-		}
-
-		public string XsiType
+		public XmlName XsiType
 		{
 			get { return node.XsiType; }
 		}

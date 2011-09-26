@@ -16,11 +16,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 
-	public interface IXmlTypeFrom<T>
+	public interface IXmlBehaviorSemantics<T>
 	{
-		string GetLocalName   (T obj);
-		string GetNamespaceUri(T obj);
-		string GetXsiType     (T obj);
-		Type   GetClrType     (T obj);
+		string GetLocalName   (T behavior);
+		string GetNamespaceUri(T behavior);
+		Type   GetClrType     (T behavior);
 	}
 }

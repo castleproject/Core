@@ -19,29 +19,23 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public abstract class XmlAccessor : IXmlPropertyAccessor, IXmlCollectionAccessor
 	{
-		private readonly Type   clrType;
-		private readonly string xsiType;
-		private readonly XmlTypeSerializer   serializer;
+		private readonly Type clrType;
+		private readonly XmlName xsiType;
+		private readonly XmlTypeSerializer serializer;
 		private readonly IXmlAccessorContext context;
 
 		protected XmlAccessor(Type clrType, IXmlAccessorContext context)
-			: this(clrType)
-		{
-			if (context == null)
-				throw Error.ArgumentNull("context");
-
-			this.context = context;
-			this.xsiType = ClrType.GetXsiType();
-		}
-
-		protected XmlAccessor(Type clrType)
 		{
 			if (clrType == null)
 				throw Error.ArgumentNull("clrType");
+			if (context == null)
+				throw Error.ArgumentNull("context");
 
 			clrType = clrType.NonNullable();
 			this.clrType    = clrType;
+			this.xsiType    = context.GetDefaultXsiType(clrType);
 			this.serializer = XmlTypeSerializer.For(clrType);
+			this.context    = context;
 		}
 
 		public Type ClrType
@@ -49,7 +43,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return clrType; }
 		}
 
-		public string XsiType
+		public XmlName XsiType
 		{
 			get { return xsiType; }
 		}

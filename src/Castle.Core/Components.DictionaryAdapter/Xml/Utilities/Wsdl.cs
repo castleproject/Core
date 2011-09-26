@@ -8,16 +8,17 @@
 // 
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.f
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	public interface IXmlName
+	// Namespace for Guid type
+	public static class Wsdl
 	{
-		string LocalName    { get; }
-		string NamespaceUri { get; }
-		string XsiType      { get; }
+		public const string
+			Prefix        = "wsdl",
+			NamespaceUri  = "http://microsoft.com/wsdl/types/";
 	}
 }

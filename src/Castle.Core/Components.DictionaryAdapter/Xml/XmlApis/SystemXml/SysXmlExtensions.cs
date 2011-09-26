@@ -105,40 +105,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return property.ExtendedProperties.Contains(XmlAccessorKey);
 		}
 
-		public static string GetXsiType(this Type type)
-		{
-			return type.GetLocalName();
-		}
-
-		public static string GetLocalName(this Type type)
-		{
-			string name;
-			if (XsdTypes.TryGetValue(type, out name))
-				return name;
-
-			name = type.Name;
-			return type.IsInterface && name.IsInterfaceName()
-				? name.Substring(1)
-				: name;
-
-			// TODO: Need to return ListOfInt rather than List`1
-		}
-
-		internal static bool IsSimpleType(this Type type)
-		{
-			return XsdTypes.ContainsKey(type);
-		}
-
 		internal static bool IsCustomSerializable(this Type type)
 		{
 			return typeof(IXmlSerializable).IsAssignableFrom(type);
-		}
-
-		private static bool IsInterfaceName(this string name)
-		{
-			return name.Length > 1
-				&& name[0] == 'I'
-				&& char.IsUpper(name, 1);
 		}
 
 		private const string
@@ -176,7 +145,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{ typeof(TimeSpan),         "duration"      },
 			{ typeof(byte[]),           "base64Binary"  },
 			{ typeof(Uri),              "anyURI"        },
-			{ typeof(XmlQualifiedName), "QName"         }
+			{ typeof(XmlName), "QName"         }
 		};
 	}
 }

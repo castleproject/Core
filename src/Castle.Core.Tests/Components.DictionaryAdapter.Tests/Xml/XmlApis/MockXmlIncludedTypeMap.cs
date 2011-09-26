@@ -29,11 +29,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		public XmlIncludedTypeSet InnerSet { get { return includedTypes; } }
 		public Type DefaultClrType { get; set; }
 
-		public IXmlIncludedType Default { get { return this; } }
-		string IXmlIncludedType.XsiType { get { return null; } }
-		Type   IXmlIncludedType.ClrType { get { return DefaultClrType; } }
+		public  IXmlIncludedType Default { get { return this; } }
+		XmlName IXmlIncludedType.XsiType { get { return XmlName.Empty; } }
+		Type    IXmlIncludedType.ClrType { get { return DefaultClrType; } }
 
-		public bool TryGet(string xsiType, out IXmlIncludedType includedType)
+		public bool TryGet(XmlName xsiType, out IXmlIncludedType includedType)
 		{
 			return (xsiType == null || xsiType == Default.XsiType)
 				? Try.Success(out includedType, Default)

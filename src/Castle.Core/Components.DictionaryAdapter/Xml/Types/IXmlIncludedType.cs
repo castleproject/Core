@@ -18,7 +18,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public interface IXmlIncludedType
 	{
-		string XsiType { get; }
-		Type   ClrType { get; }
+		XmlName XsiType { get; }
+		Type    ClrType { get; }
 	}
 }

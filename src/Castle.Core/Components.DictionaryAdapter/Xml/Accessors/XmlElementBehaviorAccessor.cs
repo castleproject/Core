@@ -20,7 +20,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public class XmlElementBehaviorAccessor : XmlNodeAccessor,
 		IConfigurable<XmlElementAttribute>,
-		IXmlTypeFrom <XmlElementAttribute>
+		IXmlBehaviorSemantics <XmlElementAttribute>
 	{
 		private ItemAccessor itemAccessor;
 		private List<XmlElementAttribute> attributes;
@@ -90,11 +90,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return attribute.Namespace;
 		}
 
-		public string GetXsiType(XmlElementAttribute attribute)
-		{
-			return attribute.Type.GetLocalName();
-		}
-
 		public Type GetClrType(XmlElementAttribute attribute)
 		{
 			return attribute.Type;
@@ -105,8 +100,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			public ItemAccessor(XmlNodeAccessor parent)
 				: base(parent.ClrType.GetCollectionItemType(), parent.Context)
 			{
-				ConfigureLocalName   (parent.LocalName   );
-				ConfigureNamespaceUri(parent.NamespaceUri);
+				ConfigureLocalName   (parent.Name.LocalName   );
+				ConfigureNamespaceUri(parent.Name.NamespaceUri);
 				ConfigureNillable    (parent.IsNillable  );
 				ConfigureKnownTypesFromParent(parent);
 			}

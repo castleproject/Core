@@ -20,8 +20,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		IXmlIncludedType Default { get; }
 
-		bool TryGet(string xsiType, out IXmlIncludedType includedType);
-		bool TryGet(Type   clrType, out IXmlIncludedType includedType);
+		bool TryGet(XmlName xsiType, out IXmlIncludedType includedType);
+		bool TryGet(Type    clrType, out IXmlIncludedType includedType);
 	}
 
 	public static class XmlIncludedTypeMapExtensions

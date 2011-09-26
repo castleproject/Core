@@ -16,13 +16,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Xml;
-	using System.Xml.Serialization;
 
-	public interface IXmlAccessorContext
+	public interface IXmlAccessorContext : IXmlIncludedType, IXmlIncludedTypeMap
 	{
 		string ChildNamespaceUri { get; }
-		XmlIncludedTypeSet IncludedTypes { get; }
 		XmlContext XmlContext { get; }
+
+		XmlName GetDefaultXsiType(Type clrType);
+		IEnumerable<IXmlIncludedType> GetIncludedTypes(Type baseType);
 	}
 }

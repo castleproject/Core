@@ -35,17 +35,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			get { return clrType; }
 		}
 
-		public string LocalName
+		public XmlName Name
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public string NamespaceUri
-		{
-			get { throw new NotImplementedException(); }
-		}
-
-		public string XsiType
+		public XmlName XsiType
 		{
 			get { throw new NotImplementedException(); }
 		}

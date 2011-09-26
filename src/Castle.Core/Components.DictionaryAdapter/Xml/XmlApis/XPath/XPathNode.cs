@@ -50,24 +50,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return type; }
 		}
 
-		//Type IXmlTypeMap.BaseType
-		//{
-		//    get { return ClrType; }
-		//}
-
-		public virtual string LocalName
+		public virtual XmlName Name
 		{
-			get { return node.LocalName; }
+			get { return new XmlName(node.LocalName, node.NamespaceURI); }
 		}
 
-		public virtual string NamespaceUri
+		public virtual XmlName XsiType
 		{
-			get { return node.NamespaceURI; }
-		}
-
-		public virtual string XsiType
-		{
-			get { return IsElement ? node.GetXsiType() : null; }
+			get { return IsElement ? node.GetXsiType() : XmlName.Empty; }
 		}
 
 		public virtual bool IsElement

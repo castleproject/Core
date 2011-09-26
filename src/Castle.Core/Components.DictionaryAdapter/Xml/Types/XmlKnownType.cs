@@ -18,76 +18,44 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public class XmlKnownType : IXmlKnownType
 	{
-		private readonly Type clrType;
-		private readonly string localName;
-		private readonly string namespaceUri;
-		private readonly string xsiType;
+		private readonly XmlName name;
+		private readonly XmlName xsiType;
+		private readonly Type    clrType;
 
-		public XmlKnownType(string localName, string namespaceUri, string xsiType, Type clrType)
+		public XmlKnownType(XmlName name, XmlName xsiType, Type clrType)
 		{
-			if (localName == null)
-				throw Error.ArgumentNull("localName");
+			if (name.LocalName == null)
+				throw Error.ArgumentNull("name.LocalName");
 			if (clrType == null)
 				throw Error.ArgumentNull("clrType");
 
-			this.localName    = localName;
-			this.namespaceUri = namespaceUri;
-			this.xsiType      = xsiType;
-			this.clrType      = clrType;
+			this.name    = name;
+			this.xsiType = xsiType;
+			this.clrType = clrType;
+		}
+
+		public XmlKnownType(string nameLocalName, string nameNamespaceUri, string xsiTypeLocalName, string xsiTypeNamespaceUri, Type clrType)
+			: this
+			(
+				new XmlName(nameLocalName,    nameNamespaceUri),
+				new XmlName(xsiTypeLocalName, xsiTypeNamespaceUri),
+				clrType
+			)
+		{ }
+
+		public XmlName Name
+		{
+			get { return name; }
+		}
+
+		public XmlName XsiType
+		{
+			get { return xsiType; }
 		}
 
 		public Type ClrType
 		{
 			get { return clrType; }
 		}
-
-		public string LocalName
-		{
-			get { return localName; }
-		}
-
-		public string NamespaceUri
-		{
-			get { return namespaceUri; }
-		}
-
-		public string XsiType
-		{
-			get { return xsiType; }
-		}
-
-		//Type IXmlTypeMap.BaseType
-		//{
-		//    get { return ClrType; }
-		//}
-
-		//protected virtual bool IsMatch(IXmlType xmlType)
-		//{
-		//    return (LocalName == null    || NameComparer.Equals(LocalName, xmlType.LocalName      ))
-		//        && (NamespaceUri == null || NameComparer.Equals(NamespaceUri, xmlType.NamespaceUri))
-		//        && (                        NameComparer.Equals(XsiType, xmlType.XsiType          ));
-		//}
-
-		//protected virtual bool IsMatch(Type clrType)
-		//{
-		//    return clrType == ClrType;
-		//}
-
-		//public bool TryGetClrType(IXmlType xmlType, out Type clrType)
-		//{
-		//    return IsMatch(xmlType)
-		//        ? Try.Success(out clrType, ClrType)
-		//        : Try.Failure(out clrType);
-		//}
-
-		//public bool TryGetXmlType(Type clrType, out IXmlType xmlType)
-		//{
-		//    return IsMatch(clrType)
-		//        ? Try.Success(out xmlType, this)
-		//        : Try.Failure(out xmlType);
-		//}
-
-		//protected static readonly StringComparer
-		//    NameComparer = StringComparer.OrdinalIgnoreCase;
 	}
 }

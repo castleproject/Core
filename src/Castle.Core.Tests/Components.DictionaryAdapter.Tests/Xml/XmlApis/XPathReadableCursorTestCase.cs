@@ -39,7 +39,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		    var cursor = Cursor(xml, "@A|A", CursorFlags.None);
 
 		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.LocalName,  Is.EqualTo("A"));
+		    Assert.That(cursor.Name.LocalName,  Is.EqualTo("A"));
 		    Assert.That(cursor.Value,      Is.EqualTo("1"));
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -51,7 +51,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		    var cursor = Cursor(xml, "@A|A", CursorFlags.None);
 
 		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.LocalName,  Is.EqualTo("A"));
+		    Assert.That(cursor.Name.LocalName,  Is.EqualTo("A"));
 		    Assert.That(cursor.Value,      Is.EqualTo("1"));
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -72,10 +72,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		    var cursor = Cursor(xml, "@A|A", CursorFlags.Multiple);
 
 		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.LocalName,  Is.EqualTo("A"));
+		    Assert.That(cursor.Name.LocalName,  Is.EqualTo("A"));
 		    Assert.That(cursor.Value,      Is.EqualTo("1"));
 		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.LocalName,  Is.EqualTo("A"));
+		    Assert.That(cursor.Name.LocalName,  Is.EqualTo("A"));
 		    Assert.That(cursor.Value,      Is.EqualTo("2"));
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}

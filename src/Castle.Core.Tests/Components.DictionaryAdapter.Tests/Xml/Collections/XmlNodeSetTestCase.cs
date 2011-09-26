@@ -21,7 +21,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class XmlNodeSetTestCase : XmlAdapterTestCase.TestCase
+	public class XmlNodeSetTestCase : XmlAdapterTestCase
 	{
 		[Test]
 		public void GetValue()

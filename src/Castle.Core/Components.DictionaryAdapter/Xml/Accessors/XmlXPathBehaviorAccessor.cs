@@ -36,13 +36,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	    protected XmlXPathBehaviorAccessor(Type clrType, IXmlAccessorContext context)
 	        : base(clrType, context)
 		{
-			includedTypes = context.IncludedTypes;
+			includedTypes = new XmlIncludedTypeSet();
+
+			foreach (var includedType in context.GetIncludedTypes(clrType))
+				includedTypes.Add(includedType);
 		}
 
 	    public CompiledXPath Path
 	    {
 	        get { return path; }
 	    }
+
+		public XmlContext XPathContext
+		{
+			get { return Context.XmlContext; }
+		}
 
 		public bool SelectsNodes
 		{
@@ -124,9 +132,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return node.Select(path, this, CursorFlags.AllNodes.MutableIf(create) | CursorFlags.Multiple);
 		}
 
-		public bool TryGet(string xsiType, out IXmlIncludedType includedType)
+		public bool TryGet(XmlName xsiType, out IXmlIncludedType includedType)
 		{
-			if (xsiType == null || xsiType == this.XsiType)
+			if (xsiType == XmlName.Empty || xsiType == this.XsiType)
 				return Try.Success(out includedType, this);
 
 			if (!includedTypes.TryGet(xsiType, out includedType))

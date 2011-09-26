@@ -70,17 +70,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return HasCurrent ? base.ClrType : knownTypes.Default.ClrType; }
 		}
 
-		public override string LocalName
+		public override XmlName Name
 		{
-			get { return HasCurrent ? base.LocalName : knownTypes.Default.LocalName; }
+			get { return HasCurrent ? base.Name : knownTypes.Default.Name; }
 		}
 
-		public override string NamespaceUri
-		{
-			get { return HasCurrent ? base.NamespaceUri : knownTypes.Default.NamespaceUri; }
-		}
-
-		public override string XsiType
+		public override XmlName XsiType
 		{
 			get { return HasCurrent ? base.XsiType : knownTypes.Default.XsiType; }
 		}
@@ -376,7 +371,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var parent       = oldNode.ParentNode;
 			var namespaceUri = GetEffectiveNamespaceUri(parent, knownType);
 
-			if (!HasName(knownType.LocalName, namespaceUri))
+			if (!XmlNameComparer.Default.Equals(Name, knownType.Name))
 			{
 				var newNode = CreateElementCore(parent, knownType, namespaceUri);
 				parent.ReplaceChild(newNode, oldNode);
@@ -392,7 +387,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var parent       = oldNode.OwnerElement;
 			var namespaceUri = GetEffectiveNamespaceUri(parent, knownType);
 
-			if (!HasName(knownType.LocalName, namespaceUri))
+			if (!XmlNameComparer.Default.Equals(Name, knownType.Name))
 			{
 				var newNode    = CreateAttributeCore(parent, knownType, namespaceUri);
 				var attributes = parent.Attributes;
@@ -439,9 +434,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			var document = parent.OwnerDocument ?? (XmlDocument) parent;
 			var prefix   = parent.GetPrefixOfNamespace(namespaceUri);
-			var element  = document.CreateElement(prefix, knownType.LocalName, namespaceUri);
+			var element  = document.CreateElement(prefix, knownType.Name.LocalName, namespaceUri);
 
-			if (knownType.XsiType != null)
+			if (knownType.XsiType != XmlName.Empty)
 				element.SetXsiType(knownType.XsiType);
 
 			node = element;
@@ -452,7 +447,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			var document  = parent.OwnerDocument ?? (XmlDocument) parent;
 			var prefix    = parent.GetPrefixOfNamespace(namespaceUri);
-			var attribute = document.CreateAttribute(prefix, knownType.LocalName, namespaceUri);
+			var attribute = document.CreateAttribute(prefix, knownType.Name.LocalName, namespaceUri);
 
 			node = attribute;
 			return attribute;
@@ -460,20 +455,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private void RequireNoXsiType(IXmlKnownType knownType)
 		{
-			if (knownType.XsiType != null)
+			if (knownType.XsiType != XmlName.Empty)
 				throw Error.CannotSetXsiTypeOnAttribute();
 		}
 
-		private static string GetEffectiveNamespaceUri(XmlNode parent, IXmlName knownType)
+		private static string GetEffectiveNamespaceUri(XmlNode parent, IXmlIdentity knownType)
 		{
-			return knownType.NamespaceUri
+			return knownType.Name.NamespaceUri
 				?? (parent != null ? parent.NamespaceURI : string.Empty);
-		}
-
-		private bool HasName(string localName, string namespaceUri)
-		{
-			return node.LocalName    == localName
-				&& node.NamespaceURI == namespaceUri;
 		}
 
 		public void RemoveAllNext()

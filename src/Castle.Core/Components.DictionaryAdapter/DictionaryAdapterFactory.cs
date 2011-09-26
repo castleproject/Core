@@ -106,16 +106,16 @@ namespace Castle.Components.DictionaryAdapter
 		/// <inheritdoc />
 		public T GetAdapter<T>(System.Xml.XmlNode xmlNode)
 		{
-			return (T)GetAdapter(typeof(T), xmlNode);
+		    return (T)GetAdapter(typeof(T), xmlNode);
 		}
 
 		/// <inheritdoc />
 		public object GetAdapter(Type type, System.Xml.XmlNode xmlNode)
 		{
-			var xml = new XmlAdapter(xmlNode);
-			return GetAdapter(type, new Hashtable(), new DictionaryDescriptor()
-				.AddBehavior(XmlMetadataBehavior.Instance)
-				.AddBehavior(xml));
+		    var xml = new XmlAdapter(xmlNode);
+		    return GetAdapter(type, new Hashtable(), new DictionaryDescriptor()
+		        .AddBehavior(XmlMetadataBehavior.Instance)
+		        .AddBehavior(xml));
 		}
 #endif
 

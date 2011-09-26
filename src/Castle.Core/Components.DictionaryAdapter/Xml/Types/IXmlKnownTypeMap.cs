@@ -20,8 +20,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		IXmlKnownType Default { get; }
 
-		bool TryGet(IXmlName xmlName, out IXmlKnownType knownType);
-		bool TryGet(Type     clrType, out IXmlKnownType knownType);
+		bool TryGet(IXmlIdentity xmlNode, out IXmlKnownType knownType);
+		bool TryGet(Type         clrType, out IXmlKnownType knownType);
 	}
 
 	public static class XmlKnownTypeMapExtensions

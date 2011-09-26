@@ -66,7 +66,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private class ItemAccessor : XmlNodeAccessor,
 			IConfigurable<XmlArrayItemAttribute>,
-			IXmlTypeFrom <XmlArrayItemAttribute>
+			IXmlBehaviorSemantics <XmlArrayItemAttribute>
 		{
 			private List<XmlArrayItemAttribute> attributes;
 
@@ -112,11 +112,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			public string GetNamespaceUri(XmlArrayItemAttribute attribute)
 			{
 				return attribute.Namespace;
-			}
-
-			public string GetXsiType(XmlArrayItemAttribute attribute)
-			{
-				return attribute.Type.GetXsiType();
 			}
 
 			public Type GetClrType(XmlArrayItemAttribute attribute)

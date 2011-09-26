@@ -75,7 +75,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			var cursor = new SysXmlCursor(xml, KnownTypes, CursorFlags.AllNodes);
 
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("1"));
 			Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -87,7 +87,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			var cursor = new SysXmlCursor(xml, KnownTypes, CursorFlags.AllNodes);
 
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("1"));
 			Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -108,10 +108,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			var cursor = new SysXmlCursor(xml, KnownTypes, CursorFlags.AllNodes | CursorFlags.Multiple);
 
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("1"));
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("2"));
 			Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -132,7 +132,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			var cursor = new SysXmlCursor(xml, KnownTypes, CursorFlags.Elements);
 
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("1"));
 			Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -153,10 +153,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			var cursor = new SysXmlCursor(xml, KnownTypes, CursorFlags.Elements | CursorFlags.Multiple);
 
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("1"));
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("2"));
 			Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -177,7 +177,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			var cursor = new SysXmlCursor(xml, KnownTypes, CursorFlags.Attributes);
 
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("1"));
 			Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -189,14 +189,14 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			var cursor = new SysXmlCursor(xml, KnownTypes, CursorFlags.Elements);
 
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("1"));
 			Assert.That(cursor.MoveNext(), Is.False);
 
 			cursor.Reset();
 
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("1"));
 			Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -235,7 +235,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			cursor.MoveTo(node);
 
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("1"));
 			Assert.That(cursor.MoveNext(), Is.True);
 			Assert.That(cursor.MoveNext(), Is.False);
@@ -254,7 +254,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			cursor.MoveTo(node);
 
-			Assert.That(cursor.LocalName,  Is.EqualTo(OtherType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(OtherType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("2"));
 			Assert.That(cursor.MoveNext(), Is.False);
 		}
@@ -311,7 +311,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			var node = cursor.Save();
 			cursor.MoveNext();
 
-			Assert.That(node.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(node.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(node.Value,      Is.EqualTo("1"));
 		}
 
@@ -323,7 +323,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			cursor.MakeNext(OtherType.ClrType);
 
-			Assert.That(cursor.LocalName, Is.EqualTo(OtherType.LocalName));
+			Assert.That(cursor.Name.LocalName, Is.EqualTo(OtherType.Name.LocalName));
 			Assert.That(xml.GetNode(), XmlEquivalent.To("<X> <Other/> </X>"));
 		}
 
@@ -336,7 +336,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			cursor.MoveNext();
 			cursor.MakeNext(OtherType.ClrType);
 
-			Assert.That(cursor.LocalName, Is.EqualTo(OtherType.LocalName));
+			Assert.That(cursor.Name.LocalName, Is.EqualTo(OtherType.Name.LocalName));
 			Assert.That(xml.GetNode(), XmlEquivalent.To("<X> <Item>1</Item> <Other/> </X>"));
 		}
 
@@ -360,10 +360,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			cursor.Create(ItemType.ClrType);
 			cursor.Value = "1";
 
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("1"));
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo(OtherType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(OtherType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("2"));
 			Assert.That(cursor.MoveNext(), Is.False);
 
@@ -380,10 +380,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			cursor.Create(ItemType.ClrType);
 			cursor.Value = "1";
 
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("1"));
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo(OtherType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(OtherType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("2"));
 			Assert.That(cursor.MoveNext(), Is.False);
 
@@ -400,7 +400,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			cursor.Create(ItemType.ClrType);
 			cursor.Value = "1";
 
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("1"));
 			Assert.That(cursor.MoveNext(), Is.False);
 
@@ -417,7 +417,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			cursor.Create(ItemType.ClrType);
 			cursor.Value = "1";
 
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.Value,      Is.EqualTo("1"));
 			Assert.That(cursor.MoveNext(), Is.False);
 
@@ -454,7 +454,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			cursor.MoveNext();
 			cursor.Coerce(ItemType.ClrType);
 
-			Assert.That(cursor.LocalName,  Is.EqualTo(ItemType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(ItemType.Name.LocalName));
 			Assert.That(cursor.MoveNext(), Is.False);
 			Assert.That(xml.GetNode(), XmlEquivalent.To("<X> <Item/> </X>"));
 		}
@@ -468,7 +468,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			cursor.MoveNext();
 			cursor.Coerce(OtherType.ClrType);
 
-			Assert.That(cursor.LocalName,  Is.EqualTo(OtherType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(OtherType.Name.LocalName));
 			Assert.That(cursor.MoveNext(), Is.False);
 			Assert.That(xml.GetNode(), XmlEquivalent.To("<X> <Other/> </X>"));
 		}
@@ -482,7 +482,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			cursor.MoveNext();
 			cursor.Coerce(OtherType.ClrType);
 
-			Assert.That(cursor.LocalName,  Is.EqualTo(OtherType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(OtherType.Name.LocalName));
 			Assert.That(cursor.MoveNext(), Is.False);
 			Assert.That(xml.GetNode(), XmlEquivalent.To("<X> <Other/> </X>"));
 		}
@@ -518,7 +518,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			cursor.Remove();
 
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo(OtherType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(OtherType.Name.LocalName));
 			Assert.That(cursor.MoveNext(), Is.False);
 
 			Assert.That(xml.GetNode(), XmlEquivalent.To("<X> <Other/> </X>"));
@@ -534,7 +534,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			cursor.Remove();
 
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo(OtherType.LocalName));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo(OtherType.Name.LocalName));
 			Assert.That(cursor.MoveNext(), Is.False);
 
 			Assert.That(xml.GetNode(), XmlEquivalent.To("<X Other='2'/>"));
@@ -567,8 +567,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		protected static readonly XmlKnownType
-			ItemType  = new XmlKnownType("Item",  null, null, typeof(_TypeA)),
-			OtherType = new XmlKnownType("Other", null, null, typeof(_TypeB));
+			ItemType  = new XmlKnownType("Item",  null, null, null, typeof(_TypeA)),
+			OtherType = new XmlKnownType("Other", null, null, null, typeof(_TypeB));
 
 		protected static readonly XmlKnownTypeSet
 			KnownTypes = new XmlKnownTypeSet(typeof(_TypeA));

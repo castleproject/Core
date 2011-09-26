@@ -19,22 +19,32 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Xml;
 	using System.Xml.Serialization;
 
-	public class XmlMetadata : IXmlKnownType, IXmlKnownTypeMap, IXmlIncludedType, IXmlIncludedTypeMap, IXmlAccessorContext
+	public class XmlMetadata : IXmlAccessorContext,
+		IXmlKnownType,    IXmlKnownTypeMap,
+		IXmlIncludedType, IXmlIncludedTypeMap
 	{
-		private readonly Type clrType;
-		private readonly bool? qualified;
-		private readonly bool? isNullable;
+		private readonly Type   clrType;
+		private readonly bool?  qualified;
+		private readonly bool?  isNullable;
 		private readonly string rootLocalName;
 		private readonly string rootNamespaceUri;
 		private readonly string childNamespaceUri;
+		private readonly string typeLocalName;
+		private readonly string typeNamespaceUri;
+
 		private readonly XmlIncludedTypeSet includedTypes;
 		private readonly XmlContext context;
+		private readonly DictionaryAdapterMeta source;
 #if !SL3
 		private readonly CompiledXPath path;
 #endif
 		
 		public XmlMetadata(DictionaryAdapterMeta meta)
 		{
+			if (meta == null)
+				throw Error.ArgumentNull("meta");
+
+			source        = meta;
 			clrType       = meta.Type;
 			context       = new XmlContext();
 			includedTypes = new XmlIncludedTypeSet();
@@ -71,50 +81,38 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				path.SetContext(context);
 			}
 #endif
+			typeLocalName = XmlConvert.EncodeLocalName
+			(
+				(xmlType == null ? null : xmlType.TypeName.NonEmpty()) ??
+				GetDefaultTypeLocalName(clrType)
+			);
+
 			rootLocalName = XmlConvert.EncodeLocalName
 			(
 				(xmlRoot == null ? null : xmlRoot.ElementName.NonEmpty()) ??
-				(xmlType == null ? null : xmlType.TypeName   .NonEmpty()) ??
-				clrType.GetLocalName()
+				typeLocalName
+			);
+
+			typeNamespaceUri =
+			(
+				(xmlType == null ? null : xmlType.Namespace)
 			);
 
 			rootNamespaceUri =
 			(
-				(xmlRoot == null ? null : xmlRoot.Namespace) ??
-				null
+				(xmlRoot == null ? null : xmlRoot.Namespace)
 			);
 
 			childNamespaceUri =
 			(
-				(xmlType == null ? null : xmlType.Namespace) ??
-				(xmlRoot == null ? null : xmlRoot.Namespace) ??
-				null
+				typeNamespaceUri ??
+				rootNamespaceUri
 			);
 		}
 
 		public Type ClrType
 		{
 			get { return clrType; }
-		}
-
-		IXmlKnownType IXmlKnownTypeMap.Default
-		{
-			get { return this; }
-		}
-
-		public string LocalName
-		{
-			get { return rootLocalName; }
-		}
-
-		public string NamespaceUri
-		{
-			get { return rootNamespaceUri; }
-		}
-
-		public string XsiType
-		{
-			get { return null; }
 		}
 
 		public bool? Qualified
@@ -125,6 +123,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public bool? IsNullable
 		{
 			get { return isNullable; }
+		}
+
+		public XmlName Name
+		{
+			get { return new XmlName(rootLocalName, rootNamespaceUri); }
+		}
+
+		public XmlName XsiType
+		{
+			get { return new XmlName(typeLocalName, typeNamespaceUri); }
+		}
+
+		XmlName IXmlIdentity.XsiType
+		{
+			get { return XmlName.Empty; }
 		}
 
 		public string ChildNamespaceUri
@@ -147,6 +160,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return path; }
 		}
 #endif
+		IXmlKnownType IXmlKnownTypeMap.Default
+		{
+			get { return this; }
+		}
+
+		IXmlIncludedType IXmlIncludedTypeMap.Default
+		{
+			get { return this; }
+		}
+
 		public IXmlCursor SelectBase(IXmlNode node) // node is root
 		{
 #if !SL3
@@ -156,10 +179,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return node.SelectChildren(this, RootFlags);
 		}
 
-		private bool IsMatch(IXmlName xmlName)
+		private bool IsMatch(IXmlIdentity xmlIdentity)
 		{
-			return NameComparer.Equals(rootLocalName, xmlName.LocalName)
-				&& (rootNamespaceUri == null || NameComparer.Equals(rootNamespaceUri, xmlName.NamespaceUri));
+			var name = xmlIdentity.Name;
+
+			return NameComparer.Equals(rootLocalName, name.LocalName)
+				&& (rootNamespaceUri == null || NameComparer.Equals(rootNamespaceUri, name.NamespaceUri));
 		}
 
 		private bool IsMatch(Type clrType)
@@ -167,9 +192,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return clrType == this.clrType;
 		}
 
-		public bool TryGet(IXmlName xmlName, out IXmlKnownType knownType)
+		public bool TryGet(IXmlIdentity xmlIdentity, out IXmlKnownType knownType)
 		{
-			return IsMatch(xmlName)
+			return IsMatch(xmlIdentity)
 				? Try.Success(out knownType, this)
 				: Try.Failure(out knownType);
 		}
@@ -181,9 +206,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				: Try.Failure(out knownType);
 		}
 
-		public bool TryGet(string xsiType, out IXmlIncludedType includedType)
+		public bool TryGet(XmlName xsiType, out IXmlIncludedType includedType)
 		{
-			return xsiType == null
+			return xsiType == XmlName.Empty || xsiType == this.XsiType
 				? Try.Success(out includedType, this)
 				: Try.Failure(out includedType);
 		}
@@ -198,8 +223,104 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void AddXmlInclude(XmlIncludeAttribute attribute)
 		{
 			var clrType      = attribute.Type;
-			var includedType = new XmlIncludedType(clrType.GetLocalName(), clrType);
+			var xsiType      = GetDefaultXsiType(clrType);
+			var includedType = new XmlIncludedType(xsiType, clrType);
 			includedTypes.Add(includedType);
+		}
+
+		public XmlName GetDefaultXsiType(Type clrType)
+		{
+			IXmlIncludedType include;
+			if (includedTypes.TryGet(clrType, out include))
+				return include.XsiType;
+
+			var kind = XmlTypeSerializer.For(clrType).Kind;
+			switch (kind)
+			{
+				case XmlTypeKind.Complex:
+					if (!clrType.IsInterface) goto default;
+					return GetXmlMetadata(clrType).XsiType;
+
+				case XmlTypeKind.Collection:
+					var itemClrType = clrType.GetCollectionItemType();
+					var itemXsiType = GetDefaultXsiType(itemClrType);
+					return new XmlName("ArrayOf" + itemXsiType.LocalName, null);
+
+				default:
+					return new XmlName(clrType.Name, null);
+			}
+		}
+
+		public IEnumerable<IXmlIncludedType> GetIncludedTypes(Type baseType)
+		{
+			var queue   = new Queue<XmlMetadata>();
+			var visited = new HashSet<Type>();
+			XmlMetadata metadata;
+
+			visited.Add(baseType);
+			if (TryGetXmlMetadata(baseType, out metadata))
+				queue.Enqueue(metadata);
+			metadata = this;
+
+			for (;;)
+			{
+				foreach (var includedType in metadata.includedTypes)
+				{
+					var clrType = includedType.ClrType;
+					var relevant
+						=  baseType != clrType
+						&& baseType.IsAssignableFrom(clrType)
+						&& visited.Add(clrType);
+
+					if (!relevant)
+						continue;
+
+					yield return includedType;
+
+					if (TryGetXmlMetadata(clrType, out metadata))
+						queue.Enqueue(metadata);
+				}
+
+				if (queue.Count == 0)
+					yield break;
+
+				metadata = queue.Dequeue();
+			}
+		}
+
+		private bool TryGetXmlMetadata(Type clrType, out XmlMetadata metadata)
+		{
+			var kind = XmlTypeSerializer.For(clrType).Kind;
+
+			return kind == XmlTypeKind.Complex && clrType.IsInterface
+				? Try.Success(out metadata, GetXmlMetadata(clrType))
+				: Try.Failure(out metadata);
+		}
+
+		private XmlMetadata GetXmlMetadata(Type clrType)
+		{
+			var descriptor = new DictionaryDescriptor();
+			descriptor.AddInitializers    (source.Initializers);
+			descriptor.AddMetaInitializers(source.MetaInitializers);
+
+			return source.Factory
+				.GetAdapterMeta(clrType, descriptor)
+				.GetXmlMeta();
+		}
+
+		private string GetDefaultTypeLocalName(Type clrType)
+		{
+			var name = clrType.Name;
+			return IsInterfaceName(name)
+				? name.Substring(1)
+				: name;
+		}
+
+		private static bool IsInterfaceName(string name)
+		{
+			return name.Length > 1
+				&& name[0] == 'I'
+				&& char.IsUpper(name, 1);
 		}
 
 		private static bool TryCast<T>(object obj, ref T result)
@@ -218,10 +339,5 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private const CursorFlags RootFlags
 			= CursorFlags.Elements
 			| CursorFlags.Mutable;
-
-		IXmlIncludedType IXmlIncludedTypeMap.Default
-		{
-			get { throw new NotImplementedException(); }
-		}
 	}
 }

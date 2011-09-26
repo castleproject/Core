@@ -31,6 +31,7 @@ namespace Castle.Components.DictionaryAdapter
 									 DictionaryDescriptor descriptor, IDictionaryAdapterFactory factory)
 		{
 			Type = type;
+			Factory = factory;
 			Initializers = initializers;
 			MetaInitializers = metaInitializers;
 			Behaviors = behaviors;
@@ -42,6 +43,8 @@ namespace Castle.Components.DictionaryAdapter
 		public Type Type { get; private set; }
 
 		public object[] Behaviors { get; private set; }
+
+		public IDictionaryAdapterFactory Factory { get; private set; }
 
 		public IDictionaryInitializer[] Initializers { get; private set; }
 

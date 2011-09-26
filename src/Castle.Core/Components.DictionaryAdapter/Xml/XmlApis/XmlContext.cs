@@ -37,8 +37,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			AddNamespace(Xsd.Prefix, Xsd.NamespaceUri);
 			AddNamespace(Xsi.Prefix, Xsi.NamespaceUri);
 #if !SL3
-			functions = new Dictionary<XmlQualifiedName, IXsltContextFunction>();
-			variables = new Dictionary<XmlQualifiedName, IXsltContextVariable>();
+			functions = new Dictionary<XmlName, IXsltContextFunction>();
+			variables = new Dictionary<XmlName, IXsltContextVariable>();
 #endif
 		}
 
@@ -64,8 +64,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 #if !SL3
 		private XPathContext xPathContext;
-		private readonly Dictionary<XmlQualifiedName, IXsltContextFunction> functions;
-		private readonly Dictionary<XmlQualifiedName, IXsltContextVariable> variables;
+		private readonly Dictionary<XmlName, IXsltContextFunction> functions;
+		private readonly Dictionary<XmlName, IXsltContextVariable> variables;
 
 		public XsltContext WithXPathSemantics
 		{
@@ -89,20 +89,20 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void AddFunction(string prefix, string name, IXsltContextFunction function)
 		{
-			var key = new XmlQualifiedName(prefix, name);
+			var key = new XmlName(name, prefix ?? string.Empty);
 			functions[key] = function;
 		}
 
 		public void AddVariable(string prefix, string name, IXsltContextVariable variable)
 		{
-			var key = new XmlQualifiedName(prefix, name);
+			var key = new XmlName(name, prefix ?? string.Empty);
 			variables[key] = variable;
 		}
 
 		public override IXsltContextFunction ResolveFunction(string prefix, string name, XPathResultType[] ArgTypes)
 		{
 			IXsltContextFunction function;
-			var key = new XmlQualifiedName(prefix, name);
+			var key = new XmlName(name, prefix ?? string.Empty);
 			functions.TryGetValue(key, out function);
 			return function;
 		}
@@ -110,7 +110,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override IXsltContextVariable ResolveVariable(string prefix, string name)
 		{
 			IXsltContextVariable variable;
-			var key = new XmlQualifiedName(prefix, name);
+			var key = new XmlName(name, prefix ?? string.Empty);
 			variables.TryGetValue(key, out variable);
 			return variable;
 		}

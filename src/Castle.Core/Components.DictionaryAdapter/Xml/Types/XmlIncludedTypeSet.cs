@@ -20,13 +20,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public class XmlIncludedTypeSet : IXmlIncludedTypeMap, IEnumerable<IXmlIncludedType>
 	{
-		private readonly Dictionary<string, IXmlIncludedType> itemsByXsiType;
-		private readonly Dictionary<Type,   IXmlIncludedType> itemsByClrType;
+		private readonly Dictionary<XmlName, IXmlIncludedType> itemsByXsiType;
+		private readonly Dictionary<Type,    IXmlIncludedType> itemsByClrType;
 
 		public XmlIncludedTypeSet()
 		{
-			itemsByXsiType = new Dictionary<string, IXmlIncludedType>();
-			itemsByClrType = new Dictionary<Type,   IXmlIncludedType>();
+			itemsByXsiType = new Dictionary<XmlName, IXmlIncludedType>();
+			itemsByClrType = new Dictionary<Type,    IXmlIncludedType>();
 
 			foreach (var includedType in DefaultEntries)
 				Add(includedType);
@@ -46,7 +46,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			itemsByClrType[includedType.ClrType] = includedType;
 		}
 
-		public bool TryGet(string xsiType, out IXmlIncludedType includedType)
+		public bool TryGet(XmlName xsiType, out IXmlIncludedType includedType)
 		{
 			return itemsByXsiType.TryGetValue(xsiType, out includedType);
 		}
@@ -69,27 +69,27 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public static readonly IList<IXmlIncludedType> DefaultEntries
 			= Array.AsReadOnly(new IXmlIncludedType[]
 		{
-			new XmlIncludedType("xsd:anyType",       typeof(object)),
-			new XmlIncludedType("xsd:string",        typeof(string)),
-			new XmlIncludedType("xsd:boolean",       typeof(bool)),
-			new XmlIncludedType("xsd:byte",          typeof(sbyte)),
-			new XmlIncludedType("xsd:unsignedByte",  typeof(byte)),
-			new XmlIncludedType("xsd:short",         typeof(short)),
-			new XmlIncludedType("xsd:unsignedShort", typeof(ushort)),
-			new XmlIncludedType("xsd:int",           typeof(int)),
-			new XmlIncludedType("xsd:unsignedInt",   typeof(uint)),
-			new XmlIncludedType("xsd:long",          typeof(long)),
-			new XmlIncludedType("xsd:unsignedLong",  typeof(ulong)),
-			new XmlIncludedType("xsd:float",         typeof(float)),
-			new XmlIncludedType("xsd:double",        typeof(double)),
-			new XmlIncludedType("xsd:decimal",       typeof(decimal)),
-			new XmlIncludedType("wsdl:guid",         typeof(Guid)),          
-			new XmlIncludedType("xsd:dateTime",      typeof(DateTime)),
-//			new XmlIncludedType("xsd:dateTime",      typeof(DateTimeOffset)), TODO: Find a way to enable this without duplicate key exception.
-			new XmlIncludedType("xsd:duration",      typeof(TimeSpan)),      
-			new XmlIncludedType("xsd:base64Binary",  typeof(byte[])),
-			new XmlIncludedType("xsd:anyURI",        typeof(Uri)),
-			new XmlIncludedType("xsd:QName",         typeof(System.Xml.XmlQualifiedName))
+			new XmlIncludedType("anyType",       Xsd .NamespaceUri, typeof(object)),
+			new XmlIncludedType("string",        Xsd .NamespaceUri, typeof(string)),
+			new XmlIncludedType("boolean",       Xsd .NamespaceUri, typeof(bool)),
+			new XmlIncludedType("byte",          Xsd .NamespaceUri, typeof(sbyte)),
+			new XmlIncludedType("unsignedByte",  Xsd .NamespaceUri, typeof(byte)),
+			new XmlIncludedType("short",         Xsd .NamespaceUri, typeof(short)),
+			new XmlIncludedType("unsignedShort", Xsd .NamespaceUri, typeof(ushort)),
+			new XmlIncludedType("int",           Xsd .NamespaceUri, typeof(int)),
+			new XmlIncludedType("unsignedInt",   Xsd .NamespaceUri, typeof(uint)),
+			new XmlIncludedType("long",          Xsd .NamespaceUri, typeof(long)),
+			new XmlIncludedType("unsignedLong",  Xsd .NamespaceUri, typeof(ulong)),
+			new XmlIncludedType("float",         Xsd .NamespaceUri, typeof(float)),
+			new XmlIncludedType("double",        Xsd .NamespaceUri, typeof(double)),
+			new XmlIncludedType("decimal",       Xsd .NamespaceUri, typeof(decimal)),
+			new XmlIncludedType("guid",          Wsdl.NamespaceUri, typeof(Guid)),          
+			new XmlIncludedType("dateTime",      Xsd .NamespaceUri, typeof(DateTime)),
+//			new XmlIncludedType("dateTime",      Xsd .NamespaceUri, typeof(DateTimeOffset)), TODO: Find a way to enable this without duplicate key exception.
+			new XmlIncludedType("duration",      Xsd .NamespaceUri, typeof(TimeSpan)),      
+			new XmlIncludedType("base64Binary",  Xsd .NamespaceUri, typeof(byte[])),
+			new XmlIncludedType("anyURI",        Xsd .NamespaceUri, typeof(Uri)),
+			new XmlIncludedType("QName",         Xsd .NamespaceUri, typeof(System.Xml.XmlQualifiedName))
 		});
 	}
 }

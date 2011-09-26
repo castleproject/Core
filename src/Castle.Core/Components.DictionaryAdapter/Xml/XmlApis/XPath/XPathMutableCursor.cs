@@ -79,17 +79,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return HasCurrent ? base.ClrType : knownTypes.Default.ClrType; }
 		}
 
-		public override string LocalName
+		public override XmlName Name
 		{
-			get { return HasCurrent ? base.LocalName : null; }
+			get { return HasCurrent ? base.Name : XmlName.Empty; }
 		}
 
-		public override string NamespaceUri
-		{
-			get { return HasCurrent ? base.NamespaceUri : null; }
-		}
-
-		public override string XsiType
+		public override XmlName XsiType
 		{
 			get { return HasCurrent ? base.XsiType : knownTypes.Default.XsiType; }
 		}

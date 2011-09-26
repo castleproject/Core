@@ -37,7 +37,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		{
 			var node = NodeForElement("<X/>");
 
-			Assert.That(node.LocalName, Is.EqualTo("X"));
+			Assert.That(node.Name.LocalName, Is.EqualTo("X"));
 		}
 
 		[Test]
@@ -45,7 +45,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		{
 			var node = NodeForElement("<a:X xmlns:a='urn:a'/>");
 
-			Assert.That(node.LocalName, Is.EqualTo("X"));
+			Assert.That(node.Name.LocalName, Is.EqualTo("X"));
 		}
 
 		[Test]
@@ -53,7 +53,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		{
 			var node = NodeForElement("<X/>");
 
-			Assert.That(node.NamespaceUri, Is.Empty);
+			Assert.That(node.Name.NamespaceUri, Is.Empty);
 		}
 
 		[Test]
@@ -61,7 +61,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		{
 			var node = NodeForElement("<X xmlns='urn:a'/>");
 
-			Assert.That(node.NamespaceUri, Is.EqualTo("urn:a"));
+			Assert.That(node.Name.NamespaceUri, Is.EqualTo("urn:a"));
 		}
 
 		[Test]
@@ -69,7 +69,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		{
 			var node = NodeForElement("<a:X xmlns:a='urn:a'/>");
 
-			Assert.That(node.NamespaceUri, Is.EqualTo("urn:a"));
+			Assert.That(node.Name.NamespaceUri, Is.EqualTo("urn:a"));
 		}
 
 		[Test]
@@ -234,7 +234,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 
 			Assert.That(cursor,            Is.Not.Null);
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo("X"));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo("X"));
 			Assert.That(cursor.MoveNext(), Is.False);
 		}
 
@@ -247,7 +247,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 
 			Assert.That(cursor,            Is.Not.Null);
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo("A"));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo("A"));
 			Assert.That(cursor.MoveNext(), Is.False);
 		}
 
@@ -261,7 +261,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 
 			Assert.That(cursor,            Is.Not.Null);
 			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.LocalName,  Is.EqualTo("A"));
+			Assert.That(cursor.Name.LocalName,  Is.EqualTo("A"));
 			Assert.That(cursor.MoveNext(), Is.False);
 		}
 
@@ -335,7 +335,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 			if (KnownTypes == null)
 			{
 				KnownTypes = new XmlKnownTypeSet(typeof(T));
-				KnownTypes.Add(new XmlKnownType("A", null, null, typeof(T)));
+				KnownTypes.Add(new XmlKnownType("A", null, null, null, typeof(T)));
 			}
 
 			if (IncludedTypes == null)
