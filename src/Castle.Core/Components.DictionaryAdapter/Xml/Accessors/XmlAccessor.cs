@@ -105,11 +105,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				? SelectCollectionNode(parentNode, orStub)
 				: SelectPropertyNode  (parentNode, orStub);
 
-			if (cursor.MoveNext() && !cursor.IsNil)
-				return serializer.GetValue(cursor, parentObject, this);
-			if (orStub)
-				return serializer.GetStub (cursor, parentObject, this);
-			return null;
+			return cursor.MoveNext()
+				? cursor.IsNil && IsNillable
+					? (orStub ? serializer.GetStub(cursor, parentObject, this) : null) // Ask Craig what to do about reading nil
+					: serializer.GetValue(cursor, parentObject, this)
+				: orStub
+					? serializer.GetStub(cursor, parentObject, this)
+					: null;
 		}
 
 		public virtual void SetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, ref object value)

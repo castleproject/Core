@@ -182,6 +182,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
+		public override void Prepare()
+		{
+			if (knownTypes == null)
+				ConfigureIncludedTypes(this);
+			else
+				ConfigureDefaultAndIncludedTypes();
+		}
+
 		private void ConfigureDefaultAndIncludedTypes()
 		{
 			var configuredKnownTypes = knownTypes.ToArray();
@@ -205,32 +213,37 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (knownTypes == null)
 			{
 				knownTypes = new XmlKnownTypeSet(ClrType);
-
-				if (0 != (state & States.ConfiguredName))
-					knownTypes.Add(new XmlKnownType(Name, XsiType, ClrType));
+				AddSelfAsKnownType();
 			}
 
 			knownTypes.Add(new XmlKnownType(name, xsiType, clrType));
 		}
 
-		public override void Prepare()
+		private void AddSelfAsKnownType()
 		{
-			if (knownTypes == null)
-				ConfigureIncludedTypes(this);
-			else
-				ConfigureDefaultAndIncludedTypes();
+			var mask
+				= States.ConfiguredLocalName
+				| States.ConfiguredNamespaceUri
+				| States.ConfiguredKnownTypes;
+
+			var selfIsKnownType
+				= (state & mask) != States.ConfiguredKnownTypes;
+
+			if (selfIsKnownType)
+			{
+				knownTypes.Add(new XmlKnownType(Name, XsiType,       ClrType));
+				knownTypes.Add(new XmlKnownType(Name, XmlName.Empty, ClrType));
+			}
 		}
 
 		[Flags]
 		private enum States
 		{
-			ConfiguredLocalName    = 0x01,
-			ConfiguredNamespaceUri = 0x02,
-			ConfiguredClrType      = 0x04,
-			Nillable               = 0x08,
-			Volatile               = 0x10,
-
-			ConfiguredName         = ConfiguredLocalName | ConfiguredNamespaceUri
+			ConfiguredLocalName    = 0x01, // The local name    has been configured
+			ConfiguredNamespaceUri = 0x02, // The namespace URI has been configured
+			ConfiguredKnownTypes   = 0x04, // Known types have been configured from attributes
+			Nillable               = 0x08, // Set a null value as xsi:nil='true'
+			Volatile               = 0x10, // Always get value from XML store; don't cache it
 		}
 
 		protected static readonly StringComparer
