@@ -15,6 +15,7 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
+using System.Collections;
 
 	public static class DictionaryAdapterExtensions
 	{
@@ -25,6 +26,23 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			descriptor.AddMetaInitializers(source.MetaInitializers);
 
 			return source.Factory.GetAdapterMeta(type, descriptor);
+		}
+
+		public static object CreateChildAdapter(this IDictionaryAdapter parent, Type type, XmlAdapter adapter)
+		{
+			return CreateChildAdapter(parent, type, adapter, null);
+		}
+
+		public static object CreateChildAdapter(this IDictionaryAdapter parent, Type type, XmlAdapter adapter, IDictionary dictionary)
+		{
+			if (null == dictionary)
+				dictionary = new Hashtable();
+
+		    var descriptor = new DictionaryDescriptor();
+		    parent.This.Descriptor.CopyBehaviors(descriptor);
+		    descriptor.AddBehavior(adapter);
+
+		    return parent.This.Factory.GetAdapter(type, dictionary, descriptor);
 		}
 	}
 }

@@ -22,11 +22,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using IBindingList         = System.ComponentModel.IBindingList;
 	using ListChangedEventArgs = System.ComponentModel.ListChangedEventArgs;
 	using ListChangedType      = System.ComponentModel.ListChangedType;
+	using System.Collections;
 
 	public class XmlAdapter : DictionaryBehaviorAttribute,
 		IDictionaryInitializer,
 		IDictionaryPropertyGetter,
-		IDictionaryPropertySetter
+		IDictionaryPropertySetter,
+		IDictionaryCreateStrategy,
+		IDictionaryCopyStrategy
 	{
 		private IXmlNode node;
 		private object source;
@@ -51,15 +54,31 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.node = node;
 		}
 
+		public IXmlNode Node
+		{
+			get { return node; }
+		}
+
+		object IDictionaryCreateStrategy.Create(IDictionaryAdapter parent, Type type, IDictionary dictionary)
+		{
+#if !SILVERLIGHT
+			var adapter = new XmlAdapter(new XmlDocument());
+#endif
+#if SILVERLIGHT
+			// TODO: Create XNode-based XmlAdapter
+#endif
+			return parent.CreateChildAdapter(type, adapter, dictionary);
+		}
+
 		void IDictionaryInitializer.Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors)
 		{
 			if (primaryXmlMeta == null)
-				InitializePrimary  (dictionaryAdapter.Meta);
+				InitializePrimary  (dictionaryAdapter.Meta, dictionaryAdapter);
 			else
 				InitializeSecondary(dictionaryAdapter.Meta);
 		}
 
-		private void InitializePrimary(DictionaryAdapterMeta meta)
+		private void InitializePrimary(DictionaryAdapterMeta meta, IDictionaryAdapter dictionaryAdapter)
 		{
 			if (!meta.HasXmlMeta())
 				throw Error.NoXmlMetadata(meta.Type);
@@ -67,6 +86,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			primaryXmlMeta = meta.GetXmlMeta();
 
 			InitializeBaseTypes(meta);
+			InitializeStrategies(dictionaryAdapter);
 
 			if (node == null)
 				node = GetBaseNode();
@@ -87,14 +107,32 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			foreach (var type in meta.Type.GetInterfaces())
 			{
 				var ns = type.Namespace;
-				if (ns == "Castle.Components.DictionaryAdapter")
-					continue;
-				if (ns == "System" || ns.StartsWith("System."))
-					continue;
+				var ignore
+					=  ns == "Castle.Components.DictionaryAdapter"
+					|| ns == "System.ComponentModel";
+				if (ignore) continue;
 
 				var baseMeta = meta.GetDictionaryAdapterMeta(type);
 				InitializeSecondary(baseMeta);
 			}
+		}
+
+		private void InitializeStrategies(IDictionaryAdapter dictionaryAdapter)
+		{
+			var instance = dictionaryAdapter.This;
+
+			if (instance.CreateStrategy == null)
+			{
+				instance.CreateStrategy = this;
+				instance.AddCopyStrategy(this);
+			}
+		}
+
+		bool IDictionaryCopyStrategy.Copy(IDictionaryAdapter source, IDictionaryAdapter target, ref Func<PropertyDescriptor, bool> selector)
+		{
+			if (selector == null)
+				selector = property => HasProperty(property.PropertyName, source);
+			return false;
 		}
 
 		object IDictionaryPropertyGetter.GetPropertyValue(IDictionaryAdapter dictionaryAdapter,
@@ -124,29 +162,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				accessor.SetPropertyValue(node, dictionaryAdapter, ref value);
 			}
 			return true;
-		}
-
-		private void AttachObservers(object value, IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
-		{
-			var bindingList = value as IBindingList;
-			if (bindingList != null)
-				bindingList.ListChanged += (s,e) => HandleListChanged(s, e, dictionaryAdapter, property);
-		}
-
-		private void HandleListChanged(object value, ListChangedEventArgs args, IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
-		{
-			var change = args.ListChangedType;
-			var changed
-				=  change == ListChangedType.ItemAdded
-				|| change == ListChangedType.ItemDeleted
-				|| change == ListChangedType.ItemMoved
-				|| change == ListChangedType.Reset;
-
-			if (changed && dictionaryAdapter.ShouldClearProperty(property, value))
-			{
-				value = null;
-				dictionaryAdapter.SetProperty(property.PropertyName, ref value);
-			}
 		}
 
 		private IXmlNode GetBaseNode()
@@ -295,9 +310,27 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return behavior is VolatileAttribute;
 		}
 
-		public IXmlNode Node
+		private void AttachObservers(object value, IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
 		{
-			get { return node; }
+			var bindingList = value as IBindingList;
+			if (bindingList != null)
+				bindingList.ListChanged += (s,e) => HandleListChanged(s, e, dictionaryAdapter, property);
+		}
+
+		private void HandleListChanged(object value, ListChangedEventArgs args, IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
+		{
+			var change = args.ListChangedType;
+			var changed
+				=  change == ListChangedType.ItemAdded
+				|| change == ListChangedType.ItemDeleted
+				|| change == ListChangedType.ItemMoved
+				|| change == ListChangedType.Reset;
+
+			if (changed && dictionaryAdapter.ShouldClearProperty(property, value))
+			{
+				value = null;
+				dictionaryAdapter.SetProperty(property.PropertyName, ref value);
+			}
 		}
 
 		public override IDictionaryBehavior Copy()

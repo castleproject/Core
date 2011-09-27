@@ -366,7 +366,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			season2.Location = season1.Location;
 			season2.Tags = season1.Tags;
 			season2.Teams = season1.Teams;
-			var player = season2.Teams[1].Players.AddNew();
+				var player = season2.Teams[1].Players.AddNew();
 			player.FirstName = "Dave";
 			player.LastName = "O'Hara";
 			season1.Teams[0].Players[1] = player;
@@ -534,7 +534,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			{
 				season.Teams[0].Players.Remove(player);
 			}
-			Assert.AreEqual(0, season.Teams[0].Players.Count);
+			Assert.IsNull(season.Teams[0].Players);
 			var roster = document.GetElementsByTagName("Roster", "RISE");
 			Assert.AreEqual(1, roster.Count);
 			Assert.AreEqual(0, roster[0].ChildNodes.Count);
@@ -604,7 +604,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			XmlDocument document = null;
 			var season = CreateXmlAdapter<ISeason>(xml, ref document);
 			season.Teams[0].Players.Clear();
-			Assert.AreEqual(0, season.Teams[0].Players.Count);
+			Assert.IsNull(season.Teams[0].Players);
 			var roster = document.GetElementsByTagName("Roster", "RISE");
 			Assert.AreEqual(1, roster.Count);
 			Assert.AreEqual(0, roster[0].ChildNodes.Count);

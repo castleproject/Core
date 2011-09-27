@@ -107,7 +107,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			return cursor.MoveNext()
 				? cursor.IsNil && IsNillable
-					? (orStub ? serializer.GetStub(cursor, parentObject, this) : null) // Ask Craig what to do about reading nil
+					? null
 					: serializer.GetValue(cursor, parentObject, this)
 				: orStub
 					? serializer.GetStub(cursor, parentObject, this)

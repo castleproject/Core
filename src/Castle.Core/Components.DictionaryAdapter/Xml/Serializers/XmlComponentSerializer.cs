@@ -38,13 +38,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override object GetStub(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
 			var adapter = new XmlAdapter(node);
-			return CreateComponent(accessor.ClrType, adapter, parent);
+			return parent.CreateChildAdapter(accessor.ClrType, adapter);
 		}
 
 		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
 			var adapter = new XmlAdapter(node);
-			return CreateComponent(node.ClrType, adapter, parent);
+			return parent.CreateChildAdapter(node.ClrType, adapter);
 		}
 
 		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, ref object value)
@@ -65,17 +65,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			// Copy value onto fresh component
 			source.CopyTo(component);
 			value = component;
-		}
-
-		public object CreateComponent(Type type, XmlAdapter adapter, IDictionaryAdapter parent)
-		{
-		    var dictionary = new Hashtable();
-
-		    var descriptor = new DictionaryDescriptor(/*parent.Meta.Behaviors*/); // TODO: Ask Craig
-		    parent.This.Descriptor.CopyBehaviors(descriptor);
-		    descriptor.AddBehavior(adapter);
-
-		    return parent.This.Factory.GetAdapter(type, dictionary, descriptor);
 		}
 	}
 }

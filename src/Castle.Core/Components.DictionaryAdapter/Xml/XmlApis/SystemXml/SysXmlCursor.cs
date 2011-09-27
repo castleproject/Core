@@ -121,7 +121,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				IsAtEnd()
 			);
 
-			if (!(hasCurrent || hadCurrent))
+			if (!hasCurrent && !hadCurrent)
 				state = State.Empty;
 
 			return hasCurrent;
@@ -300,26 +300,31 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void MoveToEnd()
 		{
-			MoveToParent();
-			state = State.End;
+			switch (state)
+			{
+				case State.Element:
+				case State.ElementPrimed:
+					MoveToParentOfElement();
+					state = State.End;
+					break;
+
+				case State.Attribute:
+				case State.AttributePrimed:
+					MoveToParentOfAttribute();
+					state = State.End;
+					break;
+
+				case State.Initial:
+					state = IsAtEnd() ? State.Empty : State.End;
+					break;
+			}
 		}
 
 		public void Reset()
 		{
-			MoveToParent();
+			MoveToEnd();
 			state = State.Initial;
 			index = -1;
-		}
-
-		private void MoveToParent()
-		{
-			switch (state)
-			{
-				case State.Element:         // Same as next
-				case State.ElementPrimed:   MoveToParentOfElement();   break;
-				case State.Attribute:       // Same as next
-				case State.AttributePrimed: MoveToParentOfAttribute(); break;
-			}
 		}
 
 		private void MoveToParentOfElement()
