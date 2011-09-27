@@ -49,7 +49,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void Add(IXmlKnownType knownType)
 		{
 			// All XmlTypes are present here
-			itemsByXmlIdentity.Add(knownType, knownType);
+			itemsByXmlIdentity[knownType] = knownType;
 
 			// Only contains the default XmlType for each ClrType
 			itemsByClrType[knownType.ClrType] = knownType;

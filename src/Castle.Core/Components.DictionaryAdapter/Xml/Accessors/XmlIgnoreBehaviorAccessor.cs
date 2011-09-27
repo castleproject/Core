@@ -15,6 +15,8 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 
 	public class XmlIgnoreBehaviorAccessor : XmlAccessor
 	{
@@ -22,7 +24,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Instance = new XmlIgnoreBehaviorAccessor();
 
 		private XmlIgnoreBehaviorAccessor()
-			: base(typeof(object), null) { }
+			: base(typeof(object), DummyContext.Instance) { }
 
 		public override bool IsIgnored
 		{
@@ -47,6 +49,58 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable)
 		{
 			throw Error.NotSupported();
+		}
+
+		private sealed class DummyContext : IXmlAccessorContext
+		{
+			public static DummyContext Instance = new DummyContext();
+
+			private DummyContext() { }
+
+			public XmlName XsiType
+			{
+				get { return new XmlName("anyType", Xsd.NamespaceUri); }
+			}
+
+			public Type ClrType
+			{
+				get { return typeof(object); }
+			}
+
+			public string ChildNamespaceUri
+			{
+				get { return null; }
+			}
+
+			public XmlContext XmlContext
+			{
+				get { return null; }
+			}
+
+			public IXmlIncludedType Default
+			{
+				get { return this; }
+			}
+
+			public XmlName GetDefaultXsiType(Type clrType)
+			{
+				return XsiType;
+			}
+
+			public IEnumerable<IXmlIncludedType> GetIncludedTypes(Type baseType)
+			{
+				return Enumerable.Empty<IXmlIncludedType>();
+			}
+
+			public bool TryGet(XmlName xsiType, out IXmlIncludedType includedType)
+			{
+				return Try.Failure(out includedType);
+			}
+
+			public bool TryGet(Type clrType, out IXmlIncludedType includedType)
+			{
+				return Try.Failure(out includedType);
+			}
 		}
 	}
 }

@@ -171,53 +171,54 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				var clrType = semantics.GetClrType(attribute);
 				if (clrType != null)
 				{
-					var name = new XmlName(
-						semantics.GetLocalName   (attribute) ?? localName,
-						semantics.GetNamespaceUri(attribute) ?? namespaceUri);
-
 					var xsiType = Context.GetDefaultXsiType(clrType);
+
+					var name = new XmlName(
+						semantics.GetLocalName   (attribute).NonEmpty() ?? xsiType.LocalName,
+						semantics.GetNamespaceUri(attribute)            ?? namespaceUri);
 
 					AddKnownType(name, xsiType, clrType);
 				}
 			}
 		}
 
-		private void ConfigureIncludedTypes()
+		private void ConfigureDefaultAndIncludedTypes()
 		{
-			if (knownTypes != null)
-				foreach (var knownType in knownTypes.ToArray())
-					ConfigureIncludedTypes(knownType);
-			else
-				ConfigureIncludedTypes(this);
+			var configuredKnownTypes = knownTypes.ToArray();
+
+			knownTypes.AddXsiTypeDefaults();
+
+			foreach (var knownType in configuredKnownTypes)
+				ConfigureIncludedTypes(knownType);
 		}
 
 		private void ConfigureIncludedTypes(IXmlKnownType knownType)
 		{
-			foreach (var include in Context.GetIncludedTypes(knownType.ClrType))
-			{
+			var includedTypes = Context.GetIncludedTypes(knownType.ClrType);
+
+			foreach (var include in includedTypes)
 				AddKnownType(knownType.Name, include.XsiType, include.ClrType);
-			}
 		}
 
 		private void AddKnownType(XmlName name, XmlName xsiType, Type clrType)
 		{
 			if (knownTypes == null)
+			{
 				knownTypes = new XmlKnownTypeSet(ClrType);
+
+				if (0 != (state & States.ConfiguredName))
+					knownTypes.Add(new XmlKnownType(Name, XsiType, ClrType));
+			}
 
 			knownTypes.Add(new XmlKnownType(name, xsiType, clrType));
 		}
 
 		public override void Prepare()
 		{
-			ConfigureIncludedTypes();
-
 			if (knownTypes == null)
-				return;
-
-			if (0 != (state & States.ConfiguredName))
-				knownTypes.Add(new XmlKnownType(Name, XsiType, ClrType));
-
-			knownTypes.AddXsiTypeDefaults();
+				ConfigureIncludedTypes(this);
+			else
+				ConfigureDefaultAndIncludedTypes();
 		}
 
 		[Flags]
