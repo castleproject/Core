@@ -19,17 +19,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public interface IXmlNode : IXmlKnownType
 	{
-		bool        IsElement    { get; }
-		bool        IsAttribute  { get; }
-		bool        IsRoot       { get; }
-		bool        IsNil        { get; set; }
-		string      Value        { get; set; } // Equivalent to InnerText
-		string      Xml          { get; }      // Equivalent to OuterXml
+		bool   IsElement   { get; }
+		bool   IsAttribute { get; }
+		bool   IsRoot      { get; }
+		bool   IsNil       { get; set; }
+		string Value       { get; set; } // Equivalent to InnerText
+		string Xml         { get; }      // Equivalent to OuterXml
+
+		string LookupPrefix(string namespaceUri);
+		string LookupNamespaceUri(string prefix);
+		void DefineNamespace(string prefix, string namespaceUri, bool root);
 
 		bool PositionEquals(IXmlNode node);
 
 		IXmlCursor SelectSelf(Type clrType);
-		IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags);
+		IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags);
 #if !SL3
 		IXmlCursor Select  (CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags);
 		object     Evaluate(CompiledXPath path);

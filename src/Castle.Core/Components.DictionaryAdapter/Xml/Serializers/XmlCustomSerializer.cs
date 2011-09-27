@@ -34,8 +34,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
             var serializable = (IXmlSerializable) Activator.CreateInstance(node.ClrType);
 
-            using (var reader = new XmlSubtreeReader(node, XmlDefaultSerializer.Root))
-                serializable.ReadXml(reader);
+			using (var reader = new XmlSubtreeReader(node, XmlDefaultSerializer.Root))
+			{
+				// Do NOT pre-read containing element
+				// ...IXmlSerializable is not a symmetric contract
+				serializable.ReadXml(reader);
+			}
 
             return serializable;
 		}
@@ -43,8 +47,15 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, ref object value)
 		{
 		    var serializable = (IXmlSerializable) value;
-		    using (var writer = new XmlSubtreeWriter(node))
-		        serializable.WriteXml(writer);
+			var root = XmlDefaultSerializer.Root;
+
+			using (var writer = new XmlSubtreeWriter(node))
+			{
+				// Pre-write containing element
+				writer.WriteStartElement(string.Empty, root.ElementName, root.Namespace);
+				serializable.WriteXml(writer);
+				writer.WriteEndElement();
+			}
 		}
 	}
 }

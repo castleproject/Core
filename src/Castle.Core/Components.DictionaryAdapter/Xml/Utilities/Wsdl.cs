@@ -20,5 +20,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public const string
 			Prefix        = "wsdl",
 			NamespaceUri  = "http://microsoft.com/wsdl/types/";
+
+		public static readonly XmlNamespaceAttribute
+			Attribute = new XmlNamespaceAttribute(NamespaceUri, Prefix) { Root = true };
 	}
 }

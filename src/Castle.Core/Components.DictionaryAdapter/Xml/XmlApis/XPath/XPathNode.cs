@@ -92,6 +92,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return node.OuterXml; }
 		}
 
+		public string LookupPrefix(string namespaceUri)
+		{
+			throw new NotImplementedException();
+		}
+
+		public string LookupNamespaceUri(string prefix)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void DefineNamespace(string prefix, string namespaceUri, bool root)
+		{
+			throw new NotImplementedException();
+		}
+
 		public bool PositionEquals(IXmlNode node)
 		{
 			var xPathNode = node as ILazy<XPathNavigator>;
@@ -114,10 +129,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new XmlSelfCursor(this, clrType);
 		}
 
-		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
 		{
 #if !SILVERLIGHT
-			return new SysXmlCursor(this, knownTypes, flags);
+			return new SysXmlCursor(this, knownTypes, namespaces, flags);
 #else
 			// TODO: XNode-based
 #endif

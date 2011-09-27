@@ -14,13 +14,8 @@
 
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	public static class Xsd
+	public interface IXmlNamespaceSource
 	{
-		public const string
-			Prefix       = "xsd",
-			NamespaceUri = "http://www.w3.org/2001/XMLSchema";
-
-		public static readonly XmlNamespaceAttribute
-			Attribute = new XmlNamespaceAttribute(NamespaceUri, Prefix) { Root = true };
+		string GetPrefix(IXmlNode node, string namespaceUri);
 	}
 }

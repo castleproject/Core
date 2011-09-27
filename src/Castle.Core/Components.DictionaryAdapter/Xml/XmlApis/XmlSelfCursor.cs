@@ -82,6 +82,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return node.Xml; }
 		}
 
+		public string LookupPrefix(string namespaceUri)
+		{
+			return node.LookupPrefix(namespaceUri);
+		}
+
+		public string LookupNamespaceUri(string prefix)
+		{
+			return node.LookupNamespaceUri(prefix);
+		}
+
+		public void DefineNamespace(string prefix, string namespaceUri, bool root)
+		{
+			node.DefineNamespace(prefix, namespaceUri, root);
+		}
+
 		public bool PositionEquals(IXmlNode node)
 		{
 			return node.PositionEquals(node);
@@ -118,9 +133,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new XmlSelfCursor(node, clrType);
 		}
 
-		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
 		{
-			return node.SelectChildren(knownTypes, flags);
+			return node.SelectChildren(knownTypes, namespaces, flags);
 		}
 
 #if !SL3

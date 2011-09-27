@@ -46,13 +46,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
-		public void Add(IXmlKnownType knownType)
+		public void Add(IXmlKnownType knownType, bool overwrite)
 		{
 			// All XmlTypes are present here
-			itemsByXmlIdentity[knownType] = knownType;
+			if (overwrite || !itemsByXmlIdentity.ContainsKey(knownType))
+				itemsByXmlIdentity[knownType] = knownType;
 
 			// Only contains the default XmlType for each ClrType
-			itemsByClrType[knownType.ClrType] = knownType;
+			var clrType = knownType.ClrType;
+			if (overwrite || !itemsByClrType.ContainsKey(clrType))
+				itemsByClrType[clrType] = knownType;
 		}
 
 		public void AddXsiTypeDefaults()
@@ -76,13 +79,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{
 				if (pair.Value)
 				{
-					var knownType = pair.Key;
-					Add(new XmlKnownType
-					(
-						knownType.Name,
-						XmlName.Empty,
-						knownType.ClrType
-					));
+					var template  = pair.Key;
+					var knownType = new XmlKnownType(template.Name, XmlName.Empty, template.ClrType);
+					Add(knownType, true);
 				}
 			}
 		}

@@ -43,7 +43,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override IXmlCursor SelectPropertyNode(IXmlNode node, bool mutable)
 		{
-			return node.SelectChildren(this, CursorFlags.Attributes.MutableIf(mutable));
+			return node.SelectChildren(this, Context.XmlContext, CursorFlags.Attributes.MutableIf(mutable));
 		}
 
 		public override IXmlCursor SelectCollectionNode(IXmlNode node, bool mutable)

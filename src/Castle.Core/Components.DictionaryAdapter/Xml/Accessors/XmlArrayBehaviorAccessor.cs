@@ -61,7 +61,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override IXmlCursor SelectPropertyNode(IXmlNode node, bool mutable)
 		{
-			return node.SelectChildren(this, PropertyFlags.MutableIf(mutable));
+			return node.SelectChildren(this, Context.XmlContext, PropertyFlags.MutableIf(mutable));
 		}
 
 		private class ItemAccessor : XmlNodeAccessor,
@@ -101,7 +101,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			public override IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable)
 			{
-				return node.SelectChildren(KnownTypes, CollectionItemFlags.MutableIf(mutable));
+				return node.SelectChildren(KnownTypes, Context.XmlContext, CollectionItemFlags.MutableIf(mutable));
 			}
 
 			public string GetLocalName(XmlArrayItemAttribute attribute)

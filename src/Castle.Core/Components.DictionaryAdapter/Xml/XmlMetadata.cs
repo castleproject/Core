@@ -176,7 +176,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (path != null)
 				return node.Select(path, this, RootFlags);
 #endif
-			return node.SelectChildren(this, RootFlags);
+			return node.SelectChildren(this, context, RootFlags);
 		}
 
 		private bool IsMatch(IXmlIdentity xmlIdentity)

@@ -12,14 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
+namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
 	using System.Xml;
 	using Castle.Components.DictionaryAdapter.Tests;
 	using Castle.Components.DictionaryAdapter.Xml;
 	using NUnit.Framework;
-	using Castle.Components.DictionaryAdapter;
 
 	[TestFixture]
 	public abstract class XmlNodeTestCase
@@ -243,7 +242,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 		{
 			var node = NodeForElement("<X> <A/> </X>");
 
-			var cursor = node.SelectChildren(KnownTypes, CursorFlags.Elements);
+			var cursor = node.SelectChildren(KnownTypes, NamespaceSource.Instance, CursorFlags.Elements);
 
 			Assert.That(cursor,            Is.Not.Null);
 			Assert.That(cursor.MoveNext(), Is.True);
@@ -335,7 +334,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests.Xml
 			if (KnownTypes == null)
 			{
 				KnownTypes = new XmlKnownTypeSet(typeof(T));
-				KnownTypes.Add(new XmlKnownType("A", null, null, null, typeof(T)));
+				KnownTypes.Add(new XmlKnownType("A", null, null, null, typeof(T)), true);
 			}
 
 			if (IncludedTypes == null)

@@ -113,5 +113,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			NilLocalName   = "nil",
 			NilValue       = "true",
 			NamespaceUri   = "http://www.w3.org/2001/XMLSchema-instance";
+
+		public static readonly XmlNamespaceAttribute
+			Attribute = new XmlNamespaceAttribute(NamespaceUri, Prefix) { Root = true };
 	}
 }

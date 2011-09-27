@@ -63,6 +63,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				&& attribute.Value == value;
 		}
 
+		public static void DefineNamespace(this XmlElement node, string prefix, string namespaceUri)
+		{
+			var attribute = node.OwnerDocument.CreateAttribute(Xmlns.Prefix, prefix, Xmlns.NamespaceUri);
+			attribute.Value = namespaceUri;
+			node.SetAttributeNode(attribute);
+		}
+
 		public static bool IsNamespace(this XmlAttribute attribute)
 		{
 			return attribute.Prefix == XmlnsPrefix ||
@@ -70,6 +77,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				string.IsNullOrEmpty(attribute.Prefix) &&
 				attribute.LocalName == XmlnsPrefix
 			);
+		}
+
+		public static XmlElement FindRoot(this XmlElement node)
+		{
+			for (;;)
+			{
+				var next = node.ParentNode as XmlElement;
+				if (next == null) return node;
+				node = next;
+			}
 		}
 
 #if !SL3

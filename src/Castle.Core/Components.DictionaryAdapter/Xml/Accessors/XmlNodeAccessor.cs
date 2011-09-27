@@ -177,7 +177,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 						semantics.GetLocalName   (attribute).NonEmpty() ?? xsiType.LocalName,
 						semantics.GetNamespaceUri(attribute)            ?? namespaceUri);
 
-					AddKnownType(name, xsiType, clrType);
+					AddKnownType(name, xsiType, clrType, true);
 				}
 			}
 		}
@@ -205,10 +205,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var includedTypes = Context.GetIncludedTypes(knownType.ClrType);
 
 			foreach (var include in includedTypes)
-				AddKnownType(knownType.Name, include.XsiType, include.ClrType);
+				AddKnownType(knownType.Name, include.XsiType, include.ClrType, false);
 		}
 
-		private void AddKnownType(XmlName name, XmlName xsiType, Type clrType)
+		private void AddKnownType(XmlName name, XmlName xsiType, Type clrType, bool overwrite)
 		{
 			if (knownTypes == null)
 			{
@@ -216,7 +216,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				AddSelfAsKnownType();
 			}
 
-			knownTypes.Add(new XmlKnownType(name, xsiType, clrType));
+			knownTypes.Add(new XmlKnownType(name, xsiType, clrType), overwrite);
 		}
 
 		private void AddSelfAsKnownType()
@@ -231,8 +231,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			if (selfIsKnownType)
 			{
-				knownTypes.Add(new XmlKnownType(Name, XsiType,       ClrType));
-				knownTypes.Add(new XmlKnownType(Name, XmlName.Empty, ClrType));
+				knownTypes.Add(new XmlKnownType(Name, XsiType,       ClrType), true);
+				knownTypes.Add(new XmlKnownType(Name, XmlName.Empty, ClrType), true);
 			}
 		}
 

@@ -218,6 +218,7 @@
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlApis\MockXmlIncludedTypeMap.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlApis\MockXPathFunction.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlApis\MockXPathVariable.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlApis\NamespaceSource.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlApis\XPathCompilerTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlApis\XPathCursorTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlApis\XPathMutableCursorTestCase.cs" />

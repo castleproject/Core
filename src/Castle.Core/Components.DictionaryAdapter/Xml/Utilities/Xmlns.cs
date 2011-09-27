@@ -14,13 +14,10 @@
 
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	public static class Xsd
+	public static class Xmlns
 	{
 		public const string
-			Prefix       = "xsd",
-			NamespaceUri = "http://www.w3.org/2001/XMLSchema";
-
-		public static readonly XmlNamespaceAttribute
-			Attribute = new XmlNamespaceAttribute(NamespaceUri, Prefix) { Root = true };
+			Prefix       = "xmlns",
+			NamespaceUri = "http://www.w3.org/2000/xmlns/";
 	}
 }

@@ -8,19 +8,22 @@
 // 
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.f
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.DictionaryAdapter.Xml
+namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
-	public static class Xsd
-	{
-		public const string
-			Prefix       = "xsd",
-			NamespaceUri = "http://www.w3.org/2001/XMLSchema";
+	using Castle.Components.DictionaryAdapter.Xml;
 
-		public static readonly XmlNamespaceAttribute
-			Attribute = new XmlNamespaceAttribute(NamespaceUri, Prefix) { Root = true };
+	internal class NamespaceSource : IXmlNamespaceSource
+	{
+		public static readonly NamespaceSource
+			Instance = new NamespaceSource();
+
+		public string GetPrefix(IXmlNode node, string namespaceUri)
+		{
+			return null;
+		}
 	}
 }

@@ -91,6 +91,30 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return node.OuterXml; }
 		}
 
+		public string LookupPrefix(string namespaceUri)
+		{
+			return node.GetPrefixOfNamespace(namespaceUri);
+		}
+
+		public string LookupNamespaceUri(string prefix)
+		{
+			return node.GetNamespaceOfPrefix(prefix);
+		}
+
+		public void DefineNamespace(string prefix, string namespaceUri, bool root)
+		{
+			if (IsRoot)
+				throw Error.NotSupported();
+
+			var target = IsAttribute
+				? ((XmlAttribute) node).OwnerElement
+				: ((XmlElement  ) node);
+			if (root)
+				target = target.FindRoot();
+
+			target.DefineNamespace(prefix, namespaceUri);
+		}
+
 		public bool PositionEquals(IXmlNode node)
 		{
 			var sysXmlNode = node as ILazy<XmlNode>;
@@ -111,9 +135,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new XmlSelfCursor(this, clrType);
 		}
 
-		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
 		{
-			return new SysXmlCursor(this, knownTypes, flags);
+			return new SysXmlCursor(this, knownTypes, namespaces, flags);
 		}
 
 		public XmlReader ReadSubtree()

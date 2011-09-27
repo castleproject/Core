@@ -23,9 +23,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 #endif
 
 #if !SL3
-	public class XmlContext : XsltContext
+	public class XmlContext : XsltContext, IXmlNamespaceSource
 #else
-	public class XmlContext : XmlNamespaceManager
+	public class XmlContext : XmlNamespaceManager, IXmlNamespaceSource
 #endif
 	{
 		private readonly Dictionary<string, string> rootNamespaces;
@@ -34,8 +34,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			: base(new NameTable())
 		{
 			rootNamespaces = new Dictionary<string, string>();
-			AddNamespace(Xsd.Prefix, Xsd.NamespaceUri);
-			AddNamespace(Xsi.Prefix, Xsi.NamespaceUri);
+			AddNamespace(Xsd .Attribute);
+			AddNamespace(Xsi .Attribute);
+			AddNamespace(Wsdl.Attribute);
 #if !SL3
 			functions = new Dictionary<XmlName, IXsltContextFunction>();
 			variables = new Dictionary<XmlName, IXsltContextVariable>();
@@ -60,6 +61,51 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			if (attribute.Root)
 				rootNamespaces.Add(prefix, namespaceUri);
+		}
+
+		public string GetPrefix(IXmlNode node, string namespaceUri)
+		{
+			if (node.Name.NamespaceUri == namespaceUri)
+				return string.Empty;
+
+			var prefix = node.LookupPrefix(namespaceUri);
+			if (!string.IsNullOrEmpty(prefix))
+				return prefix;
+
+			prefix
+				=  GetPreferredPrefix(node, namespaceUri)
+				?? GeneratePrefix(node);
+
+			string candidate;
+			var root
+				=  rootNamespaces.TryGetValue(prefix, out candidate)
+				&& candidate == namespaceUri;
+
+			node.DefineNamespace(prefix, namespaceUri, root);
+			return prefix;
+		}
+
+		private string GetPreferredPrefix(IXmlNode node, string namespaceUri)
+		{
+			var prefix = LookupPrefix(namespaceUri);
+			if (string.IsNullOrEmpty(prefix))
+				return null; // No preferred prefix
+
+			namespaceUri = node.LookupPrefix(prefix);
+			return string.IsNullOrEmpty(namespaceUri)
+				? prefix // Can use preferred prefix
+				: null;  // Preferred prefix already in use
+		}
+
+		private static string GeneratePrefix(IXmlNode node)
+		{
+			for (var i = 0; ; i++)
+			{
+				var prefix = "p" + i;
+				var namespaceUri = node.LookupNamespaceUri(prefix);
+				if (string.IsNullOrEmpty(namespaceUri))
+					return prefix;
+			}
 		}
 
 #if !SL3
