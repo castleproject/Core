@@ -57,12 +57,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			base.Prepare();
 		}
 
-		protected override void SetPropertyToNull(IXmlCursor cursor)
+		protected override void SetCursorValueToNull(IXmlCursor cursor)
 		{
 			if (IsCollection)
 				base.RemoveCollectionItems(cursor);
 			else
-				base.SetPropertyToNull(cursor);
+				base.SetCursorValueToNull(cursor);
 		}
 
 		public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
@@ -102,7 +102,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{
 				ConfigureLocalName   (parent.Name.LocalName   );
 				ConfigureNamespaceUri(parent.Name.NamespaceUri);
-				ConfigureNillable    (parent.IsNillable  );
+				ConfigureNillable    (parent.IsNillable       );
 				ConfigureKnownTypesFromParent(parent);
 			}
 

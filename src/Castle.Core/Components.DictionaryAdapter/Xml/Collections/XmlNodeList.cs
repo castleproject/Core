@@ -361,14 +361,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private T GetValue(IXmlNode node)
 		{
-			return (T) accessor.Serializer.GetValue(node, parentObject, accessor);
+			return (T) (accessor.GetNodeValue(node, parentObject, true) ?? default(T));
 		}
 
 		private void SetValue(IXmlNode node, ref T value)
 		{
 			object obj = value;
-			accessor.Serializer.SetValue(node, parentObject, accessor, ref obj);
-			value = (T) obj;
+			accessor.SetNodeValue(node, parentObject, ref obj);
+			value = (T) (obj ?? default(T));
 		}
 
 		private static Type GetTypeOrDefault(T value)

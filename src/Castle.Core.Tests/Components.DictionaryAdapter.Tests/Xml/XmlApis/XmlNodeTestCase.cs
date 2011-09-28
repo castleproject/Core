@@ -76,15 +76,15 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForElement("<X/>");
 
-			Assert.That(node.XsiType, Is.Null);
+			Assert.That(node.XsiType, Is.EqualTo(XmlName.Empty));
 		}
 
 		[Test]
 		public void XsiType_OfElement_WhenXsiTypeAttributeIsPresent()
 		{
-			var node = NodeForElement("<X xsi:type='Q' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'/>");
+			var node = NodeForElement("<X xsi:type='p:T' xmlns:p='urn:a' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'/>");
 
-			Assert.That(node.XsiType, Is.EqualTo("Q"));
+			Assert.That(node.XsiType, Is.EqualTo(new XmlName("T", "urn:a")));
 		}
 
 		[Test]
@@ -92,7 +92,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForAttribute("<X A='a'/>");
 
-			Assert.That(node.XsiType, Is.Null);
+			Assert.That(node.XsiType, Is.EqualTo(XmlName.Empty));
 		}
 
 		[Test]
@@ -339,12 +339,14 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			if (IncludedTypes == null)
 			{
-				IncludedTypes = new XmlIncludedTypeSet();
+				IncludedTypes = new MockXmlIncludedTypeMap();
+				IncludedTypes.DefaultClrType = typeof(T);
+				IncludedTypes.InnerSet.Add(new XmlIncludedType("T", string.Empty, typeof(T)));
 			}
 		}
 
-		protected static XmlKnownTypeSet    KnownTypes;
-		protected static XmlIncludedTypeSet IncludedTypes;
+		protected static XmlKnownTypeSet        KnownTypes;
+		protected static MockXmlIncludedTypeMap IncludedTypes;
 		protected sealed class T { }
 	}
 }

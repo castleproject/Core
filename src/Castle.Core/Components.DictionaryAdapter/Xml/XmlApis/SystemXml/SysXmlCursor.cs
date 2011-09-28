@@ -100,7 +100,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override bool IsNil
 		{
 			get { return HasCurrent ? base.IsNil : true; }
-			set { Realize(); base.IsNil = value; }
+			set { Realize(); SetXsiNil(node, value); }
 		}
 
 		public override string Value
@@ -434,12 +434,20 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private void SetXsiType(XmlNode node, XmlName xsiType)
 		{
-			namespaces.GetPrefix(this, Xsi.NamespaceUri);
-
+			if (xsiType != XmlName.Empty)
+				namespaces.GetPrefix(this, Xsi.NamespaceUri);
 			if (xsiType.NamespaceUri != null)
 				namespaces.GetPrefix(this, xsiType.NamespaceUri);
 
 			node.SetXsiType(xsiType);
+		}
+
+		private void SetXsiNil(XmlNode node, bool value)
+		{
+			if (value)
+				namespaces.GetPrefix(this, Xsi.NamespaceUri);
+
+			node.SetXsiNil(value);
 		}
 
 		private void CreateAttribute(IXmlKnownType knownType, XmlNode position)

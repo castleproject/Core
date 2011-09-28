@@ -134,7 +134,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			ConfigureField(ref this.namespaceUri, namespaceUri, States.ConfiguredNamespaceUri);
 		}
 
-		protected void ConfigureNillable(bool nillable)
+		public override void ConfigureNillable(bool nillable)
 		{
 			if (nillable)
 				state |= States.Nillable;

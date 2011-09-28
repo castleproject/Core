@@ -78,6 +78,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return context; }
 		}
 
+		public virtual void ConfigureNillable(bool isNillable)
+		{
+			// Do nothing
+		}
+
 		public virtual void ConfigureVolatile(bool isVolatile)
 		{
 			// Do nothing
@@ -105,13 +110,30 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				? SelectCollectionNode(parentNode, orStub)
 				: SelectPropertyNode  (parentNode, orStub);
 
-			return cursor.MoveNext()
-				? cursor.IsNil && IsNillable
-					? null
-					: serializer.GetValue(cursor, parentObject, this)
-				: orStub
-					? serializer.GetStub(cursor, parentObject, this)
-					: null;
+			return GetCursorValue(cursor, parentObject, orStub);
+		}
+
+		public object GetCursorValue(IXmlCursor cursor, IDictionaryAdapter parentObject, bool orStub)
+		{
+			return GetValueCore(cursor, parentObject, cursor.MoveNext(), orStub);
+		}
+
+		public object GetNodeValue(IXmlNode node, IDictionaryAdapter parentObject, bool orStub)
+		{
+			return GetValueCore(node, parentObject, true, orStub);
+		}
+
+		private object GetValueCore(IXmlNode node, IDictionaryAdapter parentObject, bool nodeExists, bool orStub)
+		{
+			if (nodeExists)
+				if (!node.IsNil)
+					return serializer.GetValue(node, parentObject, this);
+				else if (IsNillable)
+					return null;
+
+			return orStub
+				? serializer.GetStub(node, parentObject, this)
+				: null;
 		}
 
 		public virtual void SetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, ref object value)
@@ -120,28 +142,43 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				? SelectCollectionNode(parentNode, true)
 				: SelectPropertyNode  (parentNode, true);
 
+			SetCursorValue(cursor, parentObject, ref value);
+		}
+
+		public void SetCursorValue(IXmlCursor cursor, IDictionaryAdapter parentObject, ref object value)
+		{
 			if (null != value)
 			{
 				cursor.MakeNext(value.GetComponentType());
 				Serializer.SetValue(cursor, parentObject, this, ref value);
 			}
-			else
-			{
-				SetPropertyToNull(cursor);
-			}
+			else SetCursorValueToNull(cursor);
 		}
 
-		protected virtual void SetPropertyToNull(IXmlCursor cursor)
+		protected virtual void SetCursorValueToNull(IXmlCursor cursor)
 		{
 			if (IsNillable)
 			{
 				cursor.MakeNext(clrType);
 				cursor.IsNil = true;
 			}
+			else cursor.RemoveAllNext();
+		}
+
+		public void SetNodeValue(IXmlNode node, IDictionaryAdapter parentObject, ref object value)
+		{
+			if (null != value)
+				Serializer.SetValue(node, parentObject, this, ref value);
 			else
-			{
-				cursor.RemoveAllNext();
-			}
+				SetNodeValueToNull(node);
+		}
+
+		private void SetNodeValueToNull(IXmlNode node)
+		{
+			if (IsNillable)
+				node.IsNil = true;
+			else
+				node.Clear();
 		}
 
 		public void GetCollectionItems(IXmlNode parentNode, IDictionaryAdapter parentObject, IList values)
@@ -165,7 +202,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public virtual IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
 		{
-			return new XmlDefaultBehaviorAccessor(itemType, Context);
+			return GetDefaultCollectionAccessor(itemType);
+		}
+
+		protected IXmlCollectionAccessor GetDefaultCollectionAccessor(Type itemType)
+		{
+			var accessor = new XmlDefaultBehaviorAccessor(itemType, Context);
+			accessor.ConfigureNillable(true);
+			return accessor;
 		}
 
 		public virtual IXmlCursor SelectPropertyNode(IXmlNode parentNode, bool mutable)

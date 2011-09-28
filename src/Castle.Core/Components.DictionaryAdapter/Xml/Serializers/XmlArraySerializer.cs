@@ -69,8 +69,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				var originalItem = source.GetValue(i);
 				var assignedItem = originalItem;
 
-				cursor.MakeNext(originalItem.GetComponentType());
-				serializer.SetValue(cursor, parent, subaccessor, ref assignedItem);
+				subaccessor.SetCursorValue(cursor, parent, ref assignedItem);
 
 				if (target != null)
 				{

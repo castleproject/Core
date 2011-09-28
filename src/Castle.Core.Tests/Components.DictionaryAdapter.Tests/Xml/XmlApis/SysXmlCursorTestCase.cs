@@ -512,7 +512,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		public void Remove_WhenAtItem_RemovesItem_ForElement()
 		{
 			var xml    = Xml("<X> <Item/> <Other/> </X>");
-			var cursor = Cursor(xml, CursorFlags.Elements);
+			var cursor = Cursor(xml, CursorFlags.Elements | CursorFlags.Multiple);
 
 			cursor.MoveNext();
 			cursor.Remove();
@@ -528,7 +528,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		public void Remove_WhenAtItem_RemovesItem_ForAttribute()
 		{
 			var xml    = Xml("<X Item='1' Other='2'/>");
-			var cursor = Cursor(xml, CursorFlags.Attributes);
+			var cursor = Cursor(xml, CursorFlags.Attributes | CursorFlags.Multiple);
 
 			cursor.MoveNext();
 			cursor.Remove();

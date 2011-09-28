@@ -25,38 +25,70 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 	public class XmlNodeListTestCase : XmlAdapterTestCase
 	{
 		[Test]
-		public void GetProperty_DefaultBehavior_List_Element()
+		public void Get_Element()
 		{
-			var foo = Create<IFoo>("<Foo> <SL> <string>a</string> <string>b</string> </SL> </Foo>");
+			var foo = Create<IFoo>(StringsXml);
 
-			var items = foo.SL.ToArray();
+			var items = foo.Strings.ToArray();
 
-			Assert.That(items, Is.EquivalentTo(new[] { "a", "b" }));
+			Assert.That(items, Is.EquivalentTo(Strings));
 		}
 
 		[Test]
-		public void GetProperty_DefaultBehavior_List_Attribute()
+		public void Get_Attribute()
 		{
-			var array = new[] { 1, 2 };
 			var foo = Create<IFoo>("<Foo F='1'/>");
 
-			Assert.That(foo.SL, Is.Empty);
+			Assert.That(foo.Strings, Is.Empty);
 		}
 
 		[Test]
-		public void SetProperty_DefaultBehavior_List()
+		public void Set()
 		{
 			var xml = Xml("<Foo/>");
 			var foo = Create<IFoo>(xml);
 
-			foo.SL = new List<string> { "a", "b" };
+			foo.Strings = Strings;
 
-			Assert.That(xml, XmlEquivalent.To("<Foo> <SL> <string>a</string> <string>b</string> </SL> </Foo>"));
+			Assert.That(xml, XmlEquivalent.To(StringsXml));
+		}
+
+		[Test]
+		public void SetItemToNull()
+		{
+			var xml = Xml(StringsXml);
+			var foo = Create<IFoo>(xml);
+
+			foo.Strings[0] = null;
+			var value = foo.Strings[0];
+
+			// TODO: Why is xmlns:xsi not pushed to root?
+			var expectedXml = Xml("<Foo $xsi> <Strings> <string xsi:nil='true'/> <string>b</string> </Strings> </Foo>");
+			Assert.That(xml, XmlEquivalent.To(expectedXml));
+			Assert.That(value, Is.Null);
+		}
+
+		private IList<string> GetListOfStrings()
+		{
+			return Create<IFoo>(StringsXml).Strings;
 		}
 
 		public interface IFoo : IDictionaryAdapter
 		{
-			IList<string> SL { get; set; }
+			IList<string> Strings { get; set; }
 		}
+
+		private static readonly IList<string> Strings
+			= Array.AsReadOnly(new[] { "a", "b" });
+
+		private static readonly string StringsXml = string.Concat
+		(
+			"<Foo>",
+				"<Strings>",
+					"<string>a</string>",
+					"<string>b</string>",
+				"</Strings>",
+			"</Foo>"
+		);
 	}
 }

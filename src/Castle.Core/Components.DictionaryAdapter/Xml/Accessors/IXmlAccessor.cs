@@ -21,6 +21,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		Type ClrType { get; }
 		XmlTypeSerializer Serializer { get; }
 		IXmlAccessorContext Context { get; }
+		bool IsNillable { get; }
+
+		object GetCursorValue(IXmlCursor cursor, IDictionaryAdapter parentObject, bool orStub);
+		object GetNodeValue  (IXmlNode   node,   IDictionaryAdapter parentObject, bool orStub);
+		void   SetCursorValue(IXmlCursor cursor, IDictionaryAdapter parentObject, ref object value);
+		void   SetNodeValue  (IXmlNode   node,   IDictionaryAdapter parentObject, ref object value);
 
 		IXmlCollectionAccessor GetCollectionAccessor(Type itemType);
 	}

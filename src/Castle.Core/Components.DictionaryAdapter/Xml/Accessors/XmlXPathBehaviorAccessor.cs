@@ -62,9 +62,20 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return this; }
 		}
 
+		public override bool IsNillable
+		{
+			get { return 0 != (state & States.Nillable); }
+		}
+
 		public override bool IsVolatile
 		{
 			get { return 0 != (state & States.Volatile); }
+		}
+
+		public override void ConfigureNillable(bool nillable)
+		{
+			if (nillable)
+				state |= States.Nillable;
 		}
 
 		public override void ConfigureVolatile(bool isVolatile)
@@ -162,16 +173,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				includedTypes = parent.includedTypes;
 			}
 
+			public override bool IsNillable
+			{
+				get { return true; }
+			}
+
 			public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
 			{
-				return new XmlDefaultBehaviorAccessor(itemType, Context);
+				return GetDefaultCollectionAccessor(itemType);
 			}
 		}
 
 		[Flags]
 		private enum States
 		{
-			Volatile = 0x01
+			Nillable = 0x01,
+			Volatile = 0x02
 		}
 	}
 }

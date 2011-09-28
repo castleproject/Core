@@ -71,7 +71,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			private List<XmlArrayItemAttribute> attributes;
 
 			public ItemAccessor(Type itemClrType, XmlNodeAccessor accessor)
-				: base(itemClrType, accessor.Context) { }
+				: base(itemClrType, accessor.Context)
+			{
+				ConfigureNillable(true);
+			}
 
 			public void Configure(XmlArrayItemAttribute attribute)
 			{

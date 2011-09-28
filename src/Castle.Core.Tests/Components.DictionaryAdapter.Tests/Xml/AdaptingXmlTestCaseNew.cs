@@ -728,7 +728,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			season.Location.Line1 = "100 Hershey Park";
 			season.Location.City = "Hershey";
 			season.Location.State = "PA";
-			Assert.AreEqual("common", document.DocumentElement.GetPrefixOfNamespace("Common"));
+			Assert.AreEqual("c", document.DocumentElement.GetPrefixOfNamespace("Common"));
 		}
 
 		[Test]
@@ -906,8 +906,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			Coed
 		}
 
-		[XmlNamespace("Common", "common", Root = true),
-		 XPath("common:Address")]
+		[XmlNamespace("Common", "c", Root = true),
+		 XmlNamespace("RISE", "r"),
+		 XPath("r:Season/c:Address")]
 		public interface IAddress
 		{
 			[Volatile]

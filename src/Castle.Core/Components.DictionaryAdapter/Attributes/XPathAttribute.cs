@@ -31,6 +31,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			get { return path; }
 		}
+
+		public bool Nullable { get; set; }
 	}
 }
 #endif
