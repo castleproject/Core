@@ -16,6 +16,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	public interface IXmlNamespaceSource
 	{
-		string GetPrefix(IXmlNode node, string namespaceUri);
+		string GetRootPrefix(IXmlNode node, string namespaceUri);
+		string GetPrefix    (IXmlNode node, string namespaceUri);
 	}
 }

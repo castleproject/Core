@@ -63,38 +63,54 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				rootNamespaces.Add(prefix, namespaceUri);
 		}
 
-		public string GetPrefix(IXmlNode node, string namespaceUri)
+		public string GetRootPrefix(IXmlNode node, string namespaceUri)
 		{
-			if (node.Name.NamespaceUri == namespaceUri)
+			string prefix;
+			if (TryGetDefinedPrefix(node, namespaceUri, out prefix))
+				return prefix;
+			if (!TryGetPreferredPrefix(node, namespaceUri, out prefix))
+				return string.Empty;
+			if (!ShouldDefineOnRoot(prefix, namespaceUri))
 				return string.Empty;
 
-			var prefix = node.LookupPrefix(namespaceUri);
-			if (!string.IsNullOrEmpty(prefix))
+			node.DefineNamespace(prefix, namespaceUri, true);
+			return prefix;
+		}
+
+		public string GetPrefix(IXmlNode node, string namespaceUri)
+		{
+			string prefix;
+			if (TryGetDefinedPrefix(node, namespaceUri, out prefix))
 				return prefix;
+			if (!TryGetPreferredPrefix(node, namespaceUri, out prefix))
+				prefix = GeneratePrefix(node);
 
-			prefix
-				=  GetPreferredPrefix(node, namespaceUri)
-				?? GeneratePrefix(node);
-
-			string candidate;
-			var root
-				=  rootNamespaces.TryGetValue(prefix, out candidate)
-				&& candidate == namespaceUri;
-
+			var root = ShouldDefineOnRoot(prefix, namespaceUri);
 			node.DefineNamespace(prefix, namespaceUri, root);
 			return prefix;
 		}
 
-		private string GetPreferredPrefix(IXmlNode node, string namespaceUri)
+		private static bool TryGetDefinedPrefix(IXmlNode node, string namespaceUri, out string prefix)
 		{
-			var prefix = LookupPrefix(namespaceUri);
+			if (node.Name.NamespaceUri == namespaceUri)
+				return Try.Success(out prefix, string.Empty);
+
+			var definedPrefix = node.LookupPrefix(namespaceUri);
+			return string.IsNullOrEmpty(definedPrefix)
+				? Try.Failure(out prefix)
+				: Try.Success(out prefix, definedPrefix);
+		}
+
+		private bool TryGetPreferredPrefix(IXmlNode node, string namespaceUri, out string prefix)
+		{
+			prefix = this.LookupPrefix(namespaceUri);
 			if (string.IsNullOrEmpty(prefix))
-				return null; // No preferred prefix
+				return Try.Failure(out prefix); // No preferred prefix
 
 			namespaceUri = node.LookupPrefix(prefix);
 			return string.IsNullOrEmpty(namespaceUri)
-				? prefix // Can use preferred prefix
-				: null;  // Preferred prefix already in use
+				? true                     // Can use preferred prefix
+				: Try.Failure(out prefix); // Preferred prefix already in use
 		}
 
 		private static string GeneratePrefix(IXmlNode node)
@@ -106,6 +122,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				if (string.IsNullOrEmpty(namespaceUri))
 					return prefix;
 			}
+		}
+
+		private bool ShouldDefineOnRoot(string prefix, string namespaceUri)
+		{
+			string candidate;
+			return rootNamespaces.TryGetValue(prefix, out candidate)
+				&& candidate == namespaceUri;
 		}
 
 #if !SL3

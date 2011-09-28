@@ -456,7 +456,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private XmlElement CreateElementCore(XmlNode parent, IXmlKnownType knownType, string namespaceUri)
 		{
 			var document = parent.OwnerDocument ?? (XmlDocument) parent;
-			var prefix   = parent.GetPrefixOfNamespace(namespaceUri);
+			var prefix   = namespaces.GetRootPrefix(this, namespaceUri);
 			var element  = document.CreateElement(prefix, knownType.Name.LocalName, namespaceUri);
 			node = element;
 			return element;
@@ -465,9 +465,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private XmlAttribute CreateAttributeCore(XmlNode parent, IXmlKnownType knownType, string namespaceUri)
 		{
 			var document  = parent.OwnerDocument ?? (XmlDocument) parent;
-			var prefix    = parent.GetPrefixOfNamespace(namespaceUri);
+			var prefix    = namespaces.GetRootPrefix(this, namespaceUri);
 			var attribute = document.CreateAttribute(prefix, knownType.Name.LocalName, namespaceUri);
-
 			node = attribute;
 			return attribute;
 		}

@@ -906,9 +906,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			Coed
 		}
 
-		[XmlNamespace("RISE",   "r", Root = true)]
-		[XmlNamespace("Common", "c")]
-		[XPath("r:Season/c:Address")]
+		[XmlNamespace("Common", "common", Root = true),
+		 XPath("common:Address")]
 		public interface IAddress
 		{
 			[Volatile]

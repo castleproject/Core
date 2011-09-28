@@ -25,5 +25,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			return null;
 		}
+
+		public string GetRootPrefix(IXmlNode node, string namespaceUri)
+		{
+			return null;
+		}
 	}
 }
