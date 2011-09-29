@@ -20,13 +20,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	public class XmlDefaultBehaviorAccessor : XmlNodeAccessor
 	{
 		internal static readonly XmlAccessorFactory<XmlDefaultBehaviorAccessor>
-			Factory = (property, context) => new XmlDefaultBehaviorAccessor(property, context);
+			Factory = (name, type, context) => new XmlDefaultBehaviorAccessor(name, type, context);
 
 		public XmlDefaultBehaviorAccessor(Type type, IXmlAccessorContext context)
 			: base(type, context) { }
 
-		public XmlDefaultBehaviorAccessor(PropertyDescriptor property, IXmlAccessorContext context)
-			: base(property, context) { }
+		public XmlDefaultBehaviorAccessor(string name, Type type, IXmlAccessorContext context)
+			: base(name, type, context) { }
 
 		public override IXmlCursor SelectPropertyNode(IXmlNode node, bool mutable)
 		{

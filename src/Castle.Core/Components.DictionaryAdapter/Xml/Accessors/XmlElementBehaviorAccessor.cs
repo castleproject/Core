@@ -26,10 +26,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private List<XmlElementAttribute> attributes;
 
 		internal static readonly XmlAccessorFactory<XmlElementBehaviorAccessor>
-			Factory = (property, context) => new XmlElementBehaviorAccessor(property, context);
+			Factory = (name, type, context) => new XmlElementBehaviorAccessor(name, type, context);
 
-		public XmlElementBehaviorAccessor(PropertyDescriptor property, IXmlAccessorContext context)
-			: base(property, context) { }
+		public XmlElementBehaviorAccessor(string name, Type type, IXmlAccessorContext context)
+			: base(name, type, context) { }
 
 		public void Configure(XmlElementAttribute attribute)
 		{

@@ -19,24 +19,20 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Collections.Generic;
 	using System.Xml;
 
-	public abstract class XmlNodeAccessor : XmlAccessor, IXmlKnownType, IXmlKnownTypeMap,
-		IConfigurable<KeyAttribute>
+	public abstract class XmlNodeAccessor : XmlAccessor, IXmlKnownType, IXmlKnownTypeMap
 	{
 		private string localName;
 		private string namespaceUri;
 		private XmlKnownTypeSet knownTypes;
 		private States state;
 
-		protected XmlNodeAccessor(Type clrType, IXmlAccessorContext context)
-			: this(context.GetDefaultXsiType(clrType).LocalName, clrType, context) { }
+		protected XmlNodeAccessor(Type type, IXmlAccessorContext context)
+			: this(context.GetDefaultXsiType(type).LocalName, type, context) { }
 
-		protected XmlNodeAccessor(PropertyDescriptor property, IXmlAccessorContext context)
-			: this(property.PropertyName, property.PropertyType, context) { }
-
-		private XmlNodeAccessor(string key, Type type, IXmlAccessorContext context)
+		protected XmlNodeAccessor(string name, Type type, IXmlAccessorContext context)
 			: base(type, context)
 		{
-			localName    = XmlConvert.EncodeLocalName(key);
+			localName    = XmlConvert.EncodeLocalName(name);
 			namespaceUri = context.ChildNamespaceUri;
 		}
 
@@ -117,11 +113,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return IsMatch(clrType)
 					? Try.Success(out knownType, this)
 					: Try.Failure(out knownType);
-		}
-
-		public void Configure(KeyAttribute attrbute)
-		{
-			ConfigureLocalName(attrbute.Key);
 		}
 
 		protected void ConfigureLocalName(string localName)

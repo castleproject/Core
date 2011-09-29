@@ -25,13 +25,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private readonly ItemAccessor itemAccessor;
 
 		internal static readonly XmlAccessorFactory<XmlArrayBehaviorAccessor>
-			Factory = (property, context) => new XmlArrayBehaviorAccessor(property, context);
+			Factory = (name, type, context) => new XmlArrayBehaviorAccessor(name, type, context);
 
-		public XmlArrayBehaviorAccessor(PropertyDescriptor property, IXmlAccessorContext context)
-			: base(property, context)
+		public XmlArrayBehaviorAccessor(string name, Type type, IXmlAccessorContext context)
+			: base(name, type, context)
 		{
 			if (Serializer.Kind != XmlTypeKind.Collection)
-				throw Error.AttributeConflict(property);
+				throw Error.AttributeConflict(null);
 
 			itemAccessor = new ItemAccessor(ClrType.GetCollectionItemType(), this);
 		}

@@ -28,17 +28,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private States state;
 
 		internal static readonly XmlAccessorFactory<XmlXPathBehaviorAccessor>
-			Factory = (property, context) => new XmlXPathBehaviorAccessor(property, context);
+			Factory = (name, type, context) => new XmlXPathBehaviorAccessor(type, context);
 
-		public XmlXPathBehaviorAccessor(PropertyDescriptor property, IXmlAccessorContext context)
-			: this(property.PropertyType, context) { }
-
-	    protected XmlXPathBehaviorAccessor(Type clrType, IXmlAccessorContext context)
-	        : base(clrType, context)
+	    protected XmlXPathBehaviorAccessor(Type type, IXmlAccessorContext context)
+	        : base(type, context)
 		{
 			includedTypes = new XmlIncludedTypeSet();
 
-			foreach (var includedType in context.GetIncludedTypes(clrType))
+			foreach (var includedType in context.GetIncludedTypes(type))
 				includedTypes.Add(includedType);
 		}
 

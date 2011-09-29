@@ -21,10 +21,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IConfigurable<XmlAttributeAttribute>
 	{
 		internal static readonly XmlAccessorFactory<XmlAttributeBehaviorAccessor>
-			Factory = (property, context) => new XmlAttributeBehaviorAccessor(property, context);
+			Factory = (name, type, context) => new XmlAttributeBehaviorAccessor(name, type, context);
 
-		public XmlAttributeBehaviorAccessor(PropertyDescriptor property, IXmlAccessorContext context)
-			: base(property, context)
+		public XmlAttributeBehaviorAccessor(string name, Type type, IXmlAccessorContext context)
+			: base(name, type, context)
 		{
 			if (Serializer.Kind != XmlTypeKind.Simple)
 				throw Error.NotSupported();

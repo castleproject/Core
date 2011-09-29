@@ -139,7 +139,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			string key, object storedValue, PropertyDescriptor property, bool ifExists)
 		{
 			XmlAccessor accessor;
-			if (TryGetAccessor(dictionaryAdapter, property, null != storedValue, out accessor))
+			if (TryGetAccessor(key, property, null != storedValue, out accessor))
 			{
 				storedValue = accessor.GetPropertyValue(node, dictionaryAdapter, !ifExists);
 				if (null != storedValue)
@@ -155,7 +155,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			string key, ref object value, PropertyDescriptor property)
 		{
 			XmlAccessor accessor;
-			if (TryGetAccessor(dictionaryAdapter, property, false, out accessor))
+			if (TryGetAccessor(key, property, false, out accessor))
 			{
 				if (value != null && dictionaryAdapter.ShouldClearProperty(property, value))
 					value = null;
@@ -191,11 +191,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			throw Error.NotSupported();
 		}
 
-		private bool TryGetAccessor(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, bool requireVolatile, out XmlAccessor accessor)
+		private bool TryGetAccessor(string key, PropertyDescriptor property, bool requireVolatile, out XmlAccessor accessor)
 		{
 			accessor = property.HasAccessor()
 				? property.GetAccessor()
-				: CreateAccessor(dictionaryAdapter, property);
+				: CreateAccessor(key, property);
 
 			if (accessor.IsIgnored)
 			    return Try.Failure(out accessor);
@@ -204,7 +204,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return true;
 		}
 
-		private XmlAccessor CreateAccessor(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
+		private XmlAccessor CreateAccessor(string key, PropertyDescriptor property)
 		{
 			var accessor   = null as XmlAccessor;
 			var isVolatile = false;
@@ -215,13 +215,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					return XmlIgnoreBehaviorAccessor.Instance;
 				else if (IsVolatileBehavior(behavior))
 					isVolatile = true;
-				TryApplyBehavior(dictionaryAdapter, property, behavior, ref accessor);
+				TryApplyBehavior(key, property, behavior, ref accessor);
 			}
 
 			if (accessor == null)
 			{
 				var factory = XmlDefaultBehaviorAccessor.Factory;
-				accessor = CreateAccessor(factory, dictionaryAdapter, property);
+				accessor = CreateAccessor(key, property, factory);
 			}
 
 			accessor.ConfigureVolatile(isVolatile);
@@ -230,36 +230,33 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return accessor;
 		}
 
-		private bool TryApplyBehavior(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, object behavior, ref XmlAccessor accessor)
+		private bool TryApplyBehavior(string key, PropertyDescriptor property, object behavior, ref XmlAccessor accessor)
 		{	
 			return
 				TryApplyBehavior<XmlElementAttribute, XmlElementBehaviorAccessor>
-					(dictionaryAdapter, property, behavior, ref accessor, XmlElementBehaviorAccessor.Factory)
-				||
-				TryApplyBehavior<KeyAttribute, XmlArrayBehaviorAccessor>
-					(dictionaryAdapter, property, behavior, ref accessor, XmlArrayBehaviorAccessor.Factory)
+					(key, property, behavior, ref accessor, XmlElementBehaviorAccessor.Factory)
 				||
 				TryApplyBehavior<XmlArrayAttribute, XmlArrayBehaviorAccessor>
-					(dictionaryAdapter, property, behavior, ref accessor, XmlArrayBehaviorAccessor.Factory)
+					(key, property, behavior, ref accessor, XmlArrayBehaviorAccessor.Factory)
 				||
 				TryApplyBehavior<XmlArrayItemAttribute, XmlArrayBehaviorAccessor>
-					(dictionaryAdapter, property, behavior, ref accessor, XmlArrayBehaviorAccessor.Factory)
+					(key, property, behavior, ref accessor, XmlArrayBehaviorAccessor.Factory)
 				||
 				TryApplyBehavior<XmlAttributeAttribute, XmlAttributeBehaviorAccessor>
-					(dictionaryAdapter, property, behavior, ref accessor, XmlAttributeBehaviorAccessor.Factory)
+					(key, property, behavior, ref accessor, XmlAttributeBehaviorAccessor.Factory)
 #if !SL3
 				||
 				TryApplyBehavior<XPathAttribute, XmlXPathBehaviorAccessor>
-					(dictionaryAdapter, property, behavior, ref accessor, XmlXPathBehaviorAccessor.Factory)
+					(key, property, behavior, ref accessor, XmlXPathBehaviorAccessor.Factory)
 				||
 				TryApplyBehavior<XPathFunctionAttribute, XmlXPathBehaviorAccessor>
-					(dictionaryAdapter, property, behavior, ref accessor, XmlXPathBehaviorAccessor.Factory)
+					(key, property, behavior, ref accessor, XmlXPathBehaviorAccessor.Factory)
 #endif
 				;
 		}
 
-		private bool TryApplyBehavior<TBehavior, TAccessor>(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, object behavior, ref XmlAccessor accessor,
-			XmlAccessorFactory<TAccessor> factory)
+		private bool TryApplyBehavior<TBehavior, TAccessor>(string key, PropertyDescriptor property, object behavior,
+			ref XmlAccessor accessor, XmlAccessorFactory<TAccessor> factory)
 			where TBehavior : class
 			where TAccessor : XmlAccessor, IConfigurable<TBehavior>
 		{
@@ -268,7 +265,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				return false;
 
 			if (accessor == null)
-				accessor = CreateAccessor(factory, dictionaryAdapter, property);
+				accessor = CreateAccessor(key, property, factory);
 
 			var typedAccessor = accessor as TAccessor;
 			if (typedAccessor == null)
@@ -278,14 +275,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return true;
 		}
 
-		private TAccessor CreateAccessor<TAccessor>(
-			XmlAccessorFactory<TAccessor> factory,
-			IDictionaryAdapter dictionaryAdapter,
-			PropertyDescriptor property)
+		private TAccessor CreateAccessor<TAccessor>(string key, PropertyDescriptor property, XmlAccessorFactory<TAccessor> factory)
 			where TAccessor : XmlAccessor
 		{
-			var xmlMeta = GetXmlMetadata(property.Property.DeclaringType /* dictionaryAdapter.Meta.Type */);
-			return factory(property, xmlMeta);
+			var xmlMeta = GetXmlMetadata(property.Property.DeclaringType);
+			var accessor = factory(key, property.PropertyType, xmlMeta);
+			if (xmlMeta.IsNullable.HasValue)
+				accessor.ConfigureNillable(xmlMeta.IsNullable.Value);
+			return accessor;
 		}
 
 		private XmlMetadata GetXmlMetadata(Type type)
@@ -388,7 +385,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			PropertyDescriptor property;
 			XmlAccessor accessor;
 			return dictionaryAdapter.This.Properties.TryGetValue(propertyName, out property)
-				&& TryGetAccessor(dictionaryAdapter, property, false, out accessor)
+				&& TryGetAccessor(key, property, false, out accessor)
 				&& accessor.IsPropertyDefined(node);
 		}
 	}
