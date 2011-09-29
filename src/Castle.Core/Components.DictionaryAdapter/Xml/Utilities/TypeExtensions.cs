@@ -33,7 +33,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				return type.GetElementType();
 			if (type.IsGenericType)
 				return type.GetGenericArguments().Single();
-			throw Error.ArgumentNotCollectionType("type");
+			throw Error.NotCollectionType("type");
 		}
 
 		public static Type GetComponentType(this object obj)

@@ -15,17 +15,26 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
+	using SerializationException = System.Runtime.Serialization.SerializationException;
+#if !SL3
+	using System.Xml.XPath;
+#endif
 
 	internal static class Error
 	{
-		internal static Exception ArgumentNull(string name)
+		internal static Exception ArgumentNull(string paramName)
 		{
-			return new ArgumentNullException(name);
+			return new ArgumentNullException(paramName);
 		}
 
-		internal static Exception ArgumentNotDictionaryAdapter(string name)
+		internal static Exception ArgumentOutOfRange(string paramName)
 		{
-			return new ArgumentException("The argument is not a dictionary adapter.", name);
+			return new ArgumentOutOfRangeException(paramName);
+		}
+
+		internal static Exception InvalidOperation()
+		{
+			return new InvalidOperationException();
 		}
 
 		internal static Exception NotSupported()
@@ -33,143 +42,166 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new NotSupportedException();
 		}
 
-		internal static Exception AttributeConflict(PropertyDescriptor property)
+		internal static Exception ObjectDisposed(string objectName)
 		{
-			throw new NotImplementedException();
+			return new ObjectDisposedException(objectName);
 		}
 
-		internal static Exception NoXmlMetadata(Type type)
+		internal static Exception AttributeConflict(string propertyName)
 		{
-			throw new NotImplementedException();
+			var message = string.Format
+			(
+				"The behaviors defined for property '{0}' are ambiguous or conflicting.",
+				propertyName
+			);
+			return new InvalidOperationException(message);
 		}
 
-		internal static Exception NoInstanceDescriptor()
+		internal static Exception XmlMetadataNotAvailable(Type clrType)
 		{
-			return new InvalidOperationException("The dictionary adapter does not have an instance descriptor."); // TODO: What to do here?
+			var message = string.Format
+			(
+				"XML metadata is not available for type '{0}'.",
+				clrType.FullName
+			);
+			return new InvalidOperationException(message);
 		}
 
-		internal static Exception NoGetterOnInstanceDescriptor()
+		internal static Exception NotDictionaryAdapter(string paramName)
 		{
-			return new InvalidOperationException("The dictionary adapter instance descriptor does not have a getter."); // TODO: What to do here?
+			var message = "The argument is not a dictionary adapter.";
+			return new ArgumentException(message, paramName);
 		}
 
-		internal static Exception NoXmlAdapter()
+		internal static Exception NoInstanceDescriptor(string paramName)
 		{
-			return new InvalidOperationException("The dictionary adapter does not have XmlAdapter behavior.");
+			var message = "The dictionary adapter does not have an instance descriptor.";
+			return new ArgumentException(message, paramName);
 		}
 
-		internal static Exception IteratorNotInCreatableState()
+		internal static Exception NoXmlAdapter(string paramName)
 		{
-			return new InvalidOperationException();
+			var message = "The dictionary adapter does not have XmlAdapter behavior.";
+			return new ArgumentException(message, paramName);
 		}
 
-		internal static Exception IteratorNotInRemovableState()
+		internal static Exception CursorNotMutable()
 		{
-			return new InvalidOperationException();
+			var message = "The cursor does not support creation, removal, or modification of nodes.";
+			return new NotSupportedException(message);
 		}
 
-		internal static Exception MultipleAttributesNotSupported()
+		internal static Exception CursorNotInCreatableState()
 		{
-			return new NotSupportedException();
+			var message = "The cursor cannot create nodes in its current state.";
+			return new InvalidOperationException(message);
 		}
 
-		internal static Exception SelectedMultipleNodes()
+		internal static Exception CursorNotInRemovableState()
 		{
-			return new InvalidOperationException();
-				//var message = string.Format(
-				//    "The path '{0}' selected multiple nodes, but only one was expected.",
-				//    path.Expression);
-			//new XmlTransformException(message);
-		}
-
-		internal static Exception NoCurrentItem()
-		{
-			return new InvalidOperationException();
-		}
-
-		internal static Exception IteratorNotMutable()
-		{
-			throw new NotSupportedException();
-		}
-
-		internal static Exception NotXmlKnownType()
-		{
-			throw new NotImplementedException();
-		}
-
-		internal static Exception ValueNotAssignableToProperty()
-		{
-			return new InvalidCastException();
-		}
-
-		internal static Exception UnsupportedCollectionType()
-		{
-			throw new NotImplementedException();
-		}
-
-		internal static Exception CannotSetXsiTypeOnAttribute()
-		{
-			throw new NotImplementedException();
+			var message = "The cursor cannot remove nodes in its current state.";
+			return new InvalidOperationException(message);
 		}
 
 		internal static Exception CursorNotInCoercibleState()
 		{
-			return new InvalidOperationException();
-		}
-
-		internal static Exception CursorCannotMoveToThatNode()
-		{
-			return new InvalidOperationException();
-		}
-
-		internal static Exception MustBeXmlNodeBasedCursor()
-		{
-			return new ArgumentException();
+			var message = "The currsor cannot change node types in its current state.";
+			return new InvalidOperationException(message);
 		}
 
 		internal static Exception CursorNotInRealizableState()
 		{
-			return new InvalidOperationException();
+			var message = "The cursor cannot realize virtual nodes in its current state";
+			return new InvalidOperationException(message);
 		}
 
-		internal static Exception OperationNotValidOnAttribute()
+		internal static Exception CursorCannotMoveToGivenNode()
 		{
-			return new InvalidOperationException();
+			var message = "The cursor cannot move to the given node.";
+			return new InvalidOperationException(message);
+		}
+
+		internal static Exception CannotSetXsiNilOnAttribute(IXmlIdentity identity)
+		{
+			var message = string.Format
+			(
+				"Cannot set attribute '{0}' to nil.",
+				identity.Name.ToString()
+			);
+			return new InvalidOperationException(message);
+		}
+
+		internal static Exception CannotSetXsiTypeOnAttribute(IXmlIdentity identity)
+		{
+			var message = string.Format
+			(
+				"Cannot set type '{1}' for XML attribute '{0}'.",
+				identity.Name.ToString(),
+				identity.XsiType.ToString()
+			);
+			return new InvalidOperationException(message);
+		}
+
+		internal static Exception NotXmlKnownType(Type clrType)
+		{
+			var message = string.Format
+			(
+				"No XML type is defined for CLR type {0}.",
+				clrType.FullName
+			);
+			return new SerializationException(message);
+		}
+
+		internal static Exception UnsupportedCollectionType(Type clrType)
+		{
+			var message = string.Format
+			(
+				"Unsupported collection type: {0}.",
+				clrType.FullName
+			);
+			return new SerializationException(message);
+		}
+
+		internal static Exception NotCollectionType(string paramName)
+		{
+			var message = "The argument is not a valid collection type.";
+			return new ArgumentException(message, paramName);
+		}
+
+
+		internal static Exception InvalidLocalName()
+		{
+			var message = "Invalid local name.";
+			return new FormatException(message);
 		}
 
 		internal static Exception InvalidNamespaceUri()
 		{
-			throw new NotImplementedException();
-		}
-
-		internal static Exception NamespacePrefixIsRequired()
-		{
-			throw new NotImplementedException();
-		}
-
-		internal static Exception ArgumentNotCollectionType(string name)
-		{
-			return new ArgumentException();
+			var message = "Invalid namespace URI.";
+			return new FormatException(message);
 		}
 
 		internal static Exception NoDefaultKnownType()
 		{
-			return new InvalidOperationException();
+			var message = "No default XML type exists in the given context.";
+			return new InvalidOperationException(message);
+		}
+#if !SL3
+		internal static Exception XPathNotCreatable(CompiledXPath path)
+		{
+			var message = string.Format(
+				"The path '{0}' is not a creatable XPath expression.",
+				path.Path.Expression);
+			return new XPathException(message);
 		}
 
-		internal static Exception UnreachableState()
+		internal static Exception XPathNavigationFailed(XPathExpression path)
 		{
-			return new NotImplementedException();
+			var message = string.Format(
+				"Failed navigation to {0} element after creation.",
+				path.Expression);
+			return new XPathException(message);
 		}
-
-		internal static Exception UnrecognizedType(Type type)
-		{
-			return new NotImplementedException();
-		}
-
-		internal static Exception ArgumentOutOfRange(string p)
-		{
-			throw new NotImplementedException();
-		}
+#endif
 	}
 }

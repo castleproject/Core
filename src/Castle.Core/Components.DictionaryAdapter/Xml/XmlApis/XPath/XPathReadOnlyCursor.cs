@@ -30,11 +30,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XPathReadOnlyCursor(ILazy<XPathNavigator> parent, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
 		{
 			if (parent == null)
-				throw new ArgumentNullException("parent");
+				throw Error.ArgumentNull("parent");
 			if (path == null)
-				throw new ArgumentNullException("path");
+				throw Error.ArgumentNull("path");
 			if (includedTypes == null)
-				throw new ArgumentNullException("includedTypes");
+				throw Error.ArgumentNull("includedTypes");
 
 			this.parent        = parent.Value;
 			this.path          = path.Path;
@@ -88,7 +88,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			var source = position as ILazy<XPathNavigator>;
 			if (source == null || !source.HasValue)
-				throw Error.CursorCannotMoveToThatNode();
+				throw Error.CursorCannotMoveToGivenNode();
 
 			var positionNode = source.Value;
 
@@ -97,7 +97,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				if (iterator.Current.IsSamePosition(positionNode))
 					{ SetAtNext(); return; }
 
-			throw Error.CursorCannotMoveToThatNode();
+			throw Error.CursorCannotMoveToGivenNode();
 		}
 
 		public void MoveToEnd()
@@ -108,27 +108,27 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void MakeNext(Type type)
 		{
-			throw Error.IteratorNotMutable();
+			throw Error.CursorNotMutable();
 		}
 
 		public void Create(Type type)
 		{
-			throw Error.IteratorNotMutable();
+			throw Error.CursorNotMutable();
 		}
 
 		public void Coerce(Type type)
 		{
-			throw Error.IteratorNotMutable();
+			throw Error.CursorNotMutable();
 		}
 
 		public void Remove()
 		{
-			throw Error.IteratorNotMutable();
+			throw Error.CursorNotMutable();
 		}
 
 		public void RemoveAllNext()
 		{
-			throw Error.IteratorNotMutable();
+			throw Error.CursorNotMutable();
 		}
 
 		public IXmlNode Save()

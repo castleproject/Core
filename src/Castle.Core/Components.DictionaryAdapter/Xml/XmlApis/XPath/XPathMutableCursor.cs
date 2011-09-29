@@ -33,13 +33,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XPathMutableCursor(ILazy<XPathNavigator> parent, CompiledXPath path, IXmlIncludedTypeMap knownTypes, CursorFlags flags)
 		{
 			if (null == parent)
-				throw new ArgumentNullException("parent");
+				throw Error.ArgumentNull("parent");
 			if (null == path)
-				throw new ArgumentNullException("path");
+				throw Error.ArgumentNull("path");
 			if (knownTypes == null)
-				throw new ArgumentNullException("knownTypes");
-
-			RequireSupportedPath(path);
+				throw Error.ArgumentNull("knownTypes");
+			if (!path.IsCreatable)
+				throw Error.XPathNotCreatable(path);
 
 			this.parent     = parent;
 			this.path       = path;
@@ -210,7 +210,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			var source = position as ILazy<XPathNavigator>;
 			if (source == null || !source.HasValue)
-				throw Error.CursorCannotMoveToThatNode();
+				throw Error.CursorCannotMoveToGivenNode();
 
 			var positionNode = source.Value;
 
@@ -219,7 +219,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				if (HasCurrent && node.IsSamePosition(positionNode))
 					return;
 
-			throw Error.CursorCannotMoveToThatNode();
+			throw Error.CursorCannotMoveToGivenNode();
 		}
 
 		public override void Realize()
@@ -231,19 +231,19 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Create(knownTypes.Default.ClrType);
 		}
 
-		public void MakeNext(Type type)
+		public void MakeNext(Type clrType)
 		{
 			if (MoveNext())
-				Coerce(type);
+				Coerce(clrType);
 			else
-				Create(type);
+				Create(clrType);
 		}
 
-		public void Coerce(Type type)
+		public void Coerce(Type clrType)
 		{
 			IXmlIncludedType includedType;
-			if (!knownTypes.TryGet(type, out includedType))
-				throw Error.NotXmlKnownType();
+			if (!knownTypes.TryGet(clrType, out includedType))
+				throw Error.NotXmlKnownType(clrType);
 
 			node.SetXsiType(includedType.XsiType);
 		}
@@ -387,37 +387,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return HasCurrent ? new XPathNode(node.Clone(), type) : this;
 		}
 
-		private void RequireSupportedPath(CompiledXPath path)
-		{
-			if (!path.IsCreatable)
-			{
-				var message = string.Format(
-					"The path '{0}' is not a supported XPath path expression.",
-					path.Path.Expression);
-				throw new FormatException(message);
-			}
-		}
-
 		private void RequireRemovable()
 		{
 			if (!HasPartialOrCurrent)
-			{
-				var message = string.Format(
-					"Cannot remove current element at path component '{0}'. No current element is selected.",
-					path.FirstStep.Path.Expression);
-				throw new XPathException(message);
-			}
+				throw Error.CursorNotInRemovableState();
 		}
 
 		private void RequireMoved(bool result)
 		{
 			if (!result)
-			{
-				var message = string.Format(
-					"Failed navigation to {0} element after creation.",
-					step.Path.Expression);
-				throw new XPathException(message);
-			}
+				throw Error.XPathNavigationFailed(step.Path);
 		}
 	}
 }

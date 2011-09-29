@@ -31,7 +31,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			: base(name, type, context)
 		{
 			if (Serializer.Kind != XmlTypeKind.Collection)
-				throw Error.AttributeConflict(null);
+				throw Error.AttributeConflict(name);
 
 			itemAccessor = new ItemAccessor(ClrType.GetCollectionItemType(), this);
 		}

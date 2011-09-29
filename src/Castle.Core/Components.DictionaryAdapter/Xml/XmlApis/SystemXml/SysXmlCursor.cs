@@ -43,9 +43,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public SysXmlCursor(ILazy<XmlNode> parent, IXmlKnownTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
 		{
 			if (null == parent)
-				throw new ArgumentNullException("parent");
+				throw Error.ArgumentNull("parent");
 			if (null == knownTypes)
-				throw new ArgumentNullException("knownTypes");
+				throw Error.ArgumentNull("knownTypes");
 
 			this.parent     = parent;
 			this.knownTypes = knownTypes;
@@ -267,11 +267,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			var source = position as ILazy<XmlNode>;
 			if (source == null || !source.HasValue)
-				throw Error.CursorCannotMoveToThatNode();
+				throw Error.CursorCannotMoveToGivenNode();
 
 			IXmlKnownType knownType;
 			if (!knownTypes.TryGet(position, out knownType))
-				throw Error.CursorCannotMoveToThatNode();
+				throw Error.CursorCannotMoveToGivenNode();
 
 			node = source.Value;
 			type = knownType.ClrType;
@@ -346,7 +346,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (state != State.Empty)
 				throw Error.CursorNotInRealizableState();
 			if (!flags.SupportsMutation())
-				throw Error.IteratorNotMutable();
+				throw Error.CursorNotMutable();
 			Create(knownTypes.Default.ClrType);
 		}
 
@@ -482,7 +482,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void RequireNoXsiType(IXmlKnownType knownType)
 		{
 			if (knownType.XsiType != XmlName.Empty)
-				throw Error.CannotSetXsiTypeOnAttribute();
+				throw Error.CannotSetXsiTypeOnAttribute(knownType);
 		}
 
 		private static string GetEffectiveNamespaceUri(XmlNode parent, IXmlIdentity knownType)
@@ -542,7 +542,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				case State.Attribute: position = node; MoveToParentOfAttribute(); break;
 				case State.End:       position = null; break;
 				case State.Empty:     position = null; node = parent.Value; break;
-				default:              throw Error.IteratorNotInCreatableState();
+				default:              throw Error.CursorNotInCreatableState();
 			}
 			return position;
 		}
@@ -556,7 +556,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void RequireRemovable()
 		{
 			if (state <= State.Initial)
-				throw Error.IteratorNotInRemovableState();
+				throw Error.CursorNotInRemovableState();
 		}
 
 		protected static readonly StringComparer

@@ -29,7 +29,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public SingletonDispenser(Func<TKey, TItem> factory)
 		{
 			if (factory == null)
-				throw new ArgumentNullException("factory");
+				throw Error.ArgumentNull("factory");
 
 			this.locker  = new SlimReadWriteLock();
 			this.items   = new Dictionary<TKey, object>();

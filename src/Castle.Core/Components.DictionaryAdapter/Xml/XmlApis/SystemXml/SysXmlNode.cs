@@ -31,9 +31,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public SysXmlNode(XmlNode node, Type type)
 		{
 			if (node == null)
-				throw new ArgumentNullException("node");
+				throw Error.ArgumentNull("node");
 			if (type == null)
-				throw new ArgumentNullException("type");
+				throw Error.ArgumentNull("type");
 
 			this.node = node;
 			this.type = type;
@@ -209,7 +209,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void RequireElement()
 		{
 			if (!IsElement)
-				throw Error.OperationNotValidOnAttribute();
+				throw Error.CannotSetXsiNilOnAttribute(this);
 		}
 
 		public bool HasValue

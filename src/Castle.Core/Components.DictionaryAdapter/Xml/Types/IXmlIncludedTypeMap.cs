@@ -32,7 +32,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (includedTypes.TryGet(clrType, out includedType))
 				return includedType;
 
-			throw Error.NotXmlKnownType();
+			throw Error.NotXmlKnownType(clrType);
 		}
 	}
 }

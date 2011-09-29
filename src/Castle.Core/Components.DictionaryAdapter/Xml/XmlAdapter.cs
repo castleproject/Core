@@ -72,20 +72,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		void IDictionaryInitializer.Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors)
 		{
+			var meta = dictionaryAdapter.Meta;
+
 			if (primaryXmlMeta == null)
-				InitializePrimary  (dictionaryAdapter.Meta, dictionaryAdapter);
+				InitializePrimary  (meta, dictionaryAdapter);
 			else
-				InitializeSecondary(dictionaryAdapter.Meta);
+				InitializeSecondary(meta);
+
+			InitializeBaseTypes(meta);
 		}
 
 		private void InitializePrimary(DictionaryAdapterMeta meta, IDictionaryAdapter dictionaryAdapter)
 		{
-			if (!meta.HasXmlMeta())
-				throw Error.NoXmlMetadata(meta.Type);
-
+			RequireXmlMeta(meta);
 			primaryXmlMeta = meta.GetXmlMeta();
 
-			InitializeBaseTypes(meta);
 			InitializeStrategies(dictionaryAdapter);
 
 			if (node == null)
@@ -94,12 +95,28 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private void InitializeSecondary(DictionaryAdapterMeta meta)
 		{
+			AddSecondaryXmlMeta(meta);
+		}
+
+		private void InitializeStrategies(IDictionaryAdapter dictionaryAdapter)
+		{
+			var instance = dictionaryAdapter.This;
+			if (instance.CreateStrategy == null)
+			{
+				instance.CreateStrategy = this;
+				instance.AddCopyStrategy(this);
+			}
+		}
+
+		private void AddSecondaryXmlMeta(DictionaryAdapterMeta meta)
+		{
 			if (secondaryXmlMetas == null)
 				secondaryXmlMetas = new Dictionary<Type, XmlMetadata>();
+			else if (secondaryXmlMetas.ContainsKey(meta.Type))
+				return;
 
-			XmlMetadata item;
-			if (!secondaryXmlMetas.TryGetValue(meta.Type, out item))
-				secondaryXmlMetas[meta.Type] = meta.GetXmlMeta();
+			RequireXmlMeta(meta);
+			secondaryXmlMetas[meta.Type] = meta.GetXmlMeta();
 		}
 
 		private void InitializeBaseTypes(DictionaryAdapterMeta meta)
@@ -113,19 +130,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				if (ignore) continue;
 
 				var baseMeta = meta.GetDictionaryAdapterMeta(type);
-				InitializeSecondary(baseMeta);
+				AddSecondaryXmlMeta(baseMeta);
 			}
 		}
 
-		private void InitializeStrategies(IDictionaryAdapter dictionaryAdapter)
+		private static void RequireXmlMeta(DictionaryAdapterMeta meta)
 		{
-			var instance = dictionaryAdapter.This;
-
-			if (instance.CreateStrategy == null)
-			{
-				instance.CreateStrategy = this;
-				instance.AddCopyStrategy(this);
-			}
+			if (!meta.HasXmlMeta())
+				throw Error.XmlMetadataNotAvailable(meta.Type);
 		}
 
 		bool IDictionaryCopyStrategy.Copy(IDictionaryAdapter source, IDictionaryAdapter target, ref Func<PropertyDescriptor, bool> selector)
@@ -139,6 +151,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			string key, object storedValue, PropertyDescriptor property, bool ifExists)
 		{
 			XmlAccessor accessor;
+			key = EnsureKey(key, property);
+
 			if (TryGetAccessor(key, property, null != storedValue, out accessor))
 			{
 				storedValue = accessor.GetPropertyValue(node, dictionaryAdapter, !ifExists);
@@ -155,6 +169,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			string key, ref object value, PropertyDescriptor property)
 		{
 			XmlAccessor accessor;
+			key = EnsureKey(key, property);
+
 			if (TryGetAccessor(key, property, false, out accessor))
 			{
 				if (value != null && dictionaryAdapter.ShouldClearProperty(property, value))
@@ -162,6 +178,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				accessor.SetPropertyValue(node, dictionaryAdapter, ref value);
 			}
 			return true;
+		}
+
+		private static string EnsureKey(string key, PropertyDescriptor property)
+		{
+			return string.IsNullOrEmpty(key)
+				? property.PropertyName
+				: key;
 		}
 
 		private IXmlNode GetBaseNode()
@@ -269,7 +292,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			var typedAccessor = accessor as TAccessor;
 			if (typedAccessor == null)
-				throw Error.AttributeConflict(property);
+				throw Error.AttributeConflict(key);
 
 			typedAccessor.Configure(typedBehavior);
 			return true;
@@ -294,7 +317,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (secondaryXmlMetas.TryGetValue(type, out xmlMeta))
 				return xmlMeta;
 
-			throw Error.UnrecognizedType(type);
+			throw Error.XmlMetadataNotAvailable(type);
 		}
 
 		private static bool IsIgnoreBehavior(object behavior)
@@ -349,22 +372,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var dictionaryAdapter = obj as IDictionaryAdapter;
 			if (dictionaryAdapter == null)
 				if (!required) return null;
-				else throw Error.ArgumentNotDictionaryAdapter("obj");
+				else throw Error.NotDictionaryAdapter("obj");
 
 			var descriptor = dictionaryAdapter.This.Descriptor;
 			if (descriptor == null)
 				if (!required) return null;
-				else throw Error.NoInstanceDescriptor();
+				else throw Error.NoInstanceDescriptor("obj");
 
 			var getters = descriptor.Getters;
 			if (getters == null)
 				if (!required) return null;
-				else throw Error.NoGetterOnInstanceDescriptor();
+				else throw Error.NoXmlAdapter("obj");
 
 			var xmlAdapter = getters.OfType<XmlAdapter>().SingleOrDefault();
 			if (xmlAdapter == null)
 				if (!required) return null;
-				else throw Error.NoXmlAdapter();
+				else throw Error.NoXmlAdapter("obj");
 
 			return xmlAdapter;
 		}

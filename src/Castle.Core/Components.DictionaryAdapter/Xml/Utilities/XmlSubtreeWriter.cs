@@ -35,7 +35,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public XmlSubtreeWriter(IXmlNode node)
         {
             if (node == null)
-                throw new ArgumentNullException("node");
+                throw Error.ArgumentNull("node");
 
             this.node = node;
         }
@@ -331,31 +331,26 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
         private void RequireNotClosed()
         {
-            if (state == WriteState.Closed || state == WriteState.Error)
-                ThrowInvalidOperation();
+			if (state == WriteState.Closed || state == WriteState.Error)
+				throw Error.InvalidOperation();
         }
 
         private void RequireState(WriteState state)
         {
             if (this.state != state)
-                ThrowInvalidOperation();
+				throw Error.InvalidOperation();
         }
 
         private void RequireState(WriteState state1, WriteState state2)
         {
             if (state != state1 && state != state2)
-                ThrowInvalidOperation();
+				throw Error.InvalidOperation();
         }
 
         private void Reset(WriteState state)
         {
             this.depth = 0;
             this.state = state;
-        }
-
-        private void ThrowInvalidOperation()
-        {
-            throw new InvalidOperationException();
         }
     }
 }

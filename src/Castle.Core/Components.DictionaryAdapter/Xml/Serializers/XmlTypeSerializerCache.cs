@@ -80,7 +80,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					genericType == typeof(SortedSet<>) ||
 					// CLR binding list is not supported; use Castle version
 					genericType == typeof(BindingList<>))
-					throw Error.UnsupportedCollectionType();
+					throw Error.UnsupportedCollectionType(type);
 			}
 
 			if (type.IsInterface)

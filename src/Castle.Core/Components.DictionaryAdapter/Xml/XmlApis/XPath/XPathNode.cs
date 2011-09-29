@@ -32,9 +32,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XPathNode(XPathNavigator node, Type type)
 		{
 			if (node == null)
-				throw new ArgumentNullException("node");
+				throw Error.ArgumentNull("node");
 			if (type == null)
-				throw new ArgumentNullException("type");
+				throw Error.ArgumentNull("type");
 
 			this.node = node;
 			this.type = type;
@@ -94,17 +94,24 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public string LookupPrefix(string namespaceUri)
 		{
-			throw new NotImplementedException();
+			return node.LookupPrefix(namespaceUri);
 		}
 
 		public string LookupNamespaceUri(string prefix)
 		{
-			throw new NotImplementedException();
+			return node.LookupNamespace(prefix);
 		}
 
 		public void DefineNamespace(string prefix, string namespaceUri, bool root)
 		{
-			throw new NotImplementedException();
+			if (root)
+			{
+				node = node.Clone();
+				node.MoveToRoot();
+				node.MoveToFirstChild();
+			}
+
+			node.CreateAttribute(Xmlns.Prefix, prefix, Xmlns.NamespaceUri, namespaceUri);
 		}
 
 		public bool PositionEquals(IXmlNode node)
@@ -178,7 +185,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void RequireElement()
 		{
 			if (!IsElement)
-				throw Error.OperationNotValidOnAttribute();
+				throw Error.CannotSetXsiNilOnAttribute(this);
 		}
 
 		bool ILazy<XPathNavigator>.HasValue

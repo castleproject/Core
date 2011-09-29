@@ -32,6 +32,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		protected XmlNodeAccessor(string name, Type type, IXmlAccessorContext context)
 			: base(type, context)
 		{
+			if (name == null)
+				throw Error.ArgumentNull("name");
+			if (name == string.Empty)
+				throw Error.InvalidLocalName();
+
 			localName    = XmlConvert.EncodeLocalName(name);
 			namespaceUri = context.ChildNamespaceUri;
 		}
@@ -142,7 +147,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (string.IsNullOrEmpty(value))
 				return;
 			if (0 != (state & mask))
-				throw Error.AttributeConflict(null);
+				throw Error.AttributeConflict(localName);
 			field  = value;
 			state |= mask;
 		}
@@ -150,7 +155,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		protected void ConfigureKnownTypesFromParent(XmlNodeAccessor accessor)
 		{
 			if (knownTypes != null)
-				throw Error.AttributeConflict(null);
+				throw Error.AttributeConflict(localName);
 
 			knownTypes = accessor.knownTypes;
 		}

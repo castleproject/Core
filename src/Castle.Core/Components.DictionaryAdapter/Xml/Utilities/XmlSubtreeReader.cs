@@ -33,9 +33,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public XmlSubtreeReader(IXmlNode node, string rootLocalName, string rootNamespaceUri)
         {
             if (null == node)
-                throw new ArgumentNullException("node");
+                throw Error.ArgumentNull("node");
             if (null == rootLocalName)
-                throw new ArgumentNullException("rootLocalName");
+                throw Error.ArgumentNull("rootLocalName");
 
             this.reader           = node.ReadSubtree();
             this.rootLocalName    = reader.NameTable.Add(rootLocalName);
@@ -62,7 +62,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
         private void RequireNotDisposed()
         {
             if (IsDisposed)
-                throw new ObjectDisposedException("XmlSubtreeReader");
+                throw Error.ObjectDisposed("XmlSubtreeReader");
         }
 
         protected XmlReader Reader

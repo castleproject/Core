@@ -84,7 +84,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void Configure(XPathAttribute attribute)
 		{
 			if (path != null)
-				throw Error.AttributeConflict(null);
+				throw Error.AttributeConflict(path.Path.Expression);
 
 			path = attribute.Path;
 		}
