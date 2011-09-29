@@ -19,9 +19,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System.Collections.Generic;
 	using System.Xml;
 	using NUnit.Framework;
+	using Castle.Components.DictionaryAdapter.Xml;
 
 	[TestFixture]
-	public class MemberwiseEquaityHashCodeStrategyTestCase
+	public class MemberwiseEqualityHashCodeStrategyTestCase
 	{
 		private DictionaryAdapterFactory factory;
 
@@ -132,15 +133,15 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		private T GetAdapter<T>() where T : class
 		{
 			return (T)factory.GetAdapter(typeof(T), new Hashtable(), new DictionaryDescriptor()
-				.AddBehavior(XPathBehavior.Instance)
+				.AddBehavior(XmlMetadataBehavior.Instance)
 				.AddBehavior(new MemberwiseEqualityHashCodeStrategy()));
 		}
 
 		private T GetXmlAdapter<T>() where T : class
 		{
-			var xpath = new XPathAdapter(new XmlDocument());
+			var xpath = new XmlAdapter(new XmlDocument());
 			return (T)factory.GetAdapter(typeof(T), new Hashtable(), new DictionaryDescriptor()
-				.AddBehavior(XPathBehavior.Instance).AddBehavior(xpath)
+				.AddBehavior(XmlMetadataBehavior.Instance).AddBehavior(xpath)
 				.AddBehavior(new MemberwiseEqualityHashCodeStrategy()));
 		}
 	}

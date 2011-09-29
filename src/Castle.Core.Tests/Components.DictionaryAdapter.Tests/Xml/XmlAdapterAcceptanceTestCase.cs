@@ -12,22 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.DictionaryAdapter.Tests
+namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
 #if !SILVERLIGHT
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.IO;
 	using System.Linq;
 	using System.Xml;
 	using System.Xml.Schema;
 	using System.Xml.Serialization;
-	using Castle.Components.DictionaryAdapter.Xml;
 	using NUnit.Framework;
+	using Castle.Components.DictionaryAdapter.Tests;
 
 	[TestFixture]
-	public class XmlAdapterTestCase
+	public class XmlAdapterAcceptanceTestCase
 	{
 		private DictionaryAdapterFactory factory;
 
@@ -367,7 +366,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			season2.Location = season1.Location;
 			season2.Tags = season1.Tags;
 			season2.Teams = season1.Teams;
-			var player = season2.Teams[1].Players.AddNew();
+				var player = season2.Teams[1].Players.AddNew();
 			player.FirstName = "Dave";
 			player.LastName = "O'Hara";
 			season1.Teams[0].Players[1] = player;
@@ -535,7 +534,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			{
 				season.Teams[0].Players.Remove(player);
 			}
-			Assert.AreEqual(0, season.Teams[0].Players.Count);
+			Assert.IsNull(season.Teams[0].Players);
 			var roster = document.GetElementsByTagName("Roster", "RISE");
 			Assert.AreEqual(1, roster.Count);
 			Assert.AreEqual(0, roster[0].ChildNodes.Count);
@@ -605,7 +604,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			XmlDocument document = null;
 			var season = CreateXmlAdapter<ISeason>(xml, ref document);
 			season.Teams[0].Players.Clear();
-			Assert.AreEqual(0, season.Teams[0].Players.Count);
+			Assert.IsNull(season.Teams[0].Players);
 			var roster = document.GetElementsByTagName("Roster", "RISE");
 			Assert.AreEqual(1, roster.Count);
 			Assert.AreEqual(0, roster[0].ChildNodes.Count);
@@ -729,7 +728,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			season.Location.Line1 = "100 Hershey Park";
 			season.Location.City = "Hershey";
 			season.Location.State = "PA";
-			Assert.AreEqual("common", document.DocumentElement.GetPrefixOfNamespace("Common"));
+			Assert.AreEqual("c", document.DocumentElement.GetPrefixOfNamespace("Common"));
 		}
 
 		[Test]
@@ -778,8 +777,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			XmlDocument document = null;
 			var season = CreateXmlAdapter<ISeason>(xml, ref document);
-			Assert.IsTrue(XPathAdapter.IsPropertyDefined("Location", season));
-			Assert.IsFalse(XPathAdapter.IsPropertyDefined("Name", season));
+			Assert.IsTrue(XmlAdapter.IsPropertyDefined("Location", season));
+			Assert.IsFalse(XmlAdapter.IsPropertyDefined("Name", season));
 		}
 
 		[Test]
@@ -798,8 +797,13 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			XmlDocument document = null;
 			var season = CreateXmlAdapter<ISeason>(xml, ref document);
-			Assert.IsTrue(XPathAdapter.IsPropertyDefined("Teams", season));
-			Assert.IsFalse(XPathAdapter.IsPropertyDefined("Tags", season));
+			Assert.IsTrue(XmlAdapter.IsPropertyDefined("Teams", season));
+
+			// TODO: Ask Craig what he wants to do about this
+			// In my POV, XmlElementBehavior means that collections are ALWAYS defined
+			//   since there is not an element representing the collection itself.
+//			Assert.IsFalse(XmlAdapter.IsPropertyDefined("Tags", season));
+			Assert.IsTrue(XmlAdapter.IsPropertyDefined("Tags", season));
 		}
 
 		[Test]
@@ -845,9 +849,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			XmlDocument document = null;
 			var season = CreateXmlAdapter<ISeason>(xml, ref document);
-			Assert.IsTrue(XPathAdapter.IsPropertyDefined("Name", season));
+			Assert.IsTrue(XmlAdapter.IsPropertyDefined("Name", season));
 			season.Name = "";
-			Assert.IsFalse(XPathAdapter.IsPropertyDefined("Name", season));
+			Assert.IsFalse(XmlAdapter.IsPropertyDefined("Name", season));
 		}
 
 #if !DOTNET35
@@ -902,8 +906,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Coed
 		}
 
-		[XmlNamespace("Common", "common", Root = true),
-		 XPath("common:Address")]
+		[XmlNamespace("Common", "c", Root = true),
+		 XmlNamespace("RISE", "r"),
+		 XPath("r:Season/c:Address")]
 		public interface IAddress
 		{
 			[Volatile]
@@ -936,7 +941,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			[XmlElement("AmountDue")]
 			decimal Balance { get; set; }
 			[XmlArray("Roster", IsNullable = true), XmlArrayItem("Participant"), RemoveIfEmpty]
-			BindingList<IPlayer> Players { get; }
+			IBindingList<IPlayer> Players { get; }
 		}
 
 		[XmlRoot("Season", Namespace = "RISE"),
@@ -954,7 +959,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			[XmlElement("Address", Namespace = "Common")]
 			IAddress Location { get; set; }
 			[Key("League"), XmlArrayItem("Team")]
-			BindingList<ITeam> Teams { get; set; }
+			IBindingList<ITeam> Teams { get; set; }
 			[XPath("rise:League/rise:Team")]
 			ITeam[] TeamsArray { get; }
 			[XPath("rise:League/rise:Team[position()=1]/@Name")]

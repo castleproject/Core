@@ -185,10 +185,8 @@
     <Compile Include="Components.DictionaryAdapter\IDictionaryCopyStrategy.cs" />
     <Compile Include="Components.DictionaryAdapter\DictionaryAdapterBase.Coerce.cs" />
     <Compile Include="Components.DictionaryAdapter\IDictionaryCoerceStrategy.cs" />
-    <Compile Include="Components.DictionaryAdapter\DefaultXmlSerializer.cs" />
     <Compile Include="Components.DictionaryAdapter\IDictionaryBehaviorBuilder.cs" />
     <Compile Include="Components.DictionaryAdapter\GenericDictionaryAdapter.cs" />
-    <Compile Include="Components.DictionaryAdapter\IXPathSerializer.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\BindingList.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\IBindingList.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ICondition.cs" />
@@ -204,7 +202,6 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\IXmlBehaviorSemantics.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlNodeAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlIdentity.cs" />
-    <Compile Include="Components.DictionaryAdapter\XmlMetadata.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\IXmlAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\IXmlCollectionAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\IXmlPropertyAccessor.cs" />
@@ -335,7 +332,6 @@
     <Compile Include="Components.DictionaryAdapter\NameValueCollectionAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\PropertyDescriptor.cs" />
     <Compile Include="Core\Internal\AttributesUtil.cs" />
-    <Compile Include="Components.DictionaryAdapter\Util\BehaviorVisitor.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\BindingListInitializer.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\DynamicValue.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\DynamicValueDelegate.cs" />
@@ -343,11 +339,6 @@
     <Compile Include="Components.DictionaryAdapter\Util\EditableList.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\IDynamicValue.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\IValueInitializer.cs" />
-    <Compile Include="Components.DictionaryAdapter\XPathAdapter.cs" />
-    <Compile Include="Components.DictionaryAdapter\XPathBehavior.cs" />
-    <Compile Include="Components.DictionaryAdapter\XPathContext.cs" />
-    <Compile Include="Components.DictionaryAdapter\XPathExtensions.cs" />
-    <Compile Include="Components.DictionaryAdapter\XPathResult.cs" />
     <Compile Include="Core\Logging\LoggerLevel.cs" />
     <Compile Include="DynamicProxy\AbstractInvocation.cs" />
     <Compile Include="DynamicProxy\AllMethodsHook.cs" />

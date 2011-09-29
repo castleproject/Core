@@ -163,7 +163,7 @@ namespace Castle.Components.DictionaryAdapter
 #if SILVERLIGHT
 					false;
 #else
-					genericDef == typeof(BindingList<>);
+					genericDef == typeof(System.ComponentModel.BindingList<>);
 #endif
 
 				if (isBindingList || genericDef == typeof(List<>))

@@ -90,20 +90,6 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		/// <inheritdoc />
-		public T GetAdapter<T>(IXPathNavigable xpathNavigable)
-		{
-			return (T)GetAdapter(typeof(T), xpathNavigable);
-		}
-
-		/// <inheritdoc />
-		public object GetAdapter(Type type, IXPathNavigable xpathNavigable)
-		{
-			var xpath = new XPathAdapter(xpathNavigable);
-			return GetAdapter(type, new Hashtable(), new DictionaryDescriptor()
-				.AddBehavior(XPathBehavior.Instance).AddBehavior(xpath));
-		}
-
-		/// <inheritdoc />
 		public T GetAdapter<T>(System.Xml.XmlNode xmlNode)
 		{
 		    return (T)GetAdapter(typeof(T), xmlNode);

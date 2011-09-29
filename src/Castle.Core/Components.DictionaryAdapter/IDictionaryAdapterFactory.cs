@@ -85,26 +85,26 @@ namespace Castle.Components.DictionaryAdapter
 		object GetAdapter(Type type, NameValueCollection nameValues);
 
 		/// <summary>
-		/// Gets a typed adapter bound to the <see cref="IXPathNavigable"/>.
+		/// Gets a typed adapter bound to the <see cref="System.Xml.XmlNode"/>.
 		/// </summary>
 		/// <typeparam name="T">The typed interface.</typeparam>
-		/// <param name="xpathNavigable">The underlying source of properties.</param>
-		/// <returns>An implementation of the typed interface bound to the xpath navigable.</returns>
+		/// <param name="xmlNode">The underlying source of properties.</param>
+		/// <returns>An implementation of the typed interface bound to the <see cref="System.Xml.XmlNode"/>.</returns>
 		/// <remarks>
 		/// The type represented by T must be an interface with properties.
 		/// </remarks>
-		T GetAdapter<T>(IXPathNavigable xpathNavigable);
+		T GetAdapter<T>(System.Xml.XmlNode xmlNode);
 
 		/// <summary>
-		/// Gets a typed adapter bound to the <see cref="IXPathNavigable"/>.
+		/// Gets a typed adapter bound to the <see cref="System.Xml.XmlNode"/>.
 		/// </summary>
 		/// <param name="type">The typed interface.</param>
-		/// <param name="xpathNavigable">The underlying source of properties.</param>
-		/// <returns>An implementation of the typed interface bound to the xpath navigable.</returns>
+		/// <param name="xmlNode">The underlying source of properties.</param>
+		/// <returns>An implementation of the typed interface bound to the <see cref="System.Xml.XmlNode"/>.</returns>
 		/// <remarks>
 		/// The type represented by T must be an interface with properties.
 		/// </remarks>
-		object GetAdapter(Type type, IXPathNavigable xpathNavigable);
+		object GetAdapter(Type type, System.Xml.XmlNode xmlNode);
 #endif
 
 		/// <summary>

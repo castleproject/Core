@@ -188,7 +188,7 @@
     <Compile Include="Components.DictionaryAdapter.Tests\XmlEquivalent.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\IEmptyTest.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\IBook.cs" />
-    <Compile Include="Components.DictionaryAdapter.Tests\MemberwiseEquaityHashCodeStrategyTestCase.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\MemberwiseEqualityHashCodeStrategyTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\IUseBehaviorBuilder.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\KeyBehaviorBuilderAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\CustomGetter.cs" />
@@ -325,7 +325,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingNameValueCollectionsTestCase.cs" />
-    <Compile Include="Components.DictionaryAdapter.Tests\AdaptingXmlTestCase.cs" />
     <Compile Include="BugsReported\DynProxy132.cs" />
     <Compile Include="ChangeProxyTargetInterceptor.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\CreateHashtableDictionaryStrategy.cs" />

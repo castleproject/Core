@@ -39,7 +39,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public void Initialize(IDictionaryAdapter dictionaryAdapter, object value)
 		{
-			var bindingList = (BindingList<T>)value;
+			var bindingList = (System.ComponentModel.BindingList<T>)value;
 			if (addNew != null)
 			{
 				bindingList.AddingNew += (sender, args) =>
@@ -97,9 +97,9 @@ namespace Castle.Components.DictionaryAdapter
 		class SuppressListChangedEvents : IDisposable
 		{
 			private readonly bool raiseEvents;
-			private readonly BindingList<T> bindingList;
+			private readonly System.ComponentModel.BindingList<T> bindingList;
 
-			public SuppressListChangedEvents(BindingList<T> bindingList)
+			public SuppressListChangedEvents(System.ComponentModel.BindingList<T> bindingList)
 			{
 				this.bindingList = bindingList;
 				raiseEvents = this.bindingList.RaiseListChangedEvents;
