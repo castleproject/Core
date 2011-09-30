@@ -80,14 +80,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				InitializeSecondary(meta);
 
 			InitializeBaseTypes(meta);
+			InitializeStrategies(dictionaryAdapter);
 		}
 
 		private void InitializePrimary(DictionaryAdapterMeta meta, IDictionaryAdapter dictionaryAdapter)
 		{
 			RequireXmlMeta(meta);
 			primaryXmlMeta = meta.GetXmlMeta();
-
-			InitializeStrategies(dictionaryAdapter);
 
 			if (node == null)
 				node = GetBaseNode();
@@ -96,16 +95,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void InitializeSecondary(DictionaryAdapterMeta meta)
 		{
 			AddSecondaryXmlMeta(meta);
-		}
-
-		private void InitializeStrategies(IDictionaryAdapter dictionaryAdapter)
-		{
-			var instance = dictionaryAdapter.This;
-			if (instance.CreateStrategy == null)
-			{
-				instance.CreateStrategy = this;
-				instance.AddCopyStrategy(this);
-			}
 		}
 
 		private void AddSecondaryXmlMeta(DictionaryAdapterMeta meta)
@@ -131,6 +120,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 				var baseMeta = meta.GetDictionaryAdapterMeta(type);
 				AddSecondaryXmlMeta(baseMeta);
+			}
+		}
+
+		private void InitializeStrategies(IDictionaryAdapter dictionaryAdapter)
+		{
+			var instance = dictionaryAdapter.This;
+			if (instance.CreateStrategy == null)
+			{
+				instance.CreateStrategy = this;
+				instance.AddCopyStrategy(this);
 			}
 		}
 
