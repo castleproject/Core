@@ -48,24 +48,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return xsiType; }
 		}
 
+		public IXmlAccessorContext Context
+		{
+			get { return context; }
+		}
+
 		public XmlTypeSerializer Serializer
 		{
 			get { return serializer; }
-		}
-
-		public virtual bool IsNillable
-		{
-			get { return false; }
-		}
-
-		public virtual bool IsIgnored
-		{
-			get { return false; }
-		}
-
-		public virtual bool IsVolatile
-		{
-			get { return false; }
 		}
 
 		public bool IsCollection
@@ -73,9 +63,19 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return serializer.Kind == XmlTypeKind.Collection; }
 		}
 
-		public IXmlAccessorContext Context
+		public virtual bool IsIgnored
 		{
-			get { return context; }
+			get { return false; }
+		}
+
+		public virtual bool IsNillable
+		{
+			get { return false; }
+		}
+
+		public virtual bool IsVolatile
+		{
+			get { return false; }
 		}
 
 		public virtual void ConfigureNillable(bool isNillable)

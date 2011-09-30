@@ -151,8 +151,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			string key, object storedValue, PropertyDescriptor property, bool ifExists)
 		{
 			XmlAccessor accessor;
-			key = EnsureKey(key, property);
-
 			if (TryGetAccessor(key, property, null != storedValue, out accessor))
 			{
 				storedValue = accessor.GetPropertyValue(node, dictionaryAdapter, !ifExists);
@@ -169,8 +167,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			string key, ref object value, PropertyDescriptor property)
 		{
 			XmlAccessor accessor;
-			key = EnsureKey(key, property);
-
 			if (TryGetAccessor(key, property, false, out accessor))
 			{
 				if (value != null && dictionaryAdapter.ShouldClearProperty(property, value))
@@ -232,6 +228,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var accessor   = null as XmlAccessor;
 			var isVolatile = false;
 
+			if (string.IsNullOrEmpty(key))
+				accessor = CreateAccessor(key, property, XmlSelfAccessor.Factory);
+
 			foreach (var behavior in property.Behaviors)
 			{
 				if (IsIgnoreBehavior(behavior))
@@ -242,10 +241,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 
 			if (accessor == null)
-			{
-				var factory = XmlDefaultBehaviorAccessor.Factory;
-				accessor = CreateAccessor(key, property, factory);
-			}
+				accessor = CreateAccessor(key, property, XmlDefaultBehaviorAccessor.Factory);
 
 			accessor.ConfigureVolatile(isVolatile);
 			accessor.Prepare();
