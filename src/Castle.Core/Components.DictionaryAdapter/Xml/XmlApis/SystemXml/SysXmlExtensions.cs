@@ -23,7 +23,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Xml.XPath;
 #endif
 
-	public static class XmlExtensions
+	public static class SysXmlExtensions
 	{
 		public static string GetAttribute(this XmlNode node, string localName, string namespaceUri)
 		{
@@ -72,10 +72,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public static bool IsNamespace(this XmlAttribute attribute)
 		{
-			return attribute.Prefix == XmlnsPrefix ||
+			return attribute.Prefix == Xmlns.Prefix ||
 			(
 				string.IsNullOrEmpty(attribute.Prefix) &&
-				attribute.LocalName == XmlnsPrefix
+				attribute.LocalName == Xmlns.Prefix
 			);
 		}
 
@@ -88,54 +88,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				node = next;
 			}
 		}
-
-#if !SL3
-#endif
-
-		public static XmlMetadata GetXmlMeta(this DictionaryAdapterMeta meta)
-		{
-			return (XmlMetadata) meta.ExtendedProperties[XmlMetaKey];
-		}
-
-		public static void SetXmlMeta(this DictionaryAdapterMeta meta, XmlMetadata xmlMeta)
-		{
-			meta.ExtendedProperties[XmlMetaKey] = xmlMeta;
-		}
-
-		public static bool HasXmlMeta(this DictionaryAdapterMeta meta)
-		{
-			return meta.ExtendedProperties.Contains(XmlMetaKey);
-		}
-
-		public static XmlAccessor GetAccessor(this PropertyDescriptor property)
-		{
-		    return (XmlAccessor) property.ExtendedProperties[XmlAccessorKey];
-		}
-
-		public static void SetAccessor(this PropertyDescriptor property, XmlAccessor accessor)
-		{
-		    property.ExtendedProperties[XmlAccessorKey] = accessor;
-		}
-
-		public static bool HasAccessor(this PropertyDescriptor property)
-		{
-			return property.ExtendedProperties.Contains(XmlAccessorKey);
-		}
-
-		internal static bool IsCustomSerializable(this Type type)
-		{
-			return typeof(IXmlSerializable).IsAssignableFrom(type);
-		}
-
-		private const string
-			XmlAccessorKey = "XmlAccessor",
-			XmlMetaKey     = "XmlMeta";
-
-		private static readonly StringComparer
-			Comparer = StringComparer.OrdinalIgnoreCase;
-
-		public const string
-			XmlnsPrefix       = "xmlns";
 	}
 }
 #endif

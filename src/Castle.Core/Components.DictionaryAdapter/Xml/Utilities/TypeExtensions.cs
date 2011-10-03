@@ -16,6 +16,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 	using System.Linq;
+	using System.Xml.Serialization;
 
 	public static class TypeExtensions
 	{
@@ -42,6 +43,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return (adapter == null)
 				? obj.GetType()
 				: adapter.Meta.Type;
+		}
+
+		internal static bool IsCustomSerializable(this Type type)
+		{
+			return typeof(IXmlSerializable).IsAssignableFrom(type);
 		}
 	}
 }

@@ -118,7 +118,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					|| ns == "System.ComponentModel";
 				if (ignore) continue;
 
-				var baseMeta = meta.GetDictionaryAdapterMeta(type);
+				var baseMeta = meta.GetAdapterMeta(type);
 				AddSecondaryXmlMeta(baseMeta);
 			}
 		}

@@ -26,7 +26,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private readonly Type   clrType;
 		private readonly bool?  qualified;
 		private readonly bool?  isNullable;
-		private readonly string rootLocalName;
+		private /*rdwr*/ string rootLocalName;
 		private readonly string rootNamespaceUri;
 		private readonly string childNamespaceUri;
 		private readonly string typeLocalName;
@@ -170,6 +170,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return this; }
 		}
 
+		public void SetLocalName(string value)
+		{
+			if (value == null)
+				throw Error.ArgumentNull("value");
+			if (value == string.Empty)
+				throw Error.ArgumentOutOfRange("value");
+
+			rootLocalName = XmlConvert.EncodeLocalName(value);
+		}
+
 		public IXmlCursor SelectBase(IXmlNode node) // node is root
 		{
 #if !SL3
@@ -300,7 +310,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private XmlMetadata GetXmlMetadata(Type clrType)
 		{
 			return source
-				.GetDictionaryAdapterMeta(clrType)
+				.GetAdapterMeta(clrType)
 				.GetXmlMeta();
 		}
 

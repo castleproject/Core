@@ -248,7 +248,7 @@
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\IXmlNamespaceSource.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\SystemXml\SysXmlExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Types\XmlKnownTypeSet.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Error.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Utilities\Error.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\SystemXml\SysXmlCursor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\SingletonDispenser.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Utilities\XmlSubtreeReader.cs" />
