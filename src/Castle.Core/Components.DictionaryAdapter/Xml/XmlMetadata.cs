@@ -19,14 +19,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Xml;
 	using System.Xml.Serialization;
 
-	public class XmlMetadata : IXmlAccessorContext,
-		IXmlKnownType,    IXmlKnownTypeMap,
-		IXmlIncludedType, IXmlIncludedTypeMap
+	public class XmlMetadata : IXmlKnownType, IXmlKnownTypeMap, IXmlIncludedType, IXmlIncludedTypeMap
 	{
 		private readonly Type   clrType;
 		private readonly bool?  qualified;
 		private readonly bool?  isNullable;
-		private /*rdwr*/ string rootLocalName;
+		private readonly string rootLocalName;
 		private readonly string rootNamespaceUri;
 		private readonly string childNamespaceUri;
 		private readonly string typeLocalName;
@@ -46,7 +44,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			source        = meta;
 			clrType       = meta.Type;
-			context       = new XmlContext();
+			context       = new XmlContext(this);
 			includedTypes = new XmlIncludedTypeSet();
 
 			var xmlRoot      = null as XmlRootAttribute;
@@ -83,7 +81,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 #endif
 			typeLocalName = XmlConvert.EncodeLocalName
 			(
-				(xmlType == null ? null : xmlType.TypeName.NonEmpty()) ??
+				(!meta.HasXmlType() ? null : meta.GetXmlType().NonEmpty()) ??
+				(xmlType == null    ? null : xmlType.TypeName .NonEmpty()) ??
 				GetDefaultTypeLocalName(clrType)
 			);
 
@@ -150,7 +149,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return includedTypes; }
 		}
 
-		public XmlContext XmlContext
+		public IXmlContext Context
 		{
 			get { return context; }
 		}
@@ -168,16 +167,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IXmlIncludedType IXmlIncludedTypeMap.Default
 		{
 			get { return this; }
-		}
-
-		public void SetLocalName(string value)
-		{
-			if (value == null)
-				throw Error.ArgumentNull("value");
-			if (value == string.Empty)
-				throw Error.ArgumentOutOfRange("value");
-
-			rootLocalName = XmlConvert.EncodeLocalName(value);
 		}
 
 		public IXmlCursor SelectBase(IXmlNode node) // node is root
@@ -240,6 +229,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public XmlName GetDefaultXsiType(Type clrType)
 		{
+			if (clrType == this.clrType)
+				return this.XsiType;
+
 			IXmlIncludedType include;
 			if (includedTypes.TryGet(clrType, out include))
 				return include.XsiType;

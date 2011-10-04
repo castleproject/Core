@@ -435,9 +435,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void SetXsiType(XmlNode node, XmlName xsiType)
 		{
 			if (xsiType != XmlName.Empty)
-				namespaces.GetPrefix(this, Xsi.NamespaceUri);
+				namespaces.GetAttributePrefix(this, Xsi.NamespaceUri);
 			if (xsiType.NamespaceUri != null)
-				namespaces.GetPrefix(this, xsiType.NamespaceUri);
+				namespaces.GetAttributePrefix(this, xsiType.NamespaceUri);
 
 			node.SetXsiType(xsiType);
 		}
@@ -445,7 +445,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void SetXsiNil(XmlNode node, bool value)
 		{
 			if (value)
-				namespaces.GetPrefix(this, Xsi.NamespaceUri);
+				namespaces.GetAttributePrefix(this, Xsi.NamespaceUri);
 
 			node.SetXsiNil(value);
 		}
@@ -464,7 +464,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private XmlElement CreateElementCore(XmlNode parent, IXmlKnownType knownType, string namespaceUri)
 		{
 			var document = parent.OwnerDocument ?? (XmlDocument) parent;
-			var prefix   = namespaces.GetRootPrefix(this, namespaceUri);
+			var prefix   = namespaces.GetElementPrefix(this, namespaceUri);
 			var element  = document.CreateElement(prefix, knownType.Name.LocalName, namespaceUri);
 			node = element;
 			return element;
@@ -473,7 +473,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private XmlAttribute CreateAttributeCore(XmlNode parent, IXmlKnownType knownType, string namespaceUri)
 		{
 			var document  = parent.OwnerDocument ?? (XmlDocument) parent;
-			var prefix    = namespaces.GetRootPrefix(this, namespaceUri);
+			var prefix    = namespaces.GetAttributePrefix(this, namespaceUri);
 			var attribute = document.CreateAttribute(prefix, knownType.Name.LocalName, namespaceUri);
 			node = attribute;
 			return attribute;

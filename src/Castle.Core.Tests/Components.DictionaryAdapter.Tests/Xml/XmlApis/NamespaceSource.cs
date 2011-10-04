@@ -21,12 +21,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		public static readonly NamespaceSource
 			Instance = new NamespaceSource();
 
-		public string GetPrefix(IXmlNode node, string namespaceUri)
+		public string GetAttributePrefix(IXmlNode node, string namespaceUri)
 		{
 			return null;
 		}
 
-		public string GetRootPrefix(IXmlNode node, string namespaceUri)
+		public string GetElementPrefix(IXmlNode node, string namespaceUri)
 		{
 			return null;
 		}

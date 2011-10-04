@@ -314,7 +314,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			if (Context == null)
 			{
-				Context = new XmlContext();
+				Context = new XmlContextBase();
 				Context.AddNamespace("p", "ns");
 				Context.AddVariable("test", "v", new MockXPathVariable("VariableValue"));
 				Context.AddFunction("test", "f", new MockXPathFunction("FunctionValue"));
@@ -326,7 +326,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			TypeA = new XmlIncludedType("a", null, typeof(_TypeA)),
 			TypeB = new XmlIncludedType("b", null, typeof(_TypeB));
 
-		protected static XmlContext Context;
+		protected static XmlContextBase Context;
 
 		private class _TypeA          { }
 		private class _TypeB : _TypeA { }

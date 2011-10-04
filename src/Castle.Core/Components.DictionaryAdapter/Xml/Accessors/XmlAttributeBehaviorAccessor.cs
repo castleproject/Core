@@ -23,7 +23,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		internal static readonly XmlAccessorFactory<XmlAttributeBehaviorAccessor>
 			Factory = (name, type, context) => new XmlAttributeBehaviorAccessor(name, type, context);
 
-		public XmlAttributeBehaviorAccessor(string name, Type type, IXmlAccessorContext context)
+		public XmlAttributeBehaviorAccessor(string name, Type type, IXmlContext context)
 			: base(name, type, context)
 		{
 			if (Serializer.Kind != XmlTypeKind.Simple)
@@ -43,7 +43,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override IXmlCursor SelectPropertyNode(IXmlNode node, bool mutable)
 		{
-			return node.SelectChildren(this, Context.XmlContext, CursorFlags.Attributes.MutableIf(mutable));
+			return node.SelectChildren(this, Context, CursorFlags.Attributes.MutableIf(mutable));
 		}
 
 		public override IXmlCursor SelectCollectionNode(IXmlNode node, bool mutable)

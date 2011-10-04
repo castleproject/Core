@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SL3
 namespace Castle.Components.DictionaryAdapter
 {
-#if !SILVERLIGHT
 	using System;
 	using System.Xml.Xsl;
 
@@ -51,5 +51,5 @@ namespace Castle.Components.DictionaryAdapter
 
 		public string Prefix { get; set; }
 	}
-#endif
 }
+#endif

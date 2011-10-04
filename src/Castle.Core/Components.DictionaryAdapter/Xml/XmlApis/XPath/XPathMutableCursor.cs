@@ -226,7 +226,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			if (HasCurrent)
 				return;
-			if (iterator != null && !iterator.IsEmpty)
+			if (!(iterator == null || iterator.IsEmpty || HasPartialOrCurrent))
 				throw Error.CursorNotInRealizableState();
 			Create(knownTypes.Default.ClrType);
 		}

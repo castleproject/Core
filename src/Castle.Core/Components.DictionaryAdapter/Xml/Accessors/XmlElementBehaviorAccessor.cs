@@ -28,7 +28,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		internal static readonly XmlAccessorFactory<XmlElementBehaviorAccessor>
 			Factory = (name, type, context) => new XmlElementBehaviorAccessor(name, type, context);
 
-		public XmlElementBehaviorAccessor(string name, Type type, IXmlAccessorContext context)
+		public XmlElementBehaviorAccessor(string name, Type type, IXmlContext context)
 			: base(name, type, context) { }
 
 		public void Configure(XmlElementAttribute attribute)
@@ -72,7 +72,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override IXmlCursor SelectPropertyNode(IXmlNode node, bool mutable)
 		{
-			return node.SelectChildren(KnownTypes, Context.XmlContext, CursorFlags.Elements.MutableIf(mutable));
+			return node.SelectChildren(KnownTypes, Context, CursorFlags.Elements.MutableIf(mutable));
 		}
 
 		public override IXmlCursor SelectCollectionNode(IXmlNode node, bool mutable)
@@ -113,7 +113,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			public override IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable)
 			{
-				return node.SelectChildren(KnownTypes, Context.XmlContext, CursorFlags.Elements.MutableIf(mutable) | CursorFlags.Multiple);
+				return node.SelectChildren(KnownTypes, Context, CursorFlags.Elements.MutableIf(mutable) | CursorFlags.Multiple);
 			}
 		}
 	}

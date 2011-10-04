@@ -103,16 +103,31 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void DefineNamespace(string prefix, string namespaceUri, bool root)
 		{
-			if (IsRoot)
-				throw Error.NotSupported();
+			var target = GetNamespaceTargetElement();
+			if (target == null)
+				throw Error.InvalidOperation();
 
-			var target = IsAttribute
-				? ((XmlAttribute) node).OwnerElement
-				: ((XmlElement  ) node);
 			if (root)
 				target = target.FindRoot();
 
 			target.DefineNamespace(prefix, namespaceUri);
+		}
+
+		private XmlElement GetNamespaceTargetElement()
+		{
+			var element = node as XmlElement;
+			if (element != null)
+				return element;
+
+			var attribute = node as XmlAttribute;
+			if (attribute != null)
+				return attribute.OwnerElement;
+
+			var document = node as XmlDocument;
+			if (document != null)
+				return document.DocumentElement;
+
+			return null;
 		}
 
 		public bool PositionEquals(IXmlNode node)

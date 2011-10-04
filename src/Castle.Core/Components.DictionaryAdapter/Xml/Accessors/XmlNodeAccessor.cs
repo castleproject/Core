@@ -24,12 +24,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private string localName;
 		private string namespaceUri;
 		private XmlKnownTypeSet knownTypes;
-		private States state;
 
-		protected XmlNodeAccessor(Type type, IXmlAccessorContext context)
+		protected XmlNodeAccessor(Type type, IXmlContext context)
 			: this(context.GetDefaultXsiType(type).LocalName, type, context) { }
 
-		protected XmlNodeAccessor(string name, Type type, IXmlAccessorContext context)
+		protected XmlNodeAccessor(string name, Type type, IXmlContext context)
 			: base(type, context)
 		{
 			if (name == null)
@@ -51,24 +50,28 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return XmlName.Empty; }
 		}
 
-		IXmlKnownType IXmlKnownTypeMap.Default
-		{
-			get { return this; }
-		}
-
 		protected IXmlKnownTypeMap KnownTypes
 		{
 			get { return (IXmlKnownTypeMap) knownTypes ?? this; }
 		}
 
-		public override bool IsNillable
+		IXmlKnownType IXmlKnownTypeMap.Default
 		{
-			get { return 0 != (state & States.Nillable); }
+			get { return this; }
 		}
 
-		public override bool IsVolatile
+		public bool TryGet(IXmlIdentity xmlName, out IXmlKnownType knownType)
 		{
-			get { return 0 != (state & States.Volatile); }
+			return IsMatch(xmlName)
+					? Try.Success(out knownType, this)
+					: Try.Failure(out knownType);
+		}
+
+		public bool TryGet(Type clrType, out IXmlKnownType knownType)
+		{
+			return IsMatch(clrType)
+					? Try.Success(out knownType, this)
+					: Try.Failure(out knownType);
 		}
 
 		protected virtual bool IsMatch(IXmlIdentity xmlIdentity)
@@ -106,20 +109,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				 && typeof(IEnumerable).IsAssignableFrom(clrType));
 		}
 
-		public bool TryGet(IXmlIdentity xmlName, out IXmlKnownType knownType)
-		{
-			return IsMatch(xmlName)
-					? Try.Success(out knownType, this)
-					: Try.Failure(out knownType);
-		}
-
-		public bool TryGet(Type clrType, out IXmlKnownType knownType)
-		{
-			return IsMatch(clrType)
-					? Try.Success(out knownType, this)
-					: Try.Failure(out knownType);
-		}
-
 		protected void ConfigureLocalName(string localName)
 		{
 			ConfigureField(ref this.localName, localName, States.ConfiguredLocalName);
@@ -128,18 +117,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		protected void ConfigureNamespaceUri(string namespaceUri)
 		{
 			ConfigureField(ref this.namespaceUri, namespaceUri, States.ConfiguredNamespaceUri);
-		}
-
-		public override void ConfigureNillable(bool nillable)
-		{
-			if (nillable)
-				state |= States.Nillable;
-		}
-
-		public override void ConfigureVolatile(bool isVolatile)
-		{
-			if (isVolatile)
-				state |= States.Volatile;
 		}
 
 		private void ConfigureField(ref string field, string value, States mask)
@@ -211,7 +188,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				knownTypes = new XmlKnownTypeSet(ClrType);
 				AddSelfAsKnownType();
 			}
-
 			knownTypes.Add(new XmlKnownType(name, xsiType, clrType), overwrite);
 		}
 
@@ -230,16 +206,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				knownTypes.Add(new XmlKnownType(Name, XsiType,       ClrType), true);
 				knownTypes.Add(new XmlKnownType(Name, XmlName.Empty, ClrType), true);
 			}
-		}
-
-		[Flags]
-		private enum States
-		{
-			ConfiguredLocalName    = 0x01, // The local name    has been configured
-			ConfiguredNamespaceUri = 0x02, // The namespace URI has been configured
-			ConfiguredKnownTypes   = 0x04, // Known types have been configured from attributes
-			Nillable               = 0x08, // Set a null value as xsi:nil='true'
-			Volatile               = 0x10, // Always get value from XML store; don't cache it
 		}
 
 		protected static readonly StringComparer

@@ -191,7 +191,8 @@
     <Compile Include="Components.DictionaryAdapter\Util\IBindingList.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ICondition.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\PriorityBehaviorExtensions.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Accessors\IXmlAccessorContext.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\XmlContextBase.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\XmlApis\IXmlContext.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlSelfAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Collections\IXmlCollection.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Collections\XmlNodeSet.cs" />

@@ -25,12 +25,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private XmlAccessor itemAccessor;
 		private XmlIncludedTypeSet includedTypes;
 	    private CompiledXPath path;
-		private States state;
 
 		internal static readonly XmlAccessorFactory<XmlXPathBehaviorAccessor>
 			Factory = (name, type, context) => new XmlXPathBehaviorAccessor(type, context);
 
-	    protected XmlXPathBehaviorAccessor(Type type, IXmlAccessorContext context)
+	    protected XmlXPathBehaviorAccessor(Type type, IXmlContext context)
 	        : base(type, context)
 		{
 			includedTypes = new XmlIncludedTypeSet();
@@ -44,11 +43,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	        get { return path; }
 	    }
 
-		public XmlContext XPathContext
-		{
-			get { return Context.XmlContext; }
-		}
-
 		public bool SelectsNodes
 		{
 			get { return path.Path.ReturnType == XPathResultType.NodeSet; }
@@ -57,28 +51,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IXmlIncludedType IXmlIncludedTypeMap.Default
 		{
 			get { return this; }
-		}
-
-		public override bool IsNillable
-		{
-			get { return 0 != (state & States.Nillable); }
-		}
-
-		public override bool IsVolatile
-		{
-			get { return 0 != (state & States.Volatile); }
-		}
-
-		public override void ConfigureNillable(bool nillable)
-		{
-			if (nillable)
-				state |= States.Nillable;
-		}
-
-		public override void ConfigureVolatile(bool isVolatile)
-		{
-			if (isVolatile)
-				state |= States.Volatile;
 		}
 
 		public void Configure(XPathAttribute attribute)
@@ -95,7 +67,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override void Prepare()
 		{
-			path.SetContext(Context.XmlContext.WithXPathSemantics);
+			Context.Enlist(path);
 		}
 
 		public override object GetPropertyValue(IXmlNode node, IDictionaryAdapter da, bool ifExists)
@@ -168,24 +140,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{
 				path          = parent.path;
 				includedTypes = parent.includedTypes;
-			}
 
-			public override bool IsNillable
-			{
-				get { return true; }
+				ConfigureNillable(true);
 			}
 
 			public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
 			{
 				return GetDefaultCollectionAccessor(itemType);
 			}
-		}
-
-		[Flags]
-		private enum States
-		{
-			Nillable = 0x01,
-			Volatile = 0x02
 		}
 	}
 }

@@ -945,7 +945,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[XmlRoot("Season", Namespace = "RISE"),
-		 XmlNamespace("RISE", "rise", Default = true)]
+		 XmlNamespace("RISE", "rise", Default = true),
+		 XmlNamespace("Common", "c", Root = true)]
 		public interface ISeason : IDictionaryAdapter
 		{
 			[RemoveIf("")]

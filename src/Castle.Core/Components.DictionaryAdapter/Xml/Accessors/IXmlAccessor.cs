@@ -20,7 +20,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		Type ClrType { get; }
 		XmlTypeSerializer Serializer { get; }
-		IXmlAccessorContext Context { get; }
+		IXmlContext Context { get; }
 		bool IsNillable { get; }
 
 		object GetCursorValue(IXmlCursor cursor, IDictionaryAdapter parentObject, bool orStub);

@@ -297,7 +297,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			where TAccessor : XmlAccessor
 		{
 			var xmlMeta = GetXmlMetadata(property.Property.DeclaringType);
-			var accessor = factory(key, property.PropertyType, xmlMeta);
+			var accessor = factory(key, property.PropertyType, xmlMeta.Context);
 			if (xmlMeta.IsNullable.HasValue)
 				accessor.ConfigureNillable(xmlMeta.IsNullable.Value);
 			return accessor;

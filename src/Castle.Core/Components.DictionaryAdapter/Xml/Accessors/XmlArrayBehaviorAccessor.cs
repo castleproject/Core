@@ -27,7 +27,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		internal static readonly XmlAccessorFactory<XmlArrayBehaviorAccessor>
 			Factory = (name, type, context) => new XmlArrayBehaviorAccessor(name, type, context);
 
-		public XmlArrayBehaviorAccessor(string name, Type type, IXmlAccessorContext context)
+		public XmlArrayBehaviorAccessor(string name, Type type, IXmlContext context)
 			: base(name, type, context)
 		{
 			if (Serializer.Kind != XmlTypeKind.Collection)
@@ -61,7 +61,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override IXmlCursor SelectPropertyNode(IXmlNode node, bool mutable)
 		{
-			return node.SelectChildren(this, Context.XmlContext, PropertyFlags.MutableIf(mutable));
+			return node.SelectChildren(this, Context, PropertyFlags.MutableIf(mutable));
 		}
 
 		private class ItemAccessor : XmlNodeAccessor,
@@ -104,7 +104,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			public override IXmlCursor SelectCollectionItems(IXmlNode node, bool mutable)
 			{
-				return node.SelectChildren(KnownTypes, Context.XmlContext, CollectionItemFlags.MutableIf(mutable));
+				return node.SelectChildren(KnownTypes, Context, CollectionItemFlags.MutableIf(mutable));
 			}
 
 			public string GetLocalName(XmlArrayItemAttribute attribute)

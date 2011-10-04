@@ -17,6 +17,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 
 	public delegate TAccessor
-		XmlAccessorFactory<TAccessor>(string name, Type type, IXmlAccessorContext context)
+		XmlAccessorFactory<TAccessor>(string name, Type type, IXmlContext context)
 		where TAccessor : XmlAccessor;
 }

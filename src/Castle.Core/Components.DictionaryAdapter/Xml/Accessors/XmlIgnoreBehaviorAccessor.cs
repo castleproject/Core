@@ -51,55 +51,45 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			throw Error.NotSupported();
 		}
 
-		private sealed class DummyContext : IXmlAccessorContext
+		private sealed class DummyContext : IXmlContext
 		{
 			public static DummyContext Instance = new DummyContext();
 
 			private DummyContext() { }
 
-			public XmlName XsiType
-			{
-				get { return new XmlName("anyType", Xsd.NamespaceUri); }
-			}
-
-			public Type ClrType
-			{
-				get { return typeof(object); }
-			}
-
 			public string ChildNamespaceUri
 			{
-				get { return null; }
+			    get { return null; }
 			}
 
-			public XmlContext XmlContext
+			public IXmlContext Clone()
 			{
-				get { return null; }
-			}
-
-			public IXmlIncludedType Default
-			{
-				get { return this; }
+				return this;
 			}
 
 			public XmlName GetDefaultXsiType(Type clrType)
 			{
-				return XsiType;
+				return new XmlName("anyType", Xsd.NamespaceUri);
 			}
 
 			public IEnumerable<IXmlIncludedType> GetIncludedTypes(Type baseType)
 			{
-				return Enumerable.Empty<IXmlIncludedType>();
+				throw Error.NotSupported();
+			}
+#if !SL3
+			public void Enlist(CompiledXPath path)
+			{
+				throw Error.NotSupported();
+			}
+#endif
+			public string GetElementPrefix(IXmlNode node, string namespaceUri)
+			{
+				throw Error.NotSupported();
 			}
 
-			public bool TryGet(XmlName xsiType, out IXmlIncludedType includedType)
+			public string GetAttributePrefix(IXmlNode node, string namespaceUri)
 			{
-				return Try.Failure(out includedType);
-			}
-
-			public bool TryGet(Type clrType, out IXmlIncludedType includedType)
-			{
-				return Try.Failure(out includedType);
+				throw Error.NotSupported();
 			}
 		}
 	}

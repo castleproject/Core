@@ -18,46 +18,15 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public class XmlSelfAccessor : XmlAccessor
 	{
-		private States states;
-
 		internal static readonly XmlAccessorFactory<XmlSelfAccessor>
 			Factory = (name, type, context) => new XmlSelfAccessor(type, context);
 
-		public XmlSelfAccessor(Type clrType, IXmlAccessorContext context)
+		public XmlSelfAccessor(Type clrType, IXmlContext context)
 			: base(clrType, context) { }
-
-		public override bool IsNillable
-		{
-			get { return 0 != (states & States.Nillable); }
-		}
-
-		public override bool IsVolatile
-		{
-			get { return 0 != (states & States.Volatile); }
-		}
-
-		public override void ConfigureNillable(bool isNillable)
-		{
-			if (isNillable)
-				states |= States.Nillable;
-		}
-
-		public override void ConfigureVolatile(bool isVolatile)
-		{
-			if (isVolatile)
-				states |= States.Volatile;
-		}
 
 		public override IXmlCursor SelectPropertyNode(IXmlNode parentNode, bool mutable)
 		{
 			return parentNode.SelectSelf(ClrType);
-		}
-
-		[Flags]
-		private enum States
-		{
-			Nillable,
-			Volatile
 		}
 	}
 }

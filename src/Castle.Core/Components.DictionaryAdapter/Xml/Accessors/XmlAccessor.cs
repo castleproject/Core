@@ -22,9 +22,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private readonly Type clrType;
 		private readonly XmlName xsiType;
 		private readonly XmlTypeSerializer serializer;
-		private readonly IXmlAccessorContext context;
+		private IXmlContext context;
+		protected States state;
 
-		protected XmlAccessor(Type clrType, IXmlAccessorContext context)
+		protected XmlAccessor(Type clrType, IXmlContext context)
 		{
 			if (clrType == null)
 				throw Error.ArgumentNull("clrType");
@@ -48,14 +49,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return xsiType; }
 		}
 
-		public IXmlAccessorContext Context
-		{
-			get { return context; }
-		}
-
 		public XmlTypeSerializer Serializer
 		{
 			get { return serializer; }
+		}
+
+		public IXmlContext Context
+		{
+			get { return context; }
 		}
 
 		public bool IsCollection
@@ -68,29 +69,41 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return false; }
 		}
 
-		public virtual bool IsNillable
+		public bool IsNillable
 		{
-			get { return false; }
+			get { return 0 != (state & States.Nillable); }
 		}
 
-		public virtual bool IsVolatile
+		public bool IsVolatile
 		{
-			get { return false; }
+			get { return 0 != (state & States.Volatile); }
 		}
 
-		public virtual void ConfigureNillable(bool isNillable)
+		public void ConfigureNillable(bool nillable)
 		{
-			// Do nothing
+			if (nillable)
+				state |= States.Nillable;
 		}
 
-		public virtual void ConfigureVolatile(bool isVolatile)
+		public void ConfigureVolatile(bool isVolatile)
 		{
-			// Do nothing
+			if (isVolatile)
+				state |= States.Volatile;
 		}
 
 		public virtual void Prepare()
 		{
 			// Do nothing
+		}
+
+		protected IXmlContext CloneContext()
+		{
+			if (0 == (state & States.ConfiguredContext))
+			{
+				context = context.Clone();
+				state |= States.ConfiguredContext;
+			}
+			return context;
 		}
 
 		public virtual bool IsPropertyDefined(IXmlNode parentNode)
@@ -225,6 +238,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public virtual IXmlCursor SelectCollectionItems(IXmlNode parentNode, bool mutable)
 		{
 			throw Error.NotSupported();
+		}
+
+		[Flags]
+		protected enum States
+		{
+			Nillable               = 0x01, // Set a null value as xsi:nil='true'
+			Volatile               = 0x02, // Always get value from XML store; don't cache it
+			ConfiguredContext      = 0x04, // Have created our own IXmlContext instance
+			ConfiguredLocalName    = 0x10, // The local name    has been configured
+			ConfiguredNamespaceUri = 0x20, // The namespace URI has been configured
+			ConfiguredKnownTypes   = 0x40, // Known types have been configured from attributes
 		}
 	}
 }
