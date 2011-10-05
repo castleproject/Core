@@ -200,7 +200,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			while (cursor.MoveNext())
 			{
-				var value = serializer.GetValue(cursor.Save(), parentObject, this); // TODO: Do Save() in serializer, only when needed
+				var value = serializer.GetValue(cursor, parentObject, this);
 				values.Add(value);
 			}
 		}

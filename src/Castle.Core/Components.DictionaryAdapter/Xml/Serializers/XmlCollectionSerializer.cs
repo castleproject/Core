@@ -38,10 +38,15 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override object GetStub(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-			return GetValue(node, parent, accessor);
+			return GetValueCore(node, parent, accessor);
 		}
 
 		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
+		{
+			return GetValueCore(node.Save(), parent, accessor);
+		}
+
+		private object GetValueCore(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
 			var itemType    = node.ClrType.GetGenericArguments()[0];
 			var listType    = ListTypeConstructor.MakeGenericType(itemType);
