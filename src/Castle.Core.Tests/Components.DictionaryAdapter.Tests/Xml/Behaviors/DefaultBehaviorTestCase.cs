@@ -208,5 +208,42 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
                 Assert.That(xml, XmlEquivalent.To("<Foo> <A> <int>1</int> <int>2</int> </A> </Foo>"));
             }
 		}
+
+        [TestFixture]
+        public class XmlSerializableProperty : XmlAdapterTestCase
+        {
+            public interface IFoo : IDictionaryAdapter
+            {
+                FakeStandardXmlSerializable X { get; set; }
+            }
+
+            [Test]
+            public void GetProperty_DefaultBehavior_XmlSerializable_Element()
+            {
+                var foo = Create<IFoo>("<Foo> <X> <Text>hello</Text> </X> </Foo>");
+
+                Assert.That(foo.X,      Is.Not.Null);
+                Assert.That(foo.X.Text, Is.EqualTo("hello"));
+            }
+
+            [Test]
+            public void GetProperty_DefaultBehavior_XmlSerializable_Attribute()
+            {
+                var foo = Create<IFoo>("<Foo X='hello'/>");
+
+                Assert.That(foo.X, Is.Null);
+            }
+
+            [Test]
+            public void SetProperty_DefaultBehavior_XmlSerializable()
+            {
+                var xml = Xml("<Foo/>");
+                var foo = Create<IFoo>(xml);
+
+                foo.X = new FakeStandardXmlSerializable { Text = "hello" };
+
+                Assert.That(xml, XmlEquivalent.To("<Foo> <X> <Text>hello</Text> </X> </Foo>"));
+            }
+        }
 	}
 }
