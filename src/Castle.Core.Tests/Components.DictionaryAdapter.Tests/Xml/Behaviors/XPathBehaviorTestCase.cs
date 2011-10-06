@@ -24,42 +24,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 	public class XPathBehaviorTestCase
 	{
-		public abstract class WithVariableOrFunction : XmlAdapterTestCase
-		{
-			protected void TestGet<T>(Func<T, string> getter)
-			{
-				var xml = Xml
-				(
-					"<Foo>",
-						"<A B='other'>wrong A</A>",
-						"<A B='value'>correct</A>",
-						"<A B='other'>wrong B</A>",
-					"</Foo>"
-				);
-				var obj = Create<T>(xml);
-
-				var value = getter(obj);
-
-				Assert.That(value, Is.EqualTo("correct"));
-			}
-
-			protected void TestSet<T>(Action<T, string> setter)
-			{
-				var xml = Xml("<Foo/>");
-				var obj = Create<T>(xml);
-
-				setter(obj, "correct");
-
-				Assert.That(xml, XmlEquivalent.To
-				(
-					"<Foo>",
-						"<A B='value'>correct</A>",
-					"</Foo>"
-				));
-			}
-		}
-
-
 		[TestFixture]
 		public class WithVariable_DefinedOnType : WithVariableOrFunction
 		{
@@ -186,6 +150,41 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				Assert.That(args,    Is.Not.Null & Has.Length.EqualTo(1));
 				Assert.That(args[0], Is.EqualTo("a"));
 				return "value";
+			}
+		}
+
+		public abstract class WithVariableOrFunction : XmlAdapterTestCase
+		{
+			protected void TestGet<T>(Func<T, string> getter)
+			{
+				var xml = Xml
+				(
+					"<Foo>",
+						"<A B='other'>wrong A</A>",
+						"<A B='value'>correct</A>",
+						"<A B='other'>wrong B</A>",
+					"</Foo>"
+				);
+				var obj = Create<T>(xml);
+
+				var value = getter(obj);
+
+				Assert.That(value, Is.EqualTo("correct"));
+			}
+
+			protected void TestSet<T>(Action<T, string> setter)
+			{
+				var xml = Xml("<Foo/>");
+				var obj = Create<T>(xml);
+
+				setter(obj, "correct");
+
+				Assert.That(xml, XmlEquivalent.To
+				(
+					"<Foo>",
+						"<A B='value'>correct</A>",
+					"</Foo>"
+				));
 			}
 		}
 	}

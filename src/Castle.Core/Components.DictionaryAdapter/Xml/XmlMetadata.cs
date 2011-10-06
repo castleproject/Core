@@ -47,25 +47,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			context       = new XmlContext(this);
 			includedTypes = new XmlIncludedTypeSet();
 
-			var xmlRoot       = null as XmlRootAttribute;
-			var xmlType       = null as XmlTypeAttribute;
-			var xmlDefaults   = null as XmlDefaultsAttribute;
-			var xmlNamespace  = null as XmlNamespaceAttribute;
-			var xmlInclude    = null as XmlIncludeAttribute;
-			var xPathVariable = null as XPathVariableAttribute;
-			var xPathFunction = null as XPathFunctionAttribute;
+			var xmlRoot     = null as XmlRootAttribute;
+			var xmlType     = null as XmlTypeAttribute;
+			var xmlDefaults = null as XmlDefaultsAttribute;
 #if !SL3
-			var xPath        = null as XPathAttribute;
+			var xPath       = null as XPathAttribute;
 #endif
 			foreach (var behavior in meta.Behaviors)
 			{
 				if      (TryCast(behavior, ref xmlDefaults  )) { }
 				else if (TryCast(behavior, ref xmlRoot      )) { }
 				else if (TryCast(behavior, ref xmlType      )) { }
-				else if (TryCast(behavior, ref xmlNamespace )) { context.AddNamespace(xmlNamespace ); }
-				else if (TryCast(behavior, ref xPathVariable)) { context.AddVariable (xPathVariable); }
-				else if (TryCast(behavior, ref xPathFunction)) { context.AddFunction (xPathFunction); }
-				else if (TryCast(behavior, ref xmlInclude   )) { AddXmlInclude(xmlInclude); }
 #if !SL3
 				else if (TryCast(behavior, ref xPath       )) { }
 #endif
@@ -76,13 +68,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				qualified  = xmlDefaults.Qualified;
 				isNullable = xmlDefaults.IsNullable;
 			}
-#if !SL3
-			if (xPath != null)
-			{
-				path = xPath.Path;
-				path.SetContext(context);
-			}
-#endif
+
 			typeLocalName = XmlConvert.EncodeLocalName
 			(
 				(!meta.HasXmlType() ? null : meta.GetXmlType().NonEmpty()) ??
@@ -111,6 +97,32 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				typeNamespaceUri ??
 				rootNamespaceUri
 			);
+
+			CollectBehaviors(meta);
+
+#if !SL3
+			if (xPath != null)
+			{
+				path = xPath.Path;
+				path.SetContext(context);
+			}
+#endif
+		}
+
+		private void CollectBehaviors(DictionaryAdapterMeta meta)
+		{
+			var xmlNamespace  = null as XmlNamespaceAttribute;
+			var xmlInclude    = null as XmlIncludeAttribute;
+			var xPathVariable = null as XPathVariableAttribute;
+			var xPathFunction = null as XPathFunctionAttribute;
+
+			foreach (var behavior in meta.Behaviors)
+			{
+				if      (TryCast(behavior, ref xmlInclude   )) { AddXmlInclude(xmlInclude); }
+				else if (TryCast(behavior, ref xmlNamespace )) { context.AddNamespace(xmlNamespace ); }
+				else if (TryCast(behavior, ref xPathVariable)) { context.AddVariable (xPathVariable); }
+				else if (TryCast(behavior, ref xPathFunction)) { context.AddFunction (xPathFunction); }
+			}
 		}
 
 		public Type ClrType
