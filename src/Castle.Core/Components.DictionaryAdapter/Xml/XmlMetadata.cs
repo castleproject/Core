@@ -47,21 +47,25 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			context       = new XmlContext(this);
 			includedTypes = new XmlIncludedTypeSet();
 
-			var xmlRoot      = null as XmlRootAttribute;
-			var xmlType      = null as XmlTypeAttribute;
-			var xmlDefaults  = null as XmlDefaultsAttribute;
-			var xmlNamespace = null as XmlNamespaceAttribute;
-			var xmlInclude   = null as XmlIncludeAttribute;
+			var xmlRoot       = null as XmlRootAttribute;
+			var xmlType       = null as XmlTypeAttribute;
+			var xmlDefaults   = null as XmlDefaultsAttribute;
+			var xmlNamespace  = null as XmlNamespaceAttribute;
+			var xmlInclude    = null as XmlIncludeAttribute;
+			var xPathVariable = null as XPathVariableAttribute;
+			var xPathFunction = null as XPathFunctionAttribute;
 #if !SL3
 			var xPath        = null as XPathAttribute;
 #endif
 			foreach (var behavior in meta.Behaviors)
 			{
-				if      (TryCast(behavior, ref xmlDefaults )) { }
-				else if (TryCast(behavior, ref xmlRoot     )) { }
-				else if (TryCast(behavior, ref xmlType     )) { }
-				else if (TryCast(behavior, ref xmlNamespace)) { context.AddNamespace(xmlNamespace); }
-				else if (TryCast(behavior, ref xmlInclude  )) { AddXmlInclude(xmlInclude); }
+				if      (TryCast(behavior, ref xmlDefaults  )) { }
+				else if (TryCast(behavior, ref xmlRoot      )) { }
+				else if (TryCast(behavior, ref xmlType      )) { }
+				else if (TryCast(behavior, ref xmlNamespace )) { context.AddNamespace(xmlNamespace ); }
+				else if (TryCast(behavior, ref xPathVariable)) { context.AddVariable (xPathVariable); }
+				else if (TryCast(behavior, ref xPathFunction)) { context.AddFunction (xPathFunction); }
+				else if (TryCast(behavior, ref xmlInclude   )) { AddXmlInclude(xmlInclude); }
 #if !SL3
 				else if (TryCast(behavior, ref xPath       )) { }
 #endif

@@ -275,10 +275,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void Coerce(Type clrType)
 		{
-			IXmlIncludedType includedType;
-			if (!knownTypes.TryGet(clrType, out includedType))
-				throw Error.NotXmlKnownType(clrType);
-
+			var includedType = knownTypes.Require(clrType);
 			this.SetXsiType(includedType.XsiType);
 		}
 

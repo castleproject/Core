@@ -532,7 +532,10 @@
       <Link>CastleKey.snk</Link>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Components.DictionaryAdapter.Tests\Xml\Types\" />
+    <Folder Include="Components.DictionaryAdapter.Tests\Xml\Utilities\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition="($(MSBuildTargets) == '') Or ($(MSBuildTargets) == 'CSharp')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 4.0'" />
   <Import Project="$(RootPath)\Settings.proj" />

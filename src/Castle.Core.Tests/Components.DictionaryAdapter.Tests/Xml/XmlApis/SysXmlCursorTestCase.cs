@@ -20,6 +20,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 	using NUnit.Framework;
 	using Castle.Components.DictionaryAdapter.Tests;
 	using System.Xml.Serialization;
+	using System.Runtime.Serialization;
 
 	[TestFixture]
 	public class SysXmlCursorTestCase
@@ -425,6 +426,17 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
+		public void Create_UnknownType()
+		{
+			var xml    = Xml("<X/>");
+			var cursor = Cursor(xml, CursorFlags.Elements);
+
+			cursor.MoveNext();
+			Assert.Throws<SerializationException>(() =>
+				cursor.Create(typeof(UnknownType)));
+		}
+
+		[Test]
 		public void Coerce_WhenBeforeFirstItem()
 		{
 			var xml    = Xml("<X/>");
@@ -485,6 +497,17 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(cursor.Name.LocalName,  Is.EqualTo(OtherType.Name.LocalName));
 			Assert.That(cursor.MoveNext(), Is.False);
 			Assert.That(xml.GetNode(), XmlEquivalent.To("<X> <Other/> </X>"));
+		}
+
+		[Test]
+		public void Coerce_UnknownType()
+		{
+			var xml    = Xml("<X> <Item/> </X>");
+			var cursor = Cursor(xml, CursorFlags.Elements);
+
+			cursor.MoveNext();
+			Assert.Throws<SerializationException>(() =>
+				cursor.Coerce(typeof(UnknownType)));
 		}
 
 		[Test]
@@ -578,6 +601,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		protected static readonly XmlKnownTypeSet
 			KnownTypes = new XmlKnownTypeSet(typeof(_TypeA));
 
+		private class UnknownType { }
 		private class _TypeA          { }
 		private class _TypeB : _TypeA { }
 	}
