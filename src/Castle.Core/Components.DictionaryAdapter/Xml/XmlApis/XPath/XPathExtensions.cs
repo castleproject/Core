@@ -28,40 +28,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return source.CreateNavigator();
 		}
 
-		public static bool HasAttribute(this XPathNavigator node, string localName, string namespaceUri, string value)
-		{
-			var attributeValue = node.GetAttribute(localName, namespaceUri);
-			return attributeValue == value;
-		}
-
-		public static string GetAttributeOrNull(this XPathNavigator node, string localName, string namespaceUri)
-		{
-			if (!node.MoveToAttribute(localName, namespaceUri))
-				return null;
-			var value = node.Value;
-			node.MoveToParent();
-			return string.IsNullOrEmpty(value) ? null : value;
-		}
-
-		public static void SetAttribute(this XPathNavigator node, string localName, string namespaceUri, string value)
-		{
-			if (string.IsNullOrEmpty(value))
-			{
-				if (node.MoveToAttribute(localName, namespaceUri))
-					node.DeleteSelf();
-			}
-			else if (node.MoveToAttribute(localName, namespaceUri))
-			{
-				node.SetValue(value);
-				node.MoveToParent();
-			}
-			else
-			{
-				var prefix = node.LookupPrefix(namespaceUri);
-				node.CreateAttribute(prefix, localName, namespaceUri, value);
-			}
-		}
-
 		public static bool MoveToLastChild(this XPathNavigator navigator)
 		{
 			if (!navigator.MoveToFirstChild())
@@ -80,6 +46,23 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			while (navigator.MoveToNextAttribute()) { }
 
 			return true;
+		}
+
+		public static XPathNavigator GetRootElement(this XPathNavigator navigator)
+		{
+			navigator = navigator.Clone();
+			navigator.MoveToRoot();
+			if (!navigator.MoveToFirstChild())
+				throw Error.InvalidOperation();
+			return navigator;
+		}
+
+		public static XPathNavigator GetParent(this XPathNavigator navigator)
+		{
+			navigator = navigator.Clone();
+			if (!navigator.MoveToParent())
+				throw Error.InvalidOperation();
+			return navigator;
 		}
 
 		public static void DeleteChildren(this XPathNavigator node)

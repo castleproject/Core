@@ -19,6 +19,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public interface IXmlCursor : IXmlNode
 	{
+		new bool IsNil { get; set; }
+
 		void Reset();
 		bool MoveNext();
 		void MakeNext(Type type);
@@ -29,6 +31,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		void Coerce(Type type);
 		void Remove();
 		void RemoveAllNext();
+
+		void SetAttribute(XmlName name, string value);
+		string EnsurePrefix(string namespaceUri);
 
 		IXmlNode Save();
 	}

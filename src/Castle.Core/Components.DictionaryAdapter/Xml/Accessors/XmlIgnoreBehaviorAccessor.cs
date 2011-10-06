@@ -91,6 +91,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{
 				throw Error.NotSupported();
 			}
+
+			public void AddVariable(XPathVariableAttribute attribute)
+			{
+				throw Error.NotSupported();
+			}
+
+			public void AddFunction(XPathFunctionAttribute attribute)
+			{
+				throw Error.NotSupported();
+			}
 		}
 	}
 }

@@ -51,7 +51,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public virtual XmlName XsiType
 		{
-			get { return IsElement ? node.GetXsiType() : XmlName.Empty; }
+			get { return this.GetXsiType(); }
 		}
 
 		public virtual Type ClrType
@@ -76,8 +76,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public virtual bool IsNil
 		{
-			get { return IsElement && node.IsXsiNil(); }
-			set { RequireElement(); node.SetXsiNil(value); }
+			get { return this.IsXsiNil(); }
 		}
 
 		public virtual string Value
@@ -89,6 +88,23 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public virtual string Xml
 		{
 			get { return node.OuterXml; }
+		}
+
+		public string GetAttribute(XmlName name)
+		{
+			var element = node as XmlElement;
+			if (element == null)
+				return null;
+
+			var attribute = element.GetAttributeNode(name.LocalName, name.NamespaceUri);
+			if (attribute == null)
+				return null;
+
+			var value = attribute.Value;
+			if (string.IsNullOrEmpty(value))
+				return null;
+
+			return value;
 		}
 
 		public string LookupPrefix(string namespaceUri)
@@ -108,7 +124,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				throw Error.InvalidOperation();
 
 			if (root)
-				target = target.FindRoot();
+				target = target.FindRoot();	
 
 			target.DefineNamespace(prefix, namespaceUri);
 		}
@@ -170,10 +186,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return node.CreateNavigator().AppendChild();
 		}
 
-		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
+		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap includedTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
 		{
 			return flags.SupportsMutation()
-				? (IXmlCursor) new XPathMutableCursor (this, path, includedTypes, flags)
+				? (IXmlCursor) new XPathMutableCursor (this, path, includedTypes, namespaces, flags)
 				: (IXmlCursor) new XPathReadOnlyCursor(this, path, includedTypes, flags);
 		}
 
@@ -219,12 +235,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				if (!attribute.IsNamespace() && !attribute.IsXsiType())
 					attributes.RemoveAt(count);
 			}
-		}
-
-		private void RequireElement()
-		{
-			if (!IsElement)
-				throw Error.CannotSetXsiNilOnAttribute(this);
 		}
 
 		public bool HasValue

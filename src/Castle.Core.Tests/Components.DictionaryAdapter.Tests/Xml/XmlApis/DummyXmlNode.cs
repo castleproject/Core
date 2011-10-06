@@ -68,6 +68,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			get { throw new NotImplementedException(); }
 		}
 
+		public string GetAttribute(XmlName name)
+		{
+			throw new NotImplementedException();
+		}
+
 		public string LookupPrefix(string namespaceUri)
 		{
 			throw new NotImplementedException();
@@ -98,7 +103,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			throw new NotImplementedException();
 		}
 
-		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
+		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap includedTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
 		{
 			throw new NotImplementedException();
 		}

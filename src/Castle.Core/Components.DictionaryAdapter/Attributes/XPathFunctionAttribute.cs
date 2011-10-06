@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,43 +13,28 @@
 // limitations under the License.
 
 #if !SL3
-namespace Castle.Components.DictionaryAdapter
+namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
+	using System.Xml.XPath;
 	using System.Xml.Xsl;
 
 	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = true)]
-	public class XPathFunctionAttribute : Attribute
+	public abstract class XPathFunctionAttribute : Attribute, IXsltContextFunction
 	{
-		protected XPathFunctionAttribute(string name)
-		{
-			if (string.IsNullOrEmpty(name))
-			{
-				throw new ArgumentException("Name cannot be empty", "name");
-			}
-			Name = name;
-		}
+		protected XPathFunctionAttribute() { }
 
-		public XPathFunctionAttribute(string name, Type functionType) : this(name)
-		{
-			if (typeof(IXsltContextFunction).IsAssignableFrom(functionType) == false)
-			{
-				throw new ArgumentException("The functionType does not implement IXsltContextFunction");
-			}
+		public abstract XmlName Name { get; }
+		public abstract XPathResultType ReturnType { get; }
 
-			var defaultCtor = functionType.GetConstructor(Type.EmptyTypes);
-			if (defaultCtor == null)
-			{
-				throw new ArgumentException("The functionType does not have a parameterless constructor");
-			}
-			Function = (IXsltContextFunction)Activator.CreateInstance(functionType);
-		}
+		public virtual XPathResultType[] ArgTypes { get { return NoArgs; } }
+		public virtual int Maxargs { get { return ArgTypes.Length; } }
+		public virtual int Minargs { get { return ArgTypes.Length; } }
 
-		public string Name { get; private set; }
+		public static readonly XPathResultType[]
+			NoArgs = new XPathResultType[0];
 
-		public IXsltContextFunction Function { get; protected set; }
-
-		public string Prefix { get; set; }
+		public abstract object Invoke(XsltContext context, object[] args, XPathNavigator node);
 	}
 }
 #endif

@@ -121,23 +121,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new InvalidOperationException(message);
 		}
 
-		internal static Exception CannotSetXsiNilOnAttribute(IXmlIdentity identity)
+		internal static Exception CannotSetAttribute(IXmlIdentity identity)
 		{
 			var message = string.Format
 			(
-				"Cannot set attribute '{0}' to nil.",
+				"Cannot set attribute on node '{0}'.",
 				identity.Name.ToString()
-			);
-			return new InvalidOperationException(message);
-		}
-
-		internal static Exception CannotSetXsiTypeOnAttribute(IXmlIdentity identity)
-		{
-			var message = string.Format
-			(
-				"Cannot set type '{1}' for XML attribute '{0}'.",
-				identity.Name.ToString(),
-				identity.XsiType.ToString()
 			);
 			return new InvalidOperationException(message);
 		}

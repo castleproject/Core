@@ -46,6 +46,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				throw Error.ArgumentNull("parent");
 			if (null == knownTypes)
 				throw Error.ArgumentNull("knownTypes");
+			if (null == namespaces)
+				throw Error.ArgumentNull("namespaces");
 
 			this.parent     = parent;
 			this.knownTypes = knownTypes;
@@ -100,7 +102,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override bool IsNil
 		{
 			get { return HasCurrent ? base.IsNil : true; }
-			set { Realize(); SetXsiNil(node, value); }
+		}
+
+		bool IXmlCursor.IsNil
+		{
+			get { return IsNil; }
+			set { Realize(); this.SetXsiNil(value); }
 		}
 
 		public override string Value
@@ -112,6 +119,33 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override string Xml
 		{
 			get { return HasCurrent ? base.Xml : null; }
+		}
+
+		public void SetAttribute(XmlName name, string value)
+		{
+			var element = node as XmlElement;
+			if (element == null)
+				throw Error.CannotSetAttribute(this);
+
+			if (string.IsNullOrEmpty(value))
+			{
+				element.RemoveAttribute(name.LocalName, name.NamespaceUri);
+				return;
+			}
+
+			var attribute = element.GetAttributeNode(name.LocalName, name.NamespaceUri);
+			if (attribute == null)
+			{
+				var prefix = namespaces.GetAttributePrefix(this, name.NamespaceUri);
+				attribute = element.OwnerDocument.CreateAttribute(prefix, name.LocalName, name.NamespaceUri);
+				element.SetAttributeNode(attribute);
+			}
+			attribute.Value = value;
+		}
+
+		public string EnsurePrefix(string namespaceUri)
+		{
+			return namespaces.GetAttributePrefix(this, namespaceUri);
 		}
 
 		public bool MoveNext()
@@ -384,9 +418,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				parent.ReplaceChild(newNode, oldNode);
 
 				if (knownType.XsiType != XmlName.Empty)
-					SetXsiType(newNode, knownType.XsiType);
+					this.SetXsiType(knownType.XsiType);
 			}
-			else SetXsiType(node, knownType.XsiType);
+			else this.SetXsiType(knownType.XsiType);
 		}
 
 		private void CoerceAttribute(IXmlKnownType knownType)
@@ -429,25 +463,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			state = State.Element;
 
 			if (knownType.XsiType != XmlName.Empty)
-				SetXsiType(element, knownType.XsiType);
-		}
-
-		private void SetXsiType(XmlNode node, XmlName xsiType)
-		{
-			if (xsiType != XmlName.Empty)
-				namespaces.GetAttributePrefix(this, Xsi.NamespaceUri);
-			if (xsiType.NamespaceUri != null)
-				namespaces.GetAttributePrefix(this, xsiType.NamespaceUri);
-
-			node.SetXsiType(xsiType);
-		}
-
-		private void SetXsiNil(XmlNode node, bool value)
-		{
-			if (value)
-				namespaces.GetAttributePrefix(this, Xsi.NamespaceUri);
-
-			node.SetXsiNil(value);
+				this.SetXsiType(knownType.XsiType);
 		}
 
 		private void CreateAttribute(IXmlKnownType knownType, XmlNode position)
@@ -482,7 +498,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void RequireNoXsiType(IXmlKnownType knownType)
 		{
 			if (knownType.XsiType != XmlName.Empty)
-				throw Error.CannotSetXsiTypeOnAttribute(knownType);
+				throw Error.CannotSetAttribute(this);
 		}
 
 		private static string GetEffectiveNamespaceUri(XmlNode parent, IXmlIdentity knownType)

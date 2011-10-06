@@ -20,6 +20,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public class XmlXPathBehaviorAccessor : XmlAccessor, IXmlIncludedType, IXmlIncludedTypeMap,
 		IConfigurable<XPathAttribute>,
+		IConfigurable<XPathVariableAttribute>,
 		IConfigurable<XPathFunctionAttribute>
 	{
 		private XmlAccessor itemAccessor;
@@ -48,6 +49,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return path.Path.ReturnType == XPathResultType.NodeSet; }
 		}
 
+		XmlName IXmlIncludedType.XsiType
+		{
+			get { return XmlName.Empty; }
+		}
+
 		IXmlIncludedType IXmlIncludedTypeMap.Default
 		{
 			get { return this; }
@@ -61,8 +67,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			path = attribute.Path;
 		}
 
+		public void Configure(XPathVariableAttribute attribute)
+		{
+			CloneContext().AddVariable(attribute);
+		}
+
 		public void Configure(XPathFunctionAttribute attribute)
 		{
+			CloneContext().AddFunction(attribute);
 		}
 
 		public override void Prepare()
@@ -99,7 +111,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override IXmlCursor SelectPropertyNode(IXmlNode node, bool create)
 		{
 			var flags = CursorFlags.AllNodes.MutableIf(create);
-			return node.Select(path, this, flags);
+			return node.Select(path, this, Context, flags);
 		}
 
 		public override IXmlCursor SelectCollectionNode(IXmlNode node, bool create)
@@ -109,7 +121,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override IXmlCursor SelectCollectionItems(IXmlNode node, bool create)
 		{
-			return node.Select(path, this, CursorFlags.AllNodes.MutableIf(create) | CursorFlags.Multiple);
+			return node.Select(path, this, Context, CursorFlags.AllNodes.MutableIf(create) | CursorFlags.Multiple);
 		}
 
 		public bool TryGet(XmlName xsiType, out IXmlIncludedType includedType)

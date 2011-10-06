@@ -57,7 +57,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public virtual XmlName XsiType
 		{
-			get { return IsElement ? node.GetXsiType() : XmlName.Empty; }
+			get { return this.GetXsiType(); }
 		}
 
 		public virtual bool IsElement
@@ -77,8 +77,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public virtual bool IsNil
 		{
-			get { return IsElement && node.IsXsiNil(); }
-			set { RequireElement(); node.SetXsiNil(value); }
+			get { return this.IsXsiNil(); }
+//			set { RequireElement(); node.SetXsiNil(value); }
 		}
 
 		public virtual string Value
@@ -90,6 +90,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public virtual string Xml
 		{
 			get { return node.OuterXml; }
+		}
+
+		public string GetAttribute(XmlName name)
+		{
+			if (!node.MoveToAttribute(name.LocalName, name.NamespaceUri))
+				return null;
+
+			var value = node.Value;
+			node.MoveToParent();
+			return string.IsNullOrEmpty(value) ? null : value;
 		}
 
 		public string LookupPrefix(string namespaceUri)
@@ -104,14 +114,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void DefineNamespace(string prefix, string namespaceUri, bool root)
 		{
-			if (root)
-			{
-				node = node.Clone();
-				node.MoveToRoot();
-				node.MoveToFirstChild();
-			}
+			var target
+				= root        ? node.GetRootElement()
+				: IsElement   ? node
+				: IsAttribute ? node.GetParent()
+				: node.GetRootElement();
 
-			node.CreateAttribute(Xmlns.Prefix, prefix, Xmlns.NamespaceUri, namespaceUri);
+			target.CreateAttribute(Xmlns.Prefix, prefix, Xmlns.NamespaceUri, namespaceUri);
 		}
 
 		public bool PositionEquals(IXmlNode node)
@@ -145,10 +154,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 #endif
 		}
 
-		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
+		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap includedTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
 		{
 			return flags.SupportsMutation()
-				? (IXmlCursor) new XPathMutableCursor (this, path, includedTypes, flags)
+				? (IXmlCursor) new XPathMutableCursor (this, path, includedTypes, namespaces, flags)
 				: (IXmlCursor) new XPathReadOnlyCursor(this, path, includedTypes, flags);
 		}
 
@@ -180,12 +189,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public virtual void Clear()
 		{
 			node.DeleteChildren();
-		}
-
-		private void RequireElement()
-		{
-			if (!IsElement)
-				throw Error.CannotSetXsiNilOnAttribute(this);
 		}
 
 		bool ILazy<XPathNavigator>.HasValue

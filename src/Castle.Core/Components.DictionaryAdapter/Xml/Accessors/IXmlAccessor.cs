@@ -23,10 +23,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IXmlContext Context { get; }
 		bool IsNillable { get; }
 
-		object GetCursorValue(IXmlCursor cursor, IDictionaryAdapter parentObject, bool orStub);
-		object GetNodeValue  (IXmlNode   node,   IDictionaryAdapter parentObject, bool orStub);
-		void   SetCursorValue(IXmlCursor cursor, IDictionaryAdapter parentObject, ref object value);
-		void   SetNodeValue  (IXmlNode   node,   IDictionaryAdapter parentObject, ref object value);
+		object GetValue(IXmlNode   node,   IDictionaryAdapter parentObject, bool nodeExists, bool orStub);
+		void   SetValue(IXmlCursor cursor, IDictionaryAdapter parentObject, bool hasCurrent, ref object value);
 
 		IXmlCollectionAccessor GetCollectionAccessor(Type itemType);
 	}

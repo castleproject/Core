@@ -25,44 +25,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public static class SysXmlExtensions
 	{
-		public static string GetAttribute(this XmlNode node, string localName, string namespaceUri)
-		{
-			var attribute = node.Attributes[localName, namespaceUri];
-			if (attribute == null)
-				return null;
-
-			var value = attribute.Value;
-			if (string.IsNullOrEmpty(value))
-				return null;
-
-			return value;
-		}
-
-		public static void SetAttribute(this XmlNode node, string localName, string namespaceUri, string value)
-		{
-			if (string.IsNullOrEmpty(value))
-			{
-				node.Attributes.RemoveNamedItem(localName, namespaceUri);
-			}
-			else
-			{
-				var attribute = node.Attributes[localName, namespaceUri];
-				if (attribute == null)
-				{
-					attribute = node.OwnerDocument.CreateAttribute(null, localName, namespaceUri);
-					node.Attributes.Append(attribute);
-				}
-				attribute.Value = value;
-			}
-		}
-
-		public static bool HasAttribute(this XmlNode node, string localName, string namespaceUri, string value)
-		{
-			var attribute = node.Attributes[localName, namespaceUri];
-			return attribute != null
-				&& attribute.Value == value;
-		}
-
 		public static void DefineNamespace(this XmlElement node, string prefix, string namespaceUri)
 		{
 			var attribute = node.OwnerDocument.CreateAttribute(Xmlns.Prefix, prefix, Xmlns.NamespaceUri);
@@ -87,6 +49,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				if (next == null) return node;
 				node = next;
 			}
+		}
+
+		public static bool IsXsiType(this XmlAttribute attribute)
+		{
+		    return attribute.LocalName    == Xsi.TypeLocalName
+		        && attribute.NamespaceURI == Xsi.NamespaceUri;
 		}
 	}
 }

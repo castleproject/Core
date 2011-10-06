@@ -267,6 +267,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				TryApplyBehavior<XPathAttribute, XmlXPathBehaviorAccessor>
 					(key, property, behavior, ref accessor, XmlXPathBehaviorAccessor.Factory)
 				||
+				TryApplyBehavior<XPathVariableAttribute, XmlXPathBehaviorAccessor>
+					(key, property, behavior, ref accessor, XmlXPathBehaviorAccessor.Factory)
+				||
 				TryApplyBehavior<XPathFunctionAttribute, XmlXPathBehaviorAccessor>
 					(key, property, behavior, ref accessor, XmlXPathBehaviorAccessor.Factory)
 #endif

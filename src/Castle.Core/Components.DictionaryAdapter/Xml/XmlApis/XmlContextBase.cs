@@ -33,8 +33,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private bool hasNamespaces;
 #if !SL3
 		private XPathContext xPathContext;
-		private Dictionary<XmlName, IXsltContextFunction> functions;
 		private Dictionary<XmlName, IXsltContextVariable> variables;
+		private Dictionary<XmlName, IXsltContextFunction> functions;
 #endif
 
 		public XmlContextBase()
@@ -158,7 +158,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (string.IsNullOrEmpty(prefix))
 				return Try.Failure(out prefix); // No preferred prefix
 
-			namespaceUri = node.LookupPrefix(prefix);
+			namespaceUri = node.LookupNamespaceUri(prefix);
 			return string.IsNullOrEmpty(namespaceUri)
 				? true                     // Can use preferred prefix
 				: Try.Failure(out prefix); // Preferred prefix already in use
@@ -210,26 +210,36 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return StringComparer.Ordinal.Compare(baseUriA, baseUriB);
 		}
 
-		public void AddFunction(string prefix, string name, IXsltContextFunction function)
-		{
-			var key = new XmlName(name, prefix ?? string.Empty);
-			EnsureFunctions()[key] = function;
-		}
-
 		public void AddVariable(string prefix, string name, IXsltContextVariable variable)
 		{
 			var key = new XmlName(name, prefix ?? string.Empty);
-			EnsureVariables()[key] = variable;
+			AddVariable(key, variable);
 		}
 
-		private Dictionary<XmlName, IXsltContextFunction> EnsureFunctions()
+		public void AddFunction(string prefix, string name, IXsltContextFunction function)
 		{
-			return functions ??
-			(
-				functions = (parent != null)
-					? new Dictionary<XmlName, IXsltContextFunction>(parent.EnsureFunctions())
-					: new Dictionary<XmlName, IXsltContextFunction>()
-			);
+			var key = new XmlName(name, prefix ?? string.Empty);
+			AddFunction(key, function);
+		}
+
+		public void AddVariable(XPathVariableAttribute attribute)
+		{
+			AddVariable(attribute.Name, attribute);
+		}
+
+		public void AddFunction(XPathFunctionAttribute attribute)
+		{
+			AddFunction(attribute.Name, attribute);
+		}
+
+		public void AddVariable(XmlName name, IXsltContextVariable variable)
+		{
+			EnsureVariables()[name] = variable;
+		}
+
+		public void AddFunction(XmlName name, IXsltContextFunction function)
+		{
+			EnsureFunctions()[name] = function;
 		}
 
 		private Dictionary<XmlName, IXsltContextVariable> EnsureVariables()
@@ -242,12 +252,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			);
 		}
 
-		public override IXsltContextFunction ResolveFunction(string prefix, string name, XPathResultType[] argTypes)
+		private Dictionary<XmlName, IXsltContextFunction> EnsureFunctions()
 		{
-			return
-				functions != null ? ResolveFunctionCore   (prefix, name, argTypes) :
-				parent    != null ? parent.ResolveFunction(prefix, name, argTypes) :
-				null;
+			return functions ??
+			(
+				functions = (parent != null)
+					? new Dictionary<XmlName, IXsltContextFunction>(parent.EnsureFunctions())
+					: new Dictionary<XmlName, IXsltContextFunction>()
+			);
 		}
 
 		public override IXsltContextVariable ResolveVariable(string prefix, string name)
@@ -258,12 +270,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				null;
 		}
 
-		private IXsltContextFunction ResolveFunctionCore(string prefix, string name, XPathResultType[] argTypes)
+		public override IXsltContextFunction ResolveFunction(string prefix, string name, XPathResultType[] argTypes)
 		{
-			IXsltContextFunction function;
-			var key = new XmlName(name, prefix ?? string.Empty);
-			functions.TryGetValue(key, out function);
-			return function;
+			return
+				functions != null ? ResolveFunctionCore   (prefix, name, argTypes) :
+				parent    != null ? parent.ResolveFunction(prefix, name, argTypes) :
+				null;
 		}
 
 		private IXsltContextVariable ResolveVariableCore(string prefix, string name)
@@ -272,6 +284,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var key = new XmlName(name, prefix ?? string.Empty);
 			variables.TryGetValue(key, out variable);
 			return variable;
+		}
+
+		private IXsltContextFunction ResolveFunctionCore(string prefix, string name, XPathResultType[] argTypes)
+		{
+			IXsltContextFunction function;
+			var key = new XmlName(name, prefix ?? string.Empty);
+			functions.TryGetValue(key, out function);
+			return function;
 		}
 
 		public void Enlist(CompiledXPath path)

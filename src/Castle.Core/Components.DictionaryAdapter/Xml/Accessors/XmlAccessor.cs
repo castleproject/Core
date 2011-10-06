@@ -123,20 +123,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				? SelectCollectionNode(parentNode, orStub)
 				: SelectPropertyNode  (parentNode, orStub);
 
-			return GetCursorValue(cursor, parentObject, orStub);
+			return GetValue(cursor, parentObject, cursor.MoveNext(), orStub);
 		}
 
-		public object GetCursorValue(IXmlCursor cursor, IDictionaryAdapter parentObject, bool orStub)
-		{
-			return GetValueCore(cursor, parentObject, cursor.MoveNext(), orStub);
-		}
-
-		public object GetNodeValue(IXmlNode node, IDictionaryAdapter parentObject, bool orStub)
-		{
-			return GetValueCore(node, parentObject, true, orStub);
-		}
-
-		private object GetValueCore(IXmlNode node, IDictionaryAdapter parentObject, bool nodeExists, bool orStub)
+		public object GetValue(IXmlNode node, IDictionaryAdapter parentObject, bool nodeExists, bool orStub)
 		{
 			if (nodeExists)
 				if (!node.IsNil)
@@ -155,43 +145,45 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				? SelectCollectionNode(parentNode, true)
 				: SelectPropertyNode  (parentNode, true);
 
-			SetCursorValue(cursor, parentObject, ref value);
+			SetValue(cursor, parentObject, false, ref value);
 		}
 
-		public void SetCursorValue(IXmlCursor cursor, IDictionaryAdapter parentObject, ref object value)
+		public void SetValue(IXmlCursor cursor, IDictionaryAdapter parentObject, bool hasCurrent, ref object value)
 		{
 			if (null != value)
-			{
-				cursor.MakeNext(value.GetComponentType());
-				Serializer.SetValue(cursor, parentObject, this, ref value);
-			}
-			else SetCursorValueToNull(cursor);
+				SetValueCore(cursor, parentObject, hasCurrent, ref value);
+			else
+				SetValueToNull(cursor, hasCurrent);
 		}
 
-		protected virtual void SetCursorValueToNull(IXmlCursor cursor)
+		protected virtual void SetValueToNull(IXmlCursor cursor, bool hasCurrent)
 		{
 			if (IsNillable)
-			{
-				cursor.MakeNext(clrType);
-				cursor.IsNil = true;
-			}
-			else cursor.RemoveAllNext();
+				SetNodeToNil(cursor, hasCurrent);
+			else if (hasCurrent)
+				cursor.Clear();
+			else
+				cursor.RemoveAllNext();
 		}
 
-		public void SetNodeValue(IXmlNode node, IDictionaryAdapter parentObject, ref object value)
+		public void SetValueCore(IXmlCursor cursor, IDictionaryAdapter parentObject, bool hasCurrent, ref object value)
 		{
-			if (null != value)
-				Serializer.SetValue(node, parentObject, this, ref value);
-			else
-				SetNodeValueToNull(node);
+			MakeNext(cursor, value.GetComponentType(), hasCurrent);
+			Serializer.SetValue(cursor, parentObject, this, ref value);
 		}
 
-		private void SetNodeValueToNull(IXmlNode node)
+		private void SetNodeToNil(IXmlCursor cursor, bool hasCurrent)
 		{
-			if (IsNillable)
-				node.IsNil = true;
+			MakeNext(cursor, clrType, hasCurrent);
+			cursor.IsNil = true;
+		}
+
+		private static void MakeNext(IXmlCursor cursor, Type clrType, bool hasCurrent)
+		{
+			if (hasCurrent || cursor.MoveNext())
+				cursor.Coerce(clrType);
 			else
-				node.Clear();
+				cursor.Create(clrType);
 		}
 
 		public void GetCollectionItems(IXmlNode parentNode, IDictionaryAdapter parentObject, IList values)

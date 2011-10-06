@@ -28,16 +28,20 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private readonly ILazy<XPathNavigator> parent;
 		private readonly CompiledXPath path;
 		private readonly IXmlIncludedTypeMap knownTypes;
+		private readonly IXmlNamespaceSource namespaces;
 		private readonly CursorFlags flags;
 
-		public XPathMutableCursor(ILazy<XPathNavigator> parent, CompiledXPath path, IXmlIncludedTypeMap knownTypes, CursorFlags flags)
+		public XPathMutableCursor(ILazy<XPathNavigator> parent, CompiledXPath path,
+			IXmlIncludedTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
 		{
 			if (null == parent)
 				throw Error.ArgumentNull("parent");
 			if (null == path)
 				throw Error.ArgumentNull("path");
-			if (knownTypes == null)
+			if (null == knownTypes)
 				throw Error.ArgumentNull("knownTypes");
+			if (null == namespaces)
+				throw Error.ArgumentNull("namespaces");
 			if (!path.IsCreatable)
 				throw Error.XPathNotCreatable(path);
 
@@ -45,6 +49,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.path       = path;
 			this.step       = path.FirstStep;
 			this.knownTypes = knownTypes;
+			this.namespaces = namespaces;
 			this.flags      = flags;
 
 			if (parent.HasValue)
@@ -107,7 +112,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override bool IsNil
 		{
 			get { return HasCurrent ? base.IsNil : true; }
-			set { Realize(); base.IsNil = value; }
+		}
+
+		bool IXmlCursor.IsNil
+		{
+			get { return IsNil; }
+			set { Realize(); this.SetXsiNil(value); }
 		}
 
 		public override string Value
@@ -119,6 +129,30 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override string Xml
 		{
 			get { return HasCurrent ? base.Xml : null; }
+		}
+
+		public void SetAttribute(XmlName name, string value)
+		{
+			if (string.IsNullOrEmpty(value))
+			{
+				if (node.MoveToAttribute(name.LocalName, name.NamespaceUri))
+					node.DeleteSelf();
+			}
+			else if (node.MoveToAttribute(name.LocalName, name.NamespaceUri))
+			{
+				node.SetValue(value);
+				node.MoveToParent();
+			}
+			else
+			{
+				var prefix = namespaces.GetAttributePrefix(this, name.NamespaceUri);
+				node.CreateAttribute(prefix, name.LocalName, name.NamespaceUri, value);
+			}
+		}
+
+		public string EnsurePrefix(string namespaceUri)
+		{
+			return namespaces.GetAttributePrefix(this, namespaceUri);
 		}
 
 		public bool MoveNext()
@@ -245,7 +279,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (!knownTypes.TryGet(clrType, out includedType))
 				throw Error.NotXmlKnownType(clrType);
 
-			node.SetXsiType(includedType.XsiType);
+			this.SetXsiType(includedType.XsiType);
 		}
 
 		public void Create(Type type)

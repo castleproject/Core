@@ -106,6 +106,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			SetAtEnd();
 		}
 
+		bool IXmlCursor.IsNil
+		{
+			get { return IsNil; }
+			set { throw Error.CursorNotMutable(); }
+		}
+
+		public void SetAttribute(XmlName name, string value)
+		{
+			throw Error.CursorNotMutable();
+		}
+
+		public string EnsurePrefix(string namespaceUri)
+		{
+			throw Error.CursorNotMutable();
+		}
+
 		public void MakeNext(Type type)
 		{
 			throw Error.CursorNotMutable();

@@ -167,7 +167,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void SetValueAt(int index, T value)
 		{
 			var item = items[index];
-			SetValue(item.Node, ref value);
+			cursor.MoveTo(item.Node);
+			SetValue(cursor, ref value);
 
 			if (ShouldReplace(item.Value, value))
 			{
@@ -179,7 +180,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			else
 			{
 				value = (T) item.Value;
-				SetValue(item.Node, ref value);
+				SetValue(cursor, ref value);
 				items[index] = item.WithValue(value);
 			}
 		}
@@ -272,7 +273,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			cursor.Create(GetTypeOrDefault(value));
 			var node = cursor.Save();
-			SetValue(node, ref value);
+			SetValue(cursor, ref value);
 
 			return ShouldAdd(value)
 				? CommitInsert(index, node, value, append)
@@ -361,13 +362,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private T GetValue(IXmlNode node)
 		{
-			return (T) (accessor.GetNodeValue(node, parentObject, true) ?? default(T));
+			return (T) (accessor.GetValue(node, parentObject, true, true) ?? default(T));
 		}
 
-		private void SetValue(IXmlNode node, ref T value)
+		private void SetValue(IXmlCursor cursor, ref T value)
 		{
 			object obj = value;
-			accessor.SetNodeValue(node, parentObject, ref obj);
+			accessor.SetValue(cursor, parentObject, true, ref obj);
 			value = (T) (obj ?? default(T));
 		}
 

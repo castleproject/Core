@@ -17,7 +17,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
     using System;
 	using System.Xml;
 
-    public class XmlSelfCursor : IXmlCursor //, IXmlTypeMap
+    public class XmlSelfCursor : IXmlCursor
     {
         private readonly IXmlNode node;
 		private readonly Type clrType;
@@ -68,7 +68,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public bool IsNil
 		{
 			get { return node.IsNil; }
-			set { node.IsNil = value; }
+			set { throw Error.NotSupported(); }
 		}
 
 		public string Value
@@ -82,6 +82,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return node.Xml; }
 		}
 
+		public string GetAttribute(XmlName name)
+		{
+			return node.GetAttribute(name);
+		}
+
+		public void SetAttribute(XmlName name, string value)
+		{
+			throw Error.NotSupported();
+		}
+
 		public string LookupPrefix(string namespaceUri)
 		{
 			return node.LookupPrefix(namespaceUri);
@@ -90,6 +100,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public string LookupNamespaceUri(string prefix)
 		{
 			return node.LookupNamespaceUri(prefix);
+		}
+
+		public string EnsurePrefix(string namespaceUri)
+		{
+			throw Error.NotSupported();
 		}
 
 		public void DefineNamespace(string prefix, string namespaceUri, bool root)
@@ -139,9 +154,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 
 #if !SL3
-		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap knownTypes, CursorFlags flags)
+		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
 		{
-			return node.Select(path, knownTypes, flags);
+			return node.Select(path, knownTypes, namespaces, flags);
 		}
 
 		public object Evaluate(CompiledXPath path)

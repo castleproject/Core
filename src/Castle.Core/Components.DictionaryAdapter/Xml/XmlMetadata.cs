@@ -173,7 +173,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 #if !SL3
 			if (path != null)
-				return node.Select(path, this, RootFlags);
+				return node.Select(path, this, context, RootFlags);
 #endif
 			return node.SelectChildren(this, context, RootFlags);
 		}

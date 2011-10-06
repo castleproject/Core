@@ -57,12 +57,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			base.Prepare();
 		}
 
-		protected override void SetCursorValueToNull(IXmlCursor cursor)
+		protected override void SetValueToNull(IXmlCursor cursor, bool hasCurrent)
 		{
 			if (IsCollection)
 				base.RemoveCollectionItems(cursor);
 			else
-				base.SetCursorValueToNull(cursor);
+				base.SetValueToNull(cursor, hasCurrent);
 		}
 
 		public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)

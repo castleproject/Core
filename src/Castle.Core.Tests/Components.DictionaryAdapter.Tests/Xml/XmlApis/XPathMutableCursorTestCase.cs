@@ -31,7 +31,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			IXmlCursor cursor;
 
 			root = Node("<X/>");
-			cursor = root.Select(Path("Item"), IncludedTypes, CursorFlags.Mutable);
+			cursor = root.Select(Path("Item"), IncludedTypes, NamespaceSource.Instance, CursorFlags.Mutable);
 			cursor.MoveNext();
 			node = cursor;
 
@@ -47,9 +47,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			IXmlCursor cursor;
 
 			root = Node("<X/>");
-			cursor = root.Select(Path("Item"), IncludedTypes, CursorFlags.Mutable);
+			cursor = root.Select(Path("Item"), IncludedTypes, NamespaceSource.Instance, CursorFlags.Mutable);
 			cursor.MoveNext();
-			cursor = cursor.Select(Path("Other"), IncludedTypes, CursorFlags.Mutable);
+			cursor = cursor.Select(Path("Other"), IncludedTypes, NamespaceSource.Instance, CursorFlags.Mutable);
 			cursor.MoveNext();
 			node = cursor;
 
@@ -119,7 +119,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 		protected override IXmlCursor Cursor(ILazy<XPathNavigator> parent, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
 		{
-			return new XPathMutableCursor(parent, path, includedTypes, flags);
+			return new XPathMutableCursor(parent, path, includedTypes, NamespaceSource.Instance, flags);
 		}
 	}
 }

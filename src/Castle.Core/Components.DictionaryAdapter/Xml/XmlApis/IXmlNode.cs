@@ -22,9 +22,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		bool   IsElement   { get; }
 		bool   IsAttribute { get; }
 		bool   IsRoot      { get; }
-		bool   IsNil       { get; set; }
+		bool   IsNil       { get; }
 		string Value       { get; set; } // Equivalent to InnerText
 		string Xml         { get; }      // Equivalent to OuterXml
+
+		string GetAttribute(XmlName name);
 
 		string LookupPrefix(string namespaceUri);
 		string LookupNamespaceUri(string prefix);
@@ -35,7 +37,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IXmlCursor SelectSelf(Type clrType);
 		IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags);
 #if !SL3
-		IXmlCursor Select  (CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags);
+		IXmlCursor Select  (CompiledXPath path, IXmlIncludedTypeMap includedTypes, IXmlNamespaceSource namespaces, CursorFlags flags);
 		object     Evaluate(CompiledXPath path);
 #endif
 
