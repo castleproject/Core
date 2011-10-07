@@ -15,13 +15,14 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
+	using System.Linq;
 	using System.Collections;
 
 	public static class DictionaryAdapterExtensions
 	{
 		public static DictionaryAdapterMeta GetAdapterMeta(this DictionaryAdapterMeta source, Type type)
 		{
-			var descriptor = new DictionaryDescriptor();
+			var descriptor = new DictionaryDescriptor(GetSharedBehaviors(source));
 			descriptor.AddInitializers    (source.Initializers);
 			descriptor.AddMetaInitializers(source.MetaInitializers);
 
@@ -38,7 +39,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (null == dictionary)
 				dictionary = new Hashtable();
 
-		    var descriptor = new DictionaryDescriptor();
+			var descriptor = new DictionaryDescriptor(GetSharedBehaviors(parent.Meta));
 		    parent.This.Descriptor.CopyBehaviors(descriptor);
 		    descriptor.AddBehavior(adapter);
 
@@ -88,6 +89,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public static void SetXmlType(this DictionaryAdapterMeta meta, string value)
 		{
 			meta.ExtendedProperties[XmlTypeKey] = value;
+		}
+
+		private static object[] GetSharedBehaviors(DictionaryAdapterMeta meta)
+		{
+			return meta.Behaviors.Where(behavior =>
+				behavior is XmlDefaultsAttribute   ||
+				behavior is XmlNamespaceAttribute  ||
+				behavior is XPathVariableAttribute ||
+				behavior is XPathFunctionAttribute)
+				.ToArray();
 		}
 
 		private const string
