@@ -103,7 +103,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 #if !SL3
 			if (xPath != null)
 			{
-				path = xPath.Path;
+				path = xPath.GetPath;
 				path.SetContext(context);
 			}
 #endif

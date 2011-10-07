@@ -20,55 +20,84 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 	public class XmlIncludeBehaviorTestCase
 	{
-		public class IncludedByDeclaringType : XmlAdapterTestCase
+		public abstract class BaseTestCase<TX, TA, TB> : XmlAdapterTestCase
+			where TB : TA
 		{
-			[XmlInclude(typeof(IB))]
-			public interface IFoo
-			{
-				IA X { get; set; }
-			}
-
-			public interface IA      { string A { get; set; } }
-			public interface IB : IA { string B { get; set; } }
+			protected abstract TA     GetX(TX obj);
+			protected abstract string GetA(TA obj);
+			protected abstract string GetB(TB obj);
 
 			[Test]
 			public void Get_NoXsiType()
 			{
 				var xml = Xml("<Foo> <X> <A>a</A> </X> </Foo>");
-				var obj = Create<IFoo>(xml);
+				var obj = Create<TX>(xml);
 
-				var value = obj.X;
-				Assert.That(value,   Is.InstanceOf<IA>() & Is.Not.InstanceOf<IB>());
-				Assert.That(value.A, Is.EqualTo("a"));
+				var x = GetX(obj);
+				Assert.That(x,       Is.InstanceOf<TA>() & Is.Not.InstanceOf<TB>());
+				Assert.That(GetA(x), Is.EqualTo("a"));
 			}
 
 			[Test]
 			public void Get_XsiType_Default()
 			{
 				var xml = Xml("<Foo $xsi> <X xsi:type='A'> <A>a</A> </X> </Foo>");
-				var obj = Create<IFoo>(xml);
+				var obj = Create<TX>(xml);
 
-				var value = obj.X;
-				Assert.That(value,   Is.InstanceOf<IA>() & Is.Not.InstanceOf<IB>());
-				Assert.That(value.A, Is.EqualTo("a"));
+				var x = GetX(obj);
+				Assert.That(x,       Is.InstanceOf<TA>() & Is.Not.InstanceOf<TB>());
+				Assert.That(GetA(x), Is.EqualTo("a"));
 			}
 
 			[Test]
-			public void Get_XsiType_IncludedByDeclaringType()
+			public void Get_XsiType_Included()
 			{
 				var xml = Xml("<Foo $xsi> <X xsi:type='B'> <A>a</A> <B>b</B> </X> </Foo>");
-				var obj = Create<IFoo>(xml);
+				var obj = Create<TX>(xml);
 
-				var value = obj.X;
-				Assert.That(value,   Is.InstanceOf<IB>());
-				Assert.That(value.A, Is.EqualTo("a"));
+				var x = GetX(obj);
+				Assert.That(x,       Is.InstanceOf<TB>());
+				Assert.That(GetA(x), Is.EqualTo("a"));
 
-				var valueB = (IB) value;
-				Assert.That(valueB.B, Is.EqualTo("b"));
+				var b = (TB) x;
+				Assert.That(GetB(b), Is.EqualTo("b"));
+			}
+
+			[Test]
+			public void Get_XsiType_Unrecognized()
+			{
+				var xml = Xml("<Foo $xsi> <X xsi:type='C'> <A>a</A> </X> </Foo>");
+				var obj = Create<TX>(xml);
+
+				var x = GetX(obj);
+				Assert.That(x,       Is.InstanceOf<TA>()); // virtual
+				Assert.That(GetA(x), Is.Null);
 			}
 		}
 
-		public class IncludedByDeclaredType : XmlAdapterTestCase
+		public class IncludedByDeclaringType : BaseTestCase<
+			IncludedByDeclaringType.IFoo,
+			IncludedByDeclaringType.IA,
+			IncludedByDeclaringType.IB>
+		{
+			[XmlInclude(typeof(IB))]
+			public interface IFoo
+			{
+				IA X { get; set; }
+			}
+
+			public interface IA      { string A { get; set; } }
+			public interface IB : IA { string B { get; set; } }
+
+			protected override IA     GetX(IFoo obj) { return obj.X; }
+			protected override string GetA(IA   obj) { return obj.A; }
+			protected override string GetB(IB   obj) { return obj.B; }
+		}
+
+		public class IncludedByDeclaredType : BaseTestCase<
+			IncludedByDeclaredType.IFoo,
+			IncludedByDeclaredType.IA,
+			IncludedByDeclaredType.IB>
 		{
 			public interface IFoo
 			{
@@ -79,19 +108,36 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			public interface IA      { string A { get; set; } }
 			public interface IB : IA { string B { get; set; } }
 
-			[Test]
-			public void Get_XsiType_IncludedByDeclaredType()
+			protected override IA     GetX(IFoo obj) { return obj.X; }
+			protected override string GetA(IA   obj) { return obj.A; }
+			protected override string GetB(IB   obj) { return obj.B; }
+		}
+
+		public class UnnecessaryInclude : BaseTestCase<
+			UnnecessaryInclude.IFoo,
+			UnnecessaryInclude.IA,
+			UnnecessaryInclude.IB>
+		{
+			[XmlInclude(typeof(IB))] // OK
+			[XmlInclude(typeof(IB))] // duplicate include
+			[XmlInclude(typeof(IA))] // same as declared type
+			[XmlInclude(typeof(IC))] // not assignable to declared type
+			public interface IFoo
 			{
-				var xml = Xml("<Foo $xsi> <X xsi:type='B'> <A>a</A> <B>b</B> </X> </Foo>");
-				var obj = Create<IFoo>(xml);
-
-				var value = obj.X;
-				Assert.That(value,   Is.InstanceOf<IB>());
-				Assert.That(value.A, Is.EqualTo("a"));
-
-				var valueB = (IB) value;
-				Assert.That(valueB.B, Is.EqualTo("b"));
+				IA X { get; set; }
 			}
+
+			// TODO: Fails if both IA and IB included here
+			//[XmlInclude(typeof(IA))] // same as declared type
+			[XmlInclude(typeof(IB))] // duplicate include
+			[XmlInclude(typeof(IC))] // not assignable to declared type
+			public interface IA      { string A { get; set; } }
+			public interface IB : IA { string B { get; set; } }
+			public interface IC      { string C { get; set; } }
+
+			protected override IA     GetX(IFoo obj) { return obj.X; }
+			protected override string GetA(IA   obj) { return obj.A; }
+			protected override string GetB(IB   obj) { return obj.B; }
 		}
 	}
 }

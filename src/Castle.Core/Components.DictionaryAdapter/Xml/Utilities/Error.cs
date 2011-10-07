@@ -57,6 +57,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new InvalidOperationException(message);
 		}
 
+		internal static Exception SeparateGetterSetterOnComplexType(string propertyName)
+		{
+			var message = string.Format
+			(
+				"Cannot apply getter/setter behaviors for property '{0}'.  Separate getters/setters are supported for simple types only.",
+				propertyName
+			);
+			return new InvalidOperationException(message);
+		}
+
 		internal static Exception XmlMetadataNotAvailable(Type clrType)
 		{
 			var message = string.Format

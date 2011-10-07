@@ -27,7 +27,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			descriptor.AddMetaInitializers(source.MetaInitializers);
 
 			return source.Factory.GetAdapterMeta(type, descriptor);
-		}
+		}	
 
 		public static object CreateChildAdapter(this IDictionaryAdapter parent, Type type, XmlAdapter adapter)
 		{

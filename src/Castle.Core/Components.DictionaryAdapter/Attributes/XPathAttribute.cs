@@ -20,16 +20,37 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = true)]
 	public class XPathAttribute : Attribute
 	{
-		private readonly CompiledXPath path;
+		private readonly CompiledXPath getPath;
+		private readonly CompiledXPath setPath;
 
 		public XPathAttribute(string path)
 		{
-			this.path = XPathCompiler.Compile(path);
+			if (path == null)
+				throw Error.ArgumentNull("path");
+
+			this.getPath = XPathCompiler.Compile(path);
+			this.setPath = this.getPath;
 		}
 
-		public CompiledXPath Path
+		public XPathAttribute(string get, string set)
 		{
-			get { return path; }
+			if (get == null)
+				throw Error.ArgumentNull("get");
+			if (set == null)
+				throw Error.ArgumentNull("set");
+
+			this.getPath = XPathCompiler.Compile(get);
+			this.setPath = XPathCompiler.Compile(set);
+		}
+
+		public CompiledXPath GetPath
+		{
+			get { return getPath; }
+		}
+
+		public CompiledXPath SetPath
+		{
+			get { return setPath; }
 		}
 
 		public bool Nullable { get; set; }

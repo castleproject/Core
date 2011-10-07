@@ -25,7 +25,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		private XmlAccessor itemAccessor;
 		private XmlIncludedTypeSet includedTypes;
-	    private CompiledXPath path;
+	    private CompiledXPath getPath;
+	    private CompiledXPath setPath;
 
 		internal static readonly XmlAccessorFactory<XmlXPathBehaviorAccessor>
 			Factory = (name, type, context) => new XmlXPathBehaviorAccessor(type, context);
@@ -37,16 +38,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			foreach (var includedType in context.GetIncludedTypes(type))
 				includedTypes.Add(includedType);
-		}
-
-	    public CompiledXPath Path
-	    {
-	        get { return path; }
-	    }
-
-		public bool SelectsNodes
-		{
-			get { return path.Path.ReturnType == XPathResultType.NodeSet; }
 		}
 
 		XmlName IXmlIncludedType.XsiType
@@ -61,10 +52,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void Configure(XPathAttribute attribute)
 		{
-			if (path != null)
-				throw Error.AttributeConflict(path.Path.Expression);
+			if (getPath != null)
+				throw Error.AttributeConflict(getPath.Path.Expression);
 
-			path = attribute.Path;
+			getPath = attribute.GetPath;
+			setPath = attribute.SetPath;
+
+			if (getPath != setPath && Serializer.Kind != XmlTypeKind.Simple)
+				throw Error.SeparateGetterSetterOnComplexType(getPath.Path.Expression);
 		}
 
 		public void Configure(XPathVariableAttribute attribute)
@@ -79,19 +74,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override void Prepare()
 		{
-			Context.Enlist(path);
+			Context.Enlist(getPath);
+
+			if (getPath != setPath)
+				Context.Enlist(setPath);
 		}
 
 		public override object GetPropertyValue(IXmlNode node, IDictionaryAdapter da, bool ifExists)
 		{
-			return SelectsNodes
+			return SelectsNodes(getPath)
 				? base.GetPropertyValue(node, da, ifExists)
 				: Evaluate(node);
 		}
 
 		public override void SetPropertyValue(IXmlNode node, IDictionaryAdapter da, ref object value)
 		{
-			if (SelectsNodes)
+			if (SelectsNodes(setPath))
 				base.SetPropertyValue(node, da, ref value);
 			else
 				throw Error.NotSupported();
@@ -99,8 +97,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private object Evaluate(IXmlNode node)
 		{
-			var value = node.Evaluate(path);
+			var value = node.Evaluate(getPath);
 			return Convert.ChangeType(value, ClrType);
+		}
+
+		private static bool SelectsNodes(CompiledXPath path)
+		{
+			return path.Path.ReturnType == XPathResultType.NodeSet;
 		}
 
 		public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
@@ -111,6 +114,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override IXmlCursor SelectPropertyNode(IXmlNode node, bool create)
 		{
 			var flags = CursorFlags.AllNodes.MutableIf(create);
+			var path  = create ? setPath : getPath;
 			return node.Select(path, this, Context, flags);
 		}
 
@@ -121,7 +125,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override IXmlCursor SelectCollectionItems(IXmlNode node, bool create)
 		{
-			return node.Select(path, this, Context, CursorFlags.AllNodes.MutableIf(create) | CursorFlags.Multiple);
+			var flags = CursorFlags.AllNodes.MutableIf(create) | CursorFlags.Multiple;
+			var path  = create ? setPath : getPath;
+			return node.Select(path, this, Context, flags);
 		}
 
 		public bool TryGet(XmlName xsiType, out IXmlIncludedType includedType)
@@ -150,7 +156,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			public ItemAccessor(XmlXPathBehaviorAccessor parent)
 				: base(parent.ClrType.GetCollectionItemType(), parent.Context)
 			{
-				path          = parent.path;
+				getPath       = parent.getPath;
+				setPath       = parent.setPath;
 				includedTypes = parent.includedTypes;
 
 				ConfigureNillable(true);

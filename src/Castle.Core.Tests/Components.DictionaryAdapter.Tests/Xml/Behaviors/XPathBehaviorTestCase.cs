@@ -16,7 +16,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
 	using System.Linq;
-	using System.Xml.Serialization;
 	using System.Xml.XPath;
 	using System.Xml.Xsl;
 	using Castle.Components.DictionaryAdapter.Tests;
@@ -24,6 +23,73 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 	public class XPathBehaviorTestCase
 	{
+		[TestFixture]
+		public class SeparateGetterSetter_SimpleType : XmlAdapterTestCase
+		{
+			public interface IFoo
+			{
+				[XPath(get: "X", set: "Y")]
+				string A { get; set; }
+			}
+
+			[Test]
+			public void Get()
+			{
+				var foo = Create<IFoo>("<Foo> <X>x</X> <Y>y</Y> </Foo>");
+
+				var a = foo.A;
+
+				Assert.That(a, Is.EqualTo("x"));
+			}
+
+			[Test]
+			public void Set()
+			{
+				var xml = Xml("<Foo> <X>x</X> <Y>y</Y> </Foo>");
+				var foo = Create<IFoo>(xml);
+
+				foo.A = "*";
+
+				Assert.That(xml, XmlEquivalent.To("<Foo> <X>x</X> <Y>*</Y> </Foo>"));
+			}
+		}
+
+		[TestFixture]
+		public class SeparateGetterSetter_ComplexType : XmlAdapterTestCase
+		{
+			public interface IFoo
+			{
+				[XPath(get: "X", set: "Y")]
+				IBar A { get; set; }
+			}
+
+			public interface IBar { }
+
+			[Test]
+			public void Get()
+			{
+				var foo = Create<IFoo>("<Foo> <X>x</X> <Y>y</Y> </Foo>");
+
+				Assert.Throws<InvalidOperationException>(() =>
+				{
+					var a = foo.A;
+				});
+			}
+
+			[Test]
+			public void Set()
+			{
+				var xml = Xml("<Foo> <X>x</X> <Y>y</Y> </Foo>");
+				var foo = Create<IFoo>(xml);
+
+				Assert.Throws<InvalidOperationException>(() =>
+				{
+					foo.A = Create<IBar>();
+				});
+			}
+
+		}
+
 		[TestFixture]
 		public class WithVariable_DefinedOnType : WithVariableOrFunction
 		{
