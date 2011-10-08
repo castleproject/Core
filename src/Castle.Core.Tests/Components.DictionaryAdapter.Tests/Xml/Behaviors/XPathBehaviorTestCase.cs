@@ -24,6 +24,66 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 	public class XPathBehaviorTestCase
 	{
 		[TestFixture]
+		public class ValueExpression : XmlAdapterTestCase
+		{
+			public interface IFoo : IDictionaryAdapter
+			{
+				[XPath("string(A)")]
+				string StringValue { get; set; }
+
+				[XPath("count(A)")]
+				int NumberValue { get; set; }
+
+				[XPath("A='a'")]
+				bool BooleanValue { get; set; }
+			}
+
+			[Test]
+			public void Get_String()
+			{
+				var foo = Create<IFoo>("<Foo> <A>a</A> </Foo>");
+
+				Assert.That(foo.StringValue, Is.EqualTo("a"));
+			}
+
+			[Test]
+			public void Get_Number()
+			{
+				var foo = Create<IFoo>("<Foo> <A/> <A/> <A/> </Foo>");
+
+				Assert.That(foo.NumberValue, Is.EqualTo(3));
+			}
+
+			[Test]
+			public void Get_Boolean()
+			{
+				var foo = Create<IFoo>("<Foo> <A>a</A> </Foo>");
+
+				Assert.That(foo.BooleanValue, Is.EqualTo(true));
+			}
+
+			[Test]
+			public void SetProperty()
+			{
+				var foo = Create<IFoo>("<Foo/>");
+
+				Assert.Throws<XPathException>(() => foo.StringValue  = "a");
+				Assert.Throws<XPathException>(() => foo.NumberValue  = 1);
+				Assert.Throws<XPathException>(() => foo.BooleanValue = true);
+			}
+
+			[Test]
+			public void HasProperty()
+			{
+				var foo = Create<IFoo>("<Foo> <A>a</A> </Foo>");
+
+				Assert.That(XmlAdapter.For(foo).HasProperty("StringValue",  foo), Is.False);
+				Assert.That(XmlAdapter.For(foo).HasProperty("NumberValue",  foo), Is.False);
+				Assert.That(XmlAdapter.For(foo).HasProperty("BooleanValue", foo), Is.False);
+			}
+		}
+
+		[TestFixture]
 		public class SeparateGetterSetter_SimpleType : XmlAdapterTestCase
 		{
 			public interface IFoo

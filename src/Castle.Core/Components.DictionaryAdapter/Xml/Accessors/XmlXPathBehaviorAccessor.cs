@@ -80,6 +80,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				Context.Enlist(setPath);
 		}
 
+		public override bool IsPropertyDefined(IXmlNode parentNode)
+		{
+			return SelectsNodes(getPath)
+				&& base.IsPropertyDefined(parentNode);
+		}
+
 		public override object GetPropertyValue(IXmlNode node, IDictionaryAdapter da, bool ifExists)
 		{
 			return SelectsNodes(getPath)
@@ -92,7 +98,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (SelectsNodes(setPath))
 				base.SetPropertyValue(node, da, ref value);
 			else
-				throw Error.NotSupported();
+				throw Error.XPathNotCreatable(setPath);
 		}
 
 		private object Evaluate(IXmlNode node)
