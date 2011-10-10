@@ -452,7 +452,7 @@
     <Compile Include="NonProxiedMixinMethodsTestCase.cs" />
     <Compile Include="NonProxiedTargetMethodsTestCase.cs" />
     <Compile Include="OrderOfInterfacePrecedenceTestCase.cs" />
-    <Compile Include="OutRefParams.cs" />
+    <Compile Include="OutRefParamsTestCase.cs" />
     <Compile Include="PersistentProxyBuilderTestCase.cs" />
     <Compile Include="Interceptors\ProceedOnTypeInterceptor.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
