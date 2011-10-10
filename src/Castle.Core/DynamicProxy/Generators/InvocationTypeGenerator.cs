@@ -126,7 +126,6 @@ namespace Castle.DynamicProxy.Generators
 			// Idea: instead of grab parameters one by one
 			// we should grab an array
 			var byRefArguments = new Dictionary<int, LocalReference>();
-			bool hasByRefArguments = false;
 
 			for (var i = 0; i < parameters.Length; i++)
 			{
@@ -135,7 +134,6 @@ namespace Castle.DynamicProxy.Generators
 				var paramType = invocation.GetClosedParameterType(param.ParameterType);
 				if (paramType.IsByRef)
 				{
-					hasByRefArguments = true;
 					var localReference = invokeMethodOnTarget.CodeBuilder.DeclareLocal(paramType.GetElementType());
 					invokeMethodOnTarget.CodeBuilder
 						.AddStatement(
@@ -158,13 +156,12 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 
-			if (hasByRefArguments)
+			if (byRefArguments.Count > 0)
 			{
 				invokeMethodOnTarget.CodeBuilder.AddStatement(new TryStatement());
 			}
 
-			var methodOnTargetInvocationExpression = GetCallbackMethodInvocation(invocation, args, callbackMethod, targetField,
-			                                                                     invokeMethodOnTarget);
+			var methodOnTargetInvocationExpression = GetCallbackMethodInvocation(invocation, args, callbackMethod, targetField, invokeMethodOnTarget);
 
 			LocalReference returnValue = null;
 			if (callbackMethod.ReturnType != typeof(void))
@@ -178,32 +175,7 @@ namespace Castle.DynamicProxy.Generators
 				invokeMethodOnTarget.CodeBuilder.AddStatement(new ExpressionStatement(methodOnTargetInvocationExpression));
 			}
 
-			if (hasByRefArguments)
-			{
-				invokeMethodOnTarget.CodeBuilder.AddStatement(new FinalStatement());
-			}
-
-			foreach (var byRefArgument in byRefArguments)
-			{
-				var index = byRefArgument.Key;
-				var localReference = byRefArgument.Value;
-				invokeMethodOnTarget.CodeBuilder.AddStatement(
-					new ExpressionStatement(
-						new MethodInvocationExpression(SelfReference.Self,
-						                               InvocationMethods.SetArgumentValue,
-						                               new LiteralIntExpression(index),
-						                               new ConvertExpression(typeof(object),
-						                                                     localReference.
-						                                                     	Type,
-						                                                     new ReferenceExpression
-						                                                     	(localReference)))
-						));
-			}
-
-			if (hasByRefArguments)
-			{
-				invokeMethodOnTarget.CodeBuilder.AddStatement(new EndExceptionStatement());
-			}
+			AssignBackByRefArguments(invokeMethodOnTarget, byRefArguments);
 
 			if (callbackMethod.ReturnType != typeof(void))
 			{
@@ -216,6 +188,33 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			invokeMethodOnTarget.CodeBuilder.AddStatement(new ReturnStatement());
+		}
+
+		private void AssignBackByRefArguments(MethodEmitter invokeMethodOnTarget, Dictionary<int, LocalReference> byRefArguments)
+		{
+			if (byRefArguments.Count == 0)
+			{
+				return;
+			}
+
+			invokeMethodOnTarget.CodeBuilder.AddStatement(new FinallyStatement());
+			foreach (var byRefArgument in byRefArguments)
+			{
+				var index = byRefArgument.Key;
+				var localReference = byRefArgument.Value;
+				invokeMethodOnTarget.CodeBuilder.AddStatement(
+					new ExpressionStatement(
+						new MethodInvocationExpression(
+							SelfReference.Self,
+							InvocationMethods.SetArgumentValue,
+							new LiteralIntExpression(index),
+							new ConvertExpression(
+								typeof(object),
+								localReference.Type,
+								new ReferenceExpression(localReference)))
+						));
+			}
+			invokeMethodOnTarget.CodeBuilder.AddStatement(new EndExceptionBlockStatement());
 		}
 
 		private void CreateConstructor(AbstractTypeEmitter invocation, ProxyGenerationOptions options)
