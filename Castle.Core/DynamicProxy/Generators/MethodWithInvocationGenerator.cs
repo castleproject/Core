@@ -90,7 +90,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			var dereferencedArguments = IndirectReference.WrapIfByRef(emitter.Arguments);
-			bool hasByRefArguments = this.HasByRefArguments(emitter.Arguments);
+			var hasByRefArguments = HasByRefArguments(emitter.Arguments);
 
 			var arguments = GetCtorArguments(@class, namingScope, proxiedMethodTokenExpression,
 			                                 dereferencedArguments);
@@ -115,14 +115,14 @@ namespace Castle.DynamicProxy.Generators
 
 			if (hasByRefArguments)
 			{
-				emitter.CodeBuilder.AddStatement(new FinalStatement());
+				emitter.CodeBuilder.AddStatement(new FinallyStatement());
 			}
 
 			GeneratorUtil.CopyOutAndRefParameters(dereferencedArguments, invocationLocal, MethodToOverride, emitter);
 
 			if (hasByRefArguments)
 			{
-				emitter.CodeBuilder.AddStatement(new EndExceptionStatement());
+				emitter.CodeBuilder.AddStatement(new EndExceptionBlockStatement());
 			}
 
 			if (MethodToOverride.ReturnType != typeof(void))

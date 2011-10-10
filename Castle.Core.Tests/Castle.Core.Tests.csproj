@@ -202,7 +202,6 @@
     <Compile Include="BugsReported\Core40.cs" />
     <Compile Include="BugsReported\DynProxy159.cs" />
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
-    <Compile Include="BugsReported\DynProxy162.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Address.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Color.cs" />
@@ -453,7 +452,7 @@
     <Compile Include="NonProxiedMixinMethodsTestCase.cs" />
     <Compile Include="NonProxiedTargetMethodsTestCase.cs" />
     <Compile Include="OrderOfInterfacePrecedenceTestCase.cs" />
-    <Compile Include="OutRefParams.cs" />
+    <Compile Include="OutRefParamsTestCase.cs" />
     <Compile Include="PersistentProxyBuilderTestCase.cs" />
     <Compile Include="Interceptors\ProceedOnTypeInterceptor.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
