@@ -106,12 +106,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override bool IsRoot
 		{
-			get { return HasCurrent ? base.IsRoot : false; }
+			get { return HasCurrent && base.IsRoot; }
 		}
 
 		public override bool IsNil
 		{
-			get { return HasCurrent ? base.IsNil : true; }
+			get { return HasCurrent && base.IsNil; }
 		}
 
 		bool IXmlCursor.IsNil

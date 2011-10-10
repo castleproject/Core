@@ -264,14 +264,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					(key, property, behavior, ref accessor, XmlAttributeBehaviorAccessor.Factory)
 #if !SL3
 				||
-				TryApplyBehavior<XPathAttribute, XmlXPathBehaviorAccessor>
-					(key, property, behavior, ref accessor, XmlXPathBehaviorAccessor.Factory)
+				TryApplyBehavior<XPathAttribute, XPathBehaviorAccessor>
+					(key, property, behavior, ref accessor, XPathBehaviorAccessor.Factory)
 				||
-				TryApplyBehavior<XPathVariableAttribute, XmlXPathBehaviorAccessor>
-					(key, property, behavior, ref accessor, XmlXPathBehaviorAccessor.Factory)
+				TryApplyBehavior<XPathVariableAttribute, XPathBehaviorAccessor>
+					(key, property, behavior, ref accessor, XPathBehaviorAccessor.Factory)
 				||
-				TryApplyBehavior<XPathFunctionAttribute, XmlXPathBehaviorAccessor>
-					(key, property, behavior, ref accessor, XmlXPathBehaviorAccessor.Factory)
+				TryApplyBehavior<XPathFunctionAttribute, XPathBehaviorAccessor>
+					(key, property, behavior, ref accessor, XPathBehaviorAccessor.Factory)
 #endif
 				;
 		}

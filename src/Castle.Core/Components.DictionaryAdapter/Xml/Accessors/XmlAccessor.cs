@@ -57,6 +57,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public IXmlContext Context
 		{
 			get { return context; }
+			protected set { SetContext(value); }
 		}
 
 		public bool IsCollection
@@ -104,6 +105,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				state |= States.ConfiguredContext;
 			}
 			return context;
+		}
+
+		private void SetContext(IXmlContext value)
+		{
+			if (null == value)
+				throw Error.ArgumentNull("value");
+
+			context = value;
 		}
 
 		public virtual bool IsPropertyDefined(IXmlNode parentNode)

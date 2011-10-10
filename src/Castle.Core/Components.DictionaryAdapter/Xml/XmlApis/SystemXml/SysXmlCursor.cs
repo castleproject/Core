@@ -101,7 +101,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override bool IsNil
 		{
-			get { return HasCurrent ? base.IsNil : true; }
+			get { return HasCurrent && base.IsNil; }
 		}
 
 		bool IXmlCursor.IsNil

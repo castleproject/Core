@@ -24,6 +24,104 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 	public class XPathBehaviorTestCase
 	{
 		[TestFixture]
+		public class CreatableNodeSetExpression : XmlAdapterTestCase
+		{
+			public interface IFoo : IDictionaryAdapter
+			{
+				[XPath("A[B='b']/C[D[@E][F='f'] and G]/@H")]
+				string Value { get; set; }
+			}
+
+			[Test]
+			public void Get_Existing()
+			{
+				var foo = Create<IFoo>
+				(
+					"<Foo>",
+						"<A>",
+							"<B>b</B>",
+							"<C H='value'>",
+								"<D E='?'>",
+									"<F>f</F>",
+								"</D>",
+								"<G/>",
+							"</C>",
+						"</A>",
+					"</Foo>"
+				);
+
+				Assert.That(foo.Value, Is.EqualTo("value"));
+			}
+
+			[Test]
+			public void Get_Missing()
+			{
+				var foo = Create<IFoo>("<Foo/>");
+
+				Assert.That(foo.Value, Is.Null);
+			}
+
+			[Test]
+			public void Set()
+			{
+				var xml = Xml("<Foo/>");
+				var foo = Create<IFoo>(xml);
+
+				foo.Value = "value";
+
+				Assert.That(xml, XmlEquivalent.To
+				(
+					"<Foo>",
+						"<A>",
+							"<C H='value'>",
+								"<D E=''>",
+									"<F>f</F>",
+								"</D>",
+								"<G/>",
+							"</C>",
+							"<B>b</B>",
+						"</A>",
+					"</Foo>"
+				));
+				Assert.That(foo.Value, Is.EqualTo("value"));
+			}
+		}
+
+		[TestFixture]
+		public class NoncreatableNodeSetExpression : XmlAdapterTestCase
+		{
+			public interface IFoo : IDictionaryAdapter
+			{
+				[XPath("//*[local-name()='A']")]
+				string Value { get; set; }
+			}
+
+			[Test]
+			public void Get_Existing()
+			{
+				var obj = Create<IFoo>("<Foo xmlns:p='urn:a'> <X> <p:A>value</p:A> </X> </Foo>");
+
+				Assert.That(obj.Value, Is.EqualTo("value"));
+			}
+
+			[Test]
+			public void Get_Missing()
+			{
+				var obj = Create<IFoo>("<Foo/>");
+
+				Assert.That(obj.Value, Is.Null);
+			}
+
+			[Test]
+			public void Set()
+			{
+				var obj = Create<IFoo>("<Foo/>");
+
+				Assert.Throws<XPathException>(() => obj.Value = "value");
+			}
+		}
+
+		[TestFixture]
 		public class ValueExpression : XmlAdapterTestCase
 		{
 			public interface IFoo : IDictionaryAdapter
@@ -84,6 +182,56 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[TestFixture]
+		public class VirtualComponent : XmlAdapterTestCase
+		{
+			public interface IFoo
+			{
+				[XPath("A/B")]
+				IBar Bar { get; set; }
+			}
+
+			public interface IBar
+			{
+				[XPath("C")]
+				string Value { get; set; }
+			}
+
+			[Test]
+			public void Realize_Missing()
+			{
+				var xml = Xml("<Foo/>");
+				var foo = Create<IFoo>(xml);
+
+				var bar = foo.Bar;
+				Assert.That(xml,       XmlEquivalent.To("<Foo/>"));
+				Assert.That(bar,       Is.Not.Null & Is.SameAs(foo.Bar));
+				Assert.That(bar.Value, Is.Null);
+
+				bar.Value = "value";
+				Assert.That(xml,       XmlEquivalent.To("<Foo> <A> <B> <C>value</C> </B> </A> </Foo>"));
+				Assert.That(bar,       Is.Not.Null & Is.SameAs(foo.Bar));
+				Assert.That(bar.Value, Is.EqualTo("value"));
+			}
+
+			[Test]
+			public void Realize_Partial()
+			{
+				var xml = Xml("<Foo> <A> <X/> </A> </Foo>");
+				var foo = Create<IFoo>(xml);
+
+				var bar = foo.Bar;
+				Assert.That(xml,       XmlEquivalent.To("<Foo> <A> <X/> </A> </Foo>"));
+				Assert.That(bar,       Is.Not.Null & Is.SameAs(foo.Bar));
+				Assert.That(bar.Value, Is.Null);
+
+				bar.Value = "value";
+				Assert.That(xml,       XmlEquivalent.To("<Foo> <A> <X/> <B> <C>value</C> </B> </A> </Foo>"));
+				Assert.That(bar,       Is.Not.Null & Is.SameAs(foo.Bar));
+				Assert.That(bar.Value, Is.EqualTo("value"));
+			}
+		}
+
+		[TestFixture]
 		public class SeparateGetterSetter_SimpleType : XmlAdapterTestCase
 		{
 			public interface IFoo
@@ -93,13 +241,23 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-			public void Get()
+			public void Get_NotPreviouslySet()
+			{
+				var foo = Create<IFoo>("<Foo> <X>x</X> </Foo>");
+
+				var a = foo.A;
+
+				Assert.That(a, Is.EqualTo("x"));
+			}
+
+			[Test]
+			public void Get_PreviouslySet()
 			{
 				var foo = Create<IFoo>("<Foo> <X>x</X> <Y>y</Y> </Foo>");
 
 				var a = foo.A;
 
-				Assert.That(a, Is.EqualTo("x"));
+				Assert.That(a, Is.EqualTo("y"));
 			}
 
 			[Test]

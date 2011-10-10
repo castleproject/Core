@@ -215,7 +215,7 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlDefaultBehaviorAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlElementBehaviorAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlIgnoreBehaviorAccessor.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XmlXPathBehaviorAccessor.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Accessors\XPathBehaviorAccessor.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Collections\XmlCollectionItem.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Collections\XmlNodeList.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Types\IXmlKnownType.cs" />

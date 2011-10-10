@@ -66,7 +66,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 		    Assert.That(cursor.MoveNext(), Is.True);
 		    Assert.That(cursor.Value,      Is.Empty);
-			Assert.That(cursor.IsNil,      Is.True);
+			Assert.That(cursor.IsNil,      Is.False);
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
 

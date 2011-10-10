@@ -18,20 +18,20 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Xml.XPath;
 
-	public class XmlXPathBehaviorAccessor : XmlAccessor, IXmlIncludedType, IXmlIncludedTypeMap,
+	public class XPathBehaviorAccessor : XmlAccessor, IXmlIncludedType, IXmlIncludedTypeMap,
 		IConfigurable<XPathAttribute>,
 		IConfigurable<XPathVariableAttribute>,
 		IConfigurable<XPathFunctionAttribute>
 	{
-		private XmlAccessor itemAccessor;
+	    private CompiledXPath path;
 		private XmlIncludedTypeSet includedTypes;
-	    private CompiledXPath getPath;
-	    private CompiledXPath setPath;
+		private XmlAccessor defaultAccessor;
+		private XmlAccessor itemAccessor;
 
-		internal static readonly XmlAccessorFactory<XmlXPathBehaviorAccessor>
-			Factory = (name, type, context) => new XmlXPathBehaviorAccessor(type, context);
+		internal static readonly XmlAccessorFactory<XPathBehaviorAccessor>
+			Factory = (name, type, context) => new XPathBehaviorAccessor(type, context);
 
-	    protected XmlXPathBehaviorAccessor(Type type, IXmlContext context)
+	    protected XPathBehaviorAccessor(Type type, IXmlContext context)
 	        : base(type, context)
 		{
 			includedTypes = new XmlIncludedTypeSet();
@@ -50,16 +50,24 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return this; }
 		}
 
+		private bool SelectsNodes
+		{
+			get { return path.Path.ReturnType == XPathResultType.NodeSet; }
+		}
+
 		public void Configure(XPathAttribute attribute)
 		{
-			if (getPath != null)
-				throw Error.AttributeConflict(getPath.Path.Expression);
+			if (path != null)
+				throw Error.AttributeConflict(path.Path.Expression);
 
-			getPath = attribute.GetPath;
-			setPath = attribute.SetPath;
+			path = attribute.SetPath;
 
-			if (getPath != setPath && Serializer.Kind != XmlTypeKind.Simple)
-				throw Error.SeparateGetterSetterOnComplexType(getPath.Path.Expression);
+			if (path == attribute.GetPath)
+				return;
+			else if (Serializer.CanGetStub)
+				throw Error.SeparateGetterSetterOnComplexType(path.Path.Expression);
+
+			defaultAccessor = new DefaultAccessor(this, attribute.GetPath);
 		}
 
 		public void Configure(XPathVariableAttribute attribute)
@@ -74,42 +82,50 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override void Prepare()
 		{
-			Context.Enlist(getPath);
+			Context.Enlist(path);
 
-			if (getPath != setPath)
-				Context.Enlist(setPath);
+			if (defaultAccessor != null)
+				defaultAccessor.Prepare();
 		}
 
 		public override bool IsPropertyDefined(IXmlNode parentNode)
 		{
-			return SelectsNodes(getPath)
+			return SelectsNodes
 				&& base.IsPropertyDefined(parentNode);
 		}
 
-		public override object GetPropertyValue(IXmlNode node, IDictionaryAdapter da, bool ifExists)
+		public override object GetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, bool orStub)
 		{
-			return SelectsNodes(getPath)
-				? base.GetPropertyValue(node, da, ifExists)
-				: Evaluate(node);
+			return GetPropertyValueCore   (parentNode, parentObject, orStub)
+				?? GetDefaultPropertyValue(parentNode, parentObject, orStub);
 		}
 
-		public override void SetPropertyValue(IXmlNode node, IDictionaryAdapter da, ref object value)
+		private object GetPropertyValueCore(IXmlNode parentNode, IDictionaryAdapter parentObject, bool orStub)
 		{
-			if (SelectsNodes(setPath))
-				base.SetPropertyValue(node, da, ref value);
-			else
-				throw Error.XPathNotCreatable(setPath);
+			return SelectsNodes
+				? base.GetPropertyValue(parentNode, parentObject, orStub)
+				: Evaluate(parentNode);
+		}
+
+		private object GetDefaultPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, bool orStub)
+		{
+			return defaultAccessor != null
+				? defaultAccessor.GetPropertyValue(parentNode, parentObject, orStub)
+				: null;
 		}
 
 		private object Evaluate(IXmlNode node)
 		{
-			var value = node.Evaluate(getPath);
+			var value = node.Evaluate(path);
 			return Convert.ChangeType(value, ClrType);
 		}
 
-		private static bool SelectsNodes(CompiledXPath path)
+		public override void SetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, ref object value)
 		{
-			return path.Path.ReturnType == XPathResultType.NodeSet;
+			if (SelectsNodes)
+				base.SetPropertyValue(parentNode, parentObject, ref value);
+			else
+				throw Error.XPathNotCreatable(path);
 		}
 
 		public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
@@ -120,7 +136,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override IXmlCursor SelectPropertyNode(IXmlNode node, bool create)
 		{
 			var flags = CursorFlags.AllNodes.MutableIf(create);
-			var path  = create ? setPath : getPath;
 			return node.Select(path, this, Context, flags);
 		}
 
@@ -132,7 +147,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override IXmlCursor SelectCollectionItems(IXmlNode node, bool create)
 		{
 			var flags = CursorFlags.AllNodes.MutableIf(create) | CursorFlags.Multiple;
-			var path  = create ? setPath : getPath;
 			return node.Select(path, this, Context, flags);
 		}
 
@@ -157,14 +171,33 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				: includedTypes.TryGet(clrType, out includedType);
 		}
 
-		private class ItemAccessor : XmlXPathBehaviorAccessor
+		private class DefaultAccessor : XPathBehaviorAccessor
 		{
-			public ItemAccessor(XmlXPathBehaviorAccessor parent)
+			private readonly XPathBehaviorAccessor parent;
+
+			public DefaultAccessor(XPathBehaviorAccessor parent, CompiledXPath path)
+				: base(parent.ClrType, parent.Context)
+			{
+				this.parent = parent;
+				this.path   = path;
+			}
+
+			public override void Prepare()
+			{
+				this.includedTypes = parent.includedTypes;
+				this.Context       = parent.Context;
+
+				base.Prepare();
+			}
+		}
+
+		private class ItemAccessor : XPathBehaviorAccessor
+		{
+			public ItemAccessor(XPathBehaviorAccessor parent)
 				: base(parent.ClrType.GetCollectionItemType(), parent.Context)
 			{
-				getPath       = parent.getPath;
-				setPath       = parent.setPath;
-				includedTypes = parent.includedTypes;
+				includedTypes   = parent.includedTypes;
+				path            = parent.path;
 
 				ConfigureNillable(true);
 			}
