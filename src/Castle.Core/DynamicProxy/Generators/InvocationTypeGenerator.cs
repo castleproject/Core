@@ -156,8 +156,12 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 
-			var methodOnTargetInvocationExpression = GetCallbackMethodInvocation(invocation, args, callbackMethod, targetField,
-			                                                                     invokeMethodOnTarget);
+			if (byRefArguments.Count > 0)
+			{
+				invokeMethodOnTarget.CodeBuilder.AddStatement(new TryStatement());
+			}
+
+			var methodOnTargetInvocationExpression = GetCallbackMethodInvocation(invocation, args, callbackMethod, targetField, invokeMethodOnTarget);
 
 			LocalReference returnValue = null;
 			if (callbackMethod.ReturnType != typeof(void))
@@ -171,22 +175,7 @@ namespace Castle.DynamicProxy.Generators
 				invokeMethodOnTarget.CodeBuilder.AddStatement(new ExpressionStatement(methodOnTargetInvocationExpression));
 			}
 
-			foreach (var byRefArgument in byRefArguments)
-			{
-				var index = byRefArgument.Key;
-				var localReference = byRefArgument.Value;
-				invokeMethodOnTarget.CodeBuilder.AddStatement(
-					new ExpressionStatement(
-						new MethodInvocationExpression(SelfReference.Self,
-						                               InvocationMethods.SetArgumentValue,
-						                               new LiteralIntExpression(index),
-						                               new ConvertExpression(typeof(object),
-						                                                     localReference.
-						                                                     	Type,
-						                                                     new ReferenceExpression
-						                                                     	(localReference)))
-						));
-			}
+			AssignBackByRefArguments(invokeMethodOnTarget, byRefArguments);
 
 			if (callbackMethod.ReturnType != typeof(void))
 			{
@@ -199,6 +188,33 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			invokeMethodOnTarget.CodeBuilder.AddStatement(new ReturnStatement());
+		}
+
+		private void AssignBackByRefArguments(MethodEmitter invokeMethodOnTarget, Dictionary<int, LocalReference> byRefArguments)
+		{
+			if (byRefArguments.Count == 0)
+			{
+				return;
+			}
+
+			invokeMethodOnTarget.CodeBuilder.AddStatement(new FinallyStatement());
+			foreach (var byRefArgument in byRefArguments)
+			{
+				var index = byRefArgument.Key;
+				var localReference = byRefArgument.Value;
+				invokeMethodOnTarget.CodeBuilder.AddStatement(
+					new ExpressionStatement(
+						new MethodInvocationExpression(
+							SelfReference.Self,
+							InvocationMethods.SetArgumentValue,
+							new LiteralIntExpression(index),
+							new ConvertExpression(
+								typeof(object),
+								localReference.Type,
+								new ReferenceExpression(localReference)))
+						));
+			}
+			invokeMethodOnTarget.CodeBuilder.AddStatement(new EndExceptionBlockStatement());
 		}
 
 		private void CreateConstructor(AbstractTypeEmitter invocation, ProxyGenerationOptions options)
