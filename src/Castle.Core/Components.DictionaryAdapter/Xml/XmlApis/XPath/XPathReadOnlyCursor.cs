@@ -36,7 +36,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (includedTypes == null)
 				throw Error.ArgumentNull("includedTypes");
 
-			this.parent        = parent.Value;
+			this.parent        = parent.HasValue ? parent.Value : null;
 			this.path          = path.Path;
 			this.includedTypes = includedTypes;
 			this.flags         = flags;
@@ -46,7 +46,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void Reset()
 		{
-			iterator = parent.Select(path);
+			if (parent != null)
+				iterator = parent.Select(path);
 		}
 
 		public bool MoveNext()
@@ -93,16 +94,19 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var positionNode = source.Value;
 
 			Reset();
-			while (iterator.MoveNext())
-				if (iterator.Current.IsSamePosition(positionNode))
-					{ SetAtNext(); return; }
+
+			if (iterator != null)
+				while (iterator.MoveNext())
+					if (iterator.Current.IsSamePosition(positionNode))
+						{ SetAtNext(); return; }
 
 			throw Error.CursorCannotMoveToGivenNode();
 		}
 
 		public void MoveToEnd()
 		{
-			while (iterator.MoveNext()) ;
+			if (iterator != null)
+				while (iterator.MoveNext()) ;
 			SetAtEnd();
 		}
 

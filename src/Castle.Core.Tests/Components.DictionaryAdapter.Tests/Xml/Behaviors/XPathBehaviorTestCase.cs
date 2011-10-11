@@ -229,6 +229,26 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				Assert.That(bar,       Is.Not.Null & Is.SameAs(foo.Bar));
 				Assert.That(bar.Value, Is.EqualTo("value"));
 			}
+
+			[Test]
+			public void SelectOnVirtual()
+			{
+				var xml = Xml("<Foo> <A/> </Foo>");
+				var foo = Create<IFoo>(xml);
+
+				var bar = foo.Bar;
+				Assert.That(xml,       XmlEquivalent.To("<Foo> <A/> </Foo>"));
+				Assert.That(bar,       Is.Not.Null & Is.SameAs(foo.Bar));
+
+				var value = bar.Value;
+				Assert.That(xml,       XmlEquivalent.To("<Foo> <A/> </Foo>"));
+				Assert.That(value,     Is.Null);
+
+				bar.Value = "value";
+				Assert.That(xml,       XmlEquivalent.To("<Foo> <A> <B> <C>value</C> </B> </A> </Foo>"));
+				Assert.That(bar,       Is.Not.Null & Is.SameAs(foo.Bar));
+				Assert.That(bar.Value, Is.EqualTo("value"));
+			}
 		}
 
 		[TestFixture]
