@@ -138,6 +138,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				if (node.MoveToAttribute(name.LocalName, name.NamespaceUri))
 					node.DeleteSelf();
 			}
+			else if (!IsElement)
+			{
+				throw Error.CannotSetAttribute(this);
+			}
 			else if (node.MoveToAttribute(name.LocalName, name.NamespaceUri))
 			{
 				node.SetValue(value);
@@ -277,6 +281,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			var includedType = knownTypes.Require(clrType);
 			this.SetXsiType(includedType.XsiType);
+			this.type = clrType;
 		}
 
 		public void Create(Type type)

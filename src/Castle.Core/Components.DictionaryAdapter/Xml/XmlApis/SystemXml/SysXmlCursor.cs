@@ -124,14 +124,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void SetAttribute(XmlName name, string value)
 		{
 			var element = node as XmlElement;
-			if (element == null)
-				throw Error.CannotSetAttribute(this);
 
 			if (string.IsNullOrEmpty(value))
 			{
-				element.RemoveAttribute(name.LocalName, name.NamespaceUri);
+				if (element != null)
+					element.RemoveAttribute(name.LocalName, name.NamespaceUri);
 				return;
 			}
+
+			if (element == null)
+				throw Error.CannotSetAttribute(this);
 
 			var attribute = element.GetAttributeNode(name.LocalName, name.NamespaceUri);
 			if (attribute == null)

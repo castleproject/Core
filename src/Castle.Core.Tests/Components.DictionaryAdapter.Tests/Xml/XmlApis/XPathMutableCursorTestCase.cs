@@ -71,6 +71,30 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
+		public void Bug_SaveAfterCreate()
+		{
+		    var xml    = Xml("<X/>");
+		    var cursor = Cursor(xml, "A/B/@C", CursorFlags.Multiple);
+
+		    Assert.That(cursor.MoveNext(), Is.False);
+			cursor.Create(TypeA.ClrType);
+			cursor.Save();
+		}
+
+		[Test]
+		public void Bug_CoerceAttributeInAWayThatRequiresXsiType()
+		{
+		    var xml    = Xml("<X/>");
+		    var cursor = Cursor(xml, "A/B/@C", CursorFlags.Multiple);
+
+		    Assert.That(cursor.MoveNext(), Is.False);
+			cursor.Create(TypeA.ClrType);
+
+			Assert.Throws<InvalidOperationException>(() =>
+				cursor.Coerce(TypeB.ClrType));
+		}
+
+		[Test]
 		public void Create()
 		{
 		    var xml    = Xml("<X/>");
