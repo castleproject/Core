@@ -245,5 +245,23 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
                 Assert.That(xml, XmlEquivalent.To("<Foo> <X> <Text>hello</Text> </X> </Foo>"));
             }
         }
+
+		[TestFixture]
+		public class Nullable : XmlAdapterTestCase
+		{
+			[XmlDefaults(IsNullable = true)]
+			public interface IRoot
+			{
+				string Value { get; set; }
+			}
+
+			[Test]
+			public void SetToNull()
+			{
+				var obj = Create<IRoot>("<Root Value='v'/>");
+
+				obj.Value = null;
+			}
+		}
 	}
 }

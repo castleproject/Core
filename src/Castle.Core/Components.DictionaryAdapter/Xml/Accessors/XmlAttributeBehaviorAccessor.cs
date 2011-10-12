@@ -36,6 +36,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			ConfigureNamespaceUri(attribute.Namespace);
 		}
 
+		public override void ConfigureNillable(bool nillable)
+		{
+			// Attributes are never nillable
+		}
+
 		public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
 		{
 			throw Error.NotSupported();

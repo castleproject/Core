@@ -415,13 +415,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private void CoerceElement(IXmlKnownType knownType)
 		{
-			var oldNode      = (XmlElement) node;
-			var parent       = oldNode.ParentNode;
-			var namespaceUri = GetEffectiveNamespaceUri(parent, knownType);
+			var oldNode = (XmlElement) node;
+			var parent  = oldNode.ParentNode;
+			var name    = GetEffectiveName(knownType, parent);
 
-			if (!XmlNameComparer.Default.Equals(Name, knownType.Name))
+			if (!XmlNameComparer.Default.Equals(this.Name, name))
 			{
-				var newNode = CreateElementCore(parent, knownType, namespaceUri);
+				var newNode = CreateElementCore(parent, name);
 				parent.ReplaceChild(newNode, oldNode);
 
 				if (knownType.XsiType != XmlName.Empty)
@@ -434,13 +434,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			RequireNoXsiType(knownType);
 
-			var oldNode      = (XmlAttribute) node;
-			var parent       = oldNode.OwnerElement;
-			var namespaceUri = GetEffectiveNamespaceUri(parent, knownType);
+			var oldNode = (XmlAttribute) node;
+			var parent  = oldNode.OwnerElement;
+			var name    = GetEffectiveName(knownType, parent);
 
-			if (!XmlNameComparer.Default.Equals(Name, knownType.Name))
+			if (!XmlNameComparer.Default.Equals(this.Name, name))
 			{
-				var newNode    = CreateAttributeCore(parent, knownType, namespaceUri);
+				var newNode    = CreateAttributeCore(parent, name);
 				var attributes = parent.Attributes;
 				attributes.RemoveNamedItem(newNode.LocalName, newNode.NamespaceURI);
 				attributes.InsertBefore(newNode, oldNode);
@@ -463,9 +463,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private void CreateElement(IXmlKnownType knownType, XmlNode position)
 		{
-			var parent       = node;
-			var namespaceUri = GetEffectiveNamespaceUri(parent, knownType);
-			var element      = CreateElementCore(parent, knownType, namespaceUri);
+			var parent  = node;
+			var name    = GetEffectiveName(knownType, parent);
+			var element = CreateElementCore(parent, name);
 			parent.InsertBefore(element, position);
 			state = State.Element;
 
@@ -477,27 +477,27 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			RequireNoXsiType(knownType);
 
-			var parent       = node;
-			var namespaceUri = GetEffectiveNamespaceUri(parent, knownType);
-			var attribute    = CreateAttributeCore(parent, knownType, namespaceUri);
+			var parent    = node;
+			var name      = GetEffectiveName(knownType, parent);
+			var attribute = CreateAttributeCore(parent, name);
 			parent.Attributes.InsertBefore(attribute, (XmlAttribute) position);
 			state = State.Attribute;
 		}
 
-		private XmlElement CreateElementCore(XmlNode parent, IXmlKnownType knownType, string namespaceUri)
+		private XmlElement CreateElementCore(XmlNode parent, XmlName name)
 		{
 			var document = parent.OwnerDocument ?? (XmlDocument) parent;
-			var prefix   = namespaces.GetElementPrefix(this, namespaceUri);
-			var element  = document.CreateElement(prefix, knownType.Name.LocalName, namespaceUri);
+			var prefix   = namespaces.GetElementPrefix(this, name.NamespaceUri);
+			var element  = document.CreateElement(prefix, name.LocalName, name.NamespaceUri);
 			node = element;
 			return element;
 		}
 
-		private XmlAttribute CreateAttributeCore(XmlNode parent, IXmlKnownType knownType, string namespaceUri)
+		private XmlAttribute CreateAttributeCore(XmlNode parent, XmlName name)
 		{
 			var document  = parent.OwnerDocument ?? (XmlDocument) parent;
-			var prefix    = namespaces.GetAttributePrefix(this, namespaceUri);
-			var attribute = document.CreateAttribute(prefix, knownType.Name.LocalName, namespaceUri);
+			var prefix    = namespaces.GetAttributePrefix(this, name.NamespaceUri);
+			var attribute = document.CreateAttribute(prefix, name.LocalName, name.NamespaceUri);
 			node = attribute;
 			return attribute;
 		}
@@ -508,10 +508,18 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				throw Error.CannotSetAttribute(this);
 		}
 
-		private static string GetEffectiveNamespaceUri(XmlNode parent, IXmlIdentity knownType)
+		private XmlName GetEffectiveName(IXmlKnownType knownType, XmlNode parent)
 		{
-			return knownType.Name.NamespaceUri
-				?? (parent != null ? parent.NamespaceURI : string.Empty);
+			var name = knownType.Name;
+
+			return name.NamespaceUri != null
+				? name
+				: name.WithNamespaceUri
+				(
+					parent != null
+						? parent.NamespaceURI
+						: string.Empty
+				);
 		}
 
 		public void RemoveAllNext()

@@ -24,6 +24,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XmlSelfAccessor(Type clrType, IXmlContext context)
 			: base(clrType, context) { }
 
+		public override void ConfigureNillable(bool nillable)
+		{
+			// This behavior cannot support nillable
+		}
+
 		public override IXmlCursor SelectPropertyNode(IXmlNode parentNode, bool mutable)
 		{
 			return parentNode.SelectSelf(ClrType);

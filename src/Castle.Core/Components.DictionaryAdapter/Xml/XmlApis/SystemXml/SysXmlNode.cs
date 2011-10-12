@@ -211,18 +211,15 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void Clear()
 		{
 			if (IsElement)
-				ClearAttributes();
-			ClearChildren();
-		}
-
-		private void ClearChildren()
-		{
-			XmlNode next;
-			for (var n = node.FirstChild; n != null; n = next)
 			{
-				next = n.NextSibling;
-				node.RemoveChild(node);
+				ClearAttributes();
 			}
+			else if (IsAttribute)
+			{
+				Value = string.Empty;
+				return;
+			}
+			ClearChildren();
 		}
 
 		private void ClearAttributes()
@@ -234,6 +231,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				var attribute = attributes[--count];
 				if (!attribute.IsNamespace() && !attribute.IsXsiType())
 					attributes.RemoveAt(count);
+			}
+		}
+
+		private void ClearChildren()
+		{
+			XmlNode next;
+			for (var child = node.FirstChild; child != null; child = next)
+			{
+				next = child.NextSibling;
+				node.RemoveChild(child);
 			}
 		}
 

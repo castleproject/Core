@@ -41,6 +41,23 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			internal set { firstStep = value; }
 		}
 
+		public CompiledXPathStep LastStep
+		{
+			get
+			{
+				var step = null as CompiledXPathStep;
+				var next = firstStep;
+
+				while (next != null)
+				{
+					step = next;
+					next = step.NextStep;
+				}
+
+				return step;
+			}
+		}
+
 		public int Depth
 		{
 			get { return depth; }

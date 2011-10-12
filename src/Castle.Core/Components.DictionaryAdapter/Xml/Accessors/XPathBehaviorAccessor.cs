@@ -55,6 +55,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return path.Path.ReturnType == XPathResultType.NodeSet; }
 		}
 
+		private bool CreatesAttributes
+		{
+			get { var step = path.LastStep; return step != null && step.IsAttribute; }
+		}
+
 		public void Configure(XPathAttribute attribute)
 		{
 			if (path != null)
@@ -82,6 +87,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override void Prepare()
 		{
+			if (CreatesAttributes)
+				state &= ~States.Nillable;
+
 			Context.Enlist(path);
 
 			if (defaultAccessor != null)

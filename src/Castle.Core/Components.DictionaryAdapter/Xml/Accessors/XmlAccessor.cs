@@ -80,7 +80,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return 0 != (state & States.Volatile); }
 		}
 
-		public void ConfigureNillable(bool nillable)
+		public virtual void ConfigureNillable(bool nillable)
 		{
 			if (nillable)
 				state |= States.Nillable;
@@ -175,24 +175,36 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				cursor.RemoveAllNext();
 		}
 
-		public void SetValueCore(IXmlCursor cursor, IDictionaryAdapter parentObject, bool hasCurrent, ref object value)
+		private void SetValueCore(IXmlCursor cursor, IDictionaryAdapter parentObject, bool hasCurrent, ref object value)
 		{
-			MakeNext(cursor, value.GetComponentType(), hasCurrent);
+			var clrType = value.GetComponentType();
+
+			if (hasCurrent || cursor.MoveNext())
+				cursor.Coerce(clrType);
+			else
+				cursor.Create(clrType);
+
 			Serializer.SetValue(cursor, parentObject, this, ref value);
 		}
 
 		private void SetNodeToNil(IXmlCursor cursor, bool hasCurrent)
 		{
-			MakeNext(cursor, clrType, hasCurrent);
+			if (hasCurrent || cursor.MoveNext())
+				if (cursor.IsAttribute)
+					ReplaceCurrent(cursor);
+				else
+					cursor.Coerce(clrType);
+			else
+				cursor.Create(clrType);
+
 			cursor.IsNil = true;
 		}
 
-		private static void MakeNext(IXmlCursor cursor, Type clrType, bool hasCurrent)
+		private void ReplaceCurrent(IXmlCursor cursor)
 		{
-			if (hasCurrent || cursor.MoveNext())
-				cursor.Coerce(clrType);
-			else
-				cursor.Create(clrType);
+			cursor.Remove();
+			cursor.MoveNext();
+			cursor.Create(ClrType);
 		}
 
 		public void GetCollectionItems(IXmlNode parentNode, IDictionaryAdapter parentObject, IList values)
