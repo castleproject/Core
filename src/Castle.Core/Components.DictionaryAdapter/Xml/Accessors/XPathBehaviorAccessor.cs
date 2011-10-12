@@ -36,7 +36,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			includedTypes = new XmlIncludedTypeSet();
 
-			foreach (var includedType in context.GetIncludedTypes(type))
+			foreach (var includedType in context.GetIncludedTypes(ClrType))
 				includedTypes.Add(includedType);
 		}
 
@@ -117,7 +117,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private object Evaluate(IXmlNode node)
 		{
 			var value = node.Evaluate(path);
-			return Convert.ChangeType(value, ClrType);
+			return value != null
+				? Convert.ChangeType(value, ClrType)
+				: null;
 		}
 
 		public override void SetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, ref object value)

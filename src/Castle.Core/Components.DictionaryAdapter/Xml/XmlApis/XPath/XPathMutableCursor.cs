@@ -131,6 +131,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return HasCurrent ? base.Xml : null; }
 		}
 
+		public override object Evaluate(CompiledXPath path)
+		{
+			return HasCurrent ? base.Evaluate(path) : null;
+		}
+
 		public void SetAttribute(XmlName name, string value)
 		{
 			if (string.IsNullOrEmpty(value))

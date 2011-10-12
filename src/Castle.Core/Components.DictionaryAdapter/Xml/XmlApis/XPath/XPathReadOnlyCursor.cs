@@ -22,7 +22,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		private XPathNodeIterator iterator;
 
-		private readonly XPathNavigator parent;
+		private readonly ILazy<XPathNavigator> parent;
 		private readonly XPathExpression path;
 		private readonly IXmlIncludedTypeMap includedTypes;
 		private readonly CursorFlags flags;
@@ -36,7 +36,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (includedTypes == null)
 				throw Error.ArgumentNull("includedTypes");
 
-			this.parent        = parent.HasValue ? parent.Value : null;
+			this.parent        = parent;
 			this.path          = path.Path;
 			this.includedTypes = includedTypes;
 			this.flags         = flags;
@@ -46,8 +46,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void Reset()
 		{
-			if (parent != null)
-				iterator = parent.Select(path);
+			if (parent.HasValue)
+				iterator = parent.Value.Select(path);
 		}
 
 		public bool MoveNext()

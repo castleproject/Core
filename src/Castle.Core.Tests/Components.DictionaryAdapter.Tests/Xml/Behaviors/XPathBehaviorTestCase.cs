@@ -137,31 +137,27 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-			public void Get_String()
+			public void Get_OnVirtual()
 			{
-				var foo = Create<IFoo>("<Foo> <A>a</A> </Foo>");
+				var foo = Create<IFoo>();
 
-				Assert.That(foo.StringValue, Is.EqualTo("a"));
+				Assert.That(foo.StringValue,  Is.Null);
+				Assert.That(foo.NumberValue,  Is.EqualTo(0));
+				Assert.That(foo.BooleanValue, Is.False);
 			}
 
 			[Test]
-			public void Get_Number()
-			{
-				var foo = Create<IFoo>("<Foo> <A/> <A/> <A/> </Foo>");
-
-				Assert.That(foo.NumberValue, Is.EqualTo(3));
-			}
-
-			[Test]
-			public void Get_Boolean()
+			public void Get_OnActual()
 			{
 				var foo = Create<IFoo>("<Foo> <A>a</A> </Foo>");
 
+				Assert.That(foo.StringValue,  Is.EqualTo("a"));
+				Assert.That(foo.NumberValue,  Is.EqualTo(1));
 				Assert.That(foo.BooleanValue, Is.EqualTo(true));
 			}
 
 			[Test]
-			public void SetProperty()
+			public void Set()
 			{
 				var foo = Create<IFoo>("<Foo/>");
 

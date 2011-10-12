@@ -193,7 +193,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				: (IXmlCursor) new XPathReadOnlyCursor(this, path, includedTypes, flags);
 		}
 
-		public object Evaluate(CompiledXPath path)
+		public virtual object Evaluate(CompiledXPath path)
 		{
 			return node.CreateNavigator().Evaluate(path.Path);
 		}
