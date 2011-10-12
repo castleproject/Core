@@ -76,7 +76,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override XmlName Name
 		{
-			get { return HasCurrent ? base.Name : knownTypes.Default.Name; }
+			get { return HasCurrent ? base.Name : GetEffectiveName(knownTypes.Default, node); }
 		}
 
 		public override XmlName XsiType
