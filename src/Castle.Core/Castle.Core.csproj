@@ -208,6 +208,7 @@
     <Compile Include="Components.DictionaryAdapter\Attributes\RemoveIfAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\XmlDefaultsAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\StringStorageAttribute.cs" />
+    <Compile Include="Components.DictionaryAdapter\DynamicDictionary.cs" />
     <Compile Include="Components.DictionaryAdapter\MemberwiseEqualityHashCodeStrategy.cs" />
     <Compile Include="Components.DictionaryAdapter\DictionaryAdapterBase.Copy.cs" />
     <Compile Include="Components.DictionaryAdapter\IDictionaryCopyStrategy.cs" />

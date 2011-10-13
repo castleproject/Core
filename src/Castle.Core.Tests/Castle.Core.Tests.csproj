@@ -152,6 +152,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net35\adodb.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Rhino.Mocks.CPP.Interfaces">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net35\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
@@ -205,6 +206,7 @@
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Address.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Color.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\DynamicDictionaryTests.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\IEmptyTest.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\IBook.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\MemberwiseEquaityHashCodeStrategyTestCase.cs" />
