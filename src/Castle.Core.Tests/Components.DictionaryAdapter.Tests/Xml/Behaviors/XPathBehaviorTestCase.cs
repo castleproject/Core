@@ -257,6 +257,30 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
+			public void Delete_NotDoAnything()
+			{
+				var xml = Xml
+				(
+					"<Foo>",
+						"<A>",
+							"<B Id='1'> <C>value1</C> </B>",
+						"</A>",
+					"</Foo>"
+				);
+
+				Create<IFoo>(xml).A = null;
+
+				Assert.That(xml, XmlEquivalent.To
+				(
+					"<Foo>",
+						"<A>",
+							"<B Id='1'> <C>value1</C> </B>",
+						"</A>",
+					"</Foo>"
+				));
+			}
+
+			[Test]
 			public void Delete_Partial()
 			{
 				var xml = Xml

@@ -416,15 +416,24 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			RequireRemovable();
 
-			while (depth > 0)
-			{
-				var name = new XmlName(node.LocalName, node.NamespaceURI);
-				node.DeleteSelf();
-				depth--;
+			var name = XmlName.Empty;
 
+			if (!HasCurrent)
+			{
+				var namespaceUri = LookupNamespaceUri(step.Prefix) ?? node.NamespaceURI;
+				name = new XmlName(step.LocalName, namespaceUri);
+			}
+
+			do
+			{
 				if (node.MoveToChild(name.LocalName, name.NamespaceUri))
 					break;
+
+				name = new XmlName(node.LocalName, node.NamespaceURI);
+				node.DeleteSelf();
+				depth--;
 			}
+			while (depth > 0);
 
 			ResetCurrent();
 		}
