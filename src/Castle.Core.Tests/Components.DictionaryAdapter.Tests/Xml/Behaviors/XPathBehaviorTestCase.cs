@@ -248,6 +248,58 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[TestFixture]
+		public class PartialPaths : XmlAdapterTestCase
+		{
+			public interface IFoo
+			{
+				[XPath("A/B[@Id='2']/C")]
+				string A { get; set; }
+			}
+
+			[Test]
+			public void Delete_Partial()
+			{
+				var xml = Xml
+				(
+					"<Foo>",
+						"<A>",
+							"<B Id='1'> <C>value1</C> </B>",
+							"<B Id='2'> <C>value2</C> </B>",
+						"</A>",
+					"</Foo>"
+				);
+
+				Create<IFoo>(xml).A = null;
+
+				Assert.That(xml, XmlEquivalent.To
+				(
+					"<Foo>",
+						"<A>",
+							"<B Id='1'> <C>value1</C> </B>",
+						"</A>",
+					"</Foo>"
+				));
+			}
+
+			[Test]
+			public void Delete_Whole()
+			{
+				var xml = Xml
+				(
+					"<Foo>",
+						"<A>",
+							"<B Id='2'> <C>value2</C> </B>",
+						"</A>",
+					"</Foo>"
+				);
+
+				Create<IFoo>(xml).A = null;
+
+				Assert.That(xml, XmlEquivalent.To("<Foo/>"));
+			}
+		}
+
+		[TestFixture]
 		public class SeparateGetterSetter_SimpleType : XmlAdapterTestCase
 		{
 			public interface IFoo
