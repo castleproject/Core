@@ -1,0 +1,16 @@
+
+/build
+AssemblyInfo.cs
+
+# Standard VS.NET and ReSharper Foo
+src/*/obj
+src/*/bin
+*.csproj.user
+_ReSharper*
+*.user
+*.suo
+*.cache
+* Thumbs.db
+*.csproj.ReSharper
+
+*.orig

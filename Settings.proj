@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+***********************************************************************************************
+
+	Project Settings file for VS and external build files
+
+Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+***********************************************************************************************
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<!-- Root Path definition relative for actual build file -->
+	<PropertyGroup>
+		<RootPath Condition="'$(RootPath)' == ''">$(MSBuildProjectDirectory)</RootPath>
+	</PropertyGroup>
+
+
+	<!-- Project Properties -->
+	<PropertyGroup>
+		<ProjectName>Castle.Core</ProjectName>
+		
+		<!-- Used for display purposes. Should start with a space to look better -->
+		<BuildName> beta 1</BuildName>
+		<!-- Versioning -->
+		<Project_Major>3</Project_Major>
+		<Project_Minor>0</Project_Minor>
+		<Project_Build>0</Project_Build>
+
+		<AssemblyVersion_Build>0</AssemblyVersion_Build> <!-- By default it's (and should be) equal to $(Project_Build) -->
+
+		<!-- Project folders -->
+		<BuildScriptsPath Condition="'$(BuildScriptsPath)' ==''">$(RootPath)\buildscripts</BuildScriptsPath>
+
+	</PropertyGroup>
+	
+
+	<ItemGroup>
+		<!-- 
+		Specify additional items to package here, they are added to the package
+		in addition to automatically detected dependencies.
+		The items are resolved relative to $(OutputPath)
+		-->
+		<PackageFiles Include="$(OutputPath)log4net.dll" Condition="Exists('$(OutputPath)log4net.dll')"/>
+		<PackageFiles Include="$(OutputPath)log4net.xml" Condition="Exists('$(OutputPath)log4net.xml')"/>
+		<PackageFiles Include="$(OutputPath)NLog.dll"  Condition="Exists('$(OutputPath)NLog.dll')"/>
+		<PackageFiles Include="$(OutputPath)NLog.xml"  Condition="Exists('$(OutputPath)NLog.xml')"/>
+	</ItemGroup>
+
+
+	<!-- Import framework version specific settings, like Settings-v3.5 or Settings-v4.0 -->
+	<Import
+		Project="$(RootPath)\Settings-$(TargetFrameworkVersion).proj"
+		Condition="'$(TargetFrameworkVersion)' != '' and Exists('$(RootPath)\Settings-$(TargetFrameworkVersion).proj')"
+		/>
+
+	<!-- Import Silverlight specific settings -->
+	<Import
+		Project="$(RootPath)\Settings-SL.proj"
+		Condition="('$(BuildConfigKey)' == 'SL3' or '$(BuildConfigKey)' == 'SL4') and Exists('$(RootPath)\Settings-SL.proj')"
+		/>
+
+</Project>
