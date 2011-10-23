@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="collection_not_empty" xml:space="preserve">
+    <value>La colección no debe estar vacía</value>
+  </data>
+  <data name="credit_card_invalid" xml:space="preserve">
+    <value>Este campo no contiene un número de tarjeta de crédito válido o es de un tipo no soportado.</value>
+  </data>
+  <data name="date_invalid" xml:space="preserve">
+    <value>Por favor, ingrese una fecha válida</value>
+  </data>
+  <data name="decimal_invalid" xml:space="preserve">
+    <value>Por favor, ingrese un número decimal válido</value>
+  </data>
+  <data name="double_invalid" xml:space="preserve">
+    <value>Por favor, ingrese un número decimal válido</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>Ingrese una dirección de correo válida. Por ejemplo pedro@dominio.com</value>
+  </data>
+  <data name="exactlength" xml:space="preserve">
+    <value>Este campo debe tener {0} caracteres</value>
+  </data>
+  <data name="generic_invalid" xml:space="preserve">
+    <value>Este campo tiene contenido no válido</value>
+  </data>
+  <data name="group_not_empty_invalid" xml:space="preserve">
+    <value>Al menos uno de los valores no debería estar vacío</value>
+  </data>
+  <data name="integer_invalid" xml:space="preserve">
+    <value>Por favor, ingrese un número entero válido</value>
+  </data>
+  <data name="isrequired" xml:space="preserve">
+    <value>Este campo es requerido</value>
+  </data>
+  <data name="length_invalidrange" xml:space="preserve">
+    <value>Este campo debe tener entre {0} y {1} caracteres</value>
+  </data>
+  <data name="length_toolong" xml:space="preserve">
+    <value>Este campo no debe tener más de {0} caracteres</value>
+  </data>
+  <data name="length_tooshort" xml:space="preserve">
+    <value>Este campo debe tener por lo menos {1} caracteres</value>
+  </data>
+  <data name="not_same_as_invalid" xml:space="preserve">
+    <value>Los campos no deben coincidir</value>
+  </data>
+  <data name="not_same_value_invalid" xml:space="preserve">
+    <value>Este campo debe ser distinto a '{0}'</value>
+  </data>
+  <data name="range_invalid" xml:space="preserve">
+    <value>Este campo debe estar entre {0} y {1}</value>
+  </data>
+  <data name="range_toohigh" xml:space="preserve">
+    <value>Este campo debe ser menor o igual a {0}</value>
+  </data>
+  <data name="range_toohighorlow" xml:space="preserve">
+    <value>Este campo debe estar entre {0} y {1}</value>
+  </data>
+  <data name="range_toolow" xml:space="preserve">
+    <value>Este campo debe ser mayor o igual a {0}</value>
+  </data>
+  <data name="same_as_invalid" xml:space="preserve">
+    <value>Los campos no coinciden</value>
+  </data>
+  <data name="set_invalid" xml:space="preserve">
+    <value>Este campo debe pertenecer a una serie de valores dados</value>
+  </data>
+  <data name="single_invalid" xml:space="preserve">
+    <value>Este campo requiere un número decimal válido</value>
+  </data>
+  <data name="time_invalid" xml:space="preserve">
+    <value>Este campo requiere una hora válida</value>
+  </data>
+</root>
