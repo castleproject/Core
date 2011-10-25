@@ -48,6 +48,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		public bool IsNil   { get; set; }
 		public string Value { get; set; }
 
+		public bool Exists { get { return true; } }
+
 		public bool IsElement
 		{
 			get { throw new NotImplementedException(); }
@@ -103,6 +105,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			throw new NotImplementedException();
 		}
 
+		public IXmlIterator SelectSubtree()
+		{
+			throw new NotImplementedException();
+		}
+
 		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap includedTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
 		{
 			throw new NotImplementedException();
@@ -129,6 +136,38 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		public XmlWriter WriteChildren()
+		{
+			throw new NotImplementedException();
+		}
+
+
+		public void SetAttribute(XmlName name, string value)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IRealizable<T> AsRealizable<T>()
+		{
+			return null; // Not realizable
+		}
+
+
+		public IXmlNode Parent
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public IXmlNamespaceSource Namespaces
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public object UnderlyingObject
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool UnderlyingPositionEquals(IXmlNode node)
 		{
 			throw new NotImplementedException();
 		}

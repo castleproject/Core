@@ -21,7 +21,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Prefix        = "wsdl",
 			NamespaceUri  = "http://microsoft.com/wsdl/types/";
 
-		public static readonly XmlNamespaceAttribute
-			Attribute = new XmlNamespaceAttribute(NamespaceUri, Prefix) { Root = true };
+		internal static readonly XmlNamespaceAttribute
+			Namespace = new XmlNamespaceAttribute(NamespaceUri, Prefix) { Root = true };
 	}
 }

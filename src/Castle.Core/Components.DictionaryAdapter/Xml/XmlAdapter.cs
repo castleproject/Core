@@ -33,6 +33,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		private IXmlNode node;
 		private object source;
+		private XmlReferenceManager references;
 		private XmlMetadata primaryXmlMeta;
 		private Dictionary<Type, XmlMetadata> secondaryXmlMetas;
 
@@ -44,19 +45,29 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 		    if (node == null)
 		        throw Error.ArgumentNull("node");
+
 			this.source = node;
 		}
 #endif
-		public XmlAdapter(IXmlNode node)
+		public XmlAdapter(IXmlNode node, XmlReferenceManager references)
 		{
 		    if (node == null)
 		        throw Error.ArgumentNull("node");
+		    if (references == null)
+		        throw Error.ArgumentNull("references");
+
 			this.node = node;
+			this.references = references;
 		}
 
 		public IXmlNode Node
 		{
 			get { return node; }
+		}
+
+		internal XmlReferenceManager References
+		{
+			get { return references; }
 		}
 
 		object IDictionaryCreateStrategy.Create(IDictionaryAdapter parent, Type type, IDictionary dictionary)
@@ -152,7 +163,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			XmlAccessor accessor;
 			if (TryGetAccessor(key, property, null != storedValue, out accessor))
 			{
-				storedValue = accessor.GetPropertyValue(node, dictionaryAdapter, !ifExists);
+				storedValue = accessor.GetPropertyValue(node, dictionaryAdapter, references, !ifExists);
 				if (null != storedValue)
 				{
 					AttachObservers(storedValue, dictionaryAdapter, property);
@@ -170,7 +181,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{
 				if (value != null && dictionaryAdapter.ShouldClearProperty(property, value))
 					value = null;
-				accessor.SetPropertyValue(node, dictionaryAdapter, ref value);
+				var oldValue = dictionaryAdapter.ReadProperty(key);
+				accessor.SetPropertyValue(node, dictionaryAdapter, references, oldValue, ref value);
 			}
 			return true;
 		}
@@ -193,9 +205,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			// must be root
 			
 			var cursor = primaryXmlMeta.SelectBase(node);
-			return cursor.MoveNext()
+			node = cursor.MoveNext()
 				? cursor.Save()
 				: cursor;
+
+			references = new XmlReferenceManager(node, DefaultXmlReferenceFormat.Instance);
+			return node;
 		}
 
 		private IXmlNode GetSourceNode()
@@ -203,7 +218,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 #if !SILVERLIGHT
 			var xmlNode = source as XmlNode;
 			if (xmlNode != null)
-				return new SysXmlNode(xmlNode, primaryXmlMeta.ClrType);
+				return new SysXmlNode(xmlNode, primaryXmlMeta.ClrType, primaryXmlMeta.Context);
 #endif
 
 			throw Error.NotSupported();
@@ -224,8 +239,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private XmlAccessor CreateAccessor(string key, PropertyDescriptor property)
 		{
-			var accessor   = null as XmlAccessor;
-			var isVolatile = false;
+			var accessor    = null as XmlAccessor;
+			var isVolatile  = false;
+			var isReference = false;
 
 			if (string.IsNullOrEmpty(key))
 				accessor = CreateAccessor(key, property, XmlSelfAccessor.Factory);
@@ -236,13 +252,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					return XmlIgnoreBehaviorAccessor.Instance;
 				else if (IsVolatileBehavior(behavior))
 					isVolatile = true;
-				TryApplyBehavior(key, property, behavior, ref accessor);
+				else if (IsReferenceBehavior(behavior))
+					isReference = true;
+				else
+					TryApplyBehavior(key, property, behavior, ref accessor);
 			}
 
 			if (accessor == null)
 				accessor = CreateAccessor(key, property, XmlDefaultBehaviorAccessor.Factory);
 
-			accessor.ConfigureVolatile(isVolatile);
+			accessor.ConfigureVolatile (isVolatile);
+			accessor.ConfigureReference(isReference);
 			accessor.Prepare();
 			property.SetAccessor(accessor);
 			return accessor;
@@ -328,6 +348,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return behavior is VolatileAttribute;
 		}
 
+		private static bool IsReferenceBehavior(object behavior)
+		{
+			return behavior is ReferenceAttribute;
+		}
+
 		private void AttachObservers(object value, IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
 		{
 			var bindingList = value as IBindingList;
@@ -382,12 +407,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				if (!required) return null;
 				else throw Error.NoXmlAdapter("obj");
 
-			var xmlAdapter = getters.OfType<XmlAdapter>().SingleOrDefault();
-			if (xmlAdapter == null)
-				if (!required) return null;
-				else throw Error.NoXmlAdapter("obj");
+			XmlAdapter xmlAdapter;
+			foreach (var getter in getters)
+				if (null != (xmlAdapter = getter as XmlAdapter))
+					return xmlAdapter;
 
-			return xmlAdapter;
+			if (!required) return null;
+			else throw Error.NoXmlAdapter("obj");
 		}
 
 		public static bool IsPropertyDefined(string propertyName, IDictionaryAdapter dictionaryAdapter)

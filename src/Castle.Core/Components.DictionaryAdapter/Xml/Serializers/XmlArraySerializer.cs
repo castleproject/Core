@@ -45,12 +45,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-			var items    = new ArrayList();
-			var itemType = node.ClrType.GetElementType();
+			var items      = new ArrayList();
+			var itemType   = node.ClrType.GetElementType();
+			var references = XmlAdapter.For(parent).References;
 
 			accessor
 				.GetCollectionAccessor(itemType)
-				.GetCollectionItems(node, parent, items);
+				.GetCollectionItems(node, parent, references, items);
 
 			return items.ToArray(itemType);
 		}
@@ -63,13 +64,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var subaccessor = accessor.GetCollectionAccessor(itemType);
 			var cursor      = subaccessor.SelectCollectionItems(node, true);
 			var serializer  = subaccessor.Serializer;
+			var references  = XmlAdapter.For(parent).References;
 
 			for (var i = 0; i < source.Length; i++)
 			{
 				var originalItem = source.GetValue(i);
 				var assignedItem = originalItem;
 
-				subaccessor.SetValue(cursor, parent, false, ref assignedItem);
+				subaccessor.SetValue(cursor, parent, references, cursor.MoveNext(), null /* TODO: Get Value */, ref assignedItem);
 
 				if (target != null)
 				{

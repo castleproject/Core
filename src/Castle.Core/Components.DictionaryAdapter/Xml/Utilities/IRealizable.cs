@@ -14,17 +14,25 @@
 
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	using System;
-
-	public interface IXmlCursor : IXmlIterator
+	public interface IRealizable<T> : IRealizableSource
 	{
-		void Reset();
-		void MoveTo(IXmlNode node);
-		void MoveToEnd();
+		bool Exists { get; }
+		T    Value  { get; }
+	}
 
-		void Create(Type type);
-		void Coerce(Type type);
-		void Remove();
-		void RemoveAllNext();
+	public interface IRealizableSource
+	{
+		IRealizable<T> AsRealizable<T>();
+	}
+
+	public static class RealizableExtensions
+	{
+		public static IRealizable<T> RequireRealizable<T>(this IRealizableSource obj)
+		{
+			var realizable = obj.AsRealizable<T>();
+			if (realizable == null)
+				throw Error.NotRealizable<T>();
+			return realizable;
+		}
 	}
 }

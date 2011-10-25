@@ -1087,7 +1087,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			Assert.AreEqual(1, groupRead.Employees.Length);
 		}
 
-		[Test]
+		[Test, Ignore("Need to opt in or out of reference tracking for this to work.")]
 		public void Can_Write_To_Standard_Xml_Serialization()
 		{
 			XmlDocument document = null, mgr = null, emp = null;

@@ -16,15 +16,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 
-	public interface IXmlCursor : IXmlIterator
+	public interface IXmlIterator : IXmlNode
 	{
-		void Reset();
-		void MoveTo(IXmlNode node);
-		void MoveToEnd();
-
-		void Create(Type type);
-		void Coerce(Type type);
-		void Remove();
-		void RemoveAllNext();
+		bool MoveNext();
+		IXmlNode Save();
 	}
 }

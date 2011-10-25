@@ -31,6 +31,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private readonly IXmlCollectionAccessor accessor;
 		private readonly IXmlNode parentNode;
 		private readonly IDictionaryAdapter parentObject;
+		private readonly XmlReferenceManager references;
 		private PropertyChangedEventHandler propertyHandler;
 
 		private static PropertyDescriptorCollection itemProperties;
@@ -46,6 +47,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.cursor       = accessor.SelectCollectionItems(parentNode, true);
 			this.parentNode   = parentNode;
 			this.parentObject = parentObject;
+			this.references   = XmlAdapter.For(parentObject).References;
 
 			while (cursor.MoveNext())
 				items.Add(new XmlCollectionItem<T>(cursor.Save()));
@@ -168,7 +170,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			var item = items[index];
 			cursor.MoveTo(item.Node);
-			SetValue(cursor, ref value);
+			SetValue(cursor, item.Value, ref value);
 
 			if (ShouldReplace(item.Value, value))
 			{
@@ -179,9 +181,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 			else
 			{
-				value = (T) item.Value;
-				SetValue(cursor, ref value);
-				items[index] = item.WithValue(value);
+				var oldValue = item.Value;
+				SetValue(cursor, value, ref oldValue);
+				items[index] = item.WithValue(oldValue);
 			}
 		}
 
@@ -273,7 +275,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			cursor.Create(GetTypeOrDefault(value));
 			var node = cursor.Save();
-			SetValue(cursor, ref value);
+			SetValue(cursor, default(T), ref value);
 
 			return ShouldAdd(value)
 				? CommitInsert(index, node, value, append)
@@ -326,22 +328,32 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void RemoveCore(int index)
 		{
 			EndNew(addedIndex);
+
 			var item = items[index];
 			DetachPropertyChanged(item.Value);
+			references.OnAssigningNull(item.Node, item.Value);
+
 			cursor.MoveTo(item.Node);
 			cursor.Remove();
 			items.RemoveAt(index);
+
 			NotifyListChanged(ListChangedType.ItemDeleted, index);
 		}
 
 		public virtual void Clear()
 		{
 			EndNew(addedIndex);
+
 			foreach (var item in items)
+			{
 				DetachPropertyChanged(item.Value);
+				references.OnAssigningNull(item.Node, item.Value);
+			}
+
 			cursor.Reset();
 			cursor.RemoveAllNext();
 			items.Clear();
+
 			NotifyListReset();
 		}
 
@@ -362,13 +374,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private T GetValue(IXmlNode node)
 		{
-			return (T) (accessor.GetValue(node, parentObject, true, true) ?? default(T));
+			return (T) (accessor.GetValue(node, parentObject, references, true, true) ?? default(T));
 		}
 
-		private void SetValue(IXmlCursor cursor, ref T value)
+		private void SetValue(IXmlCursor cursor, object oldValue, ref T value)
 		{
 			object obj = value;
-			accessor.SetValue(cursor, parentObject, true, ref obj);
+			accessor.SetValue(cursor, parentObject, references, true, oldValue, ref obj);
 			value = (T) (obj ?? default(T));
 		}
 

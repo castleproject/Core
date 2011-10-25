@@ -70,6 +70,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			internal set { next = value; }
 		}
 
+		public CompiledXPathNode PreviousNode
+		{
+			get { throw new Exception(); }
+		}
+
 		public IList<CompiledXPathNode> Dependencies
 		{
 			get { return dependencies; }

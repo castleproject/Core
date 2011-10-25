@@ -102,23 +102,23 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				&& base.IsPropertyDefined(parentNode);
 		}
 
-		public override object GetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, bool orStub)
+		public override object GetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, XmlReferenceManager references, bool orStub)
 		{
-			return GetPropertyValueCore   (parentNode, parentObject, orStub)
-				?? GetDefaultPropertyValue(parentNode, parentObject, orStub);
+			return GetPropertyValueCore   (parentNode, parentObject, references, orStub)
+				?? GetDefaultPropertyValue(parentNode, parentObject, references, orStub);
 		}
 
-		private object GetPropertyValueCore(IXmlNode parentNode, IDictionaryAdapter parentObject, bool orStub)
+		private object GetPropertyValueCore(IXmlNode parentNode, IDictionaryAdapter parentObject, XmlReferenceManager references, bool orStub)
 		{
 			return SelectsNodes
-				? base.GetPropertyValue(parentNode, parentObject, orStub)
+				? base.GetPropertyValue(parentNode, parentObject, references, orStub)
 				: Evaluate(parentNode);
 		}
 
-		private object GetDefaultPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, bool orStub)
+		private object GetDefaultPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, XmlReferenceManager references, bool orStub)
 		{
 			return defaultAccessor != null
-				? defaultAccessor.GetPropertyValue(parentNode, parentObject, orStub)
+				? defaultAccessor.GetPropertyValue(parentNode, parentObject, references, orStub)
 				: null;
 		}
 
@@ -130,10 +130,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				: null;
 		}
 
-		public override void SetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, ref object value)
+		public override void SetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, XmlReferenceManager references, object oldValue, ref object value)
 		{
 			if (SelectsNodes)
-				base.SetPropertyValue(parentNode, parentObject, ref value);
+				base.SetPropertyValue(parentNode, parentObject, references, oldValue, ref value);
 			else
 				throw Error.XPathNotCreatable(path);
 		}

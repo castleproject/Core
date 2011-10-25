@@ -50,6 +50,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return clrType ?? node.ClrType; }
 		}
 
+		public bool Exists
+		{
+			get { return node.Exists; }
+		}
+
 		public bool IsElement
 		{
 			get { return node.IsElement; }
@@ -58,11 +63,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public bool IsAttribute
 		{
 			get { return node.IsAttribute; }
-		}
-
-		public bool IsRoot
-		{
-			get { return node.IsRoot; }
 		}
 
 		public bool IsNil
@@ -82,6 +82,31 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return node.Xml; }
 		}
 
+		public IXmlNode Parent
+		{
+			get { return node.Parent; }
+		}
+
+		public IXmlNamespaceSource Namespaces
+		{
+			get { return node.Namespaces; }
+		}
+
+		public object UnderlyingObject
+		{
+			get { return node.UnderlyingObject; }
+		}
+
+		public bool UnderlyingPositionEquals(IXmlNode node)
+		{
+			return this.node.UnderlyingPositionEquals(node);
+		}
+
+		public IRealizable<T> AsRealizable<T>()
+		{
+			return node.AsRealizable<T>();
+		}
+
 		public string GetAttribute(XmlName name)
 		{
 			return node.GetAttribute(name);
@@ -89,7 +114,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void SetAttribute(XmlName name, string value)
 		{
-			throw Error.NotSupported();
+			node.SetAttribute(name, value);
 		}
 
 		public string LookupPrefix(string namespaceUri)
@@ -102,19 +127,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return node.LookupNamespaceUri(prefix);
 		}
 
-		public string EnsurePrefix(string namespaceUri)
-		{
-			throw Error.NotSupported();
-		}
-
 		public void DefineNamespace(string prefix, string namespaceUri, bool root)
 		{
 			node.DefineNamespace(prefix, namespaceUri, root);
-		}
-
-		public bool PositionEquals(IXmlNode node)
-		{
-			return node.PositionEquals(node);
 		}
 
         public bool MoveNext()
@@ -151,6 +166,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
 		{
 			return node.SelectChildren(knownTypes, namespaces, flags);
+		}
+
+		public IXmlIterator SelectSubtree()
+		{
+			return node.SelectSubtree();
 		}
 
 #if !SL3

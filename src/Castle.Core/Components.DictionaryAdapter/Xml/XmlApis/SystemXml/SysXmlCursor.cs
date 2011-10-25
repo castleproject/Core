@@ -23,10 +23,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		private State state;
 		private int index;
-
-		private readonly ILazy<XmlNode> parent;
 		private readonly IXmlKnownTypeMap knownTypes;
-		private readonly IXmlNamespaceSource namespaces;
 		private readonly CursorFlags flags;
 
 		protected enum State
@@ -40,23 +37,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Attribute       =  2  // An attribute is currently selected
 		}
 
-		public SysXmlCursor(ILazy<XmlNode> parent, IXmlKnownTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
+		public SysXmlCursor(IXmlNode parent, IXmlKnownTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
+			: base(namespaces, parent)
 		{
 			if (null == parent)
 				throw Error.ArgumentNull("parent");
 			if (null == knownTypes)
 				throw Error.ArgumentNull("knownTypes");
-			if (null == namespaces)
-				throw Error.ArgumentNull("namespaces");
 
-			this.parent     = parent;
 			this.knownTypes = knownTypes;
-			this.namespaces = namespaces;
 			this.flags      = flags;
 			this.index      = -1;
 
-			if (parent.HasValue)
-				node = parent.Value;
+			var source = parent.RequireRealizable<XmlNode>();
+			if (source.Exists)
+				node = source.Value;
 		}
 
 		public override bool Exists
@@ -94,20 +89,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return HasCurrent ? base.IsAttribute : !flags.IncludesElements(); }
 		}
 
-		public override bool IsRoot
-		{
-			get { return false; } // Never yields root
-		}
-
 		public override bool IsNil
 		{
 			get { return HasCurrent && base.IsNil; }
-		}
-
-		bool IXmlCursor.IsNil
-		{
-			get { return IsNil; }
-			set { Realize(); this.SetXsiNil(value); }
+			set { Realize(); base.IsNil = value; }
 		}
 
 		public override string Value
@@ -124,35 +109,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override object Evaluate(CompiledXPath path)
 		{
 			return HasCurrent ? base.Evaluate(path) : null;
-		}
-
-		public void SetAttribute(XmlName name, string value)
-		{
-			var element = node as XmlElement;
-
-			if (string.IsNullOrEmpty(value))
-			{
-				if (element != null)
-					element.RemoveAttribute(name.LocalName, name.NamespaceUri);
-				return;
-			}
-
-			if (element == null)
-				throw Error.CannotSetAttribute(this);
-
-			var attribute = element.GetAttributeNode(name.LocalName, name.NamespaceUri);
-			if (attribute == null)
-			{
-				var prefix = namespaces.GetAttributePrefix(this, name.NamespaceUri);
-				attribute = element.OwnerDocument.CreateAttribute(prefix, name.LocalName, name.NamespaceUri);
-				element.SetAttributeNode(attribute);
-			}
-			attribute.Value = value;
-		}
-
-		public string EnsurePrefix(string namespaceUri)
-		{
-			return namespaces.GetAttributePrefix(this, namespaceUri);
 		}
 
 		public bool MoveNext()
@@ -306,8 +262,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void MoveTo(IXmlNode position)
 		{
-			var source = position as ILazy<XmlNode>;
-			if (source == null || !source.HasValue)
+			var source = position.AsRealizable<XmlNode>();
+			if (source == null || !source.Exists)
 				throw Error.CursorCannotMoveToGivenNode();
 
 			IXmlKnownType knownType;
@@ -380,7 +336,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			node = ((XmlAttribute) node).OwnerElement;
 		}
 
-		public override void Realize()
+		protected override void Realize()
 		{
 			if (HasCurrent)
 				return;
@@ -487,7 +443,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private XmlElement CreateElementCore(XmlNode parent, XmlName name)
 		{
 			var document = parent.OwnerDocument ?? (XmlDocument) parent;
-			var prefix   = namespaces.GetElementPrefix(this, name.NamespaceUri);
+			var prefix   = Namespaces.GetElementPrefix(this, name.NamespaceUri);
 			var element  = document.CreateElement(prefix, name.LocalName, name.NamespaceUri);
 			node = element;
 			return element;
@@ -496,7 +452,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private XmlAttribute CreateAttributeCore(XmlNode parent, XmlName name)
 		{
 			var document  = parent.OwnerDocument ?? (XmlDocument) parent;
-			var prefix    = namespaces.GetAttributePrefix(this, name.NamespaceUri);
+			var prefix    = Namespaces.GetAttributePrefix(this, name.NamespaceUri);
 			var attribute = document.CreateAttribute(prefix, name.LocalName, name.NamespaceUri);
 			node = attribute;
 			return attribute;
@@ -561,7 +517,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public IXmlNode Save()
 		{
-			return new SysXmlNode(node, type);
+			return new SysXmlNode(node, type, Namespaces);
 		}
 
 		private XmlNode RequireCreatable()
@@ -572,7 +528,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				case State.Element:   position = node; MoveToParentOfElement();   break;
 				case State.Attribute: position = node; MoveToParentOfAttribute(); break;
 				case State.End:       position = null; break;
-				case State.Empty:     position = null; node = parent.Value; break;
+				case State.Empty:     position = null; node = Parent.AsRealizable<XmlNode>().Value; break;
 				default:              throw Error.CursorNotInCreatableState();
 			}
 			return position;

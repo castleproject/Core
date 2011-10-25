@@ -57,12 +57,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			base.Prepare();
 		}
 
-		protected override void SetValueToNull(IXmlCursor cursor, bool hasCurrent)
+		public override void SetValue(IXmlCursor cursor, IDictionaryAdapter parentObject, XmlReferenceManager references,
+			bool hasCurrent, object oldValue, ref object newValue)
 		{
-			if (IsCollection)
-				base.RemoveCollectionItems(cursor);
+			if (newValue == null && IsCollection)
+				base.RemoveCollectionItems(cursor, references, oldValue);
 			else
-				base.SetValueToNull(cursor, hasCurrent);
+				base.SetValue(cursor, parentObject, references, hasCurrent, oldValue, ref newValue);
 		}
 
 		public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)

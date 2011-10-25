@@ -23,9 +23,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 #endif
 
 #if !SL3
-	public class XmlContextBase : XsltContext
+	public class XmlContextBase : XsltContext, IXmlNamespaceSource
 #else
-	public class XmlContextBase : XmlNamespaceManager
+	public class XmlContextBase : XmlNamespaceManager, IXmlNamespaceSource
 #endif
 	{
 		private readonly XmlContextBase parent;
@@ -40,9 +40,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XmlContextBase()
 			: base(new NameTable())
 		{
-			AddNamespace(Xsd .Attribute);
-			AddNamespace(Xsi .Attribute);
-			AddNamespace(Wsdl.Attribute);
+			AddNamespace(Xsd .Namespace);
+			AddNamespace(Xsi .Namespace);
+			AddNamespace(Wsdl.Namespace);
+			AddNamespace(XRef.Namespace);
 		}
 
 		protected XmlContextBase(XmlContextBase parent)

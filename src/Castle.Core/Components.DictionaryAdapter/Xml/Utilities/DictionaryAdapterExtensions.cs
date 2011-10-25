@@ -102,8 +102,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 
 		private const string
-			XmlAccessorKey = "XmlAccessor",
-			XmlMetaKey     = "XmlMeta",
-			XmlTypeKey     = "XmlType";
+			XmlAccessorKey         = "XmlAccessor",
+			XmlMetaKey             = "XmlMeta",
+			XmlTypeKey             = "XmlType",
+			XmlReferenceManagerKey = "XmlReferenceManager";
 	}
 }

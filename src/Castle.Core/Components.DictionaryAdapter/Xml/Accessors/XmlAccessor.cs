@@ -80,6 +80,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return 0 != (state & States.Volatile); }
 		}
 
+		public bool IsReference
+		{
+			get { return 0 != (state & States.Reference); }
+		}
+
 		public virtual void ConfigureNillable(bool nillable)
 		{
 			if (nillable)
@@ -90,6 +95,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			if (isVolatile)
 				state |= States.Volatile;
+		}
+
+		public void ConfigureReference(bool isReference)
+		{
+			if (isReference)
+				state |= States.Reference;
 		}
 
 		public virtual void Prepare()
@@ -124,7 +135,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return cursor.MoveNext();
 		}
 
-		public virtual object GetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, bool orStub)
+		public virtual object GetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, XmlReferenceManager references, bool orStub)
 		{
 			if (orStub) orStub &= serializer.CanGetStub;
 
@@ -132,10 +143,27 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				? SelectCollectionNode(parentNode, orStub)
 				: SelectPropertyNode  (parentNode, orStub);
 
-			return GetValue(cursor, parentObject, cursor.MoveNext(), orStub);
+			return GetValue(cursor, parentObject, references, cursor.MoveNext(), orStub);
 		}
 
-		public object GetValue(IXmlNode node, IDictionaryAdapter parentObject, bool nodeExists, bool orStub)
+		public object GetValue(IXmlNode node, IDictionaryAdapter parentObject, XmlReferenceManager references, bool nodeExists, bool orStub)
+		{
+			var value = null as object;
+			var token = null as object;
+
+			if (nodeExists)
+				if (!references.OnGetStarting(ref node, ref value, out token))
+					return value;
+
+			value = GetValueCore(node, parentObject, nodeExists, orStub);
+
+			if (nodeExists)
+				references.OnGetCompleted(node, value, token);
+
+			return value;
+		}
+
+		private object GetValueCore(IXmlNode node, IDictionaryAdapter parentObject, bool nodeExists, bool orStub)
 		{
 			if (nodeExists)
 				if (!node.IsNil)
@@ -148,81 +176,173 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				: null;
 		}
 
-		public virtual void SetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, ref object value)
+		public virtual void SetPropertyValue(IXmlNode parentNode, IDictionaryAdapter parentObject, XmlReferenceManager references,
+			object oldValue, ref object value)
 		{
 			var cursor = IsCollection
 				? SelectCollectionNode(parentNode, true)
 				: SelectPropertyNode  (parentNode, true);
-
-			SetValue(cursor, parentObject, false, ref value);
+				
+			SetValue(cursor, parentObject, references, cursor.MoveNext(), oldValue, ref value);
 		}
 
-		public void SetValue(IXmlCursor cursor, IDictionaryAdapter parentObject, bool hasCurrent, ref object value)
+		public virtual void SetValue(IXmlCursor cursor, IDictionaryAdapter parentObject, XmlReferenceManager references,
+			bool hasCurrent, object oldValue, ref object newValue)
 		{
-			if (null != value)
-				SetValueCore(cursor, parentObject, hasCurrent, ref value);
-			else
-				SetValueToNull(cursor, hasCurrent);
-		}
+			var hasValue   = null != newValue;
+			var isNillable = this.IsNillable; 
 
-		protected virtual void SetValueToNull(IXmlCursor cursor, bool hasCurrent)
-		{
-			if (IsNillable)
-				SetNodeToNil(cursor, hasCurrent);
-			else if (hasCurrent)
-				cursor.Clear();
-			else
-				cursor.RemoveAllNext();
-		}
+			var clrType = hasValue
+				? newValue.GetComponentType()
+				: this.clrType;
 
-		private void SetValueCore(IXmlCursor cursor, IDictionaryAdapter parentObject, bool hasCurrent, ref object value)
-		{
-			var clrType = value.GetComponentType();
-
-			if (hasCurrent || cursor.MoveNext())
-				cursor.Coerce(clrType);
-			else
-				cursor.Create(clrType);
-
-			Serializer.SetValue(cursor, parentObject, this, ref value);
-		}
-
-		private void SetNodeToNil(IXmlCursor cursor, bool hasCurrent)
-		{
-			if (hasCurrent || cursor.MoveNext())
-				if (cursor.IsAttribute)
-					ReplaceCurrent(cursor);
+			if (hasValue || isNillable)
+			{
+				if (hasCurrent)
+					Coerce(cursor, clrType, !hasValue && cursor.IsAttribute); // TODO: Refactor. (NB: && isNillable is emplied)
 				else
-					cursor.Coerce(clrType);
-			else
-				cursor.Create(clrType);
+					cursor.Create(clrType);
+			}
+			else if (!hasCurrent)
+			{
+				// No node exists + no value to assign + and not nillable = no work to do
+				return;
+			}
 
-			cursor.IsNil = true;
+			object token;
+			if (references.OnAssigningValue(cursor, oldValue, ref newValue, out token))
+			{
+			    var givenValue = newValue;
+
+				if (hasValue)
+					Serializer.SetValue(cursor, parentObject, this, ref newValue);
+				else if (isNillable)
+					cursor.IsNil = true;
+				else
+					{ cursor.Remove(); cursor.RemoveAllNext(); }
+
+			    references.OnAssignedValue(cursor, givenValue, newValue, token);
+			}
 		}
 
-		private void ReplaceCurrent(IXmlCursor cursor)
+		private void Coerce(IXmlCursor cursor, Type clrType, bool replace)
 		{
-			cursor.Remove();
-			cursor.MoveNext();
-			cursor.Create(ClrType);
+			if (replace)
+			{
+				cursor.Remove();
+				cursor.MoveNext();
+				cursor.Create(ClrType);
+			}
+			else cursor.Coerce(clrType);
 		}
 
-		public void GetCollectionItems(IXmlNode parentNode, IDictionaryAdapter parentObject, IList values)
+		//public void SetValueOld(IXmlCursor cursor, IDictionaryAdapter parentObject, XmlReferenceManager references, bool hasCurrent, object oldValue, ref object value)
+		//{
+		//    if (null != value)
+		//        SetValueCore(cursor, parentObject, references, hasCurrent, oldValue, ref value);
+		//    else
+		//        SetValueToNull(cursor, references, hasCurrent, oldValue);
+		//}
+
+		//protected virtual void SetValueToNull(IXmlCursor cursor, XmlReferenceManager references, bool hasCurrent, object oldValue)
+		//{
+		//    if (IsNillable)
+		//        SetNodeToNil(cursor, references, hasCurrent, oldValue);
+		//    else if (hasCurrent)
+		//        cursor.Clear();
+		//    else
+		//        cursor.RemoveAllNext();
+		//}
+
+		//private void SetValueCore(IXmlCursor cursor, IDictionaryAdapter parentObject, XmlReferenceManager references, bool hasCurrent, object oldValue, ref object newValue)
+		//{
+		//    var clrType = newValue.GetComponentType();
+
+		//    if (hasCurrent || cursor.MoveNext())
+		//        cursor.Coerce(clrType);
+		//    else
+		//        cursor.Create(clrType);
+
+		//    object token;
+		//    if (references.OnAssigningValue(cursor, oldValue, ref newValue, out token))
+		//    {
+		//        var givenValue = newValue;
+		//        Serializer.SetValue(cursor, parentObject, this, ref newValue);
+		//        references.OnAssignedValue(cursor, givenValue, newValue, token);
+		//    }
+		//}
+
+		//private void SetNodeToNil(IXmlCursor cursor, XmlReferenceManager references, bool hasCurrent, object oldValue)
+		//{
+		//    if (hasCurrent || cursor.MoveNext())
+		//        if (cursor.IsAttribute)
+		//            ReplaceCurrent(cursor);
+		//        else
+		//            cursor.Coerce(clrType);
+		//    else
+		//        cursor.Create(clrType);
+
+		//    var newValue = null as object;
+		//    object token;
+		//    if (references.OnAssigningValue(cursor, oldValue, ref newValue, out token))
+		//    {
+		//        cursor.IsNil = true;
+		//        references.OnAssignedValue(cursor, newValue, newValue, token);
+		//    }
+		//}
+
+		//private void ReplaceCurrent(IXmlCursor cursor)
+		//{
+		//    cursor.Remove();
+		//    cursor.MoveNext();
+		//    cursor.Create(ClrType);
+		//}
+
+		public void GetCollectionItems(IXmlNode parentNode, IDictionaryAdapter parentObject, XmlReferenceManager references, IList values)
 		{
 			var cursor = SelectCollectionItems(parentNode, false);
 
 			while (cursor.MoveNext())
 			{
-				var value = serializer.GetValue(cursor, parentObject, this);
+				IXmlNode node  = cursor;
+				object   value = null;
+				object   token;
+
+				if (references.OnGetStarting(ref node, ref value, out token))
+				{
+					value = serializer.GetValue(cursor, parentObject, this);
+					references.OnGetCompleted(cursor, value, token);
+				}
+
 				values.Add(value);
 			}
 		}
 
-		protected void RemoveCollectionItems(IXmlNode parentNode)
+		protected void RemoveCollectionItems(IXmlNode parentNode, XmlReferenceManager references, object value)
 		{
+			var collection = value as IXmlCollection;
+			if (collection != null)
+			{
+				collection.Clear();
+				return;
+			}
+
 			var itemType = clrType.GetCollectionItemType();
 			var accessor = GetCollectionAccessor(itemType);
 			var cursor   = accessor.SelectCollectionItems(parentNode, true);
+
+			var items = value as IEnumerable;
+			if (items != null)
+			{
+				foreach (var item in items)
+				{
+					if (!cursor.MoveNext())
+						break;
+					references.OnAssigningNull(cursor, item);
+				}
+			}
+
+			cursor.Reset();
 			cursor.RemoveAllNext();
 		}
 
@@ -258,7 +378,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			Nillable               = 0x01, // Set a null value as xsi:nil='true'
 			Volatile               = 0x02, // Always get value from XML store; don't cache it
-			ConfiguredContext      = 0x04, // Have created our own IXmlContext instance
+			Reference              = 0x04, // Participate in reference tracking
+			ConfiguredContext      = 0x08, // Have created our own IXmlContext instance
 			ConfiguredLocalName    = 0x10, // The local name    has been configured
 			ConfiguredNamespaceUri = 0x20, // The namespace URI has been configured
 			ConfiguredKnownTypes   = 0x40, // Known types have been configured from attributes

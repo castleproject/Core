@@ -579,7 +579,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var document = new XmlDocument();
 			document.LoadXml(string.Concat(xml));
-			return new SysXmlNode(document.DocumentElement, typeof(object));
+			return new SysXmlNode(document.DocumentElement, typeof(object), NamespaceSource.Instance);
 		}
 
 		protected static SysXmlCursor Cursor(SysXmlNode node, CursorFlags flags)

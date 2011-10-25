@@ -53,7 +53,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public static bool IsXsiType(this XmlAttribute attribute)
 		{
-		    return attribute.LocalName    == Xsi.TypeLocalName
+		    return attribute.LocalName    == Xsi.Type.LocalName
 		        && attribute.NamespaceURI == Xsi.NamespaceUri;
 		}
 	}

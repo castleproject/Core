@@ -22,5 +22,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IXmlNode Node { get; }
 
 		void Replace(IEnumerable source);
+		void Clear();
 	}
 }

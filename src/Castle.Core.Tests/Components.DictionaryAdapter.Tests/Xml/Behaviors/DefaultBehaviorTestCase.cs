@@ -263,5 +263,38 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				obj.Value = null;
 			}
 		}
+
+		[TestFixture]
+		public class Coercion : XmlAdapterTestCase
+		{
+			public interface IFoo : IDictionaryAdapter { string A { get; set; } }
+			public interface IBar : IDictionaryAdapter { string B { get; set; } }
+
+			[Test]
+			public void Coerce()
+			{
+				var xml = Xml("<Foo> <A>a</A> <B>b</B> </Foo>");
+				var foo = Create<IFoo>(xml);
+				var bar = foo.Coerce<IBar>();
+
+				Assert.That(bar,   Is.Not.Null);
+				Assert.That(bar.B, Is.EqualTo("b"));
+			}
+
+			[Test]
+			public void SharedXmlAdapters()
+			{
+				var xml = Xml("<Foo> <A>a</A> <B>b</B> </Foo>");
+				var foo = Create<IFoo>(xml);
+				var bar = foo.Coerce<IBar>();
+
+				var fooAdapter = XmlAdapter.For(foo);
+				var barAdapter = XmlAdapter.For(bar);
+
+				Assert.That(foo,        Is.Not.SameAs(bar));
+				Assert.That(foo.This,   Is.Not.SameAs(bar.This));
+				Assert.That(fooAdapter, Is    .SameAs(barAdapter));
+			}
+		}
 	}
 }

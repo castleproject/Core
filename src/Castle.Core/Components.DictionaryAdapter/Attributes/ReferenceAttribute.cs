@@ -12,19 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Components.DictionaryAdapter.Xml
+namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 
-	public interface IXmlCursor : IXmlIterator
+	/// <summary>
+	/// Specifies assignment by reference rather than by copying.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Interface)]
+	public class ReferenceAttribute : Attribute
 	{
-		void Reset();
-		void MoveTo(IXmlNode node);
-		void MoveToEnd();
-
-		void Create(Type type);
-		void Coerce(Type type);
-		void Remove();
-		void RemoveAllNext();
+		// Marker attribute; no functionality
 	}
 }

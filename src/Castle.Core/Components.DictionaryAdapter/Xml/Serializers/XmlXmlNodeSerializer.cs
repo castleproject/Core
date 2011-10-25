@@ -32,9 +32,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-			var source = node as ILazy<XmlNode>;
+			var source = node.AsRealizable<XmlNode>();
 
-			return (source != null && source.HasValue)
+			return (source != null && source.Exists)
 				? source.Value
 				: null;
 		}

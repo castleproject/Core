@@ -37,13 +37,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override object GetStub(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-			var adapter = new XmlAdapter(node);
+			// TODO: Refactor
+			var adapter = new XmlAdapter(node, XmlAdapter.For(parent).References);
 			return parent.CreateChildAdapter(accessor.ClrType, adapter);
 		}
 
 		public override object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor)
 		{
-			var adapter = new XmlAdapter(node.Save());
+			var adapter = new XmlAdapter(node.Save(), XmlAdapter.For(parent).References);
 			return parent.CreateChildAdapter(node.ClrType, adapter);
 		}
 

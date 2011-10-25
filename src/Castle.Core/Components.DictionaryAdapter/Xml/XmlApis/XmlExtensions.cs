@@ -15,13 +15,38 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
+	using System.Xml;
 
 	internal static class XmlExtensions
 	{
+		public static bool PositionEquals(this IXmlNode nodeA, IXmlNode nodeB)
+		{
+			return XmlPositionComparer.Instance.Equals(nodeA, nodeB);
+		}
+
 		public static IXmlNode Save(this IXmlNode node)
 		{
 			var cursor = node as IXmlCursor;
 			return null != cursor ? cursor.Save() : node;
+		}
+
+		public static void CopyTo(this IXmlNode source, IXmlNode target)
+		{
+			using (var reader = source.ReadSubtree())
+			{
+				if (!reader.Read())
+					return;
+
+				using (var writer = target.WriteAttributes())
+					writer.WriteAttributes(reader, false);
+
+				if (!reader.Read())
+					return;
+
+				using (var writer = target.WriteChildren())
+					do writer.WriteNode(reader, false);
+					while (!(reader.EOF || reader.NodeType == XmlNodeType.EndElement));
+			}
 		}
 	}
 }

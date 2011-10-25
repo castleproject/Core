@@ -26,29 +26,29 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		public void Constructor_RequiresNode()
 		{
 			Assert.Throws<ArgumentNullException>(() =>
-				new XPathNode(null, typeof(T)));
+				new XPathNode(null, typeof(T), NamespaceSource.Instance));
 		}
 
 		[Test]
 		public void Constructor_RequiresType()
 		{
 			Assert.Throws<ArgumentNullException>(() =>
-				new XPathNode(new XmlDocument().CreateNavigator(), null));
+				new XPathNode(new XmlDocument().CreateNavigator(), null, NamespaceSource.Instance));
 		}
 
 		protected override IXmlNode NodeForElement(params string[] xml)
 		{
-			return new XPathNode(Xml(xml).CreateNavigator(), typeof(T));
+			return new XPathNode(Xml(xml).CreateNavigator(), typeof(T), NamespaceSource.Instance);
 		}
 
 		protected override IXmlNode NodeForAttribute(params string[] xml)
 		{
-			return new XPathNode(Xml(xml).Attributes[0].CreateNavigator(), typeof(T));
+			return new XPathNode(Xml(xml).Attributes[0].CreateNavigator(), typeof(T), NamespaceSource.Instance);
 		}
 
 		protected override IXmlNode NodeForRoot()
 		{
-			return new XPathNode(new XmlDocument().CreateNavigator(), typeof(T));
+			return new XPathNode(new XmlDocument().CreateNavigator(), typeof(T), NamespaceSource.Instance);
 		}
 
 		private static XmlElement Xml(params string[] xml)

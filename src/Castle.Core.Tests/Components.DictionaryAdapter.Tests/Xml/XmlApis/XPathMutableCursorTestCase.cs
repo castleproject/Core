@@ -141,7 +141,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			));
 		}
 
-		protected override IXmlCursor Cursor(ILazy<XPathNavigator> parent, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
+		protected override IXmlCursor Cursor(IXmlNode parent, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
 		{
 			return new XPathMutableCursor(parent, path, includedTypes, NamespaceSource.Instance, flags);
 		}

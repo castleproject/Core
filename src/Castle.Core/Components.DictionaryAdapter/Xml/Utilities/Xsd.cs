@@ -20,7 +20,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Prefix       = "xsd",
 			NamespaceUri = "http://www.w3.org/2001/XMLSchema";
 
-		public static readonly XmlNamespaceAttribute
-			Attribute = new XmlNamespaceAttribute(NamespaceUri, Prefix) { Root = true };
+		internal static readonly XmlNamespaceAttribute
+			Namespace = new XmlNamespaceAttribute(NamespaceUri, Prefix) { Root = true };
 	}
 }

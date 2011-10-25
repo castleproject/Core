@@ -80,9 +80,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		    Assert.That(cursor.MoveNext(), Is.False);
 		}
 
-		protected override IXmlCursor Cursor(ILazy<XPathNavigator> lazy, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
+		protected override IXmlCursor Cursor(IXmlNode parent, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
 		{
-			return new XPathReadOnlyCursor(lazy, path, includedTypes, flags);
+			return new XPathReadOnlyCursor(parent, path, includedTypes, NamespaceSource.Instance, flags);
 		}
 	}
 }

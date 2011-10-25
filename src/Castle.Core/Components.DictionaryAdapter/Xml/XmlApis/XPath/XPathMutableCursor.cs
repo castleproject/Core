@@ -25,14 +25,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private CompiledXPathStep step;
 		private int depth;
 
-		private readonly ILazy<XPathNavigator> parent;
 		private readonly CompiledXPath path;
 		private readonly IXmlIncludedTypeMap knownTypes;
-		private readonly IXmlNamespaceSource namespaces;
 		private readonly CursorFlags flags;
 
-		public XPathMutableCursor(ILazy<XPathNavigator> parent, CompiledXPath path,
+		public XPathMutableCursor(IXmlNode parent, CompiledXPath path,
 			IXmlIncludedTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
+			: base(namespaces, parent)
 		{
 			if (null == parent)
 				throw Error.ArgumentNull("parent");
@@ -40,28 +39,18 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				throw Error.ArgumentNull("path");
 			if (null == knownTypes)
 				throw Error.ArgumentNull("knownTypes");
-			if (null == namespaces)
-				throw Error.ArgumentNull("namespaces");
 			if (!path.IsCreatable)
 				throw Error.XPathNotCreatable(path);
 
-			this.parent     = parent;
 			this.path       = path;
 			this.step       = path.FirstStep;
 			this.knownTypes = knownTypes;
-			this.namespaces = namespaces;
 			this.flags      = flags;
 
-			if (parent.HasValue)
-				CreateIterator();
-		}
-
-		private void CreateIterator()
-		{
-			iterator = new XPathBufferedNodeIterator
-			(
-				parent.Value.Select(path.FirstStep.Path)
-			);
+			var source = parent.RequireRealizable<XPathNavigator>();
+			if (source.Exists)
+				iterator = new XPathBufferedNodeIterator(
+					source.Value.Select(path.FirstStep.Path));
 		}
 
 		public override bool Exists
@@ -104,20 +93,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return HasCurrent ? base.IsAttribute : !flags.IncludesElements(); }
 		}
 
-		public override bool IsRoot
-		{
-			get { return HasCurrent && base.IsRoot; }
-		}
-
 		public override bool IsNil
 		{
 			get { return HasCurrent && base.IsNil; }
-		}
-
-		bool IXmlCursor.IsNil
-		{
-			get { return IsNil; }
-			set { Realize(); this.SetXsiNil(value); }
+			set { Realize(); base.IsNil = value; }
 		}
 
 		public override string Value
@@ -134,34 +113,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override object Evaluate(CompiledXPath path)
 		{
 			return HasCurrent ? base.Evaluate(path) : null;
-		}
-
-		public void SetAttribute(XmlName name, string value)
-		{
-			if (string.IsNullOrEmpty(value))
-			{
-				if (node.MoveToAttribute(name.LocalName, name.NamespaceUri))
-					node.DeleteSelf();
-			}
-			else if (!IsElement)
-			{
-				throw Error.CannotSetAttribute(this);
-			}
-			else if (node.MoveToAttribute(name.LocalName, name.NamespaceUri))
-			{
-				node.SetValue(value);
-				node.MoveToParent();
-			}
-			else
-			{
-				var prefix = namespaces.GetAttributePrefix(this, name.NamespaceUri);
-				node.CreateAttribute(prefix, name.LocalName, name.NamespaceUri, value);
-			}
-		}
-
-		public string EnsurePrefix(string namespaceUri)
-		{
-			return namespaces.GetAttributePrefix(this, namespaceUri);
 		}
 
 		public bool MoveNext()
@@ -251,8 +202,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void MoveTo(IXmlNode position)
 		{
-			var source = position as ILazy<XPathNavigator>;
-			if (source == null || !source.HasValue)
+			var source = position.AsRealizable<XPathNavigator>();
+			if (source == null || !source.Exists)
 				throw Error.CursorCannotMoveToGivenNode();
 
 			var positionNode = source.Value;
@@ -265,7 +216,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			throw Error.CursorCannotMoveToGivenNode();
 		}
 
-		public override void Realize()
+		protected override void Realize()
 		{
 			if (HasCurrent)
 				return;
@@ -316,7 +267,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private void Append()
 		{
-			node = parent.Value.Clone();
+			node = Parent.AsRealizable<XPathNavigator>().Value.Clone();
 			Complete();
 		}
 
@@ -386,7 +337,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (node.Value == null)
 				return;
 
-			var value = parent.Value.Evaluate(node.Value);
+			var value = Parent.AsRealizable<XPathNavigator>().Value.Evaluate(node.Value);
 			writer.WriteValue(value);
 		}
 
@@ -440,8 +391,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public IXmlNode Save()
 		{
-			return HasCurrent ? new XPathNode(node.Clone(), type) : this;
-		}
+			return HasCurrent ? new XPathNode(node.Clone(), type, Namespaces) : this;
+		}	
 
 		private void RequireRemovable()
 		{

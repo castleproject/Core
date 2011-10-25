@@ -200,7 +200,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			var xml    = Xml("<X/>");
 			var cursor = Cursor(xml, "A", CursorFlags.Multiple);
 
-			var wrongNode = new XPathNode(Xml("<Q/>"), typeof(object));
+			var wrongNode = new XPathNode(Xml("<Q/>"), typeof(object), NamespaceSource.Instance);
 
 			Assert.Throws<InvalidOperationException>(() =>
 				cursor.MoveTo(wrongNode));
@@ -283,7 +283,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 		protected static XPathNode Node(params string[] xml)
 		{
-			return new XPathNode(Xml(xml), typeof(object));
+			return new XPathNode(Xml(xml), typeof(object), NamespaceSource.Instance);
 		}
 
 		protected static CompiledXPath Path(string path)
@@ -293,13 +293,13 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 		protected IXmlCursor Cursor(XPathNavigator parent, string pathText, CursorFlags flags)
 		{
-			var lazyParent   = new DummyLazy<XPathNavigator> { Value = parent };
+			var parentNode = new XPathNode(parent, typeof(object), NamespaceSource.Instance);
 			var compiledPath = XPathCompiler.Compile(pathText);
 			compiledPath.SetContext(Context);
-			return Cursor(lazyParent, compiledPath, IncludedTypes, flags);
+			return Cursor(parentNode, compiledPath, IncludedTypes, flags);
 		}
 
-		protected abstract IXmlCursor Cursor(ILazy<XPathNavigator> lazy, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags);
+		protected abstract IXmlCursor Cursor(IXmlNode parent, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags);
 
 		[TestFixtureSetUp]
 		public virtual void OneTimeSetUp()

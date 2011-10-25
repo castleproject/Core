@@ -95,6 +95,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new ArgumentException(message, paramName);
 		}
 
+		internal static Exception NotRealizable<T>()
+		{
+			var message = string.Format(
+				"The given node cannot provide an underlying object of type {0}.",
+				typeof(T).FullName);
+			return new NotSupportedException(message);
+		}
+
 		internal static Exception CursorNotMutable()
 		{
 			var message = "The cursor does not support creation, removal, or modification of nodes.";
@@ -202,5 +210,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return new XPathException(message);
 		}
 #endif
+
+		internal static Exception ObjectIdNotFound(string id)
+		{
+			var message = string.Format(
+				"No object with ID '{0}' was present in the XML.",
+				id);
+			return new SerializationException(message);
+		}
 	}
 }

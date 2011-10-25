@@ -102,7 +102,6 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			Assert.That(node.IsElement,   Is.True);
 			Assert.That(node.IsAttribute, Is.False);
-			Assert.That(node.IsRoot,      Is.False);
 		}
 
 		[Test]
@@ -112,7 +111,6 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			Assert.That(node.IsElement,   Is.False);
 			Assert.That(node.IsAttribute, Is.True);
-			Assert.That(node.IsRoot,      Is.False);
 		}
 
 		[Test]
@@ -122,7 +120,6 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			Assert.That(node.IsElement,   Is.False);
 			Assert.That(node.IsAttribute, Is.False);
-			Assert.That(node.IsRoot,      Is.True);
 		}
 
 		[Test]

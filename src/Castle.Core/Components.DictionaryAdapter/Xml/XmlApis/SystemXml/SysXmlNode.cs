@@ -19,16 +19,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Xml;
 	using System.Xml.XPath;
 
-	public class SysXmlNode : IXmlNode,
-		ILazy<XmlNode>,
-		ILazy<XPathNavigator>
+	public class SysXmlNode : XmlNodeBase, IXmlNode,
+		IRealizable<XmlNode>,
+		IRealizable<XPathNavigator>
 	{
 		protected XmlNode node;
-		protected Type    type;
 
-		protected SysXmlNode() { }
+		protected SysXmlNode(IXmlNamespaceSource namespaces, IXmlNode parent)
+			: base(namespaces, parent) { }
 
-		public SysXmlNode(XmlNode node, Type type)
+		public SysXmlNode(XmlNode node, Type type, IXmlNamespaceSource namespaces)
+			: base(namespaces, null)
 		{
 			if (node == null)
 				throw Error.ArgumentNull("node");
@@ -39,9 +40,19 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.type = type;
 		}
 
-		public virtual bool Exists
+		public object UnderlyingObject
 		{
-			get { return true; }
+			get { return node; }
+		}
+
+		XmlNode IRealizable<XmlNode>.Value
+		{
+			get { Realize(); return node; }
+		}
+
+		XPathNavigator IRealizable<XPathNavigator>.Value
+		{
+			get { Realize(); return node.CreateNavigator(); }
 		}
 
 		public virtual XmlName Name
@@ -54,11 +65,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return this.GetXsiType(); }
 		}
 
-		public virtual Type ClrType
-		{
-			get { return type; }
-		}
-
 		public virtual bool IsElement
 		{
 			get { return node.NodeType == XmlNodeType.Element; }
@@ -69,14 +75,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return node.NodeType == XmlNodeType.Attribute; }
 		}
 
-		public virtual bool IsRoot
-		{
-			get { return node.NodeType == XmlNodeType.Document; }
-		}
-
 		public virtual bool IsNil
 		{
 			get { return this.IsXsiNil(); }
+			set { this.SetXsiNil(value); }
 		}
 
 		public virtual string Value
@@ -88,6 +90,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public virtual string Xml
 		{
 			get { return node.OuterXml; }
+		}
+
+		public bool UnderlyingPositionEquals(IXmlNode node)
+		{
+			var sysXmlNode = node.AsRealizable<XmlNode>();
+			if (sysXmlNode != null)
+				return sysXmlNode.Exists
+					&& sysXmlNode.Value == this.node;
+
+			var xPathNode = node.AsRealizable<XPathNavigator>();
+			if (xPathNode != null)
+				return xPathNode.Exists
+					&& xPathNode.Value.UnderlyingObject == this.node;
+
+			return false;
 		}
 
 		public string GetAttribute(XmlName name)
@@ -105,6 +122,30 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				return null;
 
 			return value;
+		}
+
+		public void SetAttribute(XmlName name, string value)
+		{
+			var element = node as XmlElement;
+
+			if (string.IsNullOrEmpty(value))
+			{
+				if (element != null)
+					element.RemoveAttribute(name.LocalName, name.NamespaceUri);
+				return;
+			}
+
+			if (element == null)
+				throw Error.CannotSetAttribute(this);
+
+			var attribute = element.GetAttributeNode(name.LocalName, name.NamespaceUri);
+			if (attribute == null)
+			{
+				var prefix = Namespaces.GetAttributePrefix(this, name.NamespaceUri);
+				attribute = element.OwnerDocument.CreateAttribute(prefix, name.LocalName, name.NamespaceUri);
+				element.SetAttributeNode(attribute);
+			}
+			attribute.Value = value;
 		}
 
 		public string LookupPrefix(string namespaceUri)
@@ -146,21 +187,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return null;
 		}
 
-		public bool PositionEquals(IXmlNode node)
-		{
-			var sysXmlNode = node as ILazy<XmlNode>;
-			if (sysXmlNode != null)
-				return sysXmlNode.HasValue
-					&& sysXmlNode.Value == this.node;
-
-			var xPathNode = node as ILazy<XPathNavigator>;
-			if (xPathNode != null)
-				return xPathNode.HasValue
-					&& xPathNode.Value.UnderlyingObject == this.node;
-
-			return false;
-		}
-
 		public IXmlCursor SelectSelf(Type clrType)
 		{
 			return new XmlSelfCursor(this, clrType);
@@ -169,6 +195,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
 		{
 			return new SysXmlCursor(this, knownTypes, namespaces, flags);
+		}
+
+		public IXmlIterator SelectSubtree()
+		{
+			return new SysXmlSubtreeIterator(this, Namespaces);
 		}
 
 		public XmlReader ReadSubtree()
@@ -190,7 +221,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			return flags.SupportsMutation()
 				? (IXmlCursor) new XPathMutableCursor (this, path, includedTypes, namespaces, flags)
-				: (IXmlCursor) new XPathReadOnlyCursor(this, path, includedTypes, flags);
+				: (IXmlCursor) new XPathReadOnlyCursor(this, path, includedTypes, namespaces, flags);
 		}
 
 		public virtual object Evaluate(CompiledXPath path)
@@ -201,11 +232,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XmlNode GetNode()
 		{
 			return node;
-		}
-
-		public virtual void Realize()
-		{
-			// Default nodes are realized already
 		}
 
 		public void Clear()
@@ -242,21 +268,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				next = child.NextSibling;
 				node.RemoveChild(child);
 			}
-		}
-
-		public bool HasValue
-		{
-			get { return Exists; }
-		}
-
-		XmlNode ILazy<XmlNode>.Value
-		{
-			get { Realize(); return node; }
-		}
-
-		XPathNavigator ILazy<XPathNavigator>.Value
-		{
-			get { Realize(); return node.CreateNavigator(); }
 		}
 	}
 }

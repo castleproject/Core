@@ -17,13 +17,18 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 	using System.Collections.Generic;
 	using Castle.Components.DictionaryAdapter.Xml;
 
-	internal class DummyLazy<T> : ILazy<T>
+	internal class DummyLazy<T> : IRealizable<T>
 	{
-		public bool HasValue
+		public bool Exists
 		{
 			get { return ! EqualityComparer<T>.Default.Equals(Value, default(T)); }
 		}
 
 		public T Value { get; set; }
+
+		public IRealizable<U> AsRealizable<U>()
+		{
+			return this as IRealizable<U>;
+		}
 	}
 }

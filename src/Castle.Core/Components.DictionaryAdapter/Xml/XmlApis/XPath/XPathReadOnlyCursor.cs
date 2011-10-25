@@ -21,13 +21,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	public class XPathReadOnlyCursor : XPathNode, IXmlCursor
 	{
 		private XPathNodeIterator iterator;
-
-		private readonly ILazy<XPathNavigator> parent;
 		private readonly XPathExpression path;
 		private readonly IXmlIncludedTypeMap includedTypes;
 		private readonly CursorFlags flags;
 
-		public XPathReadOnlyCursor(ILazy<XPathNavigator> parent, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)
+		public XPathReadOnlyCursor(IXmlNode parent, CompiledXPath path,
+			IXmlIncludedTypeMap includedTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
+			: base(namespaces, parent)
 		{
 			if (parent == null)
 				throw Error.ArgumentNull("parent");
@@ -36,7 +36,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (includedTypes == null)
 				throw Error.ArgumentNull("includedTypes");
 
-			this.parent        = parent;
 			this.path          = path.Path;
 			this.includedTypes = includedTypes;
 			this.flags         = flags;
@@ -46,8 +45,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void Reset()
 		{
-			if (parent.HasValue)
-				iterator = parent.Value.Select(path);
+			var source = Parent.RequireRealizable<XPathNavigator>();
+			if (source.Exists)
+				iterator = source.Value.Select(path);
 		}
 
 		public bool MoveNext()
@@ -87,8 +87,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void MoveTo(IXmlNode position)
 		{
-			var source = position as ILazy<XPathNavigator>;
-			if (source == null || !source.HasValue)
+			var source = position.AsRealizable<XPathNavigator>();
+			if (source == null || !source.Exists)
 				throw Error.CursorCannotMoveToGivenNode();
 
 			var positionNode = source.Value;
@@ -108,22 +108,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (iterator != null)
 				while (iterator.MoveNext()) ;
 			SetAtEnd();
-		}
-
-		bool IXmlCursor.IsNil
-		{
-			get { return IsNil; }
-			set { throw Error.CursorNotMutable(); }
-		}
-
-		public void SetAttribute(XmlName name, string value)
-		{
-			throw Error.CursorNotMutable();
-		}
-
-		public string EnsurePrefix(string namespaceUri)
-		{
-			throw Error.CursorNotMutable();
 		}
 
 		public void MakeNext(Type type)
@@ -153,7 +137,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public IXmlNode Save()
 		{
-			return new XPathNode(node.Clone(), type);
+			return new XPathNode(node.Clone(), type, Namespaces);
 		}
 	}
 }
