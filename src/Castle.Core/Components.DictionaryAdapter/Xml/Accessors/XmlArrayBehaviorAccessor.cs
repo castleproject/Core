@@ -74,6 +74,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				: base(itemClrType, accessor.Context)
 			{
 				ConfigureNillable(true);
+				ConfigureReference(accessor.IsReference);
 			}
 
 			public void Configure(XmlArrayItemAttribute attribute)

@@ -323,6 +323,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var accessor = factory(key, property.PropertyType, xmlMeta.Context);
 			if (xmlMeta.IsNullable.HasValue)
 				accessor.ConfigureNillable(xmlMeta.IsNullable.Value);
+			if (xmlMeta.IsReference.HasValue)
+				accessor.ConfigureReference(xmlMeta.IsReference.Value);
 			return accessor;
 		}
 

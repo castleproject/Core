@@ -331,7 +331,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			var item = items[index];
 			DetachPropertyChanged(item.Value);
-			references.OnAssigningNull(item.Node, item.Value);
+			if (accessor.IsReference)
+				references.OnAssigningNull(item.Node, item.Value);
 
 			cursor.MoveTo(item.Node);
 			cursor.Remove();
@@ -347,7 +348,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			foreach (var item in items)
 			{
 				DetachPropertyChanged(item.Value);
-				references.OnAssigningNull(item.Node, item.Value);
+				if (accessor.IsReference)
+					references.OnAssigningNull(item.Node, item.Value);
 			}
 
 			cursor.Reset();

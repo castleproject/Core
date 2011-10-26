@@ -104,6 +104,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				ConfigureLocalName   (parent.Name.LocalName   );
 				ConfigureNamespaceUri(parent.Name.NamespaceUri);
 				ConfigureNillable    (parent.IsNillable       );
+				ConfigureReference   (parent.IsReference      );
 				ConfigureKnownTypesFromParent(parent);
 			}
 

@@ -41,6 +41,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			// Attributes are never nillable
 		}
 
+		public override void ConfigureReference(bool isReference)
+		{
+			// Attributes cannot store references
+		}
+
 		public override IXmlCollectionAccessor GetCollectionAccessor(Type itemType)
 		{
 			throw Error.NotSupported();

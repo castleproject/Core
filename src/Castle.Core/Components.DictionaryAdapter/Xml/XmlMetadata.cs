@@ -24,6 +24,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private readonly Type   clrType;
 		private readonly bool?  qualified;
 		private readonly bool?  isNullable;
+		private readonly bool?  isReference;
 		private readonly string rootLocalName;
 		private readonly string rootNamespaceUri;
 		private readonly string childNamespaceUri;
@@ -50,6 +51,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var xmlRoot     = null as XmlRootAttribute;
 			var xmlType     = null as XmlTypeAttribute;
 			var xmlDefaults = null as XmlDefaultsAttribute;
+			var reference   = null as ReferenceAttribute;
 #if !SL3
 			var xPath       = null as XPathAttribute;
 #endif
@@ -58,6 +60,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				if      (TryCast(behavior, ref xmlDefaults  )) { }
 				else if (TryCast(behavior, ref xmlRoot      )) { }
 				else if (TryCast(behavior, ref xmlType      )) { }
+				else if (TryCast(behavior, ref reference    )) { }
 #if !SL3
 				else if (TryCast(behavior, ref xPath       )) { }
 #endif
@@ -67,6 +70,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{
 				qualified  = xmlDefaults.Qualified;
 				isNullable = xmlDefaults.IsNullable;
+			}
+
+			if (reference != null)
+			{
+				isReference = true;
 			}
 
 			typeLocalName = XmlConvert.EncodeLocalName
@@ -139,6 +147,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			get { return isNullable; }
 		}
+
+		public bool? IsReference
+		{
+			get { return isReference; }
+		} 
 
 		public XmlName Name
 		{
