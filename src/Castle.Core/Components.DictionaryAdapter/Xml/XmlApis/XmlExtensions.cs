@@ -24,12 +24,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return XmlPositionComparer.Instance.Equals(nodeA, nodeB);
 		}
 
-		public static IXmlNode Save(this IXmlNode node)
-		{
-			var cursor = node as IXmlCursor;
-			return null != cursor ? cursor.Save() : node;
-		}
-
 		public static void CopyTo(this IXmlNode source, IXmlNode target)
 		{
 			using (var reader = source.ReadSubtree())

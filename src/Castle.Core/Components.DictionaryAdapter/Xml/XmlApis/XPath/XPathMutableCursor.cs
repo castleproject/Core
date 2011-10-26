@@ -389,7 +389,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			ResetCurrent();
 		}
 
-		public IXmlNode Save()
+		public override IXmlNode Save()
 		{
 			return HasCurrent ? new XPathNode(node.Clone(), type, Namespaces) : this;
 		}	

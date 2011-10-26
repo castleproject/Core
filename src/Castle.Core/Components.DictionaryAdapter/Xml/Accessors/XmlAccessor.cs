@@ -151,13 +151,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var value = null as object;
 			var token = null as object;
 
-			if (nodeExists)
+			if (nodeExists || orStub)
 				if (!references.OnGetStarting(ref node, ref value, out token))
 					return value;
 
 			value = GetValueCore(node, parentObject, nodeExists, orStub);
 
-			if (nodeExists)
+			if (nodeExists || orStub)
 				references.OnGetCompleted(node, value, token);
 
 			return value;

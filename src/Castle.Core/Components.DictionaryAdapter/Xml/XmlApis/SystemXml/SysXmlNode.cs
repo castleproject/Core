@@ -187,6 +187,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return null;
 		}
 
+		public virtual IXmlNode Save()
+		{
+			return this;
+		}
+
 		public IXmlCursor SelectSelf(Type clrType)
 		{
 			return new XmlSelfCursor(this, clrType);

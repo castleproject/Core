@@ -56,12 +56,15 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				throw Error.NotDictionaryAdapter("value");
 
 			// Detect assignment of own value
-			var adapter = XmlAdapter.For(source, false);
-			if (adapter != null && node.PositionEquals(adapter.Node))
+			var sourceAdapter = XmlAdapter.For(source, false);
+			if (sourceAdapter != null && node.PositionEquals(sourceAdapter.Node))
 				return;
 
 			// Create a fresh component
-			var component = (IDictionaryAdapter) GetValue(node, parent, accessor);
+			var targetAdapter = new XmlAdapter(node.Save(), XmlAdapter.For(parent).References);
+			if (sourceAdapter != null)
+				targetAdapter.References.UnionWith(sourceAdapter.References);
+			var component = (IDictionaryAdapter) parent.CreateChildAdapter(node.ClrType, targetAdapter);
 
 			// Copy value onto fresh component
 			source.CopyTo(component);

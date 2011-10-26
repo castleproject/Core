@@ -95,7 +95,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public string GetAttribute(XmlName name)
 		{
-			if (!node.MoveToAttribute(name.LocalName, name.NamespaceUri))
+			if (!Exists || !node.MoveToAttribute(name.LocalName, name.NamespaceUri))
 				return null;
 
 			var value = node.Value;
@@ -149,20 +149,26 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public bool UnderlyingPositionEquals(IXmlNode node)
 		{
-			var other = node.UnderlyingObject;
-
-			var xPathNode = other as XPathNavigator;
-			if (xPathNode != null)
-				return xPathNode.IsSamePosition(this.node);
 #if !SILVERLIGHT
-			var sysXmlNode = other as XmlNode;
+			var sysXmlNode = node.AsRealizable<XmlNode>();
 			if (sysXmlNode != null)
-				return sysXmlNode == this.node.UnderlyingObject;
+				return sysXmlNode.Exists
+					&& sysXmlNode.Value == this.node.UnderlyingObject;
 #endif
 #if SILVERLIGHT
 			// TODO: XNode-based
 #endif
+			var xPathNode = node.AsRealizable<XPathNavigator>();
+			if (xPathNode != null)
+				return xPathNode.Exists
+					&& xPathNode.Value.IsSamePosition(this.node);
+
 			return false;
+		}
+
+		public virtual IXmlNode Save()
+		{
+			return this;
 		}
 
 		public IXmlCursor SelectSelf(Type clrType)

@@ -515,7 +515,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			attribute.OwnerElement.Attributes.Remove(attribute);
 		}
 
-		public IXmlNode Save()
+		public override IXmlNode Save()
 		{
 			return new SysXmlNode(node, type, Namespaces);
 		}

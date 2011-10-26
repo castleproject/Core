@@ -176,6 +176,7 @@
     <Compile Include="BugsReported\DynProxy159.cs" />
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Xml\Behaviors\ReferenceBehaviorTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlReferenceManagerTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\Behaviors\XmlArrayBehaviorTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\Behaviors\XmlAttributeBehaviorTestCase.cs" />

@@ -95,6 +95,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			throw new NotImplementedException();
 		}
 
+		public IXmlNode Save()
+		{
+			return this;
+		}
+
 		public IXmlCursor SelectSelf(Type clrType)
 		{
 			throw new NotImplementedException();

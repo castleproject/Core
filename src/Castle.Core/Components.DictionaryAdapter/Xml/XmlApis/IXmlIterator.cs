@@ -19,6 +19,5 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	public interface IXmlIterator : IXmlNode
 	{
 		bool MoveNext();
-		IXmlNode Save();
 	}
 }

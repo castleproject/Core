@@ -42,7 +42,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			Reset();
 		}
-
+			
 		public void Reset()
 		{
 			var source = Parent.RequireRealizable<XPathNavigator>();
@@ -135,7 +135,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			throw Error.CursorNotMutable();
 		}
 
-		public IXmlNode Save()
+		public override IXmlNode Save()
 		{
 			return new XPathNode(node.Clone(), type, Namespaces);
 		}

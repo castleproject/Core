@@ -36,7 +36,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             var document = new XmlDocument();
 			var text = string.Concat(xml)
 				.Replace("$xsd", "xmlns:xsd='http://www.w3.org/2001/XMLSchema'")
-				.Replace("$xsi", "xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'");
+				.Replace("$xsi", "xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'")
+				.Replace("$x",   "xmlns:x='urn:schemas-castle-org:xml-reference'");
             document.LoadXml(text);
             return document;
         }

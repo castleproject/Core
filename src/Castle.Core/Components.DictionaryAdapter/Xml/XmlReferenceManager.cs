@@ -16,6 +16,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using Castle.Core;
 
 	public class XmlReferenceManager
@@ -35,6 +36,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Populate(root);
 		}
 
+		#region Populate
+
 		private void Populate(IXmlNode node)
 		{
 			var references = new List<Reference>();
@@ -43,29 +46,28 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			while (iterator.MoveNext())
 				PopulateFromNode(iterator, references);
 
-			AddReferencesLate(references);
+			PopulateDeferredReferences(references);
 		}
 
-		private void PopulateFromNode(IXmlNode node, ICollection<Reference> references)
+		private void PopulateFromNode(IXmlIterator node, ICollection<Reference> references)
 		{
 			int id;
 			if (format.TryGetIdentity(node, out id))
-				AddIdentity(id, node);
+				PopulateIdentity(id, node.Save());
 			else if (format.TryGetReference(node, out id))
-				AddReferenceEarly(id, node, references);
+				PopulateReference(id, node.Save(), references);
 		}
 
-		private void AddIdentity(int id, IXmlNode node)
+		private void PopulateIdentity(int id, IXmlNode node)
 		{
 			Entry entry;
 			if (!entriesById.TryGetValue(id, out entry))
 				entriesById.Add(id, new Entry(id, node));
-
 			if (nextId <= id)
 				nextId = ++id;
 		}
 
-		private void AddReferenceEarly(int id, IXmlNode node, ICollection<Reference> references)
+		private void PopulateReference(int id, IXmlNode node, ICollection<Reference> references)
 		{
 			Entry entry;
 			if (entriesById.TryGetValue(id, out entry))
@@ -74,7 +76,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				references.Add(new Reference(id, node));
 		}
 
-		private void AddReferencesLate(ICollection<Reference> references)
+		private void PopulateDeferredReferences(ICollection<Reference> references)
 		{
 			foreach (var reference in references)
 			{
@@ -83,6 +85,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					entry.AddReference(reference.Node);
 			}
 		}
+
+		#endregion
 
 		public bool OnGetStarting(ref IXmlNode node, ref object value, out object token)
 		{
@@ -115,7 +119,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				return;
 
 			var entry = (token == CreateEntryToken)
-				? CreateEntry(node)
+				? new Entry(node)
 				: token as Entry;
 			if (entry == null)
 				return;
@@ -125,15 +129,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public bool OnAssigningNull(IXmlNode node, object oldValue)
 		{
-			object newValue = null;
-			object token;
+			object token, newValue = null;
 			return OnAssigningValue(node, oldValue, ref newValue, out token);
 		}
 
         public bool OnAssigningValue(IXmlNode node, object oldValue, ref object newValue, out object token)
         {
-			if (newValue == oldValue)
-				{ token = null; return newValue == null; }
+			if (newValue == oldValue && newValue != null)
+				{ token = null; return false; }
 
 			var oldEntry = OnReplacingValue(node, oldValue);
 
@@ -157,8 +160,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
             else
             {
 				// Value not present in graph; add as primary
-				newEntry = oldEntry ?? CreateEntry(node);
+				newEntry = oldEntry ?? new Entry(node);
 				AddValue(newEntry, type, newValue, xmlAdapter);
+				format.ClearIdentity (node);
+				format.ClearReference(node);
 				token = newEntry;
             }
 			return ShouldAssignmentProceed(oldEntry, newEntry, token);
@@ -166,7 +171,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private bool ShouldAssignmentProceed(Entry oldEntry, Entry newEntry, object token)
 		{
-			if (oldEntry != null && oldEntry != newEntry)
+			if (oldEntry != null && oldEntry != newEntry && oldEntry.Id > 0)
 				entriesById.Remove(oldEntry.Id); // Didn't reuse old entry; delete it
 
 			return token    != null  // Expecting callback with a token, so proceed with set
@@ -176,21 +181,28 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private Entry OnReplacingValue(IXmlNode node, object oldValue)
 		{
 			Entry entry;
+			bool isReference;
 
 			if (oldValue == null)
-				return null;
+			{
+				if (!TryGetEntry(node, out entry, out isReference))
+					return null;
+			}
+			else
+			{
+				if (!entriesByValue.TryGetValue(oldValue, out entry))
+					return null;
+				isReference = !entry.Node.PositionEquals(node);
+			}
 
-			if (!entriesByValue.TryGetValue(oldValue, out entry))
-				return null;
-
-			if (!entry.Node.PositionEquals(node))
+			if (isReference)
 			{
 				// Replacing reference
 				entry.RemoveReference(node);
 				ClearReference(entry, node);
 				return null;
 			}
-			else if (entry.References != null) // (&& !isReference)
+			else if (entry.References != null)
 			{
 				// Replacing primary that has references
 				// Relocate content to a referencing node (making it a new primary)
@@ -201,8 +213,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				entry.Node = node;
 				return null;
 			}
-			PrepareForReuse(entry);
-			return entry;
+			else
+			{
+				// Replaceing primary with no references; reuse entry
+				PrepareForReuse(entry);
+				return entry;
+			}
 		}
 
 		public void OnAssignedValue(IXmlNode node, object givenValue, object storedValue, object token)
@@ -218,22 +234,27 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			AddValue(entry, node.ClrType, storedValue, null);
 		}
 
-		private Entry CreateEntry(IXmlNode node)
-		{
-			var entry = new Entry(nextId++, node);
-			entriesById.Add(entry.Id, entry);
-			return entry;
-		}
-
 		private void AddReference(IXmlNode node, Entry entry)
 		{
 			if (!entry.Node.PositionEquals(node))
 			{
 				if (entry.References == null)
+				{
+					GenerateId(entry);
 					format.SetIdentity(entry.Node, entry.Id);
-
+				}
+				node.Clear();
 				entry.AddReference(node);
 				format.SetReference(node, entry.Id);
+			}
+		}
+
+		private void GenerateId(Entry entry)
+		{
+			if (entry.Id == 0)
+			{
+				entry.Id = nextId++;
+				entriesById.Add(entry.Id, entry);
 			}
 		}
 
@@ -242,15 +263,15 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (xmlAdapter == null)
 				xmlAdapter = XmlAdapter.For(value, false);
 
-			AddValueCore(entry, type, value);
+			AddValueCore(entry, type, value, true);
 
 			if (xmlAdapter != null)
-				AddValueCore(entry, typeof(XmlAdapter), xmlAdapter);
+				AddValueCore(entry, typeof(XmlAdapter), xmlAdapter, true);
 		}
 
-		private void AddValueCore(Entry entry, Type type, object value)
+		private void AddValueCore(Entry entry, Type type, object value, bool isInGraph)
 		{
-			entry.AddValue(type, value, true);
+			entry.AddValue(type, value, isInGraph);
 			entriesByValue.Add(value, entry);
 		}
 
@@ -266,6 +287,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			foreach (var item in entry.Values)
 				entriesByValue.Remove(item.Value);
+			entry.Values.Clear();
 
 			format.ClearIdentity(entry.Node);
 		}
@@ -284,16 +306,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				entry = null;
 				return false;
 			}
-			entry = GetEntry(id);
-			return true;
-		}
 
-		private Entry GetEntry(int id)
-		{
-			Entry entry;
 			if (!entriesById.TryGetValue(id, out entry))
 				throw IdNotFoundError(id);
-			return entry;
+			return true;
 		}
 
 		private bool TryGetCompatibleValue(Entry entry, Type type, ref object value)
@@ -350,12 +366,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var values = entry.Values;
 			for (int index = 0; index < values.Count; index++)
 			{
-				if (!ReferenceEquals(values[index].Value, value))
-					continue;
-
-				var item = values[index];
-				item = new EntryValue(item.Type, item.Value, false);
-				values[index] = item;
+				if (ReferenceEquals(values[index].Value, value))
+				{
+					var item = values[index];
+					item = new EntryValue(item.Type, item.Value, false);
+					values[index] = item;
+					return;
+				}
 			}
 		}
 
@@ -366,6 +383,35 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return node = cursor;
 		}
 
+		public void UnionWith(XmlReferenceManager other)
+		{
+			var visited = null as HashSet<Entry>;
+
+			foreach (var keyValue in other.entriesByValue.Keys)
+			{
+				Entry thisEntry;
+				if (entriesByValue.TryGetValue(keyValue, out thisEntry))
+				{
+					if (visited == null)
+						visited = new HashSet<Entry>(ReferenceEqualityComparer<Entry>.Instance);
+					else if (visited.Contains(thisEntry))
+						continue;
+					visited.Add(thisEntry);
+
+				    var otherEntry = other.entriesByValue[keyValue];
+
+					foreach (var otherItem in otherEntry.Values)
+					{
+						if (otherItem.Value == keyValue)
+							continue;
+						if (entriesByValue.ContainsKey(otherItem.Value))
+							continue;
+						AddValueCore(thisEntry, otherItem.Type, otherItem.Value, false);
+					}
+				}
+			}
+		}
+
 		private static readonly Type
 			StringType = typeof(string);
 
@@ -374,15 +420,19 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private class Entry
 		{
-			public readonly int Id;
+			public int Id;
 			public IXmlNode  Node;
 			private List<IXmlNode> references;
 			private List<EntryValue> values;
 
-			public Entry(int id, IXmlNode node)
+			public Entry(IXmlNode node)
 			{
-				Id     = id;
-				Node   = node;
+				Node = node;
+			}
+
+			public Entry(int id, IXmlNode node) : this(node)
+			{
+				Id = id;
 			}
 
 			public void AddReference(IXmlNode node)
@@ -403,10 +453,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			public IXmlNode RemoveReference(int index)
 			{
 				var node = references[index];
-				if (references.Count == 1)
+				references.RemoveAt(index);
+				if (references.Count == 0)
 					references = null;
-				else
-					references.RemoveAt(index);
 				return node;
 			}
 

@@ -31,6 +31,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var source = parent.RequireRealizable<XmlNode>();
 			if (source.Exists)
 				node = source.Value;
+
+			type = typeof(object);
 		}
 
 		public bool MoveNext()
@@ -80,7 +82,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return true;
 		}
 
-		public IXmlNode Save()
+		public override IXmlNode Save()
 		{
 			return new SysXmlNode(node, type, Namespaces);
 		}

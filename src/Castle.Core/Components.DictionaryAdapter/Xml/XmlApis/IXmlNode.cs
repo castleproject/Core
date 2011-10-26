@@ -39,6 +39,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		object UnderlyingObject { get; }
 		bool UnderlyingPositionEquals(IXmlNode node);
 
+		IXmlNode     Save();
 		IXmlCursor   SelectSelf(Type clrType);
 		IXmlCursor   SelectChildren(IXmlKnownTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags);
 		IXmlIterator SelectSubtree();

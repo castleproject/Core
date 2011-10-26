@@ -15,8 +15,6 @@
 namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
-    using System.Collections.Generic;
-    using System.Linq;
 	using System.Xml;
 	using Castle.Components.DictionaryAdapter.Tests;
 	using Castle.Components.DictionaryAdapter.Xml;
@@ -35,6 +33,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 						"<A x:id='1'>",
 							"<Value>a</Value>",
 						"</A>",
+						"<D>",  // Put this out of order to exercise deferred reference loading; // TODO: Rename stuff so it's in order
+							"<Y x:ref='1'/>",
+							"<Z x:ref='2'/>",
+						"</D>",
 						"<B>",
 							"<X>",
 								"<Value>b1</Value>",
@@ -49,10 +51,6 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 						"<C>",
 							"<Value>c</Value>",
 						"</C>",
-						"<D>",
-							"<Y x:ref='1'/>",
-							"<Z x:ref='2'/>",
-						"</D>",
 						"<E/>",
 					"</Root>"
 				);
@@ -126,7 +124,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				Assert.That(node,    Is.SameAs(cursorA));
 				Assert.That(value,   Is.EqualTo(ValueA));
 				Assert.That(token,   Is.Null);
-			}
+
+				// Shouldn't call this!  Here only to exercise the code path.
+				Manager.OnGetCompleted(node, value, token);
+		}
 
 			[Test]
 			public void Get_IdentityNode_ThenReferencingNodeOfSameType()
