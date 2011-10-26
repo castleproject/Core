@@ -101,6 +101,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			if (node == null)
 				node = GetBaseNode();
+
+			if (references == null)
+				references = new XmlReferenceManager(node, DefaultXmlReferenceFormat.Instance);
 		}
 
 		private void InitializeSecondary(DictionaryAdapterMeta meta)
@@ -205,12 +208,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			// must be root
 			
 			var cursor = primaryXmlMeta.SelectBase(node);
-			node = cursor.MoveNext()
+			return cursor.MoveNext()
 				? cursor.Save()
 				: cursor;
-
-			references = new XmlReferenceManager(node, DefaultXmlReferenceFormat.Instance);
-			return node;
 		}
 
 		private IXmlNode GetSourceNode()

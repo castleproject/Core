@@ -296,5 +296,45 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				Assert.That(fooAdapter, Is    .SameAs(barAdapter));
 			}
 		}
+
+		[TestFixture]
+		public class ManyVirtualObjects : XmlAdapterTestCase
+		{
+			public interface IRoot
+			{
+				IList<IFoo> Foos { get; set; }
+			}
+
+			public interface IFoo
+			{
+				IBar Bar { get; set; }
+			}
+
+			public interface IBar
+			{
+				Guid Id { get; set; }
+			}
+
+			[Test]
+			public void NondestructiveRead()
+			{
+				var xml = Xml("<Root/>");
+				var obj = Create<IRoot>(xml);
+
+				obj.Foos.Add(Create<IFoo>());
+
+				var foo = obj.Foos[0];
+
+				Assert.That(foo.Bar.Id == Guid.Empty, Is.True);
+
+				Assert.That(xml, XmlEquivalent.To(
+					"<Root>",
+						"<Foos>",
+							"<Foo/>",
+						"</Foos>",
+					"</Root>"
+				));
+			}
+		}
 	}
 }
