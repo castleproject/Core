@@ -51,14 +51,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return namespaces; }
 		}
 
+		IRealizable<T> IRealizableSource.AsRealizable<T>()
+		{
+			return this as IRealizable<T>;
+		}
+
 		protected virtual void Realize()
 		{
 			// Default nodes are fully realized already
 		}
 
-		IRealizable<T> IRealizableSource.AsRealizable<T>()
+		public virtual event EventHandler Realized
 		{
-			return this as IRealizable<T>;
+			// Default nodes never realize
+			add    { }
+			remove { }
 		}
 	}
 }

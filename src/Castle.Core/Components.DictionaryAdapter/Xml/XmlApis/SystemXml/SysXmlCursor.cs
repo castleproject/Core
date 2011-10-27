@@ -336,6 +336,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			node = ((XmlAttribute) node).OwnerElement;
 		}
 
+		public override event EventHandler Realized;
+		protected virtual void OnRealized()
+		{
+			if (Realized != null)
+				Realized(this, EventArgs.Empty);
+		}
+
 		protected override void Realize()
 		{
 			if (HasCurrent)
@@ -345,6 +352,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (!flags.SupportsMutation())
 				throw Error.CursorNotMutable();
 			Create(knownTypes.Default.ClrType);
+			OnRealized();
 		}
 
 		public void MakeNext(Type clrType)

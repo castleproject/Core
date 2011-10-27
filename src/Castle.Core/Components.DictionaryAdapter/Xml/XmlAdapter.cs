@@ -29,7 +29,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IDictionaryPropertyGetter,
 		IDictionaryPropertySetter,
 		IDictionaryCreateStrategy,
-		IDictionaryCopyStrategy
+		IDictionaryCopyStrategy,
+		IVirtual
 	{
 		private IXmlNode node;
 		private object source;
@@ -67,6 +68,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			this.node = node;
 			this.references = references;
+		}
+
+		public bool Exists
+		{
+			get { return node != null && node.Exists; }
 		}
 
 		public IXmlNode Node
@@ -111,6 +117,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			if (node == null)
 				node = GetBaseNode();
+			if (!node.Exists)
+				node.Realized += HandleNodeRealized;
 
 			if (references == null)
 				references = new XmlReferenceManager(node, DefaultXmlReferenceFormat.Instance);
@@ -373,6 +381,18 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private static bool IsReferenceBehavior(object behavior)
 		{
 			return behavior is ReferenceAttribute;
+		}
+
+		public event EventHandler Realized;
+		protected virtual void OnRealized()
+		{
+			if (Realized != null)
+				Realized(this, EventArgs.Empty);
+		}
+
+		private void HandleNodeRealized(object sender, EventArgs e)
+		{
+			OnRealized();
 		}
 
 		private void AttachObservers(object value, IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)

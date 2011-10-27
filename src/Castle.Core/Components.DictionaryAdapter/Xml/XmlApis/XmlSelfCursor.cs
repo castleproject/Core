@@ -107,6 +107,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return node.AsRealizable<T>();
 		}
 
+		public event EventHandler Realized
+		{
+			add    { node.Realized += value; }
+			remove { node.Realized -= value; }
+		}
+
 		public string GetAttribute(XmlName name)
 		{
 			return node.GetAttribute(name);

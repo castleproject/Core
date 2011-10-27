@@ -17,9 +17,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Xml;
 
-	public interface IXmlNode : IXmlKnownType, IRealizableSource
+	public interface IXmlNode : IXmlKnownType, IRealizableSource, IVirtual
 	{
-		bool   Exists      { get; }
 		bool   IsElement   { get; }
 		bool   IsAttribute { get; }
 		bool   IsNil       { get; set; }

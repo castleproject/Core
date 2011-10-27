@@ -223,7 +223,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var givenValue = newValue;
 
 			if (hasValue)
-				Serializer.SetValue(cursor, parentObject, this, ref newValue);
+				serializer.SetValue(cursor, parentObject, this, ref newValue);
 			else if (isNillable)
 				cursor.IsNil = true;
 			else
@@ -243,68 +243,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 			else cursor.Coerce(clrType);
 		}
-
-		//public void SetValueOld(IXmlCursor cursor, IDictionaryAdapter parentObject, XmlReferenceManager references, bool hasCurrent, object oldValue, ref object value)
-		//{
-		//    if (null != value)
-		//        SetValueCore(cursor, parentObject, references, hasCurrent, oldValue, ref value);
-		//    else
-		//        SetValueToNull(cursor, references, hasCurrent, oldValue);
-		//}
-
-		//protected virtual void SetValueToNull(IXmlCursor cursor, XmlReferenceManager references, bool hasCurrent, object oldValue)
-		//{
-		//    if (IsNillable)
-		//        SetNodeToNil(cursor, references, hasCurrent, oldValue);
-		//    else if (hasCurrent)
-		//        cursor.Clear();
-		//    else
-		//        cursor.RemoveAllNext();
-		//}
-
-		//private void SetValueCore(IXmlCursor cursor, IDictionaryAdapter parentObject, XmlReferenceManager references, bool hasCurrent, object oldValue, ref object newValue)
-		//{
-		//    var clrType = newValue.GetComponentType();
-
-		//    if (hasCurrent || cursor.MoveNext())
-		//        cursor.Coerce(clrType);
-		//    else
-		//        cursor.Create(clrType);
-
-		//    object token;
-		//    if (references.OnAssigningValue(cursor, oldValue, ref newValue, out token))
-		//    {
-		//        var givenValue = newValue;
-		//        Serializer.SetValue(cursor, parentObject, this, ref newValue);
-		//        references.OnAssignedValue(cursor, givenValue, newValue, token);
-		//    }
-		//}
-
-		//private void SetNodeToNil(IXmlCursor cursor, XmlReferenceManager references, bool hasCurrent, object oldValue)
-		//{
-		//    if (hasCurrent || cursor.MoveNext())
-		//        if (cursor.IsAttribute)
-		//            ReplaceCurrent(cursor);
-		//        else
-		//            cursor.Coerce(clrType);
-		//    else
-		//        cursor.Create(clrType);
-
-		//    var newValue = null as object;
-		//    object token;
-		//    if (references.OnAssigningValue(cursor, oldValue, ref newValue, out token))
-		//    {
-		//        cursor.IsNil = true;
-		//        references.OnAssignedValue(cursor, newValue, newValue, token);
-		//    }
-		//}
-
-		//private void ReplaceCurrent(IXmlCursor cursor)
-		//{
-		//    cursor.Remove();
-		//    cursor.MoveNext();
-		//    cursor.Create(ClrType);
-		//}
 
 		public void GetCollectionItems(IXmlNode parentNode, IDictionaryAdapter parentObject, XmlReferenceManager references, IList values)
 		{

@@ -125,6 +125,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			throw new NotImplementedException();
 		}
 
+		public event EventHandler Realized
+		{
+			add    { }
+			remove { }
+		}
+
 		public void Clear()
 		{
 			throw new NotImplementedException();

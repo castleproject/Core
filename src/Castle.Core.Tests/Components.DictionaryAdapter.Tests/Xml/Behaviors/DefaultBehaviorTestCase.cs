@@ -298,11 +298,11 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[TestFixture]
-		public class ManyVirtualObjects : XmlAdapterTestCase
+		public class VirtualObjects : XmlAdapterTestCase
 		{
-			public interface IRoot
+			public interface IObj
 			{
-				IList<IFoo> Foos { get; set; }
+				IFoo Foo { get; set; }
 			}
 
 			public interface IFoo
@@ -318,22 +318,55 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			[Test]
 			public void NondestructiveRead()
 			{
-				var xml = Xml("<Root/>");
-				var obj = Create<IRoot>(xml);
+				var xml = Xml("<Obj/>");
+				var obj = Create<IObj>(xml);
 
-				obj.Foos.Add(Create<IFoo>());
-
-				var foo = obj.Foos[0];
-
-				Assert.That(foo.Bar.Id == Guid.Empty, Is.True);
+				Assert.That(obj.Foo.Bar.Id == Guid.Empty, Is.True);
 
 				Assert.That(xml, XmlEquivalent.To(
-					"<Root>",
-						"<Foos>",
-							"<Foo/>",
-						"</Foos>",
-					"</Root>"
+					"<Obj/>"
 				));
+			}
+
+			[Test]
+			public void ObservingRealization()
+			{
+				var realizedObj = false;
+				var realizedFoo = false;
+				var realizedBar = false;
+
+				var obj = Create<IObj>("<Obj/>");
+				var foo = obj.Foo;
+				var bar = foo.Bar;
+
+				AsVirtual(obj).Realized += (s, e) => HandleRealized(s, obj, ref realizedObj, "(This should never happen!)");
+				AsVirtual(foo).Realized += (s, e) => HandleRealized(s, foo, ref realizedFoo, "Sender was Foo's virtual");
+				AsVirtual(bar).Realized += (s, e) => HandleRealized(s, bar, ref realizedBar, "Sender was Bar's virtual");
+
+				Assert.That(AsVirtual(obj).Exists, Is.True , "Obj exists");
+				Assert.That(AsVirtual(foo).Exists, Is.False, "Foo exists");
+				Assert.That(AsVirtual(bar).Exists, Is.False, "Bar exists");
+
+				bar.Id = Guid.NewGuid();
+
+				Assert.That(AsVirtual(obj).Exists, Is.True, "Obj exists");
+				Assert.That(AsVirtual(foo).Exists, Is.True, "Foo exists");
+				Assert.That(AsVirtual(bar).Exists, Is.True, "Bar exists");
+
+				Assert.That(realizedObj, Is.False, "Obj was realized");
+				Assert.That(realizedFoo, Is.True , "Foo was realized");
+				Assert.That(realizedBar, Is.True , "Bar was realized");
+			}
+
+			private static void HandleRealized(object sender, object expected, ref bool realized, string message)
+			{
+				Assert.That(sender, Is.SameAs(AsVirtual(expected)), message);
+				realized = true;
+			}
+
+			private static IVirtual AsVirtual(object source)
+			{
+				return XmlAdapter.For(source);
 			}
 		}
 	}

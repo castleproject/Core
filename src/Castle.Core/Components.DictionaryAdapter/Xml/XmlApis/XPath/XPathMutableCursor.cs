@@ -216,6 +216,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			throw Error.CursorCannotMoveToGivenNode();
 		}
 
+		public override event EventHandler Realized;
+		protected virtual void OnRealized()
+		{
+			if (Realized != null)
+				Realized(this, EventArgs.Empty);
+		}
+
 		protected override void Realize()
 		{
 			if (HasCurrent)
@@ -223,6 +230,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (!(iterator == null || iterator.IsEmpty || HasPartialOrCurrent))
 				throw Error.CursorNotInRealizableState();
 			Create(knownTypes.Default.ClrType);
+			OnRealized();
 		}
 
 		public void MakeNext(Type clrType)
