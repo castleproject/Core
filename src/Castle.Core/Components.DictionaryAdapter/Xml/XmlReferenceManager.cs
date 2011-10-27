@@ -88,6 +88,37 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		#endregion
 
+		public void Add(IXmlNode node, object keyValue, object newValue)
+		{
+			if (keyValue == null)
+				throw Error.ArgumentNull("keyValue");
+			if (newValue == null)
+				throw Error.ArgumentNull("newValue");
+
+            var type = newValue.GetComponentType();
+			if (ShouldExclude(type))
+				return;
+
+			if (entriesByValue.ContainsKey(newValue))
+				return;
+
+			Entry entry;
+			bool reference;
+
+			if (entriesByValue.TryGetValue(keyValue, out entry))
+			{
+				if (newValue == keyValue)
+					return;
+			}
+			else
+			{
+				if (!TryGetEntry(node, out entry, out reference))
+					entry = new Entry(node);
+			}
+
+			AddValueCore(entry, type, newValue, true);
+		}
+
 		public bool OnGetStarting(ref IXmlNode node, ref object value, out object token)
 		{
 			Entry entry;
@@ -116,6 +147,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			var type = node.ClrType;
 			if (ShouldExclude(type))
+				return;
+
+			if (entriesByValue.ContainsKey(value))
 				return;
 
 			var entry = (token == CreateEntryToken)
@@ -231,6 +265,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				return;
 
 			SetNotInGraph(entry, givenValue);
+
+			if (entriesByValue.ContainsKey(storedValue))
+				return;
+
 			AddValue(entry, node.ClrType, storedValue, null);
 		}
 

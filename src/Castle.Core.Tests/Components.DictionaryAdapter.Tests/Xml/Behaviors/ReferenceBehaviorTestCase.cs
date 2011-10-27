@@ -298,6 +298,39 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 					"</Foo>"
 				)));
 			}
+
+			[Test]
+			public void SelfReference_Root()
+			{
+				var xml = Xml("<Foo/>");
+				var foo = Create<IFoo>(xml);
+
+				foo.One = foo;
+
+				Assert.That(xml, XmlEquivalent.To(Xml(
+					"<Foo x:id='1' $x>",
+						"<One x:ref='1'/>",
+					"</Foo>"
+				)));
+			}
+
+			[Test]
+			public void SelfReference_Child()
+			{
+				var xml = Xml("<Foo/>");
+				var foo = Create<IFoo>(xml);
+
+				foo = foo.One;
+				foo.One = foo;
+
+				Assert.That(xml, XmlEquivalent.To(Xml(
+					"<Foo $x>",
+						"<One x:id='1'>",
+							"<One x:ref='1'/>",
+						"</One>",
+					"</Foo>"
+				)));
+			}
 		}
 	}
 }

@@ -36,6 +36,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private XmlReferenceManager references;
 		private XmlMetadata primaryXmlMeta;
 		private Dictionary<Type, XmlMetadata> secondaryXmlMetas;
+		private readonly bool isRoot;
 
 #if !SILVERLIGHT
 		public XmlAdapter()
@@ -47,8 +48,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		        throw Error.ArgumentNull("node");
 
 			this.source = node;
+			this.isRoot = true;
 		}
 #endif
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="XmlAdapter"/> class
+		/// that represents a child object in a larger object graph.
+		/// </summary>
+		/// <param name="node"></param>
+		/// <param name="references"></param>
 		public XmlAdapter(IXmlNode node, XmlReferenceManager references)
 		{
 		    if (node == null)
@@ -90,8 +99,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			else
 				InitializeSecondary(meta);
 
-			InitializeBaseTypes(meta);
+			InitializeBaseTypes (meta);
 			InitializeStrategies(dictionaryAdapter);
+			InitializeReference (dictionaryAdapter);
 		}
 
 		private void InitializePrimary(DictionaryAdapterMeta meta, IDictionaryAdapter dictionaryAdapter)
@@ -104,22 +114,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			if (references == null)
 				references = new XmlReferenceManager(node, DefaultXmlReferenceFormat.Instance);
+			InitializeReference(this);
 		}
 
 		private void InitializeSecondary(DictionaryAdapterMeta meta)
 		{
 			AddSecondaryXmlMeta(meta);
-		}
-
-		private void AddSecondaryXmlMeta(DictionaryAdapterMeta meta)
-		{
-			if (secondaryXmlMetas == null)
-				secondaryXmlMetas = new Dictionary<Type, XmlMetadata>();
-			else if (secondaryXmlMetas.ContainsKey(meta.Type))
-				return;
-
-			RequireXmlMeta(meta);
-			secondaryXmlMetas[meta.Type] = meta.GetXmlMeta();
 		}
 
 		private void InitializeBaseTypes(DictionaryAdapterMeta meta)
@@ -145,6 +145,26 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				instance.CreateStrategy = this;
 				instance.AddCopyStrategy(this);
 			}
+		}
+
+		private void InitializeReference(object value)
+		{
+			if (isRoot)
+				// If this is a root XmlAdapter, we must pre-populate the reference manager with
+				// this XmlAdapter and its IDictionaryAdapters.  This enables child objects in the
+				// graph to reference the root object.
+				references.Add(node, this, value);
+		}
+
+		private void AddSecondaryXmlMeta(DictionaryAdapterMeta meta)
+		{
+			if (secondaryXmlMetas == null)
+				secondaryXmlMetas = new Dictionary<Type, XmlMetadata>();
+			else if (secondaryXmlMetas.ContainsKey(meta.Type))
+				return;
+
+			RequireXmlMeta(meta);
+			secondaryXmlMetas[meta.Type] = meta.GetXmlMeta();
 		}
 
 		private static void RequireXmlMeta(DictionaryAdapterMeta meta)
