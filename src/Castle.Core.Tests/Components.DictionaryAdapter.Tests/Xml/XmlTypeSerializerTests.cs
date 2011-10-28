@@ -133,7 +133,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		public void Guid_Roundtrip()
 		{
 			var text = "04eaaed4-e7e8-433a-93d6-c6ddae957fb5";
-			TestSimpleSerializer(Guid.Parse(text), text);
+			TestSimpleSerializer(new Guid(text), text);
 		}
 
 		[Test]

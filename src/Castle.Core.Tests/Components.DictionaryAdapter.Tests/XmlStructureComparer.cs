@@ -43,17 +43,17 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
         public bool Equals(XmlNode node1, XmlNode node2)
         {
-            return Traverse<Tuple<XmlNode, XmlNode>, bool>(Tuple.Create(node1, node2), true,
+            return Traverse<Pair<XmlNode>, bool>(new Pair<XmlNode>(node1, node2), true,
                 GetChildTuples, VisitChildForEquals, VisitPrimitiveForEquals);
         }
 
         public int Compare(XmlNode node1, XmlNode node2)
         {
-            return Traverse<Tuple<XmlNode, XmlNode>, int>(Tuple.Create(node1, node2), 0,
+            return Traverse<Pair<XmlNode>, int>(new Pair<XmlNode>(node1, node2), 0,
                 GetChildTuples, VisitChildForCompare, VisitPrimitiveForCompare);
         }
 
-        private IEnumerable<Tuple<XmlNode, XmlNode>> GetChildTuples(Tuple<XmlNode, XmlNode> tuple)
+        private IEnumerable<Pair<XmlNode>> GetChildTuples(Pair<XmlNode> tuple)
         {
             return ZipOuter(
                 GetChildElementsAndAttributes(tuple.Item1)
@@ -62,7 +62,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
                 GetChildElementsAndAttributes(tuple.Item2)
 					.OrderBy(n => n.LocalName,    comparer)
 					.ThenBy (n => n.NamespaceURI, comparer),
-                (n1, n2) => Tuple.Create(n1, n2));
+                (n1, n2) => new Pair<XmlNode>(n1, n2));
         }
 
         private bool VisitChildForHashCode(XmlNode node, ref int hashCode)
@@ -78,7 +78,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
             return false;
         }
 
-        private bool VisitChildForEquals(Tuple<XmlNode, XmlNode> tuple, ref bool equal)
+        private bool VisitChildForEquals(Pair<XmlNode> tuple, ref bool equal)
         {
             return !
             (
@@ -90,7 +90,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
             );
         }
 
-        private bool VisitChildForCompare(Tuple<XmlNode, XmlNode> tuple, ref int result)
+        private bool VisitChildForCompare(Pair<XmlNode> tuple, ref int result)
         {
 			int r;
             return 0 !=
@@ -116,7 +116,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
             return false;
         }
 
-        private bool VisitPrimitiveForEquals(Tuple<XmlNode, XmlNode> tuple, ref bool equal)
+        private bool VisitPrimitiveForEquals(Pair<XmlNode> tuple, ref bool equal)
         {
             var text1 = (null == tuple.Item1) ? string.Empty : tuple.Item1.InnerText;
             var text2 = (null == tuple.Item2) ? string.Empty : tuple.Item2.InnerText;
@@ -128,7 +128,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
             );
         }
 
-        private bool VisitPrimitiveForCompare(Tuple<XmlNode, XmlNode> tuple, ref int result)
+        private bool VisitPrimitiveForCompare(Pair<XmlNode> tuple, ref int result)
         {
             var text1 = (null == tuple.Item1) ? string.Empty : tuple.Item1.InnerText;
             var text2 = (null == tuple.Item2) ? string.Empty : tuple.Item2.InnerText;
@@ -233,5 +233,17 @@ namespace Castle.Components.DictionaryAdapter.Tests
                 }
             }
         }
+
+		private struct Pair<T>
+		{
+			public readonly T Item1;
+			public readonly T Item2;
+
+			public Pair(T item1, T item2)
+			{
+				Item1 = item1;
+				Item2 = item2;
+			}
+		}
     }
 }

@@ -82,6 +82,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             GuidString   = "c7da18ce-aa3f-452d-bf8f-8e3bb9cdec2b";
 
         protected readonly byte[] Base64Bytes = Convert.FromBase64String(Base64String);
-        protected readonly Guid GuidValue = Guid.Parse(GuidString);
+        protected readonly Guid   GuidValue   = new Guid(GuidString);
     }
 }

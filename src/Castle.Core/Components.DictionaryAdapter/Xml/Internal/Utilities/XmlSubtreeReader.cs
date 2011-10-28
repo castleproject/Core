@@ -135,6 +135,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				: actualNamespaceURI;
 		}
 
+#if !DOTNET40
+		// Virtual in .NET 4.0, abstract in .NET 3.5
+		// Use default implementation from .NET 4.0
+		public override bool HasValue
+		{
+			get { return 0UL != (HasValueMask & (1UL << ((int)NodeType & 31))); }
+		}
+		private const ulong HasValueMask = 0x0002659CU;
+#endif
+
         public override string Value
         {
             get { return Reader.Value; }
