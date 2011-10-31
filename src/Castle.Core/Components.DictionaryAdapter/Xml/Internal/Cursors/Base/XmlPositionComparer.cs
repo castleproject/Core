@@ -28,80 +28,74 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			for (;;)
 			{
-				var hasA = a.MoveNext();
-				var hasB = b.MoveNext();
-
-				if (hasA && hasB)
-					if (comparer.Equals(a.Name, b.Name)) continue;
-					else return false;
-				else if (hasA || hasB)
-					return false;
-				else // (!hasA && !hasB)
+				if (a.Node.Exists && b.Node.Exists)
 					return a.Node.UnderlyingPositionEquals(b.Node);
+				if (!a.MoveNext() || !b.MoveNext())
+					return false;
+				if (!comparer.Equals(a.Name, b.Name))
+					return false;
 			}
 		}
 
 		private struct ComparandIterator
 		{
-			public IXmlNode          Node;
-			public CompiledXPathNode Path;
-			public XmlName           Name;
+			public IXmlNode Node;
+			public XmlName  Name;
+#if !SL3
+			public CompiledXPathNode Step;
+#endif
 
 			public bool MoveNext()
 			{
-				if (Path != null)
-					return ConsumePath();
-				else if (Node == null || Node.Exists)
-					return Fail();
-				else
-					return ConsumeNode();
-			}
-
-			private bool ConsumePath()
-			{
-				Name = new XmlName
-				(
-					Path.LocalName,
-					Node.LookupNamespaceUri(Path.Prefix)
-				);
-				Path = Path.PreviousNode;
-				return true;
+				return
+#if !SL3
+					Step != null ? ConsumeStep() :
+#endif
+					Node != null ? ConsumeNode() :
+					Stop();
 			}
 
 			private bool ConsumeNode()
 			{
-				Path = GetXPathLastStep(Node);
-				if (Path != null)
-					ConsumePath();
+#if !SL3
+				var path = Node.Path;
+				if (path != null)
+					return ConsumeFirstStep(path);
 				else
+#endif
 					Name = Node.Name;
 				Node = Node.Parent;
 				return true;
 			}
 
-			private bool Fail()
+			private bool Stop()
 			{
 				Name = XmlName.Empty;
 				return false;
 			}
 
-			private static CompiledXPathNode GetXPathLastStep(IXmlNode node)
+#if !SL3
+			private bool ConsumeFirstStep(CompiledXPath path)
 			{
-				var source = node as IHasXPath;
-				if (source == null)
-					return null;
+				if (!path.IsCreatable)
+					return false;
 
-				var path = source.Path;
-				return path.IsCreatable
-					? path.LastStep
-					: null;
+				Step = path.LastStep;
+				return ConsumeStep();
 			}
-		}
-	}
 
-	public interface IHasXPath
-	{
-		CompiledXPath Path { get; }
+			private bool ConsumeStep()
+			{
+				Name = new XmlName
+				(
+					Step.LocalName,
+					Node.LookupNamespaceUri(Step.Prefix)
+				);
+				Step = Step.PreviousNode;
+				return true;
+			}
+#endif
+		}
 	}
 }
 #endif

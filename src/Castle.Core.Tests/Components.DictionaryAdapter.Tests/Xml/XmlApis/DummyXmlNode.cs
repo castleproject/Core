@@ -36,6 +36,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			get { return clrType; }
 		}
 
+		public CompiledXPath Path
+		{
+			get { return null; }
+		}
+
 		public XmlName Name
 		{
 			get { throw new NotImplementedException(); }

@@ -52,6 +52,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return namespaces; }
 		}
 
+#if !SL3
+		public virtual CompiledXPath Path
+		{
+			get { return null; }
+		}
+#endif
+
 		IRealizable<T> IRealizableSource.AsRealizable<T>()
 		{
 			return this as IRealizable<T>;

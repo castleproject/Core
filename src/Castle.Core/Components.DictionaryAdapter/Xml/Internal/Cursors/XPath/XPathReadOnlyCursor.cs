@@ -22,13 +22,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	public class XPathReadOnlyCursor : XPathNode, IXmlCursor
 	{
 		private XPathNodeIterator iterator;
-		private readonly XPathExpression path;
 		private readonly IXmlIncludedTypeMap includedTypes;
 		private readonly CursorFlags flags;
 
 		public XPathReadOnlyCursor(IXmlNode parent, CompiledXPath path,
 			IXmlIncludedTypeMap includedTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
-			: base(namespaces, parent)
+			: base(path, namespaces, parent)
 		{
 			if (parent == null)
 				throw Error.ArgumentNull("parent");
@@ -37,7 +36,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (includedTypes == null)
 				throw Error.ArgumentNull("includedTypes");
 
-			this.path          = path.Path;
 			this.includedTypes = includedTypes;
 			this.flags         = flags;
 
@@ -48,7 +46,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			var source = Parent.RequireRealizable<XPathNavigator>();
 			if (source.Exists)
-				iterator = source.Value.Select(path);
+				iterator = source.Value.Select(xpath.Path);
 		}
 
 		public bool MoveNext()

@@ -26,13 +26,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private CompiledXPathStep step;
 		private int depth;
 
-		private readonly CompiledXPath path;
 		private readonly IXmlIncludedTypeMap knownTypes;
 		private readonly CursorFlags flags;
 
 		public XPathMutableCursor(IXmlNode parent, CompiledXPath path,
 			IXmlIncludedTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
-			: base(namespaces, parent)
+			: base(path, namespaces, parent)
 		{
 			if (null == parent)
 				throw Error.ArgumentNull("parent");
@@ -43,7 +42,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (!path.IsCreatable)
 				throw Error.XPathNotCreatable(path);
 
-			this.path       = path;
 			this.step       = path.FirstStep;
 			this.knownTypes = knownTypes;
 			this.flags      = flags;
@@ -61,7 +59,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public bool HasCurrent
 		{
-			get { return depth == path.Depth; }
+			get { return depth == xpath.Depth; }
 		}
 
 		public bool HasPartialOrCurrent
@@ -136,7 +134,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private bool SeekCurrent()
 		{
-			while (depth < path.Depth)
+			while (depth < xpath.Depth)
 			{
 				var iterator = node.Select(step.Path);
 				if (!iterator.MoveNext())
@@ -191,7 +189,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private void ResetDepth()
 		{
-			step = path.FirstStep;
+			step = xpath.FirstStep;
 			depth = 0;
 		}
 
@@ -353,7 +351,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void SeekCurrentAfterCreate(bool moved)
 		{
 			RequireMoved(moved);
-			if (Descend() == path.Depth)
+			if (Descend() == xpath.Depth)
 				return;
 
 			do
@@ -363,7 +361,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					: node.MoveToFirstChild();
 				RequireMoved(moved);
 			}
-			while (Descend() < path.Depth);
+			while (Descend() < xpath.Depth);
 		}
 
 		public void RemoveAllNext()

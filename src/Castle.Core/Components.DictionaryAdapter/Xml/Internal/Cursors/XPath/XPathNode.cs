@@ -26,12 +26,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 #endif
 	{
 		protected XPathNavigator node;
+		protected readonly CompiledXPath xpath;
 
-		protected XPathNode(IXmlNamespaceSource namespaces, IXmlNode parent)
-			: base(namespaces, parent) { }
+		protected XPathNode(CompiledXPath path, IXmlNamespaceSource namespaces, IXmlNode parent)
+			: base(namespaces, parent)
+		{
+			this.xpath = path;
+		}
 
 		public XPathNode(XPathNavigator node, Type type, IXmlNamespaceSource namespaces)
-			: this(namespaces, null)
+			: this(null, namespaces, null)
 		{
 			if (node == null)
 				throw Error.ArgumentNull("node");
@@ -52,9 +56,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { Realize(); return node; }
 		}
 
+#if !SILVERLIGHT
 		XmlNode IRealizable<XmlNode>.Value
 		{
 			get { Realize(); return (XmlNode) node.UnderlyingObject; }
+		}
+#endif
+
+		public override CompiledXPath Path
+		{
+			get { return xpath; }
 		}
 
 		public virtual XmlName Name
@@ -107,15 +118,19 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void SetAttribute(XmlName name, string value)
 		{
 			if (string.IsNullOrEmpty(value))
-			{
-				if (node.MoveToAttribute(name.LocalName, name.NamespaceUri))
-					node.DeleteSelf();
-			}
-			else if (!IsElement)
-			{
+				ClearAttribute(name);
+			else
+				SetAttributeCore(name, value);
+		}
+
+		private void SetAttributeCore(XmlName name, string value)
+		{
+			if (!IsElement)
 				throw Error.CannotSetAttribute(this);
-			}
-			else if (node.MoveToAttribute(name.LocalName, name.NamespaceUri))
+
+			Realize();
+
+			if (node.MoveToAttribute(name.LocalName, name.NamespaceUri))
 			{
 				node.SetValue(value);
 				node.MoveToParent();
@@ -125,6 +140,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				var prefix = Namespaces.GetAttributePrefix(this, name.NamespaceUri);
 				node.CreateAttribute(prefix, name.LocalName, name.NamespaceUri, value);
 			}
+		}
+
+		private void ClearAttribute(XmlName name)
+		{
+			if (Exists && node.MoveToAttribute(name.LocalName, name.NamespaceUri))
+				node.DeleteSelf();
 		}
 
 		public string LookupPrefix(string namespaceUri)

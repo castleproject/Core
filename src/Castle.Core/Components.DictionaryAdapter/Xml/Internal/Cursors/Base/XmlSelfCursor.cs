@@ -36,6 +36,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return node.IsAttribute ? CursorFlags.Attributes : CursorFlags.Elements; }
 		}
 
+#if !SL3
+		public CompiledXPath Path
+		{
+			get { return node.Path; }
+		}
+#endif
+
 		public XmlName Name
 		{
 			get { return node.Name; }

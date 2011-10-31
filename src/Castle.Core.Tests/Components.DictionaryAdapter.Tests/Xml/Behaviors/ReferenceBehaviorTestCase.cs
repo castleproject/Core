@@ -83,6 +83,40 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
+			public void PropertyReference_Set_ToVirtual()
+			{
+				var xml = Xml("<Foo/>");
+				var foo = Create<IFoo>(xml);
+
+				foo.Two = foo.One;
+
+				Assert.That(xml, XmlEquivalent.To(Xml(
+					"<Foo $x>",
+						"<Two x:ref='1'/>",
+						"<One x:id='1'/>",
+					"</Foo>"
+				)));
+			}
+
+			[Test]
+			public void PropertyReference_Set_ReplacingVirtual()
+			{
+				var xml = Xml("<Foo/>");
+				var foo = Create<IFoo>(xml);
+
+				foo.One.Value = "One";
+				var two = foo.Two;
+				foo.Two = foo.One;
+
+				Assert.That(xml, XmlEquivalent.To(Xml(
+					"<Foo $x>",
+						"<One x:id='1'> <Value>One</Value> </One>",
+						"<Two x:ref='1'/>",
+					"</Foo>"
+				)));
+			}
+
+			[Test]
 			public void ArrayReference_Get()
 			{
 				var xml = Xml(

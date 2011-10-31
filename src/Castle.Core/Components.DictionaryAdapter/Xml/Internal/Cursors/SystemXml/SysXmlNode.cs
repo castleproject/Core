@@ -110,6 +110,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public string GetAttribute(XmlName name)
 		{
+			if (!Exists)
+				return null;
+
 			var element = node as XmlElement;
 			if (element == null)
 				return null;
@@ -127,15 +130,20 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void SetAttribute(XmlName name, string value)
 		{
-			var element = node as XmlElement;
-
 			if (string.IsNullOrEmpty(value))
-			{
-				if (element != null)
-					element.RemoveAttribute(name.LocalName, name.NamespaceUri);
-				return;
-			}
+				ClearAttribute(name);
+			else
+				SetAttributeCore(name, value);
+		}
 
+		private void SetAttributeCore(XmlName name, string value)
+		{
+			if (!IsElement)
+				throw Error.CannotSetAttribute(this);
+
+			Realize();
+
+			var element = node as XmlElement;
 			if (element == null)
 				throw Error.CannotSetAttribute(this);
 
@@ -147,6 +155,19 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				element.SetAttributeNode(attribute);
 			}
 			attribute.Value = value;
+		}
+
+		private void ClearAttribute(XmlName name)
+		{
+			if (!Exists)
+				return;
+
+			var element = node as XmlElement;
+			if (element == null)
+				return;
+
+			element.RemoveAttribute(name.LocalName, name.NamespaceUri);
+			return;
 		}
 
 		public string LookupPrefix(string namespaceUri)
