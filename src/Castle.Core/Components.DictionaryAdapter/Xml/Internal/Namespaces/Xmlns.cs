@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	public static class Xmlns
@@ -21,3 +22,4 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			NamespaceUri = "http://www.w3.org/2000/xmlns/";
 	}
 }
+#endif

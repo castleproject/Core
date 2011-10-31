@@ -31,7 +31,9 @@ namespace Castle.Components.DictionaryAdapter
 #endif
 	using System.Diagnostics;
 
+#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
 	using Castle.Components.DictionaryAdapter.Xml;
+#endif
 	using Castle.Core.Internal;
 
 	/// <summary>
@@ -89,6 +91,7 @@ namespace Castle.Components.DictionaryAdapter
 			return GetAdapter(type, new NameValueCollectionAdapter(nameValues));
 		}
 
+#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
 		/// <inheritdoc />
 		public T GetAdapter<T>(System.Xml.XmlNode xmlNode)
 		{
@@ -103,6 +106,7 @@ namespace Castle.Components.DictionaryAdapter
 		        .AddBehavior(XmlMetadataBehavior.Instance)
 		        .AddBehavior(xml));
 		}
+#endif
 #endif
 
 		/// <inheritdoc />
