@@ -139,25 +139,35 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(node.IsNil, Is.True);
 		}
 
-		//[Test]
-		//public void IsNil_OfElement_WhenSetToTrue()
-		//{
-		//    var node = NodeForElement("<X> <Y/> </X>");
+		[Test]
+		public void IsNil_OfElement_WhenSetToTrue()
+		{
+		    var node = NodeForElement("<X> <Y/> </X>");
 
-		//    node.IsNil = true;
+		    node.IsNil = true;
 
-		//    Assert.That(node.Xml, XmlEquivalent.To("<X xsi:nil='true' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'/>"));
-		//}
+		    Assert.That(node.Xml, XmlEquivalent.To("<X xsi:nil='true' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'/>"));
+		}
 
-		//[Test]
-		//public void IsNil_OfElement_WhenSetToFalse()
-		//{
-		//    var node = NodeForElement("<X> <Y/> </X>");
+		[Test]
+		public void IsNil_OfElement_WhenSetToFalse()
+		{
+		    var node = NodeForElement("<X> <Y/> </X>");
 
-		//    node.IsNil = false;
+		    node.IsNil = false;
 
-		//    Assert.That(node.Xml, XmlEquivalent.To("<X> <Y/> </X>"));
-		//}
+		    Assert.That(node.Xml, XmlEquivalent.To("<X> <Y/> </X>"));
+		}
+
+		[Test]
+		public void IsNil_OfElement_WhenValueSet()
+		{
+			var node = NodeForElement("<X xsi:nil='true' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'/>");
+
+			node.Value = "V";
+
+			Assert.That(node.Xml, XmlEquivalent.To("<X>V</X>"));
+		}
 
 		[Test]
 		public void IsNil_OfAttribute()
@@ -168,12 +178,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		//[Test]
-		//public void IsNil_Attribute_WhenSet()
+		//public void IsNil_Attribute_WhenSetToTrue()
 		//{
 		//    var node = NodeForAttribute("<X A='a'/>");
 
 		//    Assert.Throws<InvalidOperationException>(() =>
-		//        node.IsNil = false);
+		//        node.IsNil = true);
 
 		//    Assert.That(node.Xml, Is.EqualTo("A='a'") | Is.EqualTo("A=\"a\""));
 		//}
@@ -229,10 +239,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			var cursor = node.SelectSelf(typeof(T));
 
-			Assert.That(cursor,            Is.Not.Null);
-			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.Name.LocalName,  Is.EqualTo("X"));
-			Assert.That(cursor.MoveNext(), Is.False);
+			Assert.That(cursor,                Is.Not.Null);
+			Assert.That(cursor.MoveNext(),     Is.True);
+			Assert.That(cursor.Name.LocalName, Is.EqualTo("X"));
+			Assert.That(cursor.MoveNext(),     Is.False);
 		}
 
 		[Test]

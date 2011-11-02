@@ -97,7 +97,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public virtual string Value
 		{
 			get { return node.Value; }
-			set { node.SetValue(value); }
+			set { var nil = (value == null); IsNil = nil; if (!nil) node.SetValue(value); }
 		}
 
 		public virtual string Xml

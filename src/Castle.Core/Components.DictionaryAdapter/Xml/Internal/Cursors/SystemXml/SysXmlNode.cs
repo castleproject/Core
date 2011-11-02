@@ -85,7 +85,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public virtual string Value
 		{
 			get { return node.InnerText; }
-			set { node.InnerText = value; }
+			set { var nil = (value == null); IsNil = nil; if (!nil) node.InnerText = value; }
 		}
 
 		public virtual string Xml

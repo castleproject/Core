@@ -106,8 +106,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		protected virtual bool IsMatch(Type clrType)
 		{
 			return clrType == this.ClrType
-				|| (Serializer.Kind == XmlTypeKind.Collection
-				 && typeof(IEnumerable).IsAssignableFrom(clrType));
+				|| ( Serializer.Kind == XmlTypeKind.Collection
+				&&   typeof(IEnumerable).IsAssignableFrom(clrType) );
 		}
 
 		protected void ConfigureLocalName(string localName)

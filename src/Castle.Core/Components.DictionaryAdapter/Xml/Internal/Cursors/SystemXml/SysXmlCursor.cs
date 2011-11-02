@@ -99,7 +99,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override string Value
 		{
 			get { return HasCurrent ? base.Value : string.Empty; }
-			set { Realize(); base.Value = value; }
+			set { base.Value = value; } // base sets IsNil, so no need to call Realize() here
 		}
 
 		public override string Xml
@@ -415,8 +415,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public void Create(Type type)
 		{
-			var position  = RequireCreatable();
 			var knownType = knownTypes.Require(type);
+			var position  = RequireCreatable();
 
 			if (flags.IncludesElements())
 				CreateElement  (knownType, position);
@@ -537,7 +537,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				case State.Element:   position = node; MoveToParentOfElement();   break;
 				case State.Attribute: position = node; MoveToParentOfAttribute(); break;
 				case State.End:       position = null; break;
-				case State.Empty:     position = null; node = Parent.AsRealizable<XmlNode>().Value; break;
+				case State.Empty:     position = null; node = Parent.AsRealizable<XmlNode>().Value; base.IsNil = false; break;
 				default:              throw Error.CursorNotInCreatableState();
 			}
 			return position;

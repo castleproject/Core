@@ -257,11 +257,36 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-			public void SetToNull()
+			public void Set_ToNull_Element()
 			{
-				var obj = Create<IRoot>("<Root Value='v'/>");
+				var xml = Xml("<Root> <Value>TestValue</Value> </Root>");
+				var obj = Create<IRoot>(xml);
 
 				obj.Value = null;
+
+				Assert.That(xml, XmlEquivalent.To(Xml("<Root $xsi> <Value xsi:nil='true'/> </Root>")));
+			}
+
+			[Test]
+			public void Set_ToNull_Attribute()
+			{
+				var xml = Xml("<Root Value='TestValue'/>");
+				var obj = Create<IRoot>(xml);
+
+				obj.Value = null;
+
+				Assert.That(xml, XmlEquivalent.To(Xml("<Root $xsi> <Value xsi:nil='true'/> </Root>")));
+			}
+
+			[Test]
+			public void Set_ToValue_Element()
+			{
+				var xml = Xml("<Root $xsi> <Value xsi:nil='true'/> </Root>");
+				var obj = Create<IRoot>(xml);
+
+				obj.Value = "TestValue";
+
+				Assert.That(xml, XmlEquivalent.To(Xml("<Root $xsi> <Value>TestValue</Value> </Root>")));
 			}
 		}
 

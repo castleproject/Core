@@ -101,7 +101,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public override string Value
 		{
 			get { return HasCurrent ? base.Value : string.Empty; }
-			set { Realize(); base.Value = value; }
+			set { base.Value = value; } // base sets IsNil, so no need to call Realize() here
 		}
 
 		public override string Xml
@@ -275,6 +275,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void Append()
 		{
 			node = Parent.AsRealizable<XPathNavigator>().Value.Clone();
+			Parent.IsNil = false;
 			Complete();
 		}
 
