@@ -253,7 +253,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			[XmlDefaults(IsNullable = true)]
 			public interface IRoot
 			{
-				string Value { get; set; }
+				string   Value { get; set; }
+				string[] Array { get; set; }
 			}
 
 			[Test]
@@ -287,6 +288,17 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				obj.Value = "TestValue";
 
 				Assert.That(xml, XmlEquivalent.To(Xml("<Root $xsi> <Value>TestValue</Value> </Root>")));
+			}
+
+			[Test]
+			public void Set_ToArray_Element()
+			{
+				var xml = Xml("<Root $xsi> <Array xsi:nil='true'/> </Root>");
+				var obj = Create<IRoot>(xml);
+
+				obj.Array = new[] { "TestValue" };
+
+				Assert.That(xml, XmlEquivalent.To(Xml("<Root $xsi> <Array> <string>TestValue</string> </Array> </Root>")));
 			}
 		}
 

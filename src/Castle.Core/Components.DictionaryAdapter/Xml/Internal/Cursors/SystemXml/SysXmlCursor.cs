@@ -337,6 +337,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			node = ((XmlAttribute) node).OwnerElement;
 		}
 
+		private void MoveToRealizedParent()
+		{
+			var parent = Parent;
+			node = parent.AsRealizable<XmlNode>().Value;
+			parent.IsNil = false;
+		}
+
 		public override event EventHandler Realized;
 		protected virtual void OnRealized()
 		{
@@ -536,8 +543,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{
 				case State.Element:   position = node; MoveToParentOfElement();   break;
 				case State.Attribute: position = node; MoveToParentOfAttribute(); break;
+				case State.Empty:     position = null; MoveToRealizedParent();    break;
 				case State.End:       position = null; break;
-				case State.Empty:     position = null; node = Parent.AsRealizable<XmlNode>().Value; base.IsNil = false; break;
 				default:              throw Error.CursorNotInCreatableState();
 			}
 			return position;
