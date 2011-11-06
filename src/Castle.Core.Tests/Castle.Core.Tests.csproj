@@ -157,12 +157,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net35\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.Serialization">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.ServiceModel">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
@@ -170,9 +164,7 @@
   <Choose>
     <When Condition="$(MSBuildTargets)!='Silverlight 3.0' and $(MSBuildTargets)!='Silverlight 4.0'">
       <ItemGroup>
-        <Reference Include="System.configuration" />
         <Reference Include="System.Data" />
-        <Reference Include="System.Web" />
         <Reference Include="nunit.framework">
           <SpecificVersion>False</SpecificVersion>
           <HintPath>..\..\lib\nunit.framework.dll</HintPath>

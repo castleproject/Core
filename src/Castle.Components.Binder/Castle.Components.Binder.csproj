@@ -1,27 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <!-- Root Path definition relative for actual build file -->
   <PropertyGroup>
     <RootPath Condition=" '$(RootPath)' == '' ">$(MSBuildProjectDirectory)\..\..</RootPath>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{57ED99CE-404E-4029-A98A-2159E2E70E22}</ProjectGuid>
+    <ProjectGuid>{98F19522-C9B8-400D-8A12-DABB3DA9411D}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon>
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Castle.Components.Binder.Tests</AssemblyName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyName>Castle.Components.Binder</AssemblyName>
+    <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <RootNamespace>Castle.Components.Binder.Tests</RootNamespace>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Castle.Components.Binder</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -29,26 +32,15 @@
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">NET40-Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CB9293F5-FC24-43A0-9599-C8555A61E35E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SignAssembly>true</SignAssembly>
@@ -118,18 +110,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Components.Validator, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\$(BuildConfigKey)\Castle.Components.Validator.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\$(BuildConfigKey)\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.5.2.9222, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\$(BuildConfigKey)\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -142,33 +122,56 @@
     <Reference Include="System.Web">
       <Name>System.Web</Name>
     </Reference>
-    <Reference Include="System.Xml">
-      <Name>System.XML</Name>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Address.cs" />
-    <Compile Include="Models\Comp.cs" />
-    <Compile Include="ConverterTestCase.cs" />
-    <Compile Include="Models\Customer.cs" />
-    <Compile Include="DataBinderArrayTestCase.cs" />
-    <Compile Include="DataBinderGenericListTestCase.cs" />
-    <Compile Include="DataBinderSingleValueTestCase.cs" />
-    <Compile Include="DataBinderTestCase.cs">
+    <Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="ArrayConverter.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="BindingException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DataBinderWithValidatorTestCase.cs" />
-    <Compile Include="DataReaderIntegrationTestCase.cs" />
-    <Compile Include="GenericBindingTestCase.cs" />
-    <Compile Include="NullablesTestCase.cs" />
-    <Compile Include="Models\Person.cs" />
-    <Compile Include="Models\Person2.cs" />
-    <Compile Include="TestUtils.cs">
+    <Compile Include="ConverterUtil.cs" />
+    <Compile Include="DataBinder.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TreeBuilderDataBinderIntegrationTestCase.cs" />
-    <Compile Include="TreeBuilderRegressionTestCase.cs" />
-    <Compile Include="TreeBuilderTestCase.cs" />
+    <Compile Include="DataBindError.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataReaderTreeBuilder.cs" />
+    <Compile Include="DateTimeConverter.cs" />
+    <Compile Include="DateTimeOffsetConverter.cs" />
+    <Compile Include="DecimalConverter.cs" />
+    <Compile Include="DefaultConverter.cs" />
+    <Compile Include="EnumConverter.cs" />
+    <Compile Include="ErrorList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GenericListConverter.cs" />
+    <Compile Include="GuidConverter.cs" />
+    <Compile Include="HttpPostedFileConverter.cs" />
+    <Compile Include="IBinderTranslator.cs" />
+    <Compile Include="IConverter.cs" />
+    <Compile Include="IDataBinder.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IndexComparer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Node.cs" />
+    <Compile Include="NullableConverter.cs" />
+    <Compile Include="ExactMatchConverter.cs" />
+    <Compile Include="StringConverter.cs" />
+    <Compile Include="TypeConverterAdapter.cs" />
+    <Compile Include="PrimitiveConverter.cs" />
+    <Compile Include="TreeBuilder.cs" />
+    <Compile Include="TypeConverterBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\buildscripts\CastleKey.snk">
+      <Link>CastleKey.snk</Link>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
@@ -191,9 +194,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Castle.Components.Binder\Castle.Components.Binder-vs2010.csproj">
+    <ProjectReference Include="..\Castle.Components.Validator\Castle.Components.Validator.csproj">
+      <Project>{4C945D49-02E9-43F2-9202-E7A6E7C56E77}</Project>
+      <Name>Castle.Components.Validator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.Core\Castle.Core.csproj">
       <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
-      <Name>Castle.Components.Binder-vs2010</Name>
+      <Name>Castle.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

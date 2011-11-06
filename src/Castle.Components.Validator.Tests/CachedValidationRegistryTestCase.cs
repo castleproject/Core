@@ -21,6 +21,7 @@ namespace Castle.Components.Validator.Tests
 	using System.Threading;
 	using Castle.Components.Validator.Tests.Models;
 	using Castle.DynamicProxy;
+
 	using NUnit.Framework;
 
 	[TestFixture]

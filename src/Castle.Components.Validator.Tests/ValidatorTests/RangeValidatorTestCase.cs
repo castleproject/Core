@@ -16,12 +16,10 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
 	using System.Globalization;
 	using System.Threading;
+
 	using NUnit.Framework;
-	using Rhino.Mocks;
 
 	[TestFixture]
 	public class RangeValidatorTestCase
@@ -29,19 +27,19 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		private RangeValidator validatorIntLow,
 		                       validatorIntHigh,
 		                       validatorIntLowOrHigh,
-							   validatorLongLow,
-							   validatorLongHigh,
-							   validatorLongLowOrHigh,
-							   validatorDecimalLow,
-							   validatorDecimalHigh,
-							   validatorDecimalLowOrHigh,
+		                       validatorLongLow,
+		                       validatorLongHigh,
+		                       validatorLongLowOrHigh,
+		                       validatorDecimalLow,
+		                       validatorDecimalHigh,
+		                       validatorDecimalLowOrHigh,
 		                       validatorDateTimeLow,
 		                       validatorDateTimeHigh,
 		                       validatorDateTimeLowOrHigh,
 		                       validatorStringLow,
 		                       validatorStringHigh,
 		                       validatorStringLowOrHigh,
-							   validatorIntMessage;
+		                       validatorIntMessage;
 
 		private TestTargetInt intTarget;
 		private TestTargetLong longTarget;
@@ -366,6 +364,7 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		#endregion
 
 		#region Error message tests
+
 		[Test]
 		public void CustomMessageIsReturned()
 		{
@@ -376,20 +375,110 @@ namespace Castle.Components.Validator.Tests.ValidatorTests
 		[Test]
 		public void CustomMessageIsSentToIBrowserValidationGenerator()
 		{
-			var mockery = new MockRepository();
-			IBrowserValidationGenerator browserValidationGenerator = mockery.DynamicMock<IBrowserValidationGenerator>();
+			var browserValidationGenerator = new FakeIBrowserValidationGenerator();
+			browserValidationGenerator.SetValueRange("TargetField", 0, 1, CustomErrorMessage);
+			Assert.IsFalse(validatorIntMessage.IsValid(intTarget, -2));
+			validatorIntMessage.ApplyBrowserValidation(null, InputElementType.Text, browserValidationGenerator, new Hashtable(), "TargetField");
+			Assert.AreEqual(CustomErrorMessage, validatorIntMessage.ErrorMessage);
 
-			using (mockery.Record())
+		}
+
+		#endregion
+
+
+		public class FakeIBrowserValidationGenerator : IBrowserValidationGenerator
+		{
+			public void SetDigitsOnly(string target, string violationMessage)
 			{
-				browserValidationGenerator.SetValueRange("TargetField", 0, 1, CustomErrorMessage);
 			}
-			using (mockery.Playback())
+
+			public void SetNumberOnly(string target, string violationMessage)
 			{
-				Assert.IsFalse(validatorIntMessage.IsValid(intTarget, -2));
-				validatorIntMessage.ApplyBrowserValidation(null, InputElementType.Text, browserValidationGenerator, new Hashtable(), "TargetField");
-				Assert.AreEqual(CustomErrorMessage, validatorIntMessage.ErrorMessage);
+			}
+
+			public void SetAsRequired(string target, string violationMessage)
+			{
+			}
+
+			public void SetRegExp(string target, string regExp, string violationMessage)
+			{
+			}
+
+			public void SetEmail(string target, string violationMessage)
+			{
+			}
+
+			public void SetExactLength(string target, int length)
+			{
+			}
+
+			public void SetExactLength(string target, int length, string violationMessage)
+			{
+			}
+
+			public void SetMinLength(string target, int minLength)
+			{
+			}
+
+			public void SetMinLength(string target, int minLength, string violationMessage)
+			{
+			}
+
+			public void SetMaxLength(string target, int maxLength)
+			{
+			}
+
+			public void SetMaxLength(string target, int maxLength, string violationMessage)
+			{
+			}
+
+			public void SetLengthRange(string target, int minLength, int maxLength)
+			{
+			}
+
+			public void SetLengthRange(string target, int minLength, int maxLength, string violationMessage)
+			{
+			}
+
+			public void SetValueRange(string target, int minValue, int maxValue, string violationMessage)
+			{
+			}
+
+			public void SetValueRange(string target, decimal minValue, decimal maxValue, string violationMessage)
+			{
+			}
+
+			public void SetValueRange(string target, DateTime minValue, DateTime maxValue, string violationMessage)
+			{
+			}
+
+			public void SetValueRange(string target, string minValue, string maxValue, string violationMessage)
+			{
+			}
+
+			public void SetAsSameAs(string target, string comparisonFieldName, string violationMessage)
+			{
+			}
+
+			public void SetAsNotSameAs(string target, string comparisonFieldName, string violationMessage)
+			{
+			}
+
+			public void SetDate(string target, string violationMessage)
+			{
+			}
+
+			public void SetAsGreaterThan(string target, string comparisonFieldName, IsGreaterValidationType validationType, string violationMessage)
+			{
+			}
+
+			public void SetAsLesserThan(string target, string comparisonFieldName, IsLesserValidationType validationType, string violationMessage)
+			{
+			}
+
+			public void SetAsGroupValidation(string target, string groupName, string violationMessage)
+			{
 			}
 		}
-		#endregion
 	}
 }

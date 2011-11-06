@@ -76,8 +76,8 @@ namespace Castle.Components.Validator
 		/// <param name="runWhen">Restrict the set returned to the phase specified</param>
 		/// <returns>A Validator array</returns>
 		public IValidator[] GetValidators(IValidatorRunner validatorRunner, Type targetType, RunWhen runWhen)
-		{           
-            _metaDataType = ((MetadataTypeAttribute)targetType.GetCustomAttributes(typeof(MetadataTypeAttribute), false)[0]).MetadataClassType;
+		{
+			_metaDataType = ((MetadataTypeAttribute)targetType.GetCustomAttributes(typeof(MetadataTypeAttribute), false)[0]).MetadataClassType;
 
 			var properties = (PropertyInfo[]) propertiesPerType[targetType];
 
