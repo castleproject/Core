@@ -157,9 +157,6 @@
   <!-- Castle specific configuration -->
   <!-- NOTE: it has to be in that order: Settings.proj, followed by project specific overrides, followed by Castle.Common.targets -->
   <Import Project="$(RootPath)\Settings.proj" />
-  <PropertyGroup>
-    <ProjectName>Castle.Components.Binder</ProjectName>
-  </PropertyGroup>
   <Import Project="$(BuildScriptsPath)\Castle.Common.targets" />
   <PropertyGroup>
     <PreBuildEvent>
