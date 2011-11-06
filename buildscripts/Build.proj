@@ -5,7 +5,7 @@
 
 	Main build script
 
-Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -164,8 +164,7 @@ limitations under the License.
 		</CreateProperty>
 
 		<MakeDir Directories="$(NuSpecDir)/lib/NET35" />
-		<MakeDir Directories="$(NuSpecDir)/lib/NET40ClientProfile" />
-		<MakeDir Directories="$(NuSpecDir)/lib/SL3" />
+		<MakeDir Directories="$(NuSpecDir)/lib/NET40cp" />
 		<MakeDir Directories="$(NuSpecDir)/lib/SL4" />
 
 		<CreateProperty Value="$(NuSpecDir)/$(ProjectName).nuspec">
@@ -193,9 +192,9 @@ limitations under the License.
 		Condition="$(TestRunner_Enabled)"
 		>
 		
-		<CallTarget Targets="_ExecNUnit" Condition="$(BuildConfigKey) != 'SL30' and $(BuildConfigKey) != 'SL40'" />
+		<CallTarget Targets="_ExecNUnit" Condition="$(BuildConfigKey) != 'SL50' and $(BuildConfigKey) != 'SL40'" />
 	
-		<CallTarget Targets="_ExecStatLight" Condition="$(BuildConfigKey) == 'SL30' or $(BuildConfigKey) == 'SL40'" />
+		<CallTarget Targets="_ExecStatLight" Condition="$(BuildConfigKey) == 'SL50' or $(BuildConfigKey) == 'SL40'" />
 
 	</Target>
 	

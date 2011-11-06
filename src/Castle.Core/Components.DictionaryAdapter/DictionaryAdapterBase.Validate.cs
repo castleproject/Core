@@ -84,18 +84,9 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (validators == null)
 			{
-				validators =
-#if SL3 //Silverlight 3 does not have HashSet<T>
-					new List<IDictionaryValidator>();
-#else
-					new HashSet<IDictionaryValidator>();
-#endif
+				validators = new HashSet<IDictionaryValidator>();
 			}
-#if SL3 //Silverlight 3 does not have HashSet<T>
-			if(validators.Contains(validator)) return;
-#else
 			validators.Add(validator);
-#endif
 		}
 
 		protected internal void Invalidate()

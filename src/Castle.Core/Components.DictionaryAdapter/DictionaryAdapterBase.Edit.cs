@@ -23,11 +23,8 @@ namespace Castle.Components.DictionaryAdapter
 	{
 		private int suppressEditingCount = 0;
 		private Stack<Dictionary<string, Edit>> updates;
-#if SL3
-		private List<IEditableObject> editDependencies;
-#else
 		private HashSet<IEditableObject> editDependencies;
-#endif
+		
 		struct Edit
 		{
 			public Edit(PropertyDescriptor property, object propertyValue)
@@ -213,34 +210,15 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				if (editDependencies == null)
 				{
-#if SL3
-					editDependencies = new List<IEditableObject>();
-#else
 					editDependencies = new HashSet<IEditableObject>();
-#endif
 				}
 
-#if SL3
-				if(AddDependency(editDependency))
-#else
 				if (editDependencies.Add(editDependency))
-#endif
 				{
 					editDependency.BeginEdit();
 				}
 			}
 		}
-#if SL3
-		private bool AddDependency(IEditableObject editDependency)
-		{
-			if (editDependencies.Contains(editDependency))
-			{
-				return false;
-			}
-			editDependencies.Add(editDependency);
-			return true;
-		}
-#endif
 
 		#region Nested Class: SuppressEditingScope
 

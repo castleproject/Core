@@ -27,12 +27,8 @@ namespace Castle.DynamicProxy.Contributors
 	{
 		protected readonly INamingScope namingScope;
 
-		protected readonly ICollection<Type> interfaces =
-#if SL3
-		new List<Type>();
-#else
-			new HashSet<Type>();
-#endif
+		protected readonly ICollection<Type> interfaces = new HashSet<Type>();
+		
 		private ILogger logger = NullLogger.Instance;
 		private readonly ICollection<MetaProperty> properties = new TypeElementCollection<MetaProperty>();
 		private readonly ICollection<MetaEvent> events = new TypeElementCollection<MetaEvent>();

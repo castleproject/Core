@@ -1186,9 +1186,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 
-#if SL3
-		[Ignore("Seems broken? fixme")]
-#endif
 		[Test]
 		public void CanInitializeTheDictionaryAdapterWithAttributes()
 		{
@@ -1196,9 +1193,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsTrue(((IDictionaryAdapter)name).Validators.OfType<TestDictionaryValidator>().Any());
 		}
 
-#if SL3
-		[Ignore("Seems broken? fixme")]
-#endif
 		[Test]
 		public void CanValidateAndObtainDataErrorInformation()
 		{
@@ -1211,9 +1205,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 							"Property LastName must be at least 15 characters long", name.Error);
 		}
 
-#if SL3
-		[Ignore("Seems broken? fixme")]
-#endif
 		[Test]
 		public void CanValidateGroupAndObtainDataErrorInformation()
 		{
@@ -1231,9 +1222,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual("Property FirstName must be at least 10 characters long", groupA.Error);
 			Assert.AreEqual("Property LastName must be at least 15 characters long", groupB.Error);
 		}
-#if SL3
-		[Ignore("Seems broken? fixme")]
-#endif
+		
 		[Test]
 		public void CanChainValidateGroupAndObtainDataErrorInformation()
 		{

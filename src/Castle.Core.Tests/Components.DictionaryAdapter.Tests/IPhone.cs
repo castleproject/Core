@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,10 +16,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 {
 	using System.ComponentModel;
 
-	public interface IPhone : IEditableObject, INotifyPropertyChanged
-#if !SL3
-, IDataErrorInfo
-#endif
+	public interface IPhone : IEditableObject, INotifyPropertyChanged, IDataErrorInfo
 	{
 		[Fetch]string Number { get; set; }
 		string Extension { get; set; }

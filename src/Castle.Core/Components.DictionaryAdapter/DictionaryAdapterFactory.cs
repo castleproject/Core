@@ -487,12 +487,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		private static readonly ICollection<Type> InfrastructureTypes =
-#if SL3 //Silverlight 3 does not have HashSet<T>
-			new List<Type>
-#else
-			new HashSet<Type>
-#endif
+		private static readonly ICollection<Type> InfrastructureTypes =	new HashSet<Type>
 				{
 					typeof (IEditableObject),
 					typeof (IDictionaryEdit),

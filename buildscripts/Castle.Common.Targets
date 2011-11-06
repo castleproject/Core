@@ -61,16 +61,7 @@ limitations under the License.
 		<NUnitPath>%20</NUnitPath>
 		<NUnitExecutable>nunit-console</NUnitExecutable>
 	</PropertyGroup>
-
-	<!--Silverlight 3.0 runtime-->
-	<PropertyGroup Condition="$(Configuration) == 'SL30-Release' or $(Configuration) == 'SL30-Debug'">
-		<BuildConfigKey>SL30</BuildConfigKey>
-		<TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-		<MSBuildTargets>Silverlight 3.0</MSBuildTargets>
-		<TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
-		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
-	</PropertyGroup>
-
+	
 	<!--Silverlight 4.0 runtime-->
 	<PropertyGroup Condition="$(Configuration) == 'SL40-Release' or $(Configuration) == 'SL40-Debug'">
 		<BuildConfigKey>SL40</BuildConfigKey>

@@ -1,6 +1,6 @@
 @ECHO OFF
 REM ****************************************************************************
-REM Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+REM Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 REM Licensed under the Apache License, Version 2.0 (the "License");
 REM you may not use this file except in compliance with the License.
 REM You may obtain a copy of the License at
@@ -30,12 +30,6 @@ IF /i "%1" == "MONO26" (SET BuildConfigKey=MONO26)
 
 IF /i "%1" == "MONO28" (SET FrameworkVersion=v3.5)
 IF /i "%1" == "MONO28" (SET BuildConfigKey=MONO28)
-
-
-IF /i "%1" == "SL3" (SET FrameworkVersion=v3.0)
-IF /i "%1" == "SL3" (SET BuildConfigKey=SL30)
-IF /i "%1" == "SL30" (SET FrameworkVersion=v3.0)
-IF /i "%1" == "SL30" (SET BuildConfigKey=SL30)
 
 IF /i "%1" == "SL4" (SET FrameworkVersion=v4.0)
 IF /i "%1" == "SL4" (SET BuildConfigKey=SL40)

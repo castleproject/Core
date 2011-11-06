@@ -18,20 +18,13 @@ Project("{00000000-0000-0000-0000-000000000000}") = "Castle.Core.Tests-SL", "src
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		ReleaseSL3|Any CPU = ReleaseSL3|Any CPU
 		ReleaseSL4|Any CPU = ReleaseSL4|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.ReleaseSL3|Any CPU.ActiveCfg = Release|Any CPU
-		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.ReleaseSL3|Any CPU.Build.0 = Release|Any CPU
 		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.ReleaseSL4|Any CPU.ActiveCfg = Release|Any CPU
 		{E4FA5B53-7D36-429E-8E5C-53D5479242BA}.ReleaseSL4|Any CPU.Build.0 = Release|Any CPU
-		{087AD3BF-5E40-450D-8138-FBB5F57AC474}.ReleaseSL3|Any CPU.ActiveCfg = Release|Any CPU
-		{087AD3BF-5E40-450D-8138-FBB5F57AC474}.ReleaseSL3|Any CPU.Build.0 = Release|Any CPU
 		{087AD3BF-5E40-450D-8138-FBB5F57AC474}.ReleaseSL4|Any CPU.ActiveCfg = Release|Any CPU
 		{087AD3BF-5E40-450D-8138-FBB5F57AC474}.ReleaseSL4|Any CPU.Build.0 = Release|Any CPU
-		{6EEEC4D0-17B6-474C-AF22-6B8BA2E9DD94}.ReleaseSL3|Any CPU.ActiveCfg = Release|Any CPU
-		{6EEEC4D0-17B6-474C-AF22-6B8BA2E9DD94}.ReleaseSL3|Any CPU.Build.0 = Release|Any CPU
 		{6EEEC4D0-17B6-474C-AF22-6B8BA2E9DD94}.ReleaseSL4|Any CPU.ActiveCfg = Release|Any CPU
 		{6EEEC4D0-17B6-474C-AF22-6B8BA2E9DD94}.ReleaseSL4|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
