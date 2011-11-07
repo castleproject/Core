@@ -200,21 +200,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				{
 					var attributes = originalGenericArguments[i].GenericParameterAttributes;
 					newGenericParameters[i].SetGenericParameterAttributes(attributes);
-					var types = AdjustGenericConstraints(methodToCopyGenericsFrom, newGenericParameters, originalGenericArguments,
-					                                     originalGenericArguments[i].GetGenericParameterConstraints());
+					var constraints = AdjustGenericConstraints(methodToCopyGenericsFrom, newGenericParameters, originalGenericArguments, originalGenericArguments[i].GetGenericParameterConstraints());
 
-					var interfacesConstraints = types.FindAll(type => type.IsInterface);
-					var baseClassConstraint = types.Find(type => type.IsClass);
-
-					if (interfacesConstraints.Length != 0)
-					{
-						newGenericParameters[i].SetInterfaceConstraints(interfacesConstraints);
-					}
-
-					if (baseClassConstraint != null)
-					{
-						newGenericParameters[i].SetBaseTypeConstraint(baseClassConstraint);
-					}
+					newGenericParameters[i].SetInterfaceConstraints(constraints);
 					CopyNonInheritableAttributes(newGenericParameters[i], originalGenericArguments[i]);
 				}
 				catch (NotSupportedException)

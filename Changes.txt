@@ -1,3 +1,4 @@
+- fixed DYNPROXY-164 - Invalid Proxy type generated when there are more than one base class generic constraints
 - fixed DYNPROXY-162 - ref or out parameters can not be passed back if proxied method throw an exception
 
 3.0.0 beta 1 (2011-08-14)
