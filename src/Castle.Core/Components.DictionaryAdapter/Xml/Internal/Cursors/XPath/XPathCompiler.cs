@@ -64,6 +64,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				if (!ParseStep(source, out next))
 					return false;
 				parent.NextStep = next;
+				next.PreviousNode = parent;
 				parent = next;
 				path.Depth++;
 			}
@@ -194,6 +195,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			    if (!ParseNode(source, out next))
 			        return false;
 				parent.NextNode = next;
+				next.PreviousNode = parent;
 				parent = next;
 			}
 		}

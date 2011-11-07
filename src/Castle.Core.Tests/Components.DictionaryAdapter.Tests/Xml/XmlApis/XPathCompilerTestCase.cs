@@ -49,6 +49,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.IsAttribute,     Is.False);
 			Assert.That(s.Value,           Is.Null);
 			Assert.That(s.NextStep,        Is.Null);
+			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,    Is.Null);
 			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
 		}
 
@@ -70,8 +72,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.LocalName,       Is.EqualTo("aa"));
 			Assert.That(s.IsAttribute,     Is.False);
 			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
 			Assert.That(s.NextStep,        Is.Null);
+			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,    Is.Null);
+			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
 		}
 
 		[Test]
@@ -92,8 +96,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.LocalName,       Is.EqualTo("aa"));
 			Assert.That(s.IsAttribute,     Is.True);
 			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
 			Assert.That(s.NextStep,        Is.Null);
+			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,    Is.Null);
+			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
 		}
 
 		[Test]
@@ -114,6 +120,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.LocalName,       Is.EqualTo("aa"));
 			Assert.That(s.IsAttribute,     Is.False);
 			Assert.That(s.Value,           Is.Null);
+			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,    Is.Null);
 			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
 
 			s = s.NextStep;
@@ -124,8 +132,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.LocalName,       Is.EqualTo("bb"));
 			Assert.That(s.IsAttribute,     Is.False);
 			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
 			Assert.That(s.NextStep,        Is.Null);
+			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,    Is.SameAs(p.FirstStep));
+			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
 		}
 
 		[Test]
@@ -146,8 +156,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.LocalName,       Is.EqualTo("aa"));
 			Assert.That(s.IsAttribute,     Is.False);
 			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
 			Assert.That(s.NextStep,        Is.Null);
+			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,    Is.Null);
+			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
 
 			var n = s.Dependencies[0];
 			Assert.That(n,                 Is.Not.Null);
@@ -155,8 +167,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(n.LocalName,       Is.EqualTo("bb"));
 			Assert.That(n.IsAttribute,     Is.False);
 			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 			Assert.That(n.NextNode,        Is.Null);
+			Assert.That(n.PreviousNode,    Is.Null);
+			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 		}
 
 		[Test]
@@ -177,8 +190,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.LocalName,       Is.EqualTo("aa"));
 			Assert.That(s.IsAttribute,     Is.False);
 			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
 			Assert.That(s.NextStep,        Is.Null);
+			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,    Is.Null);
+			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
 
 			var n = s.Dependencies[0];
 			Assert.That(n,                 Is.Not.Null);
@@ -186,8 +201,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(n.LocalName,       Is.EqualTo("bb"));
 			Assert.That(n.IsAttribute,     Is.False);
 			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 			Assert.That(n.NextNode,        Is.Null);
+			Assert.That(n.PreviousNode,    Is.Null);
+			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 		}
 
 		[Test]
@@ -208,8 +224,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.LocalName,       Is.EqualTo("aa"));
 			Assert.That(s.IsAttribute,     Is.False);
 			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
 			Assert.That(s.NextStep,        Is.Null);
+			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,    Is.Null);
+			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
 
 			var n = s.Dependencies[0];
 			Assert.That(n,                 Is.Not.Null);
@@ -217,8 +235,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(n.LocalName,       Is.EqualTo("bb"));
 			Assert.That(n.IsAttribute,     Is.True);
 			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 			Assert.That(n.NextNode,        Is.Null);
+			Assert.That(n.PreviousNode,    Is.Null);
+			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 		}
 
 		[Test]
@@ -239,26 +258,30 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.LocalName,        Is.EqualTo("aa"));
 			Assert.That(s.IsAttribute,      Is.False);
 			Assert.That(s.Value,            Is.Null);
-			Assert.That(s.Dependencies,     Is.Not.Null & Has.Count.EqualTo(1));
 			Assert.That(s.NextStep,         Is.Null);
+			Assert.That(s.NextNode,         Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,     Is.Null);
+			Assert.That(s.Dependencies,     Is.Not.Null & Has.Count.EqualTo(1));
 
 			var n = s.Dependencies[0];
 			Assert.That(n,                  Is.Not.Null);
 			Assert.That(n.Prefix,           Is.Null);
 			Assert.That(n.LocalName,        Is.EqualTo("bb"));
-			Assert.That(s.IsAttribute,      Is.False);
+			Assert.That(n.IsAttribute,      Is.False);
 			Assert.That(n.Value,            Is.Null);
+			Assert.That(n.PreviousNode,     Is.Null);
 			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
 
 			n = n.NextNode;
 			Assert.That(n,                  Is.Not.Null);
 			Assert.That(n.Prefix,           Is.Null);
 			Assert.That(n.LocalName,        Is.EqualTo("cc"));
-			Assert.That(s.IsAttribute,      Is.False);
+			Assert.That(n.IsAttribute,      Is.False);
 			Assert.That(n.Value,            Is.Not.Null);
 			Assert.That(n.Value.Expression, Is.EqualTo("'1'"));
-			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
 			Assert.That(n.NextNode,         Is.Null);
+			Assert.That(n.PreviousNode,     Is.SameAs(s.Dependencies[0]));
+			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
 		}
 
 		[Test]
@@ -279,26 +302,30 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.LocalName,        Is.EqualTo("aa"));
 			Assert.That(s.IsAttribute,      Is.False);
 			Assert.That(s.Value,            Is.Null);
-			Assert.That(s.Dependencies,     Is.Not.Null & Has.Count.EqualTo(1));
 			Assert.That(s.NextStep,         Is.Null);
+			Assert.That(s.NextNode,         Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,     Is.Null);
+			Assert.That(s.Dependencies,     Is.Not.Null & Has.Count.EqualTo(1));
 
 			var n = s.Dependencies[0];
 			Assert.That(n,                  Is.Not.Null);
 			Assert.That(n.Prefix,           Is.Null);
 			Assert.That(n.LocalName,        Is.EqualTo("bb"));
-			Assert.That(s.IsAttribute,      Is.False);
+			Assert.That(n.IsAttribute,      Is.False);
 			Assert.That(n.Value,            Is.Null);
+			Assert.That(n.PreviousNode,     Is.Null);
 			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
 
 			n = n.NextNode;
 			Assert.That(n,                  Is.Not.Null);
 			Assert.That(n.Prefix,           Is.Null);
 			Assert.That(n.LocalName,        Is.EqualTo("cc"));
-			Assert.That(s.IsAttribute,      Is.False);
+			Assert.That(n.IsAttribute,      Is.False);
 			Assert.That(n.Value,            Is.Not.Null);
 			Assert.That(n.Value.Expression, Is.EqualTo("\"1\""));
-			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
 			Assert.That(n.NextNode,         Is.Null);
+			Assert.That(n.PreviousNode,     Is.SameAs(s.Dependencies[0]));
+			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
 		}
 
 		[Test]
@@ -319,26 +346,30 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.LocalName,        Is.EqualTo("aa"));
 			Assert.That(s.IsAttribute,      Is.False);
 			Assert.That(s.Value,            Is.Null);
-			Assert.That(s.Dependencies,     Is.Not.Null & Has.Count.EqualTo(1));
 			Assert.That(s.NextStep,         Is.Null);
+			Assert.That(s.NextNode,         Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,     Is.Null);
+			Assert.That(s.Dependencies,     Is.Not.Null & Has.Count.EqualTo(1));
 
 			var n = s.Dependencies[0];
 			Assert.That(n,                  Is.Not.Null);
 			Assert.That(n.Prefix,           Is.Null);
 			Assert.That(n.LocalName,        Is.EqualTo("bb"));
-			Assert.That(s.IsAttribute,      Is.False);
+			Assert.That(n.IsAttribute,      Is.False);
 			Assert.That(n.Value,            Is.Null);
+			Assert.That(n.PreviousNode,     Is.Null);
 			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
 
 			n = n.NextNode;
 			Assert.That(n,                  Is.Not.Null);
 			Assert.That(n.Prefix,           Is.Null);
 			Assert.That(n.LocalName,        Is.EqualTo("cc"));
-			Assert.That(s.IsAttribute,      Is.False);
+			Assert.That(n.IsAttribute,      Is.False);
 			Assert.That(n.Value,            Is.Not.Null);
 			Assert.That(n.Value.Expression, Is.EqualTo("$dd"));
-			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
 			Assert.That(n.NextNode,         Is.Null);
+			Assert.That(n.PreviousNode,     Is.SameAs(s.Dependencies[0]));
+			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
 		}
 
 		[Test]
@@ -359,26 +390,30 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.LocalName,        Is.EqualTo("aa"));
 			Assert.That(s.IsAttribute,      Is.False);
 			Assert.That(s.Value,            Is.Null);
-			Assert.That(s.Dependencies,     Is.Not.Null & Has.Count.EqualTo(1));
 			Assert.That(s.NextStep,         Is.Null);
+			Assert.That(s.NextNode,         Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,     Is.Null);
+			Assert.That(s.Dependencies,     Is.Not.Null & Has.Count.EqualTo(1));
 
 			var n = s.Dependencies[0];
 			Assert.That(n,                  Is.Not.Null);
 			Assert.That(n.Prefix,           Is.Null);
 			Assert.That(n.LocalName,        Is.EqualTo("bb"));
-			Assert.That(s.IsAttribute,      Is.False);
+			Assert.That(n.IsAttribute,      Is.False);
 			Assert.That(n.Value,            Is.Null);
+			Assert.That(n.PreviousNode,     Is.Null);
 			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
 
 			n = n.NextNode;
 			Assert.That(n,                  Is.Not.Null);
 			Assert.That(n.Prefix,           Is.Null);
 			Assert.That(n.LocalName,        Is.EqualTo("cc"));
-			Assert.That(s.IsAttribute,      Is.False);
+			Assert.That(n.IsAttribute,      Is.False);
 			Assert.That(n.Value,            Is.Not.Null);
 			Assert.That(n.Value.Expression, Is.EqualTo("$dd"));
-			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
 			Assert.That(n.NextNode,         Is.Null);
+			Assert.That(n.PreviousNode,     Is.SameAs(s.Dependencies[0]));
+			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
 		}
 
 		[Test]
@@ -399,8 +434,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.LocalName,       Is.EqualTo("aa"));
 			Assert.That(s.IsAttribute,     Is.False);
 			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(2));
 			Assert.That(s.NextStep,        Is.Null);
+			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,    Is.Null);
+			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(2));
 
 			var n = s.Dependencies[0];
 			Assert.That(n,                 Is.Not.Null);
@@ -408,8 +445,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(n.LocalName,       Is.EqualTo("bb"));
 			Assert.That(n.IsAttribute,     Is.False);
 			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 			Assert.That(n.NextNode,        Is.Null);
+			Assert.That(n.PreviousNode,    Is.Null);
+			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 
 			n = s.Dependencies[1];
 			Assert.That(n,                 Is.Not.Null);
@@ -417,8 +455,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(n.LocalName,       Is.EqualTo("cc"));
 			Assert.That(n.IsAttribute,     Is.False);
 			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 			Assert.That(n.NextNode,        Is.Null);
+			Assert.That(n.PreviousNode,    Is.Null);
+			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 		}
 
 		[Test]
@@ -439,8 +478,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.LocalName,       Is.EqualTo("aa"));
 			Assert.That(s.IsAttribute,     Is.False);
 			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(2));
 			Assert.That(s.NextStep,        Is.Null);
+			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,    Is.Null);
+			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(2));
 
 			var n = s.Dependencies[0];
 			Assert.That(n,                 Is.Not.Null);
@@ -448,8 +489,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(n.LocalName,       Is.EqualTo("bb"));
 			Assert.That(n.IsAttribute,     Is.False);
 			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 			Assert.That(n.NextNode,        Is.Null);
+			Assert.That(n.PreviousNode,    Is.Null);
+			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 
 			n = s.Dependencies[1];
 			Assert.That(n,                 Is.Not.Null);
@@ -457,8 +499,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(n.LocalName,       Is.EqualTo("cc"));
 			Assert.That(n.IsAttribute,     Is.False);
 			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 			Assert.That(n.NextNode,        Is.Null);
+			Assert.That(n.PreviousNode,    Is.Null);
+			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 		}
 
 		[Test]
@@ -479,8 +522,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(s.LocalName,       Is.EqualTo("aa"));
 			Assert.That(s.IsAttribute,     Is.False);
 			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
 			Assert.That(s.NextStep,        Is.Null);
+			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
+			Assert.That(s.PreviousNode,    Is.Null);
+			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
 
 			var n = s.Dependencies[0];
 			Assert.That(n,                 Is.Not.Null);
@@ -488,8 +533,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(n.LocalName,       Is.EqualTo("bb"));
 			Assert.That(n.IsAttribute,     Is.False);
 			Assert.That(n.Value,           Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
 			Assert.That(n.NextNode,        Is.Null);
+			Assert.That(n.PreviousNode,    Is.Null);
+			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
 
 			n = n.Dependencies[0];
 			Assert.That(n,                 Is.Not.Null);
@@ -497,8 +543,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(n.LocalName,       Is.EqualTo("cc"));
 			Assert.That(n.IsAttribute,     Is.False);
 			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 			Assert.That(n.NextNode,        Is.Null);
+			Assert.That(n.PreviousNode,    Is.Null);
+			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
 		}
 
 		[Test]

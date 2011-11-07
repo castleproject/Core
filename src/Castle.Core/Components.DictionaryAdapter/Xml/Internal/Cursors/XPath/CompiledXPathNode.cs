@@ -29,6 +29,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private bool isAttribute;
 		private XPathExpression value;
 		private CompiledXPathNode next;
+		private CompiledXPathNode previous;
 		private IList<CompiledXPathNode> dependencies;
 
 		internal CompiledXPathNode()
@@ -73,7 +74,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public CompiledXPathNode PreviousNode
 		{
-			get { throw new Exception(); }
+			get { return previous; }
+			internal set { previous = value; }
 		}
 
 		public IList<CompiledXPathNode> Dependencies
