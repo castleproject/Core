@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="collection_not_empty" xml:space="preserve">
     <value>Kolekcja nie może być pusta</value>
@@ -138,7 +138,7 @@
     <comment>Please enter a valid email address. For example fred@domain.com</comment>
   </data>
   <data name="exactlength" xml:space="preserve">
-    <value>Zawartość pola powinna skadać z {0} znaków</value>
+    <value>Zawartość pola powinna składać się z {0} znaków</value>
     <comment>Field must be {0} characters long</comment>
   </data>
   <data name="generic_invalid" xml:space="preserve">
@@ -158,11 +158,11 @@
     <comment>This is a required field</comment>
   </data>
   <data name="length_invalidrange" xml:space="preserve">
-    <value>Zawartość pola powinna składać się od {0} do {1} znaków</value>
+    <value>Zawartość pola powinna składać się z od {0} do {1} znaków</value>
     <comment>Field must be between {0} and {1} characters long</comment>
   </data>
   <data name="length_toolong" xml:space="preserve">
-    <value>Zawartość pola powinna nie powinna przekraczać {0} znaków</value>
+    <value>Zawartość pola nie powinna przekraczać {0} znaków</value>
     <comment>Field must be less than {0} characters long</comment>
   </data>
   <data name="length_tooshort" xml:space="preserve">

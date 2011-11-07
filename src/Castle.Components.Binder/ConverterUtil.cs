@@ -69,7 +69,7 @@ namespace Castle.Components.Binder
 
 			if (!input.GetType().IsArray)
 			{
-				if (input.GetType() == typeof (String))
+				if (input is string)
 				{
 					input = NormalizeInput(input);
 
