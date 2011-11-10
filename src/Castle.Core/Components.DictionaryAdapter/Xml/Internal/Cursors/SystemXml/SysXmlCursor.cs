@@ -533,7 +533,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override IXmlNode Save()
 		{
-			return new SysXmlNode(node, type, Namespaces);
+			return HasCurrent ? new SysXmlNode(node, type, Namespaces) : this;
 		}
 
 		private XmlNode RequireCreatable()

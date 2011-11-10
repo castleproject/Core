@@ -64,9 +64,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return this; }
 		}
 
-		IXmlNode IXmlCollection.Node
+		public IXmlNode Node
 		{
 			get { return parentNode; }
+		}
+
+		public XmlReferenceManager References
+		{
+			get { return references; }
 		}
 
 		bool IBindingList<T>.AllowEdit                   { get { return true;  } }

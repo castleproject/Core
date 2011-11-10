@@ -324,6 +324,26 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 				Assert.That(Document, XmlEquivalent.To(OriginalXml));
 			}
+
+			[Test]
+			public void TryGet_TrackedObject()
+			{
+				Set_Primary();
+
+				object value;
+				Assert.That(Manager.TryGet(ValueA, out value), Is.True);
+				Assert.That(value, Is.SameAs(ValueA));
+			}
+
+			[Test]
+			public void TryGet_UntrackedObject()
+			{
+				Set_Primary();
+
+				object value;
+				Assert.That(Manager.TryGet(OtherA, out value), Is.False);
+				Assert.That(value, Is.Null);
+			}
 		}
 
 		[TestFixture]

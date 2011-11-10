@@ -8,23 +8,21 @@
 // 
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.f
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
 #if !SILVERLIGHT && !MONO // Until support for other platforms is verified
-namespace Castle.Components.DictionaryAdapter.Xml
+namespace Castle.Components.DictionaryAdapter
 {
 	using System;
-	using System.Collections;
 
-	public interface IXmlCollection
+	public interface IDictionaryReferenceManager
 	{
-		IXmlNode Node { get; }
-		XmlReferenceManager References { get; }
+		bool IsReferenceProperty(IDictionaryAdapter dictionaryAdapter, string propertyName);
 
-		void Replace(IEnumerable source);
-		void Clear();
+		bool TryGetReference(object keyObject, out object inGraphObject);
+		void    AddReference(object keyObject,     object relatedObject, bool isInGraph);
 	}
 }
 #endif

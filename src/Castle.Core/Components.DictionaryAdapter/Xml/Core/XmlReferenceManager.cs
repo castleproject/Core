@@ -89,7 +89,23 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		#endregion
 
-		public void Add(IXmlNode node, object keyValue, object newValue)
+		public bool TryGet(object keyObject, out object inGraphObject)
+		{
+			Entry entry;
+			if (entriesByValue.TryGetValue(keyObject, out entry))
+			{
+				inGraphObject = keyObject;
+				TryGetCompatibleValue(entry, keyObject.GetComponentType(), ref inGraphObject);
+				return true;
+			}
+			else
+			{
+				inGraphObject = null;
+				return false;
+			}
+		}
+
+		public void Add(IXmlNode node, object keyValue, object newValue, bool isInGraph)
 		{
 			if (keyValue == null)
 				throw Error.ArgumentNull("keyValue");
@@ -99,25 +115,24 @@ namespace Castle.Components.DictionaryAdapter.Xml
             var type = newValue.GetComponentType();
 			if (ShouldExclude(type))
 				return;
-
 			if (entriesByValue.ContainsKey(newValue))
 				return;
 
 			Entry entry;
-			bool reference;
-
 			if (entriesByValue.TryGetValue(keyValue, out entry))
 			{
 				if (newValue == keyValue)
 					return;
 			}
-			else
+			else if (node != null)
 			{
+				bool reference;
 				if (!TryGetEntry(node, out entry, out reference))
 					entry = new Entry(node);
 			}
+			else return;
 
-			AddValueCore(entry, type, newValue, true);
+			AddValueCore(entry, type, newValue, isInGraph);
 		}
 
 		public bool OnGetStarting(ref IXmlNode node, ref object value, out object token)
@@ -466,7 +481,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			public Entry(IXmlNode node)
 			{
-				Node = node;
+				Node = node.Save();
 			}
 
 			public Entry(int id, IXmlNode node) : this(node)

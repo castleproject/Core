@@ -194,6 +194,7 @@
     <Compile Include="Components.DictionaryAdapter\Util\ICondition.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\PriorityBehaviorExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Core\DefaultXmlReferenceFormat.cs" />
+    <Compile Include="Components.DictionaryAdapter\IDictionaryReferenceManager.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Core\IXmlReferenceFormat.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlIterator.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Cursors\SystemXml\SysXmlSubtreeIterator.cs" />

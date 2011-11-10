@@ -17,6 +17,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using Castle.Components.DictionaryAdapter.Tests;
 	using NUnit.Framework;
 
@@ -27,12 +28,20 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		{
 			[Reference]
 			public interface IFoo
-			{				
+			{
 				string      Value { get; set; }
 				IFoo        One   { get; set; }
 				IFoo        Two   { get; set; }
 				IFoo[]      Array { get; set; }
 				IList<IFoo> List  { get; set; }
+#if DOTNET40
+				ISet <IFoo> Set   { get; set; }
+#endif
+			}
+
+			public interface IBar
+			{
+				string      Value { get; set; }
 			}
 
 			[Test]
@@ -288,6 +297,207 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				)));
 			}
 
+			#region SetItemReference
+#if DOTNET40
+			[Test]
+			public void SetItemReference_Get()
+			{
+				var xml = Xml(
+					"<Foo $x>",
+						"<One x:id='1'> <Value>One</Value> </One>",
+						"<Set>",
+							"<Foo x:ref='1'/>",
+						"</Set>",
+					"</Foo>"
+				);
+				var foo = Create<IFoo>(xml);
+
+				Assert.That(foo.Set, Is.Not.Null & Has.Count.EqualTo(1));
+				Assert.That(foo.Set, Contains.Item(foo.One));
+			}
+
+			[Test]
+			public void Set_Assign_ExternalReference()
+			{
+				var xml = Xml(
+					"<Foo $x>",
+						"<One x:id='1'> <Value>One</Value> </One>",
+					"</Foo>"
+				);
+				var foo = Create<IFoo>(xml);
+
+				foo.Set = new HashSet<IFoo> { foo.One };
+
+				Assert.That(xml, XmlEquivalent.To(Xml(
+					"<Foo $x>",
+						"<One x:id='1'> <Value>One</Value> </One>",
+						"<Set>",
+							"<Foo x:ref='1'/>",
+						"</Set>",
+					"</Foo>"
+				)));
+
+				Assert.That(foo.Set, Is.Not.Null & Has.Count.EqualTo(1));
+				Assert.That(foo.Set, Contains.Item(foo.One));
+			}
+
+			[Test]
+			public void Set_Assign_CrossReference()
+			{
+				var xmlA = Xml("<Foo $x/>");
+				var xmlB = Xml("<Foo $x/>");
+				var fooA = Create<IFoo>(xmlA);
+				var fooB = Create<IFoo>(xmlB);
+
+				fooA.Value = "a";
+				fooB.Value = "b";
+				fooA.Set = new HashSet<IFoo> { fooB };
+				fooB.Set = new HashSet<IFoo> { fooA };
+
+				Assert.That(xmlA, XmlEquivalent.To(Xml(
+					"<Foo $x>",
+						"<Value>a</Value>",
+						"<Set>",
+							"<Foo> <Value>b</Value> </Foo>",
+						"</Set>",
+					"</Foo>"
+				)));
+
+				Assert.That(xmlB, XmlEquivalent.To(Xml(
+					"<Foo $x x:id='1'>",
+						"<Value>b</Value>",
+						"<Set>",
+							"<Foo>",
+								"<Value>a</Value>",
+								"<Set>",
+									"<Foo x:ref='1'/>",
+								"</Set>",
+							"</Foo>",
+						"</Set>",
+					"</Foo>"
+				)));
+
+				Assert.That(fooA.Set,               Is.Not.Null & Has.Count.EqualTo(1));
+				Assert.That(fooA.Set,               Is.Not.Contains(fooB));
+				Assert.That(fooA.Set.First().Value, Is.EqualTo(fooB.Value));
+			}
+
+			[Test]
+			public void SetItemReference_Add()
+			{
+				var xml = Xml("<Foo/>");
+				var foo = Create<IFoo>(xml);
+
+				foo.One.Value = "One";
+				foo.Set.Add(foo.One);
+
+				Assert.That(xml, XmlEquivalent.To(Xml(
+					"<Foo $x>",
+						"<One x:id='1'> <Value>One</Value> </One>",
+						"<Set>",
+							"<Foo x:ref='1'/>",
+						"</Set>",
+					"</Foo>"
+				)));
+			}
+
+			[Test]
+			public void SetItemReference_Remove()
+			{
+				var xml = Xml(
+					"<Foo $x>",
+						"<One x:id='1'> <Value>One</Value> </One>",
+						"<Set>",
+							"<Foo x:ref='1'/>",
+						"</Set>",
+					"</Foo>"
+				);
+				var foo = Create<IFoo>(xml);
+
+				foo.Set.Remove(foo.One);
+
+				Assert.That(xml, XmlEquivalent.To(Xml(
+					"<Foo $x>",
+						"<One> <Value>One</Value> </One>",
+						"<Set/>",
+					"</Foo>"
+				)));
+			}
+
+			[Test]
+			public void SetItemReference_Clear()
+			{
+				var xml = Xml(
+					"<Foo $x>",
+						"<One x:id='1'> <Value>One</Value> </One>",
+						"<Set>",
+							"<Foo x:ref='1'/>",
+						"</Set>",
+					"</Foo>"
+				);
+				var foo = Create<IFoo>(xml);
+
+				foo.Set.Clear();
+
+				Assert.That(xml, XmlEquivalent.To(Xml(
+					"<Foo $x>",
+						"<One> <Value>One</Value> </One>",
+						"<Set/>",
+					"</Foo>"
+				)));
+			}
+#endif
+			#endregion
+
+#if DOTNET40
+			[Test]
+			public void Complex_Collection_Assign_InternalReferences()
+			{
+			    var xml = Xml("<Foo $x/>");
+			    var foo = Create<IFoo>(xml);
+
+			    var a = Create<IFoo>(); a.Value = "a";
+			    var b = Create<IFoo>();	b.Value = "b";
+			    var c = Create<IFoo>();	c.Value = "c";
+
+				var list = new List<IFoo> { a, b, c };
+
+				foreach (var x in list)
+				{
+					x.Set = new HashSet<IFoo>(list.Except(Enumerable.Repeat(x, 1)));
+				}
+
+				foo.List = list;
+
+				//a  .Set  = new HashSet<IFoo> {    b, c };
+				//b  .Set  = new HashSet<IFoo> { a,    c }; // no effect, due to order of operations
+				//c  .Set  = new HashSet<IFoo> { a, b    }; // no effect, due to order of operations
+				//foo.List = new List   <IFoo> { a, b, c };
+
+			    Assert.That(xml, XmlEquivalent.To(Xml(
+			        "<Foo $x>",
+			            "<List>",
+			                "<Foo>",
+			                    "<Value>a</Value>",
+			                    "<Set>",
+			                        "<Foo x:id='1'> <Value>b</Value> </Foo>",
+									"<Foo x:id='2'> <Value>c</Value> </Foo>",
+			                    "</Set>",
+			                "</Foo>",
+			                "<Foo x:ref='1'/>",
+			                "<Foo x:ref='2'/>",
+			            "</List>",
+			        "</Foo>"
+			    )));
+
+				Assert.That(foo.List,                Is.Not.Null & Has.Count.EqualTo(3));
+				Assert.That(foo.List[0].Set,         Is.Not.Null & Has.Count.EqualTo(2));
+				Assert.That(foo.List[0].Set.Contains(foo.List[1]), Is.True);
+				Assert.That(foo.List[0].Set.Contains(foo.List[2]), Is.True);
+				Assert.That(foo.List[0].Set.Contains(foo),         Is.False);
+			}
+#endif
+
 			[Test]
 			public void NestedReference_NonNestedPrimary()
 			{
@@ -365,6 +575,34 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 						"</One>",
 					"</Foo>"
 				)));
+			}
+
+			[Test]
+			public void IsReference_True()
+			{
+				var adapter  = (IDictionaryAdapter) Create<IFoo>();
+				var manager  = GetReferenceManager(adapter);
+
+				var isReference = manager.IsReferenceProperty(adapter, "Value");
+
+				Assert.That(isReference, Is.True);
+			}
+
+			[Test]
+			public void IsReference_False()
+			{
+				var adapter  = (IDictionaryAdapter) Create<IBar>();
+				var manager  = GetReferenceManager(adapter);
+
+				var isReference = manager.IsReferenceProperty(adapter, "Value");
+
+				Assert.That(isReference, Is.False);
+			}
+
+			private static IDictionaryReferenceManager GetReferenceManager(IDictionaryAdapter dictionaryAdapter)
+			{
+				return dictionaryAdapter.This.Initializers
+					.OfType<IDictionaryReferenceManager>().Single();
 			}
 		}
 	}

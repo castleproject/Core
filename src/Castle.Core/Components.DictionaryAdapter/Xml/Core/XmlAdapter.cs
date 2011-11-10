@@ -31,6 +31,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IDictionaryPropertySetter,
 		IDictionaryCreateStrategy,
 		IDictionaryCopyStrategy,
+		IDictionaryReferenceManager,
 		IVirtual
 	{
 		private IXmlNode node;
@@ -162,7 +163,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				// If this is a root XmlAdapter, we must pre-populate the reference manager with
 				// this XmlAdapter and its IDictionaryAdapters.  This enables child objects in the
 				// graph to reference the root object.
-				references.Add(node, this, value);
+				references.Add(node, this, value, true);
 		}
 
 		private void AddSecondaryXmlMeta(DictionaryAdapterMeta meta)
@@ -417,6 +418,35 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				value = null;
 				dictionaryAdapter.SetProperty(property.PropertyName, ref value);
 			}
+		}
+
+		bool IDictionaryReferenceManager.IsReferenceProperty(IDictionaryAdapter dictionaryAdapter, string propertyName)
+		{
+			var xmlAdapter = XmlAdapter.For(dictionaryAdapter, false);
+			if (xmlAdapter == null)
+				return false;
+
+			var instance = dictionaryAdapter.This;
+
+			PropertyDescriptor property;
+			if (!instance.Properties.TryGetValue(propertyName, out property))
+				return false;
+
+			var key = property.GetKey(dictionaryAdapter, propertyName, instance.Descriptor);
+
+			XmlAccessor accessor;
+			return xmlAdapter.TryGetAccessor(key, property, false, out accessor)
+				&& accessor.IsReference;
+		}
+
+		bool IDictionaryReferenceManager.TryGetReference(object keyObject, out object inGraphObject)
+		{
+			return references.TryGet(keyObject, out inGraphObject);
+		}
+
+		void IDictionaryReferenceManager.AddReference(object keyObject, object relatedObject, bool isInGraph)
+		{
+			references.Add(null, keyObject, relatedObject, isInGraph);
 		}
 
 		public override IDictionaryBehavior Copy()

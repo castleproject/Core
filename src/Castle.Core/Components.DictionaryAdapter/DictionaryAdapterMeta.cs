@@ -32,17 +32,20 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			Type = type;
 			Factory = factory;
+			Descriptor = descriptor;
 			Initializers = initializers;
 			MetaInitializers = metaInitializers;
 			Behaviors = behaviors;
 			Properties = properties;
 
-			InitializeMeta(factory, descriptor);
+			InitializeMeta(factory);
 		}
 
 		public Type Type { get; private set; }
 
 		public object[] Behaviors { get; private set; }
+
+		public DictionaryDescriptor Descriptor { get; private set; }
 
 		public IDictionaryAdapterFactory Factory { get; private set; }
 
@@ -64,11 +67,11 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		private void InitializeMeta(IDictionaryAdapterFactory factory, DictionaryDescriptor descriptor)
+		private void InitializeMeta(IDictionaryAdapterFactory factory)
 		{
-			if (descriptor != null)
+			if (Descriptor != null)
 			{
-				MetaInitializers = MetaInitializers.Prioritize(descriptor.MetaInitializers).ToArray();
+				MetaInitializers = MetaInitializers.Prioritize(Descriptor.MetaInitializers).ToArray();
 			}
 
 			foreach (var metaInitializer in MetaInitializers)
