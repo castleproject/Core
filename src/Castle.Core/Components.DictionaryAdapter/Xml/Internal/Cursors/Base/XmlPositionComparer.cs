@@ -57,15 +57,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			private bool ConsumeNode()
 			{
+				var result = true;
 #if !SL3
 				var path = Node.Path;
 				if (path != null)
-					return ConsumeFirstStep(path);
+					result = ConsumeFirstStep(path);
 				else
 #endif
 					Name = Node.Name;
+
 				Node = Node.Parent;
-				return true;
+				return result;
 			}
 
 			private bool Stop()
@@ -91,6 +93,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					Step.LocalName,
 					Node.LookupNamespaceUri(Step.Prefix)
 				);
+
 				Step = Step.PreviousNode;
 				return true;
 			}
