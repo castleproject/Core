@@ -84,15 +84,19 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private bool IsMatchOnNamespaceUri(IXmlIdentity xmlIdentity)
 		{
-			return namespaceUri == null 
+			var otherNamespaceUri = xmlIdentity.Name.NamespaceUri;
+			if (ReservedNamespaceUris.Contains(otherNamespaceUri))
+				return false;
+			return namespaceUri == null
 				|| ShouldIgnoreAttributeNamespaceUri(xmlIdentity)
 				|| NameComparer.Equals(namespaceUri, xmlIdentity.Name.NamespaceUri);
 		}
 
 		private bool IsMatchOnXsiType(IXmlIdentity xmlIdentity)
 		{
-			return xmlIdentity.XsiType == XmlName.Empty
-				|| xmlIdentity.XsiType == XsiType;
+			var otherXsiType = xmlIdentity.XsiType;
+			return otherXsiType == XmlName.Empty
+				|| otherXsiType == XsiType;
 		}
 
 		private bool ShouldIgnoreAttributeNamespaceUri(IXmlIdentity xmlName)
@@ -208,6 +212,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				knownTypes.Add(new XmlKnownType(Name, XmlName.Empty, ClrType), true);
 			}
 		}
+
+		protected static readonly HashSet<string>
+			ReservedNamespaceUris = new HashSet<string>
+		{
+			Xmlns.NamespaceUri,
+			Xsi  .NamespaceUri,
+			XRef .NamespaceUri
+		};
 
 		protected static readonly StringComparer
 			NameComparer = StringComparer.OrdinalIgnoreCase;

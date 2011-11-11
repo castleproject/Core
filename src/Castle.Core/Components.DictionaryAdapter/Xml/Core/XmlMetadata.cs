@@ -32,6 +32,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private readonly string typeLocalName;
 		private readonly string typeNamespaceUri;
 
+		private List<Type> pendingIncludes;
 		private readonly XmlIncludedTypeSet includedTypes;
 		private readonly XmlContext context;
 		private readonly DictionaryAdapterMeta source;
@@ -49,21 +50,29 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			context       = new XmlContext(this);
 			includedTypes = new XmlIncludedTypeSet();
 
-			var xmlRoot     = null as XmlRootAttribute;
-			var xmlType     = null as XmlTypeAttribute;
-			var xmlDefaults = null as XmlDefaultsAttribute;
-			var reference   = null as ReferenceAttribute;
+			var xmlRoot       = null as XmlRootAttribute;
+			var xmlType       = null as XmlTypeAttribute;
+			var xmlDefaults   = null as XmlDefaultsAttribute;
+			var xmlInclude    = null as XmlIncludeAttribute;
+			var xmlNamespace  = null as XmlNamespaceAttribute;
+			var reference     = null as ReferenceAttribute;
 #if !SL3
-			var xPath       = null as XPathAttribute;
+			var xPath         = null as XPathAttribute;
+			var xPathVariable = null as XPathVariableAttribute;
+			var xPathFunction = null as XPathFunctionAttribute;
 #endif
 			foreach (var behavior in meta.Behaviors)
 			{
-				if      (TryCast(behavior, ref xmlDefaults  )) { }
-				else if (TryCast(behavior, ref xmlRoot      )) { }
+				if      (TryCast(behavior, ref xmlRoot      )) { }
 				else if (TryCast(behavior, ref xmlType      )) { }
+				else if (TryCast(behavior, ref xmlDefaults  )) { }
+				else if (TryCast(behavior, ref xmlInclude   )) { AddPendingInclude(xmlInclude); }
+				else if (TryCast(behavior, ref xmlNamespace )) { context.AddNamespace(xmlNamespace ); }
 				else if (TryCast(behavior, ref reference    )) { }
 #if !SL3
-				else if (TryCast(behavior, ref xPath       )) { }
+				else if (TryCast(behavior, ref xPath        )) { }
+				else if (TryCast(behavior, ref xPathVariable)) { context.AddVariable (xPathVariable); }
+				else if (TryCast(behavior, ref xPathFunction)) { context.AddFunction (xPathFunction); }
 #endif
 			}
 
@@ -107,8 +116,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				rootNamespaceUri
 			);
 
-			CollectBehaviors(meta);
-
 #if !SL3
 			if (xPath != null)
 			{
@@ -116,22 +123,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				path.SetContext(context);
 			}
 #endif
-		}
-
-		private void CollectBehaviors(DictionaryAdapterMeta meta)
-		{
-			var xmlNamespace  = null as XmlNamespaceAttribute;
-			var xmlInclude    = null as XmlIncludeAttribute;
-			var xPathVariable = null as XPathVariableAttribute;
-			var xPathFunction = null as XPathFunctionAttribute;
-
-			foreach (var behavior in meta.Behaviors)
-			{
-				if      (TryCast(behavior, ref xmlInclude   )) { AddXmlInclude(xmlInclude); }
-				else if (TryCast(behavior, ref xmlNamespace )) { context.AddNamespace(xmlNamespace ); }
-				else if (TryCast(behavior, ref xPathVariable)) { context.AddVariable (xPathVariable); }
-				else if (TryCast(behavior, ref xPathFunction)) { context.AddFunction (xPathFunction); }
-			}
 		}
 
 		public Type ClrType
@@ -176,7 +167,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public XmlIncludedTypeSet IncludedTypes
 		{
-			get { return includedTypes; }
+			get { ProcessPendingIncludes(); return includedTypes; }
 		}
 
 		public IXmlContext Context
@@ -249,12 +240,25 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				: Try.Failure(out includedType);
 		}
 
-		private void AddXmlInclude(XmlIncludeAttribute attribute)
+		private void AddPendingInclude(XmlIncludeAttribute attribute)
 		{
-			var clrType      = attribute.Type;
-			var xsiType      = GetDefaultXsiType(clrType);
-			var includedType = new XmlIncludedType(xsiType, clrType);
-			includedTypes.Add(includedType);
+			if (pendingIncludes == null)
+				pendingIncludes = new List<Type>();
+			pendingIncludes.Add(attribute.Type);
+		}
+
+		private void ProcessPendingIncludes()
+		{
+			var clrTypes = pendingIncludes;
+			pendingIncludes = null;
+			if (clrTypes == null) return;
+
+			foreach (var clrType in clrTypes)
+			{
+				var xsiType      = GetDefaultXsiType(clrType);
+				var includedType = new XmlIncludedType(xsiType, clrType);
+				includedTypes.Add(includedType);
+			}
 		}
 
 		public XmlName GetDefaultXsiType(Type clrType)
@@ -296,7 +300,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			for (;;)
 			{
-				foreach (var includedType in metadata.includedTypes)
+				foreach (var includedType in metadata.IncludedTypes)
 				{
 					var clrType = includedType.ClrType;
 					var relevant
