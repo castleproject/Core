@@ -408,7 +408,7 @@
     <Compile Include="DynamicProxy\ModuleScope.cs" />
     <Compile Include="DynamicProxy\PersistentProxyBuilder.cs" />
     <Compile Include="DynamicProxy\ProxyGenerationException.cs" />
-    <Compile Include="DynamicProxy\ProxyGenerationOptions.cs"/ >
+    <Compile Include="DynamicProxy\ProxyGenerationOptions.cs" />
     <Compile Include="DynamicProxy\ProxyGenerator.cs" />
     <Compile Include="DynamicProxy\Serialization\RemotableInvocation.cs" />
     <Compile Include="DynamicProxy\Serialization\ProxyTypeConstants.cs" />
