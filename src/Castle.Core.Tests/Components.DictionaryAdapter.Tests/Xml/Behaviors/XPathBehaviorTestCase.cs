@@ -89,6 +89,62 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[TestFixture]
+		public class CreatableNodeSetExpressionWithSelfReference : XmlAdapterTestCase
+		{
+			public interface IFoo : IDictionaryAdapter
+			{
+				[XPath("A[B/C[.='2']]/@D")]
+				string Value { get; set; }
+			}
+
+			[Test]
+			public void Get_Existing()
+			{
+				var foo = Create<IFoo>
+				(
+					"<Foo>",
+						"<A D='value'>",
+							"<B>",
+								"<C>2</C>",
+							"</B>",
+						"</A>",
+					"</Foo>"
+				);
+
+				Assert.That(foo.Value, Is.EqualTo("value"));
+			}
+
+			[Test]
+			public void Get_Missing()
+			{
+				var foo = Create<IFoo>("<Foo/>");
+
+				Assert.That(foo.Value, Is.Null);
+			}
+
+			[Test]
+			public void Set()
+			{
+				var xml = Xml("<Foo/>");
+				var foo = Create<IFoo>(xml);
+
+				foo.Value = "value";
+
+				Assert.That(xml, XmlEquivalent.To
+				(
+					"<Foo>",
+						"<A D='value'>",
+							"<B>",
+								"<C>2</C>",
+							"</B>",
+						"</A>",
+					"</Foo>"
+				));
+				Assert.That(foo.Value, Is.EqualTo("value"));
+			}
+		}
+
+		[TestFixture]
 		public class NoncreatableNodeSetExpression : XmlAdapterTestCase
 		{
 			public interface IFoo : IDictionaryAdapter
