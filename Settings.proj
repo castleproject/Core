@@ -21,7 +21,7 @@ limitations under the License.
 ***********************************************************************************************
 -->
 
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" InitialTargets="_InitializeDynamicProperties">
 
 	<!-- Root Path definition relative for actual build file -->
 	<PropertyGroup>
@@ -45,8 +45,7 @@ limitations under the License.
 		<!-- Project folders -->
 		<BuildScriptsPath Condition="'$(BuildScriptsPath)' ==''">$(RootPath)\buildscripts</BuildScriptsPath>
 
-	</PropertyGroup>
-	
+	</PropertyGroup>	
 
 	<ItemGroup>
 		<!-- 
@@ -59,6 +58,16 @@ limitations under the License.
 		<PackageFiles Include="$(OutputPath)NLog.dll"  Condition="Exists('$(OutputPath)NLog.dll')"/>
 		<PackageFiles Include="$(OutputPath)NLog.xml"  Condition="Exists('$(OutputPath)NLog.xml')"/>
 	</ItemGroup>
+
+	<Target Name="_InitializeDynamicProperties">
+		<PropertyGroup>
+			<!-- 
+			Specify additional items to package here, they are added to the package
+			in addition to automatically detected dependencies.
+			<PackageFiles>$(OutputPath)Assembly.dll</PackageFiles>
+			-->
+		</PropertyGroup>
+	</Target>
 
 	<!-- Import project specific settings for given Visual Studio project -->
 	<Import
@@ -76,7 +85,7 @@ limitations under the License.
 	<!-- Import Silverlight specific settings -->
 	<Import
 		Project="$(RootPath)\Settings-SL.proj"
-		Condition="('$(BuildConfigKey)' == 'SL4' or '$(BuildConfigKey)' == 'SL5') and Exists('$(RootPath)\Settings-SL.proj')"
+		Condition="'$(TargetFrameworkIdentifier)' == 'Silverlight' and Exists('$(RootPath)\Settings-SL.proj')"
 		/>
 
 </Project>

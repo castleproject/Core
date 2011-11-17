@@ -192,11 +192,20 @@ namespace Castle.Components.DictionaryAdapter.Tests
                     : Enumerable.Empty<XmlNode>();
         }
 
+
         private static IEnumerable<XmlNode> GetElementChildNodes(XmlNode node)
         {
             return Enumerable.Concat(
-                (IEnumerable<XmlNode>) node.Attributes.OfType<XmlAttribute>().Where(a => !IsNamespace(a)),
-                (IEnumerable<XmlNode>) node.ChildNodes.OfType<XmlElement>());
+                (IEnumerable<XmlNode>) node.Attributes.OfType<XmlAttribute>().Where(a => !IsNamespace(a))
+#if DOTNET35
+				.Cast<XmlNode>()
+#endif
+				,
+                (IEnumerable<XmlNode>) node.ChildNodes.OfType<XmlElement>()
+#if DOTNET35
+				.Cast<XmlNode>()
+#endif
+);
         }
 
         private static IEnumerable<XmlNode> GetDocumentChildNodes(XmlDocument document)
