@@ -92,7 +92,7 @@ limitations under the License.
 	<!-- AssemblyInfo Properties -->
 	<PropertyGroup>
 		<AssemblyInfoFile Condition="'$(AssemblyInfoFile)' == ''">AssemblyInfo.cs</AssemblyInfoFile>
-		<AssemblyTitle Condition="'$(AssemblyTitle)' == ''">$(ProjectName) for $(BuildConfigDescription)</AssemblyTitle>
+		<AssemblyTitle Condition="'$(AssemblyTitle)' == ''">$(ProjectName) $(Project_Major).$(Project_Minor).$(Project_Build)$(BuildName) for $(BuildConfigDescription)</AssemblyTitle>
 		<AssemblyProduct Condition="'$(AssemblyProduct)' == ''">$(ProjectName)</AssemblyProduct>
 		<AssemblyDescription Condition="'$(AssemblyDescription)' != ''">$(AssemblyDescription)</AssemblyDescription>
 		<ComVisible Condition="'$(ComVisible)' == ''">false</ComVisible>
