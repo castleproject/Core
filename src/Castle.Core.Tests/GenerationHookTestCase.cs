@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,15 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests
+namespace CastleTests
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
 
+	using Castle.DynamicProxy;
 	using Castle.DynamicProxy.Tests.Classes;
-	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.InterClasses;
+	using Castle.DynamicProxy.Tests.Interceptors;
+
+	using CastleTests.DynamicProxy.Tests.Classes;
 
 	using NUnit.Framework;
 
@@ -31,15 +34,15 @@ namespace Castle.DynamicProxy.Tests
 		public void HookIsUsedForConcreteClassProxy()
 		{
 			var logger = new LogInvocationInterceptor();
-			var hook = new LogHook(typeof (ServiceClass), true);
+			var hook = new LogHook(typeof(ServiceClass), true);
 
 			var options = new ProxyGenerationOptions(hook);
 
-			var proxy = (ServiceClass) generator.CreateClassProxy(typeof (ServiceClass), options, logger);
+			var proxy = (ServiceClass)generator.CreateClassProxy(typeof(ServiceClass), options, logger);
 
 			Assert.IsTrue(hook.Completed);
 			Assert.AreEqual(13, hook.AskedMembers.Count, "Asked members");
-			Assert.AreEqual(4, hook.NonVirtualMembers.Count, "Non-virtual members");
+			Assert.AreEqual(2, hook.NonVirtualMembers.Count, "Non-virtual members");
 
 			proxy.Sum(1, 2);
 			Assert.IsFalse(proxy.Valid);
@@ -51,13 +54,13 @@ namespace Castle.DynamicProxy.Tests
 		public void HookIsUsedForInterfaceProxy()
 		{
 			var logger = new LogInvocationInterceptor();
-			var hook = new LogHook(typeof (IService), false);
+			var hook = new LogHook(typeof(IService), false);
 
 			var options = new ProxyGenerationOptions(hook);
 
 			var proxy = (IService)
 			            generator.CreateInterfaceProxyWithTarget(
-			            	typeof (IService), new ServiceImpl(), options, logger);
+			            	typeof(IService), new ServiceImpl(), options, logger);
 
 			Assert.IsTrue(hook.Completed);
 			Assert.AreEqual(10, hook.AskedMembers.Count);
@@ -68,6 +71,63 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreEqual("Sum get_Valid ", logger.LogContents);
 		}
+
+		[Test]
+		public void Hook_can_NOT_see_GetType_method()
+		{
+			var hook = new LogHook(typeof(EmptyClass));
+
+			generator.CreateClassProxy(typeof(EmptyClass), new ProxyGenerationOptions(hook));
+
+			var getType = typeof(EmptyClass).GetMethod("GetType");
+			CollectionAssert.DoesNotContain(hook.AskedMembers, getType);
+			CollectionAssert.DoesNotContain(hook.NonVirtualMembers, getType);
+		}
+
+		[Test]
+		public void Hook_can_NOT_see_MemberwiseClone_method()
+		{
+			var hook = new LogHook(typeof(EmptyClass));
+
+			generator.CreateClassProxy(typeof(EmptyClass), new ProxyGenerationOptions(hook));
+
+			var memberwiseClone = typeof(EmptyClass).GetMethod("MemberwiseClone", BindingFlags.NonPublic | BindingFlags.Instance);
+			CollectionAssert.DoesNotContain(hook.AskedMembers, memberwiseClone);
+			CollectionAssert.DoesNotContain(hook.NonVirtualMembers, memberwiseClone);
+		}
+
+		[Test]
+		public void Hook_can_see_Equals_method()
+		{
+			var hook = new LogHook(typeof(EmptyClass));
+
+			generator.CreateClassProxy(typeof(EmptyClass), new ProxyGenerationOptions(hook));
+
+			var equals = typeof(EmptyClass).GetMethod("Equals");
+			CollectionAssert.Contains(hook.AskedMembers, equals);
+		}
+
+		[Test]
+		public void Hook_can_see_GetHashCode_method()
+		{
+			var hook = new LogHook(typeof(EmptyClass));
+
+			generator.CreateClassProxy(typeof(EmptyClass), new ProxyGenerationOptions(hook));
+
+			var getHashCode = typeof(EmptyClass).GetMethod("GetHashCode");
+			CollectionAssert.Contains(hook.AskedMembers, getHashCode);
+		}
+
+		[Test]
+		public void Hook_can_see_ToString_method()
+		{
+			var hook = new LogHook(typeof(EmptyClass));
+
+			generator.CreateClassProxy(typeof(EmptyClass), new ProxyGenerationOptions(hook));
+
+			var equals = typeof(EmptyClass).GetMethod("ToString");
+			CollectionAssert.Contains(hook.AskedMembers, equals);
+		}
 	}
 
 #if !SILVERLIGHT
@@ -77,11 +137,11 @@ namespace Castle.DynamicProxy.Tests
 	{
 		private readonly Type targetTypeToAssert;
 		private readonly bool screeningEnabled;
-		private IList<MemberInfo> nonVirtualMembers = new List<MemberInfo>();
-		private IList<MemberInfo> askedMembers = new List<MemberInfo>();
+		private readonly IList<MemberInfo> nonVirtualMembers = new List<MemberInfo>();
+		private readonly IList<MemberInfo> askedMembers = new List<MemberInfo>();
 		private bool completed;
 
-		public LogHook(Type targetTypeToAssert, bool screeningEnabled)
+		public LogHook(Type targetTypeToAssert, bool screeningEnabled = false)
 		{
 			this.targetTypeToAssert = targetTypeToAssert;
 			this.screeningEnabled = screeningEnabled;

@@ -1,4 +1,6 @@
 - Applied Jeff Sharps patch that refactored Xml DictionaryAdapter to improve maintainability and enable more complete functionality
+
+- fixed DYNPROXY-165 - Object.GetType() and Object.MemberwiseClone() should be ignored and not reported as non-interceptable to IProxyGenerationHook
 - fixed DYNPROXY-164 - Invalid Proxy type generated when there are more than one base class generic constraints
 - fixed DYNPROXY-162 - ref or out parameters can not be passed back if proxied method throw an exception
 

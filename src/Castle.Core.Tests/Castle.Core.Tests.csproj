@@ -240,6 +240,7 @@
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlTypeSerializerTests.cs" />
     <Compile Include="Core.Tests\Internal\PermissionUtilTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\AbstractClassWithMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\EmptyClass.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasCtorWithParamsStrings.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasCtorWithIntAndParamsArgument.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasCtorWithParamsArgument.cs" />

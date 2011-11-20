@@ -32,12 +32,7 @@ namespace Castle.DynamicProxy
 
 		public virtual bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
 		{
-			return SkippedTypes.Contains(methodInfo.DeclaringType) == false && IsFinalizer(methodInfo) == false;
-		}
-
-		protected bool IsFinalizer(MethodInfo methodInfo)
-		{
-			return methodInfo.Name == "Finalize" && methodInfo.GetBaseDefinition().DeclaringType == typeof(object);
+			return SkippedTypes.Contains(methodInfo.DeclaringType) == false;
 		}
 
 		public virtual void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)

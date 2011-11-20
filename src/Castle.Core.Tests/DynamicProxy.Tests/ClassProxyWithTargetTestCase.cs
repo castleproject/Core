@@ -22,6 +22,8 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Mixins;
 
+	using CastleTests;
+
 	using NUnit.Framework;
 
 	[TestFixture]

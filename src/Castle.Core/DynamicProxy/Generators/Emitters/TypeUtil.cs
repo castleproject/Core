@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Linq;
 	using System.Reflection;
 
@@ -37,8 +38,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			var currentType = type;
 			while (currentType != typeof(object))
 			{
-				var currentFields =
-					currentType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+				Debug.Assert(currentType != null);
+				var currentFields = currentType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 				fields.AddRange(currentFields);
 				currentType = currentType.BaseType;
 			}
@@ -123,6 +124,21 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return parameter;
 		}
 
+		public static bool IsFinalizer(this MethodInfo methodInfo)
+		{
+			return string.Equals("Finalize", methodInfo.Name) && methodInfo.GetBaseDefinition().DeclaringType == typeof(object);
+		}
+
+		public static bool IsGetType(this MethodInfo methodInfo)
+		{
+			return methodInfo.DeclaringType == typeof(object) && string.Equals("GetType", methodInfo.Name, StringComparison.OrdinalIgnoreCase);
+		}
+
+		public static bool IsMemberwiseClone(this MethodInfo methodInfo)
+		{
+			return methodInfo.DeclaringType == typeof(object) && string.Equals("MemberwiseClone", methodInfo.Name, StringComparison.OrdinalIgnoreCase);
+		}
+
 		public static void SetStaticField(this Type type, string fieldName, BindingFlags additionalFlags, object value)
 		{
 			var flags = additionalFlags | BindingFlags.Static | BindingFlags.SetField;
@@ -164,7 +180,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			var sortedMembers = new MemberInfo[members.Length];
 			Array.Copy(members, sortedMembers, members.Length);
-			Array.Sort(sortedMembers, (l, r) => string.Compare(l.Name, r.Name));
+			Array.Sort(sortedMembers, (l, r) => string.Compare(l.Name, r.Name, StringComparison.OrdinalIgnoreCase));
 			return sortedMembers;
 		}
 
@@ -187,7 +203,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			var array = types.ToArray();
 			//NOTE: is there a better, stable way to sort Types. We will need to revise this once we allow open generics
-			Array.Sort(array, (l, r) => string.Compare(l.AssemblyQualifiedName, r.AssemblyQualifiedName));
+			Array.Sort(array, (l, r) => string.Compare(l.AssemblyQualifiedName, r.AssemblyQualifiedName, StringComparison.OrdinalIgnoreCase));
 			return array;
 		}
 	}

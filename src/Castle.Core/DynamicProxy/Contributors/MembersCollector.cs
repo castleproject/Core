@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy.Contributors
 
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Internal;
 
 	public abstract class MembersCollector
@@ -189,8 +190,6 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected abstract MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone);
 
-
-
 		/// <summary>
 		///   Performs some basic screening and invokes the <see cref = "IProxyGenerationHook" />
 		///   to select methods.
@@ -216,9 +215,12 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (onlyVirtuals && !method.IsVirtual)
 			{
+				if (
 #if !SILVERLIGHT
-				if (method.DeclaringType != typeof(MarshalByRefObject))
+					method.DeclaringType != typeof(MarshalByRefObject) &&
 #endif
+					method.IsGetType() == false &&
+					method.IsMemberwiseClone() == false)
 				{
 					Logger.DebugFormat("Excluded non-virtual method {0} on {1} because it cannot be intercepted.", method.Name,
 					                   method.DeclaringType.FullName);
@@ -239,7 +241,7 @@ namespace Castle.DynamicProxy.Contributors
 				return false;
 			}
 #endif
-			if (method.DeclaringType == typeof(object) && method.Name.Equals("Finalize", StringComparison.OrdinalIgnoreCase))
+			if (method.IsFinalizer())
 			{
 				return false;
 			}

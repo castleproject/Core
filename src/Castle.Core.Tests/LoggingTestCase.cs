@@ -18,6 +18,9 @@ namespace Castle.DynamicProxy.Tests
 	using System.Collections.Generic;
 	using System.Reflection;
 	using Castle.Core.Logging;
+
+	using CastleTests.DynamicProxy.Tests.Classes;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -35,7 +38,7 @@ namespace Castle.DynamicProxy.Tests
 
 			// Assert
 			Assert.That(logger.RecordedMessage(LoggerLevel.Debug, "No cached proxy type was found for target type " +
-				"Castle.DynamicProxy.Tests.LoggingTestCase+EmptyClass."));
+				"CastleTests.DynamicProxy.Tests.Classes.EmptyClass."));
 		}
 
 		[Test]
@@ -51,7 +54,7 @@ namespace Castle.DynamicProxy.Tests
 
 			// Assert
 			Assert.That(logger.RecordedMessage(LoggerLevel.Debug, "Found cached proxy type Castle.Proxies.EmptyClassProxy " +
-				"for target type Castle.DynamicProxy.Tests.LoggingTestCase+EmptyClass."));
+				"for target type CastleTests.DynamicProxy.Tests.Classes.EmptyClass."));
 		}
 
 		[Test]
@@ -108,10 +111,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 #endif
 		#region Test Types
-
-		public class EmptyClass
-		{
-		}
 
 		public interface IEmptyInterface
 		{
