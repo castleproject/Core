@@ -144,7 +144,9 @@ namespace Castle.DynamicProxy.Generators
 		private FieldReference CreateTargetField(ClassEmitter emitter)
 		{
 			var targetField = emitter.CreateField("__target", targetType);
+#if !SILVERLIGHT
 			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(targetField);
+#endif
 			return targetField;
 		}
 
