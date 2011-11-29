@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <RootPath Condition=" '$(RootPath)' == '' ">$(MSBuildProjectDirectory)\..\..</RootPath>
@@ -288,6 +288,9 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Core\XmlMetadata.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Core\XmlMetadataBehavior.cs" />
     <Compile Include="Core\Internal\CollectionExtensions.cs" />
+    <Compile Include="Core\Internal\WeakKey.cs" />
+    <Compile Include="Core\Internal\WeakKeyComparer.cs" />
+    <Compile Include="Core\Internal\WeakKeyDictionary.cs" />
     <Compile Include="Core\ReferenceEqualityComparer.cs" />
     <Compile Include="Core\Extensions\SimpleConverter.cs" />
     <Compile Include="Core\Internal\InternalsVisible.cs" />
