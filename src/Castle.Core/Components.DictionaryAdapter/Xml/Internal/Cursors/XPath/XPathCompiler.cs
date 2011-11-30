@@ -17,7 +17,6 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Xml;
 	using System.Xml.XPath;
 
@@ -44,78 +43,77 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private static bool ParsePath(Tokenizer source, CompiledXPath path)
 		{
-			CompiledXPathStep next;
-			if (!ParseStep(source, out next))
-				return false;
-			path.FirstStep = next;
-			var parent = next;
-			path.Depth = 1;
-
-			for (;;)
+			for (CompiledXPathStep step = null;;)
 			{
+				if (!ParseStep(source, path, ref step))
+					return false;
 				if (source.Token == Token.EndOfInput)
 					return true;
-				if (source.Token != Token.StepSeparator)
+				if (!Consume(source, Token.StepSeparator))
 					return false;
-				if (parent.IsAttribute)
+				if (step.IsAttribute)
 					return false;
-				source.Consume();
-
-				if (!ParseStep(source, out next))
-					return false;
-				parent.NextStep = next;
-				next.PreviousNode = parent;
-				parent = next;
-				path.Depth++;
 			}
 		}
 
-		private static bool ParseStep(Tokenizer source, out CompiledXPathStep step)
+		private static bool ParseStep(Tokenizer source, CompiledXPath path, ref CompiledXPathStep step)
 		{
-			step = new CompiledXPathStep();
-			var start = source.Index;
+			var previous = step;
+			var start    = source.Index;
 
-			if (!ParseNodeCore(source, step))
+			if (!ParseNodeCore(source, StepFactory, ref step))
 				return false;
 
-			var path  = source.GetConsumedText(start);
-			step.Path = XPathExpression.Compile(path);
+			if (step != previous)
+			{
+				var text = source.GetConsumedText(start);
+				step.Path = XPathExpression.Compile(text);
+
+				if (previous == null)
+					path.FirstStep = step;
+				else
+					LinkNodes(previous, step);
+
+				path.Depth++;
+			}
 			return true;
 		}
 
-		private static bool ParseNodeCore(Tokenizer source, CompiledXPathNode node)
+		private static bool ParseNodeCore<TNode>(Tokenizer source, Func<TNode> factory, ref TNode node)
+			where TNode : CompiledXPathNode
 		{
-			if (Consume(source, Token.AttributeStart))
-				node.IsAttribute = true;
+			if (!Consume(source, Token.SelfReference))
+			{
+				node = factory();
 
-			if (!ParseQualifiedName(source, node))
-				return false;
+				if (Consume(source, Token.AttributeStart))
+					node.IsAttribute = true;
 
-			if (!ParsePredicateList(source, node))
-				return false;
+				if (!ParseQualifiedName(source, node))
+					return false;
+			}
 
-			return true;
+			return node == null
+				? source.Token != Token.PredicateStart
+				: ParsePredicateList(source, node);
 		}
 
-		private static bool ParsePredicateList(Tokenizer source, CompiledXPathNode node)
+		private static bool ParsePredicateList(Tokenizer source, CompiledXPathNode parent)
 		{
-			var dependencies = node.Dependencies;
-
-			while (source.Token == Token.PredicateStart)
-				if (!ParsePredicate(source, dependencies))
+			while (Consume(source, Token.PredicateStart))
+				if (!ParsePredicate(source, parent))
 					return false;
 
 			return true;
 		}
 
-		private static bool ParsePredicate(Tokenizer source, IList<CompiledXPathNode> dependencies)
+		private static bool ParsePredicate(Tokenizer source, CompiledXPathNode parent)
 		{
 			// Don't need to check this; caller must have already checked it.
 			//if (!Consume(source, Token.PredicateStart))
 			//    return false;
-			source.Consume();
 
-			if (!ParseAndExpression(source, dependencies))
+			if (!ParseAndExpression(source, parent))
 				return false;
 
 			if (!Consume(source, Token.PredicateEnd))
@@ -124,14 +122,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return true;
 		}
 
-		private static bool ParseAndExpression(Tokenizer source, IList<CompiledXPathNode> dependencies)
+		private static bool ParseAndExpression(Tokenizer source, CompiledXPathNode parent)
 		{
 			for (;;)
 			{
-				CompiledXPathNode node;
-				if (!ParseExpression(source, out node))
+				if (!ParseExpression(source, parent))
 					return false;
-				dependencies.Add(node);
 
 				if (source.Token != Token.Name || source.Text != "and")
 					return true;
@@ -139,16 +135,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
-		private static bool ParseExpression(Tokenizer source, out CompiledXPathNode node)
+		private static bool ParseExpression(Tokenizer source, CompiledXPathNode parent)
 		{
-			return (source.Token == Token.Name || source.Token == Token.AttributeStart)
-				? ParseLeftToRightExpression(source, out node)
-				: ParseRightToLeftExpression(source, out node);
+			var isLeftToRight
+				=  source.Token == Token.Name
+				|| source.Token == Token.AttributeStart
+				|| source.Token == Token.SelfReference;
+
+			return (isLeftToRight)
+				? ParseLeftToRightExpression(source, parent)
+				: ParseRightToLeftExpression(source, parent);
 		}
 
-		private static bool ParseLeftToRightExpression(Tokenizer source, out CompiledXPathNode node)
+		private static bool ParseLeftToRightExpression(Tokenizer source, CompiledXPathNode parent)
 		{
-			if (!ParsePathExpression(source, out node))
+			CompiledXPathNode node;
+			if (!ParseNestedPath(source, parent, out node))
 			    return false;
 
 			if (!Consume(source, Token.EqualsOperator))
@@ -158,53 +160,64 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (!ParseValue(source, out value))
 				return false;
 
-			GetLastNode(node).Value = value;
+			node.Value = value;
 			return true;
 		}
 
-		private static bool ParseRightToLeftExpression(Tokenizer source, out CompiledXPathNode node)
+		private static bool ParseRightToLeftExpression(Tokenizer source, CompiledXPathNode parent)
 		{
 			XPathExpression value;
 			if (!ParseValue(source, out value))
-				return Try.Failure(out node);
+				return false;
 
 			if (!Consume(source, Token.EqualsOperator))
-				return Try.Failure(out node);
+				return false;
 
-			if (!ParsePathExpression(source, out node))
+			CompiledXPathNode node;
+			if (!ParseNestedPath(source, parent, out node))
 			    return false;
 
-			GetLastNode(node).Value = value;
+			node.Value = value;
 			return true;
 		}
 
-		private static bool ParsePathExpression(Tokenizer source, out CompiledXPathNode node)
+		private static bool ParseNestedPath(Tokenizer source, CompiledXPathNode parent, out CompiledXPathNode node)
 		{
-			if (!ParseNode(source, out node))
-				return false;
-			var parent = node;
-
-			for (;;)
+			for (node = null;;)
 			{
-				if (!Consume(source, Token.StepSeparator))
-					return true;
-				if (parent.IsAttribute)
+				if (!ParseNode(source, parent, ref node))
 					return false;
-
-				CompiledXPathNode next;
-			    if (!ParseNode(source, out next))
-			        return false;
-				parent.NextNode = next;
-				next.PreviousNode = parent;
-				parent = next;
+				if (!Consume(source, Token.StepSeparator))
+					break;
+				if (node.IsAttribute)
+					return false;
 			}
+
+			if (node == null)
+			{
+				var dependencies = parent.Dependencies;
+				if (dependencies.Count != 0)
+					return false;
+				dependencies.Add(node = NodeFactory()); // Self-reference
+			}
+			return true;
 		}
 
-		private static bool ParseNode(Tokenizer source, out CompiledXPathNode node)
+		private static bool ParseNode(Tokenizer source, CompiledXPathNode parent, ref CompiledXPathNode node)
 		{
-			node = new CompiledXPathNode();
+			var previous = node;
 
-			return ParseNodeCore(source, node);
+			if (!ParseNodeCore(source, NodeFactory, ref node))
+				return false;
+
+			if (node != previous)
+			{
+				if (previous == null)
+					parent.Dependencies.Add(node);
+				else
+					LinkNodes(previous, node);
+			}
+			return true;
 		}
 
 		private static bool ParseValue(Tokenizer source, out XPathExpression value)
@@ -267,19 +280,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return true;
 		}
 
-		private static CompiledXPathNode GetLastNode(CompiledXPathNode node)
+		private static void LinkNodes(CompiledXPathNode previous, CompiledXPathNode next)
 		{
-			for (;;)
-			{
-				var next = node.NextNode;
-				if (next == null) return node;
-				node = next;
-			}
+			previous.NextNode = next;
+			next.PreviousNode = previous;
 		}
+
+		private static readonly Func<CompiledXPathNode>
+			NodeFactory = () => new CompiledXPathNode();
+
+		private static readonly Func<CompiledXPathStep>
+			StepFactory = () => new CompiledXPathStep();
 
 		private enum Token
 		{
 			Name,
+			SelfReference,
 
 			StepSeparator,
 			NameSeparator,
@@ -353,6 +369,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 							start = index;
 							switch (c)
 							{
+								case '.':  token = Token.SelfReference;     return;
 								case '/':  token = Token.StepSeparator;     return;
 								case ':':  token = Token.NameSeparator;     return;
 								case '@':  token = Token.AttributeStart;    return;

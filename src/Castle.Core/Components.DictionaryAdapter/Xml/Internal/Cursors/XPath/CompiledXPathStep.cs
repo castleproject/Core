@@ -35,7 +35,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public CompiledXPathStep NextStep
 		{
 			get { return (CompiledXPathStep) NextNode; }
-			internal set { NextNode = value; }
 		}
 
 		internal override void SetContext(XsltContext context)

@@ -32,10 +32,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private CompiledXPathNode previous;
 		private IList<CompiledXPathNode> dependencies;
 
-		internal CompiledXPathNode()
-		{
-			dependencies = new List<CompiledXPathNode>();
-		}
+		internal CompiledXPathNode() { }
 
 		public string Prefix
 		{
@@ -55,14 +52,19 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			internal set { isAttribute = value; }
 		}
 
+		public bool IsSelfReference
+		{
+			get { return localName == null; }
+		}
+
 		public bool IsSimple
 		{
-			get { return dependencies.Count == 0 && next == null; }
+			get { return next == null && HasNoRealDependencies(); }
 		}
 
 		public XPathExpression Value
 		{
-			get { return value; }
+			get { return value ?? GetSelfReferenceValue(); }
 			internal set { this.value = value; }
 		}
 
@@ -80,12 +82,39 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public IList<CompiledXPathNode> Dependencies
 		{
-			get { return dependencies; }
+			get { return dependencies ?? (dependencies = new List<CompiledXPathNode>()); }
+		}
+
+		private static readonly IList<CompiledXPathNode>
+			NoDependencies = Array.AsReadOnly(new CompiledXPathNode[0]);
+
+		private bool HasNoRealDependencies()
+		{
+			return
+			(
+				dependencies == null ||
+				dependencies.Count == 0 ||
+				(
+					dependencies.Count == 1 &&
+					dependencies[0].IsSelfReference
+				)
+			);
+		}
+
+		private XPathExpression GetSelfReferenceValue()
+		{
+			return dependencies != null
+				&& dependencies.Count == 1
+				&& dependencies[0].IsSelfReference
+				 ? dependencies[0].value
+				 : null;
 		}
 
 		internal virtual void Prepare()
 		{
-			dependencies = Array.AsReadOnly(dependencies.ToArray());
+			dependencies = (dependencies != null)
+				? Array.AsReadOnly(dependencies.ToArray())
+				: NoDependencies;
 
 			foreach (var child in dependencies)
 				child.Prepare();
