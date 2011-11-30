@@ -31,7 +31,7 @@ namespace CastleTests.Core.Tests.Internal
 			OtherItem = new KeyValuePair<TKey,TValue>(new TKey(), new TValue());
 
 		[Test]
-		public void TrimDeadObjects_LiveObject()
+		public void AfterExplicitTrim_LiveObject()
 		{
 			CreateDictionary(); AddItem();
 
@@ -43,12 +43,35 @@ namespace CastleTests.Core.Tests.Internal
 		}
 
 		[Test]
-		public void TrimDeadObjects_CollectedObject()
+		public void AfterExplicitTrim_DeadObject()
 		{
 			CreateDictionary(); AddItem(); ResetItem();
 
 			GC.Collect();
 			Dictionary.TrimDeadObjects();
+
+			Assert.That(Dictionary.Count, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void AfterAutomaticTrim_LiveObject()
+		{
+			CreateDictionary(); AddItem();
+
+			GC.Collect();
+			TriggerAutomaticTrim();
+
+			Assert.That(Dictionary.Count,      Is.EqualTo(1));
+			Assert.That(Dictionary[Item.Key],  Is.SameAs(Item.Value));
+		}
+
+		[Test]
+		public void AfterAutomaticTrim_DeadObject()
+		{
+			CreateDictionary(); AddItem(); ResetItem();
+
+			GC.Collect();
+			TriggerAutomaticTrim();
 
 			Assert.That(Dictionary.Count, Is.EqualTo(0));
 		}
@@ -907,6 +930,13 @@ namespace CastleTests.Core.Tests.Internal
 		private void ResetItem()
 		{
 			Item = default(KeyValuePair<TKey, TValue>);
+		}
+
+		private void TriggerAutomaticTrim()
+		{
+			int dummy;
+			for (var i = 0; i < 128; i++)
+				dummy = Dictionary.Count;
 		}
 
 		[TearDown]

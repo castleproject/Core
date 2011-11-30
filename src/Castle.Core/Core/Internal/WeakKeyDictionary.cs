@@ -25,6 +25,9 @@ namespace Castle.Core.Internal
 		private readonly WeakKeyComparer<TKey> comparer;
 		private KeyCollection keys;
 
+		private       int age;                // Incremented by operations
+		private const int AgeThreshold = 128; // Age at which to trim dead objects
+
 		public WeakKeyDictionary()
 			: this(0, EqualityComparer<TKey>.Default) { }
 
@@ -42,7 +45,7 @@ namespace Castle.Core.Internal
 
 		public int Count
 		{
-			get { return dictionary.Count; }
+			get { Age(1); return dictionary.Count; }
 		}
 
 		bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
@@ -62,17 +65,19 @@ namespace Castle.Core.Internal
 
 		public TValue this[TKey key]
 		{
-			get { return dictionary[key]; }
-			set { dictionary[comparer.Wrap(key)] = value; }
+			get { Age(1); return dictionary[key]; }
+			set { Age(4); dictionary[comparer.Wrap(key)] = value; }
 		}
 
 		public bool ContainsKey(TKey key)
 		{
+			Age(1);
 			return dictionary.ContainsKey(key);
 		}
 
 		bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
 		{
+			Age(1);
 			TValue candidate;
 			return dictionary.TryGetValue(item.Key, out candidate)
 				&& EqualityComparer<TValue>.Default.Equals(candidate, item.Value);
@@ -80,19 +85,30 @@ namespace Castle.Core.Internal
 
 		public bool TryGetValue(TKey key, out TValue value)
 		{
+			Age(1);
 			return dictionary.TryGetValue(key, out value);
 		}
 
 		public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
 		{
+			var hasDeadObjects = false;
+
 			foreach (var wrapped in dictionary)
 			{
-			    var item = new KeyValuePair<TKey, TValue>(
+			    var item = new KeyValuePair<TKey, TValue>
+				(
 					comparer.Unwrap(wrapped.Key),
-					wrapped.Value);
-			    if (item.Key != null)
-			        yield return item;
+					wrapped.Value
+				);
+
+				if (item.Key == null)
+					hasDeadObjects = true;
+				else
+					yield return item;
 			}
+
+			if (hasDeadObjects)
+				TrimDeadObjects();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
@@ -108,6 +124,7 @@ namespace Castle.Core.Internal
 
 		public void Add(TKey key, TValue value)
 		{
+			Age(2);
 			dictionary.Add(comparer.Wrap(key), value);
 		}
 
@@ -118,23 +135,31 @@ namespace Castle.Core.Internal
 
 		public bool Remove(TKey key)
 		{
+			Age(4);
 			return dictionary.Remove(key);
 		}
 
 		bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
 		{
 			ICollection<KeyValuePair<TKey, TValue>> collection = this;
-			return collection.Contains(item)
-				&& dictionary.Remove(item.Key);
+			return collection.Contains(item) && Remove(item.Key);
 		}
 
 		public void Clear()
 		{
+			age = 0;
 			dictionary.Clear();
+		}
+
+		private void Age(int amount)
+		{
+			if ((age += amount) > AgeThreshold)
+				TrimDeadObjects();
 		}
 
 		public void TrimDeadObjects()
 		{
+			age = 0;
 			var removals = null as List<object>;
 
 			foreach (var key in dictionary.Keys)
