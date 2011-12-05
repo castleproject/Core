@@ -191,6 +191,7 @@
     <Compile Include="Components.DictionaryAdapter\GenericDictionaryAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\BindingList.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\IBindingList.cs" />
+    <Compile Include="Components.DictionaryAdapter\Util\IBindingListSource.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ICondition.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\PriorityBehaviorExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Core\DefaultXmlReferenceFormat.cs" />
