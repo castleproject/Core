@@ -19,18 +19,19 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Collections.Generic;
 	using System.Linq;
 	using Castle.Core;
+	using Castle.Core.Internal;
 
 	public class XmlReferenceManager
 	{
-		private readonly Dictionary<int,    Entry> entriesById;
-		private readonly Dictionary<object, Entry> entriesByValue;
+		private readonly        Dictionary<int,    Entry> entriesById;
+		private readonly WeakKeyDictionary<object, Entry> entriesByValue;
 		private readonly IXmlReferenceFormat format;
 		private int nextId;
 
 		public XmlReferenceManager(IXmlNode root, IXmlReferenceFormat format)
 		{
-			entriesById    = new Dictionary<int,    Entry>();
-			entriesByValue = new Dictionary<object, Entry>(ReferenceEqualityComparer<object>.Instance);
+			entriesById    = new        Dictionary<int,    Entry>();
+			entriesByValue = new WeakKeyDictionary<object, Entry>(ReferenceEqualityComparer<object>.Instance);
 			this.format    = format;
 			this.nextId    = 1;
 
