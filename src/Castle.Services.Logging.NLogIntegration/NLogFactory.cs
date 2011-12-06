@@ -44,6 +44,15 @@ namespace Castle.Services.Logging.NLogIntegration
 			LogManager.Configuration = new XmlLoggingConfiguration(file.FullName);
 		}
 
+        /// <summary>
+        ///   Initializes a new instance of the <see cref = "NLogFactory" /> class.
+        /// </summary>
+        /// <param name = "loggingConfiguration">The NLog Configuration</param>
+        public NLogFactory(LoggingConfiguration loggingConfiguration)
+        {
+            LogManager.Configuration = loggingConfiguration;
+        }
+
 		/// <summary>
 		///   Creates a logger with specified <paramref name = "name" />.
 		/// </summary>
