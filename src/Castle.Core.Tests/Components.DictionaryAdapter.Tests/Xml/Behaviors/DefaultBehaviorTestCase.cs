@@ -404,7 +404,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			private static IVirtual AsVirtual(object source)
 			{
-				return XmlAdapter.For(source);
+				return ((IDictionaryAdapter) source).AsVirtual();
 			}
 		}
 	}
