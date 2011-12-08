@@ -397,7 +397,7 @@ namespace Castle.DynamicProxy
 						publicKeyBytes.Add(byte.Parse(InternalsVisible.ToDynamicProxyGenAssembly2.Substring(i, 2), NumberStyles.HexNumber));
 						
 					}
-					assemblyName.SetPublicKey(publicKeyBytes.ToArray());
+					assemblyName.SetPublicKeyToken(publicKeyBytes.ToArray());
 #else
 					var keyPair = new StrongNameKeyPair(keyPairStream);
 					assemblyName.KeyPair = keyPair;
