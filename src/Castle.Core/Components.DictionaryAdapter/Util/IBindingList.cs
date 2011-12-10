@@ -18,9 +18,9 @@ namespace Castle.Components.DictionaryAdapter
 	using System.ComponentModel;
 	using SysPropertyDescriptor = System.ComponentModel.PropertyDescriptor;
 
-	public interface IBindingList<T> : IList<T>, IBindingListSource
+	public interface IBindingList<T> : IList<T>
 #if !SILVERLIGHT
-		, ICancelAddNew, IRaiseItemChangedEvents
+		, IBindingListSource, ICancelAddNew, IRaiseItemChangedEvents
 #endif
 	{
 		bool AllowNew                      { get; }
