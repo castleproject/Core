@@ -18,7 +18,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.ComponentModel;
 	using SysPropertyDescriptor = System.ComponentModel.PropertyDescriptor;
 
-	public interface IBindingList<T> : IList<T>
+	public interface IBindingList<T> : IList<T>, IBindingListSource
 #if !SILVERLIGHT
 		, ICancelAddNew, IRaiseItemChangedEvents
 #endif
@@ -34,8 +34,6 @@ namespace Castle.Components.DictionaryAdapter
 		ListSortDirection SortDirection    { get; }
 
 #if !SILVERLIGHT
-		IBindingList AsBindingList         { get; }
-
 		event ListChangedEventHandler ListChanged;
 #endif
 
