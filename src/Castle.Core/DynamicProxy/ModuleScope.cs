@@ -25,10 +25,6 @@ namespace Castle.DynamicProxy
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Serialization;
 
-#if SILVERLIGHT
-	using System.Globalization;
-#endif
-
 	/// <summary>
 	///   Summary description for ModuleScope.
 	/// </summary>
@@ -378,33 +374,22 @@ namespace Castle.DynamicProxy
 
 		private AssemblyName GetAssemblyName(bool signStrongName)
 		{
-			var assemblyName = new AssemblyName
-			{
-				Name = signStrongName ? strongAssemblyName : weakAssemblyName
-			};
 
+			var assemblyName = new AssemblyName
+			                   	{
+			                   		Name = signStrongName ? strongAssemblyName : weakAssemblyName
+			                   	};
+
+#if !SILVERLIGHT
 			if (signStrongName)
 			{
-				var keyPairStream = GetKeyPair();
+				byte[] keyPairStream = GetKeyPair();
 				if (keyPairStream != null)
 				{
-#if SILVERLIGHT
-					// we can only set the public key.. but for our needs it appears to be working (workaround found by Jeff Nevins, see issue 161 for DP in the issue tracker for more details)
-					var startIndex = InternalsVisible.ToDynamicProxyGenAssembly2.IndexOf("PublicKey=") + "PublicKey=".Length;
-					var publicKeyBytes = new List<byte>(160);
-					for (var i = startIndex; i < InternalsVisible.ToDynamicProxyGenAssembly2.Length; i += 2)
-					{
-						publicKeyBytes.Add(byte.Parse(InternalsVisible.ToDynamicProxyGenAssembly2.Substring(i, 2), NumberStyles.HexNumber));
-						
-					}
-					assemblyName.SetPublicKey(publicKeyBytes.ToArray());
-#else
-					var keyPair = new StrongNameKeyPair(keyPairStream);
-					assemblyName.KeyPair = keyPair;
-
-#endif
+					assemblyName.KeyPair = new StrongNameKeyPair(keyPairStream);
 				}
 			}
+#endif
 			return assemblyName;
 		}
 
