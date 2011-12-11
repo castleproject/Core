@@ -66,6 +66,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("six", t.GetMethod("InstanceMethod").Invoke(instance, new object[] {"six"}));
 		}
 
+#if !SILVERLIGHT
 		[Test]
 		public void ForceUnsignedFalseWithSignedTypes()
 		{
@@ -75,6 +76,7 @@ namespace Castle.DynamicProxy.Tests
 			Type t = emitter.BuildType();
 			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(t.Assembly));
 		}
+#endif
 
 		[Test]
 		public void ForceUnsignedTrueWithSignedTypes()

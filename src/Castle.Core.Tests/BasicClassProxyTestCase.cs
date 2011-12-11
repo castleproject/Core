@@ -118,8 +118,7 @@ namespace CastleTests
 		}
 
 
-#if !MONO
-
+#if !MONO && !SILVERLIGHT
 		[Test]
 		public void ClassWithDifferentAccessLevelOnProperties()
 		{
@@ -310,6 +309,7 @@ namespace CastleTests
 			return methodInfo.GetParameters();
 		}
 
+#if !SILVERLIGHT
 		[Test]
 		public void ProxyForBaseTypeFromSignedAssembly()
 		{
@@ -331,6 +331,7 @@ namespace CastleTests
 			object proxy = generator.CreateClassProxy(t1, new Type[] { t2 }, new StandardInterceptor());
 			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
+#endif
 
 #if SILVERLIGHT // Silverlight test runner treats Assert.Ignore as failed test :/
 		[Ignore]
@@ -429,7 +430,7 @@ namespace CastleTests
 			object proxy2 = Activator.CreateInstance(proxy.GetType());
 			Assert.AreEqual("Something", ((ClassWithDefaultConstructor)proxy2).SomeString);
 		}
-
+#if !SILVERLIGHT
 		[Test]
 		public void ClassProxyShouldHaveDefaultConstructorWhenBaseClassHasInternal()
 		{
@@ -444,6 +445,7 @@ namespace CastleTests
 			object proxy2 = Activator.CreateInstance(proxy.GetType());
 			Assert.AreEqual("Something", ((ClassWithInternalDefaultConstructor)proxy2).SomeString);
 		}
+#endif
 
 		[Test]
 		public void ClassProxyShouldHaveDefaultConstructorWhenBaseClassHasProtected()

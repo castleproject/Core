@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SILVERLIGHT && !MONO
 namespace Castle.Core.Internal
 {
 	using System;
@@ -244,3 +245,4 @@ namespace Castle.Core.Internal
 		}
 	}
 }
+#endif

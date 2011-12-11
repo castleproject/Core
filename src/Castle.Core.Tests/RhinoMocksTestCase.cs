@@ -180,6 +180,7 @@ namespace Castle.DynamicProxy.Tests
 				new DoNothingInterceptor());
 		}
 
+#if !SILVERLIGHT
 		[Test]
 		public void InternalClassWithInternalMethodAndProperty()
 		{
@@ -194,6 +195,7 @@ namespace Castle.DynamicProxy.Tests
 			var t = o.TestProperty;
 			Assert.AreEqual(2, logging.Invocations.Count);
 		}
+#endif
 
 		[Test]
 		public void NeedingToCreateNewMethodTableSlot()
@@ -201,6 +203,7 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateClassProxy(typeof (MultiClass), new[] {typeof (ISpecialMulti)});
 		}
 
+#if !SILVERLIGHT
 		[Test]
 		public void ProxyInternalMethod()
 		{
@@ -210,6 +213,7 @@ namespace Castle.DynamicProxy.Tests
 			o.Foo();
 			Assert.AreEqual("Foo ", logging.LogContents);
 		}
+#endif
 
 		[Test]
 		public void ProxyingComInteraces()
@@ -233,13 +237,15 @@ namespace Castle.DynamicProxy.Tests
 			var o = generator.CreateInterfaceProxyWithoutTarget(typeof (IWithGuid), new StandardInterceptor());
 			Assert.IsNotNull(o);
 		}
-		
+
+#if !SILVERLIGHT
 		[Test]
 		public void ProxyingInternalInterface()
 		{
 			var o = generator.CreateInterfaceProxyWithoutTarget(typeof (IInternal), new StandardInterceptor());
 			Assert.IsNotNull(o);
 		}
+#endif
 
 		[Test]
 		public void ProxyingProtectedInternalAbstractMethod()
