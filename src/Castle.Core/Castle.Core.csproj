@@ -162,11 +162,11 @@
   </PropertyGroup>
   <ItemGroup Condition="$(MSBuildTargets)!='Silverlight 5.0' and $(MSBuildTargets)!='Silverlight 4.0'">
     <Reference Include="System.configuration" />
+	<Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs">
