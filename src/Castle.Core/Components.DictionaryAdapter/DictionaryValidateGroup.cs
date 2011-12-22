@@ -32,7 +32,7 @@ namespace Castle.Components.DictionaryAdapter
 			this.adapter = adapter;
 
 			propertyNames = (from property in this.adapter.This.Properties.Values
-					  from groupings in property.Behaviors.OfType<GroupAttribute>()
+					  from groupings in property.PropertyBehaviors.OfType<GroupAttribute>()
 					  where this.groups.Intersect(groupings.Group).Any() 
 					  select property.PropertyName).Distinct().ToArray();
 

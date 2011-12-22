@@ -145,7 +145,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
                 fooA.A = fooB.A;
 
-                Assert.That(xmlA, XmlEquivalent.To(xmlB));
+				Assert.That(xmlA, XmlEquivalent.To(xmlB));
             }
 
             [Test]

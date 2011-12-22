@@ -35,7 +35,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			var dictionary = new Dictionary<string, string>();
 			var player = (IPlayer)_factory.GetAdapter(typeof(IPlayer), dictionary.ForDictionaryAdapter(),
-				new PropertyDescriptor().AddSetter(new StringStorageAttribute()));
+				new PropertyDescriptor().AddBehaviors(new StringStorageAttribute()));
 			player.Points = 23;
 			Assert.AreEqual(23, player.Points);
 		}

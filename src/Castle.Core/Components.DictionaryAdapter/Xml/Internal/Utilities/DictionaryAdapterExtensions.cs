@@ -23,10 +23,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		public static DictionaryAdapterMeta GetAdapterMeta(this DictionaryAdapterMeta source, Type type)
 		{
-			var descriptor = new DictionaryDescriptor(GetSharedBehaviors(source));
-			descriptor.AddInitializers    (source.Initializers);
-			descriptor.AddMetaInitializers(source.MetaInitializers);
-
+			var descriptor = new PropertyDescriptor(GetSharedBehaviors(source));
+			descriptor.AddBehaviors(source.MetaInitializers);
 			return source.Factory.GetAdapterMeta(type, descriptor);
 		}	
 
@@ -40,9 +38,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (null == dictionary)
 				dictionary = new Hashtable();
 
-			var descriptor = new DictionaryDescriptor(GetSharedBehaviors(parent.Meta));
+			var descriptor = new PropertyDescriptor(GetSharedBehaviors(parent.Meta));
 		    parent.This.Descriptor.CopyBehaviors(descriptor);
-		    descriptor.AddBehavior(adapter);
+		    descriptor.AddBehaviors(adapter);
 
 		    return parent.This.Factory.GetAdapter(type, dictionary, descriptor);
 		}
@@ -103,10 +101,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 
 		private const string
-			XmlAccessorKey         = "XmlAccessor",
-			XmlMetaKey             = "XmlMeta",
-			XmlTypeKey             = "XmlType",
-			XmlReferenceManagerKey = "XmlReferenceManager";
+			XmlAccessorKey  = "XmlAccessor",
+			XmlMetaKey      = "XmlMeta",
+			XmlTypeKey      = "XmlType";
 	}
 }
 #endif

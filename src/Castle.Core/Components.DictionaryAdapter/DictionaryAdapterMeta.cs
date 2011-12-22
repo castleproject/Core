@@ -15,26 +15,22 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
+	using System.Linq;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Diagnostics;
-	using System.Linq;
+	using Castle.Core;
 
 	[DebuggerDisplay("Type: {Type.FullName,nq}")]
 	public class DictionaryAdapterMeta
 	{
 		private IDictionary extendedProperties;
 
-		public DictionaryAdapterMeta(Type type, IDictionaryInitializer[] initializers,
-									 IDictionaryMetaInitializer[] metaInitializers,
-									 object[] behaviors, IDictionary<String, PropertyDescriptor> properties,
-									 DictionaryDescriptor descriptor, IDictionaryAdapterFactory factory)
+		public DictionaryAdapterMeta(Type type, object[] behaviors, IDictionary<String, PropertyDescriptor> properties,
+									 IDictionaryAdapterFactory factory)
 		{
 			Type = type;
 			Factory = factory;
-			//Descriptor = descriptor;
-			Initializers = initializers;
-			MetaInitializers = metaInitializers;
 			Behaviors = behaviors;
 			Properties = properties;
 
@@ -45,15 +41,11 @@ namespace Castle.Components.DictionaryAdapter
 
 		public object[] Behaviors { get; private set; }
 
-		//public DictionaryDescriptor Descriptor { get { throw new Exception(); } }
-
 		public IDictionaryAdapterFactory Factory { get; private set; }
 
-		public IDictionaryInitializer[] Initializers { get; private set; }
+		public IDictionary<string, PropertyDescriptor> Properties { get; private set; }
 
 		public IDictionaryMetaInitializer[] MetaInitializers { get; private set; }
-
-		public IDictionary<string, PropertyDescriptor> Properties { get; private set; }
 
 		public IDictionary ExtendedProperties
 		{
@@ -69,15 +61,20 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void InitializeMeta(IDictionaryAdapterFactory factory, DictionaryDescriptor descriptor)
 		{
-			if (descriptor != null)
+			var metaInitializers = new HashSet<IDictionaryMetaInitializer>(ReferenceEqualityComparer<IDictionaryMetaInitializer>.Instance);
+			if (Descriptor != null)
 			{
-			    MetaInitializers = MetaInitializers.Prioritize(descriptor.MetaInitializers).ToArray();
+				MetaInitializers = MetaInitializers.Prioritize(Descriptor.MetaInitializers).ToArray();
 			}
 
-			foreach (var metaInitializer in MetaInitializers)
+			foreach (var property in Properties.Values)
+			foreach (var metaInitializer in property.MetaInitializers)
 			{
 				metaInitializer.Initialize(factory, this);
+				metaInitializers.Add(metaInitializer);
 			}
+
+			MetaInitializers = metaInitializers.ToArray();
 		}
 	}
 }

@@ -59,9 +59,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
             return (T) factory.GetAdapter(typeof(T),
                 new System.Collections.Hashtable(),
-                new DictionaryDescriptor()
-                    .AddBehavior(XmlMetadataBehavior.Instance)
-                    .AddBehavior(xmlAdapter));
+                new PropertyDescriptor()
+                    .AddBehaviors(XmlMetadataBehavior.Instance, xmlAdapter));
         }
 
         public class FakeStandardXmlSerializable

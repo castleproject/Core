@@ -18,6 +18,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Castle.Core;
 
 	public class DictionaryAdapterInstance
 	{
@@ -32,8 +33,7 @@ namespace Castle.Components.DictionaryAdapter
 			Factory = factory;
 
 			Properties = meta.Properties;
-			Initializers = meta.Initializers;
-			MergeBehaviorOverrides(meta);
+			MergePropertyOverrides(meta);
 		}
 
 		internal int? OldHashCode { get; set; }
@@ -85,30 +85,26 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		private void MergeBehaviorOverrides(DictionaryAdapterMeta meta)
+		private void MergePropertyOverrides(DictionaryAdapterMeta meta)
 		{
-			if (Descriptor == null) return;
-
-			var typeDescriptor = Descriptor as DictionaryDescriptor;
-
-			if (typeDescriptor != null)
-			{
-				Initializers = Initializers.Prioritize(typeDescriptor.Initializers).ToArray();
-			}
-
 			Properties = new Dictionary<string, PropertyDescriptor>();
+
+			var initializers = new HashSet<IDictionaryInitializer>(ReferenceEqualityComparer<IDictionaryInitializer>.Instance);
 
 			foreach (var property in meta.Properties)
 			{
-				var propertyDescriptor = property.Value;
+				var propertyDescriptor = new PropertyDescriptor(property.Value, true);
 
-				var propertyOverride = new PropertyDescriptor(propertyDescriptor, false)
-					.AddKeyBuilders(propertyDescriptor.KeyBuilders.Prioritize(Descriptor.KeyBuilders))
-					.AddGetters(propertyDescriptor.Getters.Prioritize(Descriptor.Getters))
-					.AddSetters(propertyDescriptor.Setters.Prioritize(Descriptor.Setters));
+				if (Descriptor != null)
+					propertyDescriptor.AddBehaviors(Descriptor.Behaviors);
 
-				Properties.Add(property.Key, propertyOverride);
+				foreach (var initializer in propertyDescriptor.Initializers)
+					initializers.Add(initializer);
+
+				Properties.Add(property.Key, propertyDescriptor);
 			}
+
+			Initializers = initializers.ToArray();
 		}
 	}
 }

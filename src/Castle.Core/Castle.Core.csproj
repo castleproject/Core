@@ -182,6 +182,7 @@
     <Compile Include="Components.DictionaryAdapter\Attributes\XmlDefaultsAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\StringStorageAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\DictionaryAdapterExtensions.cs" />
+    <Compile Include="Components.DictionaryAdapter\DictionaryBehaviorComparer.cs" />
     <Compile Include="Components.DictionaryAdapter\IVirtual.cs" />
     <Compile Include="Components.DictionaryAdapter\MemberwiseEqualityHashCodeStrategy.cs" />
     <Compile Include="Components.DictionaryAdapter\DictionaryAdapterBase.Copy.cs" />
@@ -194,7 +195,6 @@
     <Compile Include="Components.DictionaryAdapter\Util\IBindingList.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\IBindingListSource.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ICondition.cs" />
-    <Compile Include="Components.DictionaryAdapter\Util\PriorityBehaviorExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Core\DefaultXmlReferenceFormat.cs" />
     <Compile Include="Components.DictionaryAdapter\IDictionaryReferenceManager.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Core\IXmlReferenceFormat.cs" />
@@ -329,7 +329,6 @@
     <Compile Include="Components.DictionaryAdapter\DictionaryAdapterFactory.cs" />
     <Compile Include="Components.DictionaryAdapter\DictionaryAdapterInstance.cs" />
     <Compile Include="Components.DictionaryAdapter\DictionaryAdapterMeta.cs" />
-    <Compile Include="Components.DictionaryAdapter\DictionaryDescriptor.cs" />
     <Compile Include="Components.DictionaryAdapter\DictionaryValidateGroup.cs" />
     <Compile Include="Components.DictionaryAdapter\IDictionaryAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\IDictionaryAdapterFactory.cs" />
