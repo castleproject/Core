@@ -30,8 +30,8 @@ namespace Castle.Components.DictionaryAdapter
 	public class PropertyDescriptor : IDictionaryKeyBuilder, IDictionaryPropertyGetter, IDictionaryPropertySetter
 	{
 		private IDictionary state;
-		private IDictionary extendedProperties;
-		protected SortedSet<IDictionaryBehavior> dictionaryBehaviors;
+		private Dictionary<object, object> extendedProperties;
+		protected List<IDictionaryBehavior> dictionaryBehaviors;
 
 		private static readonly object[] NoBehaviors = new object[0];
 
@@ -80,8 +80,11 @@ namespace Castle.Components.DictionaryAdapter
 			IfExists = source.IfExists;
 			Fetch = source.Fetch;
 
+			if (source.extendedProperties != null)
+				extendedProperties = new Dictionary<object, object>(source.extendedProperties);
+
 			if (copyBehaviors && source.dictionaryBehaviors != null)
-				dictionaryBehaviors = new SortedSet<IDictionaryBehavior>(source.dictionaryBehaviors, DictionaryBehaviorComparer.Instance);
+				dictionaryBehaviors = new List<IDictionaryBehavior>(source.dictionaryBehaviors);
 		}
 
 		/// <summary>
@@ -345,15 +348,42 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (behaviors != null)
 			{
-				if (dictionaryBehaviors == null)
+				foreach (var behavior in behaviors)
 				{
-					dictionaryBehaviors = new SortedSet<IDictionaryBehavior>(behaviors, DictionaryBehaviorComparer.Instance);
-				}
-				else
-				{
-					foreach (var behavior in behaviors)
+					if (dictionaryBehaviors == null)
 					{
-						dictionaryBehaviors.Add(behavior);
+						dictionaryBehaviors = new List<IDictionaryBehavior>(8);
+					}
+
+					int? insertAt = null;
+					var duplicate = false;
+					for (var i = dictionaryBehaviors.Count - 1; i >= 0; --i)
+					{
+						var dictionaryBehavior = dictionaryBehaviors[i];
+						if (dictionaryBehavior.ExecutionOrder == behavior.ExecutionOrder)
+						{
+							if (Equals(dictionaryBehavior, behavior))
+							{
+								duplicate = true;
+								break;
+							}
+							if (insertAt.HasValue == false)
+							{
+								insertAt = i + 1;
+							}
+						}
+						else if (dictionaryBehavior.ExecutionOrder < behavior.ExecutionOrder)
+						{
+							if (insertAt.HasValue == false)
+							{
+								insertAt = i + 1;
+							}
+							break;
+						}
+					}
+					if (duplicate == false)
+					{
+						dictionaryBehaviors.Insert(insertAt.GetValueOrDefault(0), behavior);
 					}
 				}
 			}

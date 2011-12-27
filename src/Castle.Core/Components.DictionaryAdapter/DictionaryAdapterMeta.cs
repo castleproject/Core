@@ -26,15 +26,18 @@ namespace Castle.Components.DictionaryAdapter
 	{
 		private IDictionary extendedProperties;
 
-		public DictionaryAdapterMeta(Type type, object[] behaviors, IDictionary<String, PropertyDescriptor> properties,
-									 IDictionaryAdapterFactory factory)
+		public DictionaryAdapterMeta(Type type, object[] behaviors, IDictionaryMetaInitializer[] metaInitializers, 
+			                         IDictionaryInitializer[] initializers, IDictionary<String, PropertyDescriptor> properties, 
+			                         IDictionaryAdapterFactory factory)
 		{
 			Type = type;
 			Factory = factory;
 			Behaviors = behaviors;
+			MetaInitializers = metaInitializers;
+			Initializers = initializers;
 			Properties = properties;
 
-			InitializeMeta(factory, descriptor);
+			InitializeMeta();
 		}
 
 		public Type Type { get; private set; }
@@ -46,6 +49,8 @@ namespace Castle.Components.DictionaryAdapter
 		public IDictionary<string, PropertyDescriptor> Properties { get; private set; }
 
 		public IDictionaryMetaInitializer[] MetaInitializers { get; private set; }
+
+		public IDictionaryInitializer[] Initializers { get; private set; }
 
 		public IDictionary ExtendedProperties
 		{
@@ -59,22 +64,12 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		private void InitializeMeta(IDictionaryAdapterFactory factory, DictionaryDescriptor descriptor)
+		private void InitializeMeta()
 		{
-			var metaInitializers = new HashSet<IDictionaryMetaInitializer>(ReferenceEqualityComparer<IDictionaryMetaInitializer>.Instance);
-			if (Descriptor != null)
+			foreach (var metaInitializer in MetaInitializers)
 			{
-				MetaInitializers = MetaInitializers.Prioritize(Descriptor.MetaInitializers).ToArray();
+				metaInitializer.Initialize(Factory, this);
 			}
-
-			foreach (var property in Properties.Values)
-			foreach (var metaInitializer in property.MetaInitializers)
-			{
-				metaInitializer.Initialize(factory, this);
-				metaInitializers.Add(metaInitializer);
-			}
-
-			MetaInitializers = metaInitializers.ToArray();
 		}
 	}
 }

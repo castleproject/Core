@@ -186,10 +186,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			var  person = factory.GetAdapter<IPersonWithDeniedInheritancePrefix>(dictionary);
 
-			string name = "Ming The Merciless";
-			int numberOfFeet = 2;
-			int numberOfHeads = 1;
-			int numberOfFingers = 3;
+			const string name = "Ming The Merciless";
+			const int numberOfFeet = 2;
+			const int numberOfHeads = 1;
+			const int numberOfFingers = 3;
 
 			person.Name = name;
 			person.NumberOfFeet = numberOfFeet;
@@ -198,7 +198,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.NumberOfHeads = numberOfHeads;
 			person.NumberOfFingers = numberOfFingers;
 
-			string[] keys = new string[dictionary.Keys.Count];
+			var keys = new string[dictionary.Keys.Count];
 			dictionary.Keys.CopyTo(keys, 0);
 
 			Assert.IsTrue(keys.Any(key => key == "Name"));

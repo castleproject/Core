@@ -182,7 +182,6 @@
     <Compile Include="Components.DictionaryAdapter\Attributes\XmlDefaultsAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\StringStorageAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\DictionaryAdapterExtensions.cs" />
-    <Compile Include="Components.DictionaryAdapter\DictionaryBehaviorComparer.cs" />
     <Compile Include="Components.DictionaryAdapter\IVirtual.cs" />
     <Compile Include="Components.DictionaryAdapter\MemberwiseEqualityHashCodeStrategy.cs" />
     <Compile Include="Components.DictionaryAdapter\DictionaryAdapterBase.Copy.cs" />

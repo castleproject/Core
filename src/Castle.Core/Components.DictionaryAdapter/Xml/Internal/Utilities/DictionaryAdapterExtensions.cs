@@ -23,8 +23,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		public static DictionaryAdapterMeta GetAdapterMeta(this DictionaryAdapterMeta source, Type type)
 		{
-			var descriptor = new PropertyDescriptor(GetSharedBehaviors(source));
-			descriptor.AddBehaviors(source.MetaInitializers);
+			var descriptor = new PropertyDescriptor(GetSharedBehaviors(source))
+				.AddBehaviors(source.MetaInitializers)
+				.AddBehaviors(source.Initializers);
 			return source.Factory.GetAdapterMeta(type, descriptor);
 		}	
 

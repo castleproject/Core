@@ -32,8 +32,7 @@ namespace Castle.Components.DictionaryAdapter
 			Descriptor = descriptor;
 			Factory = factory;
 
-			Properties = meta.Properties;
-			MergePropertyOverrides(meta);
+			MergeProperties(meta);
 		}
 
 		internal int? OldHashCode { get; set; }
@@ -85,11 +84,21 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		private void MergePropertyOverrides(DictionaryAdapterMeta meta)
+		private void MergeProperties(DictionaryAdapterMeta meta)
 		{
 			Properties = new Dictionary<string, PropertyDescriptor>();
 
-			var initializers = new HashSet<IDictionaryInitializer>(ReferenceEqualityComparer<IDictionaryInitializer>.Instance);
+			if (Descriptor == null)
+			{
+				Initializers = meta.Initializers;
+			}
+			else
+			{
+				Initializers = new PropertyDescriptor()
+					.AddBehaviors(meta.Initializers)
+					.AddBehaviors(Descriptor.Initializers).Initializers
+					.ToArray();
+			}
 
 			foreach (var property in meta.Properties)
 			{
@@ -98,13 +107,8 @@ namespace Castle.Components.DictionaryAdapter
 				if (Descriptor != null)
 					propertyDescriptor.AddBehaviors(Descriptor.Behaviors);
 
-				foreach (var initializer in propertyDescriptor.Initializers)
-					initializers.Add(initializer);
-
 				Properties.Add(property.Key, propertyDescriptor);
 			}
-
-			Initializers = initializers.ToArray();
 		}
 	}
 }

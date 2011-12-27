@@ -138,14 +138,15 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             [Test]
             public void Set()
             {
-                var xmlA = Xml("<Foo/>");
+                var xmlA = Xml(	"<Foo/>");
 				var xmlB = Xml("<Foo> <A> <B>b</B> </A> </Foo>");
                 var fooA = Create<IFoo>(xmlA);
 				var fooB = Create<IFoo>(xmlB);
 
                 fooA.A = fooB.A;
+				var b = fooB.A.B;
 
-				Assert.That(xmlA, XmlEquivalent.To(xmlB));
+                Assert.That(xmlA, XmlEquivalent.To(xmlB));
             }
 
             [Test]

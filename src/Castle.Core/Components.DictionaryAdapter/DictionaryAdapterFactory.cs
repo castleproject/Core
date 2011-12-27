@@ -200,7 +200,15 @@ namespace Castle.Components.DictionaryAdapter
 			CreateAdapterConstructor(typeBuilder);
 
 			object[] typeBehaviors;
-			var propertyMap = GetPropertyDescriptors(type, descriptor, out typeBehaviors);
+			var initializers = new PropertyDescriptor();
+			var propertyMap = GetPropertyDescriptors(type, initializers, out typeBehaviors);
+
+			if (descriptor != null)
+			{
+				initializers.AddBehaviors(descriptor.MetaInitializers)
+							.AddBehaviors(descriptor.Initializers);
+				typeBehaviors = typeBehaviors.Union(descriptor.PropertyBehaviors).ToArray();
+			}
 
 			CreateMetaProperty(typeBuilder, AdapterGetMeta, metaField);
 
@@ -210,12 +218,9 @@ namespace Castle.Components.DictionaryAdapter
 			}
 
 			var adapterType = typeBuilder.CreateType();
-			if (descriptor != null)
-			{
-				typeBehaviors = typeBehaviors.Union(descriptor.PropertyBehaviors).ToArray();
-			}
 			var metaBindings = BindingFlags.Public | BindingFlags.Static | BindingFlags.SetField;
-			var meta = new DictionaryAdapterMeta(type, typeBehaviors, propertyMap, this);
+			var meta = new DictionaryAdapterMeta(type, typeBehaviors,
+				initializers.MetaInitializers.ToArray(), initializers.Initializers.ToArray(), propertyMap, this);
 			adapterType.InvokeMember("__meta", metaBindings, null, null, new[] { meta });
 
 			return typeBuilder.Assembly;
@@ -392,35 +397,34 @@ namespace Castle.Components.DictionaryAdapter
 		#region Property Descriptors
 
 		private static Dictionary<String, PropertyDescriptor> GetPropertyDescriptors(
-			Type type, PropertyDescriptor propertyOverrides, out object[] typeBehaviors)
+			Type type, PropertyDescriptor initializers, out object[] typeBehaviors)
 		{
 			var propertyMap = new Dictionary<String, PropertyDescriptor>();
 			var interfaceBehaviors = typeBehaviors = ExpandBehaviors(AttributesUtil.GetTypeAttributes<object>(type)).ToArray();
 			var defaultFetch = typeBehaviors.OfType<FetchAttribute>().Select(b => b.Fetch).FirstOrDefault();
 
+			initializers.AddBehaviors(typeBehaviors.OfType<IDictionaryMetaInitializer>())
+						.AddBehaviors(typeBehaviors.OfType<IDictionaryInitializer>());
+
 			CollectProperties(type, property =>
 			{
 				var propertyBehaviors = ExpandBehaviors(AttributesUtil.GetAttributes<object>(property)).ToArray();
-				var propertyDescriptor = new PropertyDescriptor(property, propertyBehaviors);
-
-				var descriptorInitializers = propertyBehaviors.OfType<IPropertyDescriptorInitializer>();
-				foreach (var descriptorInitializer in descriptorInitializers.OrderBy(b => b.ExecutionOrder))
-				{
-					descriptorInitializer.Initialize(propertyDescriptor, propertyBehaviors);	
-				}
-
-				propertyDescriptor
+				var propertyDescriptor = new PropertyDescriptor(property, propertyBehaviors)
 					.AddBehaviors(propertyBehaviors.OfType<IDictionaryBehavior>())
-					.AddBehaviors(interfaceBehaviors.OfType<IDictionaryBehavior>().Where(behavior => behavior is IDictionaryKeyBuilder == false))
+					.AddBehaviors(interfaceBehaviors.OfType<IDictionaryBehavior>().Where(b => b is IDictionaryKeyBuilder == false))
 					.AddBehaviors(ExpandBehaviors(AttributesUtil.GetTypeAttributes<object>(property.ReflectedType)).OfType<IDictionaryKeyBuilder>());
 				AddDefaultGetter(propertyDescriptor);
-
-				if (propertyOverrides != null)
-					propertyDescriptor.AddBehaviors(propertyOverrides.Behaviors);
 
 				bool? propertyFetch = (from b in propertyBehaviors.OfType<FetchAttribute>() select b.Fetch).FirstOrDefault();
 				propertyDescriptor.IfExists = propertyBehaviors.OfType<IfExistsAttribute>().Any();
 				propertyDescriptor.Fetch = propertyFetch.GetValueOrDefault(defaultFetch);
+
+				foreach (var descriptorInitializer in propertyDescriptor.Behaviors.OfType<IPropertyDescriptorInitializer>())
+				{
+					descriptorInitializer.Initialize(propertyDescriptor, propertyBehaviors);
+				}
+
+				initializers.AddBehaviors(propertyBehaviors.OfType<IDictionaryMetaInitializer>());
 
 				PropertyDescriptor existingDescriptor;
 				if (propertyMap.TryGetValue(property.Name, out existingDescriptor))
@@ -507,7 +511,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static String GetAdapterFullTypeName(Type type)
 		{
-			return type.Namespace + "." + GetAdapterTypeName(type);
+			return String.Format("{0}.{1}", type.Namespace, GetAdapterTypeName(type));
 		}
 
 		private static String GetAdapterTypeName(Type type)
