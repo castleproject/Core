@@ -205,8 +205,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (descriptor != null)
 			{
-				initializers.AddBehaviors(descriptor.MetaInitializers)
-							.AddBehaviors(descriptor.Initializers);
+				initializers.AddBehaviors(descriptor.MetaInitializers);
 				typeBehaviors = typeBehaviors.Union(descriptor.PropertyBehaviors).ToArray();
 			}
 
