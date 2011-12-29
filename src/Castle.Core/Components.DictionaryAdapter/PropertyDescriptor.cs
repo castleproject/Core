@@ -352,7 +352,7 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					if (dictionaryBehaviors == null)
 					{
-						dictionaryBehaviors = new List<IDictionaryBehavior>(8);
+						dictionaryBehaviors = new List<IDictionaryBehavior>();
 					}
 
 					int? insertAt = null;

@@ -23,22 +23,27 @@ namespace Castle.Components.DictionaryAdapter
 	public class DictionaryAdapterMeta
 	{
 		private IDictionary extendedProperties;
+		private readonly Func<DictionaryAdapterInstance, IDictionaryAdapter> creator;
 
-		public DictionaryAdapterMeta(Type type, object[] behaviors, IDictionaryMetaInitializer[] metaInitializers, 
-			                         IDictionaryInitializer[] initializers, IDictionary<String, PropertyDescriptor> properties, 
-			                         IDictionaryAdapterFactory factory)
+		public DictionaryAdapterMeta(Type type, Type implementation, object[] behaviors, IDictionaryMetaInitializer[] metaInitializers, 
+			                         IDictionaryInitializer[] initializers, IDictionary<String, PropertyDescriptor> properties,
+									 IDictionaryAdapterFactory factory, Func<DictionaryAdapterInstance, IDictionaryAdapter> creator)
 		{
 			Type = type;
-			Factory = factory;
+			Implementation = implementation;
 			Behaviors = behaviors;
 			MetaInitializers = metaInitializers;
 			Initializers = initializers;
 			Properties = properties;
+			Factory = factory;
+			this.creator = creator;
 
 			InitializeMeta();
 		}
 
 		public Type Type { get; private set; }
+
+		public Type Implementation { get; private set; }
 
 		public object[] Behaviors { get; private set; }
 
@@ -60,6 +65,12 @@ namespace Castle.Components.DictionaryAdapter
 				}
 				return extendedProperties;
 			}
+		}
+
+		internal object CreateInstance(IDictionary dictionary, PropertyDescriptor descriptor)
+		{
+			var instance = new DictionaryAdapterInstance(dictionary, this, descriptor, Factory);
+			return creator(instance);
 		}
 
 		private void InitializeMeta()
