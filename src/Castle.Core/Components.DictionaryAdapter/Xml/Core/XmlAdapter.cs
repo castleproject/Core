@@ -276,7 +276,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (string.IsNullOrEmpty(key))
 				accessor = CreateAccessor(key, property, XmlSelfAccessor.Factory);
 
-			foreach (var behavior in property.PropertyBehaviors)
+			foreach (var behavior in property.Annotations)
 			{
 				if (IsIgnoreBehavior(behavior))
 					return XmlIgnoreBehaviorAccessor.Instance;

@@ -33,25 +33,25 @@ namespace Castle.Components.DictionaryAdapter
 		private Dictionary<object, object> extendedProperties;
 		protected List<IDictionaryBehavior> dictionaryBehaviors;
 
-		private static readonly object[] NoBehaviors = new object[0];
+		private static readonly object[] NoAnnotations = new object[0];
 
 		/// <summary>
 		/// Initializes an empty <see cref="PropertyDescriptor"/> class.
 		/// </summary>
 		public PropertyDescriptor()
 		{
-			PropertyBehaviors = NoBehaviors;
+			Annotations = NoAnnotations;
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PropertyDescriptor"/> class.
 		/// </summary>
 		/// <param name="property">The property.</param>
-		/// <param name="behaviors">The property behaviors.</param>
-		public PropertyDescriptor(PropertyInfo property, object[] behaviors) : this()
+		/// <param name="annotations">The annotations.</param>
+		public PropertyDescriptor(PropertyInfo property, object[] annotations) : this()
 		{
 			Property = property;
-			PropertyBehaviors = behaviors ?? NoBehaviors;
+			Annotations = annotations ?? NoAnnotations;
 			IsDynamicProperty = typeof(IDynamicValue).IsAssignableFrom(property.PropertyType);
 			ObtainTypeConverter();
 		}
@@ -59,9 +59,9 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Initializes a new instance <see cref="PropertyDescriptor"/> class.
 		/// </summary>
-		public PropertyDescriptor(object[] behaviors)
+		public PropertyDescriptor(object[] annotations)
 		{
-			PropertyBehaviors = behaviors ?? NoBehaviors;
+			Annotations = annotations ?? NoAnnotations;
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace Castle.Components.DictionaryAdapter
 		public PropertyDescriptor(PropertyDescriptor source, bool copyBehaviors)
 		{
 			Property = source.Property;
-			PropertyBehaviors = source.PropertyBehaviors;
+			Annotations = source.Annotations;
 			IsDynamicProperty = source.IsDynamicProperty;
 			TypeConverter = source.TypeConverter;
 			SuppressNotifications = source.SuppressNotifications;
@@ -155,7 +155,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets the property behaviors.
 		/// </summary>
-		public object[] PropertyBehaviors { get; private set; }
+		public object[] Annotations { get; private set; }
 
 		/// <summary>
 		/// Gets the type converter.
@@ -359,10 +359,10 @@ namespace Castle.Components.DictionaryAdapter
 					var duplicate = false;
 					for (var i = dictionaryBehaviors.Count - 1; i >= 0; --i)
 					{
-						var dictionaryBehavior = dictionaryBehaviors[i];
-						if (dictionaryBehavior.ExecutionOrder == behavior.ExecutionOrder)
+						var existingBehavior = dictionaryBehaviors[i];
+						if (existingBehavior.ExecutionOrder == behavior.ExecutionOrder)
 						{
-							if (Equals(dictionaryBehavior, behavior))
+							if (Equals(existingBehavior, behavior))
 							{
 								duplicate = true;
 								break;
@@ -372,7 +372,7 @@ namespace Castle.Components.DictionaryAdapter
 								insertAt = i + 1;
 							}
 						}
-						else if (dictionaryBehavior.ExecutionOrder < behavior.ExecutionOrder)
+						else if (existingBehavior.ExecutionOrder < behavior.ExecutionOrder)
 						{
 							if (insertAt.HasValue == false)
 							{

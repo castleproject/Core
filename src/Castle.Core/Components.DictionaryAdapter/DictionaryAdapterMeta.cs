@@ -67,7 +67,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		internal object CreateInstance(IDictionary dictionary, PropertyDescriptor descriptor)
+		public object CreateInstance(IDictionary dictionary, PropertyDescriptor descriptor)
 		{
 			var instance = new DictionaryAdapterInstance(dictionary, this, descriptor, Factory);
 			return creator(instance);
