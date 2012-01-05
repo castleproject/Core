@@ -12,28 +12,39 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SILVERLIGHT
 namespace Castle.Components.DictionaryAdapter
 {
-	using System;
 	using System.ComponentModel;
 
-	/// <summary>
-	/// Contract for managing Dictionary adapter notifications.
-	/// </summary>
-	public interface IDictionaryNotify :
-#if !SILVERLIGHT
-		INotifyPropertyChanging,
-#endif
-		INotifyPropertyChanged
+	public class PropertyChangingEventArgsEx : PropertyChangingEventArgs
 	{
-		bool CanNotify { get; }
+		private readonly object oldValue;
+		private readonly object newValue;
+		private bool            cancel;
 
-		bool ShouldNotify { get; }
+		public PropertyChangingEventArgsEx(string propertyName, object oldValue, object newValue)
+			: base(propertyName)
+		{
+			this.oldValue = oldValue;
+			this.newValue = newValue;
+		}
 
-		IDisposable SuppressNotificationsBlock();
+		public object OldValue
+		{
+			get { return oldValue; }
+		}
 
-		void SuppressNotifications();
+		public object NewValue
+		{
+			get { return newValue; }
+		}
 
-		void ResumeNotifications();
+		public bool Cancel
+		{
+			get { return cancel; }
+			set { cancel = value; }
+		}
 	}
 }
+#endif

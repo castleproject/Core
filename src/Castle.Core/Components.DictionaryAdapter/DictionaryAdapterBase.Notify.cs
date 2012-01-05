@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,16 +21,13 @@ namespace Castle.Components.DictionaryAdapter
 
 	public abstract partial class DictionaryAdapterBase
 	{
-		private int suppressNotificationCount = 0;
-		private bool propagateChildNotifications = true;
-		private Dictionary<object, object> composedChildNotifications;
-
 		[ThreadStatic]
-		private static TrackPropertyChangeScope readonlyTrackingScope;
+		private static TrackPropertyChangeScope readOnlyTrackingScope;
+
+		private int suppressNotificationCount = 0;
 
 		public event PropertyChangingEventHandler PropertyChanging;
-		public event PropertyChangedEventHandler PropertyChanged;
-
+		public event PropertyChangedEventHandler  PropertyChanged;
 
 		public bool CanNotify { get; set; }
 
@@ -39,15 +36,9 @@ namespace Castle.Components.DictionaryAdapter
 			get { return CanNotify && suppressNotificationCount == 0; }
 		}
 
-		public bool PropagateChildNotifications
-		{
-			get { return propagateChildNotifications; }
-			set { propagateChildNotifications = value; }
-		}
-
 		public IDisposable SuppressNotificationsBlock()
 		{
-			return new SuppressNotificationsScope(this);
+			return new NotificationSuppressionScope(this);
 		}
 
 		public void SuppressNotifications()
@@ -59,174 +50,67 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			--suppressNotificationCount;
 		}
+
 		protected bool NotifyPropertyChanging(PropertyDescriptor property, object oldValue, object newValue)
 		{
-			if (property.SuppressNotifications == false)
-			{
-				var propertyChanging = PropertyChanging;
+			if (property.SuppressNotifications)
+				return true;
 
-				if (propertyChanging != null)
-				{
-					var eventArgs = new PropertyModifyingEventArgs(property.PropertyName, oldValue, newValue);
-					propertyChanging(this, eventArgs);
-					return !eventArgs.Cancel;
-				}
-			}
-			return true;
+			var propertyChanging = PropertyChanging;
+			if (propertyChanging == null)
+				return true;
+
+			var args = new PropertyChangingEventArgsEx(property.PropertyName, oldValue, newValue);
+			propertyChanging(this, args);
+			return !args.Cancel;
 		}
 
 		protected void NotifyPropertyChanged(PropertyDescriptor property, object oldValue, object newValue)
 		{
-			if (property.SuppressNotifications == false)
-			{
-				var propertyChanged = PropertyChanged;
+			if (property.SuppressNotifications)
+				return;
 
-				ComposeChildNotifications(property, oldValue, newValue);
+			var propertyChanged = PropertyChanged;
+			if (propertyChanged == null)
+				return;
 
-				if (propertyChanged != null)
-				{
-					propertyChanged(this, new PropertyModifiedEventArgs(property.PropertyName, oldValue, newValue));
-				}
-			}
+			propertyChanged(this, new PropertyChangedEventArgsEx(property.PropertyName, oldValue, newValue));
 		}
 
 		protected void NotifyPropertyChanged(string propertyName)
 		{
-			if (ShouldNotify)
-			{
-				var propertyChanged = PropertyChanged;
+			if (!ShouldNotify)
+				return;
 
-				if (propertyChanged != null)
-				{
-					propertyChanged(this, new PropertyChangedEventArgs(propertyName));
-				}
-			}
+			var propertyChanged = PropertyChanged;
+			if (propertyChanged == null)
+				return;
+
+			propertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
 
 		protected TrackPropertyChangeScope TrackPropertyChange(PropertyDescriptor property, 
 															   object oldValue, object newValue)
 		{
-			if (ShouldNotify && !property.SuppressNotifications)
-			{
-				return new TrackPropertyChangeScope(this, property, oldValue);
-			}
-			return null;
+			if (!ShouldNotify || property.SuppressNotifications)
+				return null;
+
+			return new TrackPropertyChangeScope(this, property, oldValue);
 		}
 
 		protected TrackPropertyChangeScope TrackReadonlyPropertyChanges()
 		{
-			if (ShouldNotify && readonlyTrackingScope == null)
-			{
-				var scope = new TrackPropertyChangeScope(this);
-				readonlyTrackingScope = scope;
-				return scope;
-			}
-			return null;
+			if (!ShouldNotify || readOnlyTrackingScope != null)
+				return null;
+
+			return readOnlyTrackingScope = new TrackPropertyChangeScope(this);
 		}
 
-		private void ComposeChildNotifications(PropertyDescriptor property, object oldValue, object newValue)
-		{
-			if (composedChildNotifications == null)
-				composedChildNotifications = new Dictionary<object, object>();
-
-			if (oldValue != null)
-			{
-				object handler;
-				if (composedChildNotifications.TryGetValue(oldValue, out handler))
-				{
-					composedChildNotifications.Remove(oldValue);
-
-					if (oldValue is INotifyPropertyChanged)
-					{
-						((INotifyPropertyChanged)oldValue).PropertyChanged -= Child_PropertyChanged;
-#if !SILVERLIGHT
-						if (oldValue is INotifyPropertyChanging)
-						{
-							((INotifyPropertyChanging)oldValue).PropertyChanging -= Child_PropertyChanging;
-						}
-					}
-					else if (oldValue is IBindingList)
-					{
-						((IBindingList)oldValue).ListChanged -= (ListChangedEventHandler)handler;
-#endif
-					}
-				}
-			}
-
-			if (newValue != null && !composedChildNotifications.ContainsKey(newValue))
-			{
-				if (newValue is INotifyPropertyChanged)
-				{
-					((INotifyPropertyChanged)newValue).PropertyChanged += Child_PropertyChanged;
-					
-#if !SILVERLIGHT
-					if (newValue is INotifyPropertyChanging)
-					{
-						((INotifyPropertyChanging)newValue).PropertyChanging += Child_PropertyChanging;
-					}
-
-					composedChildNotifications.Add(newValue, null);
-				}
-				else if (newValue is IBindingList)
-				{
-					ListChangedEventHandler handler = (sender, args) =>
-					{
-						if (propagateChildNotifications)
-						{
-							var propertyChanged = PropertyChanged;
-
-							if (propertyChanged != null)
-							{
-								if (args.PropertyDescriptor != null)
-								{
-									var propertyName = args.PropertyDescriptor.Name;
-									propertyChanged(sender, new PropertyChangedEventArgs(propertyName));
-								}
-								propertyChanged(this, new PropertyChangedEventArgs(property.PropertyName));
-							}
-						}
-					};
-					((IBindingList)newValue).ListChanged += handler;
-
-					composedChildNotifications.Add(newValue, handler);
-#endif
-				}
-			}
-		}
-
-		private void Child_PropertyChanging(object sender, PropertyChangingEventArgs e)
-		{
-			if (propagateChildNotifications)
-			{
-				var propertyChanging = PropertyChanging;
-
-				if (propertyChanging != null)
-				{
-					propertyChanging(sender, e);
-				}
-			}
-		}
-
-		private void Child_PropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			if (propagateChildNotifications)
-			{
-				var propertyChanged = PropertyChanged;
-
-				if (propertyChanged != null)
-				{
-					propertyChanged(sender, e);
-				}
-			}
-		}
-
-		#region Nested Class: SuppressNotificationsScope
-
-		class SuppressNotificationsScope : IDisposable
+		private class NotificationSuppressionScope : IDisposable
 		{
 			private readonly DictionaryAdapterBase adapter;
 
-			public SuppressNotificationsScope(DictionaryAdapterBase adapter)
+			public NotificationSuppressionScope(DictionaryAdapterBase adapter)
 			{
 				this.adapter = adapter;
 				this.adapter.SuppressNotifications();
@@ -238,92 +122,94 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		#endregion
-
-		#region Nested Class: TrackPropertyChangeScope
-
 		public class TrackPropertyChangeScope : IDisposable
 		{
 			private readonly DictionaryAdapterBase adapter;
 			private readonly PropertyDescriptor property;
 			private readonly object existingValue;
-			private IDictionary<PropertyDescriptor, object> readonlyProperties;
+			private Dictionary<PropertyDescriptor, object> readOnlyProperties;
 
 			public TrackPropertyChangeScope(DictionaryAdapterBase adapter)
 			{
-				this.adapter = adapter;
-				readonlyProperties = adapter.This.Properties.Values.Where(
-					pd => !pd.Property.CanWrite || pd.IsDynamicProperty)
-					.ToDictionary(pd => pd, pd => GetEffectivePropertyValue(pd));
+				this.adapter            = adapter;
+				this.readOnlyProperties = adapter.This.Properties.Values
+					.Where(
+						pd => !pd.Property.CanWrite || pd.IsDynamicProperty
+					)
+					.ToDictionary(
+						pd => pd,
+						pd => GetEffectivePropertyValue(pd)
+					);
 			}
 
-			public TrackPropertyChangeScope(DictionaryAdapterBase adapter, PropertyDescriptor property,
-											object existingValue)
+			public TrackPropertyChangeScope(DictionaryAdapterBase adapter, PropertyDescriptor property, object existingValue)
 				: this(adapter)
 			{
-				this.property = property;
+				this.property      = property;
 				this.existingValue = existingValue;
-				existingValue = adapter.GetProperty(property.PropertyName, true);
-			}
-
-			public bool Notify()
-			{
-				if (readonlyTrackingScope == this)
-				{
-					readonlyTrackingScope = null;
-					return NotifyReadonly();
-				}
-
-				var newValue = GetEffectivePropertyValue(property);
-				if (NotifyIfChanged(property, existingValue, newValue))
-				{
-					if (readonlyTrackingScope == null)
-						NotifyReadonly();
-					return true;
-				}
-
-				return false;
-			}
-
-			private bool NotifyReadonly()
-			{
-				bool changed = false;
-				foreach (var readonlyProperty in readonlyProperties)
-				{
-					var descriptor = readonlyProperty.Key;
-					var currentValue = GetEffectivePropertyValue(descriptor);
-					changed |= NotifyIfChanged(descriptor, readonlyProperty.Value, currentValue);
-				}
-				adapter.Invalidate();
-				return changed;
-			}
-
-			private bool NotifyIfChanged(PropertyDescriptor descriptor, object oldValue, object newValue)
-			{
-				if (Object.Equals(oldValue, newValue) == false)
-				{
-					adapter.NotifyPropertyChanged(descriptor, oldValue, newValue);
-					return true;
-				}
-				return false;
-			}
-
-			private object GetEffectivePropertyValue(PropertyDescriptor property)
-			{
-				var value = adapter.GetProperty(property.PropertyName, true);
-				if (value != null & property.IsDynamicProperty)
-				{
-					value = ((IDynamicValue)value).GetValue();
-				}
-				return value;
+				existingValue      = adapter.GetProperty(property.PropertyName, true); // TODO: This looks unnecessary
 			}
 
 			public void Dispose()
 			{
 				Notify();
 			}
-		}
 
-		#endregion
+			public bool Notify()
+			{
+				if (readOnlyTrackingScope == this)
+				{
+					readOnlyTrackingScope = null;
+					return NotifyReadonly();
+				}
+
+				var newValue = GetEffectivePropertyValue(property);
+
+				if (!NotifyIfChanged(property, existingValue, newValue))
+					return false;
+
+				if (readOnlyTrackingScope == null)
+					NotifyReadonly();
+
+				return true;
+			}
+
+			private bool NotifyReadonly()
+			{
+				var changed = false;
+
+				foreach (var readOnlyProperty in readOnlyProperties)
+				{
+					var descriptor   = readOnlyProperty.Key;
+					var currentValue = GetEffectivePropertyValue(descriptor);
+					changed |= NotifyIfChanged(descriptor, readOnlyProperty.Value, currentValue);
+				}
+
+				adapter.Invalidate();
+				return changed;
+			}
+
+			private bool NotifyIfChanged(PropertyDescriptor descriptor, object oldValue, object newValue)
+			{
+				if (Equals(oldValue, newValue))
+					return false;
+
+				adapter.NotifyPropertyChanged(descriptor, oldValue, newValue);
+				return true;
+			}
+
+			private object GetEffectivePropertyValue(PropertyDescriptor property)
+			{
+				var value = adapter.GetProperty(property.PropertyName, true);
+				if (value == null || !property.IsDynamicProperty)
+					return value;
+
+				var dynamicValue = value as IDynamicValue;
+				if (dynamicValue == null)
+					return value;
+
+				return dynamicValue.GetValue();
+			}
+		}
 	}
 }

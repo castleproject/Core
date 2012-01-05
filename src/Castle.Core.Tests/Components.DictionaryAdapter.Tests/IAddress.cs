@@ -16,7 +16,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 {
 	using System.ComponentModel;
 
-	[PropagateNotifications(false)]
+	//[PropagateNotifications(false)]
 	public interface IAddress : IEditableObject, INotifyPropertyChanged, IDataErrorInfo
 	{
 		string Line1 { get; set; }

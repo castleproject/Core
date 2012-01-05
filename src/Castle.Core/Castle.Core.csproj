@@ -190,6 +190,8 @@
     <Compile Include="Components.DictionaryAdapter\IDictionaryCoerceStrategy.cs" />
     <Compile Include="Components.DictionaryAdapter\IDictionaryBehaviorBuilder.cs" />
     <Compile Include="Components.DictionaryAdapter\GenericDictionaryAdapter.cs" />
+    <Compile Include="Components.DictionaryAdapter\PropertyChangedEventArgsEx.cs" />
+    <Compile Include="Components.DictionaryAdapter\PropertyChangingEventArgsEx.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\BindingList.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\IBindingList.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\IBindingListSource.cs" />
@@ -309,7 +311,6 @@
     <Compile Include="Components.DictionaryAdapter\Attributes\MultiLevelEditAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\NewGuidAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\OnDemandAttribute.cs" />
-    <Compile Include="Components.DictionaryAdapter\Attributes\PropagateNotificationsAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\StringFormatAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\StringListAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\StringValuesAttribute.cs" />

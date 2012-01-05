@@ -55,7 +55,6 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					AddEditDependency((IEditableObject)propertyValue);
 				}
-				ComposeChildNotifications(descriptor, null, propertyValue);
 				return propertyValue;
 			}
 			return null;

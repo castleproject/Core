@@ -695,11 +695,11 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var person = factory.GetAdapter<IPerson>(dictionary);
 			person.PropertyChanged += (s, e) =>
 			{
-				var details = e as PropertyModifiedEventArgs;
+				var details = e as PropertyChangedEventArgsEx;
 				if (details != null)
 				{
-					Assert.AreEqual(null, details.OldPropertyValue);
-					Assert.AreEqual("Craig", details.NewPropertyValue);
+					Assert.AreEqual(null, details.OldValue);
+					Assert.AreEqual("Craig", details.NewValue);
 				}
 			};
 
@@ -712,7 +712,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var person = factory.GetAdapter<IPerson>(dictionary);
 			person.PropertyChanging += (s, e) =>
 			{
-				((PropertyModifyingEventArgs)e).Cancel = true;
+				((PropertyChangingEventArgsEx)e).Cancel = true;
 			};
 
 			person.Name = "Craig";
@@ -739,23 +739,15 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
-		public void WillPropagatePropertyChangedEventWhenNestedPropertyChanged()
+		public void WillNotPropagatePropertyChangedEventWhenNestedPropertyChanged()
 		{
-			var notifyCalled = false;
 			var container = factory.GetAdapter<IItemContainerWithComponent<IPerson>>(dictionary);
 			container.PropertyChanged += (s, e) =>
 			{
-				if (!notifyCalled)
-				{
-					notifyCalled = true;
-					Assert.AreSame(container.Item, s);
-					Assert.IsInstanceOf<IPerson>(s);
-					Assert.AreEqual("Name", e.PropertyName);
-				}
+				Assert.Fail("Property change event was raised from wrong object.");
 			};
 
 			container.Item.Name = "Craig";
-			Assert.IsTrue(notifyCalled);
 		}
 		
 #if !SILVERLIGHT //no BindingList in Silverlight
@@ -1274,7 +1266,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				if (e.PropertyName == "ReducePositions")
 				{
 					notifyCalled = true;
-					Assert.AreEqual(10, ((PropertyModifiedEventArgs)e).NewPropertyValue);
+					Assert.AreEqual(10, ((PropertyChangedEventArgsEx)e).NewValue);
 				}
 			};
 

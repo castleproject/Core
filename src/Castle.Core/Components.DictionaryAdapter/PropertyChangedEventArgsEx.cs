@@ -14,26 +14,28 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-	using System;
 	using System.ComponentModel;
 
-	/// <summary>
-	/// Contract for managing Dictionary adapter notifications.
-	/// </summary>
-	public interface IDictionaryNotify :
-#if !SILVERLIGHT
-		INotifyPropertyChanging,
-#endif
-		INotifyPropertyChanged
+	public class PropertyChangedEventArgsEx : PropertyChangedEventArgs
 	{
-		bool CanNotify { get; }
+		private readonly object oldValue;
+		private readonly object newValue;
 
-		bool ShouldNotify { get; }
+		public PropertyChangedEventArgsEx(string propertyName, object oldValue, object newValue)
+			: base(propertyName)
+		{
+			this.oldValue = oldValue;
+			this.newValue = newValue;
+		}
 
-		IDisposable SuppressNotificationsBlock();
+		public object OldValue
+		{
+			get { return oldValue; }
+		}
 
-		void SuppressNotifications();
-
-		void ResumeNotifications();
+		public object NewValue
+		{
+			get { return newValue; }
+		}
 	}
 }
