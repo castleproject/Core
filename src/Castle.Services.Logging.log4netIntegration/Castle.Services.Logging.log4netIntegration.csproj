@@ -204,6 +204,7 @@
     <Compile Include="Log4netLogger.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SecurityAssemblyInfo.cs" />
     <Compile Include="ThreadContextProperties.cs" />
     <Compile Include="ThreadContextStack.cs" />
     <Compile Include="ThreadContextStacks.cs" />

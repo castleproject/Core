@@ -188,6 +188,7 @@
     <Compile Include="GlobalContextProperties.cs" />
     <Compile Include="NLogFactory.cs" />
     <Compile Include="NLogLogger.cs" />
+    <Compile Include="SecurityAssemblyInfo.cs" />
     <Compile Include="ThreadContextProperties.cs" />
     <Compile Include="ThreadContextStack.cs" />
     <Compile Include="ThreadContextStacks.cs" />

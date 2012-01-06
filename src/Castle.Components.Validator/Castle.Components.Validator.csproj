@@ -132,6 +132,7 @@
     </Compile>
     <Compile Include="CachedValidationRegistry.cs" />
     <Compile Include="AccessorUtil.cs" />
+    <Compile Include="SecurityAssemblyInfo.cs" />
     <Compile Include="ValidationException.cs" />
     <Compile Include="ValidationInternalError.cs" />
     <Compile Include="Attributes\ValidatorContainerInterfaceFlagAttribute.cs" />

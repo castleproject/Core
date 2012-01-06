@@ -86,6 +86,7 @@
     <Compile Include="IPaginatedPage.cs" />
     <Compile Include="Page.cs" />
     <Compile Include="PaginationSupport.cs" />
+    <Compile Include="SecurityAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\buildscripts\CastleKey.snk">

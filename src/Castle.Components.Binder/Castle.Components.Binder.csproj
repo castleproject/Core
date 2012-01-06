@@ -123,6 +123,7 @@
     <Compile Include="Node.cs" />
     <Compile Include="NullableConverter.cs" />
     <Compile Include="ExactMatchConverter.cs" />
+    <Compile Include="SecurityAssemblyInfo.cs" />
     <Compile Include="StringConverter.cs" />
     <Compile Include="TypeConverterAdapter.cs" />
     <Compile Include="PrimitiveConverter.cs" />
