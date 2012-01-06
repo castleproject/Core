@@ -53,7 +53,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		protected IXmlKnownTypeMap KnownTypes
 		{
-			get { return (IXmlKnownTypeMap) knownTypes ?? this; }
+			get
+			{
+				if (knownTypes != null)
+					return knownTypes;
+				return this;
+			}
 		}
 
 		IXmlKnownType IXmlKnownTypeMap.Default
