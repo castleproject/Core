@@ -182,14 +182,18 @@ namespace Castle.Components.DictionaryAdapter
 
 		protected void Initialize()
 		{
-			foreach (var initializer in This.Initializers)
+			var metaBehaviors = Meta.Behaviors;
+			var initializers  = This.Initializers;
+
+			foreach (var initializer in initializers)
 			{
-				initializer.Initialize(this, Meta.Behaviors);
+				initializer.Initialize(this, metaBehaviors);
 			}
 
-			foreach (var property in This.Properties.Values.Where(p => p.Fetch))
+			foreach (var property in This.Properties.Values)
 			{
-				GetProperty(property.PropertyName, false);
+				if (property.Fetch)
+					GetProperty(property.PropertyName, false);
 			}
 		}
 

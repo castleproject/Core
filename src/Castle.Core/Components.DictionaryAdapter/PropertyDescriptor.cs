@@ -176,6 +176,11 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
+		internal List<IDictionaryBehavior> BehaviorsInternal
+		{
+			get { return dictionaryBehaviors; }
+		}
+
 		/// <summary>
 		/// Gets the key builders.
 		/// </summary>
@@ -333,13 +338,29 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="behavior">The behavior.</param>
 		public PropertyDescriptor AddBehavior(IDictionaryBehavior behavior)
 		{
+			if (behavior == null)
+				return this;
+
+			var builder = behavior as IDictionaryBehaviorBuilder;
+			if (builder == null)
+				MergeBehavior(ref dictionaryBehaviors, behavior);
+			else
+				foreach (var item in builder.BuildBehaviors())
+					AddBehavior(item as IDictionaryBehavior);
+
+			return this;
+		}
+
+		public static void MergeBehavior<T>(ref List<T> dictionaryBehaviors, T behavior)
+			where T : class, IDictionaryBehavior
+		{
 			var behaviors = dictionaryBehaviors;
 			if (behaviors == null)
 			{
-				behaviors = new List<IDictionaryBehavior>();
+				behaviors = new List<T>();
 				behaviors.Add(behavior);
 				dictionaryBehaviors = behaviors;
-				return this;
+				return;
 			}
 
 			// The following is ugly but supposedly optimized
@@ -364,7 +385,7 @@ namespace Castle.Components.DictionaryAdapter
 				if (++index == count)
 				{
 					behaviors.Add(behavior);
-					return this;
+					return;
 				}
 			}
 
@@ -375,12 +396,12 @@ namespace Castle.Components.DictionaryAdapter
 					break;
 
 				if (candidateBehavior == behavior)
-					return this; // Duplicate
+					return; // Duplicate
 
 				if (++index == count)
 				{
 					behaviors.Add(behavior);
-					return this;
+					return;
 				}
 
 				candidateBehavior = behaviors[index];
@@ -389,7 +410,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			// Insert at found index
 			behaviors.Insert(index, behavior);
-			return this;
+			return;
 		}
 
 		/// <summary>
@@ -413,26 +434,6 @@ namespace Castle.Components.DictionaryAdapter
 			if (behaviors != null)
 				foreach (var behavior in behaviors)
 					AddBehavior(behavior);
-			return this;
-		}
-
-		/// <summary>
-		/// Adds the behaviors from the builders.
-		/// </summary>
-		/// <param name="builders"></param>
-		/// <returns></returns>
-		public PropertyDescriptor AddBehaviors(params IDictionaryBehaviorBuilder[] builders)
-		{
-			// DO NOT REFACTOR. Compiler will emit optimized iterator here.
-			foreach (var builder in builders)
-			{
-				foreach (var item in builder.BuildBehaviors())
-				{
-					var behavior = item as IDictionaryBehavior;
-					if (behavior != null)
-						AddBehavior(behavior);
-				}
-			}
 			return this;
 		}
 

@@ -102,7 +102,8 @@ namespace Castle.Components.DictionaryAdapter
 		{
 		    var xml = new XmlAdapter(xmlNode);
 			return GetAdapter(type, new Hashtable(), new PropertyDescriptor()
-				.AddBehaviors(XmlMetadataBehavior.Instance, xml));
+				.AddBehavior(XmlMetadataBehavior.Instance)
+				.AddBehavior(xml));
 		}
 #endif
 #endif
@@ -490,7 +491,7 @@ namespace Castle.Components.DictionaryAdapter
 		private static void AddDefaultGetter(PropertyDescriptor descriptor)
 		{
 			if (descriptor.TypeConverter != null)
-				descriptor.AddBehaviors(new DefaultPropertyGetter(descriptor.TypeConverter));
+				descriptor.AddBehavior(new DefaultPropertyGetter(descriptor.TypeConverter));
 		}
 
 		private static readonly HashSet<Type> InfrastructureTypes =	new HashSet<Type>

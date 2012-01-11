@@ -41,7 +41,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			var descriptor = new PropertyDescriptor(GetSharedBehaviors(parent.Meta));
 		    parent.This.Descriptor.CopyBehaviors(descriptor);
-		    descriptor.AddBehaviors(adapter);
+		    descriptor.AddBehavior(adapter);
 
 		    return parent.This.Factory.GetAdapter(type, dictionary, descriptor);
 		}

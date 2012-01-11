@@ -30,9 +30,20 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			Dictionary = dictionary;
 			Descriptor = descriptor;
-			Factory = factory;
+			Factory    = factory;
 
-			MergeProperties(meta);
+			List<IDictionaryBehavior> behaviors;
+
+			if (null == descriptor || null == (behaviors = descriptor.BehaviorsInternal))
+			{
+				Initializers = meta.Initializers;
+				Properties   = MergeProperties(meta.Properties);
+			}
+			else
+			{
+				Initializers = MergeInitializers(meta.Initializers, behaviors);
+				Properties   = MergeProperties(meta.Properties, behaviors);
+			}
 		}
 
 		internal int? OldHashCode { get; set; }
@@ -84,31 +95,60 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		private void MergeProperties(DictionaryAdapterMeta meta)
+		private static IDictionaryInitializer[] MergeInitializers(
+			IDictionaryInitializer[] source, List<IDictionaryBehavior> behaviors)
 		{
-			Properties = new Dictionary<string, PropertyDescriptor>();
+			int index, count;
+			IDictionaryInitializer initializer;
+			var result = null as List<IDictionaryInitializer>;
 
-			if (Descriptor == null)
-			{
-				Initializers = meta.Initializers;
-			}
-			else
-			{
-				Initializers = new PropertyDescriptor()
-					.AddBehaviors(meta.Initializers)
-					.AddBehaviors(Descriptor.Initializers).Initializers
-					.ToArray();
-			}
+			count = source.Length;
+			for (index = 0; index < count; index++)
+				PropertyDescriptor.MergeBehavior(ref result, source[index]);
 
-			foreach (var property in meta.Properties)
-			{
-				var propertyDescriptor = new PropertyDescriptor(property.Value, true);
+			count = behaviors.Count;
+			for (index = 0; index < count; index++)
+				if (null != (initializer = behaviors[index] as IDictionaryInitializer))
+					PropertyDescriptor.MergeBehavior(ref result, initializer);
 
-				if (Descriptor != null)
-					propertyDescriptor.AddBehaviors(Descriptor.Behaviors);
-
-				Properties.Add(property.Key, propertyDescriptor);
-			}
+			return result == null
+				? NoInitializers
+				: result.ToArray();
 		}
+
+		private static IDictionary<string, PropertyDescriptor> MergeProperties(
+			IDictionary<string, PropertyDescriptor> source)
+		{
+			var properties = new Dictionary<string, PropertyDescriptor>();
+
+			foreach (var sourceProperty in source)
+			{
+				properties[sourceProperty.Key] = new PropertyDescriptor(sourceProperty.Value, true);
+			}
+
+			return properties;
+		}
+
+		private static IDictionary<string, PropertyDescriptor> MergeProperties(
+			IDictionary<string, PropertyDescriptor> source, List<IDictionaryBehavior> behaviors)
+		{
+			int index, count = behaviors.Count;
+			var properties = new Dictionary<string, PropertyDescriptor>();
+
+			foreach (var sourceProperty in source)
+			{
+				var property = new PropertyDescriptor(sourceProperty.Value, true);
+
+				for (index = 0; index < count; index++)
+					property.AddBehavior(behaviors[index]);
+
+				properties[sourceProperty.Key] = property;
+			}
+
+			return properties;
+		}
+
+		private static readonly IDictionaryInitializer[]
+			NoInitializers = { };
 	}
 }
