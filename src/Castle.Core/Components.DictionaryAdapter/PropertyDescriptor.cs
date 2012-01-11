@@ -127,14 +127,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// </summary>
 		public IDictionary State
 		{
-			get
-			{
-				if (state == null)
-				{
-					state = new Dictionary<object, object>();
-				}
-				return state;
-			}
+			get { return state ?? (state = new Dictionary<object, object>()); }
 		}
 
 		/// <summary>
@@ -168,13 +161,18 @@ namespace Castle.Components.DictionaryAdapter
 		/// </summary>
 		public IDictionary ExtendedProperties
 		{
+			get { return extendedProperties ?? (extendedProperties = new Dictionary<object, object>()); }
+		}
+
+		/// <summary>
+		/// Gets the setter.
+		/// </summary>
+		/// <value>The setter.</value>
+		public IEnumerable<IDictionaryBehavior> Behaviors
+		{
 			get
 			{
-				if (extendedProperties == null)
-				{
-					extendedProperties = new Dictionary<object, object>();
-				}
-				return extendedProperties;
+				return dictionaryBehaviors ?? Enumerable.Empty<IDictionaryBehavior>();
 			}
 		}
 
@@ -189,18 +187,6 @@ namespace Castle.Components.DictionaryAdapter
 				return (dictionaryBehaviors != null)
 					? dictionaryBehaviors.OfType<IDictionaryKeyBuilder>() 
 					: Enumerable.Empty<IDictionaryKeyBuilder>();
-			}
-		}
-
-		/// <summary>
-		/// Gets the setter.
-		/// </summary>
-		/// <value>The setter.</value>
-		public IEnumerable<IDictionaryBehavior> Behaviors
-		{
-			get
-			{
-				return dictionaryBehaviors ?? Enumerable.Empty<IDictionaryBehavior>();
 			}
 		}
 
@@ -269,11 +255,15 @@ namespace Castle.Components.DictionaryAdapter
 		/// <returns></returns>
 		public string GetKey(IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor descriptor)
 		{
-			if (dictionaryBehaviors != null)
+			var behaviors = dictionaryBehaviors;
+			if (behaviors != null)
 			{
-				foreach (var builder in KeyBuilders)
+				var count = behaviors.Count;
+				for (int i = 0; i < count; i++)
 				{
-					key = builder.GetKey(dictionaryAdapter, key, this);
+					var builder = behaviors[i] as IDictionaryKeyBuilder;
+					if (builder != null)
+						key = builder.GetKey(dictionaryAdapter, key, this);
 				}
 			}
 			return key;
@@ -293,11 +283,15 @@ namespace Castle.Components.DictionaryAdapter
 			key = GetKey(dictionaryAdapter, key, descriptor);
 			storedValue = storedValue ?? dictionaryAdapter.ReadProperty(key);
 
-			if (dictionaryBehaviors != null)
+			var behaviors = dictionaryBehaviors;
+			if (behaviors != null)
 			{
-				foreach (var getter in Getters)
+				var count = behaviors.Count;
+				for (int i = 0; i < count; i++)
 				{
-					storedValue = getter.GetPropertyValue(dictionaryAdapter, key, storedValue, this, IfExists || ifExists);
+					var getter = behaviors[i] as IDictionaryPropertyGetter;
+					if (getter != null)
+						storedValue = getter.GetPropertyValue(dictionaryAdapter, key, storedValue, this, IfExists || ifExists);
 				}
 			}
 
@@ -316,14 +310,16 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			key = GetKey(dictionaryAdapter, key, descriptor);
 
-			if (dictionaryBehaviors != null)
+			var behaviors = dictionaryBehaviors;
+			if (behaviors != null)
 			{
-				foreach (var setter in Setters)
+				var count = behaviors.Count;
+				for (int i = 0; i < count; i++)
 				{
-					if (setter.SetPropertyValue(dictionaryAdapter, key, ref value, this) == false)
-					{
-						return false;
-					}
+					var setter = behaviors[i] as IDictionaryPropertySetter;
+					if (setter != null)
+						if (setter.SetPropertyValue(dictionaryAdapter, key, ref value, this) == false)
+							return false;
 				}
 			}
 
@@ -332,12 +328,80 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		/// <summary>
+		/// Adds a single behavior.
+		/// </summary>
+		/// <param name="behavior">The behavior.</param>
+		public PropertyDescriptor AddBehavior(IDictionaryBehavior behavior)
+		{
+			var behaviors = dictionaryBehaviors;
+			if (behaviors == null)
+			{
+				behaviors = new List<IDictionaryBehavior>();
+				behaviors.Add(behavior);
+				dictionaryBehaviors = behaviors;
+				return this;
+			}
+
+			// The following is ugly but supposedly optimized
+
+			// Locals using ldloc.#
+			var index = 0;
+			int candidatePriority;
+			var targetOrder = behavior.ExecutionOrder;
+			// Locals using ldloc.s
+			var count = behaviors.Count;
+			IDictionaryBehavior candidateBehavior;
+
+			// Skip while order < behavior.ExecutionOrder
+			for (;;)
+			{
+				candidateBehavior = behaviors[index];
+				candidatePriority = candidateBehavior.ExecutionOrder;
+
+				if (candidatePriority >= targetOrder)
+					break;
+
+				if (++index == count)
+				{
+					behaviors.Add(behavior);
+					return this;
+				}
+			}
+
+			// Skip while order == behavior.ExecutionOrder
+			for (;;)
+			{
+				if (candidatePriority != targetOrder)
+					break;
+
+				if (candidateBehavior == behavior)
+					return this; // Duplicate
+
+				if (++index == count)
+				{
+					behaviors.Add(behavior);
+					return this;
+				}
+
+				candidateBehavior = behaviors[index];
+				candidatePriority = candidateBehavior.ExecutionOrder;
+			}
+
+			// Insert at found index
+			behaviors.Insert(index, behavior);
+			return this;
+		}
+
+		/// <summary>
 		/// Adds the behaviors.
 		/// </summary>
 		/// <param name="behaviors">The behaviors.</param>
 		public PropertyDescriptor AddBehaviors(params IDictionaryBehavior[] behaviors)
 		{
-			return AddBehaviors((IEnumerable<IDictionaryBehavior>)behaviors);
+			// DO NOT REFACTOR. Compiler will emit optimized iterator here.
+			foreach (var behavior in behaviors)
+				AddBehavior(behavior);
+			return this;
 		}
 
 		/// <summary>
@@ -347,46 +411,8 @@ namespace Castle.Components.DictionaryAdapter
 		public PropertyDescriptor AddBehaviors(IEnumerable<IDictionaryBehavior> behaviors)
 		{
 			if (behaviors != null)
-			{
 				foreach (var behavior in behaviors)
-				{
-					if (dictionaryBehaviors == null)
-					{
-						dictionaryBehaviors = new List<IDictionaryBehavior>();
-					}
-
-					int? insertAt = null;
-					var duplicate = false;
-					for (var i = dictionaryBehaviors.Count - 1; i >= 0; --i)
-					{
-						var existingBehavior = dictionaryBehaviors[i];
-						if (existingBehavior.ExecutionOrder == behavior.ExecutionOrder)
-						{
-							if (Equals(existingBehavior, behavior))
-							{
-								duplicate = true;
-								break;
-							}
-							if (insertAt.HasValue == false)
-							{
-								insertAt = i + 1;
-							}
-						}
-						else if (existingBehavior.ExecutionOrder < behavior.ExecutionOrder)
-						{
-							if (insertAt.HasValue == false)
-							{
-								insertAt = i + 1;
-							}
-							break;
-						}
-					}
-					if (duplicate == false)
-					{
-						dictionaryBehaviors.Insert(insertAt.GetValueOrDefault(0), behavior);
-					}
-				}
-			}
+					AddBehavior(behavior);
 			return this;
 		}
 
@@ -397,7 +423,16 @@ namespace Castle.Components.DictionaryAdapter
 		/// <returns></returns>
 		public PropertyDescriptor AddBehaviors(params IDictionaryBehaviorBuilder[] builders)
 		{
-			AddBehaviors(builders.SelectMany(builder => builder.BuildBehaviors().OfType<IDictionaryBehavior>()));
+			// DO NOT REFACTOR. Compiler will emit optimized iterator here.
+			foreach (var builder in builders)
+			{
+				foreach (var item in builder.BuildBehaviors())
+				{
+					var behavior = item as IDictionaryBehavior;
+					if (behavior != null)
+						AddBehavior(behavior);
+				}
+			}
 			return this;
 		}
 
@@ -408,9 +443,16 @@ namespace Castle.Components.DictionaryAdapter
 		/// <returns></returns>
 		public PropertyDescriptor CopyBehaviors(PropertyDescriptor other)
 		{
-			if (dictionaryBehaviors != null)
+			var behaviors = dictionaryBehaviors;
+			if (behaviors != null)
 			{
-				other.AddBehaviors(dictionaryBehaviors.Select(b => b.Copy()).Where(b => b != null));
+				var count = behaviors.Count;
+				for (var i = 0; i < count; i++)
+				{
+					var behavior = behaviors[i].Copy();
+					if (behavior != null)
+						other.AddBehavior(behavior);
+				}
 			}
 			return this;
 		}
