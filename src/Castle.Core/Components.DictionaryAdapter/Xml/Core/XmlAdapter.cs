@@ -32,7 +32,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IDictionaryCreateStrategy,
 		IDictionaryCopyStrategy,
 		IDictionaryReferenceManager,
-		IVirtual
+		IVirtual,
+		IXmlNodeSource
 	{
 		private IXmlNode node;
 		private object source;

@@ -57,7 +57,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, ref object value)
 		{
-			var current = value as IXmlCollection;
+			var current = value as IXmlNodeSource;
 			if (current != null && current.Node.PositionEquals(node))
 				return;
 
@@ -65,7 +65,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (source == null)
 				throw Error.NotSupported();
 
-			var collection = (IXmlCollection) GetValue(node, parent, accessor);
+			var collection = (ICollectionProjection) GetValue(node, parent, accessor);
 			collection.Replace(source);
 			value = collection;
 		}

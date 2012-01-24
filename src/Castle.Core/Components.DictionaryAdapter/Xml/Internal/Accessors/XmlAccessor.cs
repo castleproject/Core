@@ -275,7 +275,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		protected void RemoveCollectionItems(IXmlNode parentNode, XmlReferenceManager references, object value)
 		{
-			var collection = value as IXmlCollection;
+			var collection = value as ICollectionProjection;
 			if (collection != null)
 			{
 				collection.Clear();

@@ -173,6 +173,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Compatibility\SilverlightHacks.cs" />
+    <Compile Include="Components.DictionaryAdapter\Util\ICollectionAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\ReferenceAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\XPathVariableAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\IfExistsAttribute.cs" />
@@ -195,10 +196,16 @@
     <Compile Include="Components.DictionaryAdapter\Util\BindingList.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\IBindingList.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\IBindingListSource.cs" />
+    <Compile Include="Components.DictionaryAdapter\Util\ICollectionAdapterObserver.cs" />
+    <Compile Include="Components.DictionaryAdapter\Util\ICollectionProjection.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ICondition.cs" />
+    <Compile Include="Components.DictionaryAdapter\Util\ListProjection.cs" />
+    <Compile Include="Components.DictionaryAdapter\Util\SetProjection.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Core\DefaultXmlReferenceFormat.cs" />
     <Compile Include="Components.DictionaryAdapter\IDictionaryReferenceManager.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Core\IXmlReferenceFormat.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Internal\Collections\XmlCollectionAdapter.cs" />
+    <Compile Include="Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlNodeSource.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlIterator.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Cursors\SystemXml\SysXmlSubtreeIterator.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlNodeBase.cs" />
@@ -208,7 +215,6 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlContextBase.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlContext.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Accessors\XmlSelfAccessor.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Internal\Collections\IXmlCollection.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Collections\XmlNodeSet.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Serializers\XmlCollectionSerializer.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Serializers\XmlSetSerializer.cs" />
