@@ -329,7 +329,7 @@ namespace Castle.Components.Binder
 
 			foreach (PropertyInfo prop in props)
 			{
-				if (ShouldIgnoreProperty(prop, nodeFullName))
+				if (ShouldIgnoreProperty(string.Format("{0}.{1}", nodeFullName, prop.Name)))
 				{
 					continue;
 				}
@@ -392,7 +392,7 @@ namespace Castle.Components.Binder
 				}
 			}
 
-			CheckForValidationFailures(instance, prefix, summary);
+			CheckForValidationFailures(instance, prefix, node, summary);
 
 			PopInstance(instance, prefix);
 
@@ -416,7 +416,7 @@ namespace Castle.Components.Binder
 			prop.SetValue(instance, value, null);
 		}
 
-		private void CheckForValidationFailures(object instance, string prefix, ErrorSummary summary)
+		private void CheckForValidationFailures(object instance, string prefix, Node node, ErrorSummary summary)
 		{
 			if (validator == null)
 			{
@@ -424,11 +424,15 @@ namespace Castle.Components.Binder
 			}
 			if (!validator.IsValid(instance))
 			{
-				summary.RegisterErrorsFrom(validator.GetErrorSummary(instance));
-				foreach (string invalidProperty in summary.InvalidProperties)
+				ErrorSummary errorSummaryFromValidator = validator.GetErrorSummary(instance);
+				foreach (string invalidProperty in errorSummaryFromValidator.InvalidProperties)
 				{
-					foreach (string errorMessage in summary.GetErrorsForProperty(invalidProperty))
+					if (ShouldIgnoreProperty(string.Format("{0}.{1}", node.FullName, invalidProperty)))
+						continue;
+
+					foreach (string errorMessage in errorSummaryFromValidator.GetErrorsForProperty(invalidProperty))
 					{
+						summary.RegisterErrorMessage(invalidProperty, errorMessage);
 						errors.Add(new DataBindError(prefix, invalidProperty, errorMessage));
 					}
 				}
@@ -1090,20 +1094,20 @@ namespace Castle.Components.Binder
 			Array.Sort(list, CaseInsensitiveComparer.Default);
 		}
 
-		private bool ShouldIgnoreProperty(PropertyInfo prop, string nodeFullName)
+		private bool ShouldIgnoreProperty(string propertyFullPath)
 		{
 			bool allowed = true;
 			bool disallowed = false;
 
-			string propId = string.Format("{0}.{1}", nodeFullName, prop.Name);
+
 
 			if (allowedPropertyList != null)
 			{
-				allowed = Array.BinarySearch(allowedPropertyList, propId, CaseInsensitiveComparer.Default) >= 0;
+				allowed = Array.BinarySearch(allowedPropertyList, propertyFullPath, CaseInsensitiveComparer.Default) >= 0;
 			}
 			if (excludedPropertyList != null)
 			{
-				disallowed = Array.BinarySearch(excludedPropertyList, propId, CaseInsensitiveComparer.Default) >= 0;
+				disallowed = Array.BinarySearch(excludedPropertyList, propertyFullPath, CaseInsensitiveComparer.Default) >= 0;
 			}
 
 			return (!allowed) || (disallowed);
