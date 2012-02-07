@@ -88,5 +88,14 @@ namespace Castle.Components.Binder.Tests
 			Assert.IsNotNull(instance);
 			Assert.AreEqual(2, binder.ErrorList.Count);
 		}
+		[Test]
+		public void IgnoredFieldsNotValidated()
+		{
+			var args = new NameValueCollection { { "person.Email", string.Empty } };
+			object instance = binder.BindObject(typeof(Person), "person", "person.Email", null, builder.BuildSourceNode(args));
+
+			Assert.IsNotNull(instance);
+			Assert.AreEqual(0, binder.ErrorList.Count);
+		}
 	}
 }
