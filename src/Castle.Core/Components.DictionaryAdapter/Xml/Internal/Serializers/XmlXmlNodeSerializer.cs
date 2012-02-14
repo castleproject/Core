@@ -35,7 +35,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			var source = node.AsRealizable<XmlNode>();
 
-			return (source != null && source.Exists)
+			return (source != null && source.IsReal)
 				? source.Value
 				: null;
 		}

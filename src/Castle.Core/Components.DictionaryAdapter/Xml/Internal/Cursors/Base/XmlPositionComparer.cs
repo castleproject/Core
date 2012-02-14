@@ -28,7 +28,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			for (;;)
 			{
-				if (a.Node.Exists && b.Node.Exists)
+				if (a.Node.IsReal && b.Node.IsReal)
 					return a.Node.UnderlyingPositionEquals(b.Node);
 				if (!a.MoveNext() || !b.MoveNext())
 					return false;

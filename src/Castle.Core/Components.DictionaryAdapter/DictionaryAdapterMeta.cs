@@ -67,6 +67,51 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
+		public PropertyDescriptor CreateDescriptor()
+		{
+			var metaInitializers   = MetaInitializers;
+			var sharedAnnotations  = CollectSharedBehaviors(Behaviors,    metaInitializers);
+			var sharedInitializers = CollectSharedBehaviors(Initializers, metaInitializers);
+
+			var descriptor = (sharedAnnotations != null)
+				? new PropertyDescriptor(sharedAnnotations.ToArray())
+				: new PropertyDescriptor();
+
+			descriptor.AddBehaviors(metaInitializers);
+
+			if (sharedInitializers != null)
+				descriptor.AddBehaviors(sharedInitializers);
+
+			return descriptor;
+		}
+
+		private static List<T> CollectSharedBehaviors<T>(T[] source, IDictionaryMetaInitializer[] predicates)
+		{
+			var results = null as List<T>;
+
+			foreach (var candidate in source)
+			{
+				foreach (var predicate in predicates)
+				{
+					if (predicate.ShouldHaveBehavior(candidate))
+					{
+						if (results == null)
+							results = new List<T>(source.Length);
+
+						results.Add(candidate);
+						break; // next candidate
+					}
+				}
+			}
+
+			return results;
+		}
+
+		public DictionaryAdapterMeta GetAdapterMeta(Type type)
+		{
+			return Factory.GetAdapterMeta(type, this);
+		}
+
 		public object CreateInstance(IDictionary dictionary, PropertyDescriptor descriptor)
 		{
 			var instance = new DictionaryAdapterInstance(dictionary, this, descriptor, Factory);

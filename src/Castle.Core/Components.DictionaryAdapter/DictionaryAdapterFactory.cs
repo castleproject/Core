@@ -42,7 +42,7 @@ namespace Castle.Components.DictionaryAdapter
 	public class DictionaryAdapterFactory : IDictionaryAdapterFactory
 	{
 		private readonly Dictionary<Type, DictionaryAdapterMeta> interfaceToMeta = new Dictionary<Type, DictionaryAdapterMeta>();
-		private readonly object typesDictionaryLocker = new object();
+		private readonly Lock interfaceToMetaLock = new SlimReadWriteLock();
 
 		#region IDictionaryAdapterFactory
 
@@ -111,49 +111,60 @@ namespace Castle.Components.DictionaryAdapter
 		/// <inheritdoc />
 		public DictionaryAdapterMeta GetAdapterMeta(Type type)
 		{
-			return GetAdapterMeta(type, null);
+			return GetAdapterMeta(type, null as PropertyDescriptor);
 		}
 
 		/// <inheritdoc />
 		public DictionaryAdapterMeta GetAdapterMeta(Type type, PropertyDescriptor descriptor)
 		{
-			if (type.IsInterface == false)
-			{
-				throw new ArgumentException("Only interfaces can be adapted and have metadata");
-			}
-			return InternalGetAdapterMeta(type, descriptor);
+			return InternalGetAdapterMeta(type, descriptor, null);
+		}
+
+		/// <inheritdoc />
+		public DictionaryAdapterMeta GetAdapterMeta(Type type, DictionaryAdapterMeta other)
+		{
+			return InternalGetAdapterMeta(type, null, other);
 		}
 
 		#endregion
 
-		private DictionaryAdapterMeta InternalGetAdapterMeta(Type type, PropertyDescriptor descriptor)
+		private DictionaryAdapterMeta InternalGetAdapterMeta(Type type,
+			PropertyDescriptor descriptor, DictionaryAdapterMeta other)
 		{
+			if (type == null)
+				throw new ArgumentNullException("type");
 			if (type.IsInterface == false)
+				throw new ArgumentException("Only interfaces can be adapted to a dictionary", "type");
+			DictionaryAdapterMeta meta;
+
+			using (interfaceToMetaLock.ForReading())
 			{
-				throw new ArgumentException("Only interfaces can be adapted to a dictionary");
+				if (interfaceToMeta.TryGetValue(type, out meta))
+					return meta;
 			}
 
-			DictionaryAdapterMeta meta;
-			if (interfaceToMeta.TryGetValue(type, out meta) == false)
+			using (var heldLock = interfaceToMetaLock.ForReadingUpgradeable())
 			{
-				lock (typesDictionaryLocker)
+				if (interfaceToMeta.TryGetValue(type, out meta))
+					return meta;
+
+				using (heldLock.Upgrade())
 				{
-					if (interfaceToMeta.TryGetValue(type, out meta) == false)
-					{
-						var appDomain = Thread.GetDomain();
-						var typeBuilder = CreateTypeBuilder(type, appDomain);
-						meta = CreateAdapterMeta(type, typeBuilder, descriptor);
-						interfaceToMeta.Add(type, meta);
-					}
+					if (descriptor == null && other != null)
+						descriptor = other.CreateDescriptor();
+
+					var appDomain = Thread.GetDomain();
+					var typeBuilder = CreateTypeBuilder(type, appDomain);
+					meta = CreateAdapterMeta(type, typeBuilder, descriptor);
+					interfaceToMeta.Add(type, meta);
+					return meta;
 				}
 			}
-
-			return meta;
 		}
 
 		private object InternalGetAdapter(Type type, IDictionary dictionary, PropertyDescriptor descriptor)
 		{
-			var meta = InternalGetAdapterMeta(type, descriptor);
+			var meta = InternalGetAdapterMeta(type, descriptor, null);
 			return meta.CreateInstance(dictionary, descriptor);
 		}
 

@@ -58,9 +58,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return clrType ?? node.ClrType; }
 		}
 
-		public bool Exists
+		public bool IsReal
 		{
-			get { return node.Exists; }
+			get { return node.IsReal; }
 		}
 
 		public bool IsElement
@@ -113,6 +113,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public IRealizable<T> AsRealizable<T>()
 		{
 			return node.AsRealizable<T>();
+		}
+
+		public void Realize()
+		{
+			node.Realize();
 		}
 
 		public event EventHandler Realized

@@ -47,12 +47,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.flags      = flags;
 
 			var source = parent.RequireRealizable<XPathNavigator>();
-			if (source.Exists)
+			if (source.IsReal)
 				iterator = new XPathBufferedNodeIterator(
 					source.Value.Select(path.FirstStep.Path));
 		}
 
-		public override bool Exists
+		public override bool IsReal
 		{
 			get { return HasCurrent; }
 		}
@@ -202,7 +202,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void MoveTo(IXmlNode position)
 		{
 			var source = position.AsRealizable<XPathNavigator>();
-			if (source == null || !source.Exists)
+			if (source == null || !source.IsReal)
 				throw Error.CursorCannotMoveToGivenNode();
 
 			var positionNode = source.Value;

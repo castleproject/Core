@@ -45,7 +45,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void Reset()
 		{
 			var source = Parent.RequireRealizable<XPathNavigator>();
-			if (source.Exists)
+			if (source.IsReal)
 				iterator = source.Value.Select(xpath.Path);
 		}
 
@@ -87,7 +87,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void MoveTo(IXmlNode position)
 		{
 			var source = position.AsRealizable<XPathNavigator>();
-			if (source == null || !source.Exists)
+			if (source == null || !source.IsReal)
 				throw Error.CursorCannotMoveToGivenNode();
 
 			var positionNode = source.Value;

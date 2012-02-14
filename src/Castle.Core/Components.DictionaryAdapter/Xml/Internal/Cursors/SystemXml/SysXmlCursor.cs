@@ -51,11 +51,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.index      = -1;
 
 			var source = parent.RequireRealizable<XmlNode>();
-			if (source.Exists)
+			if (source.IsReal)
 				node = source.Value;
 		}
 
-		public override bool Exists
+		public override bool IsReal
 		{
 			get { return HasCurrent; }
 		}
@@ -264,7 +264,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void MoveTo(IXmlNode position)
 		{
 			var source = position.AsRealizable<XmlNode>();
-			if (source == null || !source.Exists)
+			if (source == null || !source.IsReal)
 				throw Error.CursorCannotMoveToGivenNode();
 
 			IXmlKnownType knownType;

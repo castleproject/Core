@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,25 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
-namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
+namespace Castle.Components.DictionaryAdapter
 {
-	using System.Collections.Generic;
-	using Castle.Components.DictionaryAdapter.Xml;
+	using System;
 
-	internal class DummyLazy<T> : IRealizable<T>
+	public interface IVirtual
 	{
-		public bool IsReal
-		{
-			get { return ! EqualityComparer<T>.Default.Equals(Value, default(T)); }
-		}
+		bool IsReal { get; }
 
-		public T Value { get; set; }
+		void Realize();
 
-		public IRealizable<U> AsRealizable<U>()
-		{
-			return this as IRealizable<U>;
-		}
+		event EventHandler Realized;
+	}
+
+	public interface IVirtual<T> : IVirtual
+	{
+		new T Realize();
+
+		void AddSite(IVirtualSite<T> site);
+
+		void RemoveSite(IVirtualSite<T> site);
 	}
 }
-#endif

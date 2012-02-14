@@ -54,7 +54,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		public bool IsNil   { get; set; }
 		public string Value { get; set; }
 
-		public bool Exists { get { return true; } }
+		public bool IsReal { get { return true; } }
 
 		public bool IsElement
 		{
@@ -127,6 +127,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		public object Evaluate(CompiledXPath path)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Realize()
 		{
 			throw new NotImplementedException();
 		}

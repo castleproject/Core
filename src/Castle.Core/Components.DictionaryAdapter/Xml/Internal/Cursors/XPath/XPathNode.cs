@@ -107,7 +107,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public string GetAttribute(XmlName name)
 		{
-			if (!Exists || !node.MoveToAttribute(name.LocalName, name.NamespaceUri))
+			if (!IsReal || !node.MoveToAttribute(name.LocalName, name.NamespaceUri))
 				return null;
 
 			var value = node.Value;
@@ -144,7 +144,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private void ClearAttribute(XmlName name)
 		{
-			if (Exists && node.MoveToAttribute(name.LocalName, name.NamespaceUri))
+			if (IsReal && node.MoveToAttribute(name.LocalName, name.NamespaceUri))
 				node.DeleteSelf();
 		}
 
@@ -174,7 +174,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 #if !SILVERLIGHT
 			var sysXmlNode = node.AsRealizable<XmlNode>();
 			if (sysXmlNode != null)
-				return sysXmlNode.Exists
+				return sysXmlNode.IsReal
 					&& sysXmlNode.Value == this.node.UnderlyingObject;
 #endif
 #if SILVERLIGHT
@@ -182,7 +182,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 #endif
 			var xPathNode = node.AsRealizable<XPathNavigator>();
 			if (xPathNode != null)
-				return xPathNode.Exists
+				return xPathNode.IsReal
 					&& xPathNode.Value.IsSamePosition(this.node);
 
 			return false;

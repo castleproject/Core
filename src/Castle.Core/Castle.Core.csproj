@@ -183,7 +183,7 @@
     <Compile Include="Components.DictionaryAdapter\Attributes\XmlDefaultsAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\StringStorageAttribute.cs" />
     <Compile Include="Components.DictionaryAdapter\DictionaryAdapterExtensions.cs" />
-    <Compile Include="Components.DictionaryAdapter\IVirtual.cs" />
+    <Compile Include="Components.DictionaryAdapter\Util\IVirtual.cs" />
     <Compile Include="Components.DictionaryAdapter\MemberwiseEqualityHashCodeStrategy.cs" />
     <Compile Include="Components.DictionaryAdapter\DictionaryAdapterBase.Copy.cs" />
     <Compile Include="Components.DictionaryAdapter\IDictionaryCopyStrategy.cs" />
@@ -199,8 +199,12 @@
     <Compile Include="Components.DictionaryAdapter\Util\ICollectionAdapterObserver.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ICollectionProjection.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ICondition.cs" />
+    <Compile Include="Components.DictionaryAdapter\Util\IVirtualSite.cs" />
+    <Compile Include="Components.DictionaryAdapter\Util\IVirtualTarget.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ListProjection.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\SetProjection.cs" />
+    <Compile Include="Components.DictionaryAdapter\Util\VirtualObject.cs" />
+    <Compile Include="Components.DictionaryAdapter\Util\VirtualSite.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Core\DefaultXmlReferenceFormat.cs" />
     <Compile Include="Components.DictionaryAdapter\IDictionaryReferenceManager.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Core\IXmlReferenceFormat.cs" />

@@ -382,15 +382,15 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				AsVirtual(foo).Realized += (s, e) => HandleRealized(s, foo, ref realizedFoo, "Sender was Foo's virtual");
 				AsVirtual(bar).Realized += (s, e) => HandleRealized(s, bar, ref realizedBar, "Sender was Bar's virtual");
 
-				Assert.That(AsVirtual(obj).Exists, Is.True , "Obj exists");
-				Assert.That(AsVirtual(foo).Exists, Is.False, "Foo exists");
-				Assert.That(AsVirtual(bar).Exists, Is.False, "Bar exists");
+				Assert.That(AsVirtual(obj).IsReal, Is.True , "Obj exists");
+				Assert.That(AsVirtual(foo).IsReal, Is.False, "Foo exists");
+				Assert.That(AsVirtual(bar).IsReal, Is.False, "Bar exists");
 
 				bar.Id = Guid.NewGuid();
 
-				Assert.That(AsVirtual(obj).Exists, Is.True, "Obj exists");
-				Assert.That(AsVirtual(foo).Exists, Is.True, "Foo exists");
-				Assert.That(AsVirtual(bar).Exists, Is.True, "Bar exists");
+				Assert.That(AsVirtual(obj).IsReal, Is.True, "Obj exists");
+				Assert.That(AsVirtual(foo).IsReal, Is.True, "Foo exists");
+				Assert.That(AsVirtual(bar).IsReal, Is.True, "Bar exists");
 
 				Assert.That(realizedObj, Is.False, "Obj was realized");
 				Assert.That(realizedFoo, Is.True , "Foo was realized");

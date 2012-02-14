@@ -25,6 +25,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			meta.SetXmlMeta(new XmlMetadata(meta));
 		}
+
+		bool IDictionaryMetaInitializer.ShouldHaveBehavior(object behavior)
+		{
+			return behavior is XmlDefaultsAttribute
+				|| behavior is XmlNamespaceAttribute
+				|| behavior is XPathVariableAttribute
+				|| behavior is XPathFunctionAttribute;
+		}
 	}
 }
 #endif

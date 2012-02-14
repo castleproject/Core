@@ -38,7 +38,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private const int NoIndex = -1;
 
-		protected ListProjection(ICollectionAdapter<T> adapter)
+		public ListProjection(ICollectionAdapter<T> adapter)
 		{
 			if (adapter == null)
 				throw new ArgumentNullException("adapter");

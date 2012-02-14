@@ -121,5 +121,13 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="descriptor">The property descriptor.</param>
 		/// <returns>The adapter meta-data.</returns>
 		DictionaryAdapterMeta GetAdapterMeta(Type type, PropertyDescriptor descriptor);
+
+		/// <summary>
+		/// Gets the <see cref="DictionaryAdapterMeta"/> associated with the type.
+		/// </summary>
+		/// <param name="type">The typed interface.</param>
+		/// <param name="other">Another <see cref="DictionaryAdapterMeta"/> from which to copy behaviors.</param>
+		/// <returns>The adapter meta-data.</returns>
+		DictionaryAdapterMeta GetAdapterMeta(Type type, DictionaryAdapterMeta other);
 	}
 }
