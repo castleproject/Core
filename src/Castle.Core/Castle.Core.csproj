@@ -301,6 +301,7 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Core\XmlMetadata.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Core\XmlMetadataBehavior.cs" />
     <Compile Include="Core\Internal\CollectionExtensions.cs" />
+    <Compile Include="Core\Internal\InterfaceAttributeUtil.cs" />
     <Compile Include="Core\Internal\WeakKey.cs" />
     <Compile Include="Core\Internal\WeakKeyComparer.cs" />
     <Compile Include="Core\Internal\WeakKeyDictionary.cs" />

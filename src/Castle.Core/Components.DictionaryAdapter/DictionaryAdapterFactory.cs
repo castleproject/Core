@@ -423,7 +423,7 @@ namespace Castle.Components.DictionaryAdapter
 		private static Dictionary<String, PropertyDescriptor> GetPropertyDescriptors(Type type, PropertyDescriptor initializers, out object[] typeBehaviors)
 		{
 			var propertyMap = new Dictionary<String, PropertyDescriptor>();
-			var interfaceBehaviors = typeBehaviors = ExpandBehaviors(AttributesUtil.GetTypeAttributes<object>(type)).ToArray();
+			var interfaceBehaviors = typeBehaviors = ExpandBehaviors(AttributesUtil.GetInterfaceAttributes(type)).ToArray();
 			var defaultFetch = typeBehaviors.OfType<FetchAttribute>().Select(b => b.Fetch).FirstOrDefault();
 
 			initializers.AddBehaviors(typeBehaviors.OfType<IDictionaryMetaInitializer>())
@@ -435,7 +435,7 @@ namespace Castle.Components.DictionaryAdapter
 				var propertyDescriptor = new PropertyDescriptor(property, propertyBehaviors)
 					.AddBehaviors(propertyBehaviors.OfType<IDictionaryBehavior>())
 					.AddBehaviors(interfaceBehaviors.OfType<IDictionaryBehavior>().Where(b => b is IDictionaryKeyBuilder == false))
-					.AddBehaviors(ExpandBehaviors(AttributesUtil.GetTypeAttributes<object>(property.ReflectedType)).OfType<IDictionaryKeyBuilder>());
+					.AddBehaviors(ExpandBehaviors(AttributesUtil.GetInterfaceAttributes(property.ReflectedType)).OfType<IDictionaryKeyBuilder>());
 				AddDefaultGetter(propertyDescriptor);
 
 				bool? propertyFetch = (from b in propertyBehaviors.OfType<FetchAttribute>() select b.Fetch).FirstOrDefault();

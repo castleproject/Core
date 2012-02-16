@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -95,6 +95,22 @@ namespace Castle.Core.Internal
 
 			return attributes;
 		}
+
+		public static object[] GetInterfaceAttributes(Type type)
+		{
+			return InterfaceAttributeUtil.GetAttributes(type, true);
+		}
+
+		public static AttributeUsageAttribute GetAttributeUsage(this Type attributeType)
+		{
+			var attributes = attributeType.GetCustomAttributes(typeof(AttributeUsageAttribute), true);
+			return attributes.Length != 0
+				? (AttributeUsageAttribute) attributes[0]
+				: DefaultAttributeUsage;
+		}
+
+		private static readonly AttributeUsageAttribute
+			DefaultAttributeUsage = new AttributeUsageAttribute(AttributeTargets.All);
 
 		/// <summary>
 		///   Gets the type converter.

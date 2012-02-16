@@ -205,7 +205,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsTrue(keys.Any(key => key == "NumberOfFeet"));
 			Assert.IsTrue(keys.Any(key => key == "Person_HairColor"));
 			Assert.IsTrue(keys.Any(key => key == "Person2_Eye__Color"));
-			Assert.IsTrue(keys.Any(key => key == "Person2_NumberOfHeads"));
+			Assert.IsTrue(keys.Any(key => key == "NumberOfHeads"));
 			Assert.IsTrue(keys.Any(key => key == "NumberOfFingers"));
 
 			Assert.AreEqual(name, person.Name);
