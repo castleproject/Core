@@ -73,7 +73,7 @@ namespace Castle.Components.DictionaryAdapter
 				var value = this[index];
 
 				if (!set.Add(value))
-					RemoveAt(index);
+					{ RemoveAt(index); count--; }
 				else
 					index++;
 			}
