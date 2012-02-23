@@ -15,6 +15,7 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Linq;
 
 	public class SetProjection<T> : ListProjection<T>, ISet<T>

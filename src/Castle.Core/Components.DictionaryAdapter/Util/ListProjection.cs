@@ -18,8 +18,11 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Diagnostics;
 	using SysPropertyDescriptor = System.ComponentModel.PropertyDescriptor;
 
+	[DebuggerDisplay("Count = {Count}, Adapter = {Adapter}")]
+	[DebuggerTypeProxy(typeof(ListProjectionDebugView<>))]
 	public class ListProjection<T> :
 		IBindingList<T>, // Castle
 		IBindingList,    // System
