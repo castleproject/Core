@@ -452,10 +452,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			var visited = null as HashSet<Entry>;
 
-			foreach (var keyValue in other.entriesByValue.Keys)
+			foreach (var otherEntry in other.entriesByValue)
 			{
 				Entry thisEntry;
-				if (entriesByValue.TryGetValue(keyValue, out thisEntry))
+				if (entriesByValue.TryGetValue(otherEntry.Key, out thisEntry))
 				{
 					if (visited == null)
 						visited = new HashSet<Entry>(ReferenceEqualityComparer<Entry>.Instance);
@@ -463,16 +463,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 						continue;
 					visited.Add(thisEntry);
 
-				    var otherEntry = other.entriesByValue[keyValue];
-
-					foreach (var otherItem in otherEntry.Values)
+					foreach (var otherValue in otherEntry.Value.Values)
 					{
-						var otherValue = otherItem.Value.Target;
-						if (otherValue == null     ||
-							otherValue == keyValue ||
-							entriesByValue.ContainsKey(otherValue))
+						var otherTarget = otherValue.Value.Target;
+						if (otherTarget == null           ||
+							otherTarget == otherEntry.Key ||
+							entriesByValue.ContainsKey(otherTarget))
 							{ continue; }
-						AddValueCore(thisEntry, otherItem.Type, otherValue, false);
+						AddValueCore(thisEntry, otherValue.Type, otherTarget, false);
 					}
 				}
 			}
