@@ -69,6 +69,20 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			Assert.That(value, Is.Null);
 		}
 
+		[Test]
+		public void Insert()
+		{
+			var xml = Xml(StringsXml);
+			var foo = Create<IFoo>(xml);
+
+			foo.Strings.Insert(1, "c");
+			var value = foo.Strings[1];
+
+			var expectedXml = Xml("<Foo> <Strings> <string>a</string> <string>c</string> <string>b</string> </Strings> </Foo>");
+			Assert.That(xml, XmlEquivalent.To(expectedXml));
+			Assert.That(value, Is.EqualTo("c"));
+		}
+
 		private IList<string> GetListOfStrings()
 		{
 			return Create<IFoo>(StringsXml).Strings;

@@ -144,9 +144,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var item = new XmlCollectionItem<T>(node, value);
 
 			if (append)
-				items.Insert(index, item);
-			else
 				items.Add(item);
+			else
+				items.Insert(index, item);
 
 			advisor.OnInserted(value, index);
 			return true;
