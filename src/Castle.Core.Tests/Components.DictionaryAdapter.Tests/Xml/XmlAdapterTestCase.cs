@@ -60,7 +60,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             return (T) factory.GetAdapter(typeof(T),
                 new System.Collections.Hashtable(),
                 new PropertyDescriptor()
-                    .AddBehaviors(XmlMetadataBehavior.Instance, xmlAdapter));
+                    .AddBehaviors(XmlMetadataBehavior.Default, xmlAdapter));
         }
 
         public class FakeStandardXmlSerializable

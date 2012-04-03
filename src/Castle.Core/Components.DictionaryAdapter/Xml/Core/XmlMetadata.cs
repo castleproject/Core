@@ -17,6 +17,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Xml;
 	using System.Xml.Serialization;
 
@@ -32,23 +33,30 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private readonly string typeLocalName;
 		private readonly string typeNamespaceUri;
 
-		private List<Type> pendingIncludes;
-		private readonly XmlIncludedTypeSet includedTypes;
-		private readonly XmlContext context;
+		private readonly HashSet<string>       reservedNamespaceUris;
+		private          List<Type>            pendingIncludes;
+		private readonly XmlIncludedTypeSet    includedTypes;
+		private readonly XmlContext            context;
 		private readonly DictionaryAdapterMeta source;
 #if !SL3
 		private readonly CompiledXPath path;
 #endif
 		
-		public XmlMetadata(DictionaryAdapterMeta meta)
+		public XmlMetadata(DictionaryAdapterMeta meta, IEnumerable<string> reservedNamespaceUris)
 		{
 			if (meta == null)
 				throw Error.ArgumentNull("meta");
+			if (reservedNamespaceUris == null)
+				throw Error.ArgumentNull("reservedNamespaceUris");
 
 			source        = meta;
 			clrType       = meta.Type;
 			context       = new XmlContext(this);
 			includedTypes = new XmlIncludedTypeSet();
+
+			this.reservedNamespaceUris
+				=  reservedNamespaceUris as HashSet<string>
+				?? new HashSet<string>(reservedNamespaceUris);
 
 			var xmlRoot       = null as XmlRootAttribute;
 			var xmlType       = null as XmlTypeAttribute;
@@ -165,6 +173,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return childNamespaceUri; }
 		}
 
+		public IEnumerable<string> ReservedNamespaceUris
+		{
+			get { return reservedNamespaceUris.ToArray(); }
+		}
+
 		public XmlIncludedTypeSet IncludedTypes
 		{
 			get { ProcessPendingIncludes(); return includedTypes; }
@@ -188,6 +201,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IXmlIncludedType IXmlIncludedTypeMap.Default
 		{
 			get { return this; }
+		}
+
+		public bool IsReservedNamespaceUri(string namespaceUri)
+		{
+			return reservedNamespaceUris.Contains(namespaceUri);
 		}
 
 		public IXmlCursor SelectBase(IXmlNode node) // node is root

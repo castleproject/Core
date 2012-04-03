@@ -90,11 +90,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private bool IsMatchOnNamespaceUri(IXmlIdentity xmlIdentity)
 		{
 			var otherNamespaceUri = xmlIdentity.Name.NamespaceUri;
-			if (ReservedNamespaceUris.Contains(otherNamespaceUri))
-				return false;
+			if (Context.IsReservedNamespaceUri(otherNamespaceUri))
+				return NameComparer.Equals(namespaceUri, otherNamespaceUri);
 			return namespaceUri == null
 				|| ShouldIgnoreAttributeNamespaceUri(xmlIdentity)
-				|| NameComparer.Equals(namespaceUri, xmlIdentity.Name.NamespaceUri);
+				|| NameComparer.Equals(namespaceUri, otherNamespaceUri);
 		}
 
 		private bool IsMatchOnXsiType(IXmlIdentity xmlIdentity)
@@ -217,14 +217,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				knownTypes.Add(new XmlKnownType(Name, XmlName.Empty, ClrType), true);
 			}
 		}
-
-		protected static readonly HashSet<string>
-			ReservedNamespaceUris = new HashSet<string>
-		{
-			Xmlns.NamespaceUri,
-			Xsi  .NamespaceUri,
-			XRef .NamespaceUri
-		};
 
 		protected static readonly StringComparer
 			NameComparer = StringComparer.OrdinalIgnoreCase;

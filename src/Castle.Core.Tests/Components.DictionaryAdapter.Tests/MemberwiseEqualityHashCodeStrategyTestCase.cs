@@ -134,14 +134,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		private T GetAdapter<T>() where T : class
 		{
 			return (T)factory.GetAdapter(typeof(T), new Hashtable(), new PropertyDescriptor()
-				.AddBehaviors(XmlMetadataBehavior.Instance, new MemberwiseEqualityHashCodeStrategy()));
+				.AddBehaviors(XmlMetadataBehavior.Default, new MemberwiseEqualityHashCodeStrategy()));
 		}
 
 		private T GetXmlAdapter<T>() where T : class
 		{
 			var xpath = new XmlAdapter(new XmlDocument());
 			return (T)factory.GetAdapter(typeof(T), new Hashtable(), new PropertyDescriptor()
-				.AddBehaviors(XmlMetadataBehavior.Instance, xpath, new MemberwiseEqualityHashCodeStrategy()));
+				.AddBehaviors(XmlMetadataBehavior.Default, xpath, new MemberwiseEqualityHashCodeStrategy()));
 		}
 	}
 #endif

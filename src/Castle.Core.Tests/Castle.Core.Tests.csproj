@@ -177,6 +177,7 @@
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\VirtualObjectTestCase.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\Xml\Behaviors\ConflictBehaviorTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\Behaviors\ReferenceBehaviorTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlReferenceManagerTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\Behaviors\XmlArrayBehaviorTestCase.cs" />
@@ -541,10 +542,7 @@
       <Link>CastleKey.snk</Link>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Components.DictionaryAdapter.Tests\Xml\Types\" />
-    <Folder Include="Components.DictionaryAdapter.Tests\Xml\Utilities\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition="($(MSBuildTargets) == '') Or ($(MSBuildTargets) == 'CSharp')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 4.0'" />
   <Import Project="$(RootPath)\Settings.proj" />

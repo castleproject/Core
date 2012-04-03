@@ -102,7 +102,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 		    var xml = new XmlAdapter(xmlNode);
 			return GetAdapter(type, new Hashtable(), new PropertyDescriptor()
-				.AddBehavior(XmlMetadataBehavior.Instance)
+				.AddBehavior(XmlMetadataBehavior.Default)
 				.AddBehavior(xml));
 		}
 #endif

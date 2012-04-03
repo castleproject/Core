@@ -25,6 +25,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IXmlContext Clone();
 		XmlName GetDefaultXsiType(Type clrType);
 		IEnumerable<IXmlIncludedType> GetIncludedTypes(Type baseType);
+		bool IsReservedNamespaceUri(string namespaceUri);
 
 #if !SL3
 		void AddVariable(XPathVariableAttribute attribute);
