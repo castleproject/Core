@@ -224,7 +224,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var givenValue = newValue;
 
 			if (hasValue)
-				serializer.SetValue(cursor, parentObject, this, ref newValue);
+				serializer.SetValue(cursor, parentObject, this, oldValue, ref newValue);
 			else if (isNillable)
 				cursor.IsNil = true;
 			else

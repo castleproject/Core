@@ -327,6 +327,11 @@ namespace Castle.Components.DictionaryAdapter
 			NotifyListReset();
 		}
 
+		void ICollectionProjection.ClearReferences()
+		{
+			adapter.ClearReferences();
+		}
+
 		protected virtual void OnRemoving(T oldValue)
 		{
 			DetachPropertyChanged(oldValue);

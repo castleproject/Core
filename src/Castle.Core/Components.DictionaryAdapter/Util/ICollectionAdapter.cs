@@ -31,6 +31,7 @@ namespace Castle.Components.DictionaryAdapter
 		bool Insert (int index, T value);
 		void Remove (int index);
 		void Clear  ();
+		void ClearReferences(); // A bit of a hack. Make this nicer in a future version.
 
 		// Snapshot Support
 		bool HasSnapshot     { get; }

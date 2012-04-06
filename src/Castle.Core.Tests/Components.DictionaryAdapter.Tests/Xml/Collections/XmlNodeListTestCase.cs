@@ -93,6 +93,16 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			IList<string> Strings { get; set; }
 		}
 
+		public interface IHasItems
+		{
+			IList<IItem> List { get; set; }
+		}
+
+		public interface IItem
+		{
+			string Value { get; set; }
+		}
+
 		private static readonly IList<string> Strings
 			= Array.AsReadOnly(new[] { "a", "b" });
 

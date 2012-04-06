@@ -15,74 +15,84 @@
 #if !SILVERLIGHT && !MONO // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
-    using System;
+	using System;
 	using System.Xml;
-    using System.Xml.Serialization;
+	using System.Xml.Serialization;
 	using NUnit.Framework;
 
-    public abstract class XmlAdapterTestCase
-    {
-        private DictionaryAdapterFactory factory;
+	public abstract class XmlAdapterTestCase
+	{
+		private DictionaryAdapterFactory factory;
 
-        protected XmlAdapterTestCase() { }
+		protected XmlAdapterTestCase() { }
 
-        [SetUp]
-        public virtual void SetUp()
-        {
-            factory = new DictionaryAdapterFactory();
-        }
+		[SetUp]
+		public virtual void SetUp()
+		{
+			factory = new DictionaryAdapterFactory();
+		}
 
-        protected static XmlDocument Xml(params string[] xml)
-        {
-            var document = new XmlDocument();
+		protected static XmlDocument Xml(params string[] xml)
+		{
+			var document = new XmlDocument();
 			var text = string.Concat(xml)
 				.Replace("$xsd", "xmlns:xsd='http://www.w3.org/2001/XMLSchema'")
 				.Replace("$xsi", "xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'")
 				.Replace("$x",   "xmlns:x='urn:schemas-castle-org:xml-reference'");
-            document.LoadXml(text);
-            return document;
-        }
+			document.LoadXml(text);
+			return document;
+		}
 
-        protected T Create<T>()
-        {
-            return Create<T>(new XmlDocument());
-        }
+		protected T Create<T>()
+		{
+			return Create<T>(new XmlDocument(), null);
+		}
 
-        protected T Create<T>(params string[] xml)
-        {
-            return Create<T>(Xml(xml));
-        }
+		protected T Create<T>(params string[] xml)
+		{
+			return Create<T>(Xml(xml), null);
+		}
 
-        protected T Create<T>(XmlNode storage)
-        {
-            var xmlAdapter = new XmlAdapter(storage);
+		protected T Create<T>(XmlNode storage)
+		{
+			return Create<T>(storage, null);
+		}
 
-            return (T) factory.GetAdapter(typeof(T),
-                new System.Collections.Hashtable(),
-                new PropertyDescriptor()
-                    .AddBehaviors(XmlMetadataBehavior.Default, xmlAdapter));
-        }
+		protected virtual T Create<T>(XmlNode storage, Action<PropertyDescriptor> config)
+		{
+			var xmlAdapter = new XmlAdapter(storage);
 
-        public class FakeStandardXmlSerializable
-        {
-            public string Text { get; set; }
-        }
+			var descriptor = new PropertyDescriptor()
+				.AddBehaviors(XmlMetadataBehavior.Default, xmlAdapter);
 
-        public class FakeCustomXmlSerializable : IXmlSerializable
-        {
-            public string Text { get; set; }
+			if (config != null)
+				config(descriptor);
 
-            System.Xml.Schema.XmlSchema IXmlSerializable.GetSchema() { return null; }
-            void IXmlSerializable.ReadXml(XmlReader reader) { Text = reader.ReadString(); }
-            void IXmlSerializable.WriteXml(XmlWriter writer) { writer.WriteString(Text); }
-        }
+			var dictionary = new System.Collections.Hashtable();
 
-        protected const string
-            Base64String = "VGVzdA==",
-            GuidString   = "c7da18ce-aa3f-452d-bf8f-8e3bb9cdec2b";
+			return (T) factory.GetAdapter(typeof(T), dictionary, descriptor);
+		}
 
-        protected readonly byte[] Base64Bytes = Convert.FromBase64String(Base64String);
-        protected readonly Guid   GuidValue   = new Guid(GuidString);
-    }
+		public class FakeStandardXmlSerializable
+		{
+			public string Text { get; set; }
+		}
+
+		public class FakeCustomXmlSerializable : IXmlSerializable
+		{
+			public string Text { get; set; }
+
+			System.Xml.Schema.XmlSchema IXmlSerializable.GetSchema() { return null; }
+			void IXmlSerializable.ReadXml (XmlReader reader) { Text = reader.ReadString(); }
+			void IXmlSerializable.WriteXml(XmlWriter writer) { writer.WriteString(Text); }
+		}
+
+		protected const string
+			Base64String = "VGVzdA==",
+			GuidString   = "c7da18ce-aa3f-452d-bf8f-8e3bb9cdec2b";
+
+		protected readonly byte[] Base64Bytes = Convert.FromBase64String(Base64String);
+		protected readonly Guid   GuidValue   = new Guid(GuidString);
+	}
 }
 #endif

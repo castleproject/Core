@@ -55,19 +55,23 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return Activator.CreateInstance(listType, node, parent, subaccessor);
 		}
 
-		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, ref object value)
+		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, object oldValue, ref object value)
 		{
 			var current = value as IXmlNodeSource;
 			if (current != null && current.Node.PositionEquals(node))
 				return;
 
-			var source = value as IEnumerable;
-			if (source == null)
+			var newItems = value as IEnumerable;
+			if (newItems == null)
 				throw Error.NotSupported();
 
-			var collection = (ICollectionProjection) GetValue(node, parent, accessor);
-			collection.Replace(source);
-			value = collection;
+			var oldCollection = oldValue as ICollectionProjection;
+			if (oldCollection != null)
+				oldCollection.ClearReferences();
+
+			var newCollection = (ICollectionProjection) GetValue(node, parent, accessor);
+			newCollection.Replace(newItems);
+			value = newCollection;
 		}
 	}
 }

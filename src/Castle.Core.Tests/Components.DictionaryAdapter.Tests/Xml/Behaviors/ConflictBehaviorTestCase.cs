@@ -17,11 +17,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Linq;
 	using System.Xml;
 	using System.Xml.Serialization;
-	using System.Xml.XPath;
 	using Castle.Components.DictionaryAdapter.Tests;
 	using NUnit.Framework;
 
@@ -60,6 +57,128 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				Assert.That(xml, XmlEquivalent.To("<Foo xmlns:a='urn:a' a:A='x'> <A>y</A> </Foo>"));
 				Assert.That(foo.A, Is.EqualTo("x"), "foo.A");
 				Assert.That(bar.A, Is.EqualTo("y"), "bar.A");
+			}
+		}
+
+		[TestFixture]
+		public class AssignCollectionWithPriorItem : XmlAdapterTestCase
+		{
+			[Reference]
+			public interface IHasItemsArray
+			{
+				IItem[] Array { get; set; }
+			}
+
+			[Reference]
+			public interface IHasItemsList
+			{
+				IList<IItem> List { get; set; }
+			}
+
+			[Reference]
+			public interface IItem
+			{
+				string Value { get; set; }
+			}
+
+			[Test]
+			public void AssignArray()
+			{
+				var xml     = Xml("<HasItemsArray/>");
+				var foo     = Create<IHasItemsArray>(xml);
+				var itemA   = Create<IItem>();
+				var itemB   = Create<IItem>();
+
+				foo.Array = new[] {        itemB };
+				foo.Array = new[] { itemA, itemB };
+
+				var expectedXml = Xml("<Root> <Array> <Item/> <Item/> </Array> </Root>");
+				Assert.That(xml, XmlEquivalent.To(expectedXml));
+			}
+
+			[Test]
+			public void AssignList()
+			{
+				var xml   = Xml("<HasItemsList/>");
+				var foo   = Create<IHasItemsList>(xml);
+				var itemA = Create<IItem>();
+				var itemB = Create<IItem>();
+
+				foo.List = new[] {        itemB };
+				foo.List = new[] { itemA, itemB };
+
+				var expectedXml = Xml("<Root> <List> <Item/> <Item/> </List> </Root>");
+				Assert.That(xml, XmlEquivalent.To(expectedXml));
+			}
+		}
+
+		[TestFixture]
+		public class ReferenceBehaviorAndMultipleCopy : XmlAdapterTestCase
+		{
+			[Reference]
+			public interface IFoo : IDictionaryAdapter
+			{
+				IFoo        One  { get; set; }
+				IList<IFoo> List { get; set; }
+			}
+
+			[Test]
+			public void NestedReference_Strange()
+			{
+				var xml = Xml("<Foo/>");
+				var a = Create<IFoo>(xml);
+				var b = Create<IFoo>();
+				var c = Create<IFoo>();
+
+				b.List.Add(c);
+				a.One = b;
+
+				Assert.That(xml, XmlEquivalent.To(Xml(
+					"<Foo $x>",
+						"<One>",
+							"<List> <Foo/> </List>",
+						"</One>",
+					"</Foo>"
+				)));
+			}
+
+			protected override T Create<T>(XmlNode storage, Action<PropertyDescriptor> config)
+			{
+				return base.Create<T>(storage, d => d.AddBehavior(new MultipleCopyAttribute()));
+			}
+
+			public class MultipleCopyAttribute : DictionaryBehaviorAttribute,
+				IDictionaryInitializer,
+				IDictionaryCopyStrategy
+			{
+				private bool copying;
+
+				public void Initialize(IDictionaryAdapter dictionaryAdapter, object[] behaviors)
+				{
+					dictionaryAdapter.This.AddCopyStrategy(this);
+				}
+
+				public bool Copy(IDictionaryAdapter source, IDictionaryAdapter target,
+					ref Func<DictionaryAdapter.PropertyDescriptor, bool> selector)
+				{
+					if (copying)
+						return false;
+
+					try
+					{
+						copying = true;
+
+						// An unwise idea, but it shouldn't cause DA to implode.
+						source.CopyTo(target);
+						source.CopyTo(target);
+					}
+					finally
+					{
+						copying = false;
+					}
+
+					return true;
+				}
 			}
 		}
 	}

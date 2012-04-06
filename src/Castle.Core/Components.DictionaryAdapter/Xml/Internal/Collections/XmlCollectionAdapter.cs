@@ -182,6 +182,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			// Don't call OnRemoved. Caller is already going to fire a Reset shortly.
 		}
 
+		public void ClearReferences()
+		{
+			if (accessor.IsReference)
+				foreach (var item in items)
+					references.OnAssigningNull(item.Node, item.Value);
+		}
+
 		private void OnRemoving(XmlCollectionItem<T> item)
 		{
 			advisor.OnRemoving(item.Value);

@@ -20,5 +20,6 @@ namespace Castle.Components.DictionaryAdapter
 	{
 		void Replace(IEnumerable source);
 		void Clear();
+		void ClearReferences();
 	}
 }
