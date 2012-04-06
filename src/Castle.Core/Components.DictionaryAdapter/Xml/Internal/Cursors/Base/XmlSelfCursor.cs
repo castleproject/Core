@@ -174,7 +174,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public IXmlNode Save()
 		{
-			return node;
+			return position == 0
+				? new XmlSelfCursor(node.Save(), clrType) { position = 0 }
+				: this;
 		}
 
 		public IXmlCursor SelectSelf(Type clrType)
