@@ -73,11 +73,8 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (ExplicitlyImplementedInterfaceMethod(method))
 			{
-#if SILVERLIGHT
-				return null;
-#else
+				// Silverlight v4 now allows this
 				return ExplicitlyImplementedInterfaceMethodGenerator(method, @class, options, overrideMethod);
-#endif
 			}
 
 			var invocation = GetInvocationType(method, @class, options);
