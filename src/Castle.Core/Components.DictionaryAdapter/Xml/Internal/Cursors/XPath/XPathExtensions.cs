@@ -53,8 +53,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			navigator = navigator.Clone();
 			navigator.MoveToRoot();
-			if (!navigator.MoveToFirstChild())
-				throw Error.InvalidOperation();
+			if (navigator.NodeType == XPathNodeType.Root)
+				if (!navigator.MoveToFirstChild())
+					throw Error.InvalidOperation();
 			return navigator;
 		}
 
