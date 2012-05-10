@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,19 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
-namespace Castle.Components.DictionaryAdapter.Xml
+namespace Castle.Components.DictionaryAdapter
 {
-	using System;
-	using System.Collections;
-
-	public interface IXmlCollection
+	public interface IVirtualSite<T>
 	{
-		IXmlNode Node { get; }
-		XmlReferenceManager References { get; }
-
-		void Replace(IEnumerable source);
-		void Clear();
+		void OnRealizing(T node);
 	}
 }
-#endif

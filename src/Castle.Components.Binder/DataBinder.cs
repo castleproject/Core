@@ -346,6 +346,11 @@ namespace Castle.Components.Binder
 
 				bool isSimpleProperty = IsSimpleProperty(propType);
 
+				if (isSimpleProperty && prop.CanWrite == false)
+				{
+					continue;
+				}
+
 				BeforeBindingProperty(instance, prop, prefix, node);
 
 				try

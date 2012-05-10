@@ -20,10 +20,15 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property)]
 	public class KeyBehaviorBuilderAttribute : Attribute, IDictionaryBehaviorBuilder
 	{
-		public IEnumerable<object> BuildBehaviors()
+		private static readonly object[] Behaviors =
 		{
-			yield return new KeyPrefixAttribute("Foo ");
-			yield return new KeySubstitutionAttribute("_", " ");
+			new KeyPrefixAttribute("Foo "),
+			new KeySubstitutionAttribute("_", " ")
+		};
+
+		public object[] BuildBehaviors()
+		{
+			return Behaviors;
 		}
 	}
 }

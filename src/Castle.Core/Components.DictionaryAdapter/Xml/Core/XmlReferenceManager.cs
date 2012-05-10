@@ -341,7 +341,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void PrepareForReuse(Entry entry)
 		{
 			foreach (var item in entry.Values)
-				entriesByValue.Remove(item.Value);
+			{
+				var value = item.Value.Target;
+				if (null != value)
+					entriesByValue.Remove(value);
+			}
 			entry.Values.Clear();
 
 			format.ClearIdentity(entry.Node);
@@ -381,12 +385,16 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				if (!item.IsInGraph)
 					continue;
 
-				if (type.IsAssignableFrom(item.Type))
-					return Try.Success(out value, item.Value);
+				var candidate = item.Value.Target;
+				if (candidate == null)
+					continue;
 
-				var candidate = item.Value as IDictionaryAdapter;
-				if (candidate != null)
-					dictionaryAdapter = candidate;
+				if (type.IsAssignableFrom(item.Type))
+					if (null != candidate)
+						return Try.Success(out value, candidate);
+
+				if (dictionaryAdapter == null)
+					dictionaryAdapter = candidate as IDictionaryAdapter;
 			}
 
 			// Fall back to coercing a DA found in the graph
@@ -421,9 +429,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var values = entry.Values;
 			for (int index = 0; index < values.Count; index++)
 			{
-				if (ReferenceEquals(values[index].Value, value))
+				var item      = values[index];
+				var candidate = item.Value.Target;
+
+				if (ReferenceEquals(candidate, value))
 				{
-					var item = values[index];
 					item = new EntryValue(item.Type, item.Value, false);
 					values[index] = item;
 					return;
@@ -442,10 +452,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			var visited = null as HashSet<Entry>;
 
-			foreach (var keyValue in other.entriesByValue.Keys)
+			foreach (var otherEntry in other.entriesByValue)
 			{
 				Entry thisEntry;
-				if (entriesByValue.TryGetValue(keyValue, out thisEntry))
+				if (entriesByValue.TryGetValue(otherEntry.Key, out thisEntry))
 				{
 					if (visited == null)
 						visited = new HashSet<Entry>(ReferenceEqualityComparer<Entry>.Instance);
@@ -453,15 +463,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 						continue;
 					visited.Add(thisEntry);
 
-				    var otherEntry = other.entriesByValue[keyValue];
-
-					foreach (var otherItem in otherEntry.Values)
+					foreach (var otherValue in otherEntry.Value.Values)
 					{
-						if (otherItem.Value == keyValue)
-							continue;
-						if (entriesByValue.ContainsKey(otherItem.Value))
-							continue;
-						AddValueCore(thisEntry, otherItem.Type, otherItem.Value, false);
+						var otherTarget = otherValue.Value.Target;
+						if (otherTarget == null           ||
+							otherTarget == otherEntry.Key ||
+							entriesByValue.ContainsKey(otherTarget))
+							{ continue; }
+						AddValueCore(thisEntry, otherValue.Type, otherTarget, false);
 					}
 				}
 			}
@@ -546,11 +555,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private struct EntryValue
 		{
-			public readonly Type   Type;
-			public readonly object Value;
-			public readonly	bool   IsInGraph;
+			public readonly Type          Type;
+			public readonly WeakReference Value;
+			public readonly	bool          IsInGraph;
 
 			public EntryValue(Type type, object value, bool isInGraph)
+				: this(type, new WeakReference(value), isInGraph) { }
+
+			public EntryValue(Type type, WeakReference value, bool isInGraph)
 			{
 				Type      = type;
 				Value     = value;

@@ -27,7 +27,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		public class WithAttributeOnInterface : XmlAdapterTestCase
 		{
 			[Reference]
-			public interface IFoo
+			public interface IFoo : IDictionaryAdapter
 			{
 				string      Value { get; set; }
 				IFoo        One   { get; set; }
@@ -39,9 +39,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 #endif
 			}
 
-			public interface IBar
+			public interface IBar : IDictionaryAdapter
 			{
-				string      Value { get; set; }
+				string      Text  { get; set; }
 			}
 
 			[Test]

@@ -62,7 +62,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private static XmlNameTable GetNameTable(XmlContext parent)
 		{
 			return parent.NameTable;
-		}
+		}   
 #endif
 
 		public void AddNamespace(XmlNamespaceAttribute attribute)
@@ -134,7 +134,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public string GetAttributePrefix(IXmlNode node, string namespaceUri)
 		{
 			string prefix;
-			if (namespaceUri == node.Name.NamespaceUri)
+			if (string.IsNullOrEmpty(namespaceUri)) // was: namespaceUri == node.Name.NamespaceUri
 			    return string.Empty;
 			if (TryGetDefinedPrefix(node, namespaceUri, out prefix))
 				return prefix;

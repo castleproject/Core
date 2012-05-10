@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,60 +17,18 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.ComponentModel;
 
-	#region Class PropertyModifiedEventArgs
-
-	public class PropertyModifiedEventArgs : PropertyChangedEventArgs
-	{
-		public PropertyModifiedEventArgs(String propertyName, object oldPropertyValue, object newPropertyValue)
-			: base(propertyName)
-		{
-			OldPropertyValue = oldPropertyValue;
-			NewPropertyValue = newPropertyValue;
-		}
-
-		public object OldPropertyValue { get; private set; }
-
-		public object NewPropertyValue { get; private set; }
-	}
-
-	#endregion
-
-	#region Class PropertyModifyingEventArgs
-
-	public class PropertyModifyingEventArgs : PropertyChangingEventArgs
-	{
-		public PropertyModifyingEventArgs(String propertyName, object oldPropertyValue, object newPropertyValue)
-			: base(propertyName)
-		{
-			OldPropertyValue = oldPropertyValue;
-			NewPropertyValue = newPropertyValue;
-		}
-
-		public object OldPropertyValue { get; private set; }
-
-		public object NewPropertyValue { get; private set; }
-
-		public bool Cancel { get; set; }
-	}
-
-	public delegate void PropertyModifyingEventHandler(object sender, PropertyModifyingEventArgs e);
-
-	#endregion
-
 	/// <summary>
 	/// Contract for managing Dictionary adapter notifications.
 	/// </summary>
-	public interface IDictionaryNotify : 
+	public interface IDictionaryNotify :
 #if !SILVERLIGHT
-		INotifyPropertyChanging, 
+		INotifyPropertyChanging,
 #endif
 		INotifyPropertyChanged
 	{
 		bool CanNotify { get; }
 
 		bool ShouldNotify { get; }
-
-		bool PropagateChildNotifications { get; set; }
 
 		IDisposable SuppressNotificationsBlock();
 

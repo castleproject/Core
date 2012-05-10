@@ -20,11 +20,24 @@ namespace Castle.Components.DictionaryAdapter
 	public interface IDictionaryMetaInitializer : IDictionaryBehavior
 	{
 		/// <summary>
-		/// Performs any initialization of the dictionary adapter meta-data.
+		///		Initializes the given <see cref="DictionaryAdapterMeta"/> object.
 		/// </summary>
 		/// <param name="factory">The dictionary adapter factory.</param>
 		/// <param name="dictionaryMeta">The dictionary adapter meta.</param>
 		/// 
 		void Initialize(IDictionaryAdapterFactory factory, DictionaryAdapterMeta dictionaryMeta);
+
+		/// <summary>
+		///		Determines whether the given behavior should be included in a new
+		///		<see cref="DictionaryAdapterMeta"/> object.
+		/// </summary>
+		/// <param name="behavior">A dictionary behavior or annotation.</param>
+		/// <returns>True if the behavior should be included; otherwise, false.</returns>
+		/// <remarks>
+		///		<see cref="IDictionaryMetaInitializer"/> behaviors are always included,
+		///		regardless of the result of this method.
+		///	</remarks>
+		/// 
+		bool ShouldHaveBehavior(object behavior);
 	}
 }

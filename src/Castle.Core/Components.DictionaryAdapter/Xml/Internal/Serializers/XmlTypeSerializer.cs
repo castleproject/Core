@@ -33,7 +33,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public virtual  object GetStub (IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor) { throw Error.NotSupported(); }
 		public abstract object GetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor);
-		public abstract void   SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, ref object value);
+		public abstract void   SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, object oldValue, ref object value);
 
 		public static XmlTypeSerializer For(Type type)
 		{

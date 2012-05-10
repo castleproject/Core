@@ -20,7 +20,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 	internal class DummyLazy<T> : IRealizable<T>
 	{
-		public bool Exists
+		public bool IsReal
 		{
 			get { return ! EqualityComparer<T>.Default.Equals(Value, default(T)); }
 		}

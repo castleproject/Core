@@ -35,12 +35,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			var source = node.AsRealizable<XmlNode>();
 
-			return (source != null && source.Exists)
+			return (source != null && source.IsReal)
 				? source.Value
 				: null;
 		}
 
-		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, ref object value)
+		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, object oldValue, ref object value)
 		{
 			var newNode = (XmlNode) value;
 

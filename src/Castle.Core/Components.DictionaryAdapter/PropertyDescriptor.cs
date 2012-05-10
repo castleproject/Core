@@ -15,13 +15,12 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
-	using System.Linq;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Reflection;
 	using System.Diagnostics;
-
+	using System.Linq;
+	using System.Reflection;
 	using Castle.Core.Internal;
 
 	/// <summary>
@@ -31,33 +30,28 @@ namespace Castle.Components.DictionaryAdapter
 	public class PropertyDescriptor : IDictionaryKeyBuilder, IDictionaryPropertyGetter, IDictionaryPropertySetter
 	{
 		private IDictionary state;
-		private IDictionary extendedProperties;
-		private List<IDictionaryPropertyGetter> getters;
-		private List<IDictionaryPropertySetter> setters;
-		private List<IDictionaryKeyBuilder> keyBuilders;
+		private Dictionary<object, object> extendedProperties;
+		protected List<IDictionaryBehavior> dictionaryBehaviors;
 
-		private static readonly object[] NoBehaviors = new object[0];
-		private static readonly ICollection<IDictionaryKeyBuilder> NoKeysBuilders = new IDictionaryKeyBuilder[0];
-		private static readonly ICollection<IDictionaryPropertyGetter> NoHGetters = new IDictionaryPropertyGetter[0];
-		private static readonly ICollection<IDictionaryPropertySetter> NoSetters = new IDictionaryPropertySetter[0];
+		private static readonly object[] NoAnnotations = new object[0];
 
 		/// <summary>
 		/// Initializes an empty <see cref="PropertyDescriptor"/> class.
 		/// </summary>
 		public PropertyDescriptor()
 		{
-			Behaviors = NoBehaviors;
+			Annotations = NoAnnotations;
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PropertyDescriptor"/> class.
 		/// </summary>
 		/// <param name="property">The property.</param>
-		/// <param name="behaviors">The property behaviors.</param>
-		public PropertyDescriptor(PropertyInfo property, object[] behaviors) : this()
+		/// <param name="annotations">The annotations.</param>
+		public PropertyDescriptor(PropertyInfo property, object[] annotations) : this()
 		{
 			Property = property;
-			Behaviors = behaviors ?? NoBehaviors;
+			Annotations = annotations ?? NoAnnotations;
 			IsDynamicProperty = typeof(IDynamicValue).IsAssignableFrom(property.PropertyType);
 			ObtainTypeConverter();
 		}
@@ -65,9 +59,9 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Initializes a new instance <see cref="PropertyDescriptor"/> class.
 		/// </summary>
-		protected PropertyDescriptor(object[] behaviors)
+		public PropertyDescriptor(object[] annotations)
 		{
-			Behaviors = behaviors ?? NoBehaviors;
+			Annotations = annotations ?? NoAnnotations;
 		}
 
 		/// <summary>
@@ -78,7 +72,7 @@ namespace Castle.Components.DictionaryAdapter
 		public PropertyDescriptor(PropertyDescriptor source, bool copyBehaviors)
 		{
 			Property = source.Property;
-			Behaviors = source.Behaviors;
+			Annotations = source.Annotations;
 			IsDynamicProperty = source.IsDynamicProperty;
 			TypeConverter = source.TypeConverter;
 			SuppressNotifications = source.SuppressNotifications;
@@ -86,12 +80,11 @@ namespace Castle.Components.DictionaryAdapter
 			IfExists = source.IfExists;
 			Fetch = source.Fetch;
 
-			if (copyBehaviors)
-			{
-				keyBuilders = source.keyBuilders;
-				getters = source.getters;
-				setters = source.setters;
-			}
+			if (source.extendedProperties != null)
+				extendedProperties = new Dictionary<object, object>(source.extendedProperties);
+
+			if (copyBehaviors && source.dictionaryBehaviors != null)
+				dictionaryBehaviors = new List<IDictionaryBehavior>(source.dictionaryBehaviors);
 		}
 
 		/// <summary>
@@ -134,14 +127,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// </summary>
 		public IDictionary State
 		{
-			get
-			{
-				if (state == null)
-				{
-					state = new Dictionary<object, object>();
-				}
-				return state;
-			}
+			get { return state ?? (state = new Dictionary<object, object>()); }
 		}
 
 		/// <summary>
@@ -162,7 +148,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets the property behaviors.
 		/// </summary>
-		public object[] Behaviors { get; private set; }
+		public object[] Annotations { get; private set; }
 
 		/// <summary>
 		/// Gets the type converter.
@@ -175,44 +161,95 @@ namespace Castle.Components.DictionaryAdapter
 		/// </summary>
 		public IDictionary ExtendedProperties
 		{
-			get
-			{
-				if (extendedProperties == null)
-				{
-					extendedProperties = new Dictionary<object, object>();
-				}
-				return extendedProperties;
-			}
-		}
-
-		/// <summary>
-		/// Gets the key builders.
-		/// </summary>
-		/// <value>The key builders.</value>
-		public ICollection<IDictionaryKeyBuilder> KeyBuilders
-		{
-			get { return keyBuilders ?? NoKeysBuilders; }
+			get { return extendedProperties ?? (extendedProperties = new Dictionary<object, object>()); }
 		}
 
 		/// <summary>
 		/// Gets the setter.
 		/// </summary>
 		/// <value>The setter.</value>
-		public ICollection<IDictionaryPropertySetter> Setters
+		public IEnumerable<IDictionaryBehavior> Behaviors
 		{
-			get { return setters ?? NoSetters; }
+			get
+			{
+				return dictionaryBehaviors ?? Enumerable.Empty<IDictionaryBehavior>();
+			}
+		}
+
+		internal List<IDictionaryBehavior> BehaviorsInternal
+		{
+			get { return dictionaryBehaviors; }
+		}
+
+		/// <summary>
+		/// Gets the key builders.
+		/// </summary>
+		/// <value>The key builders.</value>
+		public IEnumerable<IDictionaryKeyBuilder> KeyBuilders
+		{
+			get 
+			{
+				return (dictionaryBehaviors != null)
+					? dictionaryBehaviors.OfType<IDictionaryKeyBuilder>() 
+					: Enumerable.Empty<IDictionaryKeyBuilder>();
+			}
+		}
+
+		/// <summary>
+		/// Gets the setter.
+		/// </summary>
+		/// <value>The setter.</value>
+		public IEnumerable<IDictionaryPropertySetter> Setters
+		{
+			get
+			{
+				return (dictionaryBehaviors != null)
+					? dictionaryBehaviors.OfType<IDictionaryPropertySetter>()
+					: Enumerable.Empty<IDictionaryPropertySetter>();
+			}
 		}
 
 		/// <summary>
 		/// Gets the getter.
 		/// </summary>
 		/// <value>The getter.</value>
-		public ICollection<IDictionaryPropertyGetter> Getters
+		public IEnumerable<IDictionaryPropertyGetter> Getters
 		{
-			get { return getters ?? NoHGetters; }
+			get
+			{
+				return (dictionaryBehaviors != null)
+					? dictionaryBehaviors.OfType<IDictionaryPropertyGetter>()
+					: Enumerable.Empty<IDictionaryPropertyGetter>();
+			}
 		}
 
-		#region IDictionaryKeyBuilder Members
+		/// <summary>
+		/// Gets the initializers.
+		/// </summary>
+		/// <value>The initializers.</value>
+		public IEnumerable<IDictionaryInitializer> Initializers
+		{
+			get
+			{
+				return (dictionaryBehaviors != null)
+					? dictionaryBehaviors.OfType<IDictionaryInitializer>()
+					: Enumerable.Empty<IDictionaryInitializer>();
+			}
+		}
+
+		/// <summary>
+		/// Gets the meta-data initializers.
+		/// </summary>
+		/// <value>The meta-data initializers.</value>
+		public IEnumerable<IDictionaryMetaInitializer> MetaInitializers
+		{
+			get
+			{
+				return (dictionaryBehaviors != null)
+					? dictionaryBehaviors.OfType<IDictionaryMetaInitializer>()
+					: Enumerable.Empty<IDictionaryMetaInitializer>();
+			}
+		}
 
 		/// <summary>
 		/// Gets the key.
@@ -223,63 +260,19 @@ namespace Castle.Components.DictionaryAdapter
 		/// <returns></returns>
 		public string GetKey(IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor descriptor)
 		{
-			if (keyBuilders != null)
+			var behaviors = dictionaryBehaviors;
+			if (behaviors != null)
 			{
-				foreach (var builder in keyBuilders)
+				var count = behaviors.Count;
+				for (int i = 0; i < count; i++)
 				{
-					key = builder.GetKey(dictionaryAdapter, key, this);
+					var builder = behaviors[i] as IDictionaryKeyBuilder;
+					if (builder != null)
+						key = builder.GetKey(dictionaryAdapter, key, this);
 				}
 			}
-
 			return key;
 		}
-
-		/// <summary>
-		/// Adds the key builder.
-		/// </summary>
-		/// <param name="builders">The builder.</param>
-		public PropertyDescriptor AddKeyBuilder(params IDictionaryKeyBuilder[] builders)
-		{
-			return AddKeyBuilders((IEnumerable<IDictionaryKeyBuilder>)builders);
-		}
-
-		/// <summary>
-		/// Adds the key builders.
-		/// </summary>
-		/// <param name="builders">The builders.</param>
-		public PropertyDescriptor AddKeyBuilders(IEnumerable<IDictionaryKeyBuilder> builders)
-		{
-			if (builders != null)
-			{
-				if (keyBuilders == null)
-				{
-					keyBuilders = new List<IDictionaryKeyBuilder>(builders);
-				}
-				else
-				{
-					keyBuilders.AddRange(builders);
-				}
-			}
-			return this;
-		}
-
-		/// <summary>
-		/// Copies the key builders to the other <see cref="PropertyDescriptor"/>
-		/// </summary>
-		/// <param name="other"></param>
-		/// <returns></returns>
-		public PropertyDescriptor CopyKeyBuilders(PropertyDescriptor other)
-		{
-			if (keyBuilders != null)
-			{
-				other.AddKeyBuilders(keyBuilders.Select(builder => builder.Copy()).OfType<IDictionaryKeyBuilder>());
-			}
-			return this;
-		}
-
-		#endregion
-
-		#region IDictionaryPropertyGetter Members
 
 		/// <summary>
 		/// Gets the property value.
@@ -290,69 +283,25 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="descriptor">The descriptor.</param>
 		/// <param name="ifExists">true if return only existing.</param>
 		/// <returns></returns>
-		public object GetPropertyValue(IDictionaryAdapter dictionaryAdapter,
-			string key, object storedValue, PropertyDescriptor descriptor, bool ifExists)
+		public object GetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key, object storedValue, PropertyDescriptor descriptor, bool ifExists)
 		{
 			key = GetKey(dictionaryAdapter, key, descriptor);
 			storedValue = storedValue ?? dictionaryAdapter.ReadProperty(key);
 
-			if (getters != null)
+			var behaviors = dictionaryBehaviors;
+			if (behaviors != null)
 			{
-				foreach (var getter in getters)
+				var count = behaviors.Count;
+				for (int i = 0; i < count; i++)
 				{
-					storedValue = getter.GetPropertyValue(dictionaryAdapter, key, storedValue, this, IfExists || ifExists);
+					var getter = behaviors[i] as IDictionaryPropertyGetter;
+					if (getter != null)
+						storedValue = getter.GetPropertyValue(dictionaryAdapter, key, storedValue, this, IfExists || ifExists);
 				}
 			}
 
 			return storedValue;
 		}
-
-		/// <summary>
-		/// Adds the dictionary getter.
-		/// </summary>
-		/// <param name="getters">The getter.</param>
-		public PropertyDescriptor AddGetter(params IDictionaryPropertyGetter[] getters)
-		{
-			return AddGetters((IEnumerable<IDictionaryPropertyGetter>)getters);
-		}
-
-		/// <summary>
-		/// Adds the dictionary getters.
-		/// </summary>
-		/// <param name="gets">The getters.</param>
-		public PropertyDescriptor AddGetters(IEnumerable<IDictionaryPropertyGetter> gets)
-		{
-			if (gets != null)
-			{
-				if (getters == null)
-				{
-					getters = new List<IDictionaryPropertyGetter>(gets);
-				}
-				else
-				{
-					getters.AddRange(gets);
-				}
-			}
-			return this;
-		}
-
-		/// <summary>
-		/// Copies the property getters to the other <see cref="PropertyDescriptor"/>
-		/// </summary>
-		/// <param name="other"></param>
-		/// <returns></returns>
-		public PropertyDescriptor CopyGetters(PropertyDescriptor other)
-		{
-			if (getters != null)
-			{
-				other.AddGetters(getters.Select(getter => getter.Copy()).OfType<IDictionaryPropertyGetter>());
-			}
-			return this;
-		}
-
-		#endregion
-
-		#region IDictionaryPropertySetter Members
 
 		/// <summary>
 		/// Sets the property value.
@@ -362,19 +311,20 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="value">The value.</param>
 		/// <param name="descriptor">The descriptor.</param>
 		/// <returns></returns>
-		public bool SetPropertyValue(IDictionaryAdapter dictionaryAdapter,
-			string key, ref object value, PropertyDescriptor descriptor)
+		public bool SetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key, ref object value, PropertyDescriptor descriptor)
 		{
 			key = GetKey(dictionaryAdapter, key, descriptor);
 
-			if (setters != null)
+			var behaviors = dictionaryBehaviors;
+			if (behaviors != null)
 			{
-				foreach(var setter in setters)
+				var count = behaviors.Count;
+				for (int i = 0; i < count; i++)
 				{
-					if (setter.SetPropertyValue(dictionaryAdapter, key, ref value, this) == false)
-					{
-						return false;
-					}
+					var setter = behaviors[i] as IDictionaryPropertySetter;
+					if (setter != null)
+						if (setter.SetPropertyValue(dictionaryAdapter, key, ref value, this) == false)
+							return false;
 				}
 			}
 
@@ -383,85 +333,107 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		/// <summary>
-		/// Adds the dictionary setter.
+		/// Adds a single behavior.
 		/// </summary>
-		/// <param name="setters">The setter.</param>
-		public PropertyDescriptor AddSetter(params IDictionaryPropertySetter[] setters)
+		/// <param name="behavior">The behavior.</param>
+		public PropertyDescriptor AddBehavior(IDictionaryBehavior behavior)
 		{
-			return AddSetters((IEnumerable<IDictionaryPropertySetter>)setters);
-		}
+			if (behavior == null)
+				return this;
 
-		/// <summary>
-		/// Adds the dictionary setters.
-		/// </summary>
-		/// <param name="sets">The setters.</param>
-		public PropertyDescriptor AddSetters(IEnumerable<IDictionaryPropertySetter> sets)
-		{
-			if (sets != null)
-			{
-				if (setters == null)
-				{
-					setters = new List<IDictionaryPropertySetter>(sets);
-				}
-				else
-				{
-					setters.AddRange(sets);
-				}
-			}
+			var builder = behavior as IDictionaryBehaviorBuilder;
+			if (builder == null)
+				MergeBehavior(ref dictionaryBehaviors, behavior);
+			else
+				foreach (var item in builder.BuildBehaviors())
+					AddBehavior(item as IDictionaryBehavior);
+
 			return this;
 		}
 
-		/// <summary>
-		/// Copies the property setters to the other <see cref="PropertyDescriptor"/>
-		/// </summary>
-		/// <param name="other"></param>
-		/// <returns></returns>
-		public PropertyDescriptor CopySetters(PropertyDescriptor other)
+		public static void MergeBehavior<T>(ref List<T> dictionaryBehaviors, T behavior)
+			where T : class, IDictionaryBehavior
 		{
-			if (setters != null)
+			var behaviors = dictionaryBehaviors;
+			if (behaviors == null)
 			{
-				other.AddSetters(setters.Select(setter => setter.Copy()).OfType<IDictionaryPropertySetter>());
+				behaviors = new List<T>();
+				behaviors.Add(behavior);
+				dictionaryBehaviors = behaviors;
+				return;
 			}
-			return this;
-		}
 
-		#endregion
+			// The following is ugly but supposedly optimized
+
+			// Locals using ldloc.#
+			var index = 0;
+			int candidatePriority;
+			var targetOrder = behavior.ExecutionOrder;
+			// Locals using ldloc.s
+			var count = behaviors.Count;
+			IDictionaryBehavior candidateBehavior;
+
+			// Skip while order < behavior.ExecutionOrder
+			for (;;)
+			{
+				candidateBehavior = behaviors[index];
+				candidatePriority = candidateBehavior.ExecutionOrder;
+
+				if (candidatePriority >= targetOrder)
+					break;
+
+				if (++index == count)
+				{
+					behaviors.Add(behavior);
+					return;
+				}
+			}
+
+			// Skip while order == behavior.ExecutionOrder
+			for (;;)
+			{
+				if (candidatePriority != targetOrder)
+					break;
+
+				if (candidateBehavior == behavior)
+					return; // Duplicate
+
+				if (++index == count)
+				{
+					behaviors.Add(behavior);
+					return;
+				}
+
+				candidateBehavior = behaviors[index];
+				candidatePriority = candidateBehavior.ExecutionOrder;
+			}
+
+			// Insert at found index
+			behaviors.Insert(index, behavior);
+			return;
+		}
 
 		/// <summary>
 		/// Adds the behaviors.
 		/// </summary>
-		/// <param name="behaviors"></param>
-		/// <returns></returns>
-		public PropertyDescriptor AddBehavior(params IDictionaryBehavior[] behaviors)
+		/// <param name="behaviors">The behaviors.</param>
+		public PropertyDescriptor AddBehaviors(params IDictionaryBehavior[] behaviors)
 		{
-			return AddBehaviors((IEnumerable<IDictionaryBehavior>)behaviors);
+			// DO NOT REFACTOR. Compiler will emit optimized iterator here.
+			foreach (var behavior in behaviors)
+				AddBehavior(behavior);
+			return this;
 		}
 
 		/// <summary>
 		/// Adds the behaviors.
 		/// </summary>
-		/// <param name="behaviors"></param>
-		/// <returns></returns>
+		/// <param name="behaviors">The behaviors.</param>
 		public PropertyDescriptor AddBehaviors(IEnumerable<IDictionaryBehavior> behaviors)
 		{
 			if (behaviors != null)
-			{
 				foreach (var behavior in behaviors)
-				{
-					InternalAddBehavior(behavior);
-				}
-			}
-			return this;
-		}
-
-			/// <summary>
-		/// Adds the behaviors from the builders.
-		/// </summary>
-		/// <param name="builders"></param>
-		/// <returns></returns>
-		public PropertyDescriptor AddBehaviors(params IDictionaryBehaviorBuilder[] builders)
-		{
-			AddBehaviors(builders.SelectMany(builder => builder.BuildBehaviors().OfType<IDictionaryBehavior>()));
+					AddBehavior(behavior);
 			return this;
 		}
 
@@ -470,9 +442,20 @@ namespace Castle.Components.DictionaryAdapter
 		/// </summary>
 		/// <param name="other"></param>
 		/// <returns></returns>
-		public virtual PropertyDescriptor CopyBehaviors(PropertyDescriptor other)
+		public PropertyDescriptor CopyBehaviors(PropertyDescriptor other)
 		{
-			return CopyKeyBuilders(other).CopyGetters(other).CopySetters(other);
+			var behaviors = dictionaryBehaviors;
+			if (behaviors != null)
+			{
+				var count = behaviors.Count;
+				for (var i = 0; i < count; i++)
+				{
+					var behavior = behaviors[i].Copy();
+					if (behavior != null)
+						other.AddBehavior(behavior);
+				}
+			}
+			return this;
 		}
 
 		/// <summary>
@@ -484,36 +467,13 @@ namespace Castle.Components.DictionaryAdapter
 			return new PropertyDescriptor(this, true);
 		}
 
-		protected virtual void InternalAddBehavior(IDictionaryBehavior behavior)
-		{
-			if (behavior is IDictionaryKeyBuilder)
-			{
-				AddKeyBuilder((IDictionaryKeyBuilder)behavior);
-			}
-
-			if (behavior is IDictionaryPropertyGetter)
-			{
-				AddGetter((IDictionaryPropertyGetter)behavior);
-			}
-
-			if (behavior is IDictionaryPropertySetter)
-			{
-				AddSetter((IDictionaryPropertySetter)behavior);
-			}
-		}
-
 		private void ObtainTypeConverter()
 		{
 			var converterType = AttributesUtil.GetTypeConverter(Property);
 
-			if (converterType != null)
-			{
-				TypeConverter = (TypeConverter) Activator.CreateInstance(converterType);
-			}
-			else
-			{
-				TypeConverter = TypeDescriptor.GetConverter(PropertyType);
-			}
+			TypeConverter = (converterType != null)
+				? (TypeConverter) Activator.CreateInstance(converterType)
+				: TypeDescriptor.GetConverter(PropertyType);
 		}
 	}
 }

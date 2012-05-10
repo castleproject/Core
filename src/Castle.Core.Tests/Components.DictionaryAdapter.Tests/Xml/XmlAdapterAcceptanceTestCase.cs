@@ -845,8 +845,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		public void Can_Remove_Properties()
 		{
 			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
-					 <Name>Soccer Adult Spring II 2010</Name>
-				  </Season>";
+					      <Name>Soccer Adult Spring II 2010</Name>
+				        </Season>";
 
 			XmlDocument document = null;
 			var season = CreateXmlAdapter<ISeason>(xml, ref document);

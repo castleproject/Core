@@ -17,43 +17,44 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Linq;
+	using System.Diagnostics;
 
 	[DebuggerDisplay("Type: {Type.FullName,nq}")]
 	public class DictionaryAdapterMeta
 	{
 		private IDictionary extendedProperties;
+		private readonly Func<DictionaryAdapterInstance, IDictionaryAdapter> creator;
 
-		public DictionaryAdapterMeta(Type type, IDictionaryInitializer[] initializers,
-									 IDictionaryMetaInitializer[] metaInitializers,
-									 object[] behaviors, IDictionary<String, PropertyDescriptor> properties,
-									 DictionaryDescriptor descriptor, IDictionaryAdapterFactory factory)
+		public DictionaryAdapterMeta(Type type, Type implementation, object[] behaviors, IDictionaryMetaInitializer[] metaInitializers, 
+			                         IDictionaryInitializer[] initializers, IDictionary<String, PropertyDescriptor> properties,
+									 IDictionaryAdapterFactory factory, Func<DictionaryAdapterInstance, IDictionaryAdapter> creator)
 		{
 			Type = type;
-			Factory = factory;
-			Descriptor = descriptor;
-			Initializers = initializers;
-			MetaInitializers = metaInitializers;
+			Implementation = implementation;
 			Behaviors = behaviors;
+			MetaInitializers = metaInitializers;
+			Initializers = initializers;
 			Properties = properties;
+			Factory = factory;
+			this.creator = creator;
 
-			InitializeMeta(factory);
+			InitializeMeta();
 		}
 
 		public Type Type { get; private set; }
 
-		public object[] Behaviors { get; private set; }
+		public Type Implementation { get; private set; }
 
-		public DictionaryDescriptor Descriptor { get; private set; }
+		public object[] Behaviors { get; private set; }
 
 		public IDictionaryAdapterFactory Factory { get; private set; }
 
-		public IDictionaryInitializer[] Initializers { get; private set; }
+		public IDictionary<string, PropertyDescriptor> Properties { get; private set; }
 
 		public IDictionaryMetaInitializer[] MetaInitializers { get; private set; }
 
-		public IDictionary<string, PropertyDescriptor> Properties { get; private set; }
+		public IDictionaryInitializer[] Initializers { get; private set; }
 
 		public IDictionary ExtendedProperties
 		{
@@ -67,16 +68,66 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		private void InitializeMeta(IDictionaryAdapterFactory factory)
+		public PropertyDescriptor CreateDescriptor()
 		{
-			if (Descriptor != null)
+			var metaInitializers   = MetaInitializers;
+			var sharedAnnotations  = CollectSharedBehaviors(Behaviors,    metaInitializers);
+			var sharedInitializers = CollectSharedBehaviors(Initializers, metaInitializers);
+
+			var descriptor = (sharedAnnotations != null)
+				? new PropertyDescriptor(sharedAnnotations.ToArray())
+				: new PropertyDescriptor();
+
+			descriptor.AddBehaviors(metaInitializers);
+
+			if (sharedInitializers != null)
+#if DOTNET40
+				descriptor.AddBehaviors(sharedInitializers);
+#else
+				descriptor.AddBehaviors(sharedInitializers.Cast<IDictionaryBehavior>());
+#endif
+
+			return descriptor;
+		}
+
+		private static List<T> CollectSharedBehaviors<T>(T[] source, IDictionaryMetaInitializer[] predicates)
+		{
+			var results = null as List<T>;
+
+			foreach (var candidate in source)
 			{
-				MetaInitializers = MetaInitializers.Prioritize(Descriptor.MetaInitializers).ToArray();
+				foreach (var predicate in predicates)
+				{
+					if (predicate.ShouldHaveBehavior(candidate))
+					{
+						if (results == null)
+							results = new List<T>(source.Length);
+
+						results.Add(candidate);
+						break; // next candidate
+					}
+				}
 			}
 
+			return results;
+		}
+
+		public DictionaryAdapterMeta GetAdapterMeta(Type type)
+		{
+			return Factory.GetAdapterMeta(type, this);
+		}
+
+		public object CreateInstance(IDictionary dictionary, PropertyDescriptor descriptor)
+		{
+			var instance = new DictionaryAdapterInstance(dictionary, this, descriptor, Factory);
+			return creator(instance);
+		}
+
+		private void InitializeMeta()
+		{
 			foreach (var metaInitializer in MetaInitializers)
 			{
-				metaInitializer.Initialize(factory, this);
+				metaInitializer.Initialize(Factory, this);
 			}
 		}
 	}
