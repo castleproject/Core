@@ -17,6 +17,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Diagnostics;
 
 	[DebuggerDisplay("Type: {Type.FullName,nq}")]
@@ -80,7 +81,11 @@ namespace Castle.Components.DictionaryAdapter
 			descriptor.AddBehaviors(metaInitializers);
 
 			if (sharedInitializers != null)
+#if DOTNET40
 				descriptor.AddBehaviors(sharedInitializers);
+#else
+				descriptor.AddBehaviors(sharedInitializers.Cast<IDictionaryBehavior>());
+#endif
 
 			return descriptor;
 		}

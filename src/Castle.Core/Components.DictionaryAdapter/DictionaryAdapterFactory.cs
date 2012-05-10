@@ -42,7 +42,8 @@ namespace Castle.Components.DictionaryAdapter
 	public class DictionaryAdapterFactory : IDictionaryAdapterFactory
 	{
 		private readonly Dictionary<Type, DictionaryAdapterMeta> interfaceToMeta = new Dictionary<Type, DictionaryAdapterMeta>();
-		private readonly Lock interfaceToMetaLock = new SlimReadWriteLock();
+
+		private readonly Lock interfaceToMetaLock = Lock.Create();
 
 		#region IDictionaryAdapterFactory
 
@@ -210,7 +211,11 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (descriptor != null)
 			{
+#if DOTNET40
 				initializers.AddBehaviors(descriptor.MetaInitializers);
+#else
+				initializers.AddBehaviors(descriptor.MetaInitializers.Cast<IDictionaryBehavior>());
+#endif
 				typeBehaviors = typeBehaviors.Union(descriptor.Annotations).ToArray();
 			}
 
@@ -426,8 +431,13 @@ namespace Castle.Components.DictionaryAdapter
 			var interfaceBehaviors = typeBehaviors = ExpandBehaviors(AttributesUtil.GetInterfaceAttributes(type)).ToArray();
 			var defaultFetch = typeBehaviors.OfType<FetchAttribute>().Select(b => b.Fetch).FirstOrDefault();
 
+#if DOTNET40
 			initializers.AddBehaviors(typeBehaviors.OfType<IDictionaryMetaInitializer>())
 						.AddBehaviors(typeBehaviors.OfType<IDictionaryInitializer>());
+#else
+			initializers.AddBehaviors(typeBehaviors.OfType<IDictionaryMetaInitializer>().Cast<IDictionaryBehavior>())
+						.AddBehaviors(typeBehaviors.OfType<IDictionaryInitializer>    ().Cast<IDictionaryBehavior>());
+#endif
 
 			CollectProperties(type, property =>
 			{
@@ -435,7 +445,17 @@ namespace Castle.Components.DictionaryAdapter
 				var propertyDescriptor = new PropertyDescriptor(property, propertyBehaviors)
 					.AddBehaviors(propertyBehaviors.OfType<IDictionaryBehavior>())
 					.AddBehaviors(interfaceBehaviors.OfType<IDictionaryBehavior>().Where(b => b is IDictionaryKeyBuilder == false))
-					.AddBehaviors(ExpandBehaviors(AttributesUtil.GetInterfaceAttributes(property.ReflectedType)).OfType<IDictionaryKeyBuilder>());
+#if DOTNET40
+					.AddBehaviors(ExpandBehaviors(AttributesUtil
+						.GetInterfaceAttributes(property.ReflectedType))
+						.OfType<IDictionaryKeyBuilder>());
+#else
+					.AddBehaviors(ExpandBehaviors(AttributesUtil
+						.GetInterfaceAttributes(property.ReflectedType))
+						.OfType<IDictionaryKeyBuilder>()
+						.Cast<IDictionaryBehavior>());
+#endif
+
 				AddDefaultGetter(propertyDescriptor);
 
 				bool? propertyFetch = (from b in propertyBehaviors.OfType<FetchAttribute>() select b.Fetch).FirstOrDefault();
@@ -447,7 +467,11 @@ namespace Castle.Components.DictionaryAdapter
 					descriptorInitializer.Initialize(propertyDescriptor, propertyBehaviors);
 				}
 
+#if DOTNET40
 				initializers.AddBehaviors(propertyBehaviors.OfType<IDictionaryMetaInitializer>());
+#else
+				initializers.AddBehaviors(propertyBehaviors.OfType<IDictionaryMetaInitializer>().Cast<IDictionaryBehavior>());
+#endif
 
 				PropertyDescriptor existingDescriptor;
 				if (propertyMap.TryGetValue(property.Name, out existingDescriptor))
