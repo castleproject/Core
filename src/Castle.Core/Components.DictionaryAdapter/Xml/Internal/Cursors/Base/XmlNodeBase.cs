@@ -17,7 +17,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 
-	public abstract class XmlNodeBase : IRealizableSource
+	public abstract class XmlNodeBase : IRealizableSource, IVirtual
 	{
 		protected Type type;
 		private readonly IXmlNode parent;
@@ -32,7 +32,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.parent     = parent;
 		}
 
-		public virtual bool Exists
+		public virtual bool IsReal
 		{
 			get { return true; }
 		}
@@ -67,6 +67,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		protected virtual void Realize()
 		{
 			// Default nodes are fully realized already
+		}
+
+		void IVirtual.Realize()
+		{
+			Realize();
 		}
 
 		public virtual event EventHandler Realized

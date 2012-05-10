@@ -66,7 +66,7 @@ namespace Castle.Components.DictionaryAdapter
 				if (component == null)
 				{
 					var descriptor = new PropertyDescriptor(property.Property, null);
-					descriptor.AddKeyBuilder(new KeyPrefixAttribute(key));
+					descriptor.AddBehavior(new KeyPrefixAttribute(key));
 					component = dictionaryAdapter.This.Factory.GetAdapter(
 						property.Property.PropertyType, dictionaryAdapter.This.Dictionary, descriptor);
 					dictionaryAdapter.This.ExtendedProperties[property.PropertyName] = component;

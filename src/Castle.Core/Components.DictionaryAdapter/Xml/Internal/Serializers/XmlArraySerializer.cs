@@ -56,10 +56,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return items.ToArray(itemType);
 		}
 
-		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, ref object value)
+		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, object oldValue, ref object value)
 		{
 			var source      = (Array) value;
 			var target      = (Array) null;
+			var originals   = (Array) oldValue;
 			var itemType    = source.GetType().GetElementType();
 			var subaccessor = accessor.GetCollectionAccessor(itemType);
 			var cursor      = subaccessor.SelectCollectionItems(node, true);
@@ -68,16 +69,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			for (var i = 0; i < source.Length; i++)
 			{
-				var originalItem = source.GetValue(i);
-				var assignedItem = originalItem;
+				var originalItem = GetItemSafe(originals, i);
+				var providedItem = source.GetValue(i);
+				var assignedItem = providedItem;
 
-				subaccessor.SetValue(cursor, parent, references, cursor.MoveNext(), null /* TODO: Get Value */, ref assignedItem);
+				subaccessor.SetValue(cursor, parent, references, cursor.MoveNext(), originalItem, ref assignedItem);
 
 				if (target != null)
 				{
 					target.SetValue(assignedItem, i);
 				}
-				else if (!Equals(assignedItem, originalItem))
+				else if (!Equals(assignedItem, providedItem))
 				{
 					target = Array.CreateInstance(itemType, source.Length);
 					Array.Copy(source, target, i);
@@ -89,6 +91,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			if (target != null)
 				value = target;
+		}
+
+		private static object GetItemSafe(Array array, int index)
+		{
+			return array != null && index >= 0 && index < array.Length
+				? array.GetValue(index)
+				: null;
 		}
 	}
 }

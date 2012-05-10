@@ -21,15 +21,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 	public static class DictionaryAdapterExtensions
 	{
-		public static DictionaryAdapterMeta GetAdapterMeta(this DictionaryAdapterMeta source, Type type)
-		{
-			var descriptor = new DictionaryDescriptor(GetSharedBehaviors(source));
-			descriptor.AddInitializers    (source.Initializers);
-			descriptor.AddMetaInitializers(source.MetaInitializers);
-
-			return source.Factory.GetAdapterMeta(type, descriptor);
-		}	
-
 		public static object CreateChildAdapter(this IDictionaryAdapter parent, Type type, XmlAdapter adapter)
 		{
 			return CreateChildAdapter(parent, type, adapter, null);
@@ -40,7 +31,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (null == dictionary)
 				dictionary = new Hashtable();
 
-			var descriptor = new DictionaryDescriptor(GetSharedBehaviors(parent.Meta));
+			var descriptor = parent.Meta.CreateDescriptor();
 		    parent.This.Descriptor.CopyBehaviors(descriptor);
 		    descriptor.AddBehavior(adapter);
 
@@ -92,21 +83,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			meta.ExtendedProperties[XmlTypeKey] = value;
 		}
 
-		private static object[] GetSharedBehaviors(DictionaryAdapterMeta meta)
-		{
-			return meta.Behaviors.Where(behavior =>
-				behavior is XmlDefaultsAttribute   ||
-				behavior is XmlNamespaceAttribute  ||
-				behavior is XPathVariableAttribute ||
-				behavior is XPathFunctionAttribute)
-				.ToArray();
-		}
-
 		private const string
-			XmlAccessorKey         = "XmlAccessor",
-			XmlMetaKey             = "XmlMeta",
-			XmlTypeKey             = "XmlType",
-			XmlReferenceManagerKey = "XmlReferenceManager";
+			XmlAccessorKey  = "XmlAccessor",
+			XmlMetaKey      = "XmlMeta",
+			XmlTypeKey      = "XmlType";
 	}
 }
 #endif

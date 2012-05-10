@@ -15,15 +15,43 @@
 #if !SILVERLIGHT && !MONO // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml
 {
+	using System.Collections.Generic;
+	using System.Linq;
+
 	public class XmlMetadataBehavior : DictionaryBehaviorAttribute, IDictionaryMetaInitializer
 	{
-		public static readonly XmlMetadataBehavior Instance = new XmlMetadataBehavior();
+		public static readonly XmlMetadataBehavior
+			Default = new XmlMetadataBehavior();
 
-		protected XmlMetadataBehavior() { }
+		private readonly HashSet<string> reservedNamespaceUris = new HashSet<string>
+		{
+			Xmlns.NamespaceUri,
+			Xsi  .NamespaceUri,
+			XRef .NamespaceUri
+		};
+
+		public IEnumerable<string> ReservedNamespaceUris
+		{
+			get { return reservedNamespaceUris.ToArray(); }
+		}
+
+		public XmlMetadataBehavior AddReservedNamespaceUri(string uri)
+		{
+			reservedNamespaceUris.Add(uri);
+			return this;
+		}
 
 		void IDictionaryMetaInitializer.Initialize(IDictionaryAdapterFactory factory, DictionaryAdapterMeta meta)
 		{
-			meta.SetXmlMeta(new XmlMetadata(meta));
+			meta.SetXmlMeta(new XmlMetadata(meta, reservedNamespaceUris));
+		}
+
+		bool IDictionaryMetaInitializer.ShouldHaveBehavior(object behavior)
+		{
+			return behavior is XmlDefaultsAttribute
+				|| behavior is XmlNamespaceAttribute
+				|| behavior is XPathVariableAttribute
+				|| behavior is XPathFunctionAttribute;
 		}
 	}
 }

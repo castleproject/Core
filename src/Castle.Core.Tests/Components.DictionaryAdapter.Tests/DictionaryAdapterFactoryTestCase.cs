@@ -186,10 +186,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			var  person = factory.GetAdapter<IPersonWithDeniedInheritancePrefix>(dictionary);
 
-			string name = "Ming The Merciless";
-			int numberOfFeet = 2;
-			int numberOfHeads = 1;
-			int numberOfFingers = 3;
+			const string name = "Ming The Merciless";
+			const int numberOfFeet = 2;
+			const int numberOfHeads = 1;
+			const int numberOfFingers = 3;
 
 			person.Name = name;
 			person.NumberOfFeet = numberOfFeet;
@@ -198,14 +198,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.NumberOfHeads = numberOfHeads;
 			person.NumberOfFingers = numberOfFingers;
 
-			string[] keys = new string[dictionary.Keys.Count];
+			var keys = new string[dictionary.Keys.Count];
 			dictionary.Keys.CopyTo(keys, 0);
 
 			Assert.IsTrue(keys.Any(key => key == "Name"));
 			Assert.IsTrue(keys.Any(key => key == "NumberOfFeet"));
 			Assert.IsTrue(keys.Any(key => key == "Person_HairColor"));
 			Assert.IsTrue(keys.Any(key => key == "Person2_Eye__Color"));
-			Assert.IsTrue(keys.Any(key => key == "Person2_NumberOfHeads"));
+			Assert.IsTrue(keys.Any(key => key == "NumberOfHeads"));
 			Assert.IsTrue(keys.Any(key => key == "NumberOfFingers"));
 
 			Assert.AreEqual(name, person.Name);
@@ -611,100 +611,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(meta["Id"], person.Id);
 		}
 
-		#region Safe type names
-
-		[Test]
-		public void GetSafeTypeName_NonGenericType_ReturnsTypeName()
-		{
-			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof(Version));
-			Assert.AreEqual(typeof(Version).Name, name);
-			AssemblyName asmName = new AssemblyName(name);
-			Assert.AreEqual(name, asmName.Name);
-		}
-
-		[Test]
-		public void GetSafeTypeName_GenericType_ReturnsSafeName()
-		{
-			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof(List<int>));
-			Assert.AreEqual("List_1_System_Int32", name);
-			AssemblyName asmName = new AssemblyName(name);
-			Assert.AreEqual(name, asmName.Name);
-		}
-
-		[Test]
-		public void GetSafeTypeName_OpenGenericType_ReturnsSafeName()
-		{
-			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof(List<>));
-			Assert.AreEqual("List_1", name);
-			AssemblyName asmName = new AssemblyName(name);
-			Assert.AreEqual(name, asmName.Name);
-		}
-
-		[Test]
-		public void GetSafeTypeName_GenericTypeWithMultipleParameters_ReturnsSafeName()
-		{
-			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof(Dictionary<int, string>));
-			Assert.AreEqual("Dictionary_2_System_Int32_System_String", name);
-			AssemblyName asmName = new AssemblyName(name);
-			Assert.AreEqual(name, asmName.Name);
-		}
-
-		[Test]
-		public void GetSafeTypeName_OpenGenericTypeWithMultipleParameters_ReturnsSafeName()
-		{
-			string name = DictionaryAdapterFactory.GetSafeTypeName(typeof(Dictionary<,>));
-			Assert.AreEqual("Dictionary_2", name);
-			AssemblyName asmName = new AssemblyName(name);
-			Assert.AreEqual(name, asmName.Name);
-		}
-
-		[Test]
-		public void GetSafeTypeFullName_NonGenericType_ReturnsFullName()
-		{
-			string name = DictionaryAdapterFactory.GetSafeTypeFullName(typeof(Version));
-			Assert.AreEqual(typeof(Version).FullName, name);
-			AssemblyName asmName = new AssemblyName(name);
-			Assert.AreEqual(name, asmName.Name);
-		}
-
-		[Test]
-		public void GetSafeTypeFullName_GenericType_ReturnsSafeName()
-		{
-			string name = DictionaryAdapterFactory.GetSafeTypeFullName(typeof(List<int>));
-			Assert.AreEqual("System.Collections.Generic.List_1_System_Int32", name);
-			AssemblyName asmName = new AssemblyName(name);
-			Assert.AreEqual(name, asmName.Name);
-		}
-
-		[Test]
-		public void GetSafeTypeFullName_OpenGenericType_ReturnsSafeName()
-		{
-			string name = DictionaryAdapterFactory.GetSafeTypeFullName(typeof(List<>));
-			Assert.AreEqual("System.Collections.Generic.List_1", name);
-			AssemblyName asmName = new AssemblyName(name);
-			Assert.AreEqual(name, asmName.Name);
-		}
-
-		[Test]
-		public void GetSafeTypeFullName_GenericTypeWithMultipleParameters_ReturnsSafeName()
-		{
-			string name = DictionaryAdapterFactory.GetSafeTypeFullName(typeof(Dictionary<int, string>));
-			Assert.AreEqual("System.Collections.Generic.Dictionary_2_System_Int32_System_String", name);
-			AssemblyName asmName = new AssemblyName(name);
-			Assert.AreEqual(name, asmName.Name);
-		}
-
-		[Test]
-		public void GetSafeTypeFullName_OpenGenericTypeWithMultipleParameters_ReturnsSafeName()
-		{
-			string name = DictionaryAdapterFactory.GetSafeTypeFullName(typeof(Dictionary<,>));
-			Assert.AreEqual("System.Collections.Generic.Dictionary_2", name);
-			AssemblyName asmName = new AssemblyName(name);
-			Assert.AreEqual(name, asmName.Name);
-		}
-
-		#endregion
-
 		[Test]
 		public void CanObtainDictionaryAdapterMeta()
 		{
@@ -734,7 +640,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		public void CanFetchProperties()
 		{
 			var getter = new CustomGetter();
-			var custom = new DictionaryDescriptor().AddGetter(getter);
+			var custom = new PropertyDescriptor().AddBehaviors(getter);
 			factory.GetAdapter(typeof(IPhone), dictionary, custom);
 
 			Assert.AreEqual(1, getter.PropertiesFetched.Count);
@@ -789,11 +695,11 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var person = factory.GetAdapter<IPerson>(dictionary);
 			person.PropertyChanged += (s, e) =>
 			{
-				var details = e as PropertyModifiedEventArgs;
+				var details = e as PropertyChangedEventArgsEx;
 				if (details != null)
 				{
-					Assert.AreEqual(null, details.OldPropertyValue);
-					Assert.AreEqual("Craig", details.NewPropertyValue);
+					Assert.AreEqual(null, details.OldValue);
+					Assert.AreEqual("Craig", details.NewValue);
 				}
 			};
 
@@ -806,7 +712,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var person = factory.GetAdapter<IPerson>(dictionary);
 			person.PropertyChanging += (s, e) =>
 			{
-				((PropertyModifyingEventArgs)e).Cancel = true;
+				((PropertyChangingEventArgsEx)e).Cancel = true;
 			};
 
 			person.Name = "Craig";
@@ -833,23 +739,15 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
-		public void WillPropagatePropertyChangedEventWhenNestedPropertyChanged()
+		public void WillNotPropagatePropertyChangedEventWhenNestedPropertyChanged()
 		{
-			var notifyCalled = false;
 			var container = factory.GetAdapter<IItemContainerWithComponent<IPerson>>(dictionary);
 			container.PropertyChanged += (s, e) =>
 			{
-				if (!notifyCalled)
-				{
-					notifyCalled = true;
-					Assert.AreSame(container.Item, s);
-					Assert.IsInstanceOf<IPerson>(s);
-					Assert.AreEqual("Name", e.PropertyName);
-				}
+				Assert.Fail("Property change event was raised from wrong object.");
 			};
 
 			container.Item.Name = "Craig";
-			Assert.IsTrue(notifyCalled);
 		}
 		
 #if !SILVERLIGHT //no BindingList in Silverlight
@@ -1368,7 +1266,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				if (e.PropertyName == "ReducePositions")
 				{
 					notifyCalled = true;
-					Assert.AreEqual(10, ((PropertyModifiedEventArgs)e).NewPropertyValue);
+					Assert.AreEqual(10, ((PropertyChangedEventArgsEx)e).NewValue);
 				}
 			};
 
@@ -1410,10 +1308,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			var container1 = (IItemContainer<IPerson>)
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
-				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
+				new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
 			var container2 = (IItemContainer<IPerson>)
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable(),
-				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
+				new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
 			Assert.AreEqual(container1, container1);
 			Assert.AreNotEqual(container1, container2);
 
@@ -1429,10 +1327,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			var container1 = (IItemContainer<IPerson>)
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
-				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
+				new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
 			var container2 = (IItemContainer<IPerson>)
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable(),
-				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
+				new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
 
 			container1.Id = Guid.NewGuid();
 			container2.Id = container1.Id;
@@ -1444,10 +1342,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			var container1 = (IItemContainer<IPerson>)
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
-				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
+				new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
 			var container2 = (IItemContainer<IPerson>)
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable(),
-				new DictionaryDescriptor().AddBehavior(new IdEqualityHashCodeStrategy()));
+				new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
 			Assert.AreNotEqual(container1.GetHashCode(), container2.GetHashCode());
 			container1.Id = Guid.NewGuid();
 			container2.Id = container1.Id;
@@ -1459,7 +1357,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			var container = (IItemContainer<IPerson>)
 					factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
-					new DictionaryDescriptor().AddBehavior(new CreateHashtableStrategy()));
+					new PropertyDescriptor().AddBehaviors(new CreateHashtableStrategy()));
 
 			Assert.IsNotNull(container.Address);
 			Assert.IsInstanceOf<Hashtable>(container.This.Dictionary);

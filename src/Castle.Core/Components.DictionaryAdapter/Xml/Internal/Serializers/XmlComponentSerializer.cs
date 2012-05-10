@@ -48,7 +48,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return parent.CreateChildAdapter(node.ClrType, adapter);
 		}
 
-		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, ref object value)
+		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, object oldValue, ref object value)
 		{
 			// Require a dictionary adapter
 			var source = value as IDictionaryAdapter;

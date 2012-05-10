@@ -138,12 +138,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             [Test]
             public void Set()
             {
-                var xmlA = Xml("<Foo/>");
+                var xmlA = Xml(	"<Foo/>");
 				var xmlB = Xml("<Foo> <A> <B>b</B> </A> </Foo>");
                 var fooA = Create<IFoo>(xmlA);
 				var fooB = Create<IFoo>(xmlB);
 
                 fooA.A = fooB.A;
+				var b = fooB.A.B;
 
                 Assert.That(xmlA, XmlEquivalent.To(xmlB));
             }
@@ -381,15 +382,15 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				AsVirtual(foo).Realized += (s, e) => HandleRealized(s, foo, ref realizedFoo, "Sender was Foo's virtual");
 				AsVirtual(bar).Realized += (s, e) => HandleRealized(s, bar, ref realizedBar, "Sender was Bar's virtual");
 
-				Assert.That(AsVirtual(obj).Exists, Is.True , "Obj exists");
-				Assert.That(AsVirtual(foo).Exists, Is.False, "Foo exists");
-				Assert.That(AsVirtual(bar).Exists, Is.False, "Bar exists");
+				Assert.That(AsVirtual(obj).IsReal, Is.True , "Obj exists");
+				Assert.That(AsVirtual(foo).IsReal, Is.False, "Foo exists");
+				Assert.That(AsVirtual(bar).IsReal, Is.False, "Bar exists");
 
 				bar.Id = Guid.NewGuid();
 
-				Assert.That(AsVirtual(obj).Exists, Is.True, "Obj exists");
-				Assert.That(AsVirtual(foo).Exists, Is.True, "Foo exists");
-				Assert.That(AsVirtual(bar).Exists, Is.True, "Bar exists");
+				Assert.That(AsVirtual(obj).IsReal, Is.True, "Obj exists");
+				Assert.That(AsVirtual(foo).IsReal, Is.True, "Foo exists");
+				Assert.That(AsVirtual(bar).IsReal, Is.True, "Bar exists");
 
 				Assert.That(realizedObj, Is.False, "Obj was realized");
 				Assert.That(realizedFoo, Is.True , "Foo was realized");
@@ -404,7 +405,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			private static IVirtual AsVirtual(object source)
 			{
-				return XmlAdapter.For(source);
+				return ((IDictionaryAdapter) source).AsVirtual();
 			}
 		}
 	}

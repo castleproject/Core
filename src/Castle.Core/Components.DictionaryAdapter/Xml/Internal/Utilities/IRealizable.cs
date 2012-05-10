@@ -15,9 +15,11 @@
 #if !SILVERLIGHT && !MONO // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml
 {
+	// OBSOLETE: This has been replaced with IVirtual<T>.
+
 	public interface IRealizable<T> : IRealizableSource
 	{
-		bool Exists { get; }
+		bool IsReal { get; }
 		T    Value  { get; }
 	}
 

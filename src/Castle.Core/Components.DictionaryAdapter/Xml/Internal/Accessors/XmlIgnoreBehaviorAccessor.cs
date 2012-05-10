@@ -68,6 +68,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				return this;
 			}
 
+			public bool IsReservedNamespaceUri(string namespaceUri)
+			{
+				return false;
+			}
+
 			public XmlName GetDefaultXsiType(Type clrType)
 			{
 				return new XmlName("anyType", Xsd.NamespaceUri);

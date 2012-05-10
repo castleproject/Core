@@ -44,7 +44,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
             return serializable;
 		}
 
-		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, ref object value)
+		public override void SetValue(IXmlNode node, IDictionaryAdapter parent, IXmlAccessor accessor, object oldValue, ref object value)
 		{
 		    var serializable = (IXmlSerializable) value;
 			var root = XmlDefaultSerializer.Root;

@@ -45,6 +45,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return metadata.ChildNamespaceUri; }
 		}
 
+		public bool IsReservedNamespaceUri(string namespaceUri)
+		{
+			return metadata.IsReservedNamespaceUri(namespaceUri);
+		}
+
 		public XmlName GetDefaultXsiType(Type clrType)
 		{
 			return metadata.GetDefaultXsiType(clrType);

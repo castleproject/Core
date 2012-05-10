@@ -32,7 +32,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IDictionaryCreateStrategy,
 		IDictionaryCopyStrategy,
 		IDictionaryReferenceManager,
-		IVirtual
+		IVirtual,
+		IXmlNodeSource
 	{
 		private IXmlNode node;
 		private object source;
@@ -72,9 +73,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.references = references;
 		}
 
-		public bool Exists
+		public bool IsReal
 		{
-			get { return node != null && node.Exists; }
+			get { return node != null && node.IsReal; }
 		}
 
 		public IXmlNode Node
@@ -119,7 +120,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			if (node == null)
 				node = GetBaseNode();
-			if (!node.Exists)
+			if (!node.IsReal)
 				node.Realized += HandleNodeRealized;
 
 			if (references == null)
@@ -276,7 +277,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (string.IsNullOrEmpty(key))
 				accessor = CreateAccessor(key, property, XmlSelfAccessor.Factory);
 
-			foreach (var behavior in property.Behaviors)
+			foreach (var behavior in property.Annotations)
 			{
 				if (IsIgnoreBehavior(behavior))
 					return XmlIgnoreBehaviorAccessor.Instance;
@@ -383,6 +384,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private static bool IsReferenceBehavior(object behavior)
 		{
 			return behavior is ReferenceAttribute;
+		}
+
+		void IVirtual.Realize()
+		{
+			throw new NotSupportedException("XmlAdapter does not support realization ssvia IVirtual.Realize().");
 		}
 
 		public event EventHandler Realized;

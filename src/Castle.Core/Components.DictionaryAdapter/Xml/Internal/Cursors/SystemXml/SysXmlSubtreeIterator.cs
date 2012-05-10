@@ -30,7 +30,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				throw Error.ArgumentNull("parent");
 
 			var source = parent.RequireRealizable<XmlNode>();
-			if (source.Exists)
+			if (source.IsReal)
 				node = source.Value;
 
 			type = typeof(object);

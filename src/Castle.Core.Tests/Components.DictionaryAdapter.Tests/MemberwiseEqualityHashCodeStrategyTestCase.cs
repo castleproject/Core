@@ -15,11 +15,12 @@
 namespace Castle.Components.DictionaryAdapter.Tests
 {
 #if !SILVERLIGHT
+	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Xml;
-	using NUnit.Framework;
 	using Castle.Components.DictionaryAdapter.Xml;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class MemberwiseEqualityHashCodeStrategyTestCase
@@ -122,7 +123,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			person.Name = "Robin";
 			person.Age = 27;
-			person.DOB = new System.DateTime(1983, 3, 12, 3, 30, 0);
+			person.DOB = new DateTime(1983, 3, 12, 3, 30, 0);
 			person.Friends = new List<IPerson>();
 			person.First_Name = "Rob";
 			person.HomeAddress = GetAdapter<IAddress>();
@@ -132,17 +133,15 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		private T GetAdapter<T>() where T : class
 		{
-			return (T)factory.GetAdapter(typeof(T), new Hashtable(), new DictionaryDescriptor()
-				.AddBehavior(XmlMetadataBehavior.Instance)
-				.AddBehavior(new MemberwiseEqualityHashCodeStrategy()));
+			return (T)factory.GetAdapter(typeof(T), new Hashtable(), new PropertyDescriptor()
+				.AddBehaviors(XmlMetadataBehavior.Default, new MemberwiseEqualityHashCodeStrategy()));
 		}
 
 		private T GetXmlAdapter<T>() where T : class
 		{
 			var xpath = new XmlAdapter(new XmlDocument());
-			return (T)factory.GetAdapter(typeof(T), new Hashtable(), new DictionaryDescriptor()
-				.AddBehavior(XmlMetadataBehavior.Instance).AddBehavior(xpath)
-				.AddBehavior(new MemberwiseEqualityHashCodeStrategy()));
+			return (T)factory.GetAdapter(typeof(T), new Hashtable(), new PropertyDescriptor()
+				.AddBehaviors(XmlMetadataBehavior.Default, xpath, new MemberwiseEqualityHashCodeStrategy()));
 		}
 	}
 #endif
