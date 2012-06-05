@@ -85,6 +85,20 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(2, result);
 		}
 
+		[Test, Ignore("DYNPROXY-169")]
+		public void Invocation_should_be_IChangeInvocationTarget_for_AdditionalInterfaces_methods()
+		{
+			var interceptor = new ChangeTargetInterceptor(new Two());
+			var proxy = generator.CreateInterfaceProxyWithTargetInterface(typeof(IOne),
+				                                                          new [] { typeof(ITwo) },
+			                                                              new OneTwo(),
+			                                                              interceptor);
+
+			var result = (proxy as ITwo).TwoMethod();
+
+			Assert.AreEqual(20, result);
+		}
+
 		[Test]
 		public void Null_target_is_valid()
 		{
