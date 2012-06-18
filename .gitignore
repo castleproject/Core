@@ -14,3 +14,4 @@ _ReSharper*
 *.csproj.ReSharper
 
 *.orig
+*~
