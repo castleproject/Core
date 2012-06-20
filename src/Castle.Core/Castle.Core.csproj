@@ -174,7 +174,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET45-Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\NET45-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY DOTNET DOTNET40</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY DOTNET DOTNET40 DOTNET45</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1591</NoWarn>
