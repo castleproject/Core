@@ -48,9 +48,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET45-Debug|AnyCPU' ">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
-    <OutputPath>bin\NET40-Debug\</OutputPath>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <OutputPath>bin\NET45-Debug\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
@@ -208,9 +207,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog">
+    <Reference Include="NLog" Condition="'$(BuildConfigKey)' != 'net45'">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog" Condition="'$(BuildConfigKey)' == 'net45'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(RootPath)\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
