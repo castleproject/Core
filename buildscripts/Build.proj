@@ -211,6 +211,9 @@ limitations under the License.
 		<CreateProperty Value="$(TestResultsPath)/nunit-results.xml" Condition="'$(NUnitTestResultXmlFiles)' == ''">
 			<Output PropertyName="NUnitTestResultXmlFiles" TaskParameter="Value"/>
 		</CreateProperty>
+		<CreateProperty Value="v4.0" Condition="'$(TargetFrameworkVersion)' == 'v4.5'">
+			<Output PropertyName="TargetFrameworkVersion" TaskParameter="Value" />
+		</CreateProperty>
 		
 		<Message Text="Running tests from assemblies: $(TestAssemblies)" />
 		
