@@ -36,6 +36,9 @@ IF /i "%1" == "SL4" (SET BuildConfigKey=SL40)
 IF /i "%1" == "SL40" (SET FrameworkVersion=v4.0)
 IF /i "%1" == "SL40" (SET BuildConfigKey=SL40)
 
+IF /i "%1" == "NET45" (SET FrameworkVersion=v4.5)
+IF /i "%1" == "NET45" (SET BuildConfigKey=NET45)
+
 IF "%2" == "" goto no_target_and_config
 SET BuildTarget=%2
 
