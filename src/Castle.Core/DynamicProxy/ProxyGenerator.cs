@@ -576,7 +576,7 @@ namespace Castle.DynamicProxy
 			}
 
 			var isRemotingProxy = false;
-			if (target != null && interfaceToProxy.IsAssignableFrom(target.GetType()) == false)
+			if (target != null && interfaceToProxy.IsInstanceOfType(target) == false)
 			{
 #if !SILVERLIGHT
 				//check if we have remoting proxy at hand...

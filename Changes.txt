@@ -1,3 +1,11 @@
+- fixed DYNPROXY-169 - Support IChangeProxyTarget on additional interfaces and mixins when using CreateInterfaceProxyWithTargetInterface
+
+3.0.0 (2011-12-13)
+==================
+no major changes
+
+3.0.0 RC 1 (2011-11-20)
+==================
 - Applied Jeff Sharps patch that refactored Xml DictionaryAdapter to improve maintainability and enable more complete functionality
 
 - fixed DYNPROXY-165 - Object.GetType() and Object.MemberwiseClone() should be ignored and not reported as non-interceptable to IProxyGenerationHook

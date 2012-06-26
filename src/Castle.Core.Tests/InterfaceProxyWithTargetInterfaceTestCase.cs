@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.Interfaces;
 	using Castle.InterClasses;
-
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -70,6 +69,35 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void Invocation_should_be_IChangeInvocationTarget_for_AdditionalInterfaces_methods()
+		{
+			var interceptor = new ChangeTargetInterceptor(new Two());
+			var proxy = generator.CreateInterfaceProxyWithTargetInterface(typeof(IOne),
+			                                                              new[] {typeof(ITwo)},
+			                                                              new OneTwo(),
+			                                                              interceptor);
+
+			var result = (proxy as ITwo).TwoMethod();
+
+			Assert.AreEqual(20, result);
+		}
+
+		[Test]
+		public void Invocation_should_be_IChangeInvocationTarget_for_target_methods()
+		{
+			var options = new ProxyGenerationOptions();
+			options.AddMixinInstance(new Two());
+			var interceptor = new ChangeTargetInterceptor(new OneTwo());
+			var proxy = generator.CreateInterfaceProxyWithTargetInterface(typeof(IOne),
+			                                                              new One(),
+			                                                              options,
+			                                                              interceptor);
+			var result = (proxy as IOne).OneMethod();
+
+			Assert.AreEqual(3, result);
+		}
+
+		[Test]
 		public void Invocation_should_be_IChangeInvocationTarget_for_Mixin_methods()
 		{
 			var options = new ProxyGenerationOptions();
@@ -83,20 +111,6 @@ namespace Castle.DynamicProxy.Tests
 			var result = (proxy as ITwo).TwoMethod();
 
 			Assert.AreEqual(2, result);
-		}
-
-		[Test, Ignore("DYNPROXY-169")]
-		public void Invocation_should_be_IChangeInvocationTarget_for_AdditionalInterfaces_methods()
-		{
-			var interceptor = new ChangeTargetInterceptor(new Two());
-			var proxy = generator.CreateInterfaceProxyWithTargetInterface(typeof(IOne),
-				                                                          new [] { typeof(ITwo) },
-			                                                              new OneTwo(),
-			                                                              interceptor);
-
-			var result = (proxy as ITwo).TwoMethod();
-
-			Assert.AreEqual(20, result);
 		}
 
 		[Test]

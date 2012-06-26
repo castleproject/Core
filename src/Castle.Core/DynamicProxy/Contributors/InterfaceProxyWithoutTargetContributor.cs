@@ -24,6 +24,7 @@ namespace Castle.DynamicProxy.Contributors
 	public class InterfaceProxyWithoutTargetContributor : CompositeTypeContributor
 	{
 		private readonly GetTargetExpressionDelegate getTargetExpression;
+		protected bool canChangeTarget = false;
 
 		public InterfaceProxyWithoutTargetContributor(INamingScope namingScope, GetTargetExpressionDelegate getTarget)
 			: base(namingScope)
@@ -63,9 +64,19 @@ namespace Castle.DynamicProxy.Contributors
 		private Type GetInvocationType(MetaMethod method, ClassEmitter emitter, ProxyGenerationOptions options)
 		{
 			var scope = emitter.ModuleScope;
-			var key = new CacheKey(method.Method, CompositionInvocationTypeGenerator.BaseType, null, null);
+			Type[] invocationInterfaces;
+			if (canChangeTarget)
+			{
+				invocationInterfaces = new[] { typeof(IInvocation), typeof(IChangeProxyTarget) };
+			}
+			else
+			{
+				invocationInterfaces = new[] { typeof(IInvocation) };
+			}
+			var key = new CacheKey(method.Method, CompositionInvocationTypeGenerator.BaseType, invocationInterfaces, null);
 
 			// no locking required as we're already within a lock
+
 			var invocation = scope.GetFromCache(key);
 			if (invocation != null)
 			{
@@ -73,10 +84,10 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			invocation = new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
-			                                                    method,
-			                                                    method.Method,
-			                                                    false,
-			                                                    null)
+																method,
+																method.Method,
+																canChangeTarget,
+																null)
 				.Generate(emitter, options, namingScope)
 				.BuildType();
 

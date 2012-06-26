@@ -26,6 +26,7 @@ namespace Castle.DynamicProxy.Contributors
 			: base(namingScope, getTarget)
 		{
 			this.getTargetReference = getTargetReference;
+			canChangeTarget = true;
 		}
 
 		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
