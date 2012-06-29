@@ -1,3 +1,4 @@
+- fixed DYNPROXY-171 - PEVerify error on generic method definition
 - fixed DYNPROXY-169 - Support IChangeProxyTarget on additional interfaces and mixins when using CreateInterfaceProxyWithTargetInterface
 
 3.0.0 (2011-12-13)

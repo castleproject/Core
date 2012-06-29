@@ -293,12 +293,14 @@
     <Compile Include="GenClasses\OnlyGenMethodsClass.cs" />
     <Compile Include="GenerationHookTestCase.cs" />
     <Compile Include="GenericClassProxyTestCase.cs" />
+    <Compile Include="GenericConstraintsTestCase.cs" />
     <Compile Include="GenericInterfaceProxyTestCase.cs" />
     <Compile Include="GenInterfaces\GenInterface.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithGenericTypes.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithGenMethods.cs" />
     <Compile Include="GenInterfaces\GenInterfaceWithGenMethodsAndGenReturn.cs" />
     <Compile Include="GenInterfaces\IConstraint_Method1IsTypeStructAndMethod2.cs" />
+    <Compile Include="GenInterfaces\IHaveGenericMethodWithNewClassStructConstraints.cs" />
     <Compile Include="Interceptors\LogInvocationInterceptor.cs" />
     <Compile Include="Interceptors\ProceedNTimesInterceptor.cs" />
     <Compile Include="Interceptors\ThrowingInterceptor.cs" />
