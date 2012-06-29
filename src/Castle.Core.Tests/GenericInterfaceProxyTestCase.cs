@@ -22,7 +22,6 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Tests.GenInterfaces;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.Interfaces;
-
 	using NUnit.Framework;
 
 	[TestFixture]

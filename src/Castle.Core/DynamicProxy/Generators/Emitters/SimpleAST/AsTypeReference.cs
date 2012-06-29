@@ -15,8 +15,10 @@
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
+	using System.Diagnostics;
 	using System.Reflection.Emit;
 
+	[DebuggerDisplay("{reference} as {type}")]
 	public class AsTypeReference : Reference
 	{
 		private readonly Reference reference;

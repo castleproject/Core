@@ -15,12 +15,14 @@
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
+	using System.Diagnostics;
 	using System.Reflection.Emit;
 
 	/// <summary>
 	///   Wraps a reference that is passed 
 	///   ByRef and provides indirect load/store support.
 	/// </summary>
+	[DebuggerDisplay("&{OwnerReference}")]
 	public class IndirectReference : TypeReference
 	{
 		public IndirectReference(TypeReference byRefReference) :

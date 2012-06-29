@@ -467,7 +467,6 @@
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\Reference.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\ReferenceExpression.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\ReferencesToObjectArrayExpression.cs" />
-    <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\ReturnReferenceExpression.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\ReturnStatement.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\SelfReference.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\Statement.cs" />
