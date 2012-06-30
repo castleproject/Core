@@ -12,124 +12,129 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Reflection;
-using Castle.DynamicProxy;
-using NUnit.Framework;
-
 namespace CastleTests.BugsReported
 {
-   /// <summary>
-   /// Contains repro for http://issues.castleproject.org/issue/DYNPROXY-170.
-   /// </summary>
-   [TestFixture]
-   public sealed class DynProxy170 : BasePEVerifyTestCase
-   {
-      private ProxyGenerator proxyGenerator = new ProxyGenerator();
-      private ProxyGenerationOptions proxyGenerationOptions;
-      private IProxyGenerationHook generationHook;
+	using System;
+	using System.Reflection;
+	using Castle.DynamicProxy;
+	using NUnit.Framework;
 
-      public DynProxy170()
-      {
-         this.generationHook = new ProxyGenerationHook();
-         this.proxyGenerationOptions = new ProxyGenerationOptions(this.generationHook);
-      }
+	/// <summary>
+	///   Contains repro for http://issues.castleproject.org/issue/DYNPROXY-170.
+	/// </summary>
+	[TestFixture]
+	[Bug("DYNPROXY-170")]
+	public sealed class DynProxy170 : BasePEVerifyTestCase
+	{
+		private readonly ProxyGenerator proxyGenerator = new ProxyGenerator();
+		private readonly ProxyGenerationOptions proxyGenerationOptions;
+		private readonly IProxyGenerationHook generationHook;
 
-      [Test]
-      public void InterceptCallToPropertyInNonInterceptedMethod()
-      {
-         bool wasIntercepted = false;
+		public DynProxy170()
+		{
+			generationHook = new ProxyGenerationHook();
+			proxyGenerationOptions = new ProxyGenerationOptions(generationHook);
+		}
 
-         MyInterceptor interceptor = new MyInterceptor();
-         interceptor.Intercepted += (s, e) =>
-         {
-            wasIntercepted = true;
-         };
-         Person p = new Person { Name = "John" };
-         p.SetAgeTo(50);
-         p = Decorate(p, interceptor);
+		[Test]
+		public void InterceptCallToPropertyInNonInterceptedMethod()
+		{
+			bool wasIntercepted = false;
 
-         p.SetAgeTo(100);
+			var interceptor = new MyInterceptor();
+			interceptor.Intercepted += (s, e) => { wasIntercepted = true; };
+			var p = new Person {Name = "John"};
+			p.SetAgeTo(50);
+			p = Decorate(p, interceptor);
 
-         var originalObject = p.GetType().GetField("__target").GetValue(p);
-         var ageInOriginalObject = originalObject.GetType().GetProperty("Age", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(originalObject, null);
+			p.SetAgeTo(100);
 
-         Assert.That(ageInOriginalObject, Is.EqualTo(100)); // The value is still 50
-         Assert.That(wasIntercepted, Is.True); // The call was not intercepted
-      }
+			var originalObject = p.GetType().GetField("__target").GetValue(p);
+			var ageInOriginalObject =
+				originalObject.GetType().GetProperty("Age", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(
+					originalObject, null);
 
-      private Person Decorate(Person person, IInterceptor interceptor)
-      {
-         var result = proxyGenerator.CreateClassProxyWithTarget(person.GetType(), new Type[0], person, proxyGenerationOptions, interceptor);
-         return (Person)result;
-      }
+			Assert.That(ageInOriginalObject, Is.EqualTo(100)); // The value is still 50
+			Assert.That(wasIntercepted, Is.True); // The call was not intercepted
+		}
 
-      internal class Person
-      {
-         public virtual string Name { get; set; }
-         protected virtual int Age { get; set; } // it works if the property is public
+		private Person Decorate(Person person, IInterceptor interceptor)
+		{
+			var result = proxyGenerator.CreateClassProxyWithTarget(person.GetType(), new Type[0], person, proxyGenerationOptions,
+			                                                       interceptor);
+			return (Person) result;
+		}
 
-         public void SetAgeTo(int value)
-         {
-            Age = value;
-         }
-      }
+		internal class Person
+		{
+			public virtual string Name { get; set; }
+			protected virtual int Age { get; set; } // it works if the property is public
 
-      private sealed class MyInterceptor : IInterceptor
-      {
-         public event EventHandler Intercepted;
+			public void SetAgeTo(int value)
+			{
+				Age = value;
+			}
+		}
 
-         public void Intercept(IInvocation invocation)
-         {
-            if (invocation.Method.Name == "set_Age")
-            {
-               OnIntercepted();
-            }
+		private sealed class MyInterceptor : IInterceptor
+		{
+			public event EventHandler Intercepted;
 
-            invocation.Proceed();
-         }
+			public void Intercept(IInvocation invocation)
+			{
+				if (invocation.Method.Name == "set_Age")
+				{
+					OnIntercepted();
+				}
 
-         private void OnIntercepted()
-         {
-            var tmp = Intercepted;
-            if (tmp != null)
-            {
-               tmp(this, EventArgs.Empty);
-            }
-         }
-      }
+				invocation.Proceed();
+			}
 
-      private sealed class ProxyGenerationHook : IProxyGenerationHook
-      {
-         public void MethodsInspected()
-         { }
+			private void OnIntercepted()
+			{
+				var tmp = Intercepted;
+				if (tmp != null)
+				{
+					tmp(this, EventArgs.Empty);
+				}
+			}
+		}
 
-         public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
-         { }
+		private sealed class ProxyGenerationHook : IProxyGenerationHook
+		{
+			public void MethodsInspected()
+			{
+			}
 
-         public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
-         {
-            if (methodInfo == null)
-            {
-               throw new ArgumentNullException("methodInfo");
-            }
+			public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
+			{
+				Console.WriteLine("NonProxyable " + memberInfo);
+			}
 
-            string methodName = methodInfo.Name;
-            bool result = methodName.StartsWith("set_", StringComparison.OrdinalIgnoreCase) ||
-                          methodName.StartsWith("get_", StringComparison.OrdinalIgnoreCase);
+			public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
+			{
+				Console.WriteLine("Proxyable " + methodInfo);
+				if (methodInfo == null)
+				{
+					throw new ArgumentNullException("methodInfo");
+				}
 
-            return result;
-         }
+				string methodName = methodInfo.Name;
+				bool result = methodName.StartsWith("set_", StringComparison.OrdinalIgnoreCase) ||
+				              methodName.StartsWith("get_", StringComparison.OrdinalIgnoreCase);
 
-         public override bool Equals(object obj)
-         {
-            return obj is ProxyGenerationHook; // all instances are equal
-         }
+				return result;
+			}
 
-         public override int GetHashCode()
-         {
-            return 7;
-         }
-      }
-   }
+			public override bool Equals(object obj)
+			{
+				return obj is ProxyGenerationHook; // all instances are equal
+			}
+
+			public override int GetHashCode()
+			{
+				return 7;
+			}
+		}
+	}
 }
