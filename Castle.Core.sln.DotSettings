@@ -5,10 +5,24 @@
 	<s:Boolean x:Key="/Default/CodeEditing/Intellisense/LookupWindow/ShowSummary/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeEditing/Intellisense/ParameterInfo/DelegatesAsLambdas/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeInspection/Highlighting/IdentifierHighlightingEnabled/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/CodeStyle/CodeCleanup/Profiles/=Full_0020cleanup_0020and_0020reformat/@EntryIndexedValue">&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;Profile name="Full cleanup and reformat"&gt;&lt;CSArrangeThisQualifier&gt;True&lt;/CSArrangeThisQualifier&gt;&lt;CSRemoveCodeRedundancies&gt;True&lt;/CSRemoveCodeRedundancies&gt;&lt;CSUseAutoProperty&gt;True&lt;/CSUseAutoProperty&gt;&lt;CSMakeFieldReadonly&gt;True&lt;/CSMakeFieldReadonly&gt;&lt;CSUseVar&gt;&lt;BehavourStyle&gt;CAN_CHANGE_TO_IMPLICIT&lt;/BehavourStyle&gt;&lt;LocalVariableStyle&gt;IMPLICIT_WHEN_INITIALIZER_HAS_TYPE&lt;/LocalVariableStyle&gt;&lt;ForeachVariableStyle&gt;ALWAYS_EXPLICIT&lt;/ForeachVariableStyle&gt;&lt;/CSUseVar&gt;&lt;CSOptimizeUsings&gt;&lt;OptimizeUsings&gt;True&lt;/OptimizeUsings&gt;&lt;EmbraceInRegion&gt;False&lt;/EmbraceInRegion&gt;&lt;RegionName&gt;&lt;/RegionName&gt;&lt;/CSOptimizeUsings&gt;&lt;CSShortenReferences&gt;True&lt;/CSShortenReferences&gt;&lt;CSReformatCode&gt;True&lt;/CSReformatCode&gt;&lt;CSharpFormatDocComments&gt;True&lt;/CSharpFormatDocComments&gt;&lt;CSReorderTypeMembers&gt;True&lt;/CSReorderTypeMembers&gt;&lt;CSUpdateFileHeader&gt;True&lt;/CSUpdateFileHeader&gt;&lt;/Profile&gt;</s:String>
 	<s:Boolean x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/SPACE_BEFORE_TYPEOF_PARENTHESES/@EntryValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeStyle/CodeFormatting/JavaScriptCodeFormatting/JavaScriptFormatOther/ALIGN_MULTIPLE_DECLARATION/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeStyle/CSharpUsing/AddImportsToDeepestScope/@EntryValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/CodeStyle/CSharpUsing/QualifiedUsingAtNestedScope/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">Copyright 2004-$CURRENT_YEAR$ Castle Project - http://www.castleproject.org/&#xD;
+&#xD;
+Licensed under the Apache License, Version 2.0 (the "License");&#xD;
+you may not use this file except in compliance with the License.&#xD;
+You may obtain a copy of the License at&#xD;
+&#xD;
+    http://www.apache.org/licenses/LICENSE-2.0&#xD;
+&#xD;
+Unless required by applicable law or agreed to in writing, software&#xD;
+distributed under the License is distributed on an "AS IS" BASIS,&#xD;
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#xD;
+See the License for the specific language governing permissions and&#xD;
+limitations under the License.</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/EventHandlerPatternLong/@EntryValue">$object$_On$event$</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=PrivateInstanceFields/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="aaBb" /&gt;</s:String>
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/PredefinedNamingRules/=PrivateStaticFields/@EntryIndexedValue">&lt;Policy Inspect="True" Prefix="" Suffix="" Style="aaBb" /&gt;</s:String>
