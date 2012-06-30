@@ -1,4 +1,5 @@
 - fixed DYNPROXY-171 - PEVerify error on generic method definition
+- fixed DYNPROXY-170 - Calls to properties inside non-intercepted methods are not forwarded to target object (regression from v2.5)
 - fixed DYNPROXY-169 - Support IChangeProxyTarget on additional interfaces and mixins when using CreateInterfaceProxyWithTargetInterface
 
 3.0.0 (2011-12-13)
