@@ -175,7 +175,6 @@
     <Compile Include="BugsReported\Core40.cs" />
     <Compile Include="BugsReported\DynProxy159.cs" />
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
-    <Compile Include="BugsReported\DynProxy170.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\VirtualObjectTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\Behaviors\ConflictBehaviorTestCase.cs" />
@@ -245,6 +244,8 @@
     <Compile Include="Core.Tests\Internal\PermissionUtilTestCase.cs" />
     <Compile Include="Core.Tests\Internal\WeakKeyDictionaryTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\AbstractClassWithMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithProtectedGenericMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithProtectedMethod.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\EmptyClass.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasCtorWithParamsStrings.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasCtorWithIntAndParamsArgument.cs" />

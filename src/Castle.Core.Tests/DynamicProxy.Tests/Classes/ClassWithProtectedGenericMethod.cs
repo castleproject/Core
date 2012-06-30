@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,27 +14,31 @@
 
 namespace Castle.DynamicProxy.Tests.Classes
 {
-	public class VirtualClassWithProtectedMethod
+	public class ClassWithProtectedGenericMethod
 	{
 		private readonly int result;
 
-		public VirtualClassWithProtectedMethod(int result)
+		public ClassWithProtectedGenericMethod(int result)
 		{
 			this.result = result;
 		}
 
-		public VirtualClassWithProtectedMethod()
+		public ClassWithProtectedGenericMethod()
 		{
 		}
 
-		protected virtual int Method()
+		protected virtual T Method<T>()
 		{
-			return result;
+			if (typeof(T) != typeof(int))
+			{
+				return default(T);
+			}
+			return (T) (object) result;
 		}
 
-		public virtual int PublicMethod()
+		public T PublicMethod<T>()
 		{
-			return Method();
+			return Method<T>();
 		}
 	}
 }

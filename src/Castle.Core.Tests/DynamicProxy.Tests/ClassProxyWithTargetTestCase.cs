@@ -1,4 +1,4 @@
-// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -34,13 +34,13 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var proxy = generator.CreateClassProxyWithTarget(typeof(VirtualClassWithNoDefaultCtor),
 			                                                 new VirtualClassWithNoDefaultCtor(42),
-			                                                 new object[] { 12 });
-			var result = ((VirtualClassWithNoDefaultCtor)proxy).Method();
+			                                                 new object[] {12});
+			var result = ((VirtualClassWithNoDefaultCtor) proxy).Method();
 			Assert.AreEqual(42, result);
 		}
 
 		[Test]
-		public void Can_proxy_class_with_protected_generic_method()
+		public void Can_proxy_virtual_class_with_protected_generic_method()
 		{
 			var proxy = generator.CreateClassProxyWithTarget(new VirtualClassWithProtectedGenericMethod(42));
 			var result = proxy.PublicMethod<int>();
@@ -48,9 +48,27 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void Can_proxy_class_with_protected_method()
+		[Bug("DYNPROXY-170")]
+		public void Can_proxy_class_with_protected_generic_method()
+		{
+			var proxy = generator.CreateClassProxyWithTarget(new ClassWithProtectedGenericMethod(42));
+			var result = proxy.PublicMethod<int>();
+			Assert.AreEqual(42, result);
+		}
+
+		[Test]
+		public void Can_proxy_virtual_class_with_protected_method()
 		{
 			var proxy = generator.CreateClassProxyWithTarget(new VirtualClassWithProtectedMethod(42));
+			var result = proxy.PublicMethod();
+			Assert.AreEqual(42, result);
+		}
+
+		[Test]
+		[Bug("DYNPROXY-170")]
+		public void Can_proxy_class_with_protected_method()
+		{
+			var proxy = generator.CreateClassProxyWithTarget(new ClassWithProtectedMethod(42));
 			var result = proxy.PublicMethod();
 			Assert.AreEqual(42, result);
 		}
@@ -104,7 +122,7 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateClassProxyWithTarget(typeof(VirtualClassWithPublicField), Type.EmptyTypes,
 			                                     new VirtualClassWithPublicField(), new ProxyGenerationOptions(hook),
 			                                     new object[0]);
-			Assert.IsNotEmpty((ICollection)hook.NonVirtualMembers);
+			Assert.IsNotEmpty((ICollection) hook.NonVirtualMembers);
 			var memberInfo = hook.NonVirtualMembers.Single(m => m is FieldInfo);
 			Assert.AreEqual("field", memberInfo.Name);
 			Assert.AreEqual(MemberTypes.Field, memberInfo.MemberType);
@@ -117,7 +135,7 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateClassProxyWithTarget(typeof(VirtualClassWithPublicField), Type.EmptyTypes,
 			                                     new VirtualClassWithPublicField(), new ProxyGenerationOptions(hook),
 			                                     new object[0]);
-			Assert.IsNotEmpty((ICollection)hook.NonVirtualMembers);
+			Assert.IsNotEmpty((ICollection) hook.NonVirtualMembers);
 			var memberInfo = hook.NonVirtualMembers.Single(m => m is FieldInfo);
 			Assert.AreEqual("field", memberInfo.Name);
 			Assert.AreEqual(MemberTypes.Field, memberInfo.MemberType);
