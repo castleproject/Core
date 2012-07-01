@@ -5,7 +5,7 @@
 
 	Project Settings file for VS and external build files
 
-Copyright 2004-2011 Castle Project - http://www.castleproject.org/
+Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,10 +34,10 @@ limitations under the License.
 		<ProjectName>Castle.Core</ProjectName>
 		
 		<!-- Used for display purposes. Should start with a space to look better -->
-		<BuildName></BuildName>
+		<BuildName> RC</BuildName>
 		<!-- Versioning -->
 		<Project_Major>3</Project_Major>
-		<Project_Minor>0</Project_Minor>
+		<Project_Minor>1</Project_Minor>
 		<Project_Build>0</Project_Build>
 
 		<AssemblyVersion_Build>0</AssemblyVersion_Build> <!-- By default it's (and should be) equal to $(Project_Build) -->
