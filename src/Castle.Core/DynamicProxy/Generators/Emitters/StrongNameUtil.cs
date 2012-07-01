@@ -1,4 +1,4 @@
-// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,29 +26,30 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	public static class StrongNameUtil
 	{
 		private static readonly IDictionary<Assembly, bool> signedAssemblyCache = new Dictionary<Assembly, bool>();
-#if !SILVERLIGHT
-		private static readonly bool canStrongNameAssembly;
-#endif
 		private static readonly object lockObject = new object();
 
-#if !SILVERLIGHT
+
 #if DOTNET40
 		[SecuritySafeCritical]
 #endif
 		static StrongNameUtil()
 		{
+#if SILVERLIGHT
+			CanStrongNameAssembly = true;
+#else
 			//idea after http://blogs.msdn.com/dmitryr/archive/2007/01/23/finding-out-the-current-trust-level-in-asp-net.aspx
 			try
 			{
 				new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Demand();
-				canStrongNameAssembly = true;
+				CanStrongNameAssembly = true;
 			}
 			catch (SecurityException)
 			{
-				canStrongNameAssembly = false;
+				CanStrongNameAssembly = false;
 			}
-		}
 #endif
+		}
+
 
 		public static bool IsAssemblySigned(this Assembly assembly)
 		{
@@ -84,17 +85,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return IsAnyTypeFromUnsignedAssembly(interfaces);
 		}
 
-		public static bool CanStrongNameAssembly
-		{
-			get
-			{
-				return
-#if SILVERLIGHT
-					true;
-#else
-					canStrongNameAssembly;
-#endif
-			}
-		}
+		public static bool CanStrongNameAssembly { get; set; }
 	}
 }
