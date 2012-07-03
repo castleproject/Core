@@ -254,6 +254,7 @@
     <Compile Include="DynamicProxy.Tests\Classes\HasFinalizer.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasTwoProtectedMethods.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\InheritsAbstractClassWithMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\InterceptionInNewThread.cs" />
     <Compile Include="DynamicProxy.Tests\DelegateProxyTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasNonInheritableAttribute.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassToSerialize.cs" />
