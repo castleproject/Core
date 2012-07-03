@@ -125,5 +125,11 @@ namespace Castle.DynamicProxy
 		/// <param name = "index">The index of the argument to override.</param>
 		/// <param name = "value">The new value for the argument.</param>
 		void SetArgumentValue(int index, object value);
+
+		/// <summary>
+		///   Allows Interceptor to create clone with own copy of currentInterceptorIndex
+		///   so that original IInvocation doesn't decrement it.
+		/// </summary>
+		IInvocation ShallowCopy();
 	}
 }

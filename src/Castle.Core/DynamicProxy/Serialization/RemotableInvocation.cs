@@ -114,6 +114,11 @@ namespace Castle.DynamicProxy.Serialization
 			set { parent.ReturnValue = value; }
 		}
 
+		public IInvocation ShallowCopy()
+		{
+			return (IInvocation) MemberwiseClone();
+		}
+
 #if DOTNET40
 		[SecurityCritical]
 #endif
