@@ -233,5 +233,10 @@ namespace Castle.DynamicProxy
 			}
 			return method;
 		}
+
+		public IInvocation ShallowCopy()
+		{
+			return (IInvocation) MemberwiseClone();
+		}
 	}
 }

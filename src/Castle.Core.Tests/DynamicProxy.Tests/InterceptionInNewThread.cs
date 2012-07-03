@@ -48,6 +48,7 @@ namespace Castle.DynamicProxy.Tests
 		public void Intercept(IInvocation invocation)
 		{
 			Assert.IsNull(task, "This interceptor should be executed just once!");
+			var invocationCopy = invocation.ShallowCopy();
 			task = Task.Factory.StartNew(t =>
 			{
 				Thread.Sleep(2000); // give AbstractInvocation.Proceed() chance to finish finaly() before we call Proceed again
@@ -57,7 +58,7 @@ namespace Castle.DynamicProxy.Tests
 				// so if finally finishes before our Proceed() then currentInterceptorIndex points to our interceptor which called again and again
 				// instead of InvokeMethodOnTarget();
 				i.Proceed();
-			}, invocation);
+			}, invocationCopy);
 		}
 	}
 
