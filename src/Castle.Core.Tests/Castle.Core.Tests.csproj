@@ -132,10 +132,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net35\adodb.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="NLog">
-      <HintPath>..\..\lib\NET40\NLog.dll</HintPath>
-    </Reference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="$(TargetFrameworkVersion)!='v3.5'">
+      <ItemGroup>
+        <Reference Include="NLog">
+          <HintPath>..\..\lib\NET40\NLog.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.CSharp" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="NLog">
+          <HintPath>..\..\lib\NET35\NLog.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
     <Reference Include="Rhino.Mocks.CPP.Interfaces">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net35\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
