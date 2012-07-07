@@ -133,6 +133,9 @@
       <HintPath>..\..\lib\net35\adodb.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NLog">
+      <HintPath>..\..\lib\NET40\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="Rhino.Mocks.CPP.Interfaces">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net35\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
@@ -315,6 +318,7 @@
     <Compile Include="Interfaces\ISimple.cs" />
     <Compile Include="MethodsWithAttributesOnParametersTestCase.cs" />
     <Compile Include="MixinTestCase.cs" />
+    <Compile Include="NLogIntegration\NLogTests.cs" />
     <Compile Include="ThrowingInterceptorException.cs" />
     <Compile Include="XmlConfigurationDeserializerTests.cs" />
     <Compile Include="XmlSerializationTestCase.cs" />
@@ -525,6 +529,10 @@
     <ProjectReference Include="..\Castle.Core\Castle.Core.csproj">
       <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
       <Name>Castle.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration.csproj">
+      <Project>{D680B5DB-B943-4BB5-891A-1695DEF86A3A}</Project>
+      <Name>Castle.Services.Logging.NLogIntegration</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -122,7 +122,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message"> The message to log </param>
 		public void Debug(string message)
 		{
-			Logger.Debug(message);
+			Log(LogLevel.Debug, message);
 		}
 
 		/// <summary>
@@ -131,7 +131,11 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="messageFactory"> Factory constructing lazily the message to log if the level is enabled </param>
 		public void Debug(Func<string> messageFactory)
 		{
-			Logger.Debug(messageFactory.Invoke);
+			if (IsDebugEnabled == false)
+			{
+				return;
+			}
+			Log(LogLevel.Debug, messageFactory());
 		}
 
 		/// <summary>
@@ -141,7 +145,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message"> The message to log </param>
 		public void Debug(string message, Exception exception)
 		{
-			Logger.DebugException(message, exception);
+			Log(LogLevel.Debug, message, exception);
 		}
 
 		/// <summary>
@@ -151,7 +155,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void DebugFormat(string format, params object[] args)
 		{
-			Logger.Debug(format, args);
+			Log(LogLevel.Debug, format, args);
 		}
 
 		/// <summary>
@@ -162,7 +166,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void DebugFormat(Exception exception, string format, params object[] args)
 		{
-			Logger.DebugException(String.Format(format, args), exception);
+			Log(LogLevel.Debug, exception, format, args);
 		}
 
 		/// <summary>
@@ -173,7 +177,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void DebugFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			Logger.Debug(formatProvider, format, args);
+			Log(LogLevel.Debug, formatProvider, format, args);
 		}
 
 		/// <summary>
@@ -185,7 +189,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void DebugFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			Logger.DebugException(String.Format(formatProvider, format, args), exception);
+			Log(LogLevel.Debug, exception, formatProvider, format, args);
 		}
 
 		/// <summary>
@@ -194,7 +198,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message"> The message to log </param>
 		public void Error(string message)
 		{
-			Logger.Error(message);
+			Log(LogLevel.Error, message);
 		}
 
 		/// <summary>
@@ -203,7 +207,11 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="messageFactory"> Factory constructing lazily the message to log if the level is enabled </param>
 		public void Error(Func<string> messageFactory)
 		{
-			Logger.Error(messageFactory.Invoke);
+			if (IsErrorEnabled == false)
+			{
+				return;
+			}
+			Log(LogLevel.Error, messageFactory());
 		}
 
 		/// <summary>
@@ -213,7 +221,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message"> The message to log </param>
 		public void Error(string message, Exception exception)
 		{
-			Logger.ErrorException(message, exception);
+			Log(LogLevel.Error, message, exception);
 		}
 
 		/// <summary>
@@ -223,7 +231,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void ErrorFormat(string format, params object[] args)
 		{
-			Logger.Error(format, args);
+			Log(LogLevel.Error, format, args);
 		}
 
 		/// <summary>
@@ -234,7 +242,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void ErrorFormat(Exception exception, string format, params object[] args)
 		{
-			Logger.ErrorException(String.Format(format, args), exception);
+			Log(LogLevel.Error, exception, format, args);
 		}
 
 		/// <summary>
@@ -245,7 +253,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void ErrorFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			Logger.Error(formatProvider, format, args);
+			Log(LogLevel.Error, formatProvider, format, args);
 		}
 
 		/// <summary>
@@ -257,7 +265,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void ErrorFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			Logger.ErrorException(String.Format(formatProvider, format, args), exception);
+			Log(LogLevel.Error, exception, formatProvider, format, args);
 		}
 
 		/// <summary>
@@ -266,7 +274,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message"> The message to log </param>
 		public void Fatal(string message)
 		{
-			Logger.Fatal(message);
+			Log(LogLevel.Fatal, message);
 		}
 
 		/// <summary>
@@ -275,8 +283,11 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="messageFactory"> Factory constructing lazily the message to log if the level is enabled </param>
 		public void Fatal(Func<string> messageFactory)
 		{
-			// we don't need to pre-check, NLog does that internally anyway
-			Logger.Fatal(messageFactory.Invoke);
+			if (IsFatalEnabled == false)
+			{
+				return;
+			}
+			Log(LogLevel.Fatal, messageFactory());
 		}
 
 		/// <summary>
@@ -286,7 +297,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message"> The message to log </param>
 		public void Fatal(string message, Exception exception)
 		{
-			Logger.FatalException(message, exception);
+			Log(LogLevel.Fatal, message, exception);
 		}
 
 		/// <summary>
@@ -296,7 +307,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void FatalFormat(string format, params object[] args)
 		{
-			Logger.Fatal(format, args);
+			Log(LogLevel.Fatal, format, args);
 		}
 
 		/// <summary>
@@ -307,7 +318,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void FatalFormat(Exception exception, string format, params object[] args)
 		{
-			Logger.FatalException(String.Format(format, args), exception);
+			Log(LogLevel.Fatal, exception, format, args);
 		}
 
 		/// <summary>
@@ -318,7 +329,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void FatalFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			Logger.Fatal(formatProvider, format, args);
+			Log(LogLevel.Fatal, formatProvider, format, args);
 		}
 
 		/// <summary>
@@ -330,7 +341,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void FatalFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			Logger.FatalException(String.Format(formatProvider, format, args), exception);
+			Log(LogLevel.Fatal, exception, formatProvider, format, args);
 		}
 
 		/// <summary>
@@ -339,7 +350,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message"> The message to log </param>
 		public void Info(string message)
 		{
-			Logger.Info(message);
+			Log(LogLevel.Info, message);
 		}
 
 		/// <summary>
@@ -348,7 +359,11 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="messageFactory"> Factory constructing lazily the message to log if the level is enabled </param>
 		public void Info(Func<string> messageFactory)
 		{
-			Logger.Info(messageFactory.Invoke);
+			if (IsInfoEnabled == false)
+			{
+				return;
+			}
+			Log(LogLevel.Info, messageFactory());
 		}
 
 		/// <summary>
@@ -358,7 +373,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message"> The message to log </param>
 		public void Info(string message, Exception exception)
 		{
-			Logger.InfoException(message, exception);
+			Log(LogLevel.Info, message, exception);
 		}
 
 		/// <summary>
@@ -368,7 +383,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void InfoFormat(string format, params object[] args)
 		{
-			Logger.Info(format, args);
+			Log(LogLevel.Info, format, args);
 		}
 
 		/// <summary>
@@ -379,7 +394,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void InfoFormat(Exception exception, string format, params object[] args)
 		{
-			Logger.InfoException(String.Format(format, args), exception);
+			Log(LogLevel.Info, exception, format, args);
 		}
 
 		/// <summary>
@@ -390,7 +405,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void InfoFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			Logger.Info(formatProvider, format, args);
+			Log(LogLevel.Info, formatProvider, format, args);
 		}
 
 		/// <summary>
@@ -402,7 +417,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void InfoFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			Logger.InfoException(String.Format(formatProvider, format, args), exception);
+			Log(LogLevel.Info, exception, formatProvider, format, args);
 		}
 
 		/// <summary>
@@ -411,7 +426,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message"> The message to log </param>
 		public void Warn(string message)
 		{
-			Logger.Warn(message);
+			Log(LogLevel.Warn, message);
 		}
 
 		/// <summary>
@@ -420,7 +435,11 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="messageFactory"> Factory constructing lazily the message to log if the level is enabled </param>
 		public void Warn(Func<string> messageFactory)
 		{
-			Logger.Warn(messageFactory.Invoke);
+			if (IsWarnEnabled == false)
+			{
+				return;
+			}
+			Log(LogLevel.Warn, messageFactory());
 		}
 
 		/// <summary>
@@ -430,7 +449,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="message"> The message to log </param>
 		public void Warn(string message, Exception exception)
 		{
-			Logger.WarnException(message, exception);
+			Log(LogLevel.Warn, message, exception);
 		}
 
 		/// <summary>
@@ -440,7 +459,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void WarnFormat(string format, params object[] args)
 		{
-			Logger.Warn(format, args);
+			Log(LogLevel.Warn, format, args);
 		}
 
 		/// <summary>
@@ -451,7 +470,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void WarnFormat(Exception exception, string format, params object[] args)
 		{
-			Logger.WarnException(String.Format(format, args), exception);
+			Log(LogLevel.Warn, exception, format, args);
 		}
 
 		/// <summary>
@@ -462,7 +481,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void WarnFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			Logger.Warn(formatProvider, format, args);
+			Log(LogLevel.Warn, formatProvider, format, args);
 		}
 
 		/// <summary>
@@ -474,7 +493,56 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void WarnFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			Logger.WarnException(String.Format(formatProvider, format, args), exception);
+			Log(LogLevel.Warn, exception, formatProvider, format, args);
+		}
+
+		private void Log(LogLevel logLevel, string message)
+		{
+			Logger.Log(typeof(NLogLogger), new LogEventInfo(logLevel, Logger.Name, message));
+		}
+
+		private void Log(LogLevel logLevel, string format, object[] args)
+		{
+			Logger.Log(typeof(NLogLogger), new LogEventInfo(logLevel, Logger.Name, format)
+				{
+					Parameters = args
+				});
+		}
+
+		private void Log(LogLevel logLevel, string message, Exception exception)
+		{
+			Logger.Log(typeof(NLogLogger), new LogEventInfo(logLevel, Logger.Name, message)
+				{
+					Exception = exception
+				});
+		}
+
+		private void Log(LogLevel logLevel, Exception exception, string format, object[] args)
+		{
+			Logger.Log(typeof(NLogLogger), new LogEventInfo(logLevel, Logger.Name, format)
+				{
+					Exception = exception,
+					Parameters = args
+				});
+		}
+
+		private void Log(LogLevel logLevel, IFormatProvider formatProvider, string format, object[] args)
+		{
+			Logger.Log(typeof(NLogLogger), new LogEventInfo(logLevel, Logger.Name, format)
+				{
+					FormatProvider = formatProvider,
+					Parameters = args
+				});
+		}
+
+		private void Log(LogLevel logLevel, Exception exceptoin, IFormatProvider formatProvider, string format, object[] args)
+		{
+			Logger.Log(typeof(NLogLogger), new LogEventInfo(logLevel, Logger.Name, format)
+				{
+					Exception = exceptoin,
+					FormatProvider = formatProvider,
+					Parameters = args
+				});
 		}
 	}
 }
