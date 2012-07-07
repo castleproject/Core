@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -24,8 +24,24 @@ namespace Castle.Services.Logging.Log4netIntegration
 
 	public class ExtendedLog4netFactory : AbstractExtendedLoggerFactory
 	{
-		public ExtendedLog4netFactory() : this("log4net.config")
+		public ExtendedLog4netFactory()
+			: this(Log4netFactory.defaultConfigFileName)
 		{
+		}
+
+		/// <summary>
+		///   Initializes a new instance of the <see cref="ExtendedLog4netFactory" /> class.
+		/// </summary>
+		/// <param name="configuredExternally"> If <c>true</c> . Skips the initialization of log4net assuming it will happen externally. Useful if you're using another framework that wants to take over configuration of log4net. </param>
+		public ExtendedLog4netFactory(bool configuredExternally)
+		{
+			if (configuredExternally)
+			{
+				return;
+			}
+
+			var file = GetConfigFile(Log4netFactory.defaultConfigFileName);
+			XmlConfigurator.ConfigureAndWatch(file);
 		}
 
 		public ExtendedLog4netFactory(String configFile)
@@ -37,7 +53,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		/// <summary>
 		///   Configures log4net with a stream containing XML.
 		/// </summary>
-		/// <param name = "config"></param>
+		/// <param name="config"> </param>
 		public ExtendedLog4netFactory(Stream config)
 		{
 			XmlConfigurator.Configure(config);
