@@ -1,3 +1,5 @@
+3.1.0 RC (2012-07-08)
+==================
 - support multiple inheritance of DA attributes on interfaces.
 - BREAKING CHANGE: removed propogate child notifications as it violated INotifyPropertyChanged contract
 - improved DictionaryAdapter performance
