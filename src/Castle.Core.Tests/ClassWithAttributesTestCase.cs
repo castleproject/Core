@@ -19,6 +19,9 @@ namespace Castle.DynamicProxy.Tests
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Tests.Classes;
+
+	using CastleTests.DynamicProxy.Tests.Classes;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -108,6 +111,26 @@ namespace Castle.DynamicProxy.Tests
 			var proxy = generator.CreateClassProxy<HasNonInheritableAttribute>();
 			var nameProperty = proxy.GetType().GetMethod("OnGenericArgument").GetGenericArguments().Single();
 			Assert.IsTrue(nameProperty.IsDefined(typeof(NonInheritableAttribute), false));
+		}
+
+		[Test]
+		public void Can_proxy_type_with_non_inheritable_attribute_depending_on_array_of_something_via_property()
+		{
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHasNonInheritableAttributeWithArray>();
+			var attribute = proxy.GetType()
+				.GetCustomAttributes(typeof(NonInheritableWithArrayAttribute), false)
+				.Cast<NonInheritableWithArrayAttribute>().Single();
+			CollectionAssert.AreEqual(attribute.Values, new[] {"1", "2", "3"});
+		}
+
+		[Test]
+		public void Can_proxy_type_with_non_inheritable_attribute_depending_on_array_of_something_via_field()
+		{
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHasNonInheritableAttributeWithArray2>();
+			var attribute = proxy.GetType()
+				.GetCustomAttributes(typeof(NonInheritableWithArray2Attribute), false)
+				.Cast<NonInheritableWithArray2Attribute>().Single();
+			CollectionAssert.AreEqual(attribute.Values, new[] { "1", "2", "3" });
 		}
 	}
 }

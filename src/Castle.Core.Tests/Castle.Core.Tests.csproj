@@ -270,8 +270,13 @@
     <Compile Include="DynamicProxy.Tests\Classes\HasCtorWithParamsArgument.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasFinalizeMethod.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasFinalizer.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\IHasNonInheritableAttributeWithArray.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasTwoProtectedMethods.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\IHasNonInheritableAttributeWithArray2.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\InheritsAbstractClassWithMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\NonInheritableAttribute.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\NonInheritableWithArray2Attribute.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\NonInheritableWithArrayAttribute.cs" />
     <Compile Include="DynamicProxy.Tests\DelegateProxyTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasNonInheritableAttribute.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassToSerialize.cs" />

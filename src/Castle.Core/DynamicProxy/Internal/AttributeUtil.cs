@@ -64,7 +64,7 @@ namespace Castle.DynamicProxy.Internal
 			FieldInfo[] fields;
 			object[] fieldValues;
 			GetSettersAndFields(attribute.NamedArguments, out properties, out propertyValues, out fields, out fieldValues);
-			var constructorArgs = GetCtorArguments(attribute.ConstructorArguments);
+			var constructorArgs = GetArguments(attribute.ConstructorArguments);
 			return new CustomAttributeBuilder(attribute.Constructor,
 			                                  constructorArgs,
 			                                  properties,
@@ -73,7 +73,7 @@ namespace Castle.DynamicProxy.Internal
 			                                  fieldValues);
 		}
 
-		private static object[] GetCtorArguments(IList<CustomAttributeTypedArgument> constructorArguments)
+		private static object[] GetArguments(IList<CustomAttributeTypedArgument> constructorArguments)
 		{
 			var arguments = new object[constructorArguments.Count];
 			for (var i = 0; i < constructorArguments.Count; i++)
@@ -92,7 +92,7 @@ namespace Castle.DynamicProxy.Internal
 				return value;
 			}
 			//special case for handling arrays in attributes
-			var arguments = GetCtorArguments((IList<CustomAttributeTypedArgument>)value);
+			var arguments = GetArguments((IList<CustomAttributeTypedArgument>)value);
 			var array = Array.CreateInstance(argument.ArgumentType.GetElementType() ?? typeof(object), arguments.Length);
 			arguments.CopyTo(array, 0);
 			return array;
@@ -112,11 +112,11 @@ namespace Castle.DynamicProxy.Internal
 				{
 					case MemberTypes.Property:
 						propertyList.Add(argument.MemberInfo as PropertyInfo);
-						propertyValuesList.Add(argument.TypedValue.Value);
+						propertyValuesList.Add(ReadAttributeValue(argument.TypedValue));
 						break;
 					case MemberTypes.Field:
 						fieldList.Add(argument.MemberInfo as FieldInfo);
-						fieldValuesList.Add(argument.TypedValue.Value);
+						fieldValuesList.Add(ReadAttributeValue(argument.TypedValue));
 						break;
 					default:
 						// NOTE: can this ever happen?
