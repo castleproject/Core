@@ -1,3 +1,6 @@
+3.1.0 (2012-08-05)
+==================
+
 - fixed DYNPROXY-174 - Unable to cast object of type 'System.Collections.ObjectModel.ReadOnlyCollection`1[System.Reflection.CustomAttributeTypedArgument]' to type 'System.Array'
 
 3.1.0 RC (2012-07-08)
