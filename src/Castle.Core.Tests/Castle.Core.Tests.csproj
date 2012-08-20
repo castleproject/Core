@@ -390,7 +390,9 @@
     <None Include="..\..\buildscripts\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -600,12 +602,6 @@
       </ItemGroup>
     </When>
   </Choose>
-  <ItemGroup>
-    <None Include="..\..\buildscripts\CastleKey.snk">
-      <Link>CastleKey.snk</Link>
-    </None>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition="($(MSBuildTargets) == '') Or ($(MSBuildTargets) == 'CSharp')" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 4.0'" />
   <Import Project="$(RootPath)\Settings.proj" />

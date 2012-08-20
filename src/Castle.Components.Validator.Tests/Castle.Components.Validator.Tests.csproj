@@ -76,6 +76,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET45-Debug|AnyCPU'">
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile></TargetFrameworkProfile>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\NET45-Debug\</OutputPath>
@@ -89,6 +90,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET45-Release|AnyCPU'">
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile></TargetFrameworkProfile>
     <OutputPath>bin\NET45-Release\</OutputPath>
     <DefineConstants>TRACE;PHYSICALASSEMBLY DOTNET DOTNET40 DOTNET45</DefineConstants>

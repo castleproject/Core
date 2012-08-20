@@ -48,6 +48,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET45-Debug|AnyCPU' ">
+    <MSBuildTargets>.NET 4.5</MSBuildTargets>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <OutputPath>bin\NET45-Debug\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
@@ -207,6 +208,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET45-Release|AnyCPU'">
+    <MSBuildTargets>.NET 4.5</MSBuildTargets>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\NET45-Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -219,11 +221,11 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog" Condition="'$(BuildConfigKey)' != 'net45'">
+    <Reference Include="NLog" Condition="'$(MSBuildTargets)' != '.NET 4.5'">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="NLog" Condition="'$(BuildConfigKey)' == 'net45'">
+    <Reference Include="NLog" Condition="'$(MSBuildTargets)' == '.NET 4.5'">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(RootPath)\lib\net40\NLog.dll</HintPath>
     </Reference>
