@@ -181,20 +181,18 @@
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET45-Release|AnyCPU'">
     <OutputPath>bin\NET45-Release\</OutputPath>
-    <DefineConstants>TRACE;PHYSICALASSEMBLY DOTNET DOTNET40 CLIENTPROFILE</DefineConstants>
-    <DocumentationFile>bin\NET40-Release\Castle.Core.xml</DocumentationFile>
+    <DefineConstants>TRACE;PHYSICALASSEMBLY DOTNET DOTNET40 DOTNET45</DefineConstants>
+    <DocumentationFile>bin\NET45-Release\Castle.Core.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1591</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup Condition="$(MSBuildTargets)!='Silverlight 5.0' and $(MSBuildTargets)!='Silverlight 4.0'">
     <Reference Include="System.configuration" />
@@ -294,9 +292,7 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Serializers\XmlStringSerializer.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Serializers\XmlTypeKind.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Serializers\XmlTypeSerializer.cs" />
-    <Compile Include="Components.DictionaryAdapter\Xml\Internal\Serializers\XmlTypeSerializerCache.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Components.DictionaryAdapter\Xml\Internal\Serializers\XmlTypeSerializerCache.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Namespaces\Xmlns.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Utilities\DictionaryAdapterExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Internal\Utilities\IRealizable.cs" />
