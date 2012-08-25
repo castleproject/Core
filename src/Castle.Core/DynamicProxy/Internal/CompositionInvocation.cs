@@ -32,19 +32,6 @@ namespace Castle.DynamicProxy.Internal
 			this.target = target;
 		}
 
-		protected CompositionInvocation(
-			object target,
-			object proxy,
-			IInterceptor[] interceptors,
-			MethodInfo proxiedMethod,
-			object[] arguments,
-			IInterceptorSelector selector,
-			ref IInterceptor[] methodInterceptors)
-			: base(proxy, GetTargetType(target), interceptors, proxiedMethod, arguments, selector, ref methodInterceptors)
-		{
-			this.target = target;
-		}
-
 		public override object InvocationTarget
 		{
 			get { return target; }
@@ -57,7 +44,7 @@ namespace Castle.DynamicProxy.Internal
 
 		public override Type TargetType
 		{
-			get { return GetTargetType(target); }
+			get { return TypeUtil.GetTypeOrNull(target); }
 		}
 
 		protected void EnsureValidProxyTarget(object newTarget)
@@ -94,16 +81,6 @@ namespace Castle.DynamicProxy.Internal
 			              "This may result in recursively calling the method over and over again until stack overflow, which may destabilize your program." +
 			              "This usually signifies a bug in the calling code. Make sure no interceptor sets proxy as its invocation target.";
 			throw new InvalidOperationException(message);
-		}
-
-		private static Type GetTargetType(object targetObject)
-		{
-			if (targetObject == null)
-			{
-				return null;
-			}
-
-			return targetObject.GetType();
 		}
 	}
 }

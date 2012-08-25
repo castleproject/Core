@@ -24,11 +24,9 @@ namespace Castle.DynamicProxy
 	using System.Security;
 #endif
 
-#if SILVERLIGHT
 	public abstract class AbstractInvocation : IInvocation
-#else
-	[Serializable]
-	public abstract class AbstractInvocation : IInvocation, ISerializable
+#if !SILVERLIGHT
+		, ISerializable
 #endif
 	{
 		private readonly IInterceptor[] interceptors;
@@ -49,29 +47,6 @@ namespace Castle.DynamicProxy
 			this.interceptors = interceptors;
 			this.proxiedMethod = proxiedMethod;
 			this.arguments = arguments;
-		}
-
-		protected AbstractInvocation(
-			object proxy,
-			Type targetType,
-			IInterceptor[] interceptors,
-			MethodInfo proxiedMethod,
-			object[] arguments,
-			IInterceptorSelector selector,
-			ref IInterceptor[] methodInterceptors)
-			: this(proxy, interceptors, proxiedMethod, arguments)
-		{
-			methodInterceptors = SelectMethodInterceptors(selector, methodInterceptors, targetType);
-			this.interceptors = methodInterceptors;
-		}
-
-		private IInterceptor[] SelectMethodInterceptors(IInterceptorSelector selector,
-		                                                IInterceptor[] methodInterceptors,
-		                                                Type targetType)
-		{
-			return methodInterceptors ??
-			       selector.SelectInterceptors(targetType, Method, interceptors) ??
-			       new IInterceptor[0];
 		}
 
 		public void SetGenericMethodArguments(Type[] arguments)

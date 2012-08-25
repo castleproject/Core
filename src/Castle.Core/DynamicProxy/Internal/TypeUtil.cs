@@ -1,4 +1,4 @@
-// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,13 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Generators.Emitters
+namespace Castle.DynamicProxy.Internal
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Reflection;
+
+	using Castle.DynamicProxy.Generators.Emitters;
 
 	public static class TypeUtil
 	{
@@ -50,8 +52,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// <summary>
 		///   Returns list of all unique interfaces implemented given types, including their base interfaces.
 		/// </summary>
-		/// <param name = "types"></param>
-		/// <returns></returns>
+		/// <param name="types"> </param>
+		/// <returns> </returns>
 		public static ICollection<Type> GetAllInterfaces(params Type[] types)
 		{
 			if (types == null)
@@ -122,6 +124,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 
 			return parameter;
+		}
+
+		public static Type GetTypeOrNull(object target)
+		{
+			if (target == null)
+			{
+				return null;
+			}
+			return target.GetType();
 		}
 
 		public static bool IsFinalizer(this MethodInfo methodInfo)

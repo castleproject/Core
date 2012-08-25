@@ -418,6 +418,7 @@
     <Compile Include="DynamicProxy\Contributors\OptionallyForwardingMethodGenerator.cs" />
     <Compile Include="DynamicProxy\Contributors\WrappedClassMembersCollector.cs" />
     <Compile Include="DynamicProxy\Generators\AttributeDisassembler.cs" />
+    <Compile Include="DynamicProxy\Internal\TypeUtil.cs" />
     <Compile Include="DynamicProxy\InvalidProxyConstructorArgumentsException.cs" />
     <Compile Include="DynamicProxy\ProxyUtil.cs" />
     <Compile Include="DynamicProxy\Serialization\CacheMappingsAttribute.cs" />
@@ -508,7 +509,6 @@
     <Compile Include="DynamicProxy\Generators\Emitters\StindOpCodesDictionary.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\StrongNameUtil.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\TypeConstructorEmitter.cs" />
-    <Compile Include="DynamicProxy\Generators\Emitters\TypeUtil.cs" />
     <Compile Include="DynamicProxy\Generators\MetaEvent.cs" />
     <Compile Include="DynamicProxy\Generators\GeneratorException.cs" />
     <Compile Include="DynamicProxy\Contributors\InterfaceProxyInstanceContributor.cs" />
@@ -552,6 +552,7 @@
     <Compile Include="Core\Extensions\SilverlightExtensions.cs" />
     <Compile Include="DynamicProxy\Tokens\DelegateMethods.cs" />
     <Compile Include="DynamicProxy\Tokens\FormatterServicesMethods.cs" />
+    <Compile Include="DynamicProxy\Tokens\InterceptorSelectorMethods.cs" />
     <Compile Include="DynamicProxy\Tokens\InvocationMethods.cs" />
     <Compile Include="DynamicProxy\Tokens\MethodBaseMethods.cs" />
     <Compile Include="DynamicProxy\Tokens\SerializationInfoMethods.cs" />

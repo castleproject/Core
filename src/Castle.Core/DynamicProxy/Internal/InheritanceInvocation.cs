@@ -32,19 +32,6 @@ namespace Castle.DynamicProxy.Internal
 			this.targetType = targetType;
 		}
 
-		protected InheritanceInvocation(
-			Type targetType,
-			object proxy,
-			IInterceptor[] interceptors,
-			MethodInfo proxiedMethod,
-			object[] arguments,
-			IInterceptorSelector selector,
-			ref IInterceptor[] methodInterceptors)
-			: base(proxy, targetType, interceptors, proxiedMethod, arguments, selector, ref methodInterceptors)
-		{
-			this.targetType = targetType;
-		}
-
 		public override object InvocationTarget
 		{
 			get { return Proxy; }

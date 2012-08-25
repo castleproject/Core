@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests.Classes
+namespace CastleTests.DynamicProxy.Tests.Classes
 {
-	public class VirtualClassWithMethod
+	public class Component2
 	{
-		public virtual int Method()
+		public virtual void DoOperation2()
 		{
-			return 42;
 		}
 	}
 }
