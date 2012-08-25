@@ -36,20 +36,7 @@ namespace Castle.DynamicProxy.Generators
 		                                                            ProxyGenerationOptions proxyGenerationOptions,
 		                                                            out ConstructorInfo baseConstructor)
 		{
-			if (proxyGenerationOptions.Selector == null)
-			{
-				baseConstructor = InvocationMethods.CompositionInvocationConstructorNoSelector;
-				return new[]
-				{
-					new ArgumentReference(targetFieldType),
-					new ArgumentReference(typeof(object)),
-					new ArgumentReference(typeof(IInterceptor[])),
-					new ArgumentReference(typeof(MethodInfo)),
-					new ArgumentReference(typeof(object[])),
-				};
-			}
-
-			baseConstructor = InvocationMethods.CompositionInvocationConstructorWithSelector;
+			baseConstructor = InvocationMethods.CompositionInvocationConstructor;
 			return new[]
 			{
 				new ArgumentReference(targetFieldType),
@@ -57,8 +44,6 @@ namespace Castle.DynamicProxy.Generators
 				new ArgumentReference(typeof(IInterceptor[])),
 				new ArgumentReference(typeof(MethodInfo)),
 				new ArgumentReference(typeof(object[])),
-				new ArgumentReference(typeof(IInterceptorSelector)),
-				new ArgumentReference(typeof(IInterceptor[]).MakeByRefType())
 			};
 		}
 

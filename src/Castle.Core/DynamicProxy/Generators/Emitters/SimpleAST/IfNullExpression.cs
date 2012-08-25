@@ -18,11 +18,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	public class IfNullExpression : Expression
 	{
-		private readonly Expression ifNotNull;
-		private readonly Expression ifNull;
+		private readonly IILEmitter ifNotNull;
+		private readonly IILEmitter ifNull;
 		private readonly Reference reference;
 
-		public IfNullExpression(Reference reference, Expression ifNull, Expression ifNotNull)
+		public IfNullExpression(Reference reference, IILEmitter ifNull, IILEmitter ifNotNull = null)
 		{
 			this.reference = reference;
 			this.ifNull = ifNull;

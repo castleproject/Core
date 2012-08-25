@@ -14,6 +14,8 @@
 
 namespace CastleTests.NLogIntegration
 {
+	using System.Runtime.CompilerServices;
+
 	using Castle.Services.Logging.NLogIntegration;
 
 	using NLog;
@@ -50,6 +52,7 @@ namespace CastleTests.NLogIntegration
 			StringAssert.Contains("NLogTests.WriteLogMessage", logMessage);
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		private void WriteLogMessage(NLogFactory factory)
 		{
 			var logger = factory.Create("MyLoggerName");

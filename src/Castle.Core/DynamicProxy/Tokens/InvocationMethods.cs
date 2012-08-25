@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Tokens
 	/// </summary>
 	public static class InvocationMethods
 	{
-		public static readonly ConstructorInfo CompositionInvocationConstructorNoSelector =
+		public static readonly ConstructorInfo CompositionInvocationConstructor =
 			typeof(CompositionInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
 			                                             new[]
 			                                             {
@@ -33,20 +33,6 @@ namespace Castle.DynamicProxy.Tokens
 			                                             	typeof(IInterceptor[]),
 			                                             	typeof(MethodInfo),
 			                                             	typeof(object[])
-			                                             },
-			                                             null);
-
-		public static readonly ConstructorInfo CompositionInvocationConstructorWithSelector =
-			typeof(CompositionInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
-			                                             new[]
-			                                             {
-			                                             	typeof(object),
-			                                             	typeof(object),
-			                                             	typeof(IInterceptor[]),
-			                                             	typeof(MethodInfo),
-			                                             	typeof(object[]),
-			                                             	typeof(IInterceptorSelector),
-			                                             	typeof(IInterceptor[]).MakeByRefType()
 			                                             },
 			                                             null);
 
@@ -62,7 +48,7 @@ namespace Castle.DynamicProxy.Tokens
 		public static readonly MethodInfo GetReturnValue =
 			typeof(AbstractInvocation).GetMethod("get_ReturnValue");
 
-		public static readonly ConstructorInfo InheritanceInvocationConstructorNoSelector =
+		public static readonly ConstructorInfo InheritanceInvocationConstructor =
 			typeof(InheritanceInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
 			                                             new[]
 			                                             {

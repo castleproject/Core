@@ -26,6 +26,8 @@ namespace Castle.DynamicProxy.Serialization
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Internal;
+
 #if DOTNET40
 #endif
 

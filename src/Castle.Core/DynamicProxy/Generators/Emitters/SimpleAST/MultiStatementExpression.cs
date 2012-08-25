@@ -26,6 +26,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			statements.Add(statement);
 		}
 
+		public void AddExpression(Expression expression)
+		{
+			AddStatement(new ExpressionStatement(expression));
+		}
+
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			statements.ForEach(s => s.Emit(member, gen));

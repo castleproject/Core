@@ -295,6 +295,7 @@
     <Compile Include="DynamicProxy.Tests\Classes\AbstractClassWithMethod.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithProtectedGenericMethod.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithProtectedMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\Component2.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\EmptyClass.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasCtorWithParamsStrings.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\HasCtorWithIntAndParamsArgument.cs" />

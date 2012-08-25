@@ -183,7 +183,6 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			emitter.CreateField("__selector", typeof(IInterceptorSelector));
-			return;
 		}
 
 		protected virtual void CreateTypeAttributes(ClassEmitter emitter)

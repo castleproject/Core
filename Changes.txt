@@ -1,3 +1,5 @@
+- fixed DYNPROXY-175 invalid CompositionInvocation type used when code uses interface proxies with and without InterceptorSelector
+
 3.1.0 (2012-08-05)
 ==================
 
