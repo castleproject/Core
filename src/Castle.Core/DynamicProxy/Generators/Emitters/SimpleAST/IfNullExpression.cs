@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -36,7 +36,10 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			gen.Emit(OpCodes.Brtrue_S, notNull);
 			ifNull.Emit(member, gen);
 			gen.MarkLabel(notNull);
-			ifNotNull.Emit(member, gen);
+			if (ifNotNull != null) // yeah, I know that reads funny :)
+			{
+				ifNotNull.Emit(member, gen);
+			}
 		}
 	}
 }
