@@ -70,6 +70,14 @@ limitations under the License.
 		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
 	</PropertyGroup>
 
+	<!--Silverlight 5.0 runtime-->
+	<PropertyGroup Condition="$(Configuration) == 'SL50-Release' or $(Configuration) == 'SL50-Debug'">
+		<BuildConfigKey>SL50</BuildConfigKey>
+		<TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+		<MSBuildTargets>Silverlight 5.0</MSBuildTargets>
+		<TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+	</PropertyGroup>
+	
 	<PropertyGroup>
 		<BuildConfigDescription Condition=" '$(BuildConfigDescription)' == '' ">$(TargetFrameworkIdentifier) $(TargetFrameworkVersion)</BuildConfigDescription>
 		<BuildConfigDescription Condition=" '$(TargetFrameworkProfile)' != '' ">$(BuildConfigDescription) Client Profile</BuildConfigDescription>
