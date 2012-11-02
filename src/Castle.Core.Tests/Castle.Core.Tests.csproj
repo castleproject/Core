@@ -224,6 +224,7 @@
     <Compile Include="BugsReported\Core40.cs" />
     <Compile Include="BugsReported\DynProxy159.cs" />
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
+    <Compile Include="BugsReported\DynProxy179.cs" />    
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\VirtualObjectTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\Behaviors\ConflictBehaviorTestCase.cs" />
