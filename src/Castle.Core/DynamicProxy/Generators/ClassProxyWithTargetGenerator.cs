@@ -42,7 +42,7 @@ namespace Castle.DynamicProxy.Generators
 
 			options.Initialize();
 			ProxyGenerationOptions = options;
-			this.additionalInterfacesToProxy = TypeUtil.GetAllInterfaces(additionalInterfacesToProxy).ToArray();
+			this.additionalInterfacesToProxy = TypeUtil.GetAllInterfaces(additionalInterfacesToProxy);
 		}
 
 		public Type GetGeneratedType()

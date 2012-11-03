@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Internal
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
-	using System.Linq;
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators.Emitters;
@@ -54,18 +53,17 @@ namespace Castle.DynamicProxy.Internal
 		/// </summary>
 		/// <param name="types"> </param>
 		/// <returns> </returns>
-		public static ICollection<Type> GetAllInterfaces(params Type[] types)
+		public static Type[] GetAllInterfaces(params Type[] types)
 		{
 			if (types == null)
 			{
 				return Type.EmptyTypes;
 			}
 
-			var dummy = new object();
-			// we should move this to HashSet once we no longer support .NET 2.0
-			IDictionary<Type, object> interfaces = new Dictionary<Type, object>();
-			foreach (var type in types)
+			var interfaces = new HashSet<Type>();
+			for (int index = 0; index < types.Length; index++)
 			{
+				var type = types[index];
 				if (type == null)
 				{
 					continue;
@@ -73,19 +71,24 @@ namespace Castle.DynamicProxy.Internal
 
 				if (type.IsInterface)
 				{
-					interfaces[type] = dummy;
+					if(interfaces.Add(type) == false)
+					{
+						continue;
+					}
 				}
 
-				foreach (var @interface in type.GetInterfaces())
+				var innerInterfaces = type.GetInterfaces();
+				for (var i = 0; i < innerInterfaces.Length; i++)
 				{
-					interfaces[@interface] = dummy;
+					var @interface = innerInterfaces[i];
+					interfaces.Add(@interface);
 				}
 			}
 
-			return Sort(interfaces.Keys);
+			return Sort(interfaces);
 		}
 
-		public static ICollection<Type> GetAllInterfaces(this Type type)
+		public static Type[] GetAllInterfaces(this Type type)
 		{
 			return GetAllInterfaces(new[] { type });
 		}
@@ -210,9 +213,10 @@ namespace Castle.DynamicProxy.Internal
 			return hasAnyGenericParameters;
 		}
 
-		private static Type[] Sort(IEnumerable<Type> types)
+		private static Type[] Sort(ICollection<Type> types)
 		{
-			var array = types.ToArray();
+			var array = new Type[types.Count];
+			types.CopyTo(array, 0);
 			//NOTE: is there a better, stable way to sort Types. We will need to revise this once we allow open generics
 			Array.Sort(array, (l, r) => string.Compare(l.AssemblyQualifiedName, r.AssemblyQualifiedName, StringComparison.OrdinalIgnoreCase));
 			return array;

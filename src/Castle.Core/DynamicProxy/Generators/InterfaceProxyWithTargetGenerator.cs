@@ -58,7 +58,7 @@ namespace Castle.DynamicProxy.Generators
 			EnsureValidBaseType(options.BaseTypeForInterfaceProxy);
 			ProxyGenerationOptions = options;
 
-			interfaces = TypeUtil.GetAllInterfaces(interfaces).ToArray();
+			interfaces = TypeUtil.GetAllInterfaces(interfaces);
 			var cacheKey = new CacheKey(proxyTargetType, targetType, interfaces, options);
 
 			return ObtainProxyType(cacheKey, (n, s) => GenerateType(n, proxyTargetType, interfaces, s));

@@ -38,7 +38,7 @@ namespace Castle.DynamicProxy.Generators
 			// make sure ProxyGenerationOptions is initialized
 			options.Initialize();
 
-			interfaces = TypeUtil.GetAllInterfaces(interfaces).ToArray();
+			interfaces = TypeUtil.GetAllInterfaces(interfaces);
 			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 			ProxyGenerationOptions = options;
 			var cacheKey = new CacheKey(targetType, interfaces, options);
