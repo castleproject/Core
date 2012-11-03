@@ -1,8 +1,8 @@
-- fixed DYNPROXY-175 invalid CompositionInvocation type used when code uses interface proxies with and without InterceptorSelector
+- fixed DYNPROXY-179 - Exception when creating a generic proxy (from cache)
+- fixed DYNPROXY-175 - invalid CompositionInvocation type used when code uses interface proxies with and without InterceptorSelector
 
 3.1.0 (2012-08-05)
 ==================
-
 - fixed DYNPROXY-174 - Unable to cast object of type 'System.Collections.ObjectModel.ReadOnlyCollection`1[System.Reflection.CustomAttributeTypedArgument]' to type 'System.Array'
 
 3.1.0 RC (2012-07-08)

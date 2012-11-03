@@ -509,7 +509,12 @@ namespace Castle.DynamicProxy
 				mappings = new Dictionary<CacheKey, string>();
 				foreach (var cacheEntry in typeCache)
 				{
-					mappings.Add(cacheEntry.Key, cacheEntry.Value.FullName);
+					// NOTE: using == returns invalid results.
+					// we need to use Equals here for it to work properly
+					if(builder.Equals(cacheEntry.Value.Assembly))
+					{
+						mappings.Add(cacheEntry.Key, cacheEntry.Value.FullName);
+					}
 				}
 			}
 
