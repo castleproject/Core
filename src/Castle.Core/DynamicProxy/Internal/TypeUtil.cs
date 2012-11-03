@@ -61,7 +61,7 @@ namespace Castle.DynamicProxy.Internal
 			}
 
 			var interfaces = new HashSet<Type>();
-			for (int index = 0; index < types.Length; index++)
+			for (var index = 0; index < types.Length; index++)
 			{
 				var type = types[index];
 				if (type == null)
@@ -71,7 +71,7 @@ namespace Castle.DynamicProxy.Internal
 
 				if (type.IsInterface)
 				{
-					if(interfaces.Add(type) == false)
+					if (interfaces.Add(type) == false)
 					{
 						continue;
 					}
