@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests.BugsReported
+namespace CastleTests
 {
 	using System.Reflection;
 
+	using Castle.DynamicProxy;
 	using Castle.DynamicProxy.Tests.Interceptors;
 
 	using NUnit.Framework;
@@ -64,9 +65,10 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 	}
 
 	[TestFixture]
-	public class DynProxy179
+	public class MultipleSavedAssembliesTestCase
 	{
 		[Test]
+		[Bug("DYNPROXY-179")]
 		public void LoadAssemblyIntoCache_InvalidCacheAfterTwoLoadAssemblyIntoCacheThatContainsSameClass()
 		{
 			//
@@ -112,6 +114,7 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 		}
 
 		[Test]
+		[Bug("DYNPROXY-179")]
 		public void LoadAssemblyIntoCache_InvalidCacheAfterTwoLoadAssemblyIntoCacheThatContainsSameGeneric()
 		{
 			//
@@ -153,6 +156,7 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 		}
 
 		[Test]
+		[Bug("DYNPROXY-179")]
 		public void LoadAssemblyIntoCache_InvalidCacheAfterTwoLoadAssemblyIntoCacheThatContainsSameInterface()
 		{
 			//
