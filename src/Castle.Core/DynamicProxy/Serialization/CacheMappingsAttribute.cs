@@ -1,4 +1,4 @@
-// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Serialization
 	using Castle.DynamicProxy.Generators;
 
 	/// <summary>
-	///   Applied to the assemblies saved by <see cref = "ModuleScope" /> in order to persist the cache data included in the persisted assembly.
+	///   Applied to the assemblies saved by <see cref="ModuleScope" /> in order to persist the cache data included in the persisted assembly.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]
 	[CLSCompliant(false)]
@@ -36,16 +36,16 @@ namespace Castle.DynamicProxy.Serialization
 		private static readonly ConstructorInfo constructor =
 			typeof(CacheMappingsAttribute).GetConstructor(new[] { typeof(byte[]) });
 
-		private readonly byte[] _serializedCacheMappings;
+		private readonly byte[] serializedCacheMappings;
 
 		public CacheMappingsAttribute(byte[] serializedCacheMappings)
 		{
-			_serializedCacheMappings = serializedCacheMappings;
+			this.serializedCacheMappings = serializedCacheMappings;
 		}
 
 		public byte[] SerializedCacheMappings
 		{
-			get { return _serializedCacheMappings; }
+			get { return serializedCacheMappings; }
 		}
 
 		public Dictionary<CacheKey, string> GetDeserializedMappings()
