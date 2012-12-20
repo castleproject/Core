@@ -159,6 +159,38 @@
     <NoWarn>1685</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50-Release|AnyCPU'">
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <MSBuildTargets>Silverlight 5.0</MSBuildTargets>
+    <OutputPath>bin\SL50-Release\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>TRACE;SILVERLIGHT SL50</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <FileAlignment>4096</FileAlignment>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <DocumentationFile>bin\SL50-Release\Castle.Services.Logging.NLogIntegration.XML</DocumentationFile>
+    <NoWarn>1685</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50-Debug|AnyCPU'">
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <MSBuildTargets>Silverlight 5.0</MSBuildTargets>
+    <OutputPath>bin\SL50-Debug\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT SL50</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <FileAlignment>4096</FileAlignment>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <NoWarn>1685</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Debug|AnyCPU'">
     <OutputPath>bin\MONO26-Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;MONO MONO26</DefineConstants>
@@ -260,6 +292,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition="$(MSBuildTargets) != 'Silverlight 5.0' and $(MSBuildTargets) != 'Silverlight 4.0'" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 4.0'" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 5.0'" />  
   <Import Project="$(RootPath)\Settings.proj" />
   <PropertyGroup>
     <ProjectName>Castle.Services.Logging.NLogIntegration</ProjectName>

@@ -32,6 +32,8 @@ limitations under the License.
 	<!-- Project Properties -->
 	<PropertyGroup>
 		<ProjectName>Castle.Core</ProjectName>
+		<SilverlightBuild>false</SilverlightBuild>
+		<SilverlightBuild Condition="'$(BuildConfigKey)'== 'SL40' Or '$(BuildConfigKey)'== 'SL50'">true</SilverlightBuild>
 		
 		<!-- Used for display purposes. Should start with a space to look better -->
 		<BuildName></BuildName>
@@ -85,7 +87,7 @@ limitations under the License.
 	<!-- Import Silverlight specific settings -->
 	<Import
 		Project="$(RootPath)\Settings-SL.proj"
-		Condition="'$(TargetFrameworkIdentifier)' == 'Silverlight' and Exists('$(RootPath)\Settings-SL.proj')"
+		Condition="'$(SilverlightBuild)' == 'true' and Exists('$(RootPath)\Settings-SL.proj')"
 		/>
 
 </Project>
