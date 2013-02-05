@@ -14,6 +14,7 @@
 
 namespace CastleTests
 {
+#if !SILVERLIGHT
 	using System.Reflection;
 
 	using Castle.DynamicProxy;
@@ -201,4 +202,5 @@ namespace CastleTests
 			}
 		}
 	}
+#endif
 }
