@@ -100,20 +100,6 @@ namespace System.Diagnostics
 }
 namespace System.ComponentModel
 {
-	public delegate void PropertyChangingEventHandler(object sender, PropertyChangingEventArgs e);
-	public class PropertyChangingEventArgs : EventArgs
-	{
-
-		public PropertyChangingEventArgs(string propertyName)
-		{
-			PropertyName = propertyName;
-		}
-
-		public virtual string PropertyName { get; private set; }
-	}
-}
-namespace System.ComponentModel
-{
 	using System.Collections.Generic;
 
 	using Castle.Core.Extensions;
@@ -140,4 +126,23 @@ namespace System.ComponentModel
 		}
 	}
 }
+#endif
+
+#if SL4
+
+namespace System.ComponentModel
+{
+	public delegate void PropertyChangingEventHandler(object sender, PropertyChangingEventArgs e);
+	public class PropertyChangingEventArgs : EventArgs
+	{
+
+		public PropertyChangingEventArgs(string propertyName)
+		{
+			PropertyName = propertyName;
+		}
+
+		public virtual string PropertyName { get; private set; }
+	}
+}
+
 #endif
