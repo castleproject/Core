@@ -101,6 +101,8 @@ limitations under the License.
 	</Target>
 
 	<Target Name="CleanAll">
+		<Message Text="Building Solution: $(SolutionPath)" Importance="high"/>
+	
 		<MSBuild Projects="$(SolutionPath)" Targets="Clean" Properties="Configuration=$(Configuration);BuildConstants=$(BuildConstants);MSBuildTargets=$(MSBuildTargets);TargetFrameworkVersion=$(TargetFrameworkVersion)" />
 
 		<CreateItem Include="**/Debug/**/*.*;**/Release/**/*.*">
