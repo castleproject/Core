@@ -1,3 +1,5 @@
+3.2.0 (2013-02-16)
+==================
 - fixed DYNPROXY-179 - Exception when creating a generic proxy (from cache)
 - fixed DYNPROXY-175 - invalid CompositionInvocation type used when code uses interface proxies with and without InterceptorSelector
 
