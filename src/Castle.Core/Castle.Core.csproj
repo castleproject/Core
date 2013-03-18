@@ -147,7 +147,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>  
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Debug|AnyCPU'">
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -441,6 +441,7 @@
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\TryStatement.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\FinallyStatement.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\EndExceptionBlockStatement.cs" />
+    <Compile Include="DynamicProxy\IConstructorGenerationHook.cs" />
     <Compile Include="DynamicProxy\Internal\CompositionInvocation.cs" />
     <Compile Include="DynamicProxy\Contributors\ClassProxyWithTargetTargetContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\CompositeTypeContributor.cs" />

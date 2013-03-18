@@ -19,8 +19,10 @@ namespace Castle.DynamicProxy
 	using System.Reflection;
 
 	[Serializable]
-	public class AllMethodsHook : IProxyGenerationHook
+	public class AllMethodsHook : IProxyGenerationHook, IConstructorGenerationHook
 	{
+        public static readonly AllMethodsHook Instance = new AllMethodsHook();
+
 		protected static readonly ICollection<Type> SkippedTypes = new[]
 		{
 			typeof(object),
@@ -52,5 +54,17 @@ namespace Castle.DynamicProxy
 		{
 			return GetType().GetHashCode();
 		}
+
+	    public ProxyConstructorImplementation DefaultConstructorImplementation
+	    {
+	        get { return ProxyConstructorImplementation.SkipConstructor; }
+	    }
+
+	    public ProxyConstructorImplementation GetConstructorImplementation(ConstructorInfo constructorInfo, ConstructorImplementationAnalysis analysis)
+	    {
+	        return analysis.IsBaseVisible
+	                   ? ProxyConstructorImplementation.CallBase
+	                   : ProxyConstructorImplementation.SkipConstructor;
+	    }
 	}
 }
