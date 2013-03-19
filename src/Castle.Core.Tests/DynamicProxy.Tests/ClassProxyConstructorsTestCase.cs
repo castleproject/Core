@@ -19,6 +19,8 @@ namespace Castle.DynamicProxy.Tests
 
 	using Castle.DynamicProxy.Tests.Classes;
 
+	using CastleTests.DynamicProxy.Tests.Classes;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -36,13 +38,14 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Ignore("I don't see any simple way of doing this...")]
 		public void Should_properly_interpret_array_of_objects()
 		{
+		    var asDeterminedByCompiler = new ClassWithVariousConstructors(new object[] { null });
+
 			var proxy =
 				(ClassWithVariousConstructors)
 				generator.CreateClassProxy(typeof(ClassWithVariousConstructors), new object[] { new object[] { null } });
-			Assert.AreEqual(Constructor.ArrayOfObjects, proxy.ConstructorCalled);
+            Assert.AreEqual(asDeterminedByCompiler.ConstructorCalled, proxy.ConstructorCalled);
 		}
 
 		[Test]
@@ -98,14 +101,22 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Ignore("I don't see any simple way of doing this...")]
 		public void Should_properly_interpret_null_as_ctor_argument()
 		{
+		    var asDeterminedByCompiler = new ClassWithVariousConstructors(null);
+
 			var proxy =
 				(ClassWithVariousConstructors)
 				generator.CreateClassProxy(typeof(ClassWithVariousConstructors), new[] { default(object) });
-			Assert.AreEqual(Constructor.Object, proxy.ConstructorCalled);
+			Assert.AreEqual(asDeterminedByCompiler.ConstructorCalled, proxy.ConstructorCalled);
 		}
+
+        [Test]
+        public void Should_not_wrap_exceptions_in_ctor()
+        {
+            var ex = Assert.Throws(typeof(ApplicationException), () => generator.CreateClassProxy(typeof(ThrowsInCtorClass), new IInterceptor[0]));
+            Assert.AreSame(typeof(ThrowsInCtorClass).GetConstructor(Type.EmptyTypes), ex.TargetSite);
+        }
 	}
 
 	public abstract class MyOwnClass

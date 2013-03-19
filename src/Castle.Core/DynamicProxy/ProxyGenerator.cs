@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Linq.Expressions;
+using System.Linq;
+
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -1467,7 +1470,20 @@ namespace Castle.DynamicProxy
 		{
 			try
 			{
-				return Activator.CreateInstance(proxyType, proxyArguments.ToArray());
+			    var ctorArgs = proxyArguments.ToArray();
+			    object state;
+			    var constructorInfos = proxyType.GetConstructors();
+			    var ctor = (ConstructorInfo) Type.DefaultBinder.BindToMethod(BindingFlags.Default, 
+			        constructorInfos, ref ctorArgs, null, null, null, out state);
+
+			    var parameters = ctor.GetParameters();
+			    var argExprs = new Expression[parameters.Length];
+			    for (int i = 0; i < parameters.Length; ++i)
+                    argExprs[i] = Expression.Constant(ctorArgs[i], parameters[i].ParameterType);
+
+                var expr = (Expression<Func<object>>)Expression.Lambda(typeof(Func<object>), Expression.New(ctor, argExprs));
+			    var newCall = expr.Compile();
+			    return newCall();
 			}
 			catch (MissingMethodException)
 			{

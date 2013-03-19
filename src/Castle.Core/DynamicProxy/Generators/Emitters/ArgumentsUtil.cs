@@ -64,7 +64,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			for (var i = 0; i < args.Length; ++i)
 			{
-				arguments[i] = new ReferenceExpression(new ArgumentReference(args[i].ParameterType, i + 1));
+				arguments[i] = new ReferenceExpression(new ArgumentReference(args[i].ParameterType, i + 1, args[i].Attributes));
 			}
 
 			return arguments;

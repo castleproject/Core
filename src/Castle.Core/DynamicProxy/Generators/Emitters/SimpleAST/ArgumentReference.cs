@@ -16,24 +16,28 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
 	using System.Diagnostics;
+	using System.Reflection;
 	using System.Reflection.Emit;
 
 	[DebuggerDisplay("argument {Type}")]
 	public class ArgumentReference : TypeReference
 	{
-		public ArgumentReference(Type argumentType)
+
+	    public ArgumentReference(Type argumentType)
 			: base(argumentType)
 		{
-			Position = -1;
+		    ParameterAttributes = ParameterAttributes.None;
+		    Position = -1;
 		}
 
-		public ArgumentReference(Type argumentType, int position)
+	    public ArgumentReference(Type argumentType, int position, ParameterAttributes parameterAttributes)
 			: base(argumentType)
 		{
 			Position = position;
 		}
 
 		internal int Position { get; set; }
+        internal ParameterAttributes ParameterAttributes { get; set; }
 
 		public override void LoadAddressOfReference(ILGenerator gen)
 		{

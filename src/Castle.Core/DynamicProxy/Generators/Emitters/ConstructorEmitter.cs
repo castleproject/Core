@@ -41,6 +41,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			var args = ArgumentsUtil.InitializeAndConvert(arguments);
 
 			builder = maintype.TypeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, args);
+			// if we don't copy the parameter attributes, the default binder will fail
+			// when trying to resolve constructors from the passed argument values.
+            for (int i = 0; i < args.Length; ++i)
+                builder.DefineParameter(i + 1, arguments[i].ParameterAttributes, "");
 		}
 
 		public virtual ConstructorCodeBuilder CodeBuilder

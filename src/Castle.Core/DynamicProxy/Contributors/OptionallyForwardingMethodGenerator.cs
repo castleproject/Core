@@ -81,7 +81,7 @@ namespace Castle.DynamicProxy.Contributors
 				if (parameter.IsOut)
 				{
 					expression.AddStatement(
-						new AssignArgumentStatement(new ArgumentReference(parameter.ParameterType, index + 1),
+						new AssignArgumentStatement(new ArgumentReference(parameter.ParameterType, index + 1, parameter.Attributes),
 						                            new DefaultValueExpression(parameter.ParameterType)));
 				}
 			}

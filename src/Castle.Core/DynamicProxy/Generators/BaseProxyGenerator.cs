@@ -212,6 +212,15 @@ namespace Castle.DynamicProxy.Generators
 		protected void GenerateConstructor(ClassEmitter emitter, ConstructorInfo baseConstructor,
 		                                   params FieldReference[] fields)
 		{
+		    GenerateConstructor(emitter, baseConstructor, ProxyConstructorImplementation.CallBase, fields);
+		}
+
+		protected void GenerateConstructor(ClassEmitter emitter, ConstructorInfo baseConstructor,
+		                                   ProxyConstructorImplementation impl, params FieldReference[] fields)
+		{
+            if (impl == ProxyConstructorImplementation.SkipConstructor)
+                return;
+
 			ArgumentReference[] args;
 			ParameterInfo[] baseConstructorParams = null;
 
@@ -260,21 +269,24 @@ namespace Castle.DynamicProxy.Generators
 
 			// Invoke base constructor
 
-			if (baseConstructor != null)
-			{
-				Debug.Assert(baseConstructorParams != null);
+            if (impl == ProxyConstructorImplementation.CallBase)
+            {
+                if (baseConstructor != null)
+                {
+                    Debug.Assert(baseConstructorParams != null);
 
-				var slice = new ArgumentReference[baseConstructorParams.Length];
-				Array.Copy(args, fields.Length, slice, 0, baseConstructorParams.Length);
+                    var slice = new ArgumentReference[baseConstructorParams.Length];
+                    Array.Copy(args, fields.Length, slice, 0, baseConstructorParams.Length);
 
-				constructor.CodeBuilder.InvokeBaseConstructor(baseConstructor, slice);
-			}
-			else
-			{
-				constructor.CodeBuilder.InvokeBaseConstructor();
-			}
+                    constructor.CodeBuilder.InvokeBaseConstructor(baseConstructor, slice);
+                }
+                else
+                {
+                    constructor.CodeBuilder.InvokeBaseConstructor();
+                }
+            }
 
-			constructor.CodeBuilder.AddStatement(new ReturnStatement());
+		    constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
 		protected void GenerateConstructors(ClassEmitter emitter, Type baseType, params FieldReference[] fields)
@@ -282,15 +294,25 @@ namespace Castle.DynamicProxy.Generators
 			var constructors =
 				baseType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
+            var ctorGenerationHook = (ProxyGenerationOptions.Hook as IConstructorGenerationHook) ?? AllMethodsHook.Instance;
+
+		    bool defaultCtorConsidered = false;
 			foreach (var constructor in constructors)
 			{
-				if (!IsConstructorVisible(constructor))
-				{
-					continue;
-				}
+                if (constructor.GetParameters().Length == 0)
+                    defaultCtorConsidered = true;
 
-				GenerateConstructor(emitter, constructor, fields);
+			    bool ctorVisible = IsConstructorVisible(constructor);
+			    var analysis = new ConstructorImplementationAnalysis(ctorVisible);
+			    var impl = ctorGenerationHook.GetConstructorImplementation(constructor, analysis);
+
+				GenerateConstructor(emitter, constructor, impl, fields);
 			}
+
+            if (!defaultCtorConsidered)
+            {
+                GenerateConstructor(emitter, null, ctorGenerationHook.DefaultConstructorImplementation, fields);
+            }
 		}
 
 		/// <summary>
