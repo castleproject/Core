@@ -38,7 +38,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				throw new NotSupportedException("Cannot load ByRef values");
 			}
-			else if (type.IsPrimitive && type != typeof(IntPtr))
+			else if (type.IsPrimitive && type != typeof(IntPtr) && type != typeof(UIntPtr))
 			{
 				var opCode = LdindOpCodesDictionary.Instance[type];
 
@@ -148,7 +148,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				throw new NotSupportedException("Cannot store ByRef values");
 			}
-			else if (type.IsPrimitive && type != typeof(IntPtr))
+			else if (type.IsPrimitive && type != typeof(IntPtr) && type != typeof(UIntPtr))
 			{
 				var opCode = StindOpCodesDictionary.Instance[type];
 
