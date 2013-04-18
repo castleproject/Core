@@ -565,10 +565,11 @@ namespace Castle.DynamicProxy
 		{
 			//TODO: add <example> to xml comments to show how to use IChangeProxyTarget
 
-			if (target != null && interfaceToProxy.IsInstanceOfType(target) == false)
-			{
-				throw new ArgumentException("targetType");
-			}
+      // In the case of a transparent proxy, the call to IsInstanceOfType was executed on the real object.
+      if (target != null && interfaceToProxy.IsInstanceOfType(target) == false)
+      {
+        throw new ArgumentException("Target does not implement interface " + interfaceToProxy.FullName, "target");
+      }
 			if (interfaceToProxy == null)
 			{
 				throw new ArgumentNullException("interfaceToProxy");
@@ -583,47 +584,29 @@ namespace Castle.DynamicProxy
 				throw new ArgumentException("Specified type is not an interface", "interfaceToProxy");
 			}
 
-			var isRemotingProxy = false;
-			if (target != null && interfaceToProxy.IsInstanceOfType(target) == false)
-			{
+		  var isRemotingProxy = false;
 #if !SILVERLIGHT
-				//check if we have remoting proxy at hand...
-				if (RemotingServices.IsTransparentProxy(target))
-				{
-					var info = (RemotingServices.GetRealProxy(target) as IRemotingTypeInfo);
-					if (info != null)
-					{
-						if (!info.CanCastTo(interfaceToProxy, target))
-						{
-							throw new ArgumentException("Target does not implement interface " + interfaceToProxy.FullName, "target");
-						}
-						isRemotingProxy = true;
-					}
-				}
-				else if (Marshal.IsComObject(target))
-				{
-					var interfaceId = interfaceToProxy.GUID;
-					if (interfaceId != Guid.Empty)
-					{
-						var iUnknown = Marshal.GetIUnknownForObject(target);
-						var interfacePointer = IntPtr.Zero;
-						var result = Marshal.QueryInterface(iUnknown, ref interfaceId, out interfacePointer);
-						if (result == 0 && interfacePointer == IntPtr.Zero)
-						{
-							throw new ArgumentException("Target COM object does not implement interface " + interfaceToProxy.FullName,
-							                            "target");
-						}
-					}
-				}
-				else
-				{
-#endif
-					throw new ArgumentException("Target does not implement interface " + interfaceToProxy.FullName, "target");
+		  if (target != null)
+		  {
+		    isRemotingProxy = RemotingServices.IsTransparentProxy(target);
 
-#if !SILVERLIGHT
-				}
+		    if (!isRemotingProxy && Marshal.IsComObject(target))
+		    {
+		      var interfaceId = interfaceToProxy.GUID;
+		      if (interfaceId != Guid.Empty)
+		      {
+		        var iUnknown = Marshal.GetIUnknownForObject(target);
+		        var interfacePointer = IntPtr.Zero;
+		        var result = Marshal.QueryInterface(iUnknown, ref interfaceId, out interfacePointer);
+		        if (result == 0 && interfacePointer == IntPtr.Zero)
+		        {
+		          throw new ArgumentException("Target COM object does not implement interface " + interfaceToProxy.FullName,
+		                                      "target");
+		        }
+		      }
+		    }
+		  }
 #endif
-			}
 
 			CheckNotGenericTypeDefinition(interfaceToProxy, "interfaceToProxy");
 			CheckNotGenericTypeDefinitions(additionalInterfacesToProxy, "additionalInterfacesToProxy");
@@ -631,6 +614,7 @@ namespace Castle.DynamicProxy
 			var generatedType = CreateInterfaceProxyTypeWithTargetInterface(interfaceToProxy, additionalInterfacesToProxy,
 			                                                                options);
 			var arguments = GetConstructorArguments(target, interceptors, options);
+
 			if (isRemotingProxy)
 			{
 				var constructors = generatedType.GetConstructors();
@@ -638,8 +622,8 @@ namespace Castle.DynamicProxy
 				// one .ctor to rule them all
 				Debug.Assert(constructors.Length == 1, "constructors.Length == 1");
 				return constructors[0].Invoke(arguments.ToArray());
-			}
-			return Activator.CreateInstance(generatedType, arguments.ToArray());
+      }
+      return Activator.CreateInstance(generatedType, arguments.ToArray());
 		}
 
 		/// <summary>
