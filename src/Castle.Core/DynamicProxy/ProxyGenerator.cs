@@ -565,13 +565,15 @@ namespace Castle.DynamicProxy
 		{
 			//TODO: add <example> to xml comments to show how to use IChangeProxyTarget
 
-			if (target != null && interfaceToProxy.IsInstanceOfType(target) == false)
-			{
-				throw new ArgumentException("targetType");
-			}
+
 			if (interfaceToProxy == null)
 			{
 				throw new ArgumentNullException("interfaceToProxy");
+			}
+			// In the case of a transparent proxy, the call to IsInstanceOfType was executed on the real object.
+			if (target != null && interfaceToProxy.IsInstanceOfType(target) == false)
+			{
+				throw new ArgumentException("Target does not implement interface " + interfaceToProxy.FullName, "target");
 			}
 			if (interceptors == null)
 			{
@@ -584,23 +586,12 @@ namespace Castle.DynamicProxy
 			}
 
 			var isRemotingProxy = false;
-			if (target != null && interfaceToProxy.IsInstanceOfType(target) == false)
-			{
 #if !SILVERLIGHT
-				//check if we have remoting proxy at hand...
-				if (RemotingServices.IsTransparentProxy(target))
-				{
-					var info = (RemotingServices.GetRealProxy(target) as IRemotingTypeInfo);
-					if (info != null)
-					{
-						if (!info.CanCastTo(interfaceToProxy, target))
-						{
-							throw new ArgumentException("Target does not implement interface " + interfaceToProxy.FullName, "target");
-						}
-						isRemotingProxy = true;
-					}
-				}
-				else if (Marshal.IsComObject(target))
+			if (target != null)
+			{
+				isRemotingProxy = RemotingServices.IsTransparentProxy(target);
+
+				if (!isRemotingProxy && Marshal.IsComObject(target))
 				{
 					var interfaceId = interfaceToProxy.GUID;
 					if (interfaceId != Guid.Empty)
@@ -611,19 +602,13 @@ namespace Castle.DynamicProxy
 						if (result == 0 && interfacePointer == IntPtr.Zero)
 						{
 							throw new ArgumentException("Target COM object does not implement interface " + interfaceToProxy.FullName,
-							                            "target");
+										    "target");
 						}
 					}
 				}
-				else
-				{
-#endif
-					throw new ArgumentException("Target does not implement interface " + interfaceToProxy.FullName, "target");
-
-#if !SILVERLIGHT
-				}
-#endif
 			}
+			
+#endif
 
 			CheckNotGenericTypeDefinition(interfaceToProxy, "interfaceToProxy");
 			CheckNotGenericTypeDefinitions(additionalInterfacesToProxy, "additionalInterfacesToProxy");
