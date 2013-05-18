@@ -596,13 +596,17 @@ namespace Castle.DynamicProxy
 					var interfaceId = interfaceToProxy.GUID;
 					if (interfaceId != Guid.Empty)
 					{
-						var iUnknown = Marshal.GetIUnknownForObject(target);
+						var iUnknown = Marshal.GetIUnknownForObject(target); // Increment the reference count
 						var interfacePointer = IntPtr.Zero;
-						var result = Marshal.QueryInterface(iUnknown, ref interfaceId, out interfacePointer);
-						if (result == 0 && interfacePointer == IntPtr.Zero)
+						var result = Marshal.QueryInterface(iUnknown, ref interfaceId, out interfacePointer); // Increment the reference count
+						var isInterfacePointerNull = interfacePointer == IntPtr.Zero;		        
+						Marshal.Release(iUnknown); // Decrement the reference count
+						Marshal.Release(interfacePointer); // Decrement the reference count
+
+						if (result == 0 && isInterfacePointerNull)
 						{
 							throw new ArgumentException("Target COM object does not implement interface " + interfaceToProxy.FullName,
-										    "target");
+														"target");
 						}
 					}
 				}
