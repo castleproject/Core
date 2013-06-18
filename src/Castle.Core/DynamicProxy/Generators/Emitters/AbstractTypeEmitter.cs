@@ -20,8 +20,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Castle.DynamicProxy.Internal;
+	using SimpleAST;
+	using Internal;
 
 	public abstract class AbstractTypeEmitter
 	{
@@ -282,7 +282,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public Type GetGenericArgument(String genericArgumentName)
 		{
-			return name2GenericType[genericArgumentName];
+			if (name2GenericType.ContainsKey(genericArgumentName))
+				return name2GenericType[genericArgumentName];
+
+			return null;
 		}
 
 		public Type[] GetGenericArgumentsFor(Type genericType)

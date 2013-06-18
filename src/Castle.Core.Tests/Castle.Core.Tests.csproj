@@ -126,7 +126,7 @@
     <ErrorReport>prompt</ErrorReport>
     <NoWarn>1685</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>  
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Debug|AnyCPU'">
     <DefineConstants>TRACE;DEBUG;MONO MONO26</DefineConstants>
     <Optimize>false</Optimize>
@@ -250,6 +250,7 @@
     <Compile Include="BugsReported\Core40.cs" />
     <Compile Include="BugsReported\DynProxy159.cs" />
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
+    <Compile Include="DynamicProxy.Tests\GenericInterfaceWithGenericMethod.cs" />
     <Compile Include="MultipleSavedAssembliesTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\VirtualObjectTestCase.cs" />
