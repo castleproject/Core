@@ -112,10 +112,7 @@ namespace Castle.DynamicProxy.Internal
 
 			if (parameter.IsGenericParameter)
 			{
-				var arg = type.GetGenericArgument(parameter.Name);
-				if (arg == null)
-					return null;
-				return arg;
+				return type.GetGenericArgument(parameter.Name);
 			}
 
 			if (parameter.IsArray)
