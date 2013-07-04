@@ -568,5 +568,37 @@ namespace Castle.DynamicProxy
 			var module = ObtainDynamicModule(disableSignedModule == false && inSignedModulePreferably);
 			return module.DefineType(name, flags);
 		}
+
+        public Dictionary<CacheKey, string> InspectTypeCache(int topCount)
+        {
+            Dictionary<CacheKey, string> cache;
+            int count = 0;
+
+            using (Lock.ForReading())
+            {
+                cache = new Dictionary<CacheKey, string>();
+                foreach (var cacheEntry in typeCache)
+                {
+                    if (count >= topCount)
+                        break;
+                    cache.Add(cacheEntry.Key, cacheEntry.Value.FullName);
+                    count += 1;
+                }
+            }
+            return cache;
+        }
+
+        public int TypeCacheSize
+        {
+            get
+            {
+                int totalSize;
+                using (Lock.ForReading())
+                {
+                    totalSize = typeCache.Count;
+                }
+                return totalSize;
+            }
+        }
 	}
 }

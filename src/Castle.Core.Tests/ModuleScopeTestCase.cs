@@ -14,15 +14,15 @@
 
 namespace Castle.DynamicProxy.Tests
 {
-	using System;
-	using System.IO;
-	using System.Reflection;
-	using Castle.DynamicProxy.Generators;
-	using Castle.DynamicProxy.Serialization;
-	using Castle.DynamicProxy.Tests.InterClasses;
-	using NUnit.Framework;
+    using Castle.DynamicProxy.Generators;
+    using Castle.DynamicProxy.Serialization;
+    using Castle.DynamicProxy.Tests.InterClasses;
+    using NUnit.Framework;
+    using System;
+    using System.IO;
+    using System.Reflection;
 
-	[TestFixture]
+    [TestFixture]
 	public class ModuleScopeTestCase
 	{
 		[Test]
@@ -490,6 +490,29 @@ namespace Castle.DynamicProxy.Tests
 
 			File.Delete(path);
 		}
+
+        [Test]
+        public void TypeCacheSize_ReturnsNumberOfEntries()
+        {
+            var scope = new ModuleScope(false);
+            var builder = new DefaultProxyBuilder(scope);
+            builder.CreateClassProxyType(typeof(object), Type.EmptyTypes, ProxyGenerationOptions.Default);
+            Assert.AreEqual(1, scope.TypeCacheSize);           
+        }
+
+        [Test]
+        public void InspectTypeCache_ReturnsTopEntries()
+        {
+            var scope = new ModuleScope(false);
+            var builder = new DefaultProxyBuilder(scope);
+                        
+            builder.CreateClassProxyType(typeof(object), Type.EmptyTypes, ProxyGenerationOptions.Default);
+            builder.CreateClassProxyType(typeof(SimpleClass), Type.EmptyTypes, ProxyGenerationOptions.Default);
+
+
+            Assert.AreEqual(1, scope.InspectTypeCache(1).Count);
+            Assert.AreEqual(2, scope.InspectTypeCache(1000).Count);
+        }
 
 #endif
 	}
