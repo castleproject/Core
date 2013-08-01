@@ -156,5 +156,17 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.IsInstanceOf(typeof(ISimpleMixin), proxy);
 		}
+
+#if !SILVERLIGHT
+		[Test]
+		[Bug("DYNPROXY-185")]
+		public void Returns_proxy_target_instead_of_self()
+		{
+			var target = new EmptyClass();
+			var proxy = generator.CreateClassProxyWithTarget(target);
+			var result = (EmptyClass)((IProxyTargetAccessor)proxy).DynProxyGetTarget();
+			Assert.AreEqual(target, result);
+		}
+#endif
 	}
 }
