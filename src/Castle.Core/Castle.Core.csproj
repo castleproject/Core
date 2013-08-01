@@ -477,6 +477,7 @@
     <Compile Include="DynamicProxy\Contributors\ForwardingMethodGenerator.cs" />
     <Compile Include="DynamicProxy\DefaultProxyBuilder.cs" />
     <Compile Include="DynamicProxy\Contributors\ClassProxyInstanceContributor.cs" />
+    <Compile Include="DynamicProxy\Contributors\ClassProxyWithTargetInstanceContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\ClassProxyTargetContributor.cs" />
     <Compile Include="DynamicProxy\Internal\AttributeUtil.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\AssignArgumentStatement.cs" />
