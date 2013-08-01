@@ -33,5 +33,5 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			return emitter.GetField("__target").ToExpression();
 		}
-    }
+	}
 }
