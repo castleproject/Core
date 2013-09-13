@@ -250,6 +250,8 @@
     <Compile Include="BugsReported\Core40.cs" />
     <Compile Include="BugsReported\DynProxy159.cs" />
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithMethodWithParameterWithDefaultValue.cs" />
+    <Compile Include="DynamicProxy.Tests\ClassProxyWithDefaultValuesTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\GenericInterfaceWithGenericMethod.cs" />
     <Compile Include="MultipleSavedAssembliesTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
