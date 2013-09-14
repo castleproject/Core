@@ -55,8 +55,8 @@ namespace Castle.DynamicProxy.Generators
 		                                                              INamingScope namingScope)
 		{
 			var methodsToSkip = new List<MethodInfo>();
-			var proxyInstance = new ClassProxyInstanceContributor(targetType, methodsToSkip, additionalInterfacesToProxy,
-			                                                      ProxyTypeConstants.ClassWithTarget);
+			var proxyInstance = new ClassProxyWithTargetInstanceContributor(targetType, methodsToSkip, additionalInterfacesToProxy,
+			                                                                ProxyTypeConstants.ClassWithTarget);
 			// TODO: the trick with methodsToSkip is not very nice...
 			var proxyTarget = new ClassProxyWithTargetTargetContributor(targetType, methodsToSkip, namingScope)
 			{ Logger = Logger };
