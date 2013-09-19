@@ -155,20 +155,8 @@ namespace Castle.Core.Smtp
 				// it to the smtpClient.
 				// After the mail is sent, the message is disposed and the
 				// eventHandler removed from the smtpClient.
-				SmtpClient smtpClient;
 
-				if (string.IsNullOrEmpty(hostname))
-				{
-					// No hostname configured, use the settings provided in system.net.smtp (SmtpClient default behavior)
-					smtpClient = new SmtpClient();
-				}
-				else
-				{
-					// A hostname is provided - init and configure using configured settings
-					smtpClient = new SmtpClient(hostname, port);
-					Configure(smtpClient);
-				}
-
+				SmtpClient smtpClient = CreateSmtpClient();
 				Guid msgGuid = new Guid();
 				SendCompletedEventHandler sceh = null;
 				sceh = delegate(object sender, AsyncCompletedEventArgs e)
@@ -185,8 +173,7 @@ namespace Castle.Core.Smtp
 			{
 				using (message)
 				{
-					SmtpClient smtpClient = new SmtpClient(hostname, port);
-					Configure(smtpClient);
+					SmtpClient smtpClient = CreateSmtpClient();
 
 					smtpClient.Send(message);
 				}
@@ -272,6 +259,23 @@ namespace Castle.Core.Smtp
 		private bool HasCredentials
 		{
 			get { return !string.IsNullOrEmpty(credentials.UserName); }
+		}
+
+#if DOTNET40
+		[SecuritySafeCritical]
+#endif
+		private SmtpClient CreateSmtpClient()
+		{
+			if (string.IsNullOrEmpty(hostname))
+			{
+				// No hostname configured, use the settings provided in system.net.smtp (SmtpClient default behavior)
+				return new SmtpClient();
+			}
+
+			// A hostname is provided - init and configure using configured settings
+			var smtpClient = new SmtpClient(hostname, port);
+			Configure(smtpClient);
+			return smtpClient;
 		}
 
 		private static bool CanAccessCredentials()
