@@ -40,7 +40,7 @@ limitations under the License.
 		<!-- Versioning -->
 		<Project_Major>3</Project_Major>
 		<Project_Minor>2</Project_Minor>
-		<Project_Build>0</Project_Build>
+		<Project_Build>1</Project_Build>
 
 		<AssemblyVersion_Build>0</AssemblyVersion_Build> <!-- By default it's (and should be) equal to $(Project_Build) -->
 

@@ -186,8 +186,13 @@ namespace Castle.DynamicProxy
 
 		private static bool ReferencesCastleCore(Assembly inspectedAssembly)
 		{
+#if SILVERLIGHT
+			// no way to check that in SILVELIGHT, so we just fall back to the solution that will definitely work
+			return false;
+#else
 			return inspectedAssembly.GetReferencedAssemblies()
 				.Any(r => r.FullName == Assembly.GetExecutingAssembly().FullName);
+#endif
 		}
 	}
 }
