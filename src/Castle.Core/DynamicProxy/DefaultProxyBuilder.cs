@@ -180,8 +180,14 @@ namespace Castle.DynamicProxy
 			                     "Make the type public, or internal and mark your assembly with " +
 			                     "[assembly: InternalsVisibleTo({1})] attribute, because assembly {2} " +
 			                     "is{3} strong-named.",
-			                     target.FullName, assemblyToBeVisibleTo, targetAssembly.GetName().Name,
-			                     strongNamedOrNotIndicator);
+				target.FullName, assemblyToBeVisibleTo,
+#if SILVERLIGHT
+				//SILVERLIGHT is retarded and doesn't allow us to call assembly.GetName()
+				targetAssembly.FullName,
+#else
+				targetAssembly.GetName().Name,
+#endif
+				strongNamedOrNotIndicator);
 		}
 
 		private static bool ReferencesCastleCore(Assembly inspectedAssembly)
