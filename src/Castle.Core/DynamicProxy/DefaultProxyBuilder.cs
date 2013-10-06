@@ -1,4 +1,4 @@
-// Copyright 2004-2011 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2013 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,9 +16,13 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
+	using System.Reflection;
 
+	using Castle.Core.Internal;
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Internal;
 
 
@@ -117,10 +121,7 @@ namespace Castle.DynamicProxy
 			}
 			if (IsPublic(target) == false && IsAccessible(target) == false)
 			{
-				throw new GeneratorException("Type " + target.FullName + " is not visible to DynamicProxy. " +
-				                             "Can not create proxy for types that are not accessible. " +
-				                             "Make the type public, or internal and mark your assembly with " +
-				                             "[assembly: InternalsVisibleTo(InternalsVisible.ToDynamicProxyGenAssembly2)] attribute.");
+				throw new GeneratorException(BuildInternalsVisibleMessageForType(target));
 			}
 		}
 
@@ -152,6 +153,41 @@ namespace Castle.DynamicProxy
 			var isInternalNotNested = target.IsVisible == false && isTargetNested == false;
 
 			return isInternalNotNested || isNestedAndInternal;
+		}
+
+		private static string BuildInternalsVisibleMessageForType(Type target)
+		{
+			var targetAssembly = target.Assembly;
+
+			string strongNamedOrNotIndicator = " not"; // assume not strong-named
+			string assemblyToBeVisibleTo = "\"DynamicProxyGenAssembly2\""; // appropriate for non-strong-named
+
+			if (targetAssembly.IsAssemblySigned())
+			{
+				strongNamedOrNotIndicator = "";
+				if (ReferencesCastleCore(targetAssembly))
+				{
+					assemblyToBeVisibleTo = "InternalsVisible.ToDynamicProxyGenAssembly2";
+				}
+				else
+				{
+					assemblyToBeVisibleTo = '"' + InternalsVisible.ToDynamicProxyGenAssembly2 + '"';
+				}
+			}
+
+			return string.Format("Type {0} is not visible to DynamicProxy. " +
+			                     "Can not create proxy for types that are not accessible. " +
+			                     "Make the type public, or internal and mark your assembly with " +
+			                     "[assembly: InternalsVisibleTo({1})] attribute, because assembly {2} " +
+			                     "is{3} strong-named.",
+			                     target.FullName, assemblyToBeVisibleTo, targetAssembly.GetName().Name,
+			                     strongNamedOrNotIndicator);
+		}
+
+		private static bool ReferencesCastleCore(Assembly inspectedAssembly)
+		{
+			return inspectedAssembly.GetReferencedAssemblies()
+				.Any(r => r.FullName == Assembly.GetExecutingAssembly().FullName);
 		}
 	}
 }
