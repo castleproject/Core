@@ -183,13 +183,29 @@ namespace Castle.DynamicProxy
 				target.FullName, assemblyToBeVisibleTo,
 #if SILVERLIGHT
 				//SILVERLIGHT is retarded and doesn't allow us to call assembly.GetName()
-				targetAssembly.FullName,
+				GetAssemblyName(targetAssembly),
 #else
 				targetAssembly.GetName().Name,
 #endif
 				strongNamedOrNotIndicator);
 		}
 
+#if SILVERLIGHT
+		private static string GetAssemblyName(Assembly targetAssembly)
+		{
+			var fullName = targetAssembly.FullName;
+			if (string.IsNullOrEmpty(fullName))
+			{
+				return fullName;
+			}
+			var index = fullName.IndexOf(", Version=", StringComparison.OrdinalIgnoreCase);
+			if (index > 0)
+			{
+				return fullName.Substring(0, index);
+			}
+			return fullName;
+		}
+#endif
 		private static bool ReferencesCastleCore(Assembly inspectedAssembly)
 		{
 #if SILVERLIGHT
