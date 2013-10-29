@@ -18,6 +18,8 @@ namespace Castle.DynamicProxy.Tests
 
 	using Castle.DynamicProxy.Tests.Classes;
 
+	using CastleTests.DynamicProxy.Tests.Classes;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -34,6 +36,16 @@ namespace Castle.DynamicProxy.Tests
 			Assert.True(parameter.HasDefaultValue);
 			Assert.AreEqual(3, parameter.DefaultValue);
 		}
+
+	    [Test]
+	    public void MethodParameterWithDefaultValue_DefaultValueNullIsSetOnProxiedMethodAsWell()
+	    {
+            var proxiedType = generator.CreateClassProxy<ClassWithMethodWithParameterWithNullDefaultValue>().GetType();
+
+            var parameter = proxiedType.GetMethod("Method").GetParameters().Single(paramInfo => paramInfo.Name == "value");
+
+            Assert.False(parameter.HasDefaultValue);
+	    }
 #endif
 	}
 }

@@ -157,7 +157,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					parameterBuilder.SetCustomAttribute(attribute);
 				}
 #if DOTNET45
-				if (parameter.HasDefaultValue)
+				if (parameter.HasDefaultValue && parameter.DefaultValue != null)
 				{
 					parameterBuilder.SetConstant(parameter.DefaultValue);
 				}
