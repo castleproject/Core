@@ -17,6 +17,7 @@ namespace Castle.Components.DictionaryAdapter
 #if! SILVERLIGHT
 	using System;
 	using System.Collections.Specialized;
+	using System.Linq;
 
 	/// <summary>
 	/// 
@@ -54,7 +55,19 @@ namespace Castle.Components.DictionaryAdapter
 		/// <exception cref="T:System.ArgumentNullException">key is null. </exception>
 		public override bool Contains(object key)
 		{
-			return Array.IndexOf(nameValues.AllKeys, key) >= 0;
+			if (key == null)
+			{
+				throw new ArgumentNullException("key");
+			}
+
+			//Getting a value out is O(1), so in the case that the collection contains a non-null value for this key
+			//we can skip the O(n) key lookup.
+			if (this[key] != null)
+			{
+				return true;
+			}
+
+			return nameValues.AllKeys.Contains(key.ToString(), StringComparer.OrdinalIgnoreCase);
 		}
 
 		/// <summary>
