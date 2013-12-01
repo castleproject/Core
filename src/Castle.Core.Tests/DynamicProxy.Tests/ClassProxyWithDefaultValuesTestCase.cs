@@ -44,7 +44,17 @@ namespace Castle.DynamicProxy.Tests
 
             var parameter = proxiedType.GetMethod("Method").GetParameters().Single(paramInfo => paramInfo.Name == "value");
 
+
             Assert.False(parameter.HasDefaultValue);
+	    }
+
+	    [Test]
+	    public void MethodParameterWithDefaultValue_UseNullDefaultValue()
+	    {
+	        var proxiedType = generator.CreateClassProxy<ClassWithMethodWithParameterWithNullDefaultValue>();
+	        var result = proxiedType.Method();
+
+            Assert.IsTrue(result);
 	    }
 #endif
 	}
