@@ -60,6 +60,8 @@ namespace Castle.Components.DictionaryAdapter
 				throw new ArgumentNullException("key");
 			}
 
+			//Getting a value out is O(1), so in the case that the collection contains a non-null value for this key
+			//we can skip the O(n) key lookup.
 			if (this[key] != null)
 			{
 				return true;
