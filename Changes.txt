@@ -1,3 +1,5 @@
+- fixed #35 - ParameterBuilder.SetConstant fails when using a default value of null - contributed by (@jonasro)
+
 3.2.1
 ==================
 - fixed #32 - Improve configuration of SmtpClient in sync sending - contributed by Artur Dorochowicz (@ArturDorochowicz)
