@@ -17,8 +17,10 @@ namespace Castle.DynamicProxy.Tests
 	using System.Linq;
 
 	using Castle.DynamicProxy.Tests.Classes;
+	using Castle.DynamicProxy.Tests.Interceptors;
 
 	using CastleTests.DynamicProxy.Tests.Classes;
+	using CastleTests.DynamicProxy.Tests.Interfaces;
 
 	using NUnit.Framework;
 
@@ -37,25 +39,34 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(3, parameter.DefaultValue);
 		}
 
-	    [Test]
-	    public void MethodParameterWithDefaultValue_DefaultValueNullIsSetOnProxiedMethodAsWell()
-	    {
-            var proxiedType = generator.CreateClassProxy<ClassWithMethodWithParameterWithNullDefaultValue>().GetType();
+		[Test]
+		public void MethodParameterWithDefaultValue_DefaultValueNullIsSetOnProxiedMethodAsWell()
+		{
+			var proxiedType = generator.CreateClassProxy<ClassWithMethodWithParameterWithNullDefaultValue>().GetType();
 
-            var parameter = proxiedType.GetMethod("Method").GetParameters().Single(paramInfo => paramInfo.Name == "value");
+			var parameter = proxiedType.GetMethod("Method").GetParameters().Single(paramInfo => paramInfo.Name == "value");
 
+			Assert.False(parameter.HasDefaultValue);
+		}
 
-            Assert.False(parameter.HasDefaultValue);
-	    }
+		[Test]
+		public void MethodParameterWithDefaultValue_UseNullDefaultValue_class_proxy()
+		{
+			var proxy = generator.CreateClassProxy<ClassWithMethodWithParameterWithNullDefaultValue>();
+			var result = proxy.Method();
 
-	    [Test]
-	    public void MethodParameterWithDefaultValue_UseNullDefaultValue()
-	    {
-	        var proxiedType = generator.CreateClassProxy<ClassWithMethodWithParameterWithNullDefaultValue>();
-	        var result = proxiedType.Method();
+			Assert.IsTrue(result);
+		}
 
-            Assert.IsTrue(result);
-	    }
+		[Test]
+		public void MethodParameterWithDefaultValue_UseNullDefaultValue_interface_proxy()
+		{
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<InterfaceWithMethodWithParameterWithNullDefaultValue>(
+					new SetReturnValueInterceptor(true));
+			var result = proxy.Method();
+
+			Assert.IsTrue(result);
+		}
 #endif
 	}
 }

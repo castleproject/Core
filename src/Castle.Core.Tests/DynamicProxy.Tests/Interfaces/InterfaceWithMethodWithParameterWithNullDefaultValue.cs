@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.DynamicProxy.Tests.Classes
+namespace CastleTests.DynamicProxy.Tests.Interfaces
 {
-	public class ClassWithMethodWithParameterWithNullDefaultValue
+	public interface InterfaceWithMethodWithParameterWithNullDefaultValue
 	{
-		public virtual bool Method(int? value = null)
-		{
-			return value == null;
-		}
+		bool Method(int? value = null);
 	}
 }
