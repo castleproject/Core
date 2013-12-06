@@ -1,4 +1,4 @@
-// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2013 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,9 +16,11 @@ namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
 
+	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Mixins;
 
@@ -97,6 +99,33 @@ namespace Castle.DynamicProxy.Tests
 			var proxy = generator.CreateClassProxyWithTarget<AbstractClassWithMethod>(new InheritsAbstractClassWithMethod());
 			var result = proxy.Method();
 			Assert.AreEqual(42, result);
+		}
+
+		private class PrivateClass { }
+
+		[Test]
+		public void Cannot_proxy_inaccessible_class()
+		{
+			var exception = Assert.Throws<GeneratorException>(() => generator.CreateClassProxyWithTarget<PrivateClass>(new PrivateClass()));
+			Assert.That(exception.Message, Is.StringStarting("Type Castle.DynamicProxy.Tests.ClassProxyWithTargetTestCase+PrivateClass is not visible to DynamicProxy. Can not create proxy for types that are not accessible."));
+		}
+
+		[Test]
+		public void Cannot_proxy_generic_class_with_inaccessible_type_argument()
+		{
+			generator.CreateClassProxyWithTarget<List<PrivateClass>>(new List<PrivateClass>());
+		}
+
+		[Test]
+		public void Cannot_proxy_generic_class_with_type_argument_that_has_inaccessible_type_argument()
+		{
+			generator.CreateClassProxyWithTarget(new List<List<PrivateClass>>(), new IInterceptor[0]);
+		}
+
+		[Test]
+		public void Can_proxy_generic_class()
+		{
+			generator.CreateClassProxyWithTarget<List<object>>(new List<object>());
 		}
 
 		[Test]

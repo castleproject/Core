@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2013 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,13 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Castle.DynamicProxy.Generators;
 using Castle.DynamicProxy.Tests.Classes;
 
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Reflection;
 
+	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.BugsReported;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.InterClasses;
@@ -215,6 +218,48 @@ namespace Castle.DynamicProxy.Tests
 		{
 			MethodInfo methodInfo = type.GetMethod("MyTestMethod", BindingFlags.Instance | BindingFlags.Public);
 			return methodInfo.GetParameters();
+		}
+
+		private interface PrivateInterface { }
+
+		[Test]
+		public void Cannot_proxy_open_generic_type()
+		{
+			var exception = Assert.Throws<ArgumentException>(() => generator.CreateInterfaceProxyWithoutTarget(typeof(IList<>), new IInterceptor[0]));
+			Assert.AreEqual(exception.Message, "You can't specify a generic type definition.\r\nParameter name: interfaceToProxy");
+		}
+
+		[Test]
+		public void Cannot_proxy_generic_type_with_open_generic_type_parameter()
+		{
+			var innerType = typeof(IList<>);
+			var targetType = innerType.MakeGenericType(typeof(IList<>));
+			generator.CreateInterfaceProxyWithoutTarget(targetType, new IInterceptor[0]);
+		}
+
+		[Test]
+		public void Cannot_proxy_inaccessible_interface()
+		{
+			var exception = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithoutTarget(typeof(PrivateInterface), new IInterceptor[0]));
+			Assert.That(exception.Message, Is.StringStarting("Type Castle.DynamicProxy.Tests.BasicInterfaceProxyTestCase+PrivateInterface is not visible to DynamicProxy. Can not create proxy for types that are not accessible."));
+		}
+
+		[Test]
+		public void Cannot_proxy_generic_interface_with_inaccessible_type_argument()
+		{
+			generator.CreateInterfaceProxyWithoutTarget(typeof(IList<PrivateInterface>), new IInterceptor[0]);
+		}
+
+		[Test]
+		public void Cannot_proxy_generic_interface_with_type_argument_that_has_inaccessible_type_argument()
+		{
+			generator.CreateInterfaceProxyWithoutTarget(typeof(IList<IList<PrivateInterface>>), new IInterceptor[0]);
+		}
+
+		[Test]
+		public void Can_proxy_generic_interface()
+		{
+			generator.CreateInterfaceProxyWithoutTarget(typeof(IList<object>), new IInterceptor[0]);
 		}
 	}
 	public class IdenticalOneVirtual:IIdenticalOne
