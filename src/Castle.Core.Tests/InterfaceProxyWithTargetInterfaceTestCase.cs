@@ -180,26 +180,25 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(typeof(One), second.Invocation.InvocationTarget.GetType());
 		}
 
-		private interface PrivateInterface { }
-		private class PrivateClass : PrivateInterface { }
-
 		[Test]
 		public void Cannot_proxy_inaccessible_interface()
 		{
 			var exception = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithTargetInterface<PrivateInterface>(new PrivateClass(), new IInterceptor[0]));
-			Assert.That(exception.Message, Is.StringStarting("Type Castle.DynamicProxy.Tests.InterfaceProxyWithTargetInterfaceTestCase+PrivateInterface is not visible to DynamicProxy. Can not create proxy for types that are not accessible."));
+			Assert.That(exception.Message, Is.StringStarting("Can not create proxy for type Castle.DynamicProxy.Tests.InterfaceProxyWithTargetInterfaceTestCase+PrivateInterface because it is not accessible. Make the type public, or internal"));
 		}
 
 		[Test]
 		public void Cannot_proxy_generic_interface_with_inaccessible_type_argument()
 		{
-			generator.CreateInterfaceProxyWithTargetInterface<IList<PrivateInterface>>(new List<PrivateInterface>(), new IInterceptor[0]);
+			var exception = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithTargetInterface<IList<PrivateInterface>>(new List<PrivateInterface>(), new IInterceptor[0]));
+			Assert.That(exception.Message, Is.StringStarting("Can not create proxy for type System.Collections.Generic.IList`1[[Castle.DynamicProxy.Tests.InterfaceProxyWithTargetInterfaceTestCase+PrivateInterface, Castle.Core.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc]] because type Castle.DynamicProxy.Tests.InterfaceProxyWithTargetInterfaceTestCase+PrivateInterface is not accessible. Make it public, or internal"));
 		}
 
 		[Test]
 		public void Cannot_proxy_generic_interface_with_type_argument_that_has_inaccessible_type_argument()
 		{
-			generator.CreateInterfaceProxyWithTargetInterface<IList<IList<PrivateInterface>>>(new List<IList<PrivateInterface>>(), new IInterceptor[0]);
+			var exception = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithTargetInterface<IList<IList<PrivateInterface>>>(new List<IList<PrivateInterface>>(), new IInterceptor[0]));
+			Assert.That(exception.Message, Is.StringStarting("Can not create proxy for type System.Collections.Generic.IList`1[[System.Collections.Generic.IList`1[[Castle.DynamicProxy.Tests.InterfaceProxyWithTargetInterfaceTestCase+PrivateInterface, Castle.Core.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] because type Castle.DynamicProxy.Tests.InterfaceProxyWithTargetInterfaceTestCase+PrivateInterface is not accessible. Make it public, or internal"));
 		}
 
 		[Test]
@@ -212,5 +211,9 @@ namespace Castle.DynamicProxy.Tests
 		{
 			return (proxy as IProxyTargetAccessor).DynProxyGetTarget().GetType();
 		}
+
+		private interface PrivateInterface { }
+
+		private class PrivateClass : PrivateInterface { }
 	}
 }

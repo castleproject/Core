@@ -101,25 +101,25 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(42, result);
 		}
 
-		private class PrivateClass { }
-
 		[Test]
 		public void Cannot_proxy_inaccessible_class()
 		{
 			var exception = Assert.Throws<GeneratorException>(() => generator.CreateClassProxyWithTarget<PrivateClass>(new PrivateClass()));
-			Assert.That(exception.Message, Is.StringStarting("Type Castle.DynamicProxy.Tests.ClassProxyWithTargetTestCase+PrivateClass is not visible to DynamicProxy. Can not create proxy for types that are not accessible."));
+			Assert.That(exception.Message, Is.StringStarting("Can not create proxy for type Castle.DynamicProxy.Tests.ClassProxyWithTargetTestCase+PrivateClass because it is not accessible. Make the type public, or internal"));
 		}
 
 		[Test]
 		public void Cannot_proxy_generic_class_with_inaccessible_type_argument()
 		{
-			generator.CreateClassProxyWithTarget<List<PrivateClass>>(new List<PrivateClass>());
+			var exception = Assert.Throws<GeneratorException>(() => generator.CreateClassProxyWithTarget<List<PrivateClass>>(new List<PrivateClass>()));
+			Assert.That(exception.Message, Is.StringStarting("Can not create proxy for type System.Collections.Generic.List`1[[Castle.DynamicProxy.Tests.ClassProxyWithTargetTestCase+PrivateClass, Castle.Core.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc]] because type Castle.DynamicProxy.Tests.ClassProxyWithTargetTestCase+PrivateClass is not accessible. Make it public, or internal"));
 		}
 
 		[Test]
 		public void Cannot_proxy_generic_class_with_type_argument_that_has_inaccessible_type_argument()
 		{
-			generator.CreateClassProxyWithTarget(new List<List<PrivateClass>>(), new IInterceptor[0]);
+			var exception = Assert.Throws<GeneratorException>(() => generator.CreateClassProxyWithTarget(new List<List<PrivateClass>>(), new IInterceptor[0]));
+			Assert.That(exception.Message, Is.StringStarting("Can not create proxy for type System.Collections.Generic.List`1[[System.Collections.Generic.List`1[[Castle.DynamicProxy.Tests.ClassProxyWithTargetTestCase+PrivateClass, Castle.Core.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] because type Castle.DynamicProxy.Tests.ClassProxyWithTargetTestCase+PrivateClass is not accessible. Make it public, or internal"));
 		}
 
 		[Test]
@@ -197,5 +197,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(target, result);
 		}
 #endif
+
+		private class PrivateClass { }
 	}
 }

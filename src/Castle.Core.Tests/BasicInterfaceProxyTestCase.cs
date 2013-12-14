@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.DynamicProxy.Generators;
 using Castle.DynamicProxy.Tests.Classes;
 
 namespace Castle.DynamicProxy.Tests
@@ -220,13 +219,11 @@ namespace Castle.DynamicProxy.Tests
 			return methodInfo.GetParameters();
 		}
 
-		private interface PrivateInterface { }
-
 		[Test]
 		public void Cannot_proxy_open_generic_type()
 		{
-			var exception = Assert.Throws<ArgumentException>(() => generator.CreateInterfaceProxyWithoutTarget(typeof(IList<>), new IInterceptor[0]));
-			Assert.AreEqual(exception.Message, "You can't specify a generic type definition.\r\nParameter name: interfaceToProxy");
+			var exception = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithoutTarget(typeof(IList<>), new IInterceptor[0]));
+			Assert.That(exception.Message, Is.EqualTo("Can not create proxy for type System.Collections.Generic.IList`1 because it is an open generic type."));
 		}
 
 		[Test]
@@ -234,26 +231,29 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var innerType = typeof(IList<>);
 			var targetType = innerType.MakeGenericType(typeof(IList<>));
-			generator.CreateInterfaceProxyWithoutTarget(targetType, new IInterceptor[0]);
+			var exception = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithoutTarget(targetType, new IInterceptor[0]));
+			Assert.That(exception.Message, Is.StringStarting("Can not create proxy for type IList`1 because type System.Collections.Generic.IList`1 is an open generic type."));
 		}
 
 		[Test]
 		public void Cannot_proxy_inaccessible_interface()
 		{
 			var exception = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithoutTarget(typeof(PrivateInterface), new IInterceptor[0]));
-			Assert.That(exception.Message, Is.StringStarting("Type Castle.DynamicProxy.Tests.BasicInterfaceProxyTestCase+PrivateInterface is not visible to DynamicProxy. Can not create proxy for types that are not accessible."));
+			Assert.That(exception.Message, Is.StringStarting("Can not create proxy for type Castle.DynamicProxy.Tests.BasicInterfaceProxyTestCase+PrivateInterface because it is not accessible. Make the type public, or internal"));
 		}
 
 		[Test]
 		public void Cannot_proxy_generic_interface_with_inaccessible_type_argument()
 		{
-			generator.CreateInterfaceProxyWithoutTarget(typeof(IList<PrivateInterface>), new IInterceptor[0]);
+			var exception = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithoutTarget(typeof(IList<PrivateInterface>), new IInterceptor[0]));
+			Assert.That(exception.Message, Is.StringStarting("Can not create proxy for type System.Collections.Generic.IList`1[[Castle.DynamicProxy.Tests.BasicInterfaceProxyTestCase+PrivateInterface, Castle.Core.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc]] because type Castle.DynamicProxy.Tests.BasicInterfaceProxyTestCase+PrivateInterface is not accessible. Make it public, or internal"));
 		}
 
 		[Test]
 		public void Cannot_proxy_generic_interface_with_type_argument_that_has_inaccessible_type_argument()
 		{
-			generator.CreateInterfaceProxyWithoutTarget(typeof(IList<IList<PrivateInterface>>), new IInterceptor[0]);
+			var exception = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithoutTarget(typeof(IList<IList<PrivateInterface>>), new IInterceptor[0]));
+			Assert.That(exception.Message, Is.StringStarting("Can not create proxy for type System.Collections.Generic.IList`1[[System.Collections.Generic.IList`1[[Castle.DynamicProxy.Tests.BasicInterfaceProxyTestCase+PrivateInterface, Castle.Core.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] because type Castle.DynamicProxy.Tests.BasicInterfaceProxyTestCase+PrivateInterface is not accessible. Make it public, or internal"));
 		}
 
 		[Test]
@@ -261,7 +261,10 @@ namespace Castle.DynamicProxy.Tests
 		{
 			generator.CreateInterfaceProxyWithoutTarget(typeof(IList<object>), new IInterceptor[0]);
 		}
+
+		private interface PrivateInterface { }
 	}
+
 	public class IdenticalOneVirtual:IIdenticalOne
 	{
 		public virtual string Foo()

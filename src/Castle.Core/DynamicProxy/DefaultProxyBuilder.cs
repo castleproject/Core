@@ -114,14 +114,23 @@ namespace Castle.DynamicProxy
 
 		private void AssertValidType(Type target)
 		{
-			if (target.IsGenericTypeDefinition)
+			AssertValidTypeForTarget(target, target);
+		}
+
+		private void AssertValidTypeForTarget(Type type, Type target)
+		{
+			if (type.IsGenericTypeDefinition)
 			{
-				throw new GeneratorException("Type " + target.FullName + " is a generic type definition. " +
-				                             "Can not create proxy for open generic types.");
+				throw new GeneratorException(string.Format("Can not create proxy for type {0} because type {1} is an open generic type.",
+															target.FullName ?? target.Name, type.FullName ?? target.Name));
 			}
-			if (IsPublic(target) == false && IsAccessible(target) == false)
+			if (IsPublic(type) == false && IsAccessible(type) == false)
 			{
-				throw new GeneratorException(BuildInternalsVisibleMessageForType(target));
+				throw new GeneratorException(BuildInternalsVisibleMessageForType(type, target));
+			}
+			foreach (var typeArgument in type.GetGenericArguments())
+			{
+				AssertValidTypeForTarget(typeArgument, target);
 			}
 		}
 
@@ -155,7 +164,7 @@ namespace Castle.DynamicProxy
 			return isInternalNotNested || isNestedAndInternal;
 		}
 
-		private static string BuildInternalsVisibleMessageForType(Type target)
+		private static string BuildInternalsVisibleMessageForType(Type type, Type target)
 		{
 			var targetAssembly = target.Assembly;
 
@@ -175,12 +184,19 @@ namespace Castle.DynamicProxy
 				}
 			}
 
-			return string.Format("Type {0} is not visible to DynamicProxy. " +
-			                     "Can not create proxy for types that are not accessible. " +
-			                     "Make the type public, or internal and mark your assembly with " +
-			                     "[assembly: InternalsVisibleTo({1})] attribute, because assembly {2} " +
-			                     "is{3} strong-named.",
-				target.FullName, assemblyToBeVisibleTo,
+			var messageFormat = type == target
+				? "Can not create proxy for type {0} " +
+				  "because it is not accessible. " +
+				  "Make the type public, or internal and mark your assembly with " +
+				  "[assembly: InternalsVisibleTo({2})] attribute, because assembly {3} " +
+				  "is{4} strong-named."
+				: "Can not create proxy for type {0} " +
+				  "because type {1} is not accessible. " +
+				  "Make it public, or internal and mark your assembly with " +
+				  "[assembly: InternalsVisibleTo({2})] attribute, because assembly {3} " +
+				  "is{4} strong-named.";
+			return string.Format(messageFormat,
+				target.FullName ?? target.Name, type.FullName ?? target.Name, assemblyToBeVisibleTo,
 #if SILVERLIGHT
 				//SILVERLIGHT is retarded and doesn't allow us to call assembly.GetName()
 				GetAssemblyName(targetAssembly),
