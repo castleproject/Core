@@ -1,4 +1,4 @@
-// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2013 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.Reflection;
 	using System.Xml.Serialization;
 
+	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.InterClasses;
@@ -287,6 +288,36 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreSame(someInstanceOfProxyWithSelector1.GetType(), someInstanceOfProxyWithSelector2.GetType());
 		}
+
+		[Test]
+		public void Cannot_proxy_inaccessible_interface()
+		{
+			var exception = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithTarget<PrivateInterface>(new PrivateClass(), new IInterceptor[0]));
+			Assert.That(exception.Message, Is.StringStarting("Can not create proxy for type Castle.DynamicProxy.Tests.InterceptorSelectorTestCase+PrivateInterface because it is not accessible. Make the type public, or internal"));
+		}
+
+		[Test]
+		public void Cannot_proxy_generic_interface_with_inaccessible_type_argument()
+		{
+			var exception = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithTarget<IList<PrivateInterface>>(new List<PrivateInterface>(), new IInterceptor[0]));
+			Assert.That(exception.Message, Is.StringStarting("Can not create proxy for type System.Collections.Generic.IList`1[[Castle.DynamicProxy.Tests.InterceptorSelectorTestCase+PrivateInterface, Castle.Core.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc]] because type Castle.DynamicProxy.Tests.InterceptorSelectorTestCase+PrivateInterface is not accessible. Make it public, or internal"));
+		}
+
+		[Test]
+		public void Cannot_proxy_generic_interface_with_type_argument_that_has_inaccessible_type_argument()
+		{
+			var exception = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithTarget<IList<IList<PrivateInterface>>>(new List<IList<PrivateInterface>>(), new IInterceptor[0]));
+		}
+
+		[Test]
+		public void Can_proxy_generic_interface()
+		{
+			generator.CreateInterfaceProxyWithTarget<IList<object>>(new List<object>(), new IInterceptor[0]);
+		}
+
+		private interface PrivateInterface { }
+
+		private class PrivateClass : PrivateInterface { }
 	}
 
 #if !MONO
