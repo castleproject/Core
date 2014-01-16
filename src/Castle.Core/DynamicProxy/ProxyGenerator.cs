@@ -1,4 +1,4 @@
-// Copyright 2004-2013 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2014 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -1487,7 +1487,7 @@ namespace Castle.DynamicProxy
 			if (type != null && type.IsGenericTypeDefinition)
 			{
 				throw new GeneratorException(string.Format("Can not create proxy for type {0} because it is an open generic type.",
-														   type.FullName ?? type.Name));
+														   type.GetBestName()));
 			}
 		}
 
