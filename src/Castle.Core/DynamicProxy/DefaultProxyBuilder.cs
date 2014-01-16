@@ -1,4 +1,4 @@
-// Copyright 2004-2013 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2014 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -122,11 +122,11 @@ namespace Castle.DynamicProxy
 			if (type.IsGenericTypeDefinition)
 			{
 				throw new GeneratorException(string.Format("Can not create proxy for type {0} because type {1} is an open generic type.",
-															target.FullName ?? target.Name, type.FullName ?? target.Name));
+															target.GetBestName(), type.GetBestName()));
 			}
 			if (IsPublic(type) == false && IsAccessible(type) == false)
 			{
-				throw new GeneratorException(BuildInternalsVisibleMessageForType(type, target));
+				throw new GeneratorException(ExceptionMessageBuilder.CreateMessageForInaccessibleType(type, target));
 			}
 			foreach (var typeArgument in type.GetGenericArguments())
 			{
@@ -162,75 +162,6 @@ namespace Castle.DynamicProxy
 			var isInternalNotNested = target.IsVisible == false && isTargetNested == false;
 
 			return isInternalNotNested || isNestedAndInternal;
-		}
-
-		private static string BuildInternalsVisibleMessageForType(Type type, Type target)
-		{
-			var targetAssembly = target.Assembly;
-
-			string strongNamedOrNotIndicator = " not"; // assume not strong-named
-			string assemblyToBeVisibleTo = "\"DynamicProxyGenAssembly2\""; // appropriate for non-strong-named
-
-			if (targetAssembly.IsAssemblySigned())
-			{
-				strongNamedOrNotIndicator = "";
-				if (ReferencesCastleCore(targetAssembly))
-				{
-					assemblyToBeVisibleTo = "InternalsVisible.ToDynamicProxyGenAssembly2";
-				}
-				else
-				{
-					assemblyToBeVisibleTo = '"' + InternalsVisible.ToDynamicProxyGenAssembly2 + '"';
-				}
-			}
-
-			var messageFormat = type == target
-				? "Can not create proxy for type {0} " +
-				  "because it is not accessible. " +
-				  "Make the type public, or internal and mark your assembly with " +
-				  "[assembly: InternalsVisibleTo({2})] attribute, because assembly {3} " +
-				  "is{4} strong-named."
-				: "Can not create proxy for type {0} " +
-				  "because type {1} is not accessible. " +
-				  "Make it public, or internal and mark your assembly with " +
-				  "[assembly: InternalsVisibleTo({2})] attribute, because assembly {3} " +
-				  "is{4} strong-named.";
-			return string.Format(messageFormat,
-				target.FullName ?? target.Name, type.FullName ?? target.Name, assemblyToBeVisibleTo,
-#if SILVERLIGHT
-				//SILVERLIGHT is retarded and doesn't allow us to call assembly.GetName()
-				GetAssemblyName(targetAssembly),
-#else
-				targetAssembly.GetName().Name,
-#endif
-				strongNamedOrNotIndicator);
-		}
-
-#if SILVERLIGHT
-		private static string GetAssemblyName(Assembly targetAssembly)
-		{
-			var fullName = targetAssembly.FullName;
-			if (string.IsNullOrEmpty(fullName))
-			{
-				return fullName;
-			}
-			var index = fullName.IndexOf(", Version=", StringComparison.OrdinalIgnoreCase);
-			if (index > 0)
-			{
-				return fullName.Substring(0, index);
-			}
-			return fullName;
-		}
-#endif
-		private static bool ReferencesCastleCore(Assembly inspectedAssembly)
-		{
-#if SILVERLIGHT
-			// no way to check that in SILVELIGHT, so we just fall back to the solution that will definitely work
-			return false;
-#else
-			return inspectedAssembly.GetReferencedAssemblies()
-				.Any(r => r.FullName == Assembly.GetExecutingAssembly().FullName);
-#endif
 		}
 	}
 }

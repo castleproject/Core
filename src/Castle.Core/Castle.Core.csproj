@@ -147,7 +147,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>  
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Debug|AnyCPU'">
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -367,7 +367,9 @@
     <Compile Include="Components.DictionaryAdapter\Xml\Core\XmlMetadata.cs" />
     <Compile Include="Components.DictionaryAdapter\Xml\Core\XmlMetadataBehavior.cs" />
     <Compile Include="Core\Internal\CollectionExtensions.cs" />
+    <Compile Include="Core\Internal\ExceptionMessageBuilder .cs" />
     <Compile Include="Core\Internal\InterfaceAttributeUtil.cs" />
+    <Compile Include="Core\Internal\TypeExtensions.cs" />
     <Compile Include="Core\Internal\WeakKey.cs" />
     <Compile Include="Core\Internal\WeakKeyComparer.cs" />
     <Compile Include="Core\Internal\WeakKeyDictionary.cs" />
