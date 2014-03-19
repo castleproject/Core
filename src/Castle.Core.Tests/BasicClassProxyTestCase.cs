@@ -285,7 +285,6 @@ namespace CastleTests
 		}
 
 		[Test]
-		[Ignore("Multi dimensional arrays seems to not work at all")]
 		public void ProxyTypeWithMultiDimentionalArrayAsParameters()
 		{
 			LogInvocationInterceptor log = new LogInvocationInterceptor();
