@@ -108,9 +108,13 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ProxyTypeWithMultiDimentionalArrayAsParameter()
 		{
-			generator.CreateInterfaceProxyWithTarget<IClassWithMultiDimentionalArray>(
+			var proxy = generator.CreateInterfaceProxyWithTarget<IClassWithMultiDimentionalArray>(
 				new ClassWithMultiDimentionalArray(),
 				new LogInvocationInterceptor());
+		    proxy.Do(new[] { 1, 2, 3 });
+		    proxy.Do2(new[,] { { 1, 2 }, { 3, 4 } });
+		    proxy.Do3(new[] { "a", "b", "c" });
+		    proxy.Do4(new[,] { { "a", "b" }, { "c", "d" } });
 		}
 
 		[Test]
