@@ -24,7 +24,7 @@ namespace Castle.Core.Internal
 		/// <remarks>
 		/// Usually the best name will be <see cref="Type.FullName"/>, but
 		/// sometimes that's null (see http://msdn.microsoft.com/en-us/library/system.type.fullname%28v=vs.110%29.aspx)
-		/// in which case the method falls back to <see cref="Type.Name"/>.
+		/// in which case the method falls back to <see cref="MemberInfo.Name"/>.
 		/// </remarks>
 		/// <param name="type">the type to name</param>
 		/// <returns>the best name</returns>
