@@ -15,6 +15,7 @@
 namespace Castle.Core.Internal
 {
 	using System;
+	using System.Reflection;
 
 	internal static class TypeExtensions
 	{
