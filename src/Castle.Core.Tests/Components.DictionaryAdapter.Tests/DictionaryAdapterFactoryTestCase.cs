@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2014 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,8 +18,11 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Reflection;
+
+	using CastleTests.Components.DictionaryAdapter.Tests;
+
 	using NUnit.Framework;
+
 #if SILVERLIGHT
 	using Hashtable = System.Collections.Generic.Dictionary<object, object>;
 #endif
@@ -68,7 +71,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual("Andre", container.Item.First_Name);
 		}
 
-		[Test, ExpectedException(typeof(TypeLoadException)), Ignore]
+		[Test]
+		[ExpectedException(typeof(TypeLoadException))]
+		[Ignore]
 		public void CreateAdapter_NoPrefixWithMethod_ThrowsException()
 		{
 			factory.GetAdapter<IPersonWithMethod>(dictionary);
@@ -184,7 +189,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapterAndRead_WithSeveralDifferentOverridesWithDifferentPrefixes_DictionaryKeysHaveCorrectPrefixes()
 		{
-			var  person = factory.GetAdapter<IPersonWithDeniedInheritancePrefix>(dictionary);
+			var person = factory.GetAdapter<IPersonWithDeniedInheritancePrefix>(dictionary);
 
 			const string name = "Ming The Merciless";
 			const int numberOfFeet = 2;
@@ -436,6 +441,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 #if SILVERLIGHT
 		[Ignore("Conversion of phone is not working. fixme")]
 #endif
+
 		[Test]
 		public void UpdateAdapter_WithDefaultConversions_WorksFine()
 		{
@@ -545,6 +551,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 #if SILVERLIGHT
 		[Ignore("String lists don't seem to work under Silverlight! - fixme")]
 #endif
+
 		[Test]
 		public void ReadAdapter_WithStringLists_WorksFine()
 		{
@@ -574,6 +581,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 #if SILVERLIGHT
 		[Ignore("String lists don't seem to work under Silverlight! - fixme")]
 #endif
+
 		[Test]
 		public void UpdateAdapter_WithStringLists_WorksFine()
 		{
@@ -650,6 +658,16 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
+		public void CanFetchPropertiesOnType()
+		{
+			var getter = new CustomGetter();
+			var custom = new PropertyDescriptor().AddBehaviors(getter);
+			factory.GetAdapter(typeof(IPhoneWithFetch), dictionary, custom);
+
+			Assert.AreEqual(2, getter.PropertiesFetched.Count);
+		}
+
+		[Test]
 		public void CanUpgradePropertiesFromReadonlyToReadWrite()
 		{
 			var name = factory.GetAdapter<IMutableName>(dictionary);
@@ -676,7 +694,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			var notifyCalled = false;
 			var person = factory.GetAdapter<IPerson>(dictionary);
-			person.PropertyChanged += (s, e) => 
+			person.PropertyChanged += (s, e) =>
 			{
 				if (!notifyCalled)
 				{
@@ -705,15 +723,13 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			person.Name = "Craig";
 		}
+
 #if !SILVERLIGHT
 		[Test]
 		public void CanCancelPropertyChanges()
 		{
 			var person = factory.GetAdapter<IPerson>(dictionary);
-			person.PropertyChanging += (s, e) =>
-			{
-				((PropertyChangingEventArgsEx)e).Cancel = true;
-			};
+			person.PropertyChanging += (s, e) => { ((PropertyChangingEventArgsEx)e).Cancel = true; };
 
 			person.Name = "Craig";
 			Assert.AreEqual(null, person.Name);
@@ -742,15 +758,13 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		public void WillNotPropagatePropertyChangedEventWhenNestedPropertyChanged()
 		{
 			var container = factory.GetAdapter<IItemContainerWithComponent<IPerson>>(dictionary);
-			container.PropertyChanged += (s, e) =>
-			{
-				Assert.Fail("Property change event was raised from wrong object.");
-			};
+			container.PropertyChanged += (s, e) => { Assert.Fail("Property change event was raised from wrong object."); };
 
 			container.Item.Name = "Craig";
 		}
-		
+
 #if !SILVERLIGHT //no BindingList in Silverlight
+
 		[Test]
 		public void WillPropagatePropertyChangedEventWhenBindingListPropertyChanged()
 		{
@@ -759,6 +773,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.Name = "Fred Flinstone";
 		}
 #endif
+
 		[Test]
 		public void CanSuppressAllPropertyChangedEvents()
 		{
@@ -895,7 +910,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.PropertyChanged += (s, e) =>
 			{
 				if (e.PropertyName == "Name")
+				{
 					notifyCalled = true;
+				}
 			};
 			person.BeginEdit();
 			person.Name = "Craig";
@@ -912,7 +929,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.BillingAddress.PropertyChanged += (s, e) =>
 			{
 				if (e.PropertyName == "Line1")
+				{
 					notifyCalled = true;
+				}
 			};
 			person.BeginEdit();
 			person.BillingAddress.Line1 = "600 Tulip Ln.";
@@ -930,7 +949,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.CancelEdit();
 			Assert.IsNull(person.Name);
 		}
-		
+
 		[Test]
 		public void CanEditNestedPropertiesAndCancelChanges()
 		{
@@ -1001,7 +1020,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.PropertyChanged += (s, e) =>
 			{
 				if (e.PropertyName == "Name")
+				{
 					notifyCalled++;
+				}
 			};
 			person.BeginEdit();
 			person.Name = "Craig";
@@ -1018,7 +1039,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.BillingAddress.PropertyChanged += (s, e) =>
 			{
 				if (e.PropertyName == "Line1")
+				{
 					notifyCalled++;
+				}
 			};
 			person.BeginEdit();
 			person.BillingAddress.Line1 = "600 Tulip Ln.";
@@ -1029,12 +1052,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void WillRaisePropertyChangedEventsForReadonlyProperties()
 		{
-			int notifications = 0;
+			var notifications = 0;
 			var name = factory.GetAdapter<IMutableName>(dictionary);
 			name.PropertyChanged += (s, e) =>
 			{
 				if (e.PropertyName == "FullName")
+				{
 					++notifications;
+				}
 			};
 
 			name.FirstName = "Big";
@@ -1046,12 +1071,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void WillRaisePropertyChangedEventsForReadonlyPropertyWhenEditing()
 		{
-			int notifications = 0;
+			var notifications = 0;
 			var name = factory.GetAdapter<IMutableName>(dictionary);
 			name.PropertyChanged += (s, e) =>
 			{
 				if (e.PropertyName == "FullName")
+				{
 					++notifications;
+				}
 			};
 
 			name.BeginEdit();
@@ -1066,12 +1093,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void WillRaisePropertyChangedEventsForReadonlyPropertyWhenCancelEditing()
 		{
-			int notifications = 0;
+			var notifications = 0;
 			var name = factory.GetAdapter<IMutableName>(dictionary);
 			name.PropertyChanged += (s, e) =>
 			{
 				if (e.PropertyName == "FullName")
+				{
 					++notifications;
+				}
 			};
 
 			name.BeginEdit();
@@ -1082,7 +1111,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual("", name.FullName);
 			Assert.AreEqual(3, notifications);
 		}
-
 
 		[Test]
 		public void CanInitializeTheDictionaryAdapterWithAttributes()
@@ -1100,7 +1128,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			Assert.IsFalse(name.IsValid);
 			Assert.AreEqual("Property FirstName must be at least 10 characters long" + Environment.NewLine +
-							"Property LastName must be at least 15 characters long", name.Error);
+			                "Property LastName must be at least 15 characters long", name.Error);
 		}
 
 		[Test]
@@ -1120,7 +1148,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual("Property FirstName must be at least 10 characters long", groupA.Error);
 			Assert.AreEqual("Property LastName must be at least 15 characters long", groupB.Error);
 		}
-		
+
 		[Test]
 		public void CanChainValidateGroupAndObtainDataErrorInformation()
 		{
@@ -1133,13 +1161,13 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			Assert.IsFalse(groupAandB.IsValid);
 			Assert.AreEqual("Property FirstName must be at least 10 characters long" + Environment.NewLine +
-							"Property LastName must be at least 15 characters long", groupAandB.Error);
+			                "Property LastName must be at least 15 characters long", groupAandB.Error);
 		}
 
 		[Test]
 		public void WillNotifyPropertyChangesOnValidateGroup()
 		{
-			bool notifyCalled = false;
+			var notifyCalled = false;
 			var name = factory.GetAdapter<IMutableName>(dictionary);
 			name.FirstName = "Big";
 			name.LastName = "Tex";
@@ -1182,7 +1210,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
 			Assert.AreEqual(5, container.Count);
 		}
-		
+
 		[Test]
 		public void CanGetGuidPropertyOnDemand()
 		{
@@ -1224,8 +1252,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
 			Assert.IsNotNull(container.Phone);
 		}
-		
+
 #if !SILVERLIGHT //no BindingList in Silverlight
+
 		[Test]
 		public void CanAddBindingListItemsOnDemand()
 		{
@@ -1257,7 +1286,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void WillGetNotificedWhenDynamicValueChanges()
 		{
-			bool notifyCalled = false;
+			var notifyCalled = false;
 			var container = factory.GetAdapter<IItemContainer<IPerson>>(dictionary);
 			container.ReducePositions = new DynamicValueDelegate<int>(() => container.Positions.Sum());
 
@@ -1308,10 +1337,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			var container1 = (IItemContainer<IPerson>)
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
-				new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
+					new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
 			var container2 = (IItemContainer<IPerson>)
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable(),
-				new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
+					new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
 			Assert.AreEqual(container1, container1);
 			Assert.AreNotEqual(container1, container2);
 
@@ -1327,10 +1356,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			var container1 = (IItemContainer<IPerson>)
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
-				new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
+					new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
 			var container2 = (IItemContainer<IPerson>)
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable(),
-				new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
+					new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
 
 			container1.Id = Guid.NewGuid();
 			container2.Id = container1.Id;
@@ -1342,10 +1371,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		{
 			var container1 = (IItemContainer<IPerson>)
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
-				new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
+					new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
 			var container2 = (IItemContainer<IPerson>)
 				factory.GetAdapter(typeof(IItemContainer<IPerson>), new Hashtable(),
-				new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
+					new PropertyDescriptor().AddBehaviors(new IdEqualityHashCodeStrategy()));
 			Assert.AreNotEqual(container1.GetHashCode(), container2.GetHashCode());
 			container1.Id = Guid.NewGuid();
 			container2.Id = container1.Id;
@@ -1356,7 +1385,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		public void CanSupplyCustomCreationStrategy()
 		{
 			var container = (IItemContainer<IPerson>)
-					factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
+				factory.GetAdapter(typeof(IItemContainer<IPerson>), dictionary,
 					new PropertyDescriptor().AddBehaviors(new CreateHashtableStrategy()));
 
 			Assert.IsNotNull(container.Address);

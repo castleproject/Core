@@ -429,7 +429,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			var propertyMap = new Dictionary<String, PropertyDescriptor>();
 			var interfaceBehaviors = typeBehaviors = ExpandBehaviors(AttributesUtil.GetInterfaceAttributes(type)).ToArray();
-			var defaultFetch = typeBehaviors.OfType<FetchAttribute>().Select(b => b.Fetch).FirstOrDefault();
+			var defaultFetch = typeBehaviors.OfType<FetchAttribute>().Select(b => (bool?)b.Fetch).FirstOrDefault().GetValueOrDefault();
 
 #if DOTNET40
 			initializers.AddBehaviors(typeBehaviors.OfType<IDictionaryMetaInitializer>())
@@ -458,7 +458,7 @@ namespace Castle.Components.DictionaryAdapter
 
 				AddDefaultGetter(propertyDescriptor);
 
-				bool? propertyFetch = (from b in propertyBehaviors.OfType<FetchAttribute>() select b.Fetch).FirstOrDefault();
+				var propertyFetch = propertyBehaviors.OfType<FetchAttribute>().Select(b => (bool?)b.Fetch).FirstOrDefault();
 				propertyDescriptor.IfExists = propertyBehaviors.OfType<IfExistsAttribute>().Any();
 				propertyDescriptor.Fetch = propertyFetch.GetValueOrDefault(defaultFetch);
 

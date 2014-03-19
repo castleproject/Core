@@ -250,6 +250,7 @@
     <Compile Include="BugsReported\Core40.cs" />
     <Compile Include="BugsReported\DynProxy159.cs" />
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\IPhoneWithFetch.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\NameValueCollectionAdapterTests.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithMethodWithParameterWithDefaultValue.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithMethodWithParameterWithNullDefaultValue.cs" />

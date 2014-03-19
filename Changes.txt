@@ -1,3 +1,10 @@
+- implemented #42 - move complicated BuildInternalsVisibleMessageForType method out of DynamicProxyBuilder - contributed by Blair Conrad (@blairconrad)
+- fixed #47 - Calling DynamicProxy proxy methods with multidimensional array parameters - contributed by  Ed Parcell (@edparcell)
+- fixed #44 - DictionaryAdapter FetchAttribute on type has no effect
+- fixed #34 and #39 - inaccessible type parameters should give better error messsages - contributed by Blair Conrad (@blairconrad)
+
+3.2.2
+==================
 - fixed #35 - ParameterBuilder.SetConstant fails when using a default value of null - contributed by (@jonasro)
 
 3.2.1
