@@ -9,11 +9,13 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void Should_Handle_String_Object()
 		{
-			var dictionary = new Dictionary<string, object>();
-			dictionary.Add("Team", "Giants");
-			dictionary.Add("Points", 48);
+			var dictionary = new Dictionary<string, object>
+			{
+				{ "Team", "Giants" },
+				{ "Points", 48 }
+			};
 
-			var player = _factory.GetAdapter<IPlayer, object>(dictionary);
+			var player = _factory.GetAdapter<IPlayer>(dictionary);
 			Assert.AreEqual("Giants", player.Team);
 			Assert.AreEqual(48, player.Points);
 		}

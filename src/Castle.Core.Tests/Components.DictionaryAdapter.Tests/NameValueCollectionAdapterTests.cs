@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2013 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2014 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,41 +12,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+#if! SILVERLIGHT
+
 namespace CastleTests.Components.DictionaryAdapter.Tests
 {
-	using System.Collections.Specialized;
+    using System.Collections.Specialized;
 
-	using Castle.Components.DictionaryAdapter;
+    using Castle.Components.DictionaryAdapter;
 
-	using NUnit.Framework;
+    using NUnit.Framework;
 
-	[TestFixture]
-	public class NameValueCollectionAdapterTests
-	{
-		[SetUp]
-		public void SetUp()
-		{
-			nameValueCollection = new NameValueCollection();
-		}
+    [TestFixture]
+    public class NameValueCollectionAdapterTests
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            nameValueCollection = new NameValueCollection();
+        }
 
-		private NameValueCollection nameValueCollection;
+        private NameValueCollection nameValueCollection;
 
-		[Test]
-		public void Contains_IsCaseInsensitive()
-		{
-			var adapter = new NameValueCollectionAdapter(nameValueCollection);
-			adapter["a key"] = "a value";
+        [Test]
+        public void Contains_IsCaseInsensitive()
+        {
+            var adapter = new NameValueCollectionAdapter(nameValueCollection);
+            adapter["a key"] = "a value";
 
-			Assert.IsTrue(adapter.Contains("A Key"));
-		}
+            Assert.IsTrue(adapter.Contains("A Key"));
+        }
 
-		[Test]
-		public void Contains_IsCorrectWhenValueIsNull()
-		{
-			var adapter = new NameValueCollectionAdapter(nameValueCollection);
-			adapter["a key"] = null;
+        [Test]
+        public void Contains_IsCorrectWhenValueIsNull()
+        {
+            var adapter = new NameValueCollectionAdapter(nameValueCollection);
+            adapter["a key"] = null;
 
-			Assert.IsTrue(adapter.Contains("A Key"));
-		}
-	}
+            Assert.IsTrue(adapter.Contains("A Key"));
+        }
+    }
 }
+
+#endif
