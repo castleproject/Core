@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>Castle.Core</id>
+    <version>0.0.0</version>
+    <authors>Castle Project Contributors</authors>
+    <owners>Castle Project Contributors</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+    <projectUrl>http://www.castleproject.org/</projectUrl>
+    <iconUrl>http://docs.castleproject.org/GetFile.aspx?File=/castleLogo100px.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Castle Project Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</description>
+    <summary>Castle Project Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</summary>
+    <copyright>Copyright 2004-2014 Castle Project - http://www.castleproject.org/</copyright>
+    <tags>castle dynamicproxy dynamic proxy dynamicproxy2 dictionaryadapter emailsender</tags>
+  </metadata>
+  <files>
+    <file src="BreakingChanges.txt" />
+    <file src="Changes.txt" />
+    <file src="License.txt" />
+    <file src="build/NET35/NET35-Release/pkg/bin/Castle.Core.dll" target="lib/net35" />
+    <file src="build/NET35/NET35-Release/pkg/bin/Castle.Core.pdb" target="lib/net35" />
+    <file src="build/NET35/NET35-Release/pkg/bin/Castle.Core.xml" target="lib/net35" />
+    <file src="build/NET40/NET40-Release/pkg/bin/Castle.Core.dll" target="lib/net40-client" />
+    <file src="build/NET40/NET40-Release/pkg/bin/Castle.Core.pdb" target="lib/net40-client" />
+    <file src="build/NET40/NET40-Release/pkg/bin/Castle.Core.xml" target="lib/net40-client" />
+    <file src="build/NET45/NET45-Release/pkg/bin/Castle.Core.dll" target="lib/net45" />
+    <file src="build/NET45/NET45-Release/pkg/bin/Castle.Core.pdb" target="lib/net45" />
+    <file src="build/NET45/NET45-Release/pkg/bin/Castle.Core.xml" target="lib/net45" />
+    <file src="build/SL4/SL4-Release/pkg/bin/Castle.Core.dll" target="lib/sl4" />
+    <file src="build/SL4/SL4-Release/pkg/bin/Castle.Core.pdb" target="lib/sl4" />
+    <file src="build/SL4/SL4-Release/pkg/bin/Castle.Core.xml" target="lib/sl4" />
+    <file src="build/SL5/SL5-Release/pkg/bin/Castle.Core.dll" target="lib/sl5" />
+    <file src="build/SL5/SL5-Release/pkg/bin/Castle.Core.pdb" target="lib/sl5" />
+    <file src="build/SL5/SL5-Release/pkg/bin/Castle.Core.xml" target="lib/sl5" />
+    <file src="buildscripts/ASL - Apache Software Foundation License.txt" />
+    <file src="buildscripts/readme.txt" />
+    <file src="src/Castle.Core/**/*.cs" />
+  </files>
+</package>
