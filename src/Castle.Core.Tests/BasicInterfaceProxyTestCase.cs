@@ -256,8 +256,11 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Cannot_proxy_generic_interface_with_type_argument_that_has_inaccessible_type_argument()
 		{
+			var expected = string.Format("Can not create proxy for type {0} because type {1} is not accessible. Make it public, or internal",
+				typeof(IList<IList<PrivateInterface>>).FullName, typeof(PrivateInterface).FullName);
+
 			var exception = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithoutTarget(typeof(IList<IList<PrivateInterface>>), new IInterceptor[0]));
-			Assert.That(exception.Message, Is.StringStarting("Can not create proxy for type System.Collections.Generic.IList`1[[System.Collections.Generic.IList`1[[Castle.DynamicProxy.Tests.BasicInterfaceProxyTestCase+PrivateInterface, Castle.Core.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] because type Castle.DynamicProxy.Tests.BasicInterfaceProxyTestCase+PrivateInterface is not accessible. Make it public, or internal"));
+			StringAssert.StartsWith(expected, exception.Message);
 		}
 
 		[Test]
