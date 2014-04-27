@@ -1,3 +1,7 @@
+3.3.0
+==================
+- implemented #51 - removed abandoned projects: Binder, Pagination, Validator
+- implemented #49 - build NuGet and Zip packages from TeamCity - contributed by Blair Conrad (@blairconrad)
 - implemented #42 - move complicated BuildInternalsVisibleMessageForType method out of DynamicProxyBuilder - contributed by Blair Conrad (@blairconrad)
 - fixed #47 - Calling DynamicProxy proxy methods with multidimensional array parameters - contributed by  Ed Parcell (@edparcell)
 - fixed #44 - DictionaryAdapter FetchAttribute on type has no effect
