@@ -14,13 +14,14 @@
 
 namespace Castle.Services.Logging.Log4netIntegration
 {
+	extern alias log4net1;
 	using System;
 	using System.IO;
 
 	using Castle.Core.Logging;
 
-	using log4net;
-	using log4net.Config;
+	using log4net1::log4net;
+	using log4net1::log4net.Config;
 
 	public class ExtendedLog4netFactory : AbstractExtendedLoggerFactory
 	{

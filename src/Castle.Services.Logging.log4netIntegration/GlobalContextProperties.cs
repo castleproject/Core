@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2014 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,27 +14,26 @@
 
 namespace Castle.Services.Logging.Log4netIntegration
 {
+	extern alias log4net1;
 	using Castle.Core.Logging;
-
-	using log4net;
 
 	public class GlobalContextProperties : IContextProperties
 	{
 		/// <summary>
-		///   Gets or sets the value of a property
+		///     Gets or sets the value of a property
 		/// </summary>
 		/// <value>
-		///   The value for the property with the specified key
+		///     The value for the property with the specified key
 		/// </value>
 		/// <remarks>
-		///   <para>
-		///     Gets or sets the value of a property
-		///   </para>
+		///     <para>
+		///         Gets or sets the value of a property
+		///     </para>
 		/// </remarks>
 		public object this[string key]
 		{
-			get { return GlobalContext.Properties[key]; }
-			set { GlobalContext.Properties[key] = value; }
+			get { return log4net1::log4net.GlobalContext.Properties[key]; }
+			set { log4net1::log4net.GlobalContext.Properties[key] = value; }
 		}
 	}
 }
