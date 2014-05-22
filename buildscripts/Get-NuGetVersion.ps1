@@ -11,7 +11,7 @@ if ( $env:release_build -eq "true" )
 }
 else
 {
-    $version_suffix = "-ci$env:build_number"
+    $version_suffix = "-ci{0:00000}" -f [int]$env:build_number
 }
 
 Write-Host "##teamcity[setParameter name='ReleaseVersion' value='$major.$minor.$build$version_suffix']"
