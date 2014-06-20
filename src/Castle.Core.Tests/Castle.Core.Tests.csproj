@@ -208,6 +208,18 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Reference Include="Serilog, Version=1.3.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+    <SpecificVersion>False</SpecificVersion>
+      <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\Serilog.dll</HintPath>
+      <HintPath Condition="'$(Configuration)' == 'NET40-Release' or '$(Configuration)' == 'NET40-Debug'">..\..\lib\net40\Serilog.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.FullNetFX, Version=1.3.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\Serilog.FullNetFX.dll</HintPath>
+      <HintPath Condition="'$(Configuration)' == 'NET40-Release' or '$(Configuration)' == 'NET40-Debug'">..\..\lib\net40\Serilog.FullNetFX.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Rhino.Mocks.CPP.Interfaces">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net35\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
@@ -405,6 +417,7 @@
     <Compile Include="MethodsWithAttributesOnParametersTestCase.cs" />
     <Compile Include="MixinTestCase.cs" />
     <Compile Include="NLogIntegration\NLogTests.cs" />
+    <Compile Include="SerilogIntegration\SerilogTests.cs" />
     <Compile Include="ThrowingInterceptorException.cs" />
     <Compile Include="XmlConfigurationDeserializerTests.cs" />
     <Compile Include="XmlSerializationTestCase.cs" />
@@ -621,6 +634,10 @@
     <ProjectReference Include="..\Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration.csproj">
       <Project>{D680B5DB-B943-4BB5-891A-1695DEF86A3A}</Project>
       <Name>Castle.Services.Logging.NLogIntegration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Castle.Services.Logging.SerilogIntegration\Castle.Services.Logging.SerilogIntegration.csproj" Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug' or '$(Configuration)' == 'NET40-Debug' or '$(Configuration)' == 'NET40-Release'">
+      <Project>{15410e1f-e79f-43b6-b403-228768df793d}</Project>
+      <Name>Castle.Services.Logging.SerilogIntegration</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
