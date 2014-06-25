@@ -387,19 +387,22 @@ namespace Castle.DynamicProxy.Generators
 
 		protected Type ObtainProxyType(CacheKey cacheKey, Func<string, INamingScope, Type> factory)
 		{
-			using (var locker = Scope.Lock.ForReadingUpgradeable())
+			Type cacheType;
+			using (var locker = Scope.Lock.ForReading())
 			{
-				var cacheType = GetFromCache(cacheKey);
+				cacheType = GetFromCache(cacheKey);
 				if (cacheType != null)
 				{
 					Logger.DebugFormat("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
 					return cacheType;
 				}
-
-				// Upgrade the lock to a write lock, then read again. This is to avoid generating duplicate types
-				// under heavy multithreaded load.
-				locker.Upgrade();
-
+			}
+			
+			// This is to avoid generating duplicate types under heavy multithreaded load.
+			using (var locker = Scope.Lock.ForReadingUpgradeable())
+			{
+				// Only one thread at a time may enter an upgradable read lock.
+				// See if an earlier lock holder populated the cache.
 				cacheType = GetFromCache(cacheKey);
 				if (cacheType != null)
 				{
@@ -413,6 +416,9 @@ namespace Castle.DynamicProxy.Generators
 
 				var name = Scope.NamingScope.GetUniqueName("Castle.Proxies." + targetType.Name + "Proxy");
 				var proxyType = factory.Invoke(name, Scope.NamingScope.SafeSubScope());
+
+				// Upgrade the lock to a write lock. 
+				locker.Upgrade();
 
 				AddToCache(cacheKey, proxyType);
 				return proxyType;
