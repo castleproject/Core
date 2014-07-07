@@ -1,3 +1,5 @@
+- implemented #61 - Added support for Serilog - contributed by Russell J Baker (@ruba1987)
+
 3.3.0
 ==================
 - implemented #51 - removed abandoned projects: Binder, Pagination, Validator
