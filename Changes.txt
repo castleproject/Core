@@ -1,3 +1,5 @@
+3.3.1
+==================
 - implemented #61 - Added support for Serilog - contributed by Russell J Baker (@ruba1987)
 
 3.3.0
