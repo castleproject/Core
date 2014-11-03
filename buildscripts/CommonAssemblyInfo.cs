@@ -15,4 +15,4 @@
 using System.Reflection;
 
 [assembly: AssemblyCompany("Castle Project")]
-[assembly: AssemblyCopyright("Copyright (c) 2004-2013 Castle Project - http://www.castleproject.org")]
+[assembly: AssemblyCopyright("Copyright (c) 2004-2014 Castle Project - http://www.castleproject.org")]
