@@ -60,7 +60,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsDebugEnabled)
             {
-                Logger.Debug(message, exception);
+                Logger.Debug(exception, message);
             }
         }
 
@@ -116,7 +116,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsErrorEnabled)
             {
-                Logger.Error(message, exception);
+                Logger.Error(exception, message);
             }
         }
 
@@ -172,7 +172,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsFatalEnabled)
             {
-                Logger.Fatal(message, exception);
+                Logger.Fatal(exception, message);
             }
         }
 
@@ -228,7 +228,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsInfoEnabled)
             {
-                Logger.Information(message, exception);
+                Logger.Information(exception, message);
             }
         }
 
@@ -284,7 +284,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsWarnEnabled)
             {
-                Logger.Warning(message, exception);
+                Logger.Warning(exception, message);
             }
         }
 

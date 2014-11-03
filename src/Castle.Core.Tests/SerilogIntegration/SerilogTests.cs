@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2014 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 namespace CastleTests.SerilogIntegration
 {
 #if DOTNET45 || DOTNET40
+    using System;
     using System.IO;
 
     using Castle.Core.Logging;
@@ -102,6 +102,51 @@ namespace CastleTests.SerilogIntegration
             var logs = output.ToString();
 
             StringAssert.Contains("{ Name: \"test\", Value: 55 }", logs);
+        }
+
+        [Test]
+        public void should_log_exceptions()
+        {
+            var output = new StringWriter();
+
+            var config = new LoggerConfiguration()
+                .WriteTo.TextWriter(output);
+
+            var factory = new SerilogFactory(config);
+            var logger = factory.Create("TestingLogger", LoggerLevel.Debug);
+
+            logger.Debug("Debug", new Exception("Debug Exception 1"));
+            logger.DebugFormat(new Exception("Debug Exception 2"), "Debug");
+            logger.DebugFormat(new Exception("Debug Exception 3"), null, "Debug");
+            logger.Error("Error", new Exception("Error Exception 1"));
+            logger.ErrorFormat(new Exception("Error Exception 2"), "Error");
+            logger.ErrorFormat(new Exception("Error Exception 3"), null, "Error");
+            logger.Fatal("Fatal", new Exception("Fatal Exception 1"));
+            logger.FatalFormat(new Exception("Fatal Exception 2"), "Fatal");
+            logger.FatalFormat(new Exception("Fatal Exception 3"), null, "Fatal");
+            logger.Info("Info", new Exception("Info Exception 1"));
+            logger.InfoFormat(new Exception("Info Exception 2"), "Info");
+            logger.InfoFormat(new Exception("Info Exception 3"), null, "Info");
+            logger.Warn("Warn", new Exception("Warn Exception 1"));
+            logger.WarnFormat(new Exception("Warn Exception 2"), "Warn");
+            logger.WarnFormat(new Exception("Warn Exception 3"), null, "Warn");
+
+            var logs = output.ToString();
+            StringAssert.Contains("Debug Exception 1", logs);
+            StringAssert.Contains("Debug Exception 2", logs);
+            StringAssert.Contains("Debug Exception 3", logs);
+            StringAssert.Contains("Error Exception 1", logs);
+            StringAssert.Contains("Error Exception 2", logs);
+            StringAssert.Contains("Error Exception 3", logs);
+            StringAssert.Contains("Fatal Exception 1", logs);
+            StringAssert.Contains("Fatal Exception 2", logs);
+            StringAssert.Contains("Fatal Exception 3", logs);
+            StringAssert.Contains("Info Exception 1", logs);
+            StringAssert.Contains("Info Exception 2", logs);
+            StringAssert.Contains("Info Exception 3", logs);
+            StringAssert.Contains("Warn Exception 1", logs);
+            StringAssert.Contains("Warn Exception 2", logs);
+            StringAssert.Contains("Warn Exception 3", logs);
         }
 
         private void WriteTestLogs(Castle.Core.Logging.ILogger logger)

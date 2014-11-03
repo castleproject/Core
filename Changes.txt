@@ -1,3 +1,7 @@
+3.3.2
+==================
+- fixed #66 - SerilogLogger implementation bug where exceptions were passed through incorrectly
+
 3.3.1
 ==================
 - implemented #61 - Added support for Serilog - contributed by Russell J Baker (@ruba1987)
