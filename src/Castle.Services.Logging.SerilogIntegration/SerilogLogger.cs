@@ -84,6 +84,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsDebugEnabled)
             {
+                //TODO: This honours the formatProvider rather than passing through args for structured logging
                 Logger.Debug(exception, string.Format(formatProvider, format, args));
             }
         }
@@ -92,6 +93,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsDebugEnabled)
             {
+                //TODO: This honours the formatProvider rather than passing through args for structured logging
                 Logger.Debug(string.Format(formatProvider, format, args));
             }
         }
@@ -140,6 +142,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsErrorEnabled)
             {
+                //TODO: This honours the formatProvider rather than passing through args for structured logging
                 Logger.Error(exception, string.Format(formatProvider, format, args));
             }
         }
@@ -148,6 +151,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsErrorEnabled)
             {
+                //TODO: This honours the formatProvider rather than passing through args for structured logging
                 Logger.Error(string.Format(formatProvider, format, args));
             }
         }
@@ -196,6 +200,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsFatalEnabled)
             {
+                //TODO: This honours the formatProvider rather than passing through args for structured logging
                 Logger.Fatal(exception, string.Format(formatProvider, format, args));
             }
         }
@@ -204,6 +209,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsFatalEnabled)
             {
+                //TODO: This honours the formatProvider rather than passing through args for structured logging
                 Logger.Fatal(string.Format(formatProvider, format, args));
             }
         }
@@ -252,6 +258,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsInfoEnabled)
             {
+                //TODO: This honours the formatProvider rather than passing through args for structured logging
                 Logger.Information(exception, string.Format(formatProvider, format, args));
             }
         }
@@ -260,6 +267,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsInfoEnabled)
             {
+                //TODO: This honours the formatProvider rather than passing through args for structured logging
                 Logger.Information(string.Format(formatProvider, format, args));
             }
         }
@@ -308,6 +316,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsWarnEnabled)
             {
+                //TODO: This honours the formatProvider rather than passing through args for structured logging
                 Logger.Warning(exception, string.Format(formatProvider, format, args));
             }
         }
@@ -316,6 +325,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             if (IsWarnEnabled)
             {
+                //TODO: This honours the formatProvider rather than passing through args for structured logging
                 Logger.Warning(string.Format(formatProvider, format, args));
             }
         }
