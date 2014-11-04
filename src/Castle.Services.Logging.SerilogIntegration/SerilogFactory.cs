@@ -51,7 +51,7 @@ namespace Castle.Services.Logging.SerilogIntegration
 
             var log = configuration
                 .MinimumLevel.Is(serilogLevel)
-                .CreateLogger();
+                .CreateLogger().ForContext("SourceContext", name);;
 
             return new SerilogLogger(log, this);
         }
@@ -59,7 +59,7 @@ namespace Castle.Services.Logging.SerilogIntegration
         public override Castle.Core.Logging.ILogger Create(string name)
         {
             var log = configuration
-                .CreateLogger();
+                .CreateLogger().ForContext("SourceContext", name);
 
             return new SerilogLogger(log, this);
         }
