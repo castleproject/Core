@@ -18,13 +18,13 @@ namespace CastleTests.SerilogIntegration
     using System;
     using System.IO;
 
-    using Castle.Core.Logging;
     using Castle.Services.Logging.SerilogIntegration;
 
     using Serilog;
     using Serilog.Events;
 
     using NUnit.Framework;
+
     public class SerilogTests
     {
         [Test]
@@ -33,8 +33,8 @@ namespace CastleTests.SerilogIntegration
             var output = new StringWriter();
 
             var config = new LoggerConfiguration()
-                .WriteTo.TextWriter(output)
-                .MinimumLevel.Is(LogEventLevel.Debug);
+                .MinimumLevel.Is(LogEventLevel.Debug)
+                .WriteTo.TextWriter(output);
 
             var factory = new SerilogFactory(config);
             var logger = factory.Create("TestingLogger");
@@ -53,10 +53,11 @@ namespace CastleTests.SerilogIntegration
             var output = new StringWriter();
 
             var config = new LoggerConfiguration()
+                .MinimumLevel.Is(LogEventLevel.Debug)
                 .WriteTo.TextWriter(output);
 
             var factory = new SerilogFactory(config);
-            var logger = factory.Create("TestingLogger", LoggerLevel.Debug);
+            var logger = factory.Create("TestingLogger");
 
             WriteTestLogs(logger);
 
@@ -67,23 +68,31 @@ namespace CastleTests.SerilogIntegration
         }
 
         [Test]
-        public void should_log_info_when_off()
+        public void should_not_log_debug_with_new_serilog_config()
         {
             var output = new StringWriter();
 
+            // New LoggerConfiguration which defaults to Information
             var config = new LoggerConfiguration()
                 .WriteTo.TextWriter(output);
 
             var factory = new SerilogFactory(config);
-            var logger = factory.Create("TestingLogger", LoggerLevel.Off);
+            var logger = factory.Create("TestingLogger");
 
             WriteTestLogs(logger);
 
             var logs = output.ToString();
 
-            StringAssert.Contains("Testing info", logs);
             StringAssert.DoesNotContain("Testing debug", logs);
+            StringAssert.Contains("Testing info", logs);
             StringAssert.Contains("Testing warning", logs);
+        }
+
+        private void WriteTestLogs(Castle.Core.Logging.ILogger logger)
+        {
+            logger.Debug("Testing debug");
+            logger.Info("Testing info");
+            logger.Warn("Testing warning");
         }
 
         [Test]
@@ -92,10 +101,11 @@ namespace CastleTests.SerilogIntegration
             var output = new StringWriter();
 
             var config = new LoggerConfiguration()
+                .MinimumLevel.Is(LogEventLevel.Debug)
                 .WriteTo.TextWriter(output);
 
             var factory = new SerilogFactory(config);
-            var logger = factory.Create("TestingLogger", LoggerLevel.Debug);
+            var logger = factory.Create("TestingLogger");
 
             logger.DebugFormat("Testing Debug {@TestingData}", new { Name = "test", Value = 55 });
 
@@ -110,10 +120,11 @@ namespace CastleTests.SerilogIntegration
             var output = new StringWriter();
 
             var config = new LoggerConfiguration()
+                .MinimumLevel.Debug()
                 .WriteTo.TextWriter(output);
 
             var factory = new SerilogFactory(config);
-            var logger = factory.Create("TestingLogger", LoggerLevel.Debug);
+            var logger = factory.Create("TestingLogger");
 
             logger.Debug("Debug", new Exception("Debug Exception 1"));
             logger.DebugFormat(new Exception("Debug Exception 2"), "Debug");
@@ -147,13 +158,6 @@ namespace CastleTests.SerilogIntegration
             StringAssert.Contains("Warn Exception 1", logs);
             StringAssert.Contains("Warn Exception 2", logs);
             StringAssert.Contains("Warn Exception 3", logs);
-        }
-
-        private void WriteTestLogs(Castle.Core.Logging.ILogger logger)
-        {
-            logger.Debug("Testing debug");
-            logger.Warn("Testing warning");
-            logger.Info("Testing info");
         }
     }
 #endif

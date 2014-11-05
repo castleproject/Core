@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2014 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
 
 namespace Castle.Services.Logging.SerilogIntegration
 {
+    using System;
+
     using Serilog;
     using Serilog.Events;
 
@@ -21,47 +23,15 @@ namespace Castle.Services.Logging.SerilogIntegration
     {
         private readonly LoggerConfiguration configuration;
 
-        public override Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level)
+        /// <summary>
+        /// Creates a new SerilogFactory with the <c>MinimumLevel</c> set to <c>LogEventLevel.Debug</c>
+        /// writing to the console.
+        /// </summary>
+        public SerilogFactory()
         {
-            LogEventLevel serilogLevel;
-            switch (level)
-            {
-                case Castle.Core.Logging.LoggerLevel.Debug:
-                    serilogLevel = LogEventLevel.Debug;
-                    break;
-                case Castle.Core.Logging.LoggerLevel.Error:
-                    serilogLevel = LogEventLevel.Error;
-                    break;
-                case Castle.Core.Logging.LoggerLevel.Fatal:
-                    serilogLevel = LogEventLevel.Fatal;
-                    break;
-                case Castle.Core.Logging.LoggerLevel.Info:
-                    serilogLevel = LogEventLevel.Information;
-                    break;
-                case Castle.Core.Logging.LoggerLevel.Off:
-                    serilogLevel = LogEventLevel.Information;
-                    break;
-                case Castle.Core.Logging.LoggerLevel.Warn:
-                    serilogLevel = LogEventLevel.Warning;
-                    break;
-                default:
-                    serilogLevel = LogEventLevel.Information;
-                    break;
-            }
-
-            var log = configuration
-                .MinimumLevel.Is(serilogLevel)
-                .CreateLogger();
-
-            return new SerilogLogger(log, this);
-        }
-
-        public override Castle.Core.Logging.ILogger Create(string name)
-        {
-            var log = configuration
-                .CreateLogger();
-
-            return new SerilogLogger(log, this);
+            configuration = new LoggerConfiguration()
+                .MinimumLevel.Is(LogEventLevel.Debug) // Default to debug rather than info so all events show up
+                .WriteTo.ColoredConsole();
         }
 
         public SerilogFactory(LoggerConfiguration configuration)
@@ -69,11 +39,17 @@ namespace Castle.Services.Logging.SerilogIntegration
             this.configuration = configuration;
         }
 
-        public SerilogFactory()
+        public override Castle.Core.Logging.ILogger Create(string name)
         {
-            configuration = new LoggerConfiguration()
-                .MinimumLevel.Is(LogEventLevel.Debug)
-                .WriteTo.ColoredConsole();
+            ILogger logger = configuration
+                .CreateLogger();
+
+            return new SerilogLogger(logger, this);
+        }
+
+        public override Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level)
+        {
+            throw new NotSupportedException("Logger levels cannot be set at runtime. Please see Serilog's LoggerConfiguration.MinimumLevel.");
         }
     }
 }

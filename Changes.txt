@@ -1,3 +1,5 @@
+- fixed #70 - Serilog integration modifies LoggerConfiguration.MinimumLevel
+
 3.3.2
 ==================
 - fixed #66 - SerilogLogger implementation bug where exceptions were passed through incorrectly
