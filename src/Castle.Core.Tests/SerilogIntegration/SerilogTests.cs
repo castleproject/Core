@@ -159,6 +159,27 @@ namespace CastleTests.SerilogIntegration
             StringAssert.Contains("Warn Exception 2", logs);
             StringAssert.Contains("Warn Exception 3", logs);
         }
+
+        [Test]
+        public void should_log_with_source_context()
+        {
+            var output = new StringWriter();
+            var config = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.TextWriter(output);
+
+            var factory = new SerilogFactory(config);
+
+            var logger1 = factory.Create("MyLogger1");
+            var logger2 = factory.Create("MyLogger2");
+
+            logger1.Info("Test1 using {SourceContext}");
+            logger2.Debug("Test2 using {SourceContext}");
+
+            var logs = output.ToString();
+            StringAssert.Contains("MyLogger1", logs);
+            StringAssert.Contains("MyLogger2", logs);
+        }
     }
 #endif
 }

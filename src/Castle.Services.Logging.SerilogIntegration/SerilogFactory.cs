@@ -42,7 +42,8 @@ namespace Castle.Services.Logging.SerilogIntegration
         public override Castle.Core.Logging.ILogger Create(string name)
         {
             ILogger logger = configuration
-                .CreateLogger();
+                .CreateLogger()
+                .ForContext(Serilog.Core.Constants.SourceContextPropertyName, name);
 
             return new SerilogLogger(logger, this);
         }
