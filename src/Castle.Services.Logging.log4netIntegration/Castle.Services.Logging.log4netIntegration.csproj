@@ -162,7 +162,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>  
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Debug|AnyCPU'">
     <OutputPath>bin\MONO26-Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;MONO MONO26</DefineConstants>
@@ -236,9 +236,16 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+      <Aliases>log4net2</Aliases>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net35\log4net.dll</HintPath>
+      <Aliases>log4net1</Aliases>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -258,6 +265,14 @@
     <Compile Include="GlobalContextProperties.cs" />
     <Compile Include="ExtendedLog4netFactory.cs" />
     <Compile Include="ExtendedLog4netLogger.cs" />
+    <Compile Include="log4net2\ExtendedLog4netFactory.cs" />
+    <Compile Include="log4net2\ExtendedLog4netLogger.cs" />
+    <Compile Include="log4net2\GlobalContextProperties.cs" />
+    <Compile Include="log4net2\Log4netFactory.cs" />
+    <Compile Include="log4net2\Log4netLogger.cs" />
+    <Compile Include="log4net2\ThreadContextProperties.cs" />
+    <Compile Include="log4net2\ThreadContextStack.cs" />
+    <Compile Include="log4net2\ThreadContextStacks.cs" />
     <Compile Include="Log4netFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -273,6 +288,7 @@
     <None Include="..\..\buildscripts\CastleKey.snk">
       <Link>CastleKey.snk</Link>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.Core\Castle.Core.csproj">

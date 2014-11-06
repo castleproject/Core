@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2014 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,15 +14,16 @@
 
 namespace Castle.Services.Logging.Log4netIntegration
 {
+	extern alias log4net1;
 	using System;
 
 	using Castle.Core.Logging;
 
-	using log4net;
+	using log4net1::log4net;
 
-	using ILogger = log4net.Core.ILogger;
 	using Logger = Castle.Core.Logging.ILogger;
 	using ExtendedLogger = Castle.Core.Logging.IExtendedLogger;
+	using ILogger = log4net1::log4net.Core.ILogger;
 
 	public class ExtendedLog4netLogger : Log4netLogger, ExtendedLogger
 	{
@@ -41,7 +42,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		}
 
 		/// <summary>
-		///   Exposes the Global Context of the extended logger.
+		///     Exposes the Global Context of the extended logger.
 		/// </summary>
 		public IContextProperties GlobalProperties
 		{
@@ -49,7 +50,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		}
 
 		/// <summary>
-		///   Exposes the Thread Context of the extended logger.
+		///     Exposes the Thread Context of the extended logger.
 		/// </summary>
 		public IContextProperties ThreadProperties
 		{
@@ -57,7 +58,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		}
 
 		/// <summary>
-		///   Exposes the Thread Stack of the extended logger.
+		///     Exposes the Thread Stack of the extended logger.
 		/// </summary>
 		public IContextStacks ThreadStacks
 		{

@@ -1,4 +1,4 @@
-// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2014 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,13 +14,14 @@
 
 namespace Castle.Services.Logging.Log4netIntegration
 {
+	extern alias log4net1;
 	using System;
 	using System.IO;
 
 	using Castle.Core.Logging;
 
-	using log4net;
-	using log4net.Config;
+	using log4net1::log4net;
+	using log4net1::log4net.Config;
 
 	public class Log4netFactory : AbstractLoggerFactory
 	{
@@ -37,9 +38,12 @@ namespace Castle.Services.Logging.Log4netIntegration
 		}
 
 		/// <summary>
-		///   Initializes a new instance of the <see cref="Log4netFactory" /> class.
+		///     Initializes a new instance of the <see cref="Log4netFactory" /> class.
 		/// </summary>
-		/// <param name="configuredExternally"> If <c>true</c> . Skips the initialization of log4net assuming it will happen externally. Useful if you're using another framework that wants to take over configuration of log4net. </param>
+		/// <param name="configuredExternally">
+		///     If <c>true</c> . Skips the initialization of log4net assuming it will happen
+		///     externally. Useful if you're using another framework that wants to take over configuration of log4net.
+		/// </param>
 		public Log4netFactory(bool configuredExternally)
 		{
 			if (configuredExternally)
@@ -52,7 +56,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		}
 
 		/// <summary>
-		///   Configures log4net with a stream containing XML.
+		///     Configures log4net with a stream containing XML.
 		/// </summary>
 		/// <param name="config"> </param>
 		public Log4netFactory(Stream config)
