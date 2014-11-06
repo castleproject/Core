@@ -1,5 +1,7 @@
+3.3.3
+==================
 - fixed #70 - Serilog integration modifies LoggerConfiguration.MinimumLevel
-- fixed #69 - Added SourceContext to the Serilog Logger
+- fixed #69 - Added SourceContext to the Serilog Logger - contributed by @KevivL
 
 3.3.2
 ==================
