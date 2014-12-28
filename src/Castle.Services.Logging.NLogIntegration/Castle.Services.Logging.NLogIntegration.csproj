@@ -254,13 +254,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog" Condition="'$(MSBuildTargets)' != '.NET 4.5'">
+    <Reference Include="NLog">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog" Condition="'$(MSBuildTargets)' == '.NET 4.5'">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(RootPath)\lib\net40\NLog.dll</HintPath>
+      <HintPath>$(RootPath)\lib\$(BuildConfigKey.ToLower())\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
