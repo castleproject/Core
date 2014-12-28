@@ -36,7 +36,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 		public bool TryGet(XmlName xsiType, out IXmlIncludedType includedType)
 		{
-			return (xsiType == null || xsiType == Default.XsiType)
+			return (xsiType == Default.XsiType)
 				? Try.Success(out includedType, Default)
 				: includedTypes.TryGet(xsiType, out includedType);
 		}
