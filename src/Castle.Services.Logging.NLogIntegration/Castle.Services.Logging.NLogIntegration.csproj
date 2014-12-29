@@ -233,7 +233,7 @@
   <ItemGroup>
     <Reference Include="NLog" Condition="'$(BuildConfigKey)' == 'mono310'">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(RootPath)\lib\net45\NLog.dll</HintPath>
+      <HintPath>$(RootPath)\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="NLog" Condition="'$(BuildConfigKey)' != 'mono310'">
       <SpecificVersion>False</SpecificVersion>
