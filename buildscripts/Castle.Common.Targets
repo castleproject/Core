@@ -29,13 +29,11 @@ limitations under the License.
 		<Configuration Condition="$(Configuration)=='' or $(Configuration)=='Release'">NET40-Release</Configuration>
 	</PropertyGroup>
 
-
 	<!-- .NET 4.5 -->
 	<PropertyGroup Condition="$(Configuration) == 'NET45-Release' or $(Configuration) == 'NET45-Debug'">
 		<BuildConfigKey>NET45</BuildConfigKey>
 		<TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
 	</PropertyGroup>
-
 
 	<!-- .NET 4.0 (default) -->
 	<PropertyGroup Condition="$(Configuration) == 'NET40-Release' or $(Configuration) == 'NET40-Debug'">
@@ -49,26 +47,15 @@ limitations under the License.
 		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	</PropertyGroup>
 
-	<!-- Mono 2.6 -->
-	<PropertyGroup Condition="$(Configuration) == 'MONO26-Release' or $(Configuration) == 'MONO26-Debug'">
-		<BuildConfigKey>mono26</BuildConfigKey>
-		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-		<BuildConfigDescription>Mono 2.6 - $(TargetFrameworkVersion) Profile</BuildConfigDescription>
-	</PropertyGroup>
-
-	<!-- Mono 2.8 -->
-	<PropertyGroup Condition="$(Configuration) == 'MONO28-Release' or $(Configuration) == 'MONO28-Debug'">
-		<BuildConfigKey>mono28</BuildConfigKey>
-		<TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-		<BuildConfigDescription>Mono 2.8 - $(TargetFrameworkVersion) Profile</BuildConfigDescription>
-	</PropertyGroup>
-
-	<!-- Mono -->
-	<PropertyGroup Condition="$(Configuration) == 'MONO28-Release' or $(Configuration) == 'MONO28-Debug' or $(Configuration) == 'MONO26-Release' or $(Configuration) == 'MONO26-Debug'" >
+	<!-- Mono 3.10 -->
+	<PropertyGroup Condition="$(Configuration) == 'MONO310-Release' or $(Configuration) == 'MONO310-Debug'">
+		<BuildConfigKey>mono310</BuildConfigKey>
+		<TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+		<BuildConfigDescription>Mono 3.10 - $(TargetFrameworkVersion) Profile</BuildConfigDescription>
 		<NUnitPath>%20</NUnitPath>
 		<NUnitExecutable>nunit-console</NUnitExecutable>
 	</PropertyGroup>
-	
+
 	<!--Silverlight 4.0 runtime-->
 	<PropertyGroup Condition="$(Configuration) == 'SL40-Release' or $(Configuration) == 'SL40-Debug'">
 		<BuildConfigKey>SL40</BuildConfigKey>

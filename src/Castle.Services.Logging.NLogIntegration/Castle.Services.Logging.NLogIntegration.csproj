@@ -206,10 +206,10 @@
     <NoWarn>1685</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Debug|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO310-Debug|AnyCPU'">
     <OutputPath>bin\MONO26-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;MONO MONO26</DefineConstants>
-    <DocumentationFile>bin\MONO26-Debug\Castle.Services.Logging.NLogIntegration.xml</DocumentationFile>
+    <DefineConstants>TRACE;DEBUG;__MONO</DefineConstants>
+    <DocumentationFile>bin\MONO310-Debug\Castle.Services.Logging.NLogIntegration.xml</DocumentationFile>
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -219,34 +219,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Release|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO310-Release|AnyCPU'">
     <OutputPath>bin\MONO26-Release\</OutputPath>
-    <DefineConstants>TRACE;MONO MONO26</DefineConstants>
-    <DocumentationFile>bin\MONO26-Release\Castle.Services.Logging.NLogIntegration.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1591</NoWarn>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO28-Debug|AnyCPU'">
-    <OutputPath>bin\MONO28-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;MONO MONO28</DefineConstants>
-    <DocumentationFile>bin\MONO28-Debug\Castle.Services.Logging.NLogIntegration.xml</DocumentationFile>
-    <Optimize>false</Optimize>
-    <DebugType>full</DebugType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1591</NoWarn>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO28-Release|AnyCPU'">
-    <OutputPath>bin\MONO28-Release\</OutputPath>
-    <DefineConstants>TRACE;MONO MONO28</DefineConstants>
-    <DocumentationFile>bin\MONO28-Release\Castle.Services.Logging.NLogIntegration.xml</DocumentationFile>
+    <DefineConstants>TRACE;__MONO</DefineConstants>
+    <DocumentationFile>bin\MONO310-Release\Castle.Services.Logging.NLogIntegration.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -255,7 +231,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NLog">
+    <Reference Include="NLog" Condition="'$(BuildConfigKey)' == 'mono310'">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(RootPath)\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog" Condition="'$(BuildConfigKey)' != 'mono310'">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(RootPath)\lib\$(BuildConfigKey.ToLower())\NLog.dll</HintPath>
     </Reference>

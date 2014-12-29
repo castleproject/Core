@@ -127,38 +127,20 @@
     <NoWarn>1685</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Debug|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG;MONO MONO26</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO310-Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;__MONO</DefineConstants>
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <OutputPath>bin\MONO26-Debug\</OutputPath>
+    <OutputPath>bin\MONO310-Debug\</OutputPath>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO26-Release|AnyCPU'">
-    <DefineConstants>TRACE;MONO MONO26</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO310-Release|AnyCPU'">
+    <DefineConstants>TRACE;__MONO</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <OutputPath>bin\MONO26-Release\</OutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO28-Release|AnyCPU'">
-    <OutputPath>bin\MONO28-Release\</OutputPath>
-    <DefineConstants>TRACE;MONO MONO28</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO28-Debug|AnyCPU'">
-    <OutputPath>bin\MONO28-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;MONO MONO28</DefineConstants>
-    <Optimize>false</Optimize>
-    <DebugType>full</DebugType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\MONO310-Release\</OutputPath>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
