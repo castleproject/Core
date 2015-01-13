@@ -11,7 +11,7 @@
     <iconUrl>http://docs.castleproject.org/GetFile.aspx?File=/castleLogo100px.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Castle logging services integration with Serilog</description>
-    <copyright>Copyright 2004-2014 Castle Project - http://www.castleproject.org/</copyright>
+    <copyright>Copyright 2004-$CurrentYear$ Castle Project - http://www.castleproject.org/</copyright>
     <tags>castle, logging, serilog</tags>
     <dependencies>
       <dependency id="Castle.Core" version="$CastleCoreVersion$" />

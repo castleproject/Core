@@ -11,7 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Castle Project Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</description>
     <summary>Castle Project Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</summary>
-    <copyright>Copyright 2004-2014 Castle Project - http://www.castleproject.org/</copyright>
+    <copyright>Copyright 2004-$CurrentYear$ Castle Project - http://www.castleproject.org/</copyright>
     <tags>castle dynamicproxy dynamic proxy dynamicproxy2 dictionaryadapter emailsender</tags>
   </metadata>
   <files>
