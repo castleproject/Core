@@ -15,3 +15,7 @@ else
 }
 
 Write-Host "##teamcity[setParameter name='ReleaseVersion' value='$major.$minor.$build$version_suffix']"
+
+$year = (Get-Date).Year
+
+Write-Host "##teamcity[setParameter name='CurrentYear' value='$year']"
