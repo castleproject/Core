@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy
 	using System.Collections.Generic;
 	using System.Reflection.Emit;
 	using System.Runtime.Serialization;
+	using Castle.Core.Internal;
 #if DOTNET40
 	using System.Security;
 #endif
@@ -192,6 +193,10 @@ namespace Castle.DynamicProxy
 			{
 				return false;
 			}
+			if (!CollectionExtensions.AreEquivalent(AdditionalAttributes, proxyGenerationOptions.AdditionalAttributes))
+			{
+				return false;
+			}
 			return true;
 		}
 
@@ -204,6 +209,7 @@ namespace Castle.DynamicProxy
 			result = 29*result + (Selector != null ? 1 : 0);
 			result = 29*result + MixinData.GetHashCode();
 			result = 29*result + (BaseTypeForInterfaceProxy != null ? BaseTypeForInterfaceProxy.GetHashCode() : 0);
+			result = 29*result + CollectionExtensions.GetContentsHashCode(AdditionalAttributes);
 			return result;
 		}
 	}
