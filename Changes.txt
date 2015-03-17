@@ -1,3 +1,6 @@
+- fixed #77 - ProxyGenerator cache does not take into account AdditionalAttributes (@cmerat)
+- fixed #82 - Castle.Services.Logging.SerilogIntegration.dll missing some assembly info attributes (@imzshh)
+
 3.3.3
 ==================
 - fixed #70 - Serilog integration modifies LoggerConfiguration.MinimumLevel
