@@ -20,10 +20,6 @@ namespace Castle.Core.Internal
 	using System.ComponentModel;
 	using System.Linq;
 
-#if SILVERLIGHT
-	using System.Linq;
-#endif
-
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public static class CollectionExtensions
 	{
