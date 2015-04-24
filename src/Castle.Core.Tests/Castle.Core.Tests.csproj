@@ -252,6 +252,9 @@
     <Compile Include="DynamicProxy.Tests\ClassProxyWithDefaultValuesTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\GenericInterfaceWithGenericMethod.cs" />
     <Compile Include="DynamicProxy.Tests\Interfaces\InterfaceWithMethodWithParameterWithNullDefaultValue.cs" />
+    <Compile Include="Interfaces\IGeneric.cs" />
+    <Compile Include="Interfaces\IMultipleRepeated.cs" />
+    <Compile Include="MultipleRepeatedInterfaceTestCase.cs" />
     <Compile Include="MultipleSavedAssembliesTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\VirtualObjectTestCase.cs" />
