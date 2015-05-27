@@ -1,0 +1,3 @@
+# Make your supporting classes serializable
+
+If you're going to be serializing your proxies, you should make all the classes that go with it serializable. That includes proxy generation hooks, interceptors and interceptor selectors. Otherwise, you will get an exception when trying to serialize your proxies. It is not mandatory, but I find it useful. Notice that you will need this also when persisting your proxy assembly to disk.
