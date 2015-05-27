@@ -12,7 +12,7 @@ See the [Releases](https://github.com/castleproject/Core/releases).
 
 ## Copyright
 
-Copyright 2004-2014 Castle Project
+Copyright 2004-2015 Castle Project
 
 ## License
 
