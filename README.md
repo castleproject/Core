@@ -6,7 +6,7 @@ Castle Core provides common Castle Project abstractions including logging servic
 
 See the [documentation](docs/README.md).
 
-# Releases
+## Releases
 
 See the [Releases](https://github.com/castleproject/Core/releases).
 
