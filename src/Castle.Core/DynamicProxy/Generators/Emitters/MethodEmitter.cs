@@ -159,6 +159,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 #if DOTNET45
 				if (parameter.HasDefaultValue && parameter.DefaultValue != null)
 				{
+					if (parameter.ParameterType == typeof(decimal) || parameter.ParameterType == typeof(decimal?))
+					{
+						/*
+						 * A decimal value may not be passed to SetConstant(), so omit the call
+						 * in this instance.
+						 * 
+						 * See https://github.com/castleproject/Core/issues/87 and https://bit.ly/1eXx6fF 
+						 * for additional information.
+						 */
+						continue;
+					}
+					
 					parameterBuilder.SetConstant(parameter.DefaultValue);
 				}
 #endif
