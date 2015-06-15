@@ -59,9 +59,6 @@ limitations under the License.
 		<Message Text="Binaries built from solution: @(AllBinaries)" />
 
 		<!-- Resolve test projects -->
-		<RegexMatch Input="@(AllBinaries)" Expression="$(TestDetectionExpression)">
-			<Output TaskParameter="Output" ItemName="TestAssemblies" />
-		</RegexMatch>
 		<Message Text="Detected the following test assemblies: @(TestAssemblies)" />
 		<CreateProperty Value="@(TestAssemblies->'&quot;%(FullPath)&quot;', ' ')">
 			<Output PropertyName="TestAssemblies" TaskParameter="Value"/>
