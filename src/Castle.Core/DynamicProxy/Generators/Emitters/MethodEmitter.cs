@@ -162,10 +162,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					if (parameter.ParameterType == typeof(decimal) || parameter.ParameterType == typeof(decimal?))
 					{
 						/*
-						 * A decimal value may not be passed to SetConstant(), so omit the call
-						 * in this instance.
+						 * Because of a limitation of the .NET Framework, a decimal value may not 
+						 * be passed to SetConstant(), so omit the call in this instance.
 						 * 
-						 * See https://github.com/castleproject/Core/issues/87 and https://bit.ly/1eXx6fF 
+						 * See https://github.com/castleproject/Core/issues/87 and
+						 * https://msdn.microsoft.com/en-au/library/system.reflection.emit.parameterbuilder.setconstant(v=vs.110).aspx
 						 * for additional information.
 						 */
 						continue;

@@ -12,8 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !DOTNET35
 namespace CastleTests.DynamicProxy.Tests.Interfaces
 {
+
 	public interface InterfaceWithMethodsWithAllKindsOfOptionalParameters
 	{
 		void MethodWithOptionalByteParameter(byte b = 0);
@@ -127,3 +129,4 @@ namespace CastleTests.DynamicProxy.Tests.Interfaces
 		void MethodWithOptionalNonDefaultNullableDecimalParameter(decimal? d = 3m);
 	}
 }
+#endif

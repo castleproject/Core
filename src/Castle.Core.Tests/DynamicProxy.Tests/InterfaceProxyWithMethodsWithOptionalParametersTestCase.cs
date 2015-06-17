@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !DOTNET35
 namespace Castle.DynamicProxy.Tests
 {
 	using CastleTests.DynamicProxy.Tests.Interfaces;
@@ -29,3 +30,4 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 }
+#endif

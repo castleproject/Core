@@ -11,6 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+#if !DOTNET35
 namespace Castle.DynamicProxy.Tests
 {
 	using CastleTests.DynamicProxy.Tests.Classes;
@@ -28,3 +30,4 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 }
+#endif
