@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !DOTNET35
+#if !DOTNET35 && !SILVERLIGHT
 namespace CastleTests.DynamicProxy.Tests.Classes
 {
 	using CastleTests.DynamicProxy.Tests.Interfaces;
