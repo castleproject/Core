@@ -104,8 +104,6 @@ namespace Castle.DynamicProxy.Tests
 			proxy.Foo<int>();
 		}
 
-#if !MONO
-
 		[Test]
 		public void ProxyWithGenericArgumentAndGenericMethod()
 		{
@@ -200,6 +198,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+#if __MonoCS__
+		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
+#endif
 		public void MethodInfoClosedInGenIfcGenMethodRefTypeNoTarget()
 		{
 			var interceptor = new KeepDataInterceptor();
@@ -217,6 +218,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+#if __MonoCS__
+		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
+#endif
 		public void MethodInfoClosedInGenIfcGenMethodValueTypeNoTarget()
 		{
 			var interceptor = new KeepDataInterceptor();
@@ -262,6 +266,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+#if __MonoCS__
+		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
+#endif
 		public void MethodInfoClosedInNongenIfcGenMethodNoTarget()
 		{
 			var interceptor = new KeepDataInterceptor();
@@ -276,6 +283,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+#if __MonoCS__
+		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
+#endif
 		public void MethodInfoClosedInGenIfcGenMethodRefTypeWithTarget()
 		{
 			var interceptor = new KeepDataInterceptor();
@@ -301,6 +311,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+#if __MonoCS__
+		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
+#endif
 		public void MethodInfoClosedInGenIfcGenMethodValueTypeWithTarget()
 		{
 			var interceptor = new KeepDataInterceptor();
@@ -372,6 +385,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+#if __MonoCS__
+		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
+#endif
 		public void MethodInfoClosedInNongenIfcGenMethodWithTarget()
 		{
 			var interceptor = new KeepDataInterceptor();
@@ -446,7 +462,6 @@ namespace Castle.DynamicProxy.Tests
 				AppDomain.Unload(newDomain);
 			}
 		}
-#endif
 #endif
 	}
 }

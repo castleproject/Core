@@ -27,6 +27,9 @@ namespace Castle.DynamicProxy.Tests
 	public class GenericMethodsProxyTestCase : BasePEVerifyTestCase
 	{
 		[Test]
+#if __MonoCS__
+		[Ignore("Assertion at sgen-alloc.c:460, condition `*p == NULL' not met")]
+#endif
 		public void GenericMethod_WithArrayOfGenericOfGenericArgument()
 		{
 			var proxy = generator.CreateClassProxy<ClassWithMethodWithArrayOfListOfT>();
@@ -52,6 +55,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+#if __MonoCS__
+		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
+#endif
 		public void GenericMethod_WithConstraintOnSurroundingTypeParameter()
 		{
 			var type = typeof(IGenericInterfaceWithGenericMethodWithDependentConstraint<object>);
@@ -70,6 +76,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+#if __MonoCS__
+		[Ignore("Assertion at sgen-alloc.c:460, condition `*p == NULL' not met")]
+#endif
 		public void GenericMethod_WithGenericOfGenericArgument()
 		{
 			var proxy = generator.CreateClassProxy<ClassWithMethodWithGenericOfGenericOfT>();
