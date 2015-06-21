@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !__MonoCS__
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -416,3 +417,4 @@ namespace Castle.DynamicProxy.Tests
 		R[] TestMethod<R>();
 	}
 }
+#endif
