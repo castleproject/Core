@@ -29,6 +29,11 @@ namespace Castle.DynamicProxy.Tests
 	{
 #if DOTNET45
 		[Test]
+#if __MonoCS__
+		// Seems like mono is too strict, and doesn't handle a nullable default parameter in ParameterBuilder
+		// https://github.com/mono/mono/blob/master/mcs/class/corlib/System.Reflection.Emit/ParameterBuilder.cs#L101
+		[Ignore("Constant does not match the defined type.")]
+#endif
 		public void MethodParameterWithDefaultValue_DefaultValueIsSetOnProxiedMethodAsWell()
 		{
 			var proxiedType = generator.CreateClassProxy<ClassWithMethodWithParameterWithDefaultValue>().GetType();
