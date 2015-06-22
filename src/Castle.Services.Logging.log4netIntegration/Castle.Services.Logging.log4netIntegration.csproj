@@ -162,30 +162,6 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO310-Debug|AnyCPU'">
-    <OutputPath>bin\MONO310-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;__MONO</DefineConstants>
-    <DocumentationFile>bin\MONO26-Debug\Castle.Services.Logging.Log4NetIntegration.xml</DocumentationFile>
-    <Optimize>false</Optimize>
-    <DebugType>full</DebugType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1591</NoWarn>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO310-Release|AnyCPU'">
-    <OutputPath>bin\MONO310-Release\</OutputPath>
-    <DefineConstants>TRACE;__MONO</DefineConstants>
-    <DocumentationFile>bin\MONO26-Release\Castle.Services.Logging.Log4NetIntegration.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1591</NoWarn>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET45-Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>

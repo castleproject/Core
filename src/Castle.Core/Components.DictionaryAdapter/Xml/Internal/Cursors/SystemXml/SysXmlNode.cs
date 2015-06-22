@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
-#if !SILVERLIGHT
+#if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -298,5 +297,4 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 	}
 }
-#endif
 #endif

@@ -97,7 +97,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(1, countingInterceptor.Count);
 		}
 
-#if !MONO
 		[Test]
 		public void SelectorWorksForMultipleGenericMethods()
 		{
@@ -116,7 +115,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(2, countingInterceptor.Count);
 			Assert.AreEqual(default(string), result2);
 		}
-#endif
 
 		[Test]
 		public void SelectorWorksForProperties()
@@ -323,7 +321,6 @@ namespace Castle.DynamicProxy.Tests
 		private class PrivateClass : PrivateInterface { }
 	}
 
-#if !MONO
 	public class MultiGenericClass : IMultiGenericInterface
 	{
 		public T1 Method<T1, T2>(T2 p)
@@ -343,7 +340,6 @@ namespace Castle.DynamicProxy.Tests
 
 		T2 Method<T1, T2>(T1 p);
 	}
-#endif
 
 #if !SILVERLIGHT
 	[Serializable]

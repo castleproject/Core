@@ -118,7 +118,7 @@ namespace CastleTests
 		}
 
 
-#if !MONO && !SILVERLIGHT
+#if !SILVERLIGHT
 		[Test]
 		public void ClassWithDifferentAccessLevelOnProperties()
 		{

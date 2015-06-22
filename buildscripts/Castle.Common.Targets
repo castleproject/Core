@@ -47,15 +47,6 @@ limitations under the License.
 		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	</PropertyGroup>
 
-	<!-- Mono 3.10 -->
-	<PropertyGroup Condition="$(Configuration) == 'MONO310-Release' or $(Configuration) == 'MONO310-Debug'">
-		<BuildConfigKey>mono310</BuildConfigKey>
-		<TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-		<BuildConfigDescription>Mono 3.10 - $(TargetFrameworkVersion) Profile</BuildConfigDescription>
-		<NUnitPath>%20</NUnitPath>
-		<NUnitExecutable>nunit-console</NUnitExecutable>
-	</PropertyGroup>
-
 	<!--Silverlight 4.0 runtime-->
 	<PropertyGroup Condition="$(Configuration) == 'SL40-Release' or $(Configuration) == 'SL40-Debug'">
 		<BuildConfigKey>SL40</BuildConfigKey>

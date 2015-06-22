@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if (!SILVERLIGHT && !MONO && !__MonoCS__)
+#if !SILVERLIGHT && !__MonoCS__
 namespace Castle.DynamicProxy.Tests
 {
 	using System.Reflection;
