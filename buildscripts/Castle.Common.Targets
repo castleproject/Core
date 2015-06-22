@@ -127,11 +127,6 @@ limitations under the License.
 
 	<!-- Testing Properties -->
 	<PropertyGroup>
-		<TestDetectionExpression>.[\.]((Integration|Unit)?Test[s]{0,1}?)</TestDetectionExpression>
-		<ItemGroup>
-			<TestAssemblies Include="$(OutputPath)Castle.Core.Tests.dll" />
-		</ItemGroup>
-
 		<TestRunner_Enabled Condition="'$(TestRunner_Enabled)' == ''">true</TestRunner_Enabled>
 		<!-- Controls whether tests are run -->
 		<TestRunner_Timeout Condition="'$(TestRunner_Timeout)' == ''">180000</TestRunner_Timeout>
@@ -139,6 +134,9 @@ limitations under the License.
 		<TestRunner_ContinueOnError Condition="'$(TestRunner_ContinueOnError)' == ''">false</TestRunner_ContinueOnError>
 		<!-- Controls whether to continue the build if tests are failing -->
 	</PropertyGroup>
+	<ItemGroup>
+		<TestAssemblies Include="$(OutputPath)Castle.Core.Tests.dll" />
+	</ItemGroup>
 
 
 	<!-- 3rd Party Program Paths -->
