@@ -313,7 +313,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				||
 				TryApplyBehavior<XmlAttributeAttribute, XmlAttributeBehaviorAccessor>
 					(key, property, behavior, ref accessor, XmlAttributeBehaviorAccessor.Factory)
-#if !SL3
 				||
 				TryApplyBehavior<XPathAttribute, XPathBehaviorAccessor>
 					(key, property, behavior, ref accessor, XPathBehaviorAccessor.Factory)
@@ -323,7 +322,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				||
 				TryApplyBehavior<XPathFunctionAttribute, XPathBehaviorAccessor>
 					(key, property, behavior, ref accessor, XPathBehaviorAccessor.Factory)
-#endif
 				;
 		}
 

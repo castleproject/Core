@@ -44,11 +44,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IXmlCursor   SelectChildren(IXmlKnownTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags);
 		IXmlIterator SelectSubtree();
 
-#if !SL3
 		CompiledXPath Path    { get; }
 		IXmlCursor    Select  (CompiledXPath path, IXmlIncludedTypeMap includedTypes, IXmlNamespaceSource namespaces, CursorFlags flags);
 		object        Evaluate(CompiledXPath path);
-#endif
 
 		void      Clear();
 		XmlReader ReadSubtree();

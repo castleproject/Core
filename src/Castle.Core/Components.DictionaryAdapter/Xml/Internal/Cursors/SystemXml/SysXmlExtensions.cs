@@ -19,9 +19,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Collections.Generic;
 	using System.Xml;
 	using System.Xml.Serialization;
-#if !SL3
 	using System.Xml.XPath;
-#endif
 
 	public static class SysXmlExtensions
 	{

@@ -82,12 +82,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			{
 				throw Error.NotSupported();
 			}
-#if !SL3
+
 			public void Enlist(CompiledXPath path)
 			{
 				throw Error.NotSupported();
 			}
-#endif
+
 			public string GetElementPrefix(IXmlNode node, string namespaceUri)
 			{
 				throw Error.NotSupported();

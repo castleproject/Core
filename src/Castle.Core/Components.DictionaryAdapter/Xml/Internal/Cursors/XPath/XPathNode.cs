@@ -13,7 +13,6 @@
 // limitations under the License.
 
 #if !SILVERLIGHT // Until support for other platforms is verified
-#if !SL3
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -249,5 +248,4 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 	}
 }
-#endif
 #endif
