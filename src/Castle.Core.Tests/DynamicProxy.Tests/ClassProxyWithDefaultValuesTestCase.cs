@@ -32,7 +32,7 @@ namespace Castle.DynamicProxy.Tests
 #if __MonoCS__
 		// Seems like mono is too strict, and doesn't handle a nullable default parameter in ParameterBuilder
 		// https://github.com/mono/mono/blob/master/mcs/class/corlib/System.Reflection.Emit/ParameterBuilder.cs#L101
-		[Ignore("Constant does not match the defined type.")]
+		[Ignore("System.ArgumentException : Constant does not match the defined type.")]
 #endif
 		public void MethodParameterWithDefaultValue_DefaultValueIsSetOnProxiedMethodAsWell()
 		{
