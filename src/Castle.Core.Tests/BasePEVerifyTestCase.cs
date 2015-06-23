@@ -24,8 +24,7 @@ namespace CastleTests
 
 	using NUnit.Framework;
 
-#if !__MonoCS__ && !SILVERLIGHT
-	// mono doesn't have PEVerify
+#if !__MonoCS__ && !SILVERLIGHT // mono doesn't have PEVerify
 	[SetUpFixture]
 	public class FindPeVerify
 	{
@@ -84,8 +83,7 @@ namespace CastleTests
 			get { return verificationDisabled; }
 		}
 
-#if !__MonoCS__ && !SILVERLIGHT
-		// mono doesn't have PEVerify
+#if !__MonoCS__ && !SILVERLIGHT // mono doesn't have PEVerify
 		[TearDown]
 		public virtual void TearDown()
 		{
@@ -148,8 +146,7 @@ namespace Castle.DynamicProxy.Tests
 
 	using NUnit.Framework;
 
-#if !__MonoCS__ && !SILVERLIGHT
-	// mono doesn't have PEVerify
+#if !__MonoCS__ && !SILVERLIGHT // mono doesn't have PEVerify
 	[SetUpFixture]
 	public class FindPeVerify
 	{
@@ -208,8 +205,7 @@ namespace Castle.DynamicProxy.Tests
 			get { return verificationDisabled; }
 		}
 
-#if !__MonoCS__ && !SILVERLIGHT
-		// mono doesn't have PEVerify
+#if !__MonoCS__ && !SILVERLIGHT // mono doesn't have PEVerify
 		[TearDown]
 		public virtual void TearDown()
 		{
@@ -253,9 +249,9 @@ namespace Castle.DynamicProxy.Tests
 			}
 		}
 #else
-		#if !SILVERLIGHT
+#if !SILVERLIGHT
 		[TearDown]
-		#endif
+#endif
 		public virtual void TearDown()
 		{
 		}
