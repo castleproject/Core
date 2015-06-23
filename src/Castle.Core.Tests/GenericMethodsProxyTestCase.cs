@@ -27,9 +27,8 @@ namespace Castle.DynamicProxy.Tests
 	public class GenericMethodsProxyTestCase : BasePEVerifyTestCase
 	{
 		[Test]
-#if __MonoCS__
-		[Ignore("Assertion at sgen-alloc.c:460, condition `*p == NULL' not met")]
-#endif
+		[Platform(Exclude = "mono", Reason = "Assertion at sgen-alloc.c:460, condition `*p == NULL' not met. " +
+			"Fixed in https://bugzilla.xamarin.com/show_bug.cgi?id=28182")]
 		public void GenericMethod_WithArrayOfGenericOfGenericArgument()
 		{
 			var proxy = generator.CreateClassProxy<ClassWithMethodWithArrayOfListOfT>();
@@ -79,9 +78,8 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("Assertion at sgen-alloc.c:460, condition `*p == NULL' not met")]
-#endif
+		[Platform(Exclude = "mono", Reason = "Assertion at sgen-alloc.c:460, condition `*p == NULL' not met. " +
+			"Fixed in https://bugzilla.xamarin.com/show_bug.cgi?id=28182")]
 		public void GenericMethod_WithGenericOfGenericArgument()
 		{
 			var proxy = generator.CreateClassProxy<ClassWithMethodWithGenericOfGenericOfT>();
