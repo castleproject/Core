@@ -228,10 +228,14 @@
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\IPhoneWithFetch.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\NameValueCollectionAdapterTests.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\ClassWithMethodsWithAllKindsOfOptionalParameters.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithMethodWithParameterWithDefaultValue.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithMethodWithParameterWithNullDefaultValue.cs" />
     <Compile Include="DynamicProxy.Tests\ClassProxyWithDefaultValuesTestCase.cs" />
+    <Compile Include="DynamicProxy.Tests\ClassProxyWithMethodsWithOptionalParametersTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\GenericInterfaceWithGenericMethod.cs" />
+    <Compile Include="DynamicProxy.Tests\InterfaceProxyWithMethodsWithOptionalParametersTestCase.cs" />
+    <Compile Include="DynamicProxy.Tests\Interfaces\InterfaceWithMethodsWithAllKindsOfOptionalParameters.cs" />
     <Compile Include="DynamicProxy.Tests\Interfaces\InterfaceWithMethodWithParameterWithNullDefaultValue.cs" />
     <Compile Include="MultipleSavedAssembliesTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
