@@ -54,7 +54,7 @@ namespace Castle.DynamicProxy.Internal
 			disassemblers[typeof(TAttribute)] = disassembler;
 		}
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE
 		public static CustomAttributeBuilder CreateBuilder(CustomAttributeData attribute)
 		{
 			Debug.Assert(attribute != null, "attribute != null");
@@ -138,7 +138,7 @@ namespace Castle.DynamicProxy.Internal
 		{
 			Debug.Assert(member != null, "member != null");
 			var attributes =
-#if SILVERLIGHT
+#if SILVERLIGHT || NETCORE
 				member.GetCustomAttributes(false);
 #else
 				CustomAttributeData.GetCustomAttributes(member);
@@ -147,7 +147,7 @@ namespace Castle.DynamicProxy.Internal
 			foreach (var attribute in attributes)
 			{
 				var attributeType =
-#if SILVERLIGHT
+#if SILVERLIGHT || NETCORE
 				attribute.GetType();
 #else
 					attribute.Constructor.DeclaringType;
@@ -161,7 +161,7 @@ namespace Castle.DynamicProxy.Internal
 				try
 				{
 					builder = CreateBuilder(attribute
-#if SILVERLIGHT
+#if SILVERLIGHT || NETCORE
 					as Attribute
 #endif
 						);
@@ -171,8 +171,14 @@ namespace Castle.DynamicProxy.Internal
 					var message =
 						string.Format(
 							"Due to limitations in CLR, DynamicProxy was unable to successfully replicate non-inheritable attribute {0} on {1}{2}. To avoid this error you can chose not to replicate this attribute type by calling '{3}.Add(typeof({0}))'.",
+#if NETCORE
+							attributeType.FullName, (member.DeclaringType == null) ? "" : member.DeclaringType.FullName,
+							(member is TypeInfo) ? "" : ("." + member.Name), typeof(AttributesToAvoidReplicating).FullName);
+#else
 							attributeType.FullName, (member.ReflectedType == null) ? "" : member.ReflectedType.FullName,
 							(member is Type) ? "" : ("." + member.Name), typeof(AttributesToAvoidReplicating).FullName);
+#endif
+
 					throw new ProxyGenerationException(message, e);
 				}
 				if (builder != null)
@@ -186,7 +192,7 @@ namespace Castle.DynamicProxy.Internal
 		{
 			Debug.Assert(parameter != null, "parameter != null");
 			var attributes =
-#if SILVERLIGHT
+#if SILVERLIGHT || NETCORE
 				parameter.GetCustomAttributes(false);
 #else
 				CustomAttributeData.GetCustomAttributes(parameter);
@@ -195,7 +201,7 @@ namespace Castle.DynamicProxy.Internal
 			foreach (var attribute in attributes)
 			{
 				var attributeType =
-#if SILVERLIGHT
+#if SILVERLIGHT || NETCORE
 				attribute.GetType();
 #else
 					attribute.Constructor.DeclaringType;
@@ -233,13 +239,14 @@ namespace Castle.DynamicProxy.Internal
 			{
 				return true;
 			}
-
+#if NETCORE
+			var attrs = new List<Attribute>(((MemberInfo)attribute.GetTypeInfo()).GetCustomAttributes(typeof(AttributeUsageAttribute), true)).ToArray();
+#else
 			var attrs = attribute.GetCustomAttributes(typeof(AttributeUsageAttribute), true);
-
+#endif
 			if (attrs.Length != 0)
 			{
 				var usage = (AttributeUsageAttribute)attrs[0];
-
 				return usage.Inherited;
 			}
 

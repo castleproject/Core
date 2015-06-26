@@ -25,6 +25,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
+	using Castle.DynamicProxy.Internal;
 
 	public class ClassProxyTargetContributor : CompositeTypeContributor
 	{
@@ -50,9 +51,14 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				var item = new InterfaceMembersOnClassCollector(@interface,
 				                                                true,
+#if NETCORE 
+				                                                targetType.GetTypeInfo().GetRuntimeInterfaceMap(@interface)) { Logger = Logger };
+#else
 				                                                targetType.GetInterfaceMap(@interface)) { Logger = Logger };
+#endif
 				item.CollectMembersToProxy(hook);
 				yield return item;
+
 			}
 		}
 
@@ -96,17 +102,17 @@ namespace Castle.DynamicProxy.Contributors
 			if (!method.HasTarget)
 			{
 				return new InheritanceInvocationTypeGenerator(targetType,
-				                                              method,
-				                                              null, null)
-					.Generate(@class, options, namingScope)
-					.BuildType();
+			                                                  method,
+			                                                  null, null)
+				.Generate(@class, options, namingScope)
+				.BuildType();
 			}
 			var callback = CreateCallbackMethod(@class, methodInfo, method.MethodOnTarget);
 			return new InheritanceInvocationTypeGenerator(callback.DeclaringType,
-			                                              method,
-			                                              callback, null)
-				.Generate(@class, options, namingScope)
-				.BuildType();
+				                                          method,
+				                                          callback, null)
+					.Generate(@class, options, namingScope)
+					.BuildType();
 		}
 
 		private MethodBuilder CreateCallbackMethod(ClassEmitter emitter, MethodInfo methodInfo, MethodInfo methodOnTarget)
@@ -116,7 +122,11 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (targetMethod.IsGenericMethod)
 			{
+#if NETCORE
+				targetMethod = targetMethod.MakeGenericMethod(callBackMethod.GenericTypeParams.AsTypeArray());
+#else
 				targetMethod = targetMethod.MakeGenericMethod(callBackMethod.GenericTypeParams);
+#endif
 			}
 
 			var exps = new Expression[callBackMethod.Arguments.Length];
@@ -161,6 +171,7 @@ namespace Castle.DynamicProxy.Contributors
 		private IInvocationCreationContributor GetContributor(Type @delegate, MetaMethod method)
 		{
 			if (@delegate.GetTypeInfo().IsGenericType == false)
+
 			{
 				return new InvocationWithDelegateContributor(@delegate, targetType, method, namingScope);
 			}
@@ -173,7 +184,11 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			var scope = @class.ModuleScope;
 			var key = new CacheKey(
+#if NETCORE
+				typeof(Delegate).GetTypeInfo(),
+#else
 				typeof(Delegate),
+#endif
 				targetType,
 				new[] { method.MethodOnTarget.ReturnType }
 					.Concat(ArgumentsUtil.GetTypes(method.MethodOnTarget.GetParameters())).

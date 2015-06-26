@@ -1,0 +1,12 @@
+{
+  "version": "3.3.4-*",
+  "frameworks": {
+    "dnxcore50": {
+      "wrappedProject": "../../../Castle.Core.NetCore/Castle.Core.NetCore.csproj",
+      "bin": {
+        "assembly": "../../../../build/NetCore/NETCore-{configuration}/bin/Castle.Core.dll",
+        "pdb": "../../../../build/NetCore/NETCore-{configuration}/bin/Castle.Core.pdb"
+      }
+    }
+  }
+}

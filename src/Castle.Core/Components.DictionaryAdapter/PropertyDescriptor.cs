@@ -469,8 +469,11 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void ObtainTypeConverter()
 		{
+#if NETCORE
+			Type converterType = null; 
+#else
 			var converterType = AttributesUtil.GetTypeConverter(Property);
-
+#endif
 			TypeConverter = (converterType != null)
 				? (TypeConverter) Activator.CreateInstance(converterType)
 				: TypeDescriptor.GetConverter(PropertyType);

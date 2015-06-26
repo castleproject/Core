@@ -32,7 +32,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 		public void InvokeBaseConstructor()
 		{
 			var type = baseType;
+#if NETCORE
+			if (type.GetTypeInfo().ContainsGenericParameters)
+#else
 			if (type.ContainsGenericParameters)
+#endif
 			{
 				type = type.GetGenericTypeDefinition();
 					// need to get generic type definition, otherwise the GetConstructor method might throw NotSupportedException

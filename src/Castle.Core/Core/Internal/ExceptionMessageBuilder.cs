@@ -29,8 +29,11 @@ namespace Castle.Core.Internal
 		/// <param name="typeToProxy">the type that couldn't be proxied</param>
 		public static string CreateMessageForInaccessibleType(Type inaccessibleType, Type typeToProxy)
 		{
+#if NETCORE
+			var targetAssembly = typeToProxy.GetTypeInfo().Assembly;
+#else
 			var targetAssembly = typeToProxy.Assembly;
-
+#endif
 			string strongNamedOrNotIndicator = " not"; // assume not strong-named
 			string assemblyToBeVisibleTo = "\"DynamicProxyGenAssembly2\""; // appropriate for non-strong-named
 	
@@ -82,8 +85,8 @@ namespace Castle.Core.Internal
 
 		private static bool ReferencesCastleCore(Assembly inspectedAssembly)
 		{
-#if SILVERLIGHT
-			// no way to check that in SILVERLIGHT, so we just fall back to the solution that will definitely work
+#if SILVERLIGHT || NETCORE
+			// no way to check that in SILVERLIGHT or .NET Core, so we just fall back to the solution that will definitely work
 			return false;
 #else
 			return inspectedAssembly.GetReferencedAssemblies()

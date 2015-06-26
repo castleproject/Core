@@ -18,19 +18,19 @@ namespace Castle.Core.Logging
 	using System.Globalization;
 #if DOTNET40
 	using System.Security;
-#else
+#elif !NETCORE
 	using System.Security.Permissions;
 #endif
 
 	/// <summary>
-	/// The Level Filtered Logger class.  This is a base clase which
+	/// The Level Filtered Logger class.  This is a base class which
 	/// provides a LogLevel attribute and reroutes all functions into
 	/// one Log method.
 	/// </summary>
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
-#if SILVERLIGHT
+#if SILVERLIGHT || NETCORE
 	public abstract class LevelFilteredLogger : ILogger
 #else
 	public abstract class LevelFilteredLogger : MarshalByRefObject, ILogger
@@ -61,7 +61,7 @@ namespace Castle.Core.Logging
 			ChangeName(loggerName);
 		}
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE
 		/// <summary>
 		/// Keep the instance alive in a remoting scenario
 		/// </summary>
@@ -75,6 +75,7 @@ namespace Castle.Core.Logging
 		{
 			return null;
 		}
+
 #endif
 
 		public abstract ILogger CreateChildLogger(string loggerName);

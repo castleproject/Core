@@ -12,13 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#pragma warning disable 3001
+
 namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE
 	using System.Runtime.InteropServices;
 	using System.Runtime.Remoting;
 	using System.Security;
@@ -47,7 +49,7 @@ namespace Castle.DynamicProxy
 		{
 			proxyBuilder = builder;
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE
 			if (HasSecurityPermission())
 			{
 				Logger = new TraceLogger("Castle.DynamicProxy", LoggerLevel.Warn);
@@ -55,7 +57,7 @@ namespace Castle.DynamicProxy
 #endif
 		}
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE
 		private bool HasSecurityPermission()
 		{
 			const SecurityPermissionFlag flag = SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy;
@@ -558,7 +560,6 @@ namespace Castle.DynamicProxy
 		{
 			//TODO: add <example> to xml comments to show how to use IChangeProxyTarget
 
-
 			if (interfaceToProxy == null)
 			{
 				throw new ArgumentNullException("interfaceToProxy");
@@ -579,7 +580,7 @@ namespace Castle.DynamicProxy
 			}
 
 			var isRemotingProxy = false;
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE
 			if (target != null)
 			{
 				isRemotingProxy = RemotingServices.IsTransparentProxy(target);
@@ -1592,4 +1593,5 @@ namespace Castle.DynamicProxy
 			return ProxyBuilder.CreateClassProxyTypeWithTarget(classToProxy, additionalInterfacesToProxy, options);
 		}
 	}
+#pragma warning restore 3001
 }

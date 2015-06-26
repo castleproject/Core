@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE // Until support for other platforms is verified
 namespace Castle.Core.Internal
 {
 	using System;

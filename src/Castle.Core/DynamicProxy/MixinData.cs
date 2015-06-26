@@ -16,6 +16,9 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections.Generic;
+#if NETCORE
+	using System.Reflection;
+#endif
 
 	public class MixinData
 	{

@@ -63,6 +63,7 @@ namespace Castle.DynamicProxy.Generators
 			var invocationType = invocation;
 
 			Trace.Assert(MethodToOverride.IsGenericMethod == invocationType.GetTypeInfo().IsGenericTypeDefinition);
+
 			var genericArguments = Type.EmptyTypes;
 
 			var constructor = invocation.GetConstructors()[0];
@@ -179,7 +180,7 @@ namespace Castle.DynamicProxy.Generators
 				new MethodInvocationExpression(invocationLocal,
 				                               InvocationMethods.SetGenericMethodArguments,
 				                               new ReferenceExpression(
-					                               genericParamsArrayLocal)));
+					                                genericParamsArrayLocal)));
 		}
 
 		private Expression[] GetCtorArguments(ClassEmitter @class, Expression proxiedMethodTokenExpression, TypeReference[] dereferencedArguments, Expression methodInterceptors)

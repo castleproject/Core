@@ -1,0 +1,10 @@
+{
+    "projects": [
+        "wrap"
+    ],
+    "sdk": {
+        "version": "1.0.0-beta5",
+        "runtime": "coreclr",
+        "architecture": "x86"
+    }
+}

@@ -185,7 +185,11 @@ namespace Castle.DynamicProxy
 		/// <returns></returns>
 		public static byte[] GetKeyPair()
 		{
+#if NETCORE
+			using (var stream = typeof(ModuleScope).GetTypeInfo().Assembly.GetManifestResourceStream("Castle.DynamicProxy.DynProxy.snk"))
+#else
 			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Castle.DynamicProxy.DynProxy.snk"))
+#endif
 			{
 				if (stream == null)
 				{
@@ -337,7 +341,7 @@ namespace Castle.DynamicProxy
 		{
 			var assemblyName = GetAssemblyName(signStrongName);
 			var moduleName = signStrongName ? StrongNamedModuleName : WeakNamedModuleName;
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE
 			if (savePhysicalAssembly)
 			{
 				AssemblyBuilder assemblyBuilder;
@@ -365,11 +369,16 @@ namespace Castle.DynamicProxy
 			else
 #endif
 			{
+#if NETCORE
+				var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+				var module = assemblyBuilder.DefineDynamicModule(moduleName);
+#else
 				var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
 					assemblyName,
 					AssemblyBuilderAccess.Run);
 
 				var module = assemblyBuilder.DefineDynamicModule(moduleName, false);
+#endif
 				return module;
 			}
 		}
@@ -382,7 +391,7 @@ namespace Castle.DynamicProxy
 			                   		Name = signStrongName ? strongAssemblyName : weakAssemblyName
 			                   	};
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE // .NET Core does not support StrongNaming.
 			if (signStrongName)
 			{
 				byte[] keyPairStream = GetKeyPair();
@@ -395,7 +404,7 @@ namespace Castle.DynamicProxy
 			return assemblyName;
 		}
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE
 		/// <summary>
 		///   Saves the generated assembly with the name and directory information given when this <see cref = "ModuleScope" /> instance was created (or with
 		///   the <see cref = "DEFAULT_FILE_NAME" /> and current directory if none was given).

@@ -24,6 +24,7 @@ namespace Castle.Core.Internal
 	/// </summary>
 	public static class AttributesUtil
 	{
+#if !NETCORE  // .NET Core lacks support for ICustomAttributeProvider
 		/// <summary>
 		///   Gets the attribute.
 		/// </summary>
@@ -138,5 +139,29 @@ namespace Castle.Core.Internal
 		{
 			return GetAttributes<T>(member).FirstOrDefault() != null;
 		}
+
+#else
+
+		/// <summary>
+		///   Gets the attributes. Does not consider inherited attributes!
+		/// </summary>
+		/// <param name = "member">The member.</param>
+		/// <returns>The member attributes.</returns>
+		public static T[] GetAttributes<T>(PropertyInfo member) where T : class
+		{
+			if (typeof(T) != typeof(object))
+			{
+				return  member.GetCustomAttributes(typeof(T), false).Cast<T>().ToArray();
+			}
+			return member.GetCustomAttributes(false).Cast<T>().ToArray();
+		}
+
+		public static object[] GetInterfaceAttributes(Type type)
+		{
+			return InterfaceAttributeUtil.GetAttributes(type, true);
+		}
+
+#endif
 	}
+
 }

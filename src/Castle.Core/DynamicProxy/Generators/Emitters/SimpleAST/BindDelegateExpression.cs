@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
+	using Castle.DynamicProxy.Internal;
 	using System;
 	using System.Reflection;
 	using System.Reflection.Emit;
@@ -30,10 +31,18 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			delegateCtor = @delegate.GetConstructors()[0];
 			this.methodToBindTo = methodToBindTo;
 			if (@delegate.GetTypeInfo().IsGenericTypeDefinition)
+
 			{
+#if NETCORE
+				var genericTypeParameters = genericTypeParams.AsTypeArray();
+				var closedDelegate = @delegate.MakeGenericType(genericTypeParameters);
+				delegateCtor = TypeBuilder.GetConstructor(closedDelegate, delegateCtor);
+				this.methodToBindTo = methodToBindTo.MakeGenericMethod(genericTypeParameters);
+#else
 				var closedDelegate = @delegate.MakeGenericType(genericTypeParams);
 				delegateCtor = TypeBuilder.GetConstructor(closedDelegate, delegateCtor);
 				this.methodToBindTo = methodToBindTo.MakeGenericMethod(genericTypeParams);
+#endif
 			}
 			this.owner = owner;
 		}

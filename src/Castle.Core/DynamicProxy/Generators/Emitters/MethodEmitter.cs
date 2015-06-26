@@ -111,7 +111,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			get
 			{
+#if NETCORE
+				var attributes = builder.MethodImplementationFlags;
+#else
 				var attributes = builder.GetMethodImplementationFlags();
+#endif
 				return (attributes & MethodImplAttributes.Runtime) != 0;
 			}
 		}
@@ -171,7 +175,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 						 */
 						continue;
 					}
-					
 					parameterBuilder.SetConstant(parameter.DefaultValue);
 				}
 #endif
@@ -188,7 +191,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			builder.SetSignature(
 				returnType,
-#if SILVERLIGHT
+#if SILVERLIGHT || NETCORE
 				null,
 				null,
 #else
@@ -196,7 +199,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				returnParameter.GetOptionalCustomModifiers(),
 #endif
 				parameters,
-#if SILVERLIGHT
+#if SILVERLIGHT || NETCORE
 				null,
 				null
 #else

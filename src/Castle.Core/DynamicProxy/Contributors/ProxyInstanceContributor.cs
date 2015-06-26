@@ -28,6 +28,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Serialization;
 #endif
 	using Castle.DynamicProxy.Tokens;
+	using System.Reflection;
 
 	public abstract class ProxyInstanceContributor : ITypeContributor
 	{
@@ -53,7 +54,11 @@ namespace Castle.DynamicProxy.Contributors
 			ImplementGetObjectData(@class);
 #endif
 			ImplementProxyTargetAccessor(@class, interceptors);
+#if NETCORE
+			foreach (var attribute in targetType.GetTypeInfo().GetNonInheritableAttributes())
+#else
 			foreach (var attribute in targetType.GetNonInheritableAttributes())
+#endif
 			{
 				@class.DefineCustomAttribute(attribute);
 			}

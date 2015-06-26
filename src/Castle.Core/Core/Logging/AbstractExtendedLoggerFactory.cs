@@ -17,7 +17,7 @@ namespace Castle.Core.Logging
 	using System;
 	using System.IO;
 
-#if SILVERLIGHT
+#if SILVERLIGHT || NETCORE
 	public abstract class AbstractExtendedLoggerFactory : IExtendedLoggerFactory
 #else
 	public abstract class AbstractExtendedLoggerFactory : MarshalByRefObject, IExtendedLoggerFactory
@@ -107,7 +107,11 @@ namespace Castle.Core.Logging
 			}
 			else
 			{
+#if NETCORE
+				result = new FileInfo(Path.Combine(AppContext.BaseDirectory, fileName));
+#else
 				result = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName));
+#endif
 			}
 
 			return result;

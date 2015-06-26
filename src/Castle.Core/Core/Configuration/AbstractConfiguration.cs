@@ -15,6 +15,9 @@
 namespace Castle.Core.Configuration
 {
 	using System;
+#if NETCORE
+	using System.Globalization;
+#endif
 	using System.Threading;
 
 	/// <summary>
@@ -88,7 +91,12 @@ namespace Castle.Core.Configuration
 
 			try
 			{
+#if NETCORE
+				return Convert.ChangeType(Value, type, CultureInfo.CurrentCulture);
+#else
 				return Convert.ChangeType(Value, type, Thread.CurrentThread.CurrentCulture);
+#endif
+
 			}
 			catch (InvalidCastException)
 			{

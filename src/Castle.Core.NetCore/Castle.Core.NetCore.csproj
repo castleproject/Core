@@ -1,0 +1,1352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <RootPath Condition=" '$(RootPath)' == '' ">$(MSBuildProjectDirectory)\..\..</RootPath>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9C846611-F9BF-455D-A92F-5092657DB944}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Castle.Core</RootNamespace>
+    <!-- Currently wrapper projects with matching name to Nuget feed can have collisions.  Investigating...-->
+    <AssemblyName>Castle.Core</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <!-- Having some challenges with build integration, so including duplicate config and Netcore-config bits -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\build\NetCore\NetCore-Debug\bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NETCORE;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NetCore-Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\build\NetCore\NetCore-Debug\bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NETCORE;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NetCore-Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\build\NetCore\NetCore-Release\bin\</OutputPath>
+    <DefineConstants>TRACE;NETCORE;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\build\NetCore\NetCore-Release\bin\</OutputPath>
+    <DefineConstants>TRACE;NETCORE;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>CastleKey.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50-Release|AnyCPU'">
+    <OutputPath>..\..\build\SL50\SL50-Release\bin\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\AbstractDictionaryAdapter.cs">
+      <Link>Components.DictionaryAdapter\AbstractDictionaryAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\AbstractDictionaryAdapterVisitor.cs">
+      <Link>Components.DictionaryAdapter\AbstractDictionaryAdapterVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\ComponentAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\ComponentAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\DictionaryAdapterAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\DictionaryAdapterAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\DictionaryBehaviorAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\DictionaryBehaviorAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\FetchAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\FetchAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\GroupAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\GroupAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\IfExistsAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\IfExistsAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\KeyAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\KeyAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\KeyPrefixAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\KeyPrefixAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\KeySubstitutionAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\KeySubstitutionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\MultiLevelEditAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\MultiLevelEditAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\NewGuidAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\NewGuidAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\OnDemandAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\OnDemandAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\ReferenceAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\ReferenceAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\RemoveIfAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\RemoveIfAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\RemoveIfEmptyAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\RemoveIfEmptyAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\StringFormatAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\StringFormatAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\StringListAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\StringListAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\StringStorageAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\StringStorageAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\StringValuesAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\StringValuesAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\SuppressNotificationsAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\SuppressNotificationsAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\TypeKeyPrefixAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\TypeKeyPrefixAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\VolatileAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\VolatileAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\XmlDefaultsAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\XmlDefaultsAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\XmlNamespaceAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\XmlNamespaceAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\XPathAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\XPathAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\XPathFunctionAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\XPathFunctionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Attributes\XPathVariableAttribute.cs">
+      <Link>Components.DictionaryAdapter\Attributes\XPathVariableAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\CascadingDictionaryAdapter.cs">
+      <Link>Components.DictionaryAdapter\CascadingDictionaryAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\DefaultPropertyGetter.cs">
+      <Link>Components.DictionaryAdapter\DefaultPropertyGetter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\DictionaryAdapterBase.Coerce.cs">
+      <Link>Components.DictionaryAdapter\DictionaryAdapterBase.Coerce.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\DictionaryAdapterBase.Copy.cs">
+      <Link>Components.DictionaryAdapter\DictionaryAdapterBase.Copy.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\DictionaryAdapterBase.Create.cs">
+      <Link>Components.DictionaryAdapter\DictionaryAdapterBase.Create.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\DictionaryAdapterBase.cs">
+      <Link>Components.DictionaryAdapter\DictionaryAdapterBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\DictionaryAdapterBase.Edit.cs">
+      <Link>Components.DictionaryAdapter\DictionaryAdapterBase.Edit.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\DictionaryAdapterBase.Notify.cs">
+      <Link>Components.DictionaryAdapter\DictionaryAdapterBase.Notify.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\DictionaryAdapterBase.Validate.cs">
+      <Link>Components.DictionaryAdapter\DictionaryAdapterBase.Validate.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\DictionaryAdapterExtensions.cs">
+      <Link>Components.DictionaryAdapter\DictionaryAdapterExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\DictionaryAdapterFactory.cs">
+      <Link>Components.DictionaryAdapter\DictionaryAdapterFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\DictionaryAdapterInstance.cs">
+      <Link>Components.DictionaryAdapter\DictionaryAdapterInstance.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\DictionaryAdapterMeta.cs">
+      <Link>Components.DictionaryAdapter\DictionaryAdapterMeta.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\DictionaryValidateGroup.cs">
+      <Link>Components.DictionaryAdapter\DictionaryValidateGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\DynamicDictionary.cs">
+      <Link>Components.DictionaryAdapter\DynamicDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\GenericDictionaryAdapter.cs">
+      <Link>Components.DictionaryAdapter\GenericDictionaryAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryAdapter.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryAdapterFactory.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryAdapterFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryAdapterVisitor.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryAdapterVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryBehavior.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryBehaviorBuilder.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryBehaviorBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryCoerceStrategy.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryCoerceStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryCopyStrategy.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryCopyStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryCreate.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryCreate.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryCreateStrategy.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryCreateStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryEdit.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryEdit.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryEqualityHashCodeStrategy.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryEqualityHashCodeStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryInitializer.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryKeyBuilder.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryKeyBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryMetaInitializer.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryMetaInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryNotify.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryNotify.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryPropertyGetter.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryPropertyGetter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryPropertySetter.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryPropertySetter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryReferenceManager.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryReferenceManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryValidate.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryValidate.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IDictionaryValidator.cs">
+      <Link>Components.DictionaryAdapter\IDictionaryValidator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\IPropertyDescriptorInitializer.cs">
+      <Link>Components.DictionaryAdapter\IPropertyDescriptorInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\MemberwiseEqualityHashCodeStrategy.cs">
+      <Link>Components.DictionaryAdapter\MemberwiseEqualityHashCodeStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\NameValueCollectionAdapter.cs">
+      <Link>Components.DictionaryAdapter\NameValueCollectionAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\PropertyChangedEventArgsEx.cs">
+      <Link>Components.DictionaryAdapter\PropertyChangedEventArgsEx.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\PropertyChangingEventArgsEx.cs">
+      <Link>Components.DictionaryAdapter\PropertyChangingEventArgsEx.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\PropertyDescriptor.cs">
+      <Link>Components.DictionaryAdapter\PropertyDescriptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\BindingList.cs">
+      <Link>Components.DictionaryAdapter\Util\BindingList.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\BindingListInitializer.cs">
+      <Link>Components.DictionaryAdapter\Util\BindingListInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\DynamicValue.cs">
+      <Link>Components.DictionaryAdapter\Util\DynamicValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\DynamicValueDelegate.cs">
+      <Link>Components.DictionaryAdapter\Util\DynamicValueDelegate.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\EditableBindingList.cs">
+      <Link>Components.DictionaryAdapter\Util\EditableBindingList.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\EditableList.cs">
+      <Link>Components.DictionaryAdapter\Util\EditableList.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\IBindingList.cs">
+      <Link>Components.DictionaryAdapter\Util\IBindingList.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\IBindingListSource.cs">
+      <Link>Components.DictionaryAdapter\Util\IBindingListSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\ICollectionAdapter.cs">
+      <Link>Components.DictionaryAdapter\Util\ICollectionAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\ICollectionAdapterObserver.cs">
+      <Link>Components.DictionaryAdapter\Util\ICollectionAdapterObserver.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\ICollectionProjection.cs">
+      <Link>Components.DictionaryAdapter\Util\ICollectionProjection.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\ICondition.cs">
+      <Link>Components.DictionaryAdapter\Util\ICondition.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\IDynamicValue.cs">
+      <Link>Components.DictionaryAdapter\Util\IDynamicValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\IValueInitializer.cs">
+      <Link>Components.DictionaryAdapter\Util\IValueInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\IVirtual.cs">
+      <Link>Components.DictionaryAdapter\Util\IVirtual.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\IVirtualSite.cs">
+      <Link>Components.DictionaryAdapter\Util\IVirtualSite.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\IVirtualTarget.cs">
+      <Link>Components.DictionaryAdapter\Util\IVirtualTarget.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\ListProjection.cs">
+      <Link>Components.DictionaryAdapter\Util\ListProjection.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\ListProjectionDebugView.cs">
+      <Link>Components.DictionaryAdapter\Util\ListProjectionDebugView.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\SetProjection.cs">
+      <Link>Components.DictionaryAdapter\Util\SetProjection.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\VirtualObject.cs">
+      <Link>Components.DictionaryAdapter\Util\VirtualObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Util\VirtualSite.cs">
+      <Link>Components.DictionaryAdapter\Util\VirtualSite.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Core\DefaultXmlReferenceFormat.cs">
+      <Link>Components.DictionaryAdapter\Xml\Core\DefaultXmlReferenceFormat.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Core\IReferenceSet.cs">
+      <Link>Components.DictionaryAdapter\Xml\Core\IReferenceSet.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Core\IXmlReferenceFormat.cs">
+      <Link>Components.DictionaryAdapter\Xml\Core\IXmlReferenceFormat.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Core\XmlAdapter.cs">
+      <Link>Components.DictionaryAdapter\Xml\Core\XmlAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Core\XmlMetadata.cs">
+      <Link>Components.DictionaryAdapter\Xml\Core\XmlMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Core\XmlMetadataBehavior.cs">
+      <Link>Components.DictionaryAdapter\Xml\Core\XmlMetadataBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Core\XmlReferenceManager.cs">
+      <Link>Components.DictionaryAdapter\Xml\Core\XmlReferenceManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Accessors\IXmlAccessor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Accessors\IXmlAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Accessors\IXmlBehaviorSemantics.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Accessors\IXmlBehaviorSemantics.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Accessors\IXmlCollectionAccessor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Accessors\IXmlCollectionAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Accessors\IXmlPropertyAccessor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Accessors\IXmlPropertyAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Accessors\XmlAccessor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Accessors\XmlAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Accessors\XmlAccessorFactory.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Accessors\XmlAccessorFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Accessors\XmlArrayBehaviorAccessor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Accessors\XmlArrayBehaviorAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Accessors\XmlAttributeBehaviorAccessor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Accessors\XmlAttributeBehaviorAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Accessors\XmlDefaultBehaviorAccessor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Accessors\XmlDefaultBehaviorAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Accessors\XmlElementBehaviorAccessor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Accessors\XmlElementBehaviorAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Accessors\XmlIgnoreBehaviorAccessor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Accessors\XmlIgnoreBehaviorAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Accessors\XmlNodeAccessor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Accessors\XmlNodeAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Accessors\XmlSelfAccessor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Accessors\XmlSelfAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Accessors\XPathBehaviorAccessor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Accessors\XPathBehaviorAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Collections\XmlCollectionAdapter.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Collections\XmlCollectionAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Collections\XmlCollectionItem.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Collections\XmlCollectionItem.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Collections\XmlNodeList.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Collections\XmlNodeList.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Collections\XmlNodeSet.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Collections\XmlNodeSet.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\CursorFlags.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\CursorFlags.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlContext.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlCursor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlCursor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlIterator.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlIterator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlNamespaceSource.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlNamespaceSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlNode.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlNodeSource.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\IXmlNodeSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlContext.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlContextBase.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlContextBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlExtensions.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlName.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlName.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlNameComparer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlNameComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlNodeBase.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlNodeBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlPositionComparer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlPositionComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlSelfCursor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\Base\XmlSelfCursor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\SystemXml\SysXmlCursor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\SystemXml\SysXmlCursor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\SystemXml\SysXmlExtensions.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\SystemXml\SysXmlExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\SystemXml\SysXmlNode.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\SystemXml\SysXmlNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\SystemXml\SysXmlSubtreeIterator.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\SystemXml\SysXmlSubtreeIterator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\CompiledXPath.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\CompiledXPath.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\CompiledXPathNode.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\CompiledXPathNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\CompiledXPathStep.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\CompiledXPathStep.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\XPathBufferedNodeIterator.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\XPathBufferedNodeIterator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\XPathCompiler.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\XPathCompiler.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\XPathContext.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\XPathContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\XPathExtensions.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\XPathExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\XPathMutableCursor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\XPathMutableCursor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\XPathNode.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\XPathNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\XPathReadOnlyCursor.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Cursors\XPath\XPathReadOnlyCursor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Namespaces\Wsdl.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Namespaces\Wsdl.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Namespaces\Xmlns.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Namespaces\Xmlns.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Namespaces\XRef.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Namespaces\XRef.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Namespaces\Xsd.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Namespaces\Xsd.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Namespaces\Xsi.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Namespaces\Xsi.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlArraySerializer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlArraySerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlCollectionSerializer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlCollectionSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlComponentSerializer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlComponentSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlCustomSerializer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlCustomSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlDefaultSerializer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlDefaultSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlDynamicSerializer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlDynamicSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlEnumerationSerializer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlEnumerationSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlListSerializer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlListSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlSetSerializer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlSetSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlSimpleSerializer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlSimpleSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlStringSerializer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlStringSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlTypeKind.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlTypeKind.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlTypeSerializer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlTypeSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlTypeSerializerCache.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlTypeSerializerCache.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Serializers\XmlXmlNodeSerializer.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Serializers\XmlXmlNodeSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Types\IXmlIdentity.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Types\IXmlIdentity.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Types\IXmlIncludedType.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Types\IXmlIncludedType.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Types\IXmlIncludedTypeMap.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Types\IXmlIncludedTypeMap.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Types\IXmlKnownType.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Types\IXmlKnownType.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Types\IXmlKnownTypeMap.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Types\IXmlKnownTypeMap.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Types\XmlIncludedType.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Types\XmlIncludedType.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Types\XmlIncludedTypeSet.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Types\XmlIncludedTypeSet.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Types\XmlKnownType.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Types\XmlKnownType.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Types\XmlKnownTypeSet.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Types\XmlKnownTypeSet.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Utilities\DictionaryAdapterExtensions.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Utilities\DictionaryAdapterExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Utilities\Error.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Utilities\Error.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Utilities\IConfigurable.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Utilities\IConfigurable.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Utilities\IRealizable.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Utilities\IRealizable.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Utilities\SingletonDispenser.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Utilities\SingletonDispenser.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Utilities\StringExtensions.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Utilities\StringExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Utilities\Try.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Utilities\Try.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Utilities\TypeExtensions.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Utilities\TypeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Utilities\XmlSubtreeReader.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Utilities\XmlSubtreeReader.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Components.DictionaryAdapter\Xml\Internal\Utilities\XmlSubtreeWriter.cs">
+      <Link>Components.DictionaryAdapter\Xml\Internal\Utilities\XmlSubtreeWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Configuration\AbstractConfiguration.cs">
+      <Link>Core\Configuration\AbstractConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Configuration\ConfigurationAttributeCollection.cs">
+      <Link>Core\Configuration\ConfigurationAttributeCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Configuration\ConfigurationCollection.cs">
+      <Link>Core\Configuration\ConfigurationCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Configuration\IConfiguration.cs">
+      <Link>Core\Configuration\IConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Configuration\MutableConfiguration.cs">
+      <Link>Core\Configuration\MutableConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Configuration\Xml\XmlConfigurationDeserializer.cs">
+      <Link>Core\Configuration\Xml\XmlConfigurationDeserializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Extensions\SimpleConverter.cs">
+      <Link>Core\Extensions\SimpleConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\AttributesUtil.cs">
+      <Link>Core\Internal\AttributesUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\CollectionExtensions.cs">
+      <Link>Core\Internal\CollectionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\ExceptionMessageBuilder.cs">
+      <Link>Core\Internal\ExceptionMessageBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\ILockHolder.cs">
+      <Link>Core\Internal\ILockHolder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\InterfaceAttributeUtil.cs">
+      <Link>Core\Internal\InterfaceAttributeUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\InternalsVisible.cs">
+      <Link>Core\Internal\InternalsVisible.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\IUpgradeableLockHolder.cs">
+      <Link>Core\Internal\IUpgradeableLockHolder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\Lock.cs">
+      <Link>Core\Internal\Lock.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\MonitorLock.cs">
+      <Link>Core\Internal\MonitorLock.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\MonitorLockHolder.cs">
+      <Link>Core\Internal\MonitorLockHolder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\MonitorUpgradeableLockHolder.cs">
+      <Link>Core\Internal\MonitorUpgradeableLockHolder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\NoOpLock.cs">
+      <Link>Core\Internal\NoOpLock.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\NoOpUpgradeableLock.cs">
+      <Link>Core\Internal\NoOpUpgradeableLock.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\PermissionUtil.cs">
+      <Link>Core\Internal\PermissionUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\SlimReadLockHolder.cs">
+      <Link>Core\Internal\SlimReadLockHolder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\SlimReadWriteLock.cs">
+      <Link>Core\Internal\SlimReadWriteLock.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\SlimUpgradeableReadLockHolder.cs">
+      <Link>Core\Internal\SlimUpgradeableReadLockHolder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\SlimWriteLockHolder.cs">
+      <Link>Core\Internal\SlimWriteLockHolder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\TypeExtensions.cs">
+      <Link>Core\Internal\TypeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\WeakKey.cs">
+      <Link>Core\Internal\WeakKey.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\WeakKeyComparer.cs">
+      <Link>Core\Internal\WeakKeyComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Internal\WeakKeyDictionary.cs">
+      <Link>Core\Internal\WeakKeyDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\IServiceEnabledComponent.cs">
+      <Link>Core\IServiceEnabledComponent.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\IServiceProviderEx.cs">
+      <Link>Core\IServiceProviderEx.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\IServiceProviderExAccessor.cs">
+      <Link>Core\IServiceProviderExAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\AbstractExtendedLoggerFactory.cs">
+      <Link>Core\Logging\AbstractExtendedLoggerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\AbstractLoggerFactory.cs">
+      <Link>Core\Logging\AbstractLoggerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\ConsoleFactory.cs">
+      <Link>Core\Logging\ConsoleFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\ConsoleLogger.cs">
+      <Link>Core\Logging\ConsoleLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\DiagnosticsLogger.cs">
+      <Link>Core\Logging\DiagnosticsLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\DiagnosticsLoggerFactory.cs">
+      <Link>Core\Logging\DiagnosticsLoggerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\IContextProperties.cs">
+      <Link>Core\Logging\IContextProperties.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\IContextStack.cs">
+      <Link>Core\Logging\IContextStack.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\IContextStacks.cs">
+      <Link>Core\Logging\IContextStacks.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\IExtendedLogger.cs">
+      <Link>Core\Logging\IExtendedLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\IExtendedLoggerFactory.cs">
+      <Link>Core\Logging\IExtendedLoggerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\ILogger.cs">
+      <Link>Core\Logging\ILogger.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\ILoggerFactory.cs">
+      <Link>Core\Logging\ILoggerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\LevelFilteredLogger.cs">
+      <Link>Core\Logging\LevelFilteredLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\LoggerException.cs">
+      <Link>Core\Logging\LoggerException.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\LoggerLevel.cs">
+      <Link>Core\Logging\LoggerLevel.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\NullLogFactory.cs">
+      <Link>Core\Logging\NullLogFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\NullLogger.cs">
+      <Link>Core\Logging\NullLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\StreamLogger.cs">
+      <Link>Core\Logging\StreamLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\StreamLoggerFactory.cs">
+      <Link>Core\Logging\StreamLoggerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\TraceLogger.cs">
+      <Link>Core\Logging\TraceLogger.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Logging\TraceLoggerFactory.cs">
+      <Link>Core\Logging\TraceLoggerFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Pair.cs">
+      <Link>Core\Pair.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\ProxyServices.cs">
+      <Link>Core\ProxyServices.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\ReferenceEqualityComparer.cs">
+      <Link>Core\ReferenceEqualityComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\ReflectionBasedDictionaryAdapter.cs">
+      <Link>Core\ReflectionBasedDictionaryAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\AbstractResource.cs">
+      <Link>Core\Resource\AbstractResource.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\AbstractStreamResource.cs">
+      <Link>Core\Resource\AbstractStreamResource.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\AssemblyBundleResource.cs">
+      <Link>Core\Resource\AssemblyBundleResource.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\AssemblyResource.cs">
+      <Link>Core\Resource\AssemblyResource.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\AssemblyResourceFactory.cs">
+      <Link>Core\Resource\AssemblyResourceFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\ConfigResource.cs">
+      <Link>Core\Resource\ConfigResource.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\ConfigResourceFactory.cs">
+      <Link>Core\Resource\ConfigResourceFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\CustomUri.cs">
+      <Link>Core\Resource\CustomUri.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\FileResource.cs">
+      <Link>Core\Resource\FileResource.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\FileResourceFactory.cs">
+      <Link>Core\Resource\FileResourceFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\IResource.cs">
+      <Link>Core\Resource\IResource.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\IResourceFactory.cs">
+      <Link>Core\Resource\IResourceFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\ResourceException.cs">
+      <Link>Core\Resource\ResourceException.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\StaticContentResource.cs">
+      <Link>Core\Resource\StaticContentResource.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\UncResource.cs">
+      <Link>Core\Resource\UncResource.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\Resource\UncResourceFactory.cs">
+      <Link>Core\Resource\UncResourceFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Core\StringObjectDictionaryAdapter.cs">
+      <Link>Core\StringObjectDictionaryAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\AbstractInvocation.cs">
+      <Link>DynamicProxy\AbstractInvocation.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\AllMethodsHook.cs">
+      <Link>DynamicProxy\AllMethodsHook.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\ClassMembersCollector.cs">
+      <Link>DynamicProxy\Contributors\ClassMembersCollector.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\ClassProxyInstanceContributor.cs">
+      <Link>DynamicProxy\Contributors\ClassProxyInstanceContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\ClassProxyTargetContributor.cs">
+      <Link>DynamicProxy\Contributors\ClassProxyTargetContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\ClassProxyWithTargetInstanceContributor.cs">
+      <Link>DynamicProxy\Contributors\ClassProxyWithTargetInstanceContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\ClassProxyWithTargetTargetContributor.cs">
+      <Link>DynamicProxy\Contributors\ClassProxyWithTargetTargetContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\CompositeTypeContributor.cs">
+      <Link>DynamicProxy\Contributors\CompositeTypeContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\DelegateProxyTargetContributor.cs">
+      <Link>DynamicProxy\Contributors\DelegateProxyTargetContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\Delegates.cs">
+      <Link>DynamicProxy\Contributors\Delegates.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\DelegateTypeGenerator.cs">
+      <Link>DynamicProxy\Contributors\DelegateTypeGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\ForwardingMethodGenerator.cs">
+      <Link>DynamicProxy\Contributors\ForwardingMethodGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\InterfaceMembersCollector.cs">
+      <Link>DynamicProxy\Contributors\InterfaceMembersCollector.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\InterfaceMembersOnClassCollector.cs">
+      <Link>DynamicProxy\Contributors\InterfaceMembersOnClassCollector.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\InterfaceProxyInstanceContributor.cs">
+      <Link>DynamicProxy\Contributors\InterfaceProxyInstanceContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\InterfaceProxyTargetContributor.cs">
+      <Link>DynamicProxy\Contributors\InterfaceProxyTargetContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\InterfaceProxyWithOptionalTargetContributor.cs">
+      <Link>DynamicProxy\Contributors\InterfaceProxyWithOptionalTargetContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\InterfaceProxyWithoutTargetContributor.cs">
+      <Link>DynamicProxy\Contributors\InterfaceProxyWithoutTargetContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\InterfaceProxyWithTargetInterfaceTargetContributor.cs">
+      <Link>DynamicProxy\Contributors\InterfaceProxyWithTargetInterfaceTargetContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\InvocationWithDelegateContributor.cs">
+      <Link>DynamicProxy\Contributors\InvocationWithDelegateContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\InvocationWithGenericDelegateContributor.cs">
+      <Link>DynamicProxy\Contributors\InvocationWithGenericDelegateContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\ITypeContributor.cs">
+      <Link>DynamicProxy\Contributors\ITypeContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\MembersCollector.cs">
+      <Link>DynamicProxy\Contributors\MembersCollector.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\MinimialisticMethodGenerator.cs">
+      <Link>DynamicProxy\Contributors\MinimialisticMethodGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\MixinContributor.cs">
+      <Link>DynamicProxy\Contributors\MixinContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\OptionallyForwardingMethodGenerator.cs">
+      <Link>DynamicProxy\Contributors\OptionallyForwardingMethodGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\ProxyInstanceContributor.cs">
+      <Link>DynamicProxy\Contributors\ProxyInstanceContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Contributors\WrappedClassMembersCollector.cs">
+      <Link>DynamicProxy\Contributors\WrappedClassMembersCollector.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\DefaultProxyBuilder.cs">
+      <Link>DynamicProxy\DefaultProxyBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\AttributeDisassembler.cs">
+      <Link>DynamicProxy\Generators\AttributeDisassembler.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\AttributesToAvoidReplicating.cs">
+      <Link>DynamicProxy\Generators\AttributesToAvoidReplicating.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\BaseProxyGenerator.cs">
+      <Link>DynamicProxy\Generators\BaseProxyGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\CacheKey.cs">
+      <Link>DynamicProxy\Generators\CacheKey.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\ClassProxyGenerator.cs">
+      <Link>DynamicProxy\Generators\ClassProxyGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\ClassProxyWithTargetGenerator.cs">
+      <Link>DynamicProxy\Generators\ClassProxyWithTargetGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\CompositionInvocationTypeGenerator.cs">
+      <Link>DynamicProxy\Generators\CompositionInvocationTypeGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\DelegateMembersCollector.cs">
+      <Link>DynamicProxy\Generators\DelegateMembersCollector.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\DelegateProxyGenerationHook.cs">
+      <Link>DynamicProxy\Generators\DelegateProxyGenerationHook.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\DelegateProxyGenerator.cs">
+      <Link>DynamicProxy\Generators\DelegateProxyGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\AbstractTypeEmitter.cs">
+      <Link>DynamicProxy\Generators\Emitters\AbstractTypeEmitter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\ArgumentsUtil.cs">
+      <Link>DynamicProxy\Generators\Emitters\ArgumentsUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\ClassEmitter.cs">
+      <Link>DynamicProxy\Generators\Emitters\ClassEmitter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\CodeBuilders\AbstractCodeBuilder.cs">
+      <Link>DynamicProxy\Generators\Emitters\CodeBuilders\AbstractCodeBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\CodeBuilders\ConstructorCodeBuilder.cs">
+      <Link>DynamicProxy\Generators\Emitters\CodeBuilders\ConstructorCodeBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\CodeBuilders\MethodCodeBuilder.cs">
+      <Link>DynamicProxy\Generators\Emitters\CodeBuilders\MethodCodeBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\ConstructorCollection.cs">
+      <Link>DynamicProxy\Generators\Emitters\ConstructorCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\ConstructorEmitter.cs">
+      <Link>DynamicProxy\Generators\Emitters\ConstructorEmitter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\EventCollection.cs">
+      <Link>DynamicProxy\Generators\Emitters\EventCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\EventEmitter.cs">
+      <Link>DynamicProxy\Generators\Emitters\EventEmitter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\GenericUtil.cs">
+      <Link>DynamicProxy\Generators\Emitters\GenericUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\IMemberEmitter.cs">
+      <Link>DynamicProxy\Generators\Emitters\IMemberEmitter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\LdcOpCodesDictionary.cs">
+      <Link>DynamicProxy\Generators\Emitters\LdcOpCodesDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\LdindOpCodesDictionary.cs">
+      <Link>DynamicProxy\Generators\Emitters\LdindOpCodesDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\MethodCollection.cs">
+      <Link>DynamicProxy\Generators\Emitters\MethodCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\MethodEmitter.cs">
+      <Link>DynamicProxy\Generators\Emitters\MethodEmitter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\NestedClassCollection.cs">
+      <Link>DynamicProxy\Generators\Emitters\NestedClassCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\NestedClassEmitter.cs">
+      <Link>DynamicProxy\Generators\Emitters\NestedClassEmitter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\OpCodeUtil.cs">
+      <Link>DynamicProxy\Generators\Emitters\OpCodeUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\PropertiesCollection.cs">
+      <Link>DynamicProxy\Generators\Emitters\PropertiesCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\PropertyEmitter.cs">
+      <Link>DynamicProxy\Generators\Emitters\PropertyEmitter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\AddressOfReferenceExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\AddressOfReferenceExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\ArgumentReference.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\ArgumentReference.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\AssignArgumentStatement.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\AssignArgumentStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\AssignArrayStatement.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\AssignArrayStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\AssignStatement.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\AssignStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\AsTypeReference.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\AsTypeReference.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\BindDelegateExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\BindDelegateExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\ByRefReference.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\ByRefReference.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\ConstReference.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\ConstReference.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\ConstructorInvocationStatement.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\ConstructorInvocationStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\ConvertExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\ConvertExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\DefaultValueExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\DefaultValueExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\EndExceptionBlockStatement.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\EndExceptionBlockStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\Expression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\Expression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\ExpressionStatement.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\ExpressionStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\FieldReference.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\FieldReference.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\FinallyStatement.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\FinallyStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\IfNullExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\IfNullExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\IILEmitter.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\IILEmitter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\IndirectReference.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\IndirectReference.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\LiteralIntExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\LiteralIntExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\LoadArrayElementExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\LoadArrayElementExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\LoadRefArrayElementExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\LoadRefArrayElementExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\LocalReference.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\LocalReference.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\MethodInvocationExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\MethodInvocationExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\MethodTokenExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\MethodTokenExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\MultiStatementExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\MultiStatementExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\NewArrayExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\NewArrayExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\NewInstanceExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\NewInstanceExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\NopStatement.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\NopStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\NullCoalescingOperatorExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\NullCoalescingOperatorExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\NullExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\NullExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\Reference.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\Reference.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\ReferenceExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\ReferenceExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\ReferencesToObjectArrayExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\ReferencesToObjectArrayExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\ReturnStatement.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\ReturnStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\SelfReference.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\SelfReference.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\Statement.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\Statement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\ThrowStatement.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\ThrowStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\TryStatement.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\TryStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\TypeReference.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\TypeReference.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\SimpleAST\TypeTokenExpression.cs">
+      <Link>DynamicProxy\Generators\Emitters\SimpleAST\TypeTokenExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\StindOpCodesDictionary.cs">
+      <Link>DynamicProxy\Generators\Emitters\StindOpCodesDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\StrongNameUtil.cs">
+      <Link>DynamicProxy\Generators\Emitters\StrongNameUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\TypeConstructorEmitter.cs">
+      <Link>DynamicProxy\Generators\Emitters\TypeConstructorEmitter.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\GeneratorException.cs">
+      <Link>DynamicProxy\Generators\GeneratorException.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\GeneratorUtil.cs">
+      <Link>DynamicProxy\Generators\GeneratorUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\IGenerator.cs">
+      <Link>DynamicProxy\Generators\IGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\IInvocationCreationContributor.cs">
+      <Link>DynamicProxy\Generators\IInvocationCreationContributor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\INamingScope.cs">
+      <Link>DynamicProxy\Generators\INamingScope.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\InheritanceInvocationTypeGenerator.cs">
+      <Link>DynamicProxy\Generators\InheritanceInvocationTypeGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\InterfaceProxyWithoutTargetGenerator.cs">
+      <Link>DynamicProxy\Generators\InterfaceProxyWithoutTargetGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\InterfaceProxyWithTargetGenerator.cs">
+      <Link>DynamicProxy\Generators\InterfaceProxyWithTargetGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\InterfaceProxyWithTargetInterfaceGenerator.cs">
+      <Link>DynamicProxy\Generators\InterfaceProxyWithTargetInterfaceGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\InvocationTypeGenerator.cs">
+      <Link>DynamicProxy\Generators\InvocationTypeGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\MetaEvent.cs">
+      <Link>DynamicProxy\Generators\MetaEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\MetaMethod.cs">
+      <Link>DynamicProxy\Generators\MetaMethod.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\MetaProperty.cs">
+      <Link>DynamicProxy\Generators\MetaProperty.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\MetaType.cs">
+      <Link>DynamicProxy\Generators\MetaType.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\MetaTypeElement.cs">
+      <Link>DynamicProxy\Generators\MetaTypeElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\MethodFinder.cs">
+      <Link>DynamicProxy\Generators\MethodFinder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\MethodGenerator.cs">
+      <Link>DynamicProxy\Generators\MethodGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\MethodSignatureComparer.cs">
+      <Link>DynamicProxy\Generators\MethodSignatureComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\MethodWithInvocationGenerator.cs">
+      <Link>DynamicProxy\Generators\MethodWithInvocationGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\NamingScope.cs">
+      <Link>DynamicProxy\Generators\NamingScope.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Generators\TypeElementCollection.cs">
+      <Link>DynamicProxy\Generators\TypeElementCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\IAttributeDisassembler.cs">
+      <Link>DynamicProxy\IAttributeDisassembler.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\IChangeProxyTarget.cs">
+      <Link>DynamicProxy\IChangeProxyTarget.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\IInterceptor.cs">
+      <Link>DynamicProxy\IInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\IInterceptorSelector.cs">
+      <Link>DynamicProxy\IInterceptorSelector.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\IInvocation.cs">
+      <Link>DynamicProxy\IInvocation.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Internal\AttributeUtil.cs">
+      <Link>DynamicProxy\Internal\AttributeUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Internal\CompositionInvocation.cs">
+      <Link>DynamicProxy\Internal\CompositionInvocation.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Internal\InheritanceInvocation.cs">
+      <Link>DynamicProxy\Internal\InheritanceInvocation.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Internal\InternalsUtil.cs">
+      <Link>DynamicProxy\Internal\InternalsUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Internal\InvocationHelper.cs">
+      <Link>DynamicProxy\Internal\InvocationHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Internal\TypeUtil.cs">
+      <Link>DynamicProxy\Internal\TypeUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\InvalidMixinConfigurationException.cs">
+      <Link>DynamicProxy\InvalidMixinConfigurationException.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\InvalidProxyConstructorArgumentsException.cs">
+      <Link>DynamicProxy\InvalidProxyConstructorArgumentsException.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\IProxyBuilder.cs">
+      <Link>DynamicProxy\IProxyBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\IProxyGenerationHook.cs">
+      <Link>DynamicProxy\IProxyGenerationHook.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\IProxyTargetAccessor.cs">
+      <Link>DynamicProxy\IProxyTargetAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\MixinData.cs">
+      <Link>DynamicProxy\MixinData.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\ModuleScope.cs">
+      <Link>DynamicProxy\ModuleScope.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\PersistentProxyBuilder.cs">
+      <Link>DynamicProxy\PersistentProxyBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\ProxyGenerationException.cs">
+      <Link>DynamicProxy\ProxyGenerationException.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\ProxyGenerationOptions.cs">
+      <Link>DynamicProxy\ProxyGenerationOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\ProxyGenerator.cs">
+      <Link>DynamicProxy\ProxyGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\ProxyUtil.cs">
+      <Link>DynamicProxy\ProxyUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Serialization\CacheMappingsAttribute.cs">
+      <Link>DynamicProxy\Serialization\CacheMappingsAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Serialization\ProxyObjectReference.cs">
+      <Link>DynamicProxy\Serialization\ProxyObjectReference.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Serialization\ProxyTypeConstants.cs">
+      <Link>DynamicProxy\Serialization\ProxyTypeConstants.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Serialization\RemotableInvocation.cs">
+      <Link>DynamicProxy\Serialization\RemotableInvocation.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\StandardInterceptor.cs">
+      <Link>DynamicProxy\StandardInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Tokens\DelegateMethods.cs">
+      <Link>DynamicProxy\Tokens\DelegateMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Tokens\FormatterServicesMethods.cs">
+      <Link>DynamicProxy\Tokens\FormatterServicesMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Tokens\InterceptorSelectorMethods.cs">
+      <Link>DynamicProxy\Tokens\InterceptorSelectorMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Tokens\InvocationMethods.cs">
+      <Link>DynamicProxy\Tokens\InvocationMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Tokens\MethodBaseMethods.cs">
+      <Link>DynamicProxy\Tokens\MethodBaseMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Tokens\SerializationInfoMethods.cs">
+      <Link>DynamicProxy\Tokens\SerializationInfoMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Tokens\TypeBuilderMethods.cs">
+      <Link>DynamicProxy\Tokens\TypeBuilderMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Tokens\TypeMethods.cs">
+      <Link>DynamicProxy\Tokens\TypeMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\DynamicProxy\Tokens\TypeUtilMethods.cs">
+      <Link>DynamicProxy\Tokens\TypeUtilMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\Castle.Core\Properties\InternalsVisibleToTests.cs">
+      <Link>Properties\InternalsVisibleToTests.cs</Link>
+    </Compile>
+    <Compile Include="Core\Extensions\NetCoreExtensions.cs" />
+    <Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\buildscripts\CastleKey.snk" />
+    <None Include="project.json" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="$(RootPath)\Settings.proj" />
+  <Import Project="$(BuildScriptsPath)\Castle.Common.targets" />
+</Project>

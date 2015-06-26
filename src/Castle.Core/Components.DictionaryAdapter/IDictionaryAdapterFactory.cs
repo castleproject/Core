@@ -19,6 +19,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections;
 #if !SILVERLIGHT
 	using System.Collections.Specialized;
+	using System.Xml;
 	using System.Xml.XPath;
 #endif
 
@@ -61,7 +62,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// </remarks>
 		object GetAdapter(Type type, IDictionary dictionary, PropertyDescriptor descriptor);
 		
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE
 		/// <summary>
 		/// Gets a typed adapter bound to the <see cref="NameValueCollection"/>.
 		/// </summary>

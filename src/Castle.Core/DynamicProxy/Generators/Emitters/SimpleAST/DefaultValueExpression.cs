@@ -76,9 +76,15 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			{
 				return true;
 			}
+#if NETCORE
+			return ((type.GetTypeInfo().IsClass || type.GetTypeInfo().IsInterface) &&
+					type.IsGenericParameter == false &&
+					type.IsByRef == false);
+#else
 			return ((type.GetTypeInfo().IsClass || type.GetTypeInfo().IsInterface) &&
 			        type.GetTypeInfo().IsGenericParameter == false &&
 			        type.GetTypeInfo().IsByRef == false);
+#endif
 		}
 	}
 }

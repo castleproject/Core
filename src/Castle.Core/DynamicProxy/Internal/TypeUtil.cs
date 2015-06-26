@@ -42,7 +42,11 @@ namespace Castle.DynamicProxy.Internal
 				Debug.Assert(currentType != null);
 				var currentFields = currentType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 				fields.AddRange(currentFields);
+#if NETCORE
+				currentType = currentType.GetTypeInfo().BaseType;
+#else
 				currentType = currentType.BaseType;
+#endif
 			}
 
 			return fields.ToArray();
@@ -96,11 +100,13 @@ namespace Castle.DynamicProxy.Internal
 		public static Type GetClosedParameterType(this AbstractTypeEmitter type, Type parameter)
 		{
 			if (parameter.GetTypeInfo().IsGenericTypeDefinition)
+
 			{
 				return parameter.GetGenericTypeDefinition().MakeGenericType(type.GetGenericArgumentsFor(parameter));
 			}
 
 			if (parameter.GetTypeInfo().IsGenericType)
+
 			{
 				var arguments = parameter.GetGenericArguments();
 				if (CloseGenericParametersIfAny(type, arguments))
@@ -158,12 +164,22 @@ namespace Castle.DynamicProxy.Internal
 
 		public static void SetStaticField(this Type type, string fieldName, BindingFlags additionalFlags, object value)
 		{
+#if NETCORE
+			var flags = additionalFlags | BindingFlags.Static;
+
+			try
+			{
+				FieldInfo toSet = type.GetField(fieldName, flags);
+				toSet.SetValue(type, value);
+			}
+#else
 			var flags = additionalFlags | BindingFlags.Static | BindingFlags.SetField;
 
 			try
 			{
 				type.InvokeMember(fieldName, flags, null, null, new[] { value });
 			}
+#endif
 			catch (MissingFieldException e)
 			{
 				throw new ProxyGenerationException(
@@ -172,6 +188,7 @@ namespace Castle.DynamicProxy.Internal
 						fieldName,
 						type), e);
 			}
+#if !NETCORE // doesn't exist  here.
 			catch (TargetException e)
 			{
 				throw new ProxyGenerationException(
@@ -180,6 +197,7 @@ namespace Castle.DynamicProxy.Internal
 						fieldName,
 						type), e);
 			}
+#endif
 			catch (TargetInvocationException e) // yes, this is not documented in MSDN. Yay for documentation
 			{
 				if ((e.InnerException is TypeInitializationException) == false)
@@ -224,5 +242,18 @@ namespace Castle.DynamicProxy.Internal
 			Array.Sort(array, (l, r) => string.Compare(l.AssemblyQualifiedName, r.AssemblyQualifiedName, StringComparison.OrdinalIgnoreCase));
 			return array;
 		}
+
+#if NETCORE
+		public static Type[] AsTypeArray(this TypeInfo[] typeInfos)
+		{
+			Type[] types = new Type[typeInfos.Length];
+			for (int i = 0; i < types.Length; i++)
+			{
+				types[i] = typeInfos[i].AsType();
+			}
+			return types;
+		}
+#endif
+
 	}
 }

@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
@@ -48,7 +49,11 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected virtual MembersCollector GetCollectorForInterface(Type @interface)
 		{
+#if NETCORE
+			return new InterfaceMembersOnClassCollector(@interface, false, proxyTargetType.GetTypeInfo().GetRuntimeInterfaceMap(@interface));
+#else
 			return new InterfaceMembersOnClassCollector(@interface, false, proxyTargetType.GetInterfaceMap(@interface));
+#endif
 		}
 
 		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
