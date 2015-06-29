@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
+#if !SILVERLIGHT // Until support for other platforms is verified
 namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
@@ -81,6 +81,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
+#if __MonoCS__
+		[Ignore("Expected: urn:a:T  But was: T")]
+#endif
 		public void XsiType_OfElement_WhenXsiTypeAttributeIsPresent()
 		{
 			var node = NodeForElement("<X xsi:type='p:T' xmlns:p='urn:a' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'/>");

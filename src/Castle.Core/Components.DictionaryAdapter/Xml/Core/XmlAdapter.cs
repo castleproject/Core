@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
+#if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -313,7 +313,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				||
 				TryApplyBehavior<XmlAttributeAttribute, XmlAttributeBehaviorAccessor>
 					(key, property, behavior, ref accessor, XmlAttributeBehaviorAccessor.Factory)
-#if !SL3
 				||
 				TryApplyBehavior<XPathAttribute, XPathBehaviorAccessor>
 					(key, property, behavior, ref accessor, XPathBehaviorAccessor.Factory)
@@ -323,7 +322,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				||
 				TryApplyBehavior<XPathFunctionAttribute, XPathBehaviorAccessor>
 					(key, property, behavior, ref accessor, XPathBehaviorAccessor.Factory)
-#endif
 				;
 		}
 

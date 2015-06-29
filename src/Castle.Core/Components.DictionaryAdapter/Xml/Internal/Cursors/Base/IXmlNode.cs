@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
+#if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -44,11 +44,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		IXmlCursor   SelectChildren(IXmlKnownTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags);
 		IXmlIterator SelectSubtree();
 
-#if !SL3
 		CompiledXPath Path    { get; }
 		IXmlCursor    Select  (CompiledXPath path, IXmlIncludedTypeMap includedTypes, IXmlNamespaceSource namespaces, CursorFlags flags);
 		object        Evaluate(CompiledXPath path);
-#endif
 
 		void      Clear();
 		XmlReader ReadSubtree();

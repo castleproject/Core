@@ -148,34 +148,6 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO310-Debug|AnyCPU'">
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <OutputPath>bin\MONO310-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;PHYSICALASSEMBLY __MONO</DefineConstants>
-    <DocumentationFile>bin\MONO310-Debug\Castle.Core.xml</DocumentationFile>
-    <Optimize>false</Optimize>
-    <DebugType>full</DebugType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1591</NoWarn>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO310-Release|AnyCPU'">
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <OutputPath>bin\MONO310-Release\</OutputPath>
-    <DefineConstants>TRACE;PHYSICALASSEMBLY __MONO</DefineConstants>
-    <DocumentationFile>bin\MONO310-Release\Castle.Core.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1591</NoWarn>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET45-Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\NET45-Debug\</OutputPath>

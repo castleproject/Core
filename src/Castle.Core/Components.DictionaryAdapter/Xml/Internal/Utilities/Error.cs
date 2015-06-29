@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
+#if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 	using SerializationException = System.Runtime.Serialization.SerializationException;
-#if !SL3
 	using System.Xml.XPath;
-#endif
 
 	internal static class Error
 	{
@@ -194,7 +192,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			var message = "No default XML type exists in the given context.";
 			return new InvalidOperationException(message);
 		}
-#if !SL3
+
 		internal static Exception XPathNotCreatable(CompiledXPath path)
 		{
 			var message = string.Format(
@@ -210,7 +208,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				path.Expression);
 			return new XPathException(message);
 		}
-#endif
 
 		internal static Exception ObjectIdNotFound(string id)
 		{

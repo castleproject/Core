@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
+#if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
@@ -43,6 +43,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
+#if __MonoCS__
+			[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
+#endif
 			public void Set()
 			{
 				XmlMetadataBehavior.Default.AddReservedNamespaceUri("urn:a");

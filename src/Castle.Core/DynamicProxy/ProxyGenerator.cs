@@ -100,10 +100,6 @@ namespace Castle.DynamicProxy
 			get { return proxyBuilder; }
 		}
 
-#if MONO
-#pragma warning disable 1584, 1580, 1574 // Mono chokes on cref with generic arguments
-#endif
-
 		/// <summary>
 		///   Creates proxy object intercepting calls to members of interface <typeparamref name = "TInterface" /> on <paramref
 		///    name = "target" /> object with given <paramref name = "interceptors" />.
@@ -169,10 +165,6 @@ namespace Castle.DynamicProxy
 		{
 			return (TInterface)CreateInterfaceProxyWithTarget(typeof(TInterface), target, options, interceptors);
 		}
-
-#if MONO
-#pragma warning restore 1584, 1580, 1574
-#endif
 
 		/// <summary>
 		///   Creates proxy object intercepting calls to members of interface <paramref name = "interfaceToProxy" /> on <paramref

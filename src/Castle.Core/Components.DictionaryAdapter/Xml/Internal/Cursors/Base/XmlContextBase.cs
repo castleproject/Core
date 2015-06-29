@@ -12,31 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
+#if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Xml;
-#if !SL3
 	using System.Xml.XPath;
 	using System.Xml.Xsl;
-#endif
 
-#if !SL3
 	public class XmlContextBase : XsltContext, IXmlNamespaceSource
-#else
-	public class XmlContextBase : XmlNamespaceManager, IXmlNamespaceSource
-#endif
 	{
 		private readonly XmlContextBase parent;
 		private Dictionary<string, string> rootNamespaces;
 		private bool hasNamespaces;
-#if !SL3
 		private XPathContext xPathContext;
 		private Dictionary<XmlName, IXsltContextVariable> variables;
 		private Dictionary<XmlName, IXsltContextFunction> functions;
-#endif
 
 		public XmlContextBase()
 			: base(new NameTable())
@@ -53,17 +45,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.parent = parent;
 		}
 
-#if !SL3
 		private static NameTable GetNameTable(XmlContextBase parent)
 		{
 			return parent.NameTable as NameTable ?? new NameTable();
 		}
-#else
-		private static XmlNameTable GetNameTable(XmlContext parent)
-		{
-			return parent.NameTable;
-		}   
-#endif
 
 		public void AddNamespace(XmlNamespaceAttribute attribute)
 		{
@@ -191,7 +176,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				&& candidate == uri;
 		}
 
-#if !SL3
 		private XPathContext XPathContext
 		{
 			get { return xPathContext ?? (xPathContext = new XPathContext(this)); }
@@ -300,7 +284,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			path.SetContext(XPathContext);
 		}
-#endif
 	}
 }
 #endif

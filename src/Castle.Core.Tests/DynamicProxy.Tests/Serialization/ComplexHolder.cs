@@ -14,7 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests.Serialization
 {
-#if !MONO && !SILVERLIGHT
+#if !SILVERLIGHT
 	using System;
 
 	[Serializable]

@@ -26,8 +26,6 @@ namespace Castle.Services.Logging.NLogIntegration
 	/// </summary>
 	public class ExtendedNLogFactory : AbstractExtendedLoggerFactory
 	{
-		// Deal with mono bug https://bugzilla.novell.com/show_bug.cgi?id=63986
-#pragma warning disable 419
 		/// <summary>
 		///   Initializes a new instance of the <see cref="ExtendedNLogFactory" /> class.
 		///   Configures NLog with a config file name 'nlog.config' 
@@ -37,7 +35,6 @@ namespace Castle.Services.Logging.NLogIntegration
 			: this(NLogFactory.defaultConfigFileName)
 		{
 		}
-#pragma warning restore 419
 
 		/// <summary>
 		///   Initializes a new instance of the <see cref="ExtendedNLogFactory" /> class with the configfile specified by <paramref

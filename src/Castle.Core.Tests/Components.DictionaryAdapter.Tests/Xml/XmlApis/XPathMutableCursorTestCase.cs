@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
+#if !SILVERLIGHT // Until support for other platforms is verified
 namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
@@ -23,6 +23,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 	using NUnit.Framework;
 
 	[TestFixture]
+#if __MonoCS__
+	[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
+#endif
 	public class XPathReadableCursorTestCase : XPathCursorTestCase
 	{
 		[Test]

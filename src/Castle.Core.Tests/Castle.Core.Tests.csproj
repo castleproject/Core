@@ -127,22 +127,6 @@
     <NoWarn>1685</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO310-Debug|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG;__MONO</DefineConstants>
-    <Optimize>false</Optimize>
-    <DebugType>full</DebugType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <OutputPath>bin\MONO310-Debug\</OutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONO310-Release|AnyCPU'">
-    <DefineConstants>TRACE;__MONO</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <OutputPath>bin\MONO310-Release\</OutputPath>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -185,7 +169,6 @@
       <HintPath Condition="'$(Configuration)' == 'NET35-Release' or '$(Configuration)' == 'NET35-Debug'">..\..\lib\net35\NLog.dll</HintPath>
       <HintPath Condition="'$(Configuration)' == 'NET40-Release' or '$(Configuration)' == 'NET40-Debug'">..\..\lib\net40\NLog.dll</HintPath>
       <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\NLog.dll</HintPath>
-      <HintPath Condition="'$(Configuration)' == 'MONO310-Release' or '$(Configuration)' == 'MONO310-Debug'">..\..\lib\net45\NLog.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -193,13 +176,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\Serilog.dll</HintPath>
       <HintPath Condition="'$(Configuration)' == 'NET40-Release' or '$(Configuration)' == 'NET40-Debug'">..\..\lib\net40\Serilog.dll</HintPath>
-      <HintPath Condition="'$(Configuration)' == 'MONO310-Release' or '$(Configuration)' == 'MONO310-Debug'">..\..\lib\net45\Serilog.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.FullNetFX, Version=1.3.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\Serilog.FullNetFX.dll</HintPath>
       <HintPath Condition="'$(Configuration)' == 'NET40-Release' or '$(Configuration)' == 'NET40-Debug'">..\..\lib\net40\Serilog.FullNetFX.dll</HintPath>
-      <HintPath Condition="'$(Configuration)' == 'MONO310-Release' or '$(Configuration)' == 'MONO310-Debug'">..\..\lib\net45\Serilog.FullNetFX.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

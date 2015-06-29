@@ -14,7 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests
 {
-#if !MONO && !SILVERLIGHT
+#if !SILVERLIGHT
 	using System;
 	using System.Collections;
 	using System.IO;

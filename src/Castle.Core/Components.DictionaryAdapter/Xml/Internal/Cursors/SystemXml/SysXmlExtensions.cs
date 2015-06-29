@@ -12,17 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
-#if !SILVERLIGHT
+#if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Xml;
 	using System.Xml.Serialization;
-#if !SL3
 	using System.Xml.XPath;
-#endif
 
 	public static class SysXmlExtensions
 	{
@@ -59,5 +56,4 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 	}
 }
-#endif
 #endif

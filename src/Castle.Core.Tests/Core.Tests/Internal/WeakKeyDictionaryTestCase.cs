@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO
+#if !SILVERLIGHT
 namespace CastleTests.Core.Tests.Internal
 {
 	using System;
@@ -44,6 +44,9 @@ namespace CastleTests.Core.Tests.Internal
 		}
 
 		[Test]
+#if __MonoCS__
+		[Ignore("Expected: 0  But was: 1")]
+#endif
 		public void AfterExplicitTrim_DeadObject()
 		{
 			CreateDictionary(); AddItem(); ResetItem();

@@ -25,6 +25,9 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 		// It also produces verifiable code.
 		// In Visual Studio 2010 this test passes just fine with the debugger attached.
 		[Test]
+#if __MonoCS__
+		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
+#endif
 		public void TestCase()
 		{
 			generator.ProxyBuilder.CreateInterfaceProxyTypeWithTarget(

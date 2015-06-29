@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
+#if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml
 {
     using System;
@@ -36,12 +36,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { return node.IsAttribute ? CursorFlags.Attributes : CursorFlags.Elements; }
 		}
 
-#if !SL3
 		public CompiledXPath Path
 		{
 			get { return node.Path; }
 		}
-#endif
 
 		public XmlName Name
 		{
@@ -194,7 +192,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return node.SelectSubtree();
 		}
 
-#if !SL3
 		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
 		{
 			return node.Select(path, knownTypes, namespaces, flags);
@@ -204,7 +201,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			return node.Evaluate(path);
 		}
-#endif
 
 		public XmlReader ReadSubtree()
 		{

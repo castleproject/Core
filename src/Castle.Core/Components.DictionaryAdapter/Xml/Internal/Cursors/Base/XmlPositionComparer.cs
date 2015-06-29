@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
+#if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	public class XmlPositionComparer
@@ -41,16 +41,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			public IXmlNode Node;
 			public XmlName  Name;
-#if !SL3
 			public CompiledXPathNode Step;
-#endif
 
 			public bool MoveNext()
 			{
 				return
-#if !SL3
 					Step != null ? ConsumeStep() :
-#endif
 					Node != null ? ConsumeNode() :
 					Stop();
 			}
@@ -58,12 +54,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			private bool ConsumeNode()
 			{
 				var result = true;
-#if !SL3
 				var path = Node.Path;
 				if (path != null)
 					result = ConsumeFirstStep(path);
 				else
-#endif
 					Name = Node.Name;
 
 				Node = Node.Parent;
@@ -76,7 +70,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				return false;
 			}
 
-#if !SL3
 			private bool ConsumeFirstStep(CompiledXPath path)
 			{
 				if (!path.IsCreatable)
@@ -97,7 +90,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				Step = Step.PreviousNode;
 				return true;
 			}
-#endif
 		}
 	}
 }

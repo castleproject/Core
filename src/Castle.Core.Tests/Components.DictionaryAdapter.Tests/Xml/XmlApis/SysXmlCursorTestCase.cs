@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !MONO // Until support for other platforms is verified
+#if !SILVERLIGHT // Until support for other platforms is verified
 namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
@@ -373,6 +373,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
+#if __MonoCS__
+		[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
+#endif
 		public void Create_BeforeEnd_IsInsert_ForAttribute()
 		{
 			var xml    = Xml("<X Other='2'/>");
@@ -410,6 +413,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
+#if __MonoCS__
+		[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
+#endif
 		public void Create_AtEnd_IsAppend_ForAttribute()
 		{
 			var xml    = Xml("<X/>");
