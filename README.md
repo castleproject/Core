@@ -38,7 +38,7 @@ xbuild /p:Configuration=NET45-Release /t:RunAllTests buildscripts/Build.proj
 
 ### Conditional Compilation Symbols
 
-**TODO:** Retire these `CLIENTPROFILE`, `DOTNET`.
+**TODO:** Retire these `DOTNET`.
 
 Symbol                  | NET35              | NET40              | NET45              | SL40               | SL50
 ----------------------- | ------------------ | ------------------ | ------------------ | ------------------ | ------------------

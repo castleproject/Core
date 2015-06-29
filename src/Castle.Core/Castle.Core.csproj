@@ -26,7 +26,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;DOTNET DOTNET40 CLIENTPROFILE FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET DOTNET40 FEATURE_SERIALIZATION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -42,7 +42,7 @@
     <OutputPath>bin\NET40-Release\</OutputPath>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <DefineConstants>TRACE;DOTNET DOTNET40 CLIENTPROFILE FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DOTNET DOTNET40 FEATURE_SERIALIZATION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\NET40-Release\Castle.Core.xml</DocumentationFile>
