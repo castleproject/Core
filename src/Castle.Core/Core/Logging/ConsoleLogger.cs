@@ -22,7 +22,9 @@ namespace Castle.Core.Logging
 	/// This is mainly for the cases when you have a utility that
 	/// does not have a logger to supply.
 	/// </summary>
+#if FEATURE_SERIALIZATION
 	[Serializable]
+#endif
 	public class ConsoleLogger : LevelFilteredLogger
 	{
 		/// <summary>

@@ -17,7 +17,9 @@ namespace Castle.Core.Resource
 	using System;
 	using System.Text;
 
+#if FEATURE_SERIALIZATION
 	[Serializable]
+#endif
 	public sealed class CustomUri
 	{
 		public static readonly String SchemeDelimiter = "://";

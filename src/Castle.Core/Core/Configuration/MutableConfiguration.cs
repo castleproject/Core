@@ -19,7 +19,9 @@ namespace Castle.Core.Configuration
 	/// <summary>
 	/// Summary description for MutableConfiguration.
 	/// </summary>
+#if FEATURE_SERIALIZATION
 	[Serializable]
+#endif
 	public class MutableConfiguration : AbstractConfiguration
 	{
 		/// <summary>

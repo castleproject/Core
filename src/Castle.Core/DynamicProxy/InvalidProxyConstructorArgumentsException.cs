@@ -16,7 +16,9 @@ namespace Castle.DynamicProxy
 {
 	using System;
 
+#if FEATURE_SERIALIZATION
 	[Serializable]
+#endif
 	public class InvalidProxyConstructorArgumentsException : ArgumentException
 	{
 		public InvalidProxyConstructorArgumentsException(string message, Type proxyType, Type classToProxy) : base(message)
