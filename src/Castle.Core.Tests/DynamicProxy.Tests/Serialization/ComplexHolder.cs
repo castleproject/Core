@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_SERIALIZATION
+
 namespace Castle.DynamicProxy.Tests.Serialization
 {
-#if !SILVERLIGHT
 	using System;
 
 	[Serializable]
@@ -23,5 +24,6 @@ namespace Castle.DynamicProxy.Tests.Serialization
 		public object Element;
 		public Type Type;
 	}
-#endif
 }
+
+#endif

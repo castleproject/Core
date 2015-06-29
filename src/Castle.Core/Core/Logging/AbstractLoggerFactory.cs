@@ -17,10 +17,12 @@ namespace Castle.Core.Logging
 	using System;
 	using System.IO;
 
+#if FEATURE_SERIALIZATION
+	[Serializable]
+#endif
 #if SILVERLIGHT
 	public abstract class AbstractLoggerFactory : ILoggerFactory
 #else
-	[Serializable]
 	public abstract class AbstractLoggerFactory : MarshalByRefObject, ILoggerFactory
 #endif
 	{

@@ -23,14 +23,16 @@ namespace Castle.Core.Logging
 #endif
 
 	/// <summary>
-	///	The Level Filtered Logger class.  This is a base clase which
-	///	provides a LogLevel attribute and reroutes all functions into
-	///	one Log method.
+	/// The Level Filtered Logger class.  This is a base clase which
+	/// provides a LogLevel attribute and reroutes all functions into
+	/// one Log method.
 	/// </summary>
+#if FEATURE_SERIALIZATION
+	[Serializable]
+#endif
 #if SILVERLIGHT
 	public abstract class LevelFilteredLogger : ILogger
 #else
-	[Serializable]
 	public abstract class LevelFilteredLogger : MarshalByRefObject, ILogger
 #endif
 	{

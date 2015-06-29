@@ -17,7 +17,9 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
+#if FEATURE_SERIALIZATION
 	using System.Xml.Serialization;
+#endif
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Internal;
@@ -341,7 +343,7 @@ namespace Castle.DynamicProxy.Tests
 		T2 Method<T1, T2>(T1 p);
 	}
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
 	public class GenericClass : IGenericInterface
@@ -374,7 +376,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
 	internal class TypeInterceptorSelector<TInterceptor> : IInterceptorSelector where TInterceptor : IInterceptor
@@ -397,7 +399,7 @@ namespace Castle.DynamicProxy.Tests
 		#endregion
 	}
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
 	public class AllInterceptorSelector : IInterceptorSelector
@@ -412,7 +414,9 @@ namespace Castle.DynamicProxy.Tests
 		#endregion
 	}
 
+#if FEATURE_SERIALIZATION
 	[Serializable]
+#endif
 	public class SelectorWithState : IInterceptorSelector
 	{
 		private readonly int state;
@@ -455,7 +459,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
 	public class SimpleClass : ISimpleInterface
@@ -481,16 +485,22 @@ namespace Castle.DynamicProxy.Tests
 		public static ProxyGenerationOptions proxyGenerationOptions;
 		public static MethodInfo token_Do;
 
+#if FEATURE_SERIALIZATION
 		[XmlIgnore]
+#endif
 		public IInterceptor[] __interceptors;
 
 		public IInterceptorSelector __selector;
 
+#if FEATURE_SERIALIZATION
 		[XmlIgnore]
+#endif
 		public SimpleClass __target;
 
+#if FEATURE_SERIALIZATION
 		[NonSerialized]
 		[XmlIgnore]
+#endif
 		public IInterceptor[] interceptors_Do;
 
 		public virtual int Do()

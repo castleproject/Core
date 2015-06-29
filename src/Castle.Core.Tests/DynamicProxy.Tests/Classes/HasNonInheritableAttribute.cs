@@ -60,7 +60,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 		}
 	}
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
 	[AttributeUsage(AttributeTargets.All, Inherited = false)]

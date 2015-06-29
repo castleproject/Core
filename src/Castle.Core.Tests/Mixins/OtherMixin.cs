@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Tests.Mixins
 	/// <summary>
 	/// Summary description for OtherMixin.
 	/// </summary>
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
 	public class OtherMixin : IOtherMixin

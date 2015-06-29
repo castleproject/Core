@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 {
 	using System;
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
 	public class ServiceImpl : IService, IExtendedService
