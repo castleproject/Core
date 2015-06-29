@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_SERIALIZATION
+
 namespace CastleTests
 {
-#if !SILVERLIGHT
 	using System.Reflection;
 
 	using Castle.DynamicProxy;
@@ -202,5 +203,6 @@ namespace CastleTests
 			}
 		}
 	}
-#endif
 }
+
+#endif

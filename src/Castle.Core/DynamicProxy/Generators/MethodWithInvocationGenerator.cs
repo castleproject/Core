@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	using System.Xml.Serialization;
 #endif
 
@@ -52,7 +52,7 @@ namespace Castle.DynamicProxy.Generators
 				namingScope.GetUniqueName(string.Format("interceptors_{0}", method.Name)),
 				typeof(IInterceptor[]),
 				false);
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 			@class.DefineCustomAttributeFor<XmlIgnoreAttribute>(methodInterceptors);
 #endif
 			return methodInterceptors;
@@ -144,7 +144,6 @@ namespace Castle.DynamicProxy.Generators
 			{
 				return null;
 			}
-
 
 			var methodInterceptorsField = BuildMethodInterceptorsField(@class, MethodToOverride, namingScope);
 

@@ -33,7 +33,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo,
 		                                               ArgumentReference streamingContext, ClassEmitter emitter)
 		{

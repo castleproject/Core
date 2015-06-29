@@ -17,15 +17,17 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Diagnostics;
 	using System.Reflection;
+#if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
-	using Castle.DynamicProxy.Serialization;
-
 #if DOTNET40
 	using System.Security;
 #endif
 
+	using Castle.DynamicProxy.Serialization;
+#endif
+
 	public abstract class AbstractInvocation : IInvocation
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 		, ISerializable
 #endif
 	{
@@ -151,7 +153,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 #if DOTNET40
 		[SecurityCritical]
 #endif

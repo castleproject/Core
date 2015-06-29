@@ -35,3 +35,18 @@ msbuild /p:Configuration=SL40-Release /t:RunAllTests buildscripts/Build.proj
 ```
 xbuild /p:Configuration=NET45-Release /t:RunAllTests buildscripts/Build.proj
 ```
+
+### Conditional Compilation Symbols
+
+**TODO:** Retire these `PHYSICALASSEMBLY`, `CLIENTPROFILE`, `DOTNET`.
+
+Symbol                  | NET35              | NET40              | NET45              | SL40               | SL50
+----------------------- | ------------------ | ------------------ | ------------------ | ------------------ | ------------------
+`FEATURE_SERIALIZATION` | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:
+`DOTNET35`              | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:
+`DOTNET40`              | :no_entry_sign:    | :white_check_mark: | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:
+`DOTNET45`              | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:
+`SILVERLIGHT`           | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark: | :white_check_mark:
+`SL4`                   | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark: | :no_entry_sign:
+
+The `__MonoCS__` symbol is used only in unit tests when compiled on Mono to work around Mono defects and non-Windows differences, however we are trying to move away from platform specific symbols as much as possible.

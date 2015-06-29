@@ -67,7 +67,7 @@ namespace Castle.DynamicProxy.Tests
 			var result = proxy.PublicMethod();
 			Assert.AreEqual(42, result);
 		}
-		
+
 #if !SILVERLIGHT
 		[Test]
 		[Bug("DYNPROXY-170")]
@@ -195,9 +195,9 @@ namespace Castle.DynamicProxy.Tests
 		[Bug("DYNPROXY-185")]
 		public void Returns_proxy_target_instead_of_self()
 		{
-			var target = new EmptyClass();
+			var target = new CastleTests.DynamicProxy.Tests.Classes.EmptyClass();
 			var proxy = generator.CreateClassProxyWithTarget(target);
-			var result = (EmptyClass)((IProxyTargetAccessor)proxy).DynProxyGetTarget();
+			var result = (CastleTests.DynamicProxy.Tests.Classes.EmptyClass)((IProxyTargetAccessor)proxy).DynProxyGetTarget();
 			Assert.AreEqual(target, result);
 		}
 #endif

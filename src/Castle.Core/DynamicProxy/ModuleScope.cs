@@ -23,7 +23,9 @@ namespace Castle.DynamicProxy
 
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
+#if FEATURE_SERIALIZATION
 	using Castle.DynamicProxy.Serialization;
+#endif
 
 	/// <summary>
 	///   Summary description for ModuleScope.
@@ -493,13 +495,16 @@ namespace Castle.DynamicProxy
 				File.Delete(assemblyFilePath);
 			}
 
+#if FEATURE_SERIALIZATION
 			AddCacheMappings(assemblyBuilder);
+#endif
+
 			assemblyBuilder.Save(assemblyFileName);
 			return assemblyFilePath;
 		}
 #endif
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 		private void AddCacheMappings(AssemblyBuilder builder)
 		{
 			Dictionary<CacheKey, string> mappings;
@@ -520,9 +525,7 @@ namespace Castle.DynamicProxy
 
 			CacheMappingsAttribute.ApplyTo(builder, mappings);
 		}
-#endif
 
-#if !SILVERLIGHT
 		/// <summary>
 		///   Loads the generated types from the given assembly into this <see cref = "ModuleScope" />'s cache.
 		/// </summary>
