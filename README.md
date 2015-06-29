@@ -38,8 +38,6 @@ xbuild /p:Configuration=NET45-Release /t:RunAllTests buildscripts/Build.proj
 
 ### Conditional Compilation Symbols
 
-**TODO:** Retire these `DOTNET`.
-
 Symbol                  | NET35              | NET40              | NET45              | SL40               | SL50
 ----------------------- | ------------------ | ------------------ | ------------------ | ------------------ | ------------------
 `FEATURE_SERIALIZATION` | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:
