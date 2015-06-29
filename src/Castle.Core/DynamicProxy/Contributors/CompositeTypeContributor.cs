@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Reflection;
 
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
@@ -98,7 +99,7 @@ namespace Castle.DynamicProxy.Contributors
 		public void AddInterfaceToProxy(Type @interface)
 		{
 			Debug.Assert(@interface != null, "@interface == null", "Shouldn't be adding empty interfaces...");
-			Debug.Assert(@interface.IsInterface, "@interface.IsInterface", "Should be adding interfaces only...");
+			Debug.Assert(@interface.GetTypeInfo().IsInterface, "@interface.IsInterface", "Should be adding interfaces only...");
 			Debug.Assert(!interfaces.Contains(@interface), "!interfaces.ContainsKey(@interface)",
 			             "Shouldn't be adding same interface twice...");
 

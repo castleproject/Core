@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
+	using System.Reflection;
 
 	public abstract class MetaTypeElement
 	{
@@ -27,7 +28,7 @@ namespace Castle.DynamicProxy.Generators
 
 		internal bool CanBeImplementedExplicitly
 		{
-			get { return sourceType != null && sourceType.IsInterface; }
+			get { return sourceType != null && sourceType.GetTypeInfo().IsInterface; }
 		}
 
 		internal abstract void SwitchToExplicitImplementation();

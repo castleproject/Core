@@ -69,7 +69,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		protected virtual IEnumerable<Type> InitializeGenericArgumentsFromBases(ref Type baseType,
 		                                                                        IEnumerable<Type> interfaces)
 		{
-			if (baseType != null && baseType.IsGenericTypeDefinition)
+			if (baseType != null && baseType.GetTypeInfo().IsGenericTypeDefinition)
 			{
 				throw new NotSupportedException("ClassEmitter does not support open generic base types. Type: " + baseType.FullName);
 			}
@@ -81,7 +81,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			foreach (var inter in interfaces)
 			{
-				if (inter.IsGenericTypeDefinition)
+				if (inter.GetTypeInfo().IsGenericTypeDefinition)
 				{
 					throw new NotSupportedException("ClassEmitter does not support open generic interfaces. Type: " + inter.FullName);
 				}

@@ -18,6 +18,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Linq;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Reflection;
 
 	using Castle.Core;
 
@@ -68,7 +69,7 @@ namespace Castle.Components.DictionaryAdapter
 					{
 						VisitCollection(dictionaryAdapter, property, collectionItemType, state);
 					}
-					else if (property.PropertyType.IsInterface)
+					else if (property.PropertyType.GetTypeInfo().IsInterface)
 					{
 						VisitInterface(dictionaryAdapter, property, state);
 					}
@@ -137,11 +138,11 @@ namespace Castle.Components.DictionaryAdapter
 			var propertyType = property.PropertyType;
 			if (propertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(propertyType))
 			{
-				if (propertyType.IsArray)
+				if (propertyType.GetTypeInfo().IsArray)
 				{
 					collectionItemType = propertyType.GetElementType();
 				}
-				else if (propertyType.IsGenericType)
+				else if (propertyType.GetTypeInfo().IsGenericType)
 				{
 					var arguments = propertyType.GetGenericArguments();
 					collectionItemType = arguments[0];

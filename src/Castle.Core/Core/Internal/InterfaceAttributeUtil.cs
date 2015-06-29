@@ -18,6 +18,7 @@ namespace Castle.Core.Internal
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
+	using System.Reflection;
 
 	internal sealed class InterfaceAttributeUtil
 	{
@@ -44,7 +45,7 @@ namespace Castle.Core.Internal
 
 		public static object[] GetAttributes(Type type, bool inherit)
 		{
-			if (type.IsInterface == false)
+			if (type.GetTypeInfo().IsInterface == false)
 				throw new ArgumentOutOfRangeException("type");
 
 			var attributes = type.GetCustomAttributes(false);

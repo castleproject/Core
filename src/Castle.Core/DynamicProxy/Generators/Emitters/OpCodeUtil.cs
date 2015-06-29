@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
+	using System.Reflection;
 	using System.Reflection.Emit;
 
 	internal abstract class OpCodeUtil
@@ -28,17 +29,17 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// <param name = "type"></param>
 		public static void EmitLoadIndirectOpCodeForType(ILGenerator gen, Type type)
 		{
-			if (type.IsEnum)
+			if (type.GetTypeInfo().IsEnum)
 			{
 				EmitLoadIndirectOpCodeForType(gen, GetUnderlyingTypeOfEnum(type));
 				return;
 			}
 
-			if (type.IsByRef)
+			if (type.GetTypeInfo().IsByRef)
 			{
 				throw new NotSupportedException("Cannot load ByRef values");
 			}
-			else if (type.IsPrimitive && type != typeof(IntPtr) && type != typeof(UIntPtr))
+			else if (type.GetTypeInfo().IsPrimitive && type != typeof(IntPtr) && type != typeof(UIntPtr))
 			{
 				var opCode = LdindOpCodesDictionary.Instance[type];
 
@@ -49,11 +50,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 				gen.Emit(opCode);
 			}
-			else if (type.IsValueType)
+			else if (type.GetTypeInfo().IsValueType)
 			{
 				gen.Emit(OpCodes.Ldobj, type);
 			}
-			else if (type.IsGenericParameter)
+			else if (type.GetTypeInfo().IsGenericParameter)
 			{
 				gen.Emit(OpCodes.Ldobj, type);
 			}
@@ -97,7 +98,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// </summary>
 		public static void EmitLoadOpCodeForDefaultValueOfType(ILGenerator gen, Type type)
 		{
-			if (type.IsPrimitive)
+			if (type.GetTypeInfo().IsPrimitive)
 			{
 				var opCode = LdcOpCodesDictionary.Instance[type];
 				switch (opCode.StackBehaviourPush)
@@ -138,17 +139,17 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// <param name = "type"></param>
 		public static void EmitStoreIndirectOpCodeForType(ILGenerator gen, Type type)
 		{
-			if (type.IsEnum)
+			if (type.GetTypeInfo().IsEnum)
 			{
 				EmitStoreIndirectOpCodeForType(gen, GetUnderlyingTypeOfEnum(type));
 				return;
 			}
 
-			if (type.IsByRef)
+			if (type.GetTypeInfo().IsByRef)
 			{
 				throw new NotSupportedException("Cannot store ByRef values");
 			}
-			else if (type.IsPrimitive && type != typeof(IntPtr) && type != typeof(UIntPtr))
+			else if (type.GetTypeInfo().IsPrimitive && type != typeof(IntPtr) && type != typeof(UIntPtr))
 			{
 				var opCode = StindOpCodesDictionary.Instance[type];
 
@@ -159,11 +160,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 				gen.Emit(opCode);
 			}
-			else if (type.IsValueType)
+			else if (type.GetTypeInfo().IsValueType)
 			{
 				gen.Emit(OpCodes.Stobj, type);
 			}
-			else if (type.IsGenericParameter)
+			else if (type.GetTypeInfo().IsGenericParameter)
 			{
 				gen.Emit(OpCodes.Stobj, type);
 			}

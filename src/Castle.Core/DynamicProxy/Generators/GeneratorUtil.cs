@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Generators
 
 			for (var i = 0; i < parameters.Length; i++)
 			{
-				if (!parameters[i].ParameterType.IsByRef)
+				if (!parameters[i].ParameterType.GetTypeInfo().IsByRef)
 				{
 					continue;
 				}

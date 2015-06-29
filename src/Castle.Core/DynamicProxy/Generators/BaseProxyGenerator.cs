@@ -88,7 +88,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			Debug.Assert(implementer != null, "implementer != null");
 			Debug.Assert(@interface != null, "@interface != null");
-			Debug.Assert(@interface.IsInterface, "@interface.IsInterface");
+			Debug.Assert(@interface.GetTypeInfo().IsInterface, "@interface.IsInterface");
 
 			if (!mapping.ContainsKey(@interface))
 			{
@@ -131,7 +131,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void CheckNotGenericTypeDefinition(Type type, string argumentName)
 		{
-			if (type != null && type.IsGenericTypeDefinition)
+			if (type != null && type.GetTypeInfo().IsGenericTypeDefinition)
 			{
 				throw new ArgumentException("Type cannot be a generic type definition. Type: " + type.FullName, argumentName);
 			}
@@ -245,7 +245,7 @@ namespace Castle.DynamicProxy.Generators
 			if (baseConstructorParams != null && baseConstructorParams.Length != 0)
 			{
 				var last = baseConstructorParams.Last();
-				if (last.ParameterType.IsArray && last.HasAttribute<ParamArrayAttribute>())
+				if (last.ParameterType.GetTypeInfo().IsArray && last.HasAttribute<ParamArrayAttribute>())
 				{
 					var parameter = constructor.ConstructorBuilder.DefineParameter(args.Length, ParameterAttributes.None, last.Name);
 					var builder = AttributeUtil.CreateBuilder<ParamArrayAttribute>();
@@ -430,7 +430,7 @@ namespace Castle.DynamicProxy.Generators
 			return constructor.IsPublic
 			       || constructor.IsFamily
 			       || constructor.IsFamilyOrAssembly
-#if !Silverlight
+#if !SILVERLIGHT
 			       || (constructor.IsAssembly && InternalsUtil.IsInternalToDynamicProxy(constructor.DeclaringType.Assembly));
 #else
             ;

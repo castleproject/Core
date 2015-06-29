@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
+	using System.Reflection;
 	using System.Reflection.Emit;
 
 	public class DefaultValueExpression : Expression
@@ -33,7 +34,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			{
 				OpCodeUtil.EmitLoadOpCodeForDefaultValueOfType(gen, type);
 			}
-			else if (type.IsValueType || type.IsGenericParameter)
+			else if (type.GetTypeInfo().IsValueType || type.GetTypeInfo().IsGenericParameter)
 			{
 				// TODO: handle decimal explicitly
 				var local = gen.DeclareLocal(type);
@@ -41,7 +42,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				gen.Emit(OpCodes.Initobj, type);
 				gen.Emit(OpCodes.Ldloc, local);
 			}
-			else if (type.IsByRef)
+			else if (type.GetTypeInfo().IsByRef)
 			{
 				EmitByRef(gen);
 			}
@@ -59,7 +60,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				OpCodeUtil.EmitLoadOpCodeForDefaultValueOfType(gen, elementType);
 				OpCodeUtil.EmitStoreIndirectOpCodeForType(gen, elementType);
 			}
-			else if (elementType.IsGenericParameter || elementType.IsValueType)
+			else if (elementType.GetTypeInfo().IsGenericParameter || elementType.GetTypeInfo().IsValueType)
 			{
 				gen.Emit(OpCodes.Initobj, elementType);
 			}
@@ -71,13 +72,13 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		private bool IsPrimitiveOrClass(Type type)
 		{
-			if ((type.IsPrimitive && type != typeof(IntPtr)))
+			if ((type.GetTypeInfo().IsPrimitive && type != typeof(IntPtr)))
 			{
 				return true;
 			}
-			return ((type.IsClass || type.IsInterface) &&
-			        type.IsGenericParameter == false &&
-			        type.IsByRef == false);
+			return ((type.GetTypeInfo().IsClass || type.GetTypeInfo().IsInterface) &&
+			        type.GetTypeInfo().IsGenericParameter == false &&
+			        type.GetTypeInfo().IsByRef == false);
 		}
 	}
 }

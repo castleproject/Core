@@ -49,13 +49,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static Type ExtractCorrectType(Type paramType, Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
 		{
-			if (paramType.IsArray)
+			if (paramType.GetTypeInfo().IsArray)
 			{
 				var rank = paramType.GetArrayRank();
 
 				var underlyingType = paramType.GetElementType();
 
-				if (underlyingType.IsGenericParameter)
+				if (underlyingType.GetTypeInfo().IsGenericParameter)
 				{
 					GenericTypeParameterBuilder genericType;
 					if (name2GenericType.TryGetValue(underlyingType.Name, out genericType) == false)
@@ -76,7 +76,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				return underlyingType.MakeArrayType(rank);
 			}
 
-			if (paramType.IsGenericParameter)
+			if (paramType.GetTypeInfo().IsGenericParameter)
 			{
 				GenericTypeParameterBuilder value;
 				if (name2GenericType.TryGetValue(paramType.Name, out value))
@@ -124,7 +124,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			Type constraint, MethodInfo methodToCopyGenericsFrom, Type[] originalGenericParameters,
 			GenericTypeParameterBuilder[] newGenericParameters)
 		{
-			if (constraint.IsGenericType)
+			if (constraint.GetTypeInfo().IsGenericType)
 			{
 				var genericArgumentsOfConstraint = constraint.GetGenericArguments();
 
@@ -136,7 +136,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 				return constraint.GetGenericTypeDefinition().MakeGenericType(genericArgumentsOfConstraint);
 			}
-			else if (constraint.IsGenericParameter)
+			else if (constraint.GetTypeInfo().IsGenericParameter)
 			{
 				// Determine the source of the parameter
 				if (constraint.DeclaringMethod != null)
@@ -149,8 +149,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 				else // parameter from surrounding type
 				{
-					Trace.Assert(constraint.DeclaringType.IsGenericTypeDefinition);
-					Trace.Assert(methodToCopyGenericsFrom.DeclaringType.IsGenericType
+					Trace.Assert(constraint.DeclaringType.GetTypeInfo().IsGenericTypeDefinition);
+					Trace.Assert(methodToCopyGenericsFrom.DeclaringType.GetTypeInfo().IsGenericType
 					             && constraint.DeclaringType == methodToCopyGenericsFrom.DeclaringType.GetGenericTypeDefinition(),
 					             "When a generic method parameter has a constraint on a generic type parameter, the generic type must be the declaring typer of the method.");
 

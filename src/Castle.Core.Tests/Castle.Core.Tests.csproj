@@ -27,7 +27,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;DOTNET40 FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET40 FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -41,7 +41,7 @@
     <OutputPath>bin\NET40-Release\</OutputPath>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <DefineConstants>TRACE;DOTNET40 FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DOTNET40 FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -53,7 +53,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Debug|AnyCPU'">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <OutputPath>bin\NET35-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;DOTNET35 FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET35 FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -65,7 +65,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Release|AnyCPU'">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <OutputPath>bin\NET35-Release\</OutputPath>
-    <DefineConstants>TRACE;DOTNET35 FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DOTNET35 FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -78,7 +78,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Release|AnyCPU'">
     <OutputPath>bin\SL40-Release\</OutputPath>
     <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
-    <DefineConstants>TRACE;SILVERLIGHT SL4</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT SL4 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -93,7 +93,7 @@
     <DebugSymbols>true</DebugSymbols>
     <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
     <OutputPath>bin\SL40-Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT SL4</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT SL4 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -104,7 +104,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50-Release|AnyCPU'">
     <OutputPath>bin\SL50-Release\</OutputPath>
     <MSBuildTargets>Silverlight 5.0</MSBuildTargets>
-    <DefineConstants>TRACE;SILVERLIGHT SL5</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT SL5 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -119,7 +119,7 @@
     <DebugSymbols>true</DebugSymbols>
     <MSBuildTargets>Silverlight 5.0</MSBuildTargets>
     <OutputPath>bin\SL50-Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT SL5</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT SL5 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>

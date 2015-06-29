@@ -87,7 +87,7 @@ namespace Castle.DynamicProxy.Contributors
 		private Type[] GetParamTypes(AbstractTypeEmitter @delegate)
 		{
 			var parameters = method.MethodOnTarget.GetParameters();
-			if (@delegate.TypeBuilder.IsGenericType)
+			if (@delegate.TypeBuilder.GetTypeInfo().IsGenericType)
 			{
 				var types = new Type[parameters.Length];
 

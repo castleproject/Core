@@ -117,7 +117,7 @@ namespace Castle.DynamicProxy.Tests
 			emitter.CreateMethod("MyMethod", MethodAttributes.Public | MethodAttributes.Abstract | MethodAttributes.Virtual,
 			                     typeof(void), Type.EmptyTypes);
 			Type t = emitter.BuildType();
-			Assert.IsTrue(t.IsInterface);
+			Assert.IsTrue(t.GetTypeInfo().IsInterface);
 			MethodInfo method = t.GetMethod("MyMethod");
 			Assert.IsNotNull(method);
 		}
@@ -166,7 +166,7 @@ namespace Castle.DynamicProxy.Tests
 			                          typeof(void), Type.EmptyTypes);
 			Type inner = innerEmitter.BuildType();
 			Type outer = outerEmitter.BuildType();
-			Assert.IsTrue(inner.IsInterface);
+			Assert.IsTrue(inner.GetTypeInfo().IsInterface);
 			MethodInfo method = inner.GetMethod("MyMethod");
 			Assert.IsNotNull(method);
 			Assert.AreSame(inner, outer.GetNestedType("IInner", BindingFlags.Public));

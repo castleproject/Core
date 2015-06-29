@@ -133,7 +133,7 @@ namespace Castle.DynamicProxy.Generators
 				var param = parameters[i];
 
 				var paramType = invocation.GetClosedParameterType(param.ParameterType);
-				if (paramType.IsByRef)
+				if (paramType.GetTypeInfo().IsByRef)
 				{
 					var localReference = invokeMethodOnTarget.CodeBuilder.DeclareLocal(paramType.GetElementType());
 					invokeMethodOnTarget.CodeBuilder

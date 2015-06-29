@@ -107,7 +107,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		private IInvocationCreationContributor GetContributor(Type @delegate, MetaMethod method)
 		{
-			if (@delegate.IsGenericType == false)
+			if (@delegate.GetTypeInfo().IsGenericType == false)
 			{
 				return new InvocationWithDelegateContributor(@delegate, targetType, method, namingScope);
 			}

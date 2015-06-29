@@ -19,6 +19,8 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Diagnostics;
+	using System.Reflection;
+
 	using SysPropertyDescriptor = System.ComponentModel.PropertyDescriptor;
 
 	[DebuggerDisplay("Count = {Count}, Adapter = {Adapter}")]
@@ -432,7 +434,7 @@ namespace Castle.Components.DictionaryAdapter
 #else
 		private void AttachPropertyChanged(T value)
 		{
-			if (typeof(T).IsValueType)
+			if (typeof(T).GetTypeInfo().IsValueType)
 				return;
 
 			var notifier = value as INotifyPropertyChanged;
@@ -447,7 +449,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void DetachPropertyChanged(T value)
 		{
-			if (typeof(T).IsValueType)
+			if (typeof(T).GetTypeInfo().IsValueType)
 				return;
 
 			var notifier = value as INotifyPropertyChanged;

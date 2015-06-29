@@ -16,6 +16,7 @@ namespace Castle.Core.Tests
 {
 	using System;
 	using System.Collections;
+	using System.Reflection;
 
 	using Castle.Core;
 
@@ -109,7 +110,7 @@ namespace Castle.Core.Tests
 		public void Using_anonymous_types_works_without_exception()
 		{
 			var target = new { foo = 1, name = "john", age = 25 };
-			Assert.IsFalse(target.GetType().IsPublic);
+			Assert.IsFalse(target.GetType().GetTypeInfo().IsPublic);
 			var dict = new ReflectionBasedDictionaryAdapter(target);
 
 			Assert.AreEqual(3, dict.Count);

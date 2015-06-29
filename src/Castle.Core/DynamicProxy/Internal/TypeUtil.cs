@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Internal
 				throw new ArgumentNullException("type");
 			}
 
-			if (type.IsClass == false)
+			if (type.GetTypeInfo().IsClass == false)
 			{
 				throw new ArgumentException(string.Format("Type {0} is not a class type. This method supports only classes", type));
 			}
@@ -69,7 +69,7 @@ namespace Castle.DynamicProxy.Internal
 					continue;
 				}
 
-				if (type.IsInterface)
+				if (type.GetTypeInfo().IsInterface)
 				{
 					if (interfaces.Add(type) == false)
 					{
@@ -95,12 +95,12 @@ namespace Castle.DynamicProxy.Internal
 
 		public static Type GetClosedParameterType(this AbstractTypeEmitter type, Type parameter)
 		{
-			if (parameter.IsGenericTypeDefinition)
+			if (parameter.GetTypeInfo().IsGenericTypeDefinition)
 			{
 				return parameter.GetGenericTypeDefinition().MakeGenericType(type.GetGenericArgumentsFor(parameter));
 			}
 
-			if (parameter.IsGenericType)
+			if (parameter.GetTypeInfo().IsGenericType)
 			{
 				var arguments = parameter.GetGenericArguments();
 				if (CloseGenericParametersIfAny(type, arguments))
@@ -109,22 +109,21 @@ namespace Castle.DynamicProxy.Internal
 				}
 			}
 
-
-			if (parameter.IsGenericParameter)
+			if (parameter.GetTypeInfo().IsGenericParameter)
 			{
 				return type.GetGenericArgument(parameter.Name);
 			}
 
-			if (parameter.IsArray)
+			if (parameter.GetTypeInfo().IsArray)
 			{
 				var elementType = GetClosedParameterType(type, parameter.GetElementType());
-                int rank = parameter.GetArrayRank();
-                return rank == 1
-                    ? elementType.MakeArrayType()
-                    : elementType.MakeArrayType(rank);
+				int rank = parameter.GetArrayRank();
+				return rank == 1
+					? elementType.MakeArrayType()
+					: elementType.MakeArrayType(rank);
 			}
 
-			if (parameter.IsByRef)
+			if (parameter.GetTypeInfo().IsByRef)
 			{
 				var elementType = GetClosedParameterType(type, parameter.GetElementType());
 				return elementType.MakeByRefType();

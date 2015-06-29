@@ -29,7 +29,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			delegateCtor = @delegate.GetConstructors()[0];
 			this.methodToBindTo = methodToBindTo;
-			if (@delegate.IsGenericTypeDefinition)
+			if (@delegate.GetTypeInfo().IsGenericTypeDefinition)
 			{
 				var closedDelegate = @delegate.MakeGenericType(genericTypeParams);
 				delegateCtor = TypeBuilder.GetConstructor(closedDelegate, delegateCtor);

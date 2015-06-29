@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 {
 	using System;
 	using System.Collections;
+	using System.Reflection;
 	using System.Text;
 	using System.Collections.Generic;
 
@@ -39,7 +40,7 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 			{
 				base.PerformProceed (invocation);
 			}
-			else if (invocation.Method.ReturnType.IsValueType && invocation.Method.ReturnType != typeof (void))
+			else if (invocation.Method.ReturnType.GetTypeInfo().IsValueType && invocation.Method.ReturnType != typeof (void))
 			{
 				invocation.ReturnValue = Activator.CreateInstance (invocation.Method.ReturnType); // set default return value
 			}

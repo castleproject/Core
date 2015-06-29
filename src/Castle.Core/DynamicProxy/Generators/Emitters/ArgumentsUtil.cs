@@ -118,7 +118,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			for (var i = 0; i < parameters.Length; i++)
 			{
-				if (parameters[i].ParameterType.IsByRef)
+				if (parameters[i].ParameterType.GetTypeInfo().IsByRef)
 				{
 					return true;
 				}

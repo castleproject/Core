@@ -134,8 +134,9 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
-			if (type.IsInterface == false)
+			if (type.GetTypeInfo().IsInterface == false)
 				throw new ArgumentException("Only interfaces can be adapted to a dictionary", "type");
+
 			DictionaryAdapterMeta meta;
 
 			using (interfaceToMetaLock.ForReading())
@@ -402,7 +403,7 @@ namespace Castle.Components.DictionaryAdapter
 			PreparePropertyMethod(descriptor, setILGenerator);
 
 			setILGenerator.Emit(OpCodes.Ldarg_1);
-			if (descriptor.PropertyType.IsValueType)
+			if (descriptor.PropertyType.GetTypeInfo().IsValueType)
 			{
 				setILGenerator.Emit(OpCodes.Box, descriptor.PropertyType);
 			}

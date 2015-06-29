@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
+	using System.Reflection;
 	using System.Reflection.Emit;
 
 	/// <summary>
@@ -45,16 +46,16 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 				ArgumentsUtil.EmitLoadOwnerAndReference(reference, gen);
 
-				if (reference.Type.IsByRef)
+				if (reference.Type.GetTypeInfo().IsByRef)
 				{
 					throw new NotSupportedException();
 				}
 
-				if (reference.Type.IsValueType)
+				if (reference.Type.GetTypeInfo().IsValueType)
 				{
 					gen.Emit(OpCodes.Box, reference.Type.UnderlyingSystemType);
 				}
-				else if (reference.Type.IsGenericParameter)
+				else if (reference.Type.GetTypeInfo().IsGenericParameter)
 				{
 					gen.Emit(OpCodes.Box, reference.Type);
 				}
