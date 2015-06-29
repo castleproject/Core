@@ -19,7 +19,9 @@ namespace Castle.Core
 	using System.Collections.Generic;
 	using System.Runtime.CompilerServices;
 
+#if FEATURE_SERIALIZATION
 	[Serializable]
+#endif
 	public class ReferenceEqualityComparer<T> : IEqualityComparer, IEqualityComparer<T>
 	{
 		private static readonly ReferenceEqualityComparer<T> instance = new ReferenceEqualityComparer<T>();

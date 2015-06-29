@@ -15,7 +15,7 @@
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
 #endif
 
@@ -24,7 +24,9 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
+#if FEATURE_SERIALIZATION
 	using Castle.DynamicProxy.Serialization;
+#endif
 	using Castle.DynamicProxy.Tokens;
 
 	public abstract class ProxyInstanceContributor : ITypeContributor
@@ -47,7 +49,7 @@ namespace Castle.DynamicProxy.Contributors
 		public virtual void Generate(ClassEmitter @class, ProxyGenerationOptions options)
 		{
 			var interceptors = @class.GetField("__interceptors");
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 			ImplementGetObjectData(@class);
 #endif
 			ImplementProxyTargetAccessor(@class, interceptors);
@@ -70,8 +72,7 @@ namespace Castle.DynamicProxy.Contributors
 				new ReturnStatement(interceptorsField));
 		}
 
-#if !SILVERLIGHT
-
+#if FEATURE_SERIALIZATION
 		protected void ImplementGetObjectData(ClassEmitter emitter)
 		{
 			var getObjectData = emitter.CreateMethod("GetObjectData", typeof(void),

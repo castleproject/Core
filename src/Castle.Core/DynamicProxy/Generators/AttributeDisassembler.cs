@@ -22,7 +22,9 @@ namespace Castle.DynamicProxy.Generators
 
 	using Castle.DynamicProxy.Internal;
 
+#if FEATURE_SERIALIZATION
 	[Serializable]
+#endif
 	public class AttributeDisassembler : IAttributeDisassembler
 	{
 		public CustomAttributeBuilder Disassemble(Attribute attribute)
@@ -135,7 +137,6 @@ namespace Castle.DynamicProxy.Generators
 		/// </summary>
 		private static object[] InitializeConstructorArgs(Type attributeType, Attribute attribute, ParameterInfo[] parameters)
 		{
-
 			var args = new object[parameters.Length];
 			for (var i = 0; i < args.Length; i++)
 			{

@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_SERIALIZATION
+
 namespace Castle.DynamicProxy.Tests.Serialization
 {
-#if !SILVERLIGHT
 	using System;
 	using System.Reflection;
 	using System.Text.RegularExpressions;
@@ -42,5 +43,6 @@ namespace Castle.DynamicProxy.Tests.Serialization
 			return Regex.IsMatch(memberInfo.Name, nameFilter);
 		}
 	}
-#endif
 }
+
+#endif

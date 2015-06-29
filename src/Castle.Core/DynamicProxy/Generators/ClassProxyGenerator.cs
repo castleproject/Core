@@ -166,8 +166,8 @@ namespace Castle.DynamicProxy.Generators
 					AddMapping(@interface, additionalInterfacesContributor, typeImplementerMapping);
 				}
 			}
-#if !SILVERLIGHT
 			// 4. plus special interfaces
+#if FEATURE_SERIALIZATION
 			if (targetType.IsSerializable)
 			{
 				AddMappingForISerializable(typeImplementerMapping, proxyInstance);

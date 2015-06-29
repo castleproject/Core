@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Tests.Interfaces
 		void Did<T>(ref T i);
 	}
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
 	public class GenericWithRefOut : IGenericWithRefOut

@@ -16,10 +16,12 @@ namespace Castle.DynamicProxy
 {
 	using System;
 
+#if FEATURE_SERIALIZATION
+	[Serializable]
+#endif
 #if SILVERLIGHT
 	public class StandardInterceptor : IInterceptor
 #else
-	[Serializable]
 	public class StandardInterceptor : MarshalByRefObject, IInterceptor
 #endif
 	{

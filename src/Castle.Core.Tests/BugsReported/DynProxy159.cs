@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SILVERLIGHT
+
 namespace CastleTests.BugsReported
 {
-#if !SILVERLIGHT
 	using System;
 	using System.IO;
 	using System.Reflection;
@@ -74,12 +75,15 @@ namespace CastleTests.BugsReported
 		}
 	}
 
+#if FEATURE_SERIALIZATION
 	[Serializable]
+#endif
 	public class MySerialClass
 	{
 		public string xxx { get; set; }
 		public double? yyy { get; set; }
 		public int? zzz { get; set; }
 	}
-#endif
 }
+
+#endif

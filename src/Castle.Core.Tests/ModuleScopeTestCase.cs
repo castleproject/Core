@@ -271,6 +271,7 @@ namespace Castle.DynamicProxy.Tests
 			scope.SaveAssembly(true);
 		}
 
+#if FEATURE_SERIALIZATION
 		[Test]
 		public void SavedAssemblyHasCacheMappings()
 		{
@@ -316,6 +317,7 @@ namespace Castle.DynamicProxy.Tests
 
 			File.Delete(savedPath);
 		}
+#endif
 
 		[Test]
 		public void GeneratedAssembliesDefaultName()
@@ -379,7 +381,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(scope, builder.ModuleScope);
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 		[Test]
 		[ExpectedException(typeof (ArgumentException))]
 		public void LoadAssemblyIntoCache_InvalidAssembly()
@@ -499,7 +501,6 @@ namespace Castle.DynamicProxy.Tests
 
 			File.Delete(path);
 		}
-
 #endif
 	}
 }

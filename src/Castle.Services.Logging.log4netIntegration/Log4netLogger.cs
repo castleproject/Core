@@ -23,7 +23,9 @@ namespace Castle.Services.Logging.Log4netIntegration
 
 	using Logger = Castle.Core.Logging.ILogger;
 
+#if FEATURE_SERIALIZATION
 	[Serializable]
+#endif
 	public class Log4netLogger : MarshalByRefObject, Logger
 	{
 		private static readonly Type declaringType = typeof(Log4netLogger);

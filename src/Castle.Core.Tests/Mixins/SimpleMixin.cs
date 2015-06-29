@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Tests.Mixins
 	/// <summary>
 	/// Summary description for SimpleMixin.
 	/// </summary>
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
 	public class SimpleMixin : ISimpleMixin

@@ -14,33 +14,26 @@
 
 namespace Castle.Core.Configuration
 {
-#if !SILVERLIGHT
-
+#if FEATURE_SERIALIZATION
 	using System;
-	using System.Collections.Specialized;
 	using System.Runtime.Serialization;
+#endif
 
+#if FEATURE_SERIALIZATION
 	[Serializable]
-	public class ConfigurationAttributeCollection : NameValueCollection
-	{
-		public ConfigurationAttributeCollection()
-		{
-		}
-
-		protected ConfigurationAttributeCollection(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-		}
-	}
+#endif
+	public class ConfigurationAttributeCollection
+#if SILVERLIGHT
+		: System.Collections.Generic.Dictionary<string, string>
 #else
-
-	using System.Collections.Generic;
-
-	public class ConfigurationAttributeCollection : Dictionary<string, string>
+		: System.Collections.Specialized.NameValueCollection
+#endif
 	{
 		public ConfigurationAttributeCollection()
 		{
 		}
-	
+
+#if SILVERLIGHT
 		public new string this[string key]
 		{
 			get
@@ -54,6 +47,12 @@ namespace Castle.Core.Configuration
 				base[key] = value;
 			}
 		}
-	}
 #endif
+
+#if FEATURE_SERIALIZATION
+		protected ConfigurationAttributeCollection(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+		}
+#endif
+	}
 }

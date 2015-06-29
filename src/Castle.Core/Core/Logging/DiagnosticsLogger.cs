@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SILVERLIGHT
+
 namespace Castle.Core.Logging
 {
-#if !SILVERLIGHT
 	using System;
 	using System.Diagnostics;
 	using System.Globalization;
@@ -22,10 +23,14 @@ namespace Castle.Core.Logging
 	/// <summary>
 	///   The Logger using standart Diagnostics namespace.
 	/// </summary>
+#if FEATURE_SERIALIZATION
 	[Serializable]
+#endif
 	public class DiagnosticsLogger : LevelFilteredLogger, IDisposable
 	{
+#if FEATURE_SERIALIZATION
 		[NonSerialized]
+#endif
 		private EventLog eventLog;
 
 		/// <summary>
@@ -140,5 +145,6 @@ namespace Castle.Core.Logging
 			}
 		}
 	}
-#endif
 }
+
+#endif

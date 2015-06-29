@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 {
 	using System;
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
 	public class ClassWithInterface : ISimpleInterface

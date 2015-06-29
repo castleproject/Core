@@ -15,9 +15,13 @@
 namespace Castle.Core.Logging
 {
 	using System;
+#if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
+#endif
 
+#if FEATURE_SERIALIZATION
 	[Serializable]
+#endif
 	public class LoggerException : Exception
 	{
 		public LoggerException()
@@ -32,7 +36,7 @@ namespace Castle.Core.Logging
 		{
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 		protected LoggerException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}

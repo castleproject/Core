@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 	/// <summary>
 	/// Summary description for MySerializableClass.
 	/// </summary>
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
 	public class MySerializableClass
@@ -43,7 +43,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 		}
 	}
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	[Serializable]
 	public class MySerializableClass2 : MySerializableClass, ISerializable
 	{

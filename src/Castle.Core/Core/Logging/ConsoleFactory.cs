@@ -16,10 +16,12 @@ namespace Castle.Core.Logging
 {
 	using System;
 
+#if FEATURE_SERIALIZATION
+	[Serializable]
+#endif
 #if SILVERLIGHT
 	public class ConsoleFactory : ILoggerFactory
 #else
-	[Serializable]
 	public class ConsoleFactory : MarshalByRefObject, ILoggerFactory
 #endif
 	{

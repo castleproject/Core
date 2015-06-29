@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SILVERLIGHT
+
 namespace Castle.DynamicProxy
 {
-#if !SILVERLIGHT
 	/// <summary>
 	///   ProxyBuilder that persists the generated type.
 	/// </summary>
@@ -43,5 +44,6 @@ namespace Castle.DynamicProxy
 			return ModuleScope.SaveAssembly();
 		}
 	}
-#endif
 }
+
+#endif

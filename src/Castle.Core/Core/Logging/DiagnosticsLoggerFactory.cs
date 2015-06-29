@@ -12,12 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SILVERLIGHT
+
 namespace Castle.Core.Logging
 {
-#if !SILVERLIGHT
 	using System;
 
+#if FEATURE_SERIALIZATION
 	[Serializable]
+#endif
 	public class DiagnosticsLoggerFactory : AbstractLoggerFactory
 	{
 		private const string DefaultLogName = "CastleDefaultLogger";
@@ -34,6 +37,6 @@ namespace Castle.Core.Logging
 			return logger;
 		}
 	}
+}
 
 #endif
-}

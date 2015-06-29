@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Reflection;
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
 	public class ProxyNothingHook : IProxyGenerationHook

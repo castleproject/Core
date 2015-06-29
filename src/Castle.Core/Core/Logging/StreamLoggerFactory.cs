@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !SILVERLIGHT
+
 namespace Castle.Core.Logging
 {
-#if !SILVERLIGHT
 	using System;
 	using System.IO;
 	using System.Text;
@@ -24,7 +25,9 @@ namespace Castle.Core.Logging
 	///   to files. The name of the file is derived from the log name
 	///   plus the 'log' extension.
 	/// </summary>
+#if FEATURE_SERIALIZATION
 	[Serializable]
+#endif
 	public class StreamLoggerFactory : AbstractLoggerFactory
 	{
 		public override ILogger Create(string name)
@@ -40,6 +43,6 @@ namespace Castle.Core.Logging
 			return logger;
 		}
 	}
+}
 
 #endif
-}

@@ -18,7 +18,7 @@ namespace Castle.InterClasses
 
 	using Castle.DynamicProxy.Tests.Interfaces;
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
 	public class WithRefOut : IWithRefOut

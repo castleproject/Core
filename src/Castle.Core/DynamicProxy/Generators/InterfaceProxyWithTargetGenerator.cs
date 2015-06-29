@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 	using System.Xml.Serialization;
 #endif
 
@@ -90,8 +90,8 @@ namespace Castle.DynamicProxy.Generators
 			}
 			return contributor;
 		}
-		
-#if (!SILVERLIGHT)
+
+#if !SILVERLIGHT
 		protected override void CreateTypeAttributes(ClassEmitter emitter)
 		{
 			base.CreateTypeAttributes(emitter);
@@ -218,7 +218,9 @@ namespace Castle.DynamicProxy.Generators
 
 			// 4. plus special interfaces
 			var instance = new InterfaceProxyInstanceContributor(targetType, GeneratorType, interfaces);
+#if FEATURE_SERIALIZATION
 			AddMappingForISerializable(typeImplementerMapping, instance);
+#endif
 			try
 			{
 				AddMappingNoCheck(typeof(IProxyTargetAccessor), instance, typeImplementerMapping);
@@ -256,7 +258,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			base.CreateFields(emitter);
 			targetField = emitter.CreateField("__target", proxyTargetType);
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(targetField);
 #endif
 		}

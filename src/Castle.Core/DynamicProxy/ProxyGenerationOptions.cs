@@ -17,17 +17,20 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection.Emit;
+#if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
+#endif
 	using Castle.Core.Internal;
 #if DOTNET40
 	using System.Security;
 #endif
 
-#if SILVERLIGHT
-	public class ProxyGenerationOptions
-#else
+#if FEATURE_SERIALIZATION
 	[Serializable]
-	public class ProxyGenerationOptions : ISerializable
+#endif
+	public class ProxyGenerationOptions
+#if FEATURE_SERIALIZATION
+		: ISerializable
 #endif
 	{
 		public static readonly ProxyGenerationOptions Default = new ProxyGenerationOptions();
@@ -36,7 +39,7 @@ namespace Castle.DynamicProxy
 		internal readonly IList<Attribute> attributesToAddToGeneratedTypes = new List<Attribute>();
 		private readonly IList<CustomAttributeBuilder> additionalAttributes = new List<CustomAttributeBuilder>();
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 		[NonSerialized]
 #endif
 		private MixinData mixinData; // this is calculated dynamically on proxy type creation
@@ -59,7 +62,7 @@ namespace Castle.DynamicProxy
 		{
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 		private ProxyGenerationOptions(SerializationInfo info, StreamingContext context)
 		{
 			Hook = (IProxyGenerationHook)info.GetValue("hook", typeof(IProxyGenerationHook));
@@ -85,7 +88,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 #if DOTNET40
 		[SecurityCritical]
 #endif

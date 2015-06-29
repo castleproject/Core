@@ -12,21 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-#if !SILVERLIGHT
-using System.Runtime.Serialization.Formatters.Binary;
-#endif
-using Castle.DynamicProxy.Tests.Classes;
-using NUnit.Framework;
+#if FEATURE_SERIALIZATION
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Runtime.Serialization.Formatters.Binary;
+
+	using Castle.DynamicProxy.Tests.Classes;
+
+	using NUnit.Framework;
+
 	[TestFixture]
 	public class DictionarySerializationTestCase
 	{
-#if !SILVERLIGHT
 		[Test]
 		public void NullReferenceProxyDeserializationTest()
 		{
@@ -110,17 +111,7 @@ namespace Castle.DynamicProxy.Tests
 			stream.Position = 0;
 			return (T) formatter.Deserialize(stream);
 		}
-#endif
-#if SILVERLIGHT
-		[Test, Ignore("No serialization support...")]
-		public void NullReferenceProxyDeserializationTest() { }
-		[Test, Ignore("No serialization support...")]
-		public void DictionaryDeserializationWithoutProxyTest() { }
-		[Test, Ignore("No serialization support...")]
-		public void DictionaryDeserializationWithProxyTest() { }
-		[Test, Ignore("No serialization support...")]
-		public void BasicSerializationProxyTest() { }
-#endif
-
 	}
 }
+
+#endif
