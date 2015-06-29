@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
 	using System.Diagnostics;
+	using System.Reflection;
 	using System.Reflection.Emit;
 
 	/// <summary>
@@ -28,7 +29,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		public IndirectReference(TypeReference byRefReference) :
 			base(byRefReference, byRefReference.Type.GetElementType())
 		{
-			if (!byRefReference.Type.IsByRef)
+			if (!byRefReference.Type.GetTypeInfo().IsByRef)
 			{
 				throw new ArgumentException("Expected an IsByRef reference", "byRefReference");
 			}
@@ -53,7 +54,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public static TypeReference WrapIfByRef(TypeReference reference)
 		{
-			return reference.Type.IsByRef ? new IndirectReference(reference) : reference;
+			return reference.Type.GetTypeInfo().IsByRef ? new IndirectReference(reference) : reference;
 		}
 
 		// TODO: Better name

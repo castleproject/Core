@@ -18,6 +18,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Reflection;
 	using System.Xml;
 	using System.Xml.Serialization;
 
@@ -284,7 +285,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			switch (kind)
 			{
 				case XmlTypeKind.Complex:
-					if (!clrType.IsInterface) goto default;
+					if (!clrType.GetTypeInfo().IsInterface) goto default;
 					return GetXmlMetadata(clrType).XsiType;
 
 				case XmlTypeKind.Collection:
@@ -338,7 +339,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			var kind = XmlTypeSerializer.For(clrType).Kind;
 
-			return kind == XmlTypeKind.Complex && clrType.IsInterface
+			return kind == XmlTypeKind.Complex && clrType.GetTypeInfo().IsInterface
 				? Try.Success(out metadata, GetXmlMetadata(clrType))
 				: Try.Failure(out metadata);
 		}

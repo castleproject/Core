@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
+	using System.Reflection;
 	using System.Reflection.Emit;
 
 	public class ConvertExpression : Expression
@@ -44,7 +45,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				return;
 			}
 
-			if (fromType.IsByRef)
+			if (fromType.GetTypeInfo().IsByRef)
 			{
 				fromType = fromType.GetElementType();
 			}
@@ -56,7 +57,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 			if (target.IsValueType)
 			{
-				if (fromType.IsValueType)
+				if (fromType.GetTypeInfo().IsValueType)
 				{
 					throw new NotImplementedException("Cannot convert between distinct value types");
 				}
@@ -78,7 +79,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else
 			{
-				if (fromType.IsValueType)
+				if (fromType.GetTypeInfo().IsValueType)
 				{
 					// Box conversion
 					gen.Emit(OpCodes.Box, fromType);
@@ -98,7 +99,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			{
 				gen.Emit(OpCodes.Unbox_Any, target);
 			}
-			else if (from.IsGenericParameter)
+			else if (from.GetTypeInfo().IsGenericParameter)
 			{
 				gen.Emit(OpCodes.Box, from);
 			}

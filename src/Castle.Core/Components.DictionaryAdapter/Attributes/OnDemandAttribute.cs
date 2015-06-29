@@ -67,7 +67,7 @@ namespace Castle.Components.DictionaryAdapter
 
 					if (IsAcceptedType(type))
 					{
-						if (type.IsInterface)
+						if (type.GetTypeInfo().IsInterface)
 						{
 							if (property.IsDynamicProperty == false)
 							{
@@ -77,7 +77,7 @@ namespace Castle.Components.DictionaryAdapter
 								}
 							}
 						}
-						else if (type.IsArray)
+						else if (type.GetTypeInfo().IsArray)
 						{
 							storedValue = Array.CreateInstance(type.GetElementType(), 0);
 						}
@@ -139,7 +139,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static bool IsAcceptedType(Type type)
 		{
-			return type != null && type != typeof(String) && !type.IsPrimitive && !type.IsEnum;
+			return type != null && type != typeof(string) && !type.GetTypeInfo().IsPrimitive && !type.GetTypeInfo().IsEnum;
 		}
 
 		private static Type GetInferredType(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, out IValueInitializer initializer)
@@ -155,11 +155,11 @@ namespace Castle.Components.DictionaryAdapter
 
 			Type collectionType = null;
 
-			if (type.IsGenericType)
+			if (type.GetTypeInfo().IsGenericType)
 			{
 				var genericDef = type.GetGenericTypeDefinition();
 				var genericArg = type.GetGenericArguments()[0];
-				bool isBindingList = 
+				bool isBindingList =
 #if SILVERLIGHT
 					false;
 #else
@@ -176,10 +176,9 @@ namespace Castle.Components.DictionaryAdapter
 						collectionType = isBindingList ? typeof(EditableBindingList<>) : typeof(EditableList<>);
 #endif
 					}
-					
-#if SILVERLIGHT //never true
-#else
-					if (isBindingList && genericArg.IsInterface)
+
+#if !SILVERLIGHT
+					if (isBindingList && genericArg.GetTypeInfo().IsInterface)
 					{
 						Func<object> addNew = () => dictionaryAdapter.Create(genericArg);
 						initializer = (IValueInitializer)Activator.CreateInstance(

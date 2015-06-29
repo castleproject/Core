@@ -271,12 +271,12 @@ namespace Castle.DynamicProxy.Generators
 					"Base type for proxy is null reference. Please set it to System.Object or some other valid type.");
 			}
 
-			if (!type.IsClass)
+			if (!type.GetTypeInfo().IsClass)
 			{
 				ThrowInvalidBaseType(type, "it is not a class type");
 			}
 
-			if (type.IsSealed)
+			if (type.GetTypeInfo().IsSealed)
 			{
 				ThrowInvalidBaseType(type, "it is sealed");
 			}

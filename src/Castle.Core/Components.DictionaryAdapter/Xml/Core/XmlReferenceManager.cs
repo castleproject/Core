@@ -18,6 +18,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Reflection;
+
 	using Castle.Core;
 	using Castle.Core.Internal;
 
@@ -420,7 +422,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private static bool ShouldExclude(Type type)
 		{
-			return type.IsValueType
+			return type.GetTypeInfo().IsValueType
 				|| type == StringType;
 		}
 

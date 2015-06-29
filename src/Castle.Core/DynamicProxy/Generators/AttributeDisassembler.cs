@@ -224,7 +224,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				return false;
 			}
-			if (type.IsEnum)
+			if (type.GetTypeInfo().IsEnum)
 			{
 				return Enum.ToObject(type, 0);
 			}
@@ -232,11 +232,11 @@ namespace Castle.DynamicProxy.Generators
 			{
 				return Char.MinValue;
 			}
-			if (type.IsPrimitive)
+			if (type.GetTypeInfo().IsPrimitive)
 			{
 				return 0;
 			}
-			if(type.IsArray && parameter.IsDefined(typeof(ParamArrayAttribute), true))
+			if(type.GetTypeInfo().IsArray && parameter.IsDefined(typeof(ParamArrayAttribute), true))
 			{
 				return Array.CreateInstance(type.GetElementType(), 0);
 			}

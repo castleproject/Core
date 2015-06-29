@@ -18,6 +18,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
+	using System.Reflection;
 	using System.Text;
 
 	/// <summary>
@@ -45,7 +46,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (storedValue == null || !storedValue.GetType().IsInstanceOfType(propertyType))
 			{
-				if (propertyType.IsGenericType)
+				if (propertyType.GetTypeInfo().IsGenericType)
 				{
 					var genericDef = propertyType.GetGenericTypeDefinition();
 

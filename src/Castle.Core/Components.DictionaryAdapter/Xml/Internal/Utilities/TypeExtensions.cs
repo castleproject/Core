@@ -17,13 +17,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 	using System.Linq;
+	using System.Reflection;
 	using System.Xml.Serialization;
 
 	public static class TypeExtensions
 	{
 		public static Type NonNullable(this Type type)
 		{
-			return type.IsGenericType
+			return type.GetTypeInfo().IsGenericType
 				&& type.GetGenericTypeDefinition() == typeof(Nullable<>)
 				? type.GetGenericArguments()[0]
 				: type;
@@ -31,9 +32,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public static Type GetCollectionItemType(this Type type)
 		{
-			if (type.IsArray)
+			if (type.GetTypeInfo().IsArray)
 				return type.GetElementType();
-			if (type.IsGenericType)
+			if (type.GetTypeInfo().IsGenericType)
 				return type.GetGenericArguments().Single();
 			throw Error.NotCollectionType("type");
 		}

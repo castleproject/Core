@@ -181,7 +181,7 @@ namespace Castle.DynamicProxy
 
 			string methodKindIs;
 			string methodKindDescription;
-			if (Method.DeclaringType.IsClass && Method.IsAbstract)
+			if (Method.DeclaringType.GetTypeInfo().IsClass && Method.IsAbstract)
 			{
 				methodKindIs = "is abstract";
 				methodKindDescription = "an abstract method";

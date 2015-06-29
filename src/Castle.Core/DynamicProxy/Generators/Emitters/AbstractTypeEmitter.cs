@@ -58,7 +58,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			get
 			{
-				if (TypeBuilder.IsInterface)
+				if (TypeBuilder.GetTypeInfo().IsInterface)
 				{
 					throw new InvalidOperationException("This emitter represents an interface; interfaces have no base types.");
 				}
@@ -132,7 +132,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public ConstructorEmitter CreateConstructor(params ArgumentReference[] arguments)
 		{
-			if (TypeBuilder.IsInterface)
+			if (TypeBuilder.GetTypeInfo().IsInterface)
 			{
 				throw new InvalidOperationException("Interfaces cannot have constructors.");
 			}
@@ -144,7 +144,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public void CreateDefaultConstructor()
 		{
-			if (TypeBuilder.IsInterface)
+			if (TypeBuilder.GetTypeInfo().IsInterface)
 			{
 				throw new InvalidOperationException("Interfaces cannot have constructors.");
 			}
@@ -294,7 +294,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			foreach (var genType in genericType.GetGenericArguments())
 			{
-				if (genType.IsGenericParameter)
+				if (genType.GetTypeInfo().IsGenericParameter)
 				{
 					types.Add(name2GenericType[genType.Name]);
 				}
@@ -341,7 +341,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					throw;
 				}
 
-				if (type.IsGenericTypeDefinition == false)
+				if (type.GetTypeInfo().IsGenericTypeDefinition == false)
 				{
 					throw;
 				}
@@ -359,7 +359,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		protected virtual void EnsureBuildersAreInAValidState()
 		{
-			if (!typebuilder.IsInterface && constructors.Count == 0)
+			if (!typebuilder.GetTypeInfo().IsInterface && constructors.Count == 0)
 			{
 				CreateDefaultConstructor();
 			}

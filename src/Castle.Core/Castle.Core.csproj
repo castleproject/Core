@@ -26,7 +26,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;DOTNET40 FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET40 FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -42,7 +42,7 @@
     <OutputPath>bin\NET40-Release\</OutputPath>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <DefineConstants>TRACE;DOTNET40 FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DOTNET40 FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\NET40-Release\Castle.Core.xml</DocumentationFile>
@@ -55,7 +55,7 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <OutputPath>bin\NET35-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;DOTNET35 FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET35 FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <Optimize>true</Optimize>
@@ -72,7 +72,7 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <OutputPath>bin\NET35-Release\</OutputPath>
-    <DefineConstants>TRACE;DOTNET35 FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DOTNET35 FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
     <DocumentationFile>bin\NET35-Release\Castle.Core.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -88,7 +88,7 @@
     </TargetFrameworkProfile>
     <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
     <OutputPath>bin\SL40-Release\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT SL4</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT SL4 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
     <DocumentationFile>bin\SL40-Release\Castle.Core.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -105,7 +105,7 @@
     <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\SL40-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT SL4</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT SL4 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -121,7 +121,7 @@
     </TargetFrameworkProfile>
     <MSBuildTargets>Silverlight 5.0</MSBuildTargets>
     <OutputPath>bin\SL50-Release\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT SL5</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT SL5 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
     <DocumentationFile>bin\SL50-Release\Castle.Core.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -138,7 +138,7 @@
     <MSBuildTargets>Silverlight 5.0</MSBuildTargets>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\SL40-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT SL5</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT SL5 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -183,6 +183,7 @@
     <Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Compatibility\IntrospectionExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ListProjectionDebugView.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ICollectionAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\ReferenceAttribute.cs" />

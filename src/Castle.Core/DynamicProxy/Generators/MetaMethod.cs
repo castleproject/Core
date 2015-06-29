@@ -109,7 +109,7 @@ namespace Castle.DynamicProxy.Generators
 			var methodInfo = Method;
 			var attributes = MethodAttributes.Virtual;
 
-			if (methodInfo.IsFinal || Method.DeclaringType.IsInterface)
+			if (methodInfo.IsFinal || Method.DeclaringType.GetTypeInfo().IsInterface)
 			{
 				attributes |= MethodAttributes.NewSlot;
 			}

@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		public InvocationWithGenericDelegateContributor(Type delegateType, MetaMethod method, Reference targetReference)
 		{
-			Debug.Assert(delegateType.IsGenericType, "delegateType.IsGenericType");
+			Debug.Assert(delegateType.GetTypeInfo().IsGenericType, "delegateType.IsGenericType");
 			this.delegateType = delegateType;
 			this.method = method;
 			this.targetReference = targetReference;

@@ -48,7 +48,7 @@ namespace Castle.DynamicProxy.Generators
 			var methodEmitter = overrideMethod(method.Name, method.Attributes, MethodToOverride);
 			var proxiedMethod = BuildProxiedMethodBody(methodEmitter, @class, options, namingScope);
 
-			if (MethodToOverride.DeclaringType.IsInterface)
+			if (MethodToOverride.DeclaringType.GetTypeInfo().IsInterface)
 			{
 				@class.TypeBuilder.DefineMethodOverride(proxiedMethod.MethodBuilder, MethodToOverride);
 			}
