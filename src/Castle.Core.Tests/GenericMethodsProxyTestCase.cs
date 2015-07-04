@@ -36,9 +36,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore ("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-		#endif
 		public void GenericMethod_WithConstraintOnOtherParameter ()
 		{
 			var type = typeof(IInterfaceWithGenericMethodWithDependentConstraint);
@@ -57,9 +54,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore ("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-		#endif
 		public void GenericMethod_WithConstraintOnSurroundingTypeParameter ()
 		{
 			var type = typeof(IGenericInterfaceWithGenericMethodWithDependentConstraint<object>);

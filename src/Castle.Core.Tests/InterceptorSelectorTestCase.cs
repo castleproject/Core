@@ -48,9 +48,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-#endif
 		public void SelectorWorksForGenericMethods()
 		{
 			var options = new ProxyGenerationOptions();

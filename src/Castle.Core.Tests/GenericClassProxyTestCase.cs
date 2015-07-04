@@ -114,8 +114,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Platform(Exclude = "mono", Reason = "Assertion at sgen-alloc.c:460, condition `*p == NULL' not met. " +
-		"Fixed in https://bugzilla.xamarin.com/show_bug.cgi?id=28182")]
+#if __MonoCS__
+		[Ignore ("System.Type.GetTypeInfo().IsByRef throws a System.InvalidCastException on mono 4.0.2")]
+#endif
 		public void ProxyWithMethodReturningGenericOfGenericOfT ()
 		{
 			var proxy = generator.CreateClassProxy<ClassWithMethodWithReturnArrayOfListOfT> ();
