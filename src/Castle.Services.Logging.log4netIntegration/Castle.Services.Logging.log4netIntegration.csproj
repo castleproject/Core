@@ -8,13 +8,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FA79D6B4-30B1-444A-A627-ED283BF6406B}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">NET40-Release</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">NET40-Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>
-    </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>Castle.Services.Logging.Log4netIntegration</AssemblyName>
@@ -26,8 +22,6 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Castle.Services.Logging.Log4netIntegration</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <StartupObject>
-    </StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -38,19 +32,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET40-Debug|AnyCPU' ">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <OutputPath>bin\NET40-Debug\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;DEBUG;FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>
-    </NoWarn>
     <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
@@ -63,19 +50,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET40-Release|AnyCPU' ">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <OutputPath>bin\NET40-Release\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <NoWarn>
-    </NoWarn>
     <Optimize>true</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
@@ -98,6 +78,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Release|AnyCPU'">
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
@@ -112,6 +93,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Release|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -125,6 +107,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -137,6 +121,9 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50-Release|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -150,6 +137,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50-Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -162,6 +151,9 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET45-Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -174,30 +166,49 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET45-Release|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mono43-Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\NET45-Release\</OutputPath>
-    <DefineConstants>TRACE;FEATURE_SERIALIZATION</DefineConstants>
-    <BaseAddress>285212672</BaseAddress>
-    <Optimize>true</Optimize>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <FileAlignment>4096</FileAlignment>
     <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Mono43-Release\</OutputPath>
+    <DefineConstants>TRACE;FEATURE_SERIALIZATION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <FileAlignment>4096</FileAlignment>
+    <BaseAddress>285212672</BaseAddress>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mono43-Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Mono43-Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;FEATURE_SERIALIZATION</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    <FileAlignment>4096</FileAlignment>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <BaseAddress>285212672</BaseAddress>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\net35\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\lib\net35\log4net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

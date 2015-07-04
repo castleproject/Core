@@ -29,83 +29,77 @@ namespace Castle.Core.Logging.Tests
 	public class TraceLoggerTests
 	{
 		[SetUp]
-		public void Initialize()
+		public void Initialize ()
 		{
-			Listener.ClearMessages();
+			Listener.ClearMessages ();
 		}
 
 		[TearDown]
-		public void Cleanup()
+		public void Cleanup ()
 		{
-			Listener.ClearMessages();
+			Listener.ClearMessages ();
 		}
 
 		[Test]
-		[Platform(Exclude = "mono", Reason = "Mono has a bug that causes the listeners to not fully work.")]
-		public void WritingToLoggerByType()
+		//		[Platform (Exclude = "mono", Reason = "Mono has a bug that causes the listeners to not fully work.")]
+		public void WritingToLoggerByType ()
 		{
-			TraceLoggerFactory factory = new TraceLoggerFactory();
-			ILogger logger = factory.Create(typeof(TraceLoggerTests), LoggerLevel.Debug);
-			logger.Debug("this is a tracing message");
+			TraceLoggerFactory factory = new TraceLoggerFactory ();
+			ILogger logger = factory.Create (typeof(TraceLoggerTests), LoggerLevel.Debug);
+			logger.Debug ("this is a tracing message");
 
-			Listener.AssertContains("testsrule", "Castle.Core.Logging.Tests.TraceLoggerTests");
-			Listener.AssertContains("testsrule", "this is a tracing message");
+			Listener.AssertContains ("testsrule", "Castle.Core.Logging.Tests.TraceLoggerTests");
+			Listener.AssertContains ("testsrule", "this is a tracing message");
 		}
 
 		[Test]
-		public void TracingErrorInformation()
+		public void TracingErrorInformation ()
 		{
-			TraceLoggerFactory factory = new TraceLoggerFactory();
-			ILogger logger = factory.Create(typeof(TraceLoggerTests), LoggerLevel.Debug);
-			try
-			{
-				try
-				{
+			TraceLoggerFactory factory = new TraceLoggerFactory ();
+			ILogger logger = factory.Create (typeof(TraceLoggerTests), LoggerLevel.Debug);
+			try {
+				try {
 					string fakearg = "Thisisavalue";
-					throw new ArgumentOutOfRangeException("fakearg", fakearg, "Thisisamessage" );
+					throw new ArgumentOutOfRangeException ("fakearg", fakearg, "Thisisamessage");
+				} catch (Exception ex) {
+					throw new ApplicationException ("Inner error is " + ex.Message, ex);
 				}
-				catch (Exception ex)
-				{
-					throw new ApplicationException("Inner error is " + ex.Message, ex);
-				}
-			}
-			catch (Exception ex)
-			{
-				logger.Error("Problem handled", ex);
+			} catch (Exception ex) {
+				logger.Error ("Problem handled", ex);
 			}
 
-			Listener.AssertContains("testsrule", "Castle.Core.Logging.Tests.TraceLoggerTests");
-			Listener.AssertContains("testsrule", "Problem handled");
-			Listener.AssertContains("testsrule", "ApplicationException");
-			Listener.AssertContains("testsrule", "Inner error is");
-			Listener.AssertContains("testsrule", "ArgumentOutOfRangeException");
-			Listener.AssertContains("testsrule", "fakearg");
-			Listener.AssertContains("testsrule", "Thisisavalue");
-			Listener.AssertContains("testsrule", "Thisisamessage");
+			Listener.AssertContains ("testsrule", "Castle.Core.Logging.Tests.TraceLoggerTests");
+			Listener.AssertContains ("testsrule", "Problem handled");
+			Listener.AssertContains ("testsrule", "ApplicationException");
+			Listener.AssertContains ("testsrule", "Inner error is");
+			Listener.AssertContains ("testsrule", "ArgumentOutOfRangeException");
+			Listener.AssertContains ("testsrule", "fakearg");
+			Listener.AssertContains ("testsrule", "Thisisavalue");
+			Listener.AssertContains ("testsrule", "Thisisamessage");
 		}
 
 		[Test]
-		[Platform(Exclude = "mono", Reason = "Mono has a bug that causes the listeners to not fully work.")]
-		public void FallUpToShorterSourceName()
+		//		[Platform (Exclude = "mono", Reason = "Mono has a bug that causes the listeners to not fully work.")]
+		public void FallUpToShorterSourceName ()
 		{
-			TraceLoggerFactory factory = new TraceLoggerFactory();
-			ILogger logger = factory.Create(typeof(Configuration.Xml.XmlConfigurationDeserializer), LoggerLevel.Debug);
-			logger.Info("Logging to config namespace");
+			TraceLoggerFactory factory = new TraceLoggerFactory ();
+			ILogger logger = factory.Create (typeof(Configuration.Xml.XmlConfigurationDeserializer), LoggerLevel.Debug);
+			logger.Info ("Logging to config namespace");
 
-			Listener.AssertContains("configrule", "Castle.Core.Configuration.Xml.XmlConfigurationDeserializer");
-			Listener.AssertContains("configrule", "Logging to config namespace");            
+			Listener.AssertContains ("configrule", "Castle.Core.Configuration.Xml.XmlConfigurationDeserializer");
+			Listener.AssertContains ("configrule", "Logging to config namespace");            
 		}
 
 		[Test]
-		[Platform(Exclude = "mono", Reason = "Mono has a bug that causes the listeners to not fully work.")]
-		public void FallUpToDefaultSource()
+		//		[Platform (Exclude = "mono", Reason = "Mono has a bug that causes the listeners to not fully work.")]
+		public void FallUpToDefaultSource ()
 		{
-			TraceLoggerFactory factory = new TraceLoggerFactory();
-			ILogger logger = factory.Create("System.Xml.XmlDocument", LoggerLevel.Debug);
-			logger.Info("Logging to non-configured namespace namespace");
+			TraceLoggerFactory factory = new TraceLoggerFactory ();
+			ILogger logger = factory.Create ("System.Xml.XmlDocument", LoggerLevel.Debug);
+			logger.Info ("Logging to non-configured namespace namespace");
 
-			Listener.AssertContains("defaultrule", "System.Xml.XmlDocument");
-			Listener.AssertContains("defaultrule", "Logging to non-configured namespace namespace");
+			Listener.AssertContains ("defaultrule", "System.Xml.XmlDocument");
+			Listener.AssertContains ("defaultrule", "Logging to non-configured namespace namespace");
 		}
 
 		#region in-memory listener class
@@ -116,50 +110,50 @@ namespace Castle.Core.Logging.Tests
 		/// </summary>
 		public class Listener : TraceListener
 		{
-			public Listener()
+			public Listener ()
 			{
 			}
 
-			public Listener(string initializationData)
+			public Listener (string initializationData)
 			{
 				traceName = initializationData;
 			}
 
-			static Dictionary<string, StringBuilder> traces = new Dictionary<string, StringBuilder>();
+			static Dictionary<string, StringBuilder> traces = new Dictionary<string, StringBuilder> ();
 			readonly string traceName;
 
-			StringBuilder GetStringBuilder()
+			StringBuilder GetStringBuilder ()
 			{
-				lock (traces)
-				{
-					if (!traces.ContainsKey(traceName))
-						traces.Add(traceName, new StringBuilder());
+				lock (traces) {
+					if (!traces.ContainsKey (traceName))
+						traces.Add (traceName, new StringBuilder ());
 
-					return traces[traceName];
+					return traces [traceName];
 				}
 			}
 
-			public override void Write(string message)
+			public override void Write (string message)
 			{
-				GetStringBuilder().Append(message);
+				GetStringBuilder ().Append (message);
 			}
 
-			public override void WriteLine(string message)
+			public override void WriteLine (string message)
 			{
-				GetStringBuilder().AppendLine(message);
+				GetStringBuilder ().AppendLine (message);
 			}
 
-			public static void AssertContains(string traceName, string expected)
+			public static void AssertContains (string traceName, string expected)
 			{
-				Assert.IsTrue(traces.ContainsKey(traceName), "Trace named {0} not found", traceName);
-				Assert.IsTrue(traces[traceName].ToString().Contains(expected), string.Format("Trace text expected to contain '{0}'", expected));
+				Assert.IsTrue (traces.ContainsKey (traceName), "Trace named {0} not found", traceName);
+				Assert.IsTrue (traces [traceName].ToString ().Contains (expected), string.Format ("Trace text expected to contain '{0}'", expected));
 			}
 
-			public static void ClearMessages()
+			public static void ClearMessages ()
 			{
-				traces = new Dictionary<string, StringBuilder>();
+				traces = new Dictionary<string, StringBuilder> ();
 			}
 		}
+
 		#endregion
 	}
 }
