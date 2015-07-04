@@ -156,7 +156,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				{
 					parameterBuilder.SetCustomAttribute(attribute);
 				}
-#if DOTNET45
+#if DOTNET45 && !__MonoCS__
 				if (parameter.HasDefaultValue && parameter.DefaultValue != null)
 				{
 					if (parameter.ParameterType == typeof(decimal) || parameter.ParameterType == typeof(decimal?))

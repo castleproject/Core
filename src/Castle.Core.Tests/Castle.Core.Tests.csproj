@@ -188,6 +188,9 @@
     <Reference Include="NLog">
       <HintPath>..\..\lib\net45\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="$(TargetFrameworkVersion)!='v3.5'">
@@ -207,31 +210,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <Choose>
-    <When Condition="$(MSBuildTargets)!='Silverlight 5.0' and $(MSBuildTargets)!='Silverlight 4.0'">
-      <ItemGroup>
-        <Reference Include="System.Data" />
-        <Reference Include="nunit.framework">
-          <SpecificVersion>False</SpecificVersion>
-          <HintPath>..\..\lib\nunit.framework.dll</HintPath>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(MSBuildTargets) == 'Silverlight 5.0' or $(MSBuildTargets) == 'Silverlight 4.0'">
-      <ItemGroup>
-        <Reference Include="NUnit.Silverlight.Framework">
-          <SpecificVersion>False</SpecificVersion>
-          <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NUnit.Silverlight.Framework.dll</HintPath>
-        </Reference>
-        <Reference Include="NUnit.Silverlight.Compatibility">
-          <SpecificVersion>False</SpecificVersion>
-          <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NUnit.Silverlight.Compatibility.dll</HintPath>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
   <ItemGroup>
     <Compile Include="AccessLevelTestCase.cs" />
     <Compile Include="BasePEVerifyTestCase.cs" />
@@ -428,6 +406,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingNameValueCollectionsTestCase.cs" />
