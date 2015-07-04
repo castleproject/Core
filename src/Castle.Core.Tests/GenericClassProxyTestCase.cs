@@ -114,8 +114,8 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		//		[Platform(Exclude = "mono", Reason = "Assertion at sgen-alloc.c:460, condition `*p == NULL' not met. " +
-//			"Fixed in https://bugzilla.xamarin.com/show_bug.cgi?id=28182")]
+		[Platform(Exclude = "mono", Reason = "Assertion at sgen-alloc.c:460, condition `*p == NULL' not met. " +
+		"Fixed in https://bugzilla.xamarin.com/show_bug.cgi?id=28182")]
 		public void ProxyWithMethodReturningGenericOfGenericOfT ()
 		{
 			var proxy = generator.CreateClassProxy<ClassWithMethodWithReturnArrayOfListOfT> ();
@@ -124,9 +124,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore ("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-		#endif
 		public void ProxyWithGenericArgumentsAndMethodGenericArguments ()
 		{
 			GenClassWithGenMethods<List<object>> proxy =
@@ -142,9 +139,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore ("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-		#endif
 		public void ProxyWithGenericArgumentsAndMethodGenericArgumentsWithConstraints ()
 		{
 			GenClassWithGenMethodsConstrained<List<object>> proxy =
@@ -160,9 +154,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore ("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-		#endif
 		public void ProxyWithGenericArgumentsAndMethodGenericArgumentsWithOneNotDefinedOnType ()
 		{
 			GenClassWithGenMethods<List<object>> proxy =
@@ -214,9 +205,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore ("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-		#endif
 		public void ClassWithGenMethodOnly ()
 		{
 			OnlyGenMethodsClass proxy =
@@ -231,9 +219,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore ("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-		#endif
 		public void MethodInfoClosedInGenTypeGenMethodRefType ()
 		{
 			KeepDataInterceptor interceptor = new KeepDataInterceptor ();
@@ -249,9 +234,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore ("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-		#endif
 		public void MethodInfoClosedInGenTypeGenMethodValueType ()
 		{
 			KeepDataInterceptor interceptor = new KeepDataInterceptor ();
@@ -315,9 +297,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore ("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-		#endif
 		public void MethodInfoClosedInNongenTypeGenMethod ()
 		{
 			KeepDataInterceptor interceptor = new KeepDataInterceptor ();
