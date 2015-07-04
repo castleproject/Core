@@ -178,8 +178,6 @@
     <DefineConstants>TRACE;FEATURE_SERIALIZATION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <FileAlignment>4096</FileAlignment>
     <BaseAddress>285212672</BaseAddress>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
