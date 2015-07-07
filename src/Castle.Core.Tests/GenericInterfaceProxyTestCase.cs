@@ -398,7 +398,9 @@ namespace Castle.DynamicProxy.Tests
 		public void ThrowsWhenProxyingGenericTypeDefNoTarget()
 		{
 			var interceptor = new KeepDataInterceptor();
+			#pragma warning disable 219
 			var o = generator.CreateInterfaceProxyWithoutTarget(typeof(IGenInterfaceHierarchyBase<>), interceptor);
+			#pragma warning restore 219
 		}
 
 		[Test(Description = "There is a strange CLR bug resulting from our loading the tokens of methods in generic types. "

@@ -17,7 +17,7 @@ rm -fr Lib
 rm -fr Bin
 
 echo "BUILD SAMPLES"
-$MD build -c:$CONFIG Castle.Core.Mono.sln
+$MD build -c:$CONFIG Castle.Core.sln
 
 echo "COMPLETE"
 pause

@@ -32,7 +32,9 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 		[ExpectedException(typeof(InvalidProxyConstructorArgumentsException))]
 		public void ShouldGenerateTypeWithIndexers()
 		{
+			#pragma warning disable 219
 			var proxy = generator.CreateClassProxy(typeof(Core40ClassToProxy), new object[] { null, null, null });
+			#pragma warning restore 219
 		}
 	}
 }

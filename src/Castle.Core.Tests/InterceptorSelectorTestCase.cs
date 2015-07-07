@@ -306,7 +306,9 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Cannot_proxy_generic_interface_with_type_argument_that_has_inaccessible_type_argument()
 		{
+			#pragma warning disable 219
 			var exception = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithTarget<IList<IList<PrivateInterface>>>(new List<IList<PrivateInterface>>(), new IInterceptor[0]));
+			#pragma warning restore 219
 		}
 
 		[Test]

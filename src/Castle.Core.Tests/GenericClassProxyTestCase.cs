@@ -326,7 +326,9 @@ namespace Castle.DynamicProxy.Tests
 		public void ThrowsWhenProxyingGenericTypeDefNoTarget ()
 		{
 			KeepDataInterceptor interceptor = new KeepDataInterceptor ();
+			#pragma warning disable 219
 			object o = generator.CreateClassProxy (typeof(GenClassWithGenReturn<,>), interceptor);
+			#pragma warning restore 219
 		}
 	}
 }

@@ -26,9 +26,9 @@
     <DefineConstants>TRACE;DEBUG;DOTNET40 FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'NET40-Release|AnyCPU' ">
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -41,31 +41,6 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Debug|AnyCPU'">
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <OutputPath>bin\NET35-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;DOTNET35 FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
-    <Optimize>false</Optimize>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <DebugSymbols>true</DebugSymbols>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Prefer32Bit>false</Prefer32Bit>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Release|AnyCPU'">
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <OutputPath>bin\NET35-Release\</OutputPath>
-    <DefineConstants>TRACE;DOTNET35 FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <Prefer32Bit>false</Prefer32Bit>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Release|AnyCPU'">
     <OutputPath>bin\SL40-Release\</OutputPath>
@@ -153,43 +128,18 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mono43-Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Mono43-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;DOTNET40 DOTNET45 FEATURE_SERIALIZATION</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <Prefer32Bit>false</Prefer32Bit>
-    <BuildConfigKey>NET45</BuildConfigKey>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mono43-Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Mono43-Release\</OutputPath>
-    <DefineConstants>TRACE;DOTNET40 DOTNET45 FEATURE_SERIALIZATION</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <BuildConfigKey>NET45</BuildConfigKey>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ADODB">
       <HintPath>..\..\lib\net35\adodb.dll</HintPath>
     </Reference>
     <Reference Include="Serilog">
-      <HintPath>..\..\lib\net45\Serilog.dll</HintPath>
+      <HintPath>..\..\packages\Serilog.1.5.7\lib\net40\Serilog.dll</HintPath>
     </Reference>
     <Reference Include="Serilog.FullNetFx">
-      <HintPath>..\..\lib\net45\Serilog.FullNetFX.dll</HintPath>
+      <HintPath>..\..\packages\Serilog.1.5.7\lib\net40\Serilog.FullNetFx.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
-      <HintPath>..\..\lib\net45\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+      <HintPath>..\..\packages\NLog.4.0.1\lib\net40\NLog.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Choose>
@@ -200,9 +150,6 @@
     </When>
   </Choose>
   <ItemGroup>
-    <!--    <Reference Include="NLog">
-      <HintPath>$(RootPath)\lib\$(BuildConfigKey.ToLower())\NLog.dll</HintPath>
-    </Reference>-->
     <Reference Include="Rhino.Mocks.CPP.Interfaces">
       <HintPath>..\..\lib\net35\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
     </Reference>
@@ -210,6 +157,31 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
   </ItemGroup>
+  <Choose>
+    <When Condition="$(MSBuildTargets)!='Silverlight 5.0' and $(MSBuildTargets)!='Silverlight 4.0'">
+      <ItemGroup>
+        <Reference Include="System.Data" />
+        <Reference Include="nunit.framework">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(MSBuildTargets) == 'Silverlight 5.0' or $(MSBuildTargets) == 'Silverlight 4.0'">
+      <ItemGroup>
+        <Reference Include="NUnit.Silverlight.Framework">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NUnit.Silverlight.Framework.dll</HintPath>
+        </Reference>
+        <Reference Include="NUnit.Silverlight.Compatibility">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NUnit.Silverlight.Compatibility.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
   <ItemGroup>
     <Compile Include="AccessLevelTestCase.cs" />
     <Compile Include="BasePEVerifyTestCase.cs" />
