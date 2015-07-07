@@ -145,7 +145,9 @@ namespace CastleTests.Components.DictionaryAdapter.Tests
 
 		private static readonly Node
 			NodeA = new Node(),
+		#pragma warning disable 414
 			NodeB = new Node();
+		#pragma warning restore 414
 
 		private static readonly Member
 			MemberA = new Member(),

@@ -67,7 +67,7 @@ namespace Castle.DynamicProxy.Tests
 
 		[Test]
 #if __MonoCS__
-		[Ignore("Expected: CastleDynProxy2.dll  But was:  /home/teamcity/buildagent/work/...")]
+		[Ignore("Expected: /home/teamcity/buildagent/work/... But was: CastleDynProxy2.dll")]
 #endif
 		public void ImplicitModulePaths()
 		{
@@ -85,7 +85,7 @@ namespace Castle.DynamicProxy.Tests
 
 		[Test]
 #if __MonoCS__
-		[Ignore("Expected: StrongModule.dll  But was:  /home/teamcity/buildagent/work/...")]
+		[Ignore("Expected: /home/teamcity/buildagent/work/... But was: StrongModule.dll")]
 #endif
 		public void ExplicitModulePaths()
 		{

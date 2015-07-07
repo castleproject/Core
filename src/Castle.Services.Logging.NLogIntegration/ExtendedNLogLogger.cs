@@ -87,7 +87,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// </summary>
 		/// <param name="name"> The name. </param>
 		/// <returns> </returns>
-		public override ILogger CreateChildLogger(String name)
+		public override Castle.Core.Logging.ILogger CreateChildLogger(String name)
 		{
 			return CreateExtendedChildLogger(name);
 		}

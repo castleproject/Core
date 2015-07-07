@@ -89,8 +89,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				firstStep.SetContext(context);
 		}
 
+#pragma warning disable 414
 		private static readonly IList<CompiledXPathStep>
 			NoSteps = Array.AsReadOnly(new CompiledXPathStep[0]);
+#pragma warning restore 414
 	}
 }
 #endif

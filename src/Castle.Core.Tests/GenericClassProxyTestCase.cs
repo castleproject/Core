@@ -26,325 +26,309 @@ namespace Castle.DynamicProxy.Tests
 	{
 		private LogInvocationInterceptor logger;
 
-		public override void Init()
+		public override void Init ()
 		{
-			base.Init();
-			logger = new LogInvocationInterceptor();
+			base.Init ();
+			logger = new LogInvocationInterceptor ();
 		}
 
 		[Test]
-		public void ProxyWithGenericArgument()
+		public void ProxyWithGenericArgument ()
 		{
-			ClassWithGenArgs<int> proxy = generator.CreateClassProxy<ClassWithGenArgs<int>>(logger);
+			ClassWithGenArgs<int> proxy = generator.CreateClassProxy<ClassWithGenArgs<int>> (logger);
 
-			Assert.IsNotNull(proxy);
+			Assert.IsNotNull (proxy);
 
-			proxy.DoSomething();
+			proxy.DoSomething ();
 
-			Assert.IsTrue(proxy.Invoked);
+			Assert.IsTrue (proxy.Invoked);
 
 			proxy.AProperty = true;
-			Assert.IsTrue(proxy.AProperty);
+			Assert.IsTrue (proxy.AProperty);
 
-			Assert.AreEqual("DoSomething set_AProperty get_AProperty ", logger.LogContents);
+			Assert.AreEqual ("DoSomething set_AProperty get_AProperty ", logger.LogContents);
 		}
 
 		[Test]
-		public void ProxyWithGenericArguments()
+		public void ProxyWithGenericArguments ()
 		{
-			ClassWithGenArgs<int, string> proxy = generator.CreateClassProxy<ClassWithGenArgs<int, string>>(logger);
+			ClassWithGenArgs<int, string> proxy = generator.CreateClassProxy<ClassWithGenArgs<int, string>> (logger);
 
-			Assert.IsNotNull(proxy);
+			Assert.IsNotNull (proxy);
 
-			proxy.DoSomething();
+			proxy.DoSomething ();
 
-			Assert.IsTrue(proxy.Invoked);
+			Assert.IsTrue (proxy.Invoked);
 
 			proxy.AProperty = true;
-			Assert.IsTrue(proxy.AProperty);
+			Assert.IsTrue (proxy.AProperty);
 
-			Assert.AreEqual("DoSomething set_AProperty get_AProperty ", logger.LogContents);
+			Assert.AreEqual ("DoSomething set_AProperty get_AProperty ", logger.LogContents);
 		}
 
 		[Test]
-		public void ProxyWithGenericArgumentsWithBaseGenericClass()
+		public void ProxyWithGenericArgumentsWithBaseGenericClass ()
 		{
 			SubClassWithGenArgs<int, string, int> proxy =
-				generator.CreateClassProxy<SubClassWithGenArgs<int, string, int>>(logger);
+				generator.CreateClassProxy<SubClassWithGenArgs<int, string, int>> (logger);
 
-			Assert.IsNotNull(proxy);
+			Assert.IsNotNull (proxy);
 
-			proxy.DoSomething();
+			proxy.DoSomething ();
 
-			Assert.IsTrue(proxy.Invoked);
+			Assert.IsTrue (proxy.Invoked);
 
 			proxy.AProperty = true;
-			Assert.IsTrue(proxy.AProperty);
+			Assert.IsTrue (proxy.AProperty);
 
-			Assert.AreEqual("DoSomething set_AProperty get_AProperty ", logger.LogContents);
+			Assert.AreEqual ("DoSomething set_AProperty get_AProperty ", logger.LogContents);
 		}
 
 		[Test]
-		public void ProxyWithGenericArgumentsAndArgumentConstraints()
+		public void ProxyWithGenericArgumentsAndArgumentConstraints ()
 		{
-			GenClassWithConstraints<int> proxy = generator.CreateClassProxy<GenClassWithConstraints<int>>(logger);
+			GenClassWithConstraints<int> proxy = generator.CreateClassProxy<GenClassWithConstraints<int>> (logger);
 
-			Assert.IsNotNull(proxy);
+			Assert.IsNotNull (proxy);
 
-			proxy.DoSomething();
+			proxy.DoSomething ();
 
-			Assert.IsTrue(proxy.Invoked);
+			Assert.IsTrue (proxy.Invoked);
 
-			Assert.AreEqual("DoSomething ", logger.LogContents);
+			Assert.AreEqual ("DoSomething ", logger.LogContents);
 		}
 
 		[Test]
-		public void GenericProxyWithIndexer()
+		public void GenericProxyWithIndexer ()
 		{
-			object proxy = generator.CreateClassProxy<ClassWithIndexer<string, int>>(logger);
+			object proxy = generator.CreateClassProxy<ClassWithIndexer<string, int>> (logger);
 
-			Assert.IsNotNull(proxy);
+			Assert.IsNotNull (proxy);
 
-			ClassWithIndexer<string, int> type = (ClassWithIndexer<string, int>) proxy;
+			ClassWithIndexer<string, int> type = (ClassWithIndexer<string, int>)proxy;
 
-			type["name"] = 10;
-			Assert.AreEqual(10, type["name"]);
+			type ["name"] = 10;
+			Assert.AreEqual (10, type ["name"]);
 
-			Assert.AreEqual("set_Item get_Item ", logger.LogContents);
-		}
-
-		[Test]
-		[Platform(Exclude = "mono", Reason = "Assertion at sgen-alloc.c:460, condition `*p == NULL' not met. " +
-			"Fixed in https://bugzilla.xamarin.com/show_bug.cgi?id=28182")]
-		public void ProxyWithMethodReturningGenericOfGenericOfT()
-		{
-			var proxy = generator.CreateClassProxy<ClassWithMethodWithReturnArrayOfListOfT>();
-			proxy.GenericMethodReturnsListArray<string>();
-			proxy.GenericMethodReturnsGenericOfGenericType<int>();
+			Assert.AreEqual ("set_Item get_Item ", logger.LogContents);
 		}
 
 		[Test]
 #if __MonoCS__
-		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
+		[Ignore ("System.Type.GetTypeInfo().IsByRef throws a System.InvalidCastException on mono 4.0.2")]
 #endif
-		public void ProxyWithGenericArgumentsAndMethodGenericArguments()
+		public void ProxyWithMethodReturningGenericOfGenericOfT ()
+		{
+			var proxy = generator.CreateClassProxy<ClassWithMethodWithReturnArrayOfListOfT> ();
+			proxy.GenericMethodReturnsListArray<string> ();
+			proxy.GenericMethodReturnsGenericOfGenericType<int> ();
+		}
+
+		[Test]
+		public void ProxyWithGenericArgumentsAndMethodGenericArguments ()
 		{
 			GenClassWithGenMethods<List<object>> proxy =
-				generator.CreateClassProxy<GenClassWithGenMethods<List<object>>>(logger);
+				generator.CreateClassProxy<GenClassWithGenMethods<List<object>>> (logger);
 
-			Assert.IsNotNull(proxy);
+			Assert.IsNotNull (proxy);
 
-			proxy.DoSomething("z param");
+			proxy.DoSomething ("z param");
 
-			Assert.IsTrue(proxy.Invoked);
-			Assert.AreEqual("z param", proxy.SavedParam);
-			Assert.AreEqual("DoSomething ", logger.LogContents);
+			Assert.IsTrue (proxy.Invoked);
+			Assert.AreEqual ("z param", proxy.SavedParam);
+			Assert.AreEqual ("DoSomething ", logger.LogContents);
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-#endif
-		public void ProxyWithGenericArgumentsAndMethodGenericArgumentsWithConstraints()
+		public void ProxyWithGenericArgumentsAndMethodGenericArgumentsWithConstraints ()
 		{
 			GenClassWithGenMethodsConstrained<List<object>> proxy =
-				generator.CreateClassProxy<GenClassWithGenMethodsConstrained<List<object>>>(logger);
+				generator.CreateClassProxy<GenClassWithGenMethodsConstrained<List<object>>> (logger);
 
-			Assert.IsNotNull(proxy);
+			Assert.IsNotNull (proxy);
 
-			proxy.DoSomething("z param");
+			proxy.DoSomething ("z param");
 
-			Assert.IsTrue(proxy.Invoked);
-			Assert.AreEqual("z param", proxy.SavedParam);
-			Assert.AreEqual("DoSomething ", logger.LogContents);
+			Assert.IsTrue (proxy.Invoked);
+			Assert.AreEqual ("z param", proxy.SavedParam);
+			Assert.AreEqual ("DoSomething ", logger.LogContents);
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-#endif
-		public void ProxyWithGenericArgumentsAndMethodGenericArgumentsWithOneNotDefinedOnType()
+		public void ProxyWithGenericArgumentsAndMethodGenericArgumentsWithOneNotDefinedOnType ()
 		{
 			GenClassWithGenMethods<List<object>> proxy =
-				generator.CreateClassProxy<GenClassWithGenMethods<List<object>>>(logger);
+				generator.CreateClassProxy<GenClassWithGenMethods<List<object>>> (logger);
 
-			Assert.IsNotNull(proxy);
+			Assert.IsNotNull (proxy);
 
 			int value1 = 10;
 
-			proxy.DoSomethingElse<string>(delegate(int param1) { return param1.ToString(); }, value1);
+			proxy.DoSomethingElse<string> (delegate(int param1) {
+				return param1.ToString ();
+			}, value1);
 
-			Assert.IsTrue(proxy.Invoked);
-			Assert.AreEqual("10", proxy.SavedParam);
-			Assert.AreEqual("DoSomethingElse ", logger.LogContents);
+			Assert.IsTrue (proxy.Invoked);
+			Assert.AreEqual ("10", proxy.SavedParam);
+			Assert.AreEqual ("DoSomethingElse ", logger.LogContents);
 		}
 
 		[Test]
-		public void ProxyWithGenericArgumentsAndMethodGenericReturn()
+		public void ProxyWithGenericArgumentsAndMethodGenericReturn ()
 		{
 			GenClassWithGenReturn<List<object>, List<object>> proxy =
-				generator.CreateClassProxy<GenClassWithGenReturn<List<object>, List<object>>>(logger);
+				generator.CreateClassProxy<GenClassWithGenReturn<List<object>, List<object>>> (logger);
 
-			Assert.IsNotNull(proxy);
+			Assert.IsNotNull (proxy);
 
-			object ret1 = proxy.DoSomethingT();
-			object ret2 = proxy.DoSomethingZ();
+			object ret1 = proxy.DoSomethingT ();
+			object ret2 = proxy.DoSomethingZ ();
 
-			Assert.IsInstanceOf(typeof (List<object>), ret1);
-			Assert.IsInstanceOf(typeof (List<object>), ret2);
-			Assert.AreEqual("DoSomethingT DoSomethingZ ", logger.LogContents);
+			Assert.IsInstanceOf (typeof(List<object>), ret1);
+			Assert.IsInstanceOf (typeof(List<object>), ret2);
+			Assert.AreEqual ("DoSomethingT DoSomethingZ ", logger.LogContents);
 		}
 
 		[Test]
-		public void GenericMethodArgumentsAndTypeGenericArgumentsWithSameName()
+		public void GenericMethodArgumentsAndTypeGenericArgumentsWithSameName ()
 		{
 			GenClassNameClash<List<object>, List<object>> proxy =
-				generator.CreateClassProxy<GenClassNameClash<List<object>, List<object>>>(logger);
+				generator.CreateClassProxy<GenClassNameClash<List<object>, List<object>>> (logger);
 
-			Assert.IsNotNull(proxy);
+			Assert.IsNotNull (proxy);
 
-			proxy.DoSomethingT<int>(1);
-			proxy.DoSomethingZ<long>(1L);
-			proxy.DoSomethingTX<int, string>(1, "a");
-			proxy.DoSomethingZX<long, string>(1L, "b");
+			proxy.DoSomethingT<int> (1);
+			proxy.DoSomethingZ<long> (1L);
+			proxy.DoSomethingTX<int, string> (1, "a");
+			proxy.DoSomethingZX<long, string> (1L, "b");
 
-			Assert.AreEqual("DoSomethingT DoSomethingZ DoSomethingTX DoSomethingZX ", logger.LogContents);
+			Assert.AreEqual ("DoSomethingT DoSomethingZ DoSomethingTX DoSomethingZX ", logger.LogContents);
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-#endif
-		public void ClassWithGenMethodOnly()
+		public void ClassWithGenMethodOnly ()
 		{
 			OnlyGenMethodsClass proxy =
-				generator.CreateClassProxy<OnlyGenMethodsClass>(logger);
+				generator.CreateClassProxy<OnlyGenMethodsClass> (logger);
 
-			Assert.IsNotNull(proxy);
+			Assert.IsNotNull (proxy);
 
-			proxy.DoSomething(new List<object>());
+			proxy.DoSomething (new List<object> ());
 
-			Assert.IsTrue(proxy.Invoked);
-			Assert.AreEqual("DoSomething ", logger.LogContents);
+			Assert.IsTrue (proxy.Invoked);
+			Assert.AreEqual ("DoSomething ", logger.LogContents);
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-#endif
-		public void MethodInfoClosedInGenTypeGenMethodRefType()
+		public void MethodInfoClosedInGenTypeGenMethodRefType ()
 		{
-			KeepDataInterceptor interceptor = new KeepDataInterceptor();
-			GenClassWithGenMethods<List<object>> proxy = generator.CreateClassProxy<GenClassWithGenMethods<List<object>>>(interceptor);
+			KeepDataInterceptor interceptor = new KeepDataInterceptor ();
+			GenClassWithGenMethods<List<object>> proxy = generator.CreateClassProxy<GenClassWithGenMethods<List<object>>> (interceptor);
 
-			proxy.DoSomething(1);
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (List<object>),
-			                                           typeof (int));
+			proxy.DoSomething (1);
+			GenericTestUtility.CheckMethodInfoIsClosed (interceptor.Invocation.GetConcreteMethod (), typeof(List<object>),
+				typeof(int));
 
-			proxy.DoSomething(new List<object>());
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (List<object>),
-			                                           typeof (List<object>));
+			proxy.DoSomething (new List<object> ());
+			GenericTestUtility.CheckMethodInfoIsClosed (interceptor.Invocation.GetConcreteMethod (), typeof(List<object>),
+				typeof(List<object>));
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-#endif
-		public void MethodInfoClosedInGenTypeGenMethodValueType()
+		public void MethodInfoClosedInGenTypeGenMethodValueType ()
 		{
-			KeepDataInterceptor interceptor = new KeepDataInterceptor();
-			GenClassWithGenMethods<int> proxy = generator.CreateClassProxy<GenClassWithGenMethods<int>>(interceptor);
+			KeepDataInterceptor interceptor = new KeepDataInterceptor ();
+			GenClassWithGenMethods<int> proxy = generator.CreateClassProxy<GenClassWithGenMethods<int>> (interceptor);
 
-			proxy.DoSomething(1);
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int), typeof (int));
+			proxy.DoSomething (1);
+			GenericTestUtility.CheckMethodInfoIsClosed (interceptor.Invocation.GetConcreteMethod (), typeof(int), typeof(int));
 
-			proxy.DoSomething(new List<object>());
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int),
-			                                           typeof (List<object>));
+			proxy.DoSomething (new List<object> ());
+			GenericTestUtility.CheckMethodInfoIsClosed (interceptor.Invocation.GetConcreteMethod (), typeof(int),
+				typeof(List<object>));
 		}
 
 		[Test]
-		public void MethodInfoClosedInGenTypeNongenMethodRefTypeRefType()
+		public void MethodInfoClosedInGenTypeNongenMethodRefTypeRefType ()
 		{
-			KeepDataInterceptor interceptor = new KeepDataInterceptor();
+			KeepDataInterceptor interceptor = new KeepDataInterceptor ();
 			GenClassWithGenReturn<List<object>, List<object>> proxy =
-				generator.CreateClassProxy<GenClassWithGenReturn<List<object>, List<object>>>(interceptor);
+				generator.CreateClassProxy<GenClassWithGenReturn<List<object>, List<object>>> (interceptor);
 
-			proxy.DoSomethingT();
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(List<object>));
+			proxy.DoSomethingT ();
+			GenericTestUtility.CheckMethodInfoIsClosed (interceptor.Invocation.GetConcreteMethod (), typeof(List<object>));
 
-			proxy.DoSomethingZ();
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof(List<object>));
+			proxy.DoSomethingZ ();
+			GenericTestUtility.CheckMethodInfoIsClosed (interceptor.Invocation.GetConcreteMethod (), typeof(List<object>));
 		}
 
 		[Test]
-		public void MethodInfoClosedInGenTypeNongenMethodValueTypeValueType()
+		public void MethodInfoClosedInGenTypeNongenMethodValueTypeValueType ()
 		{
-			KeepDataInterceptor interceptor = new KeepDataInterceptor();
-			GenClassWithGenReturn<int, int> proxy = generator.CreateClassProxy<GenClassWithGenReturn<int, int>>(interceptor);
+			KeepDataInterceptor interceptor = new KeepDataInterceptor ();
+			GenClassWithGenReturn<int, int> proxy = generator.CreateClassProxy<GenClassWithGenReturn<int, int>> (interceptor);
 
-			proxy.DoSomethingT();
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int));
-			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-							interceptor.Invocation.GetConcreteMethodInvocationTarget().GetBaseDefinition());
+			proxy.DoSomethingT ();
+			GenericTestUtility.CheckMethodInfoIsClosed (interceptor.Invocation.GetConcreteMethod (), typeof(int));
+			Assert.AreEqual (interceptor.Invocation.GetConcreteMethod (),
+				interceptor.Invocation.GetConcreteMethodInvocationTarget ().GetBaseDefinition ());
 
-			proxy.DoSomethingZ();
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int));
-			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-							interceptor.Invocation.GetConcreteMethodInvocationTarget().GetBaseDefinition());
+			proxy.DoSomethingZ ();
+			GenericTestUtility.CheckMethodInfoIsClosed (interceptor.Invocation.GetConcreteMethod (), typeof(int));
+			Assert.AreEqual (interceptor.Invocation.GetConcreteMethod (),
+				interceptor.Invocation.GetConcreteMethodInvocationTarget ().GetBaseDefinition ());
 		}
 
 		[Test]
-		public void MethodInfoClosedInGenTypeNongenMethodValueTypeRefType()
+		public void MethodInfoClosedInGenTypeNongenMethodValueTypeRefType ()
 		{
-			KeepDataInterceptor interceptor = new KeepDataInterceptor();
+			KeepDataInterceptor interceptor = new KeepDataInterceptor ();
 			GenClassWithGenReturn<int, List<object>> proxy =
-				generator.CreateClassProxy<GenClassWithGenReturn<int, List<object>>>(interceptor);
+				generator.CreateClassProxy<GenClassWithGenReturn<int, List<object>>> (interceptor);
 
-			proxy.DoSomethingT();
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int));
-			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-			                interceptor.Invocation.GetConcreteMethodInvocationTarget().GetBaseDefinition());
+			proxy.DoSomethingT ();
+			GenericTestUtility.CheckMethodInfoIsClosed (interceptor.Invocation.GetConcreteMethod (), typeof(int));
+			Assert.AreEqual (interceptor.Invocation.GetConcreteMethod (),
+				interceptor.Invocation.GetConcreteMethodInvocationTarget ().GetBaseDefinition ());
 
-			proxy.DoSomethingZ();
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (List<object>));
-			Assert.AreEqual(interceptor.Invocation.GetConcreteMethod(),
-							interceptor.Invocation.GetConcreteMethodInvocationTarget().GetBaseDefinition());
+			proxy.DoSomethingZ ();
+			GenericTestUtility.CheckMethodInfoIsClosed (interceptor.Invocation.GetConcreteMethod (), typeof(List<object>));
+			Assert.AreEqual (interceptor.Invocation.GetConcreteMethod (),
+				interceptor.Invocation.GetConcreteMethodInvocationTarget ().GetBaseDefinition ());
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-#endif
-		public void MethodInfoClosedInNongenTypeGenMethod()
+		public void MethodInfoClosedInNongenTypeGenMethod ()
 		{
-			KeepDataInterceptor interceptor = new KeepDataInterceptor();
-			OnlyGenMethodsClass proxy = generator.CreateClassProxy<OnlyGenMethodsClass>(interceptor);
+			KeepDataInterceptor interceptor = new KeepDataInterceptor ();
+			OnlyGenMethodsClass proxy = generator.CreateClassProxy<OnlyGenMethodsClass> (interceptor);
 
-			proxy.DoSomething(1);
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (int), typeof (int));
+			proxy.DoSomething (1);
+			GenericTestUtility.CheckMethodInfoIsClosed (interceptor.Invocation.GetConcreteMethod (), typeof(int), typeof(int));
 
-			proxy.DoSomething(new List<object>());
-			GenericTestUtility.CheckMethodInfoIsClosed(interceptor.Invocation.GetConcreteMethod(), typeof (List<object>),
-			                                           typeof (List<object>));
+			proxy.DoSomething (new List<object> ());
+			GenericTestUtility.CheckMethodInfoIsClosed (interceptor.Invocation.GetConcreteMethod (), typeof(List<object>),
+				typeof(List<object>));
 		}
 
 		[Test]
-		[Platform(Exclude = "mono", Reason = "Assertion at sgen-alloc.c:460, condition `*p == NULL' not met. " +
-			"Fixed in https://bugzilla.xamarin.com/show_bug.cgi?id=28182")]
-		public void TypeWithGenericMethodHavingArgumentBeingGenericArrayOfT()
+		//		[Platform(Exclude = "mono", Reason = "Assertion at sgen-alloc.c:460, condition `*p == NULL' not met. " +
+//			"Fixed in https://bugzilla.xamarin.com/show_bug.cgi?id=28182")]
+		public void TypeWithGenericMethodHavingArgumentBeingGenericArrayOfT ()
 		{
-			var proxy = generator.CreateClassProxy<MethodWithArgumentBeingArrayOfGenericTypeOfT>();
-			Assert.IsNotNull(proxy);
-			proxy.Method(new Action<string>[0]);
+			var proxy = generator.CreateClassProxy<MethodWithArgumentBeingArrayOfGenericTypeOfT> ();
+			Assert.IsNotNull (proxy);
+			proxy.Method (new Action<string>[0]);
 		}
 
 		[Test]
-		[ExpectedException(typeof (GeneratorException))]
-		public void ThrowsWhenProxyingGenericTypeDefNoTarget()
+		[ExpectedException (typeof(GeneratorException))]
+		public void ThrowsWhenProxyingGenericTypeDefNoTarget ()
 		{
-			KeepDataInterceptor interceptor = new KeepDataInterceptor();
-			object o = generator.CreateClassProxy(typeof (GenClassWithGenReturn<,>), interceptor);
+			KeepDataInterceptor interceptor = new KeepDataInterceptor ();
+			#pragma warning disable 219
+			object o = generator.CreateClassProxy (typeof(GenClassWithGenReturn<,>), interceptor);
+			#pragma warning restore 219
 		}
 	}
 }

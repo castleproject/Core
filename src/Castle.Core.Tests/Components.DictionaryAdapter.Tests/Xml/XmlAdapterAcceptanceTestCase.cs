@@ -1183,7 +1183,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			using (var stream = new FileStream("out.xml", FileMode.Open))
 			{
 				var serializer = new XmlSerializer(typeof(Group));
+#pragma warning disable 219
 				var groupRead = (Group)serializer.Deserialize(stream);
+#pragma warning restore 219
 				Assert.IsNull(group.Owner);
 			}
 		}

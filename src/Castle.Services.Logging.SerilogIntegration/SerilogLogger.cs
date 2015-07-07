@@ -23,16 +23,20 @@ namespace Castle.Services.Logging.SerilogIntegration
     [Serializable]
 #endif
     public class SerilogLogger : MarshalByRefObject, Castle.Core.Logging.ILogger
-    {
+	{
+		#pragma warning disable 3001	// Argument type `Serilog.ILogger' is not CLS-compliant (CS3001) (Castle.Services.Logging.SerilogIntegration)
         public SerilogLogger(ILogger logger, SerilogFactory factory)
         {
             Logger = logger;
             Factory = factory;
         }
+		#pragma warning restore 3001
 
         internal SerilogLogger() { }
 
-        protected internal ILogger Logger { get; set; }
+		#pragma warning disable 3003	// Type of `Castle.Services.Logging.SerilogIntegration.SerilogLogger.Logger' is not CLS-compliant (CS3003) (Castle.Services.Logging.SerilogIntegration)
+		protected internal ILogger Logger { get; set; }
+		#pragma warning restore 3003
 
         protected internal SerilogFactory Factory { get; set; }
 

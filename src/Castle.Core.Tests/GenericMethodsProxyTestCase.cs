@@ -27,79 +27,73 @@ namespace Castle.DynamicProxy.Tests
 	public class GenericMethodsProxyTestCase : BasePEVerifyTestCase
 	{
 		[Test]
-		[Platform(Exclude = "mono", Reason = "Assertion at sgen-alloc.c:460, condition `*p == NULL' not met. " +
-			"Fixed in https://bugzilla.xamarin.com/show_bug.cgi?id=28182")]
-		public void GenericMethod_WithArrayOfGenericOfGenericArgument()
+		//		[Platform(Exclude = "mono", Reason = "Assertion at sgen-alloc.c:460, condition `*p == NULL' not met. " +
+//			"Fixed in https://bugzilla.xamarin.com/show_bug.cgi?id=28182")]
+		public void GenericMethod_WithArrayOfGenericOfGenericArgument ()
 		{
-			var proxy = generator.CreateClassProxy<ClassWithMethodWithArrayOfListOfT>();
-			proxy.GenericMethodWithListArrayArgument<string>(null);
+			var proxy = generator.CreateClassProxy<ClassWithMethodWithArrayOfListOfT> ();
+			proxy.GenericMethodWithListArrayArgument<string> (null);
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-#endif
-		public void GenericMethod_WithConstraintOnOtherParameter()
+		public void GenericMethod_WithConstraintOnOtherParameter ()
 		{
 			var type = typeof(IInterfaceWithGenericMethodWithDependentConstraint);
 
-			var interceptor = new KeepDataInterceptor();
+			var interceptor = new KeepDataInterceptor ();
 			var proxy = (IInterfaceWithGenericMethodWithDependentConstraint)
-			            generator.CreateInterfaceProxyWithoutTarget(type, new Type[] { }, interceptor);
+			            generator.CreateInterfaceProxyWithoutTarget (type, new Type[] { }, interceptor);
 
-			proxy.RegisterType<object, string>();
+			proxy.RegisterType<object, string> ();
 
 			var expectedMethod =
-				typeof(IInterfaceWithGenericMethodWithDependentConstraint).GetMethod("RegisterType").MakeGenericMethod(
+				typeof(IInterfaceWithGenericMethodWithDependentConstraint).GetMethod ("RegisterType").MakeGenericMethod (
 					typeof(object), typeof(string));
 
-			Assert.AreEqual(expectedMethod, interceptor.Invocation.Method);
+			Assert.AreEqual (expectedMethod, interceptor.Invocation.Method);
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-#endif
-		public void GenericMethod_WithConstraintOnSurroundingTypeParameter()
+		public void GenericMethod_WithConstraintOnSurroundingTypeParameter ()
 		{
 			var type = typeof(IGenericInterfaceWithGenericMethodWithDependentConstraint<object>);
 
-			var interceptor = new KeepDataInterceptor();
+			var interceptor = new KeepDataInterceptor ();
 			var proxy = (IGenericInterfaceWithGenericMethodWithDependentConstraint<object>)
-			            generator.CreateInterfaceProxyWithoutTarget(type, new Type[] { }, interceptor);
+			            generator.CreateInterfaceProxyWithoutTarget (type, new Type[] { }, interceptor);
 
-			proxy.RegisterType<string>();
+			proxy.RegisterType<string> ();
 
 			var expectedMethod =
-				typeof(IGenericInterfaceWithGenericMethodWithDependentConstraint<object>).GetMethod("RegisterType").
-					MakeGenericMethod(typeof(string));
+				typeof(IGenericInterfaceWithGenericMethodWithDependentConstraint<object>).GetMethod ("RegisterType").
+					MakeGenericMethod (typeof(string));
 
-			Assert.AreEqual(expectedMethod, interceptor.Invocation.Method);
+			Assert.AreEqual (expectedMethod, interceptor.Invocation.Method);
 		}
 
 		[Test]
-		[Platform(Exclude = "mono", Reason = "Assertion at sgen-alloc.c:460, condition `*p == NULL' not met. " +
-			"Fixed in https://bugzilla.xamarin.com/show_bug.cgi?id=28182")]
-		public void GenericMethod_WithGenericOfGenericArgument()
+		//		[Platform(Exclude = "mono", Reason = "Assertion at sgen-alloc.c:460, condition `*p == NULL' not met. " +
+//			"Fixed in https://bugzilla.xamarin.com/show_bug.cgi?id=28182")]
+		public void GenericMethod_WithGenericOfGenericArgument ()
 		{
-			var proxy = generator.CreateClassProxy<ClassWithMethodWithGenericOfGenericOfT>();
-			proxy.GenericMethodWithGenericOfGenericArgument<string>(null);
+			var proxy = generator.CreateClassProxy<ClassWithMethodWithGenericOfGenericOfT> ();
+			proxy.GenericMethodWithGenericOfGenericArgument<string> (null);
 		}
 
 		[Test]
-		public void ProxyAdditionalInterfaceWithGenericMethods()
+		public void ProxyAdditionalInterfaceWithGenericMethods ()
 		{
-			var proxy = (IService)generator.CreateInterfaceProxyWithoutTarget(
-				typeof(IService), new[] { typeof(OnlyGenMethodsInterface) },
-				new StandardInterceptor());
+			var proxy = (IService)generator.CreateInterfaceProxyWithoutTarget (
+				            typeof(IService), new[] { typeof(OnlyGenMethodsInterface) },
+				            new StandardInterceptor ());
 
-			Assert.IsNotNull(proxy);
+			Assert.IsNotNull (proxy);
 		}
 
 		[Test]
-		public void ProxyInterfaceWithGenericMethodWithTwoGenericParametersWhereOneIsBaseToAnother()
+		public void ProxyInterfaceWithGenericMethodWithTwoGenericParametersWhereOneIsBaseToAnother ()
 		{
-			generator.CreateInterfaceProxyWithoutTarget<GenericMethodWhereOneGenParamInheritsTheOther>();
+			generator.CreateInterfaceProxyWithoutTarget<GenericMethodWhereOneGenParamInheritsTheOther> ();
 		}
 	}
 }

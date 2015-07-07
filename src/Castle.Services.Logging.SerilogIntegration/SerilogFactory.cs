@@ -34,10 +34,12 @@ namespace Castle.Services.Logging.SerilogIntegration
                 .WriteTo.ColoredConsole();
         }
 
+		#pragma warning disable 3001	// Argument type `Serilog.LoggerConfiguration' is not CLS-compliant (CS3001) (Castle.Services.Logging.SerilogIntegration)
         public SerilogFactory(LoggerConfiguration configuration)
         {
             this.configuration = configuration;
         }
+		#pragma warning restore 3001
 
         public override Castle.Core.Logging.ILogger Create(string name)
         {
