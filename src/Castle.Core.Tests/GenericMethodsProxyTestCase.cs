@@ -27,8 +27,6 @@ namespace Castle.DynamicProxy.Tests
 	public class GenericMethodsProxyTestCase : BasePEVerifyTestCase
 	{
 		[Test]
-		[Platform(Exclude = "mono", Reason = "Assertion at sgen-alloc.c:460, condition `*p == NULL' not met. " +
-			"Fixed in https://bugzilla.xamarin.com/show_bug.cgi?id=28182")]
 		public void GenericMethod_WithArrayOfGenericOfGenericArgument()
 		{
 			var proxy = generator.CreateClassProxy<ClassWithMethodWithArrayOfListOfT>();
@@ -36,9 +34,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-#endif
 		public void GenericMethod_WithConstraintOnOtherParameter()
 		{
 			var type = typeof(IInterfaceWithGenericMethodWithDependentConstraint);
@@ -57,9 +52,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.Type[] doesn't implement interface Castle.DynamicProxy.IInvocation")]
-#endif
 		public void GenericMethod_WithConstraintOnSurroundingTypeParameter()
 		{
 			var type = typeof(IGenericInterfaceWithGenericMethodWithDependentConstraint<object>);
@@ -78,8 +70,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Platform(Exclude = "mono", Reason = "Assertion at sgen-alloc.c:460, condition `*p == NULL' not met. " +
-			"Fixed in https://bugzilla.xamarin.com/show_bug.cgi?id=28182")]
 		public void GenericMethod_WithGenericOfGenericArgument()
 		{
 			var proxy = generator.CreateClassProxy<ClassWithMethodWithGenericOfGenericOfT>();
