@@ -10,13 +10,9 @@ See the [documentation](docs/README.md).
 
 See the [Releases](https://github.com/castleproject/Core/releases).
 
-## Copyright
-
-Copyright 2004-2015 Castle Project
-
 ## License
 
-Castle Core is licensed under the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license. Refer to license.txt for more information.
+Castle Core is &copy; 2004-2015 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
 
 ## Building
 
@@ -31,6 +27,8 @@ msbuild /p:Configuration=SL40-Release /t:RunAllTests buildscripts/Build.proj
 ```
 
 ### Mono
+
+Castle Core supports Mono 4.0.2+, previous 4.x releases have serious runtime bugs that cause runtime crashes. Mono 3.x releases used to work well, but are not supported.
 
 ```
 xbuild /p:Configuration=NET45-Release /t:RunAllTests buildscripts/Build.proj
