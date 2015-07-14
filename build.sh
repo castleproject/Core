@@ -5,16 +5,13 @@ pause() {
 	echo ""
 }
 
-CONFIG="Mono43-Release"
+CONFIG="NET45-Release"
 
 MD=$(which mdtool)
 
 SRC=$(pwd)
 
 cd $SRC
-
-rm -fr Lib
-rm -fr Bin
 
 echo "BUILD SAMPLES"
 $MD build -c:$CONFIG Castle.Core.sln
