@@ -68,7 +68,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsTrue(File.Exists(path));
 		}
 
-		private void FindsVerificationErrors()
+		private void FindVerificationErrors()
 		{
 			ModuleBuilder moduleBuilder = generator.ProxyBuilder.ModuleScope.ObtainDynamicModule(true);
 			TypeBuilder invalidType = moduleBuilder.DefineType("InvalidType");
@@ -92,19 +92,7 @@ namespace Castle.DynamicProxy.Tests
 		[Platform(Exclude = "mono", Reason = "Mono doesn't have peverify, so we can't perform verification.")]
 		public void TearDown_FindsVerificationErrors()
 		{
-			ModuleBuilder moduleBuilder = generator.ProxyBuilder.ModuleScope.ObtainDynamicModule(true);
-			TypeBuilder invalidType = moduleBuilder.DefineType("InvalidType");
-			MethodBuilder invalidMethod = invalidType.DefineMethod("InvalidMethod", MethodAttributes.Public);
-			invalidMethod.GetILGenerator().Emit(OpCodes.Ldnull); // missing RET statement
-
-			invalidType.CreateType();
-
-			if (!IsVerificationDisabled)
-			{
-				Console.WriteLine("This next test case is expected to yield a verification error.");
-			}
-
-			Assert.Throws<AssertionException>(() => FindsVerificationErrors());
+			Assert.Throws<AssertionException>(() => FindVerificationErrors());
 		}
 
 		[Test]
@@ -112,7 +100,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			DisableVerification();
 
-			FindsVerificationErrors();
+			FindVerificationErrors();
 		}
 
 		[Test]
