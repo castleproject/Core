@@ -29,6 +29,7 @@ namespace Castle.DynamicProxy.Tests
 			ResetGeneratorAndBuilder(); // we call TearDown ourselves in these test cases
 			base.TearDown();
 		}
+
 		[Test]
 #if SILVERLIGHT
 		[Ignore("This passes in NUnit, but when run in a Browser test harness like UnitDriven this failed because of access to the disk???")]
@@ -70,7 +71,6 @@ namespace Castle.DynamicProxy.Tests
 #if __MonoCS__
 		[Ignore("NUnit.Framework.AssertionException was expected")]
 #endif
-		[ExpectedException(typeof (AssertionException))]
 		public void TearDown_FindsVerificationErrors()
 		{
 			ModuleBuilder moduleBuilder = generator.ProxyBuilder.ModuleScope.ObtainDynamicModule(true);
@@ -81,12 +81,17 @@ namespace Castle.DynamicProxy.Tests
 			invalidType.CreateType();
 
 			if (!IsVerificationDisabled)
+			{
 				Console.WriteLine("This next test case is expected to yield a verification error.");
+			}
 
-			base.TearDown();
+			Assert.Throws<AssertionException>(() => base.TearDown());
 		}
 
 		[Test]
+#if __MonoCS__
+		[Ignore("NUnit.Framework.AssertionException was expected")]
+#endif
 		public void DisableVerification_DisablesVerificationForTestCase()
 		{
 			DisableVerification();

@@ -72,11 +72,11 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(TypeLoadException))]
-		[Ignore]
 		public void CreateAdapter_NoPrefixWithMethod_ThrowsException()
 		{
-			factory.GetAdapter<IPersonWithMethod>(dictionary);
+			Assert.Throws<TypeLoadException>(() =>
+				factory.GetAdapter<IPersonWithMethod>(dictionary)
+			);
 		}
 
 		[Test]

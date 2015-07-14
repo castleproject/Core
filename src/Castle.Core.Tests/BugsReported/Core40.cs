@@ -29,10 +29,11 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 	public class Core40 : BasePEVerifyTestCase
 	{
 		[Test]
-		[ExpectedException(typeof(InvalidProxyConstructorArgumentsException))]
 		public void ShouldGenerateTypeWithIndexers()
 		{
-			var proxy = generator.CreateClassProxy(typeof(Core40ClassToProxy), new object[] { null, null, null });
+			Assert.Throws<InvalidProxyConstructorArgumentsException>(delegate {
+				var proxy = generator.CreateClassProxy(typeof(Core40ClassToProxy), new object[] { null, null, null });
+			});
 		}
 	}
 }

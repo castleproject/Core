@@ -22,7 +22,6 @@ namespace Castle.Core.Tests.Resources
 
 	using Castle.Core.Resource;
 
-
 	[TestFixture]
 	public class FileResourceFactoryTestCase
 	{
@@ -82,11 +81,11 @@ namespace Castle.Core.Tests.Resources
 		}
 
 		[Test]
-		[ExpectedException(typeof(ResourceException))]
 		public void NonExistingResource()
 		{
-			resFactory.Create( new CustomUri(basePath + "/Something/file1.txt") )
-				.GetStreamReader();
+			IResource resource = resFactory.Create(new CustomUri(basePath + "/Something/file1.txt"));
+
+			Assert.Throws<ResourceException>(() => resource.GetStreamReader());
 		}
 	}
 }

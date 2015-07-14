@@ -21,7 +21,6 @@ namespace Castle.Core.Logging.Tests
 
 	using Castle.Core.Logging;
 
-
 	/// <summary>
 	/// Contains all tests relating to the properties.
 	/// </summary>
@@ -112,23 +111,23 @@ namespace Castle.Core.Logging.Tests
 		public void DefaultLevel()
 		{
 			Assert.AreEqual(LoggerLevel.Off, logger.Level, "Default LevelFilteredLogger.Level is not Off");
-        }
+		}
 
 #if !SILVERLIGHT
-		    [Test]
-		    public void Level()
-		    {
-			    // Set the level to all available levels,
-			    // and then check that it was properly set
-			    foreach (LoggerLevel level in Enum.GetValues(typeof(LoggerLevel)))
-			    {
-				    logger.Level = level;
-				    Assert.AreEqual(level, logger.Level, "LevelFilteredLogger.Level did not change");
-			    }
-		    }
+		[Test]
+		public void Level()
+		{
+			// Set the level to all available levels,
+			// and then check that it was properly set
+			foreach (LoggerLevel level in Enum.GetValues(typeof(LoggerLevel)))
+			{
+				logger.Level = level;
+				Assert.AreEqual(level, logger.Level, "LevelFilteredLogger.Level did not change");
+			}
+		}
 #endif
 
-        [Test]
+		[Test]
 		public void DefaultName()
 		{
 			Assert.AreEqual("unnamed", logger.Name, "Default LevelFilteredLogger.Name is not String.Empty");
@@ -145,10 +144,11 @@ namespace Castle.Core.Logging.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void SettingNameToNull()
 		{
-			((LevelFilteredLoggerInstance) logger).ChangeName(null);
+			Assert.Throws<ArgumentNullException>(() =>
+				((LevelFilteredLoggerInstance) logger).ChangeName(null)
+			);
 		}
 	}
 
@@ -1352,7 +1352,6 @@ namespace Castle.Core.Logging.Tests
 		{
 			Fixture = fixture;
 		}
-
 
 		public new void ChangeName(String name)
 		{

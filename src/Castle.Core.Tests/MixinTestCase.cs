@@ -360,7 +360,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidMixinConfigurationException))]
 		public void TwoMixinsWithSameInterface()
 		{
 			ProxyGenerationOptions options = new ProxyGenerationOptions();
@@ -370,7 +369,10 @@ namespace Castle.DynamicProxy.Tests
 			options.AddMixinInstance(mixin2);
 
 			StandardInterceptor interceptor = new StandardInterceptor();
-			generator.CreateClassProxy(typeof(SimpleClass), options, interceptor);
+
+			Assert.Throws<InvalidMixinConfigurationException>(() =>
+				generator.CreateClassProxy(typeof(SimpleClass), options, interceptor)
+			);
 		}
 
 		[Test]

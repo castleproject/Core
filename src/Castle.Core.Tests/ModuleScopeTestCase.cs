@@ -123,7 +123,9 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreEqual(keyPair.PublicKey.Length, loadedPublicKey.Length);
 			for (var i = 0; i < keyPair.PublicKey.Length; ++i)
+			{
 				Assert.AreEqual(keyPair.PublicKey[i], loadedPublicKey[i]);
+			}
 		}
 
 		[Test]
@@ -215,14 +217,13 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidOperationException))]
 		public void SaveThrowsWhenMultipleAssembliesGenerated()
 		{
 			var scope = new ModuleScope(true);
 			scope.ObtainDynamicModuleWithStrongName();
 			scope.ObtainDynamicModuleWithWeakName();
 
-			scope.SaveAssembly();
+			Assert.Throws<InvalidOperationException>(() => scope.SaveAssembly());
 		}
 
 		[Test]
@@ -252,23 +253,21 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidOperationException))]
 		public void ExplicitSaveThrowsWhenSpecifiedAssemblyNotGeneratedWeakName()
 		{
 			var scope = new ModuleScope(true);
 			scope.ObtainDynamicModuleWithStrongName();
 
-			scope.SaveAssembly(false);
+			Assert.Throws<InvalidOperationException>(() => scope.SaveAssembly(false));
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidOperationException))]
 		public void ExplicitSaveThrowsWhenSpecifiedAssemblyNotGeneratedStrongName()
 		{
 			var scope = new ModuleScope(true);
 			scope.ObtainDynamicModuleWithWeakName();
 
-			scope.SaveAssembly(true);
+			Assert.Throws<InvalidOperationException>(() => scope.SaveAssembly(true));
 		}
 
 #if FEATURE_SERIALIZATION
@@ -383,11 +382,13 @@ namespace Castle.DynamicProxy.Tests
 
 #if FEATURE_SERIALIZATION
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void LoadAssemblyIntoCache_InvalidAssembly()
 		{
 			var newScope = new ModuleScope(false);
-			newScope.LoadAssemblyIntoCache(Assembly.GetExecutingAssembly());
+
+			Assert.Throws<ArgumentException>(() =>
+				newScope.LoadAssemblyIntoCache(Assembly.GetExecutingAssembly())
+			);
 		}
 
 		[Test]

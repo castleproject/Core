@@ -83,10 +83,12 @@ namespace Castle.Core.Tests
 			Assert.AreEqual("name", dict["name"]);
 		}
 
-		[Test, ExpectedException(typeof (ArgumentNullException))]
+		[Test]
 		public void CannotCreateWithNullArgument()
 		{
-			new ReflectionBasedDictionaryAdapter(null);
+			Assert.Throws<ArgumentNullException>(() =>
+				new ReflectionBasedDictionaryAdapter(null)
+			);
 		}
 
 		[Test]
@@ -104,7 +106,6 @@ namespace Castle.Core.Tests
 				Assert.IsNotNull(enumerator.Value);
 			}
 		}
-
 
 		[Test]
 		public void Using_anonymous_types_works_without_exception()

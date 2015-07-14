@@ -21,7 +21,6 @@ namespace Castle.DynamicProxy.Tests
 	using NUnit.Framework;
 	using System.Collections.Generic;
 
-
 	[TestFixture]
 	public class MethodFinderTestCase
 	{
@@ -104,20 +103,21 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void GetMethodsThrowsOnStatic()
 		{
-			MethodFinder.GetAllInstanceMethods(typeof(object),
-											   BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+			Assert.Throws<ArgumentException>(() =>
+				MethodFinder.GetAllInstanceMethods(typeof(object),
+					BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
+			);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void GetMethodsThrowsOnOtherFlags()
 		{
-			MethodFinder.GetAllInstanceMethods(typeof(object),
-											   BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public |
-											   BindingFlags.DeclaredOnly);
+			Assert.Throws<ArgumentException>(() =>
+				MethodFinder.GetAllInstanceMethods(typeof(object),
+					BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly)
+			);
 		}
 	}
 }
