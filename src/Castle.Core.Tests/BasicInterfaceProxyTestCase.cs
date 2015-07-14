@@ -128,14 +128,13 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void CantCreateInterfaceTargetedProxyWithoutInterface()
 		{
+			Assert.Throws<ArgumentException>(delegate {
 #pragma warning disable 219
-			IService2 service = (IService2)
-			                    generator.CreateInterfaceProxyWithTargetInterface(
-			                    	typeof (Service2), new Service2());
+				IService2 service = (IService2)generator.CreateInterfaceProxyWithTargetInterface(typeof(Service2), new Service2());
 #pragma warning restore 219
+			});
 		}
 
 		[Test]
@@ -165,7 +164,6 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreEqual(20, service.Sum(10, 10));
 		}
-
 
 		/// <summary>
 		/// See http://support.castleproject.org/browse/DYNPROXY-43

@@ -123,36 +123,41 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void NoBaseTypeForInterfaces()
 		{
 			DisableVerification();
 			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
 				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
 
+			Assert.Throws<InvalidOperationException>(delegate {
 #pragma warning disable 219
-			Type t = emitter.BaseType;
+				Type t = emitter.BaseType;
 #pragma warning restore 219
+			});
 		}
 
 		[Test]
-		[ExpectedException (typeof (InvalidOperationException))]
 		public void NoDefaultCtorForInterfaces()
 		{
 			DisableVerification();
 			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
 				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
-			emitter.CreateDefaultConstructor();
+
+			Assert.Throws<InvalidOperationException>(delegate {
+				emitter.CreateDefaultConstructor();
+			});
 		}
 
 		[Test]
-		[ExpectedException (typeof (InvalidOperationException))]
 		public void NoCustomCtorForInterfaces()
 		{
 			DisableVerification();
 			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
 				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
-			emitter.CreateConstructor();
+
+			Assert.Throws<InvalidOperationException>(delegate {
+				emitter.CreateConstructor();
+			});
 		}
 
 		[Test]

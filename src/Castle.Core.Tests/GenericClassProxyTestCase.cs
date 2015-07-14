@@ -318,11 +318,13 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof (GeneratorException))]
 		public void ThrowsWhenProxyingGenericTypeDefNoTarget()
 		{
 			KeepDataInterceptor interceptor = new KeepDataInterceptor();
-			object o = generator.CreateClassProxy(typeof (GenClassWithGenReturn<,>), interceptor);
+
+			Assert.Throws<GeneratorException>(delegate {
+				object o = generator.CreateClassProxy(typeof(GenClassWithGenReturn<,>), interceptor);
+			});
 		}
 	}
 }

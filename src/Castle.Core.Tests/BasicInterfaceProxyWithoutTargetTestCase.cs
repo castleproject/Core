@@ -52,14 +52,12 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExpectedException(typeof (ThrowingInterceptorException), ExpectedMessage = "Because I feel like it")]
 		public void CanThrowExceptionFromInterceptorOfInterfaceMethod()
 		{
-			var service = (IService)
-			              generator.CreateInterfaceProxyWithoutTarget(
-			              	typeof (IService), new ThrowingInterceptor());
+			var service = (IService)generator.CreateInterfaceProxyWithoutTarget(typeof(IService), new ThrowingInterceptor());
 
-			service.Sum(2, 2);
+			var ex = Assert.Throws<ThrowingInterceptorException>(() => service.Sum(2, 2));
+			Assert.AreEqual("Because I feel like it", ex.Message);
 		}
 
 		[Test]

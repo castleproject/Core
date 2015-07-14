@@ -29,6 +29,7 @@ namespace Castle.DynamicProxy.Tests
 			ResetGeneratorAndBuilder(); // we call TearDown ourselves in these test cases
 			base.TearDown();
 		}
+
 		[Test]
 #if SILVERLIGHT
 		[Ignore("This passes in NUnit, but when run in a Browser test harness like UnitDriven this failed because of access to the disk???")]
@@ -37,7 +38,9 @@ namespace Castle.DynamicProxy.Tests
 		{
 			string path = ModuleScope.DEFAULT_FILE_NAME;
 			if (File.Exists(path))
+			{
 				File.Delete(path);
+			}
 
 			base.TearDown();
 
@@ -55,23 +58,17 @@ namespace Castle.DynamicProxy.Tests
 		{
 			string path = ModuleScope.DEFAULT_FILE_NAME;
 			if (File.Exists(path))
+			{
 				File.Delete(path);
+			}
 
-			generator.CreateClassProxy(typeof (object), new StandardInterceptor());
+			generator.CreateClassProxy(typeof(object), new StandardInterceptor());
 
 			base.TearDown();
 			Assert.IsTrue(File.Exists(path));
 		}
 
-		[Test]
-#if SILVERLIGHT
-		[Ignore("Cannot do in Silverlight")]
-#endif
-#if __MonoCS__
-		[Ignore("NUnit.Framework.AssertionException was expected")]
-#endif
-		[ExpectedException(typeof (AssertionException))]
-		public void TearDown_FindsVerificationErrors()
+		private void FindVerificationErrors()
 		{
 			ModuleBuilder moduleBuilder = generator.ProxyBuilder.ModuleScope.ObtainDynamicModule(true);
 			TypeBuilder invalidType = moduleBuilder.DefineType("InvalidType");
@@ -81,16 +78,29 @@ namespace Castle.DynamicProxy.Tests
 			invalidType.CreateType();
 
 			if (!IsVerificationDisabled)
+			{
 				Console.WriteLine("This next test case is expected to yield a verification error.");
+			}
 
 			base.TearDown();
+		}
+
+		[Test]
+#if SILVERLIGHT
+		[Ignore("Cannot do in Silverlight")]
+#endif
+		[Platform(Exclude = "mono", Reason = "Mono doesn't have peverify, so we can't perform verification.")]
+		public void TearDown_FindsVerificationErrors()
+		{
+			Assert.Throws<AssertionException>(() => FindVerificationErrors());
 		}
 
 		[Test]
 		public void DisableVerification_DisablesVerificationForTestCase()
 		{
 			DisableVerification();
-			TearDown_FindsVerificationErrors();
+
+			FindVerificationErrors();
 		}
 
 		[Test]
