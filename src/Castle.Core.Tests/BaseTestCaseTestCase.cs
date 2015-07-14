@@ -89,9 +89,7 @@ namespace Castle.DynamicProxy.Tests
 #if SILVERLIGHT
 		[Ignore("Cannot do in Silverlight")]
 #endif
-#if __MonoCS__
-		[Ignore("NUnit.Framework.AssertionException was expected")]
-#endif
+		[Platform(Exclude = "mono", Reason = "Mono doesn't have peverify, so we can't perform verification.")]
 		public void TearDown_FindsVerificationErrors()
 		{
 			ModuleBuilder moduleBuilder = generator.ProxyBuilder.ModuleScope.ObtainDynamicModule(true);
