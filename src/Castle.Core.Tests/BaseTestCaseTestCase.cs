@@ -38,7 +38,9 @@ namespace Castle.DynamicProxy.Tests
 		{
 			string path = ModuleScope.DEFAULT_FILE_NAME;
 			if (File.Exists(path))
+			{
 				File.Delete(path);
+			}
 
 			base.TearDown();
 
@@ -56,9 +58,11 @@ namespace Castle.DynamicProxy.Tests
 		{
 			string path = ModuleScope.DEFAULT_FILE_NAME;
 			if (File.Exists(path))
+			{
 				File.Delete(path);
+			}
 
-			generator.CreateClassProxy(typeof (object), new StandardInterceptor());
+			generator.CreateClassProxy(typeof(object), new StandardInterceptor());
 
 			base.TearDown();
 			Assert.IsTrue(File.Exists(path));
