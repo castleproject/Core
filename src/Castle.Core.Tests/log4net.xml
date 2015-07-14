@@ -1,0 +1,51 @@
+﻿<log4net>
+
+  <appender name="RollingLogFileAppender" type="log4net.Appender.RollingFileAppender">
+    <!--日志文件名开头-->
+    <file value="Logs/project.log" />
+    <!--是否追加到文件-->
+    <appendToFile value="true" />
+    <!--混合使用日期和文件大小变换日志文件名-->
+    <rollingStyle value="Composite" />
+    <!--日期的格式-->
+    <datePattern value="&quot;.&quot;yyyyMMdd" />
+    <!--最大变换数量-->
+    <maxSizeRollBackups value="30" />
+    <!--最大文件大小-->
+    <maximumFileSize value="1MB" />
+    <layout type="log4net.Layout.PatternLayout">
+      <conversionPattern value="%d [%t] %-5p %m - [%F:%L]%n" />
+    </layout>
+  </appender>
+
+  <appender name="ConsoleAppender" type="log4net.Appender.ConsoleAppender">
+    <layout type="log4net.Layout.PatternLayout">
+      <conversionPattern value="%d [%t] %-5p %m%n" />
+    </layout>
+  </appender>
+
+  <root>
+    <level value="DEBUG"></level>
+
+    <appender-ref ref="RollingLogFileAppender"></appender-ref>
+    <!--<appender-ref ref="ConsoleAppender"></appender-ref>-->
+  </root>
+
+</log4net>
+
+<!--
+配置与使用：
+
+1.*.config 里添加如下节点
+<section name="log4net" type="System.Configuration.IgnoreSectionHandler"/>
+
+2.Global.asax里Application_Start方法中添加下面配置
+var path = Server.MapPath("~/log4net.xml");
+log4net.Config.XmlConfigurator.Configure(new System.IO.FileInfo(path));
+
+3.使用，可以更改配置文件log4net.config自己配置
+方式一：log4net.LogManager.GetLogger(GetType());
+方式二：log4net.LogManager.GetLogger("logger-name");
+方式三：LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+-->

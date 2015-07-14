@@ -141,6 +141,9 @@
     <Reference Include="NLog">
       <HintPath>..\..\packages\NLog.4.0.1\lib\net40\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="$(TargetFrameworkVersion)!='v3.5'">
@@ -379,6 +382,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <None Include="log4net.xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingNameValueCollectionsTestCase.cs" />
