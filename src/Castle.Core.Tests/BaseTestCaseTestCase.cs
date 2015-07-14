@@ -68,6 +68,23 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsTrue(File.Exists(path));
 		}
 
+		private void FindsVerificationErrors()
+		{
+			ModuleBuilder moduleBuilder = generator.ProxyBuilder.ModuleScope.ObtainDynamicModule(true);
+			TypeBuilder invalidType = moduleBuilder.DefineType("InvalidType");
+			MethodBuilder invalidMethod = invalidType.DefineMethod("InvalidMethod", MethodAttributes.Public);
+			invalidMethod.GetILGenerator().Emit(OpCodes.Ldnull); // missing RET statement
+
+			invalidType.CreateType();
+
+			if (!IsVerificationDisabled)
+			{
+				Console.WriteLine("This next test case is expected to yield a verification error.");
+			}
+
+			base.TearDown();
+		}
+
 		[Test]
 #if SILVERLIGHT
 		[Ignore("Cannot do in Silverlight")]
@@ -89,17 +106,15 @@ namespace Castle.DynamicProxy.Tests
 				Console.WriteLine("This next test case is expected to yield a verification error.");
 			}
 
-			Assert.Throws<AssertionException>(() => base.TearDown());
+			Assert.Throws<AssertionException>(() => FindsVerificationErrors());
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("NUnit.Framework.AssertionException was expected")]
-#endif
 		public void DisableVerification_DisablesVerificationForTestCase()
 		{
 			DisableVerification();
-			TearDown_FindsVerificationErrors();
+
+			FindsVerificationErrors();
 		}
 
 		[Test]
