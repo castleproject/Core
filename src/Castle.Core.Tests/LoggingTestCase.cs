@@ -37,7 +37,7 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateClassProxy<EmptyClass>();
 
 			// Assert
-			Assert.That(logger.RecordedMessage(LoggerLevel.Debug, "No cached proxy type was found for target type " +
+			Assert.True(logger.RecordedMessage(LoggerLevel.Debug, "No cached proxy type was found for target type " +
 				"CastleTests.DynamicProxy.Tests.Classes.EmptyClass."));
 		}
 
@@ -53,7 +53,7 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateClassProxy<EmptyClass>();
 
 			// Assert
-			Assert.That(logger.RecordedMessage(LoggerLevel.Debug, "Found cached proxy type Castle.Proxies.EmptyClassProxy " +
+			Assert.True(logger.RecordedMessage(LoggerLevel.Debug, "Found cached proxy type Castle.Proxies.EmptyClassProxy " +
 				"for target type CastleTests.DynamicProxy.Tests.Classes.EmptyClass."));
 		}
 
@@ -69,7 +69,7 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateInterfaceProxyWithoutTarget<IEmptyInterface>();
 
 			// Assert
-			Assert.That(logger.RecordedMessage(LoggerLevel.Debug, "Found cached proxy type Castle.Proxies.IEmptyInterfaceProxy " +
+			Assert.True(logger.RecordedMessage(LoggerLevel.Debug, "Found cached proxy type Castle.Proxies.IEmptyInterfaceProxy " +
 				"for target type Castle.DynamicProxy.Tests.LoggingTestCase+IEmptyInterface."));
 		}
 
@@ -87,7 +87,7 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateClassProxy(typeof(EmptyClass), options);
 
 			// Assert
-			Assert.That(logger.RecordedMessage(LoggerLevel.Warn, "The IProxyGenerationHook type " +
+			Assert.True(logger.RecordedMessage(LoggerLevel.Warn, "The IProxyGenerationHook type " +
 				"Castle.DynamicProxy.Tests.LoggingTestCase+EmptyHook does not override both Equals and GetHashCode. " +
 				"If these are not correctly overridden caching will fail to work causing performance problems."));
 		}
@@ -104,9 +104,9 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateClassProxy<NonVirtualMethodClass>();
 
 			// Assert
-			Assert.That(logger.RecordedMessage(LoggerLevel.Debug, "Excluded non-virtual method ClassMethod on " +
+			Assert.True(logger.RecordedMessage(LoggerLevel.Debug, "Excluded non-virtual method ClassMethod on " +
 				"Castle.DynamicProxy.Tests.LoggingTestCase+NonVirtualMethodClass because it cannot be intercepted."));
-			Assert.That(logger.RecordedMessage(LoggerLevel.Debug, "Excluded sealed method InterfaceMethod on " +
+			Assert.True(logger.RecordedMessage(LoggerLevel.Debug, "Excluded sealed method InterfaceMethod on " +
 				"Castle.DynamicProxy.Tests.LoggingTestCase+NonVirtualMethodClass because it cannot be intercepted."));
 		}
 #endif

@@ -34,183 +34,131 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ClassProxy_AdditionalInterfaces()
 		{
-			TestDelegate action = () =>
-			                      generator.CreateClassProxy(typeof (object),
-			                                                 new[]
-			                                                 	{
-			                                                 		typeof (IProxyTargetAccessor)
-			                                                 	});
-			Exception exception = Assert.Throws(typeof (ProxyGenerationException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ProxyGenerationException), () =>
+				generator.CreateClassProxy(typeof(object), new[] { typeof(IProxyTargetAccessor) }));
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 
 		[Test]
 		public void ClassProxy_base()
 		{
-			TestDelegate action = () =>
-			                      generator.CreateClassProxy
-			                      	<ImplementsProxyTargetAccessor>();
-			Exception exception = Assert.Throws(typeof (ArgumentException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ArgumentException), () =>
+				generator.CreateClassProxy<ImplementsProxyTargetAccessor>());
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 
 		[Test]
 		public void ClassProxy_Mixin()
 		{
-			TestDelegate action = () =>
-			                      generator.CreateClassProxy(typeof (object),
-			                                                 MixIn(
-			                                                 	new ImplementsProxyTargetAccessor()));
-			Exception exception = Assert.Throws(typeof (ProxyGenerationException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ProxyGenerationException), () =>
+				generator.CreateClassProxy(typeof(object), MixIn(new ImplementsProxyTargetAccessor())));
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 
 		//-------------
+
 		[Test]
 		public void InterfaceProxyWithoutTarget_AdditionalInterfaces()
 		{
-			TestDelegate action = () =>
-			                      generator.CreateInterfaceProxyWithoutTarget(
-			                      	typeof (IOne),
-			                      	new[] {typeof (IProxyTargetAccessor)});
-			Exception exception = Assert.Throws(typeof (ProxyGenerationException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ProxyGenerationException), () =>
+				generator.CreateInterfaceProxyWithoutTarget(typeof(IOne), new[] { typeof(IProxyTargetAccessor) }));
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 
 		[Test]
 		public void InterfaceProxyWithoutTarget_Mixin()
 		{
-			TestDelegate action = () =>
-			                      generator.CreateInterfaceProxyWithoutTarget(
-			                      	typeof (IOne),
-			                      	new[] {typeof (IProxyTargetAccessor)},
-			                      	MixIn(new ImplementsProxyTargetAccessor()));
-			Exception exception = Assert.Throws(typeof (ProxyGenerationException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ProxyGenerationException), () =>
+				generator.CreateInterfaceProxyWithoutTarget(typeof(IOne), new[] { typeof(IProxyTargetAccessor) },
+					MixIn(new ImplementsProxyTargetAccessor())));
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 
 		[Test]
 		public void InterfaceProxyWithoutTarget_TargetInterface()
 		{
-			TestDelegate action = () =>
-			                      generator.CreateInterfaceProxyWithoutTarget(
-			                      	typeof (IProxyTargetAccessor));
-			Exception exception = Assert.Throws(typeof (ProxyGenerationException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ProxyGenerationException), () =>
+				generator.CreateInterfaceProxyWithoutTarget(typeof(IProxyTargetAccessor)));
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 
 		[Test]
 		public void InterfaceProxyWithoutTarget_TargetInterface_derived()
 		{
-			TestDelegate action = () =>
-			                      generator.CreateInterfaceProxyWithoutTarget(
-			                      	typeof (IProxyTargetAccessorDerived));
-			Exception exception = Assert.Throws(typeof (ProxyGenerationException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ProxyGenerationException), () =>
+				generator.CreateInterfaceProxyWithoutTarget(typeof(IProxyTargetAccessorDerived)));
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 
 		[Test]
 		public void InterfaceProxyWithTarget_AdditionalInterfaces()
 		{
-			TestDelegate action = () =>
-			                      generator.CreateInterfaceProxyWithTarget(
-			                      	typeof (IOne),
-			                      	new[] {typeof (IProxyTargetAccessor)},
-			                      	new One());
-			Exception exception = Assert.Throws(typeof (ProxyGenerationException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ProxyGenerationException), () =>
+				generator.CreateInterfaceProxyWithTarget(typeof(IOne), new[] { typeof(IProxyTargetAccessor) }, new One()));
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 
 		[Test]
 		public void InterfaceProxyWithTarget_Mixin()
 		{
-			TestDelegate action = () =>
-			                      generator.CreateInterfaceProxyWithTarget(
-			                      	typeof (IOne),
-			                      	new[] {typeof (IProxyTargetAccessor)},
-			                      	new One(),
-			                      	MixIn(new ImplementsProxyTargetAccessor()));
-			Exception exception = Assert.Throws(typeof (ProxyGenerationException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ProxyGenerationException), () =>
+				generator.CreateInterfaceProxyWithTarget(typeof(IOne), new[] { typeof(IProxyTargetAccessor) }, new One(),
+					MixIn(new ImplementsProxyTargetAccessor())));
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 
 		[Test]
 		public void InterfaceProxyWithTarget_Target()
 		{
-			TestDelegate action = () =>
-			                      generator.CreateInterfaceProxyWithTarget(
-			                      	typeof (IProxyTargetAccessor),
-			                      	new ImplementsProxyTargetAccessor());
-			Exception exception = Assert.Throws(typeof (ProxyGenerationException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ProxyGenerationException), () =>
+				generator.CreateInterfaceProxyWithTarget(typeof(IProxyTargetAccessor), new ImplementsProxyTargetAccessor()));
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 
 		[Test]
 		public void InterfaceProxyWithTarget_Target_derived()
 		{
-			TestDelegate action = () =>
-			                      generator.CreateInterfaceProxyWithTarget(
-			                      	typeof (IProxyTargetAccessorDerived),
-			                      	new ImplementsProxyTargetAccessorDerived());
-			Exception exception = Assert.Throws(typeof (ProxyGenerationException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ProxyGenerationException), () =>
+				generator.CreateInterfaceProxyWithTarget(typeof(IProxyTargetAccessorDerived), new ImplementsProxyTargetAccessorDerived()));
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 
 		//----------------------
 
-
 		[Test]
 		public void InterfaceProxyWithTargetInterface_AdditionalInterfaces()
 		{
-			TestDelegate action = () =>
-			                      generator.
-			                      	CreateInterfaceProxyWithTargetInterface(
-			                      	typeof (IOne),
-			                      	new[] {typeof (IProxyTargetAccessor)},
-			                      	new One());
-			Exception exception = Assert.Throws(typeof (ProxyGenerationException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ProxyGenerationException), () =>
+				generator.CreateInterfaceProxyWithTargetInterface(typeof(IOne), new[] { typeof(IProxyTargetAccessor) }, new One()));
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 
 		[Test]
 		public void InterfaceProxyWithTargetInterface_Mixin()
 		{
-			TestDelegate action = () =>
-			                      generator.
-			                      	CreateInterfaceProxyWithTargetInterface(
-			                      	typeof (IOne),
-			                      	new[] {typeof (IProxyTargetAccessor)},
-			                      	new One(),
-			                      	MixIn(new ImplementsProxyTargetAccessor()));
-			Exception exception = Assert.Throws(typeof (ProxyGenerationException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ProxyGenerationException), () =>
+				generator.CreateInterfaceProxyWithTargetInterface(typeof(IOne), new[] { typeof(IProxyTargetAccessor) }, new One(),
+					MixIn(new ImplementsProxyTargetAccessor())));
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 
 		[Test]
 		public void InterfaceProxyWithTargetInterface_Target()
 		{
-			TestDelegate action = () =>
-			                      generator.
-			                      	CreateInterfaceProxyWithTargetInterface(
-			                      	typeof (IProxyTargetAccessor),
-			                      	new ImplementsProxyTargetAccessor());
-			Exception exception = Assert.Throws(typeof (ProxyGenerationException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ProxyGenerationException), () =>
+				generator.CreateInterfaceProxyWithTargetInterface(typeof(IProxyTargetAccessor), new ImplementsProxyTargetAccessor()));
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 
 		[Test]
 		public void InterfaceProxyWithTargetInterface_Target_derived()
 		{
-			TestDelegate action = () =>
-			                      generator.
-			                      	CreateInterfaceProxyWithTargetInterface(
-			                      	typeof (IProxyTargetAccessorDerived),
-			                      	new ImplementsProxyTargetAccessorDerived());
-			Exception exception = Assert.Throws(typeof (ProxyGenerationException), action);
-			Assert.That(exception.Message.Contains("IProxyTargetAccessor"));
+			var ex = Assert.Throws(typeof(ProxyGenerationException), () =>
+				generator.CreateInterfaceProxyWithTargetInterface(typeof(IProxyTargetAccessorDerived),
+					new ImplementsProxyTargetAccessorDerived()));
+			StringAssert.Contains("IProxyTargetAccessor", ex.Message);
 		}
 	}
-
 
 	public class ImplementsProxyTargetAccessor : IProxyTargetAccessor
 	{

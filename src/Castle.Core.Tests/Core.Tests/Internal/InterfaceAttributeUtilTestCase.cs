@@ -109,7 +109,7 @@ namespace Castle.Core.Tests.Internal
 				new AdditiveInheritedAttribute { Id = "Override1" }
 			);
 		}
-		
+
 		[SingletonPrivate  (Id="Original")]
 		[SingletonInherited(Id="Original")]
 		[AdditivePrivate   (Id="Original")]
@@ -185,15 +185,13 @@ namespace Castle.Core.Tests.Internal
 		{
 			var attributes = InterfaceAttributeUtil.GetAttributes(interfaceType, true);
 
-			Assert.That(attributes, Is.Not.Null & Is.EquivalentTo(expectedAttributes));
+			Assert.IsNotNull(attributes);
+			CollectionAssert.AreEquivalent(expectedAttributes, attributes);
 		}
 
 		private static void AssertInvalid(Type interfaceType)
 		{
-			Assert.Throws<InvalidOperationException>(() =>
-			{
-				InterfaceAttributeUtil.GetAttributes(interfaceType, true);
-			});
+			Assert.Throws<InvalidOperationException>(() => InterfaceAttributeUtil.GetAttributes(interfaceType, true));
 		}
 	}
 }

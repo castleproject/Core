@@ -23,7 +23,7 @@
 			var type = typeof(IMinimumFailure<string>);
 			var result = proxyGenerator.CreateInterfaceProxyWithoutTarget(type, new Type[0], options);
 
-			Assert.That(result as IMinimumFailure<string>, Is.Not.Null);
+			Assert.IsNotNull(result as IMinimumFailure<string>);
 		}
 
 		public interface IMinimumFailure<T>
