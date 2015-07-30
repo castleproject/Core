@@ -40,6 +40,12 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void Can_clone_attributes_with_array_enums()
+		{
+			generator.CreateInterfaceProxyWithoutTarget(typeof(IHasAttributeWithEnumArray));
+		}
+
+		[Test]
 		public void On_class()
 		{
 			var options = new ProxyGenerationOptions();
@@ -70,6 +76,20 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 
+    public enum SomeEnumForAttributeWithEnumArrayArgument
+    {
+        Default,
+        Special
+    }
+
+	[AttributeUsage(AttributeTargets.All, Inherited = false)]
+	public sealed class AttributeWithEnumArrayArgument : Attribute
+	{
+        public AttributeWithEnumArrayArgument(params SomeEnumForAttributeWithEnumArrayArgument[] attributeEnums)
+		{
+		}
+	}
+
 	[AttributeUsage(AttributeTargets.All, Inherited = false)]
 	public sealed class AttributeWithIntArrayArgument : Attribute
 	{
@@ -80,6 +100,11 @@ namespace Castle.DynamicProxy.Tests
 
 	[AttributeWithTypeArrayArgument(typeof(string))]
 	public interface IHasAttributeWithTypeArray
+	{
+	}
+
+    [AttributeWithEnumArrayArgument(SomeEnumForAttributeWithEnumArrayArgument.Special)]
+	public interface IHasAttributeWithEnumArray
 	{
 	}
 
