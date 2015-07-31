@@ -46,6 +46,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			Debug.Assert(@interface != null, "@interface == null", "Shouldn't be adding empty interfaces...");
 			Debug.Assert(@interface.GetTypeInfo().IsInterface, "@interface.IsInterface", "Should be adding interfaces only...");
+
 			Debug.Assert(!interfaces.Contains(@interface), "!interfaces.Contains(@interface)",
 			             "Shouldn't be adding same interface twice...");
 			Debug.Assert(!empty.Contains(@interface), "!empty.Contains(@interface)",

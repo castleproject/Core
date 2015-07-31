@@ -33,6 +33,8 @@
     <file src="build/SL5/SL5-Release/pkg/bin/Castle.Core.dll" target="lib/sl5" />
     <file src="build/SL5/SL5-Release/pkg/bin/Castle.Core.pdb" target="lib/sl5" />
     <file src="build/SL5/SL5-Release/pkg/bin/Castle.Core.xml" target="lib/sl5" />
+    <file src="build/NetCore/NetCore-Release/pkg/bin/Castle.Core.dll" target="lib/dotnet" />
+    <file src="build/NetCore/NetCore-Release/pkg/bin/Castle.Core.pdb" target="lib/dotnet" />
     <file src="buildscripts/ASL - Apache Software Foundation License.txt" />
     <file src="buildscripts/readme.txt" />
     <file src="src/Castle.Core/**/*.cs" />

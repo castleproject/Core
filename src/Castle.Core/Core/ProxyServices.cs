@@ -15,6 +15,8 @@
 namespace Castle.Core
 {
 	using System;
+	using System.Reflection;
+
 
 	/// <summary>
 	/// List of utility methods related to dynamic proxy operations
@@ -31,8 +33,13 @@ namespace Castle.Core
 		/// </returns>
 		public static bool IsDynamicProxy(Type type)
 		{
+#if NETCORE
+			return (type.GetTypeInfo().Assembly.FullName.StartsWith("DynamicAssemblyProxyGen", StringComparison.Ordinal) ||
+			  type.GetTypeInfo().Assembly.FullName.StartsWith("DynamicProxyGenAssembly2", StringComparison.Ordinal));
+#else
 			return (type.Assembly.FullName.StartsWith("DynamicAssemblyProxyGen", StringComparison.Ordinal) ||
 					type.Assembly.FullName.StartsWith("DynamicProxyGenAssembly2", StringComparison.Ordinal));
+#endif
 		}
 	}
 }

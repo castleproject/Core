@@ -20,7 +20,6 @@ namespace Castle.DynamicProxy.Contributors
 #if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
 #endif
-
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
@@ -65,7 +64,11 @@ namespace Castle.DynamicProxy.Contributors
 			}
 #endif
 			ImplementProxyTargetAccessor(@class, interceptors);
+#if NETCORE
+			foreach (var attribute in targetType.GetTypeInfo().GetNonInheritableAttributes())
+#else
 			foreach (var attribute in targetType.GetNonInheritableAttributes())
+#endif
 			{
 				@class.DefineCustomAttribute(attribute);
 			}
@@ -140,7 +143,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			codebuilder.AddStatement(new ExpressionStatement(
 			                         	new MethodInvocationExpression(baseGetObjectData,
-			                         	                               serializationInfo.ToExpression(),
+			                         	                              serializationInfo.ToExpression(),
 			                         	                               streamingContext.ToExpression())));
 		}
 

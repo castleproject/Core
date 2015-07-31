@@ -1,0 +1,17 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CastleTests.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="PeVerifyProbingPaths" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;string&gt;c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\NETFX 4.0 Tools&lt;/string&gt;
+  &lt;string&gt;c:\Program Files (x86)\Microsoft SDKs\Windows\v7.1\Bin\NETFX 4.0 Tools&lt;/string&gt;
+  &lt;string&gt;c:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\NETFX 4.0 Tools&lt;/string&gt;
+  &lt;string&gt;c:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\NETFX 4.0 Tools&lt;/string&gt;
+  &lt;string&gt;c:\Program Files\Microsoft SDKs\Windows\v6.0A\Bin&lt;/string&gt;
+  &lt;string&gt;C:\Program Files (x86)\Microsoft Visual Studio 8\SDK\v2.0\bin&lt;/string&gt;
+&lt;/ArrayOfString&gt;</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

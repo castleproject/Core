@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
-
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
@@ -26,7 +25,7 @@ namespace Castle.DynamicProxy
 		protected static readonly ICollection<Type> SkippedTypes = new[]
 		{
 			typeof(object),
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE
 			typeof(MarshalByRefObject),
 			typeof(ContextBoundObject)
 #endif

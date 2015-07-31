@@ -58,8 +58,11 @@ namespace Castle.DynamicProxy.Internal
 				{
 					return internalsToDynProxy[asm];
 				}
-
+#if NETCORE
+				var internalsVisibleTo = asm.GetCustomAttributes<InternalsVisibleToAttribute>();
+#else
 				var internalsVisibleTo = asm.GetAttributes<InternalsVisibleToAttribute>();
+#endif
 				var found = internalsVisibleTo.Any(VisibleToDynamicProxy);
 
 				internalsToDynProxy.Add(asm, found);
@@ -79,7 +82,7 @@ namespace Castle.DynamicProxy.Internal
 		/// <returns></returns>
 		public static bool IsAccessible(this MethodBase method)
 		{
-			// Accessibility supported by the full framework and CoreCLR
+			// Accessibility supported by the full framework and CoreCLR / NETCORE
 			if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly)
 			{
 				return true;
@@ -89,8 +92,11 @@ namespace Castle.DynamicProxy.Internal
 			{
 				return true;
 			}
-
+#if NETCORE
+			if (method.DeclaringType.GetTypeInfo().Assembly.IsInternalToDynamicProxy() && method.IsAssembly)
+#else
 			if (method.DeclaringType.Assembly.IsInternalToDynamicProxy() && method.IsAssembly)
+#endif
 			{
 				return true;
 			}

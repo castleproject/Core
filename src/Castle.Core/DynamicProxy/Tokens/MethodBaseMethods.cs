@@ -19,8 +19,18 @@ namespace Castle.DynamicProxy.Tokens
 
 	public static class MethodBaseMethods
 	{
+#if NETCORE
+		public static readonly MethodInfo GetMethodFromHandle1 =
+			typeof(MethodBase).GetMethod("GetMethodFromHandle", new[] { typeof(RuntimeMethodHandle) });
+
+		public static readonly MethodInfo GetMethodFromHandle2 =
+			typeof(MethodBase).GetMethod("GetMethodFromHandle", new[] { typeof(RuntimeMethodHandle), typeof(RuntimeTypeHandle) });
+#else
+
 		public static readonly MethodInfo GetMethodFromHandle2 =
 			typeof(MethodBase).GetMethod("GetMethodFromHandle", BindingFlags.Static | BindingFlags.Public, null,
 			                             new[] { typeof(RuntimeMethodHandle), typeof(RuntimeTypeHandle) }, null);
+
+#endif
 	}
 }

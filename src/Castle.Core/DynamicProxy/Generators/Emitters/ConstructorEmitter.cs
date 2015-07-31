@@ -75,7 +75,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			get
 			{
+#if NETCORE
+				var attributes = builder.MethodImplementationFlags;
+#else
 				var attributes = builder.GetMethodImplementationFlags();
+#endif
 				return (attributes & MethodImplAttributes.Runtime) != 0;
 			}
 		}

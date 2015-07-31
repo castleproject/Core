@@ -22,6 +22,8 @@ namespace Castle.Core.Resource
 	{
 #if SILVERLIGHT
         protected static readonly String DefaultBasePath = String.Empty;
+#elif NETCORE 
+        protected static readonly String DefaultBasePath = AppContext.BaseDirectory;
 #else
         protected static readonly String DefaultBasePath = AppDomain.CurrentDomain.BaseDirectory;
 #endif

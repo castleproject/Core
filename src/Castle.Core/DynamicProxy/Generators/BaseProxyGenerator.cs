@@ -245,7 +245,11 @@ namespace Castle.DynamicProxy.Generators
 			if (baseConstructorParams != null && baseConstructorParams.Length != 0)
 			{
 				var last = baseConstructorParams.Last();
+#if NETCORE
+				if (last.ParameterType.IsArray) // TODO: Make a replacement for HasAttribute<T> or document the lack.
+#else
 				if (last.ParameterType.GetTypeInfo().IsArray && last.HasAttribute<ParamArrayAttribute>())
+#endif
 				{
 					var parameter = constructor.ConstructorBuilder.DefineParameter(args.Length, ParameterAttributes.None, last.Name);
 					var builder = AttributeUtil.CreateBuilder<ParamArrayAttribute>();
@@ -303,6 +307,7 @@ namespace Castle.DynamicProxy.Generators
 		protected void GenerateParameterlessConstructor(ClassEmitter emitter, Type baseClass, FieldReference interceptorField)
 		{
 			// Check if the type actually has a default constructor
+
 			var defaultConstructor = baseClass.GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, Type.EmptyTypes,
 			                                                  null);
 
@@ -322,7 +327,7 @@ namespace Castle.DynamicProxy.Generators
 			// initialize fields with an empty interceptor
 
 			constructor.CodeBuilder.AddStatement(new AssignStatement(interceptorField,
-			                                                         new NewArrayExpression(1, typeof(IInterceptor))));
+			                                     new NewArrayExpression(1, typeof(IInterceptor))));
 			constructor.CodeBuilder.AddStatement(
 				new AssignArrayStatement(interceptorField, 0, new NewInstanceExpression(typeof(StandardInterceptor), new Type[0])));
 
@@ -430,8 +435,10 @@ namespace Castle.DynamicProxy.Generators
 			return constructor.IsPublic
 			       || constructor.IsFamily
 			       || constructor.IsFamilyOrAssembly
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE
 			       || (constructor.IsAssembly && InternalsUtil.IsInternalToDynamicProxy(constructor.DeclaringType.Assembly));
+#elif NETCORE
+			       || (constructor.IsAssembly && InternalsUtil.IsInternalToDynamicProxy(constructor.DeclaringType.GetTypeInfo().Assembly));
 #else
             ;
 #endif

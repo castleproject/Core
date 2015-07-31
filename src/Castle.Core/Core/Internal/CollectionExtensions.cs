@@ -23,6 +23,7 @@ namespace Castle.Core.Internal
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public static class CollectionExtensions
 	{
+#if !NETCORE
 		public static TResult[] ConvertAll<T, TResult>(this T[] items, Converter<T, TResult> transformation)
 		{
 #if SILVERLIGHT
@@ -31,7 +32,7 @@ namespace Castle.Core.Internal
 			return Array.ConvertAll(items, transformation);
 #endif
 		}
-
+#endif
 		public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
 		{
 			if (items == null) return;

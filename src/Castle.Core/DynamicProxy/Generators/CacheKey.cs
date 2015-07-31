@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Reflection;
-
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
@@ -42,6 +41,18 @@ namespace Castle.DynamicProxy.Generators
 			this.options = options;
 		}
 
+#if NETCORE // Going forward, TypeInfo and not Type inherits from MemberInfo
+		/// <summary>
+		///   Initializes a new instance of the <see cref = "CacheKey" /> class.
+		/// </summary>
+		/// <param name = "target">Type of the target.</param>
+		/// <param name = "interfaces">The interfaces.</param>
+		/// <param name = "options">The options.</param>
+		public CacheKey(Type target, Type[] interfaces, ProxyGenerationOptions options)
+			: this(target.GetTypeInfo(), null, interfaces, options)
+		{
+		}
+#else
 		/// <summary>
 		///   Initializes a new instance of the <see cref = "CacheKey" /> class.
 		/// </summary>
@@ -52,7 +63,7 @@ namespace Castle.DynamicProxy.Generators
 			: this(target, null, interfaces, options)
 		{
 		}
-
+#endif
 		public override int GetHashCode()
 		{
 			var result = target.GetHashCode();

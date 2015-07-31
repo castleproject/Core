@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE  // ConfigurationManager will not be exposed in NETCORE
 
 namespace Castle.Core.Resource
 {

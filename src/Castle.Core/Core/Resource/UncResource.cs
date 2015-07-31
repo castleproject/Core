@@ -21,7 +21,9 @@ namespace Castle.Core.Resource
 	/// <summary>
 	/// Enable access to files on network shares
 	/// </summary>
+#if !NETCORE
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unc")]
+#endif
 	public class UncResource : AbstractStreamResource
 	{
 		private String basePath;

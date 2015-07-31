@@ -216,7 +216,7 @@ namespace Castle.DynamicProxy.Contributors
 			if (onlyVirtuals && !method.IsVirtual)
 			{
 				if (
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE
 					method.DeclaringType != typeof(MarshalByRefObject) &&
 #endif
 					method.IsGetType() == false &&
@@ -235,7 +235,7 @@ namespace Castle.DynamicProxy.Contributors
 				return false;
 			}
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE
 			if (method.DeclaringType == typeof(MarshalByRefObject))
 			{
 				return false;
@@ -252,7 +252,11 @@ namespace Castle.DynamicProxy.Contributors
 		private static bool IsInternalAndNotVisibleToDynamicProxy(MethodInfo method)
 		{
 			return method.IsInternal() &&
-			       method.DeclaringType.Assembly.IsInternalToDynamicProxy() == false;
+#if NETCORE
+				method.DeclaringType.GetTypeInfo().Assembly.IsInternalToDynamicProxy() == false;
+#else
+				method.DeclaringType.Assembly.IsInternalToDynamicProxy() == false;
+#endif
 		}
 	}
 }

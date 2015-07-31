@@ -47,10 +47,16 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 			else
 			{
+#if NETCORE
+				var newDefinedProperty = (DefineProperty_Clr_2_0_SP1)
+				                         TypeBuilderMethods.DefineProperty.CreateDelegate(typeof(DefineProperty_Clr_2_0_SP1),
+				                                                                          parentTypeEmitter.TypeBuilder);
+#else
 				var newDefinedProperty = (DefineProperty_Clr_2_0_SP1)
 				                         Delegate.CreateDelegate(typeof(DefineProperty_Clr_2_0_SP1),
 				                                                 parentTypeEmitter.TypeBuilder,
 				                                                 TypeBuilderMethods.DefineProperty);
+#endif
 				builder = newDefinedProperty(
 					name, attributes, CallingConventions.HasThis, propertyType,
 					null, null, arguments, null, null);

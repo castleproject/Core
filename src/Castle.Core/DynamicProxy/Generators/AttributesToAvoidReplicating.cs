@@ -17,16 +17,19 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.InteropServices;
+#if !NETCORE
 	using System.Security.Permissions;
-
+#endif
 	public static class AttributesToAvoidReplicating
 	{
 		private static readonly IList<Type> attributes = new List<Type>();
 
 		static AttributesToAvoidReplicating()
 		{
+#if !NETCORE
 			Add<ComImportAttribute>();
-#if !SILVERLIGHT
+#endif
+#if !SILVERLIGHT && !NETCORE
 			Add<SecurityPermissionAttribute>();
 #endif
 #if DOTNET40

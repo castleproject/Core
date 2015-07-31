@@ -46,16 +46,29 @@ namespace Castle.Core.Internal
 		public static object[] GetAttributes(Type type, bool inherit)
 		{
 			if (type.GetTypeInfo().IsInterface == false)
+
+
 				throw new ArgumentOutOfRangeException("type");
-
+#if NETCORE
+			var attributes = type.GetTypeInfo().GetCustomAttributes(false);
+#else
 			var attributes = type.GetCustomAttributes(false);
-			var baseTypes  = type.GetInterfaces();
-
+#endif
+			var baseTypes = type.GetInterfaces();
 			if (baseTypes.Length == 0 || !inherit)
+#if NETCORE
+			{
+				return (object[] ) attributes;
+			}
+			return new InterfaceAttributeUtil(type, baseTypes)
+				.GetAttributes((object[])attributes);
+#else
 				return attributes;
 
 			return new InterfaceAttributeUtil(type, baseTypes)
 				.GetAttributes(attributes);
+#endif
+
 		}
 
 		private InterfaceAttributeUtil(Type derivedType, Type[] baseTypes)
@@ -91,7 +104,11 @@ namespace Castle.Core.Internal
 		private object[] GetAttributes(object[] attributes)
 		{
 			for (index = types.Length - 1; index > 0; index--)
+#if NETCORE
+				ProcessType((object[] ) CurrentType.GetTypeInfo().GetCustomAttributes(false));
+#else
 				ProcessType(CurrentType.GetCustomAttributes(false));
+#endif
 
 			ProcessType(attributes);
 
@@ -104,8 +121,11 @@ namespace Castle.Core.Internal
 			foreach (var attribute in attributes)
 			{
 				var attributeType  = attribute.GetType();
+#if NETCORE
+				var attributeUsage = attributeType.GetTypeInfo().GetCustomAttribute<AttributeUsageAttribute>(); 
+#else
 				var attributeUsage = attributeType.GetAttributeUsage();
-
+#endif
 				if (IsMostDerivedType || attributeUsage.Inherited)
 				{
 					if (attributeUsage.AllowMultiple)

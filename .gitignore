@@ -15,3 +15,7 @@ _ReSharper*
 
 *.orig
 *~
+artifacts
+*.lock.json
+packages
+.vs

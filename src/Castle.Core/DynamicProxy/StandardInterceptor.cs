@@ -19,7 +19,8 @@ namespace Castle.DynamicProxy
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
-#if SILVERLIGHT
+
+#if SILVERLIGHT || NETCORE
 	public class StandardInterceptor : IInterceptor
 #else
 	public class StandardInterceptor : MarshalByRefObject, IInterceptor

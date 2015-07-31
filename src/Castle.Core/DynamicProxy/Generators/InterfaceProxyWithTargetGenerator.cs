@@ -59,7 +59,11 @@ namespace Castle.DynamicProxy.Generators
 			ProxyGenerationOptions = options;
 
 			interfaces = TypeUtil.GetAllInterfaces(interfaces);
+#if NETCORE
+			var cacheKey = new CacheKey(proxyTargetType.GetTypeInfo(), targetType, interfaces, options);
+#else
 			var cacheKey = new CacheKey(proxyTargetType, targetType, interfaces, options);
+#endif
 
 			return ObtainProxyType(cacheKey, (n, s) => GenerateType(n, proxyTargetType, interfaces, s));
 		}
@@ -91,7 +95,7 @@ namespace Castle.DynamicProxy.Generators
 			return contributor;
 		}
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NETCORE
 		protected override void CreateTypeAttributes(ClassEmitter emitter)
 		{
 			base.CreateTypeAttributes(emitter);

@@ -15,13 +15,18 @@
 namespace Castle.DynamicProxy
 {
 	using System;
+#if !NETCORE
 	using System.Runtime.Remoting;
+#else
+	using System.Reflection;
+#endif
+
 
 	public class ProxyUtil
 	{
 		public static object GetUnproxiedInstance(object instance)
 		{
-#if (!SILVERLIGHT)
+#if (!SILVERLIGHT && !NETCORE)
 			if (!RemotingServices.IsTransparentProxy(instance))
 #endif
 			{
@@ -37,7 +42,7 @@ namespace Castle.DynamicProxy
 
 		public static Type GetUnproxiedType(object instance)
 		{
-#if (!SILVERLIGHT)
+#if (!SILVERLIGHT && !NETCORE)
 			if (!RemotingServices.IsTransparentProxy(instance))
 #endif
 			{
@@ -51,7 +56,11 @@ namespace Castle.DynamicProxy
 					{
 						if (ReferenceEquals(target, instance))
 						{
+#if NETCORE
+							return instance.GetType().GetTypeInfo().BaseType;
+#else
 							return instance.GetType().BaseType;
+#endif
 						}
 
 						instance = target;
@@ -64,7 +73,7 @@ namespace Castle.DynamicProxy
 
 		public static bool IsProxy(object instance)
 		{
-#if (!SILVERLIGHT)
+#if (!SILVERLIGHT && !NETCORE)
 			if (RemotingServices.IsTransparentProxy(instance))
 			{
 				return true;

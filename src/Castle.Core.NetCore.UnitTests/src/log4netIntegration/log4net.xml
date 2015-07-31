@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+
+	<log4net>
+
+		<appender name="Console" type="log4net.Appender.ConsoleAppender">
+			<layout type="log4net.Layout.PatternLayout">
+				<conversionPattern value="%date [%thread] %-5level %logger [%property{NDC}] - %message%newline" />
+			</layout>
+		</appender>
+		<appender name="Memory" type="log4net.Appender.MemoryAppender">
+			<layout type="log4net.Layout.PatternLayout">
+				<conversionPattern value="%message" />
+			</layout>
+		</appender>
+
+
+		<!-- Setup the root category, add the appenders and set the default level -->
+		<root>
+			<!-- ALL, DEBUG, INFO, WARN, ERROR, FATAL, OFF-->
+			<priority value="ALL" />
+			<appender-ref ref="Console" />
+		</root>
+
+		<logger name="Log4netFactoryTestCase">
+			<priority value="ALL" />
+			<appender-ref ref="Memory" />
+		</logger>
+
+	</log4net>
+
+</configuration>

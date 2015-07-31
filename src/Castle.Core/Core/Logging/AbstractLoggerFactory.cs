@@ -20,7 +20,7 @@ namespace Castle.Core.Logging
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
-#if SILVERLIGHT
+#if SILVERLIGHT || NETCORE
 	public abstract class AbstractLoggerFactory : ILoggerFactory
 #else
 	public abstract class AbstractLoggerFactory : MarshalByRefObject, ILoggerFactory
@@ -66,7 +66,11 @@ namespace Castle.Core.Logging
 			}
 			else
 			{
+#if NETCORE
+				result = new FileInfo(Path.Combine(AppContext.BaseDirectory, fileName));
+#else
 				result = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName));
+#endif
 			}
 
 			return result;

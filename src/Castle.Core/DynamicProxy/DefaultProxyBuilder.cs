@@ -120,6 +120,7 @@ namespace Castle.DynamicProxy
 		private void AssertValidTypeForTarget(Type type, Type target)
 		{
 			if (type.GetTypeInfo().IsGenericTypeDefinition)
+
 			{
 				throw new GeneratorException(string.Format("Can not create proxy for type {0} because type {1} is an open generic type.",
 															target.GetBestName(), type.GetBestName()));
@@ -147,20 +148,28 @@ namespace Castle.DynamicProxy
 
 		private bool IsAccessible(Type target)
 		{
+#if NETCORE
+			return IsInternal(target) && target.GetTypeInfo().Assembly.IsInternalToDynamicProxy();
+#else
 			return IsInternal(target) && target.Assembly.IsInternalToDynamicProxy();
+#endif
 		}
 
 		private bool IsPublic(Type target)
 		{
 			return target.GetTypeInfo().IsPublic || target.GetTypeInfo().IsNestedPublic;
+
 		}
 
 		private static bool IsInternal(Type target)
 		{
 			var isTargetNested = target.IsNested;
 			var isNestedAndInternal = isTargetNested && (target.GetTypeInfo().IsNestedAssembly || target.GetTypeInfo().IsNestedFamORAssem);
+#if NETCORE
+			var isInternalNotNested = target.GetTypeInfo().IsVisible == false && isTargetNested == false;
+#else
 			var isInternalNotNested = target.IsVisible == false && isTargetNested == false;
-
+#endif
 			return isInternalNotNested || isNestedAndInternal;
 		}
 	}

@@ -17,6 +17,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections;
 	using System.ComponentModel;
 	using System.Linq;
+	using System.Reflection;
 
 	public abstract partial class DictionaryAdapterBase : IDictionaryAdapter
 	{
@@ -27,7 +28,6 @@ namespace Castle.Components.DictionaryAdapter
 			CanEdit = typeof(IEditableObject).IsAssignableFrom(Meta.Type);
 			CanNotify = typeof(INotifyPropertyChanged).IsAssignableFrom(Meta.Type);
 			CanValidate = typeof(IDataErrorInfo).IsAssignableFrom(Meta.Type);
-
 			Initialize();
 		}
 
@@ -134,7 +134,6 @@ namespace Castle.Components.DictionaryAdapter
 			return property == null ||
 				property.Setters.OfType<RemoveIfAttribute>().Where(remove => remove.ShouldRemove(value)).Any();
 		}
-
 		public override bool Equals(object obj)
 		{
 			var other = obj as IDictionaryAdapter;
@@ -161,6 +160,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			return base.Equals(obj);
 		}
+
 
 		public override int GetHashCode()
 		{

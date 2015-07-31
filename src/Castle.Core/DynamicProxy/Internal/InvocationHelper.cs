@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Internal
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
-
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
 
@@ -88,7 +87,11 @@ namespace Castle.DynamicProxy.Internal
 			MethodInfo methodOnTarget = null;
 			if (declaringType.GetTypeInfo().IsInterface)
 			{
+#if NETCORE
+				var mapping = type.GetTypeInfo().GetRuntimeInterfaceMap(declaringType); 
+#else
 				var mapping = type.GetInterfaceMap(declaringType);
+#endif
 				var index = Array.IndexOf(mapping.InterfaceMethods, proxiedMethod);
 				Debug.Assert(index != -1);
 				methodOnTarget = mapping.TargetMethods[index];

@@ -65,8 +65,9 @@ namespace Castle.Components.DictionaryAdapter
 			get
 			{
 				return string.Join(Environment.NewLine,
-					propertyNames.Select(propertyName => adapter[propertyName])
-					.Where(errors => !string.IsNullOrEmpty(errors)).ToArray());
+
+				propertyNames.Select(propertyName => adapter[propertyName])
+				.Where(errors => !string.IsNullOrEmpty(errors)).ToArray());
 			}
 		}
 
@@ -90,7 +91,10 @@ namespace Castle.Components.DictionaryAdapter
 
 		public IEnumerable<IDictionaryValidator> Validators
 		{
-			get { return adapter.Validators; }
+			get
+			{
+				return adapter.Validators;
+			}
 		}
 
 		public void AddValidator(IDictionaryValidator validator)

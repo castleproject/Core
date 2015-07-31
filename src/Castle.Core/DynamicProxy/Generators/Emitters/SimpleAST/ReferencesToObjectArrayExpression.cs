@@ -52,9 +52,15 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				}
 
 				if (reference.Type.GetTypeInfo().IsValueType)
+#if NETCORE
+				{
+					gen.Emit(OpCodes.Box, reference.Type); 
+				}
+#else
 				{
 					gen.Emit(OpCodes.Box, reference.Type.UnderlyingSystemType);
 				}
+#endif
 				else if (reference.Type.GetTypeInfo().IsGenericParameter)
 				{
 					gen.Emit(OpCodes.Box, reference.Type);

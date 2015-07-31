@@ -142,6 +142,10 @@ namespace Castle.Core.Resource
 
 		private static Assembly ObtainAssembly(String assemblyName)
 		{
+#if NETCORE
+			// TODO:  Could add support for DI of IAssemblyLoadContext for users running in Dnx.
+			throw new NotImplementedException("Assembly.Load(string) is not supported in NETCORE");
+#else
 			try
 			{
 				return Assembly.Load(assemblyName);
@@ -151,6 +155,7 @@ namespace Castle.Core.Resource
 				String message = String.Format(CultureInfo.InvariantCulture, "The assembly {0} could not be loaded", assemblyName);
 				throw new ResourceException(message, ex);
 			}
+#endif
 		}
 	}
 }

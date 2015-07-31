@@ -47,7 +47,11 @@ namespace Castle.DynamicProxy.Generators
 
 		public Type GetGeneratedType()
 		{
+#if NETCORE
+			var cacheKey = new CacheKey(targetType.GetTypeInfo(), targetType, additionalInterfacesToProxy, ProxyGenerationOptions);
+#else
 			var cacheKey = new CacheKey(targetType, targetType, additionalInterfacesToProxy, ProxyGenerationOptions);
+#endif
 			return ObtainProxyType(cacheKey, GenerateType);
 		}
 
@@ -77,7 +81,7 @@ namespace Castle.DynamicProxy.Generators
 					{
 						// OK, so the target implements this interface. We now do one of two things:
 						if (additionalInterfacesToProxy.Contains(mixinInterface) &&
-						    typeImplementerMapping.ContainsKey(mixinInterface) == false)
+						  typeImplementerMapping.ContainsKey(mixinInterface) == false)
 						{
 							AddMappingNoCheck(mixinInterface, proxyTarget, typeImplementerMapping);
 							proxyTarget.AddInterfaceToProxy(mixinInterface);

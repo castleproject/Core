@@ -19,7 +19,7 @@ namespace Castle.Core.Logging
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
-#if SILVERLIGHT
+#if SILVERLIGHT || NETCORE
 	public class ConsoleFactory : ILoggerFactory
 #else
 	public class ConsoleFactory : MarshalByRefObject, ILoggerFactory
