@@ -42,6 +42,7 @@ Symbol                          | NET35              | NET40              | NET4
 ------------------------------- | ------------------ | ------------------ | ------------------ | ------------------ | ------------------
 `FEATURE_LEGACY_REFLECTION_API` | :white_check_mark: | :white_check_mark: | :no_entry_sign:    | :white_check_mark: | :white_check_mark:
 `FEATURE_SERIALIZATION`         | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:
+`FEATURE_STRONGNAME`            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:
 `FEATURE_XUNITNET`              | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:
 `DOTNET35`                      | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:
 `DOTNET40`                      | :no_entry_sign:    | :white_check_mark: | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:

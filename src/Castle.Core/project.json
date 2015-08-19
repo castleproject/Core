@@ -1,0 +1,39 @@
+﻿{
+  "version": "3.3.4-*",
+  "description": "Castle.Core",
+  "authors": [ "" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "dependencies": {
+    "System.Runtime": "4.0.20",
+    "System.Threading": "4.0.10"
+  },
+  "frameworks": {
+    "dotnet": { }
+  },
+  "compilationOptions": {
+    "warningsAsErrors": true
+  },
+  "exclude": [
+    "Compatibility/**/*",
+    "Components.DictionaryAdapter/**/*",
+    "Core/**/*",
+    "DynamicProxy/**/*"
+  ],
+  "compileFiles": [
+    "Properties/InternalsVisibleToTests.cs",
+    "Core/Internal/ILockHolder.cs",
+    "Core/Internal/IUpgradeableLockHolder.cs",
+    "Core/Internal/Lock.cs",
+    "Core/Internal/MonitorLock.cs",
+    "Core/Internal/MonitorLockHolder.cs",
+    "Core/Internal/MonitorUpgradeableLockHolder.cs",
+    "Core/Internal/NoOpLock.cs",
+    "Core/Internal/NoOpUpgradeableLock.cs",
+    "Core/Internal/SlimReadLockHolder.cs",
+    "Core/Internal/SlimReadWriteLock.cs",
+    "Core/Internal/SlimUpgradeableReadLockHolder.cs",
+    "Core/Internal/SlimWriteLockHolder.cs"
+  ]
+}
