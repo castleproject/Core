@@ -27,8 +27,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	{
 		private DictionaryAdapterFactory factory;
 
+#if FEATURE_XUNITNET
+		public MemberwiseEqualityHashCodeStrategyTestCase()
+#else
 		[SetUp]
 		public void SetUp()
+#endif
 		{
 			factory = new DictionaryAdapterFactory();
 			GetAdapter<IPhone>();

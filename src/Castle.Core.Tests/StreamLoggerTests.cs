@@ -28,15 +28,18 @@ namespace Castle.Core.Logging.Tests
 		private StreamLogger logger;
 		private MemoryStream stream;
 
+#if FEATURE_XUNITNET
+		public StreamLoggerTests()
+#else
 		[SetUp]
 		public void SetUp()
+#endif
 		{
 			stream = new MemoryStream();
 
 			logger = new StreamLogger(Name, stream);
 			logger.Level = LoggerLevel.Debug;
 		}
-
 
 		[Test]
 		public void Debug()

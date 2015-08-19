@@ -21,9 +21,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 	using Castle.Components.DictionaryAdapter.Xml;
 	using NUnit.Framework;
 
-    public static class ReferenceManagerTestCase
-    {
-	    [TestFixture]
+	public static class ReferenceManagerTestCase
+	{
+		[TestFixture]
 		public class WithValidXml : TestScenario
 		{
 			protected override string GetXmlText()
@@ -67,10 +67,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 				var proceed = Manager.OnGetStarting(ref node, ref value, out token);
 
-				Assert.That(proceed, Is.True);
-				Assert.That(node,    Is.SameAs(cursorC));
-				Assert.That(value,   Is.Null);
-				Assert.That(token,   Is.Not.Null);
+				Assert.True(proceed);
+				Assert.AreSame(cursorC, node);
+				Assert.IsNull(value);
+				Assert.NotNull(token);
 
 				Manager.OnGetCompleted(node, ValueA, token);
 			}
@@ -85,10 +85,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 				var proceed = Manager.OnGetStarting(ref node, ref value, out token);
 
-				Assert.That(proceed, Is.True);
-				Assert.That(node,    Is.SameAs(cursorA));
-				Assert.That(value,   Is.Null);
-				Assert.That(token,   Is.Null);
+				Assert.True(proceed);
+				Assert.AreSame(cursorA, node);
+				Assert.IsNull(value);
+				Assert.IsNull(token);
 			}
 
 			[Test]
@@ -101,10 +101,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 				var proceed = Manager.OnGetStarting(ref node, ref value, out token);
 
-				Assert.That(proceed, Is.True);
-				Assert.That(node,    Is.SameAs(cursorA));
-				Assert.That(value,   Is.Null);
-				Assert.That(token,   Is.Not.Null);
+				Assert.True(proceed);
+				Assert.AreSame(cursorA, node);
+				Assert.IsNull(value);
+				Assert.NotNull(token);
 
 				Manager.OnGetCompleted(node, ValueA, token);
 			}
@@ -121,10 +121,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 				var proceed = Manager.OnGetStarting(ref node, ref value, out token);
 
-				Assert.That(proceed, Is.False);
-				Assert.That(node,    Is.SameAs(cursorA));
-				Assert.That(value,   Is.EqualTo(ValueA));
-				Assert.That(token,   Is.Null);
+				Assert.False(proceed);
+				Assert.AreSame(cursorA, node);
+				Assert.AreEqual(ValueA, value);
+				Assert.IsNull(token);
 
 				// Shouldn't call this!  Here only to exercise the code path.
 				Manager.OnGetCompleted(node, value, token);
@@ -143,10 +143,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 				var proceed = Manager.OnGetStarting(ref node, ref value, out token);
 
-				Assert.That(proceed, Is.False);
-				Assert.That(node,    Is.Not.SameAs(cursorY));
-				Assert.That(value,   Is.EqualTo(ValueA));
-				Assert.That(token,   Is.Null);
+				Assert.False(proceed);
+				Assert.AreNotSame(cursorY, node);
+				Assert.AreEqual(ValueA, value);
+				Assert.IsNull(token);
 			}
 
 			[Test]
@@ -162,10 +162,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 				var proceed = Manager.OnGetStarting(ref node, ref value, out token);
 
-				Assert.That(proceed, Is.True);
-				Assert.That(node,    Is.Not.SameAs(cursorY));
-				Assert.That(value,   Is.Null);
-				Assert.That(token,   Is.Not.Null);
+				Assert.True(proceed);
+				Assert.AreNotSame(cursorY, node);
+				Assert.IsNull(value);
+				Assert.NotNull(token);
 
 				Manager.OnGetCompleted(node, OtherA, token);
 			}
@@ -183,10 +183,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 				var proceed = Manager.OnGetStarting(ref node, ref value, out token);
 
-				Assert.That(proceed, Is.False);
-				Assert.That(node,    Is.Not.SameAs(cursorY));
-				Assert.That(value,   Is.SameAs(OtherA));
-				Assert.That(token,   Is.Null);
+				Assert.False(proceed);
+				Assert.AreNotSame(cursorY, node);
+				Assert.AreSame(OtherA, value);
+				Assert.IsNull(token);
 			}
 
 			[Test]
@@ -199,9 +199,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 				var proceed = Manager.OnAssigningValue(node, null, ref value, out token);
 
-				Assert.That(proceed, Is.True);
-				Assert.That(value,   Is.EqualTo(42));
-				Assert.That(token,   Is.Null);
+				Assert.True(proceed);
+				Assert.AreEqual(42, value);
+				Assert.IsNull(token);
 			}
 		}
 
@@ -218,7 +218,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 			{
 				SetValue(Node, "A", null, ValueA, SetResult.ProceedTracked);
 
-				Assert.That(Document, XmlEquivalent.To(OriginalXml));
+				CustomAssert.AreXmlEquivalent(OriginalXml, Document);
 			}
 
 			[Test]
@@ -227,7 +227,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				SetValue(Node, "A", null,   ValueA, SetResult.ProceedTracked);
 				SetValue(Node, "A", ValueA, ValueA, SetResult.Return);
 
-				Assert.That(Document, XmlEquivalent.To(OriginalXml));
+				CustomAssert.AreXmlEquivalent(OriginalXml, Document);
 			}
 
 			[Test]
@@ -236,7 +236,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				SetValue(Node, "A", null,   ValueA, SetResult.ProceedTracked);
 				SetValue(Node, "A", ValueA, OtherA, SetResult.ProceedTracked);
 
-				Assert.That(Document, XmlEquivalent.To(OriginalXml));
+				CustomAssert.AreXmlEquivalent(OriginalXml, Document);
 			}
 
 			[Test]
@@ -245,9 +245,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				SetValue(Node, "A", null, ValueA, SetResult.ProceedTracked);
 				SetValue(Node, "B", null, ValueA, SetResult.Return);
 
-				Assert.That(Document, XmlEquivalent.To(
-					Xml("<Root $x> <A x:id='1'/> <B x:ref='1'/> <C/> </Root>")
-				));
+				CustomAssert.AreXmlEquivalent(Xml("<Root $x> <A x:id='1'/> <B x:ref='1'/> <C/> </Root>"), Document);
 			}
 
 			[Test]
@@ -257,9 +255,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				SetValue(Node, "B", null,   ValueA, SetResult.Return);
 				SetValue(Node, "B", ValueA, ValueA, SetResult.Return);
 
-				Assert.That(Document, XmlEquivalent.To(
-					Xml("<Root $x> <A x:id='1'/> <B x:ref='1'/> <C/> </Root>")
-				));
+				CustomAssert.AreXmlEquivalent(Xml("<Root $x> <A x:id='1'/> <B x:ref='1'/> <C/> </Root>"), Document);
 			}
 
 			[Test]
@@ -269,9 +265,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				SetValue(Node, "B", null, ValueA, SetResult.Return);
 				SetValue(Node, "C", null, ValueA, SetResult.Return);
 
-				Assert.That(Document, XmlEquivalent.To(
-					Xml("<Root $x> <A x:id='1'/> <B x:ref='1'/> <C x:ref='1'/> </Root>")
-				));
+				CustomAssert.AreXmlEquivalent(Xml("<Root $x> <A x:id='1'/> <B x:ref='1'/> <C x:ref='1'/> </Root>"), Document);
 			}
 
 			[Test]
@@ -282,9 +276,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				SetValue(Node, "C", null,   ValueA, SetResult.Return);
 				SetValue(Node, "A", ValueA, OtherA, SetResult.ProceedTracked);
 
-				Assert.That(Document, XmlEquivalent.To(
-					Xml("<Root $x> <A/> <B x:id='1'/> <C x:ref='1'/> </Root>")
-				));
+				CustomAssert.AreXmlEquivalent(Xml("<Root $x> <A/> <B x:id='1'/> <C x:ref='1'/> </Root>"), Document);
 			}
 
 			[Test]
@@ -295,9 +287,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				SetValue(Node, "C", null,   ValueA, SetResult.Return);
 				SetValue(Node, "B", ValueA, OtherA, SetResult.ProceedTracked);
 
-				Assert.That(Document, XmlEquivalent.To(
-					Xml("<Root $x> <A x:id='1'/> <B/> <C x:ref='1'/> </Root>")
-				));
+				CustomAssert.AreXmlEquivalent(Xml("<Root $x> <A x:id='1'/> <B/> <C x:ref='1'/> </Root>"), Document);
 			}
 
 			[Test]
@@ -309,7 +299,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				SetValue(Node, "A", ValueA, OtherA, SetResult.ProceedTracked);
 				SetValue(Node, "B", ValueA, OtherB, SetResult.ProceedTracked);
 
-				Assert.That(Document, XmlEquivalent.To(OriginalXml));
+				CustomAssert.AreXmlEquivalent(OriginalXml, Document);
 			}
 
 			[Test]
@@ -322,7 +312,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				SetValue(Node, "B", ValueA, OtherB, SetResult.ProceedTracked);
 				SetValue(Node, "C", ValueA, OtherC, SetResult.ProceedTracked);
 
-				Assert.That(Document, XmlEquivalent.To(OriginalXml));
+				CustomAssert.AreXmlEquivalent(OriginalXml, Document);
 			}
 
 			[Test]
@@ -331,8 +321,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				Set_Primary();
 
 				object value;
-				Assert.That(Manager.TryGet(ValueA, out value), Is.True);
-				Assert.That(value, Is.SameAs(ValueA));
+				Assert.True(Manager.TryGet(ValueA, out value));
+				Assert.AreSame(ValueA, value);
 			}
 
 			[Test]
@@ -341,8 +331,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				Set_Primary();
 
 				object value;
-				Assert.That(Manager.TryGet(OtherA, out value), Is.False);
-				Assert.That(value, Is.Null);
+				Assert.False(Manager.TryGet(OtherA, out value));
+				Assert.IsNull(value);
 			}
 		}
 
@@ -367,9 +357,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				SetValue(Node, "B", null,   ValueA, SetResult.Return);
 				SetValue(Node, "A", ValueA, OtherA, SetResult.ProceedTracked);
 
-				Assert.That(Document, XmlEquivalent.To(
-					Xml("<Root $x> <A/> <B C='c'> d <E>f</E> g </B> </Root>")
-				));
+				CustomAssert.AreXmlEquivalent(Xml("<Root $x> <A/> <B C='c'> d <E>f</E> g </B> </Root>"), Document);
 			}
 		}
 
@@ -396,9 +384,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				SetValue(Node, "C", null,   ValueA, SetResult.Return);
 				SetValue(Node, "A", ValueA, OtherA, SetResult.ProceedTracked);
 
-				Assert.That(Document, XmlEquivalent.To(
-					Xml("<Root $x> <A/> <B C='c' x:id='1'> d <E>f</E> g </B> <C x:ref='1'/> </Root>")
-				));
+				CustomAssert.AreXmlEquivalent(Xml("<Root $x> <A/> <B C='c' x:id='1'> d <E>f</E> g </B> <C x:ref='1'/> </Root>"), Document);
 			}
 		}
 
@@ -417,8 +403,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				OtherB = new TX(),
 				OtherC = new TX();
 
+#if FEATURE_XUNITNET
+			protected TestScenario()
+#else
 			[SetUp]
 			public void SetUp()
+#endif
 			{
 				OriginalXml = GetXmlText();
 				Document    = Xml(OriginalXml);
@@ -440,22 +430,22 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				switch (expectedResult)
 				{
 					case SetResult.ProceedUntracked:
-						Assert.That(proceed, Is.True);
-						Assert.That(value,   Is.EqualTo(newValue));
-						Assert.That(token,   Is.Null);
+						Assert.True(proceed);
+						Assert.AreEqual(newValue, value);
+						Assert.IsNull(token);
 						break;
 
 					case SetResult.ProceedTracked:
-						Assert.That(proceed, Is.True);
-						Assert.That(value,   Is.EqualTo(newValue));
-						Assert.That(token,   Is.Not.Null);
+						Assert.True(proceed);
+						Assert.AreEqual(newValue, value);
+						Assert.NotNull(token);
 						Manager.OnAssignedValue(node, value, value, token);
 						break;
 
 					case SetResult.Return:
-						Assert.That(proceed, Is.False);
-						Assert.That(value,   Is.EqualTo(newValue));
-						Assert.That(token,   Is.Null);
+						Assert.False(proceed);
+						Assert.AreEqual(newValue, value);
+						Assert.IsNull(token);
 						break;
 				}
 			}
@@ -479,7 +469,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				knownTypes.Add(knownType, true);
 
 				var cursor = node.SelectChildren(knownTypes, Namespaces, CursorFlags.Elements);
-				Assert.That(cursor.MoveNext(), Is.True);
+				Assert.True(cursor.MoveNext());
 
 				return cursor;
 			}

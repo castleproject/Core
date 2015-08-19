@@ -30,9 +30,9 @@ namespace CastleTests.Components.DictionaryAdapter.Tests
 
 			var realizedNode = obj.Realize();
 
-			Assert.That(realizedNode,          Is.SameAs(NodeA));
-			Assert.That(target.RealizedNode,   Is.SameAs(NodeA));
-			Assert.That(target.RealizedMember, Is.SameAs(MemberA));
+			Assert.AreSame(NodeA, realizedNode);
+			Assert.AreSame(NodeA, target.RealizedNode);
+			Assert.AreSame(MemberA, target.RealizedMember);
 		}
 
 		[Test]
@@ -44,14 +44,15 @@ namespace CastleTests.Components.DictionaryAdapter.Tests
 
 			obj.Realized += (sender, args) =>
 			{
-				Assert.That(sender, Is.SameAs(obj));
-				Assert.That(args,   Is.Not.Null & Is.InstanceOf<EventArgs>());
+				Assert.AreSame(obj, sender);
+				Assert.NotNull(args);
+				Assert.IsInstanceOf<EventArgs>(args);
 				fired = true;
 			};
 
 			obj.Realize();
 
-			Assert.That(fired, Is.True, "Event fired");
+			Assert.True(fired, "Event fired");
 		}
 
 		[Test]
@@ -64,11 +65,11 @@ namespace CastleTests.Components.DictionaryAdapter.Tests
 			obj.AddSite(new VirtualSite<Node, Member>(target2, MemberB));
 			var realizedNode = obj.Realize();
 
-			Assert.That(realizedNode,           Is.SameAs(NodeA));
-			Assert.That(target1.RealizedNode,   Is.SameAs(NodeA));
-			Assert.That(target1.RealizedMember, Is.SameAs(MemberA));
-			Assert.That(target2.RealizedNode,   Is.SameAs(NodeA));
-			Assert.That(target2.RealizedMember, Is.SameAs(MemberB));
+			Assert.AreSame(NodeA, realizedNode);
+			Assert.AreSame(NodeA, target1.RealizedNode);
+			Assert.AreSame(MemberA, target1.RealizedMember);
+			Assert.AreSame(NodeA, target2.RealizedNode);
+			Assert.AreSame(MemberB, target2.RealizedMember);
 		}
 
 		[Test]
@@ -80,13 +81,13 @@ namespace CastleTests.Components.DictionaryAdapter.Tests
 
 			obj.AddSite   (new VirtualSite<Node, Member>(target2, MemberB));
 			obj.RemoveSite(new VirtualSite<Node, Member>(target1, MemberA));
-			var realizedNode = obj.Realize();	
+			var realizedNode = obj.Realize();
 
-			Assert.That(realizedNode,           Is.SameAs(NodeA));
-			Assert.That(target1.RealizedNode,   Is.Null);
-			Assert.That(target1.RealizedMember, Is.Null);
-			Assert.That(target2.RealizedNode,   Is.SameAs(NodeA));
-			Assert.That(target2.RealizedMember, Is.SameAs(MemberB));
+			Assert.AreSame(NodeA, realizedNode);
+			Assert.IsNull(target1.RealizedNode);
+			Assert.IsNull(target1.RealizedMember);
+			Assert.AreSame(NodeA, target2.RealizedNode);
+			Assert.AreSame(MemberB, target2.RealizedMember);
 		}
 
 		[Test]
@@ -96,7 +97,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests
 
 			var realizedNode = obj.Realize();
 
-			Assert.That(realizedNode, Is.SameAs(NodeA));
+			Assert.AreSame(NodeA, realizedNode);
 		}
 
 		[Test]
@@ -112,7 +113,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests
 
 			obj.Realize();
 
-			Assert.That(fired, Is.False, "Event fired");
+			Assert.False(fired, "Event fired");
 		}
 
 		[Test]
@@ -124,9 +125,9 @@ namespace CastleTests.Components.DictionaryAdapter.Tests
 			obj.AddSite(new VirtualSite<Node, Member>(target, MemberA));
 			var realizedNode = obj.Realize();
 
-			Assert.That(realizedNode,          Is.SameAs(NodeA));
-			Assert.That(target.RealizedNode,   Is.Null);
-			Assert.That(target.RealizedMember, Is.Null);
+			Assert.AreSame(NodeA, realizedNode);
+			Assert.IsNull(target.RealizedNode);
+			Assert.IsNull(target.RealizedMember);
 		}
 
 		[Test]
@@ -138,9 +139,9 @@ namespace CastleTests.Components.DictionaryAdapter.Tests
 			obj.RemoveSite(new VirtualSite<Node, Member>(target, MemberA));
 			var realizedNode = obj.Realize();
 
-			Assert.That(realizedNode,          Is.SameAs(NodeA));
-			Assert.That(target.RealizedNode,   Is.Null);
-			Assert.That(target.RealizedMember, Is.Null);
+			Assert.AreSame(NodeA, realizedNode);
+			Assert.IsNull(target.RealizedNode);
+			Assert.IsNull(target.RealizedMember);
 		}
 
 		private static readonly Node

@@ -15,7 +15,6 @@
 #if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
-	using System;
 	using System.Xml.Serialization;
 	using Castle.Components.DictionaryAdapter.Tests;
     using NUnit.Framework;
@@ -36,7 +35,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             {
                 var foo = Create<IFoo>("<Foo> <A>a</A> </Foo>");
 
-                Assert.That(foo.A, Is.EqualTo("a"));
+				Assert.AreEqual("a", foo.A);
             }
 
             [Test]
@@ -44,7 +43,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             {
                 var foo = Create<IFoo>("<Foo A='a'/>");
 
-                Assert.That(foo.A, Is.EqualTo(default(string)));
+				Assert.AreEqual(default(string), foo.A);
             }
 
             [Test]
@@ -55,7 +54,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
                 foo.A = "a";
 
-                Assert.That(xml, XmlEquivalent.To("<Foo> <A>a</A> </Foo>"));
+				CustomAssert.AreXmlEquivalent("<Foo> <A>a</A> </Foo>", xml);
             }
         }
 
@@ -76,9 +75,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				var array = foo.Items;
 
-				Assert.That(array,    Is.Not.Null & Has.Length.EqualTo(2));
-				Assert.That(array[0], Is.EqualTo("0"));
-				Assert.That(array[1], Is.EqualTo("1"));
+				Assert.AreEqual(2, array.Length);
+				Assert.AreEqual("0", array[0]);
+				Assert.AreEqual("1", array[1]);
 			}
 		}
 
@@ -92,9 +91,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				var array = foo.Items;
 
-				Assert.That(array,    Is.Not.Null & Has.Length.EqualTo(2));
-				Assert.That(array[0], Is.InstanceOf<IDerived1>());
-				Assert.That(array[1], Is.InstanceOf<IDerived2>());
+				Assert.AreEqual(2, array.Length);
+				Assert.IsInstanceOf<IDerived1>(array[0]);
+				Assert.IsInstanceOf<IDerived2>(array[1]);
             }
 
             //[Test]
@@ -106,7 +105,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
             //    foo.F = array;
 
-            //    Assert.That(xml, XmlEquivalent.To("<Foo> <F> <int>1</int> <int>2</int> </F> </Foo>"));
+            //    CustomAssert.AreXmlEquivalent("<Foo> <F> <int>1</int> <int>2</int> </F> </Foo>", xml);
             //}
 
             public interface IRoot

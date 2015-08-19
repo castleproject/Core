@@ -29,8 +29,12 @@ namespace Castle.Core.Logging.Tests
 	{
 		private LevelFilteredLogger logger;
 
+#if FEATURE_XUNITNET
+		public PropertyTests()
+#else
 		[SetUp]
 		public void SetUp()
+#endif
 		{
 			logger = new LevelFilteredLoggerInstance(null);
 		}
@@ -166,8 +170,12 @@ namespace Castle.Core.Logging.Tests
 		internal Exception exception;
 		internal int calls;
 
+#if FEATURE_XUNITNET
+		public LoggingTests()
+#else
 		[SetUp]
 		public void SetUp()
+#endif
 		{
 			logger = new LevelFilteredLoggerInstance(this);
 

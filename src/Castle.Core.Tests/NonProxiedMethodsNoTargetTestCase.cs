@@ -15,8 +15,10 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+
 	using Castle.DynamicProxy.Tests.InterClasses;
 	using Castle.DynamicProxy.Tests.Interfaces;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -54,6 +56,13 @@ namespace Castle.DynamicProxy.Tests
 			return (T) generator.CreateClassProxy(typeof (T), Type.EmptyTypes, options);
 		}
 
+		public static readonly object[] AllKinds = {
+			new object[] { ProxyKind.Class },
+			new object[] { ProxyKind.WithoutTarget },
+			new object[] { ProxyKind.WithTarget },
+			new object[] { ProxyKind.WithTargetInterface }
+		};
+
 		[Test]
 		public void Abstract_method()
 		{
@@ -62,21 +71,25 @@ namespace Castle.DynamicProxy.Tests
 			Assert.DoesNotThrow(() => result = proxy.Foo());
 			Assert.IsNull(result);
 		}
+
 #if SILVERLIGHT
 		[Test]
 		public void AdditionalInterfaces_method()
 		{
-			AdditionalInterfaces_method(ProxyKind.Class);
-			AdditionalInterfaces_method(ProxyKind.WithoutTarget);
-			AdditionalInterfaces_method(ProxyKind.WithTarget);
-			AdditionalInterfaces_method(ProxyKind.WithTargetInterface);
+			foreach (object[] kind in AllKinds)
+			{
+				AdditionalInterfaces_method((ProxyKind)kind[0]);
+			}
 		}
+#else
+#if FEATURE_XUNITNET
+		[Xunit.Theory]
 #else
 		[Test]
 #endif
-		public void AdditionalInterfaces_method(
-			[Values(ProxyKind.Class, ProxyKind.WithoutTarget, ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind
-				kind)
+		[TestCaseSource("AllKinds")]
+#endif
+		public void AdditionalInterfaces_method(ProxyKind kind)
 		{
 			var proxy = CreateProxyWithAdditionalInterface<IWithRefOut>(kind);
 			int result = -1;
@@ -116,7 +129,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(0, result);
 		}
 
-
 		[Test]
 		public void Target_method_generic_out_ref_parameters_int()
 		{
@@ -148,8 +160,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var proxy = CreateProxy<IGenericInterface>();
 			string result = "";
-			Assert.DoesNotThrow(() =>
-			                    result = proxy.GenericMethod<string>());
+			Assert.DoesNotThrow(() => result = proxy.GenericMethod<string>());
 			Assert.IsNull(result);
 		}
 
@@ -173,7 +184,6 @@ namespace Castle.DynamicProxy.Tests
 			result = new int?(5);
 			Assert.DoesNotThrow(() => proxy.GetOut(out result));
 			Assert.IsNull(result);
-
 
 			result = new int?(5);
 			Assert.DoesNotThrow(() => proxy.Set(result));

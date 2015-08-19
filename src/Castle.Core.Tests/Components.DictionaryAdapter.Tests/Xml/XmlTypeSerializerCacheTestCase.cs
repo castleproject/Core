@@ -28,7 +28,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
         {
             var serializer = XmlTypeSerializerCache.Instance[typeof(A)];
 
-            Assert.That(serializer, Is.Not.Null & Is.InstanceOf<XmlTypeSerializer>());
+            Assert.IsInstanceOf<XmlTypeSerializer>(serializer);
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             var a = XmlTypeSerializerCache.Instance[typeof(A)];
             var b = XmlTypeSerializerCache.Instance[typeof(A)];
 
-            Assert.That(a, Is.SameAs(b));
+            Assert.AreSame(b, a);
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             var a = XmlTypeSerializerCache.Instance[typeof(A)];
             var b = XmlTypeSerializerCache.Instance[typeof(B)];
 
-            Assert.That(a, Is.Not.SameAs(b));
+            Assert.AreNotSame(b, a);
         }
 
 #if DOTNET40
@@ -60,7 +60,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
                 i => serializers[i] = XmlTypeSerializerCache.Instance[typeof(A)]);
 
             for (var i = 1; i < count; i++)
-                Assert.That(serializers[i], Is.Not.Null & Is.SameAs(serializers[0]));
+            {
+                Assert.AreSame(serializers[0], serializers[i]);
+            }
         }
 #endif
 

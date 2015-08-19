@@ -15,7 +15,6 @@
 #if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
-	using System;
 	using System.Xml.Serialization;
 	using NUnit.Framework;
 

@@ -19,6 +19,8 @@ namespace Castle.DynamicProxy.Tests
 	using System.Reflection;
 	using System.Reflection.Emit;
 
+	using Castle.Core.Tests;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -92,7 +94,13 @@ namespace Castle.DynamicProxy.Tests
 		[Platform(Exclude = "mono", Reason = "Mono doesn't have peverify, so we can't perform verification.")]
 		public void TearDown_FindsVerificationErrors()
 		{
-			Assert.Throws<AssertionException>(() => FindVerificationErrors());
+#if FEATURE_XUNITNET
+			var ex = Assert.Throws<Xunit.Sdk.TrueException>(() => FindVerificationErrors());
+#else
+			var ex = Assert.Throws<AssertionException>(() => FindVerificationErrors());
+#endif
+			StringAssert.Contains("PeVerify reported error(s)", ex.Message);
+			StringAssert.Contains("fall through end of the method without returning", ex.Message);
 		}
 
 		[Test]

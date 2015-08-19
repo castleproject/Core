@@ -41,7 +41,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			node.Value = "1";
 
-			Assert.That(root.Xml, XmlEquivalent.To("<X> <Item>1</Item> </X>"));
+			CustomAssert.AreXmlEquivalent("<X> <Item>1</Item> </X>", root.Xml);
 		}
 
 		[Test]
@@ -59,7 +59,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			node.Value = "1";
 
-			Assert.That(root.Xml, XmlEquivalent.To("<X> <Item><Other>1</Other></Item> </X>"));
+			CustomAssert.AreXmlEquivalent("<X> <Item><Other>1</Other></Item> </X>", root.Xml);
 		}
 
 		[Test]
@@ -68,10 +68,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		    var xml    = Xml("<X> <A><B/></A> </X>");
 		    var cursor = Cursor(xml, "A/B/@C", CursorFlags.Multiple);
 
-		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.Value,      Is.Empty);
-			Assert.That(cursor.IsNil,      Is.False);
-		    Assert.That(cursor.MoveNext(), Is.False);
+			Assert.True(cursor.MoveNext());
+			Assert.IsEmpty(cursor.Value);
+			Assert.False(cursor.IsNil);
+			Assert.False(cursor.MoveNext());
 		}
 
 		[Test]
@@ -80,7 +80,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		    var xml    = Xml("<X/>");
 		    var cursor = Cursor(xml, "A/B/@C", CursorFlags.Multiple);
 
-		    Assert.That(cursor.MoveNext(), Is.False);
+			Assert.False(cursor.MoveNext());
 			cursor.Create(TypeA.ClrType);
 			cursor.Save();
 		}
@@ -91,7 +91,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		    var xml    = Xml("<X/>");
 		    var cursor = Cursor(xml, "A/B/@C", CursorFlags.Multiple);
 
-		    Assert.That(cursor.MoveNext(), Is.False);
+			Assert.False(cursor.MoveNext());
 			cursor.Create(TypeA.ClrType);
 
 			Assert.Throws<InvalidOperationException>(() =>
@@ -104,12 +104,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		    var xml    = Xml("<X/>");
 		    var cursor = Cursor(xml, "A[B='b']/C[D[E][F='f'] and G]/@H", CursorFlags.Multiple);
 
-		    Assert.That(cursor.MoveNext(), Is.False);
+			Assert.False(cursor.MoveNext());
 
 			cursor.Create(TypeA.ClrType);
 			cursor.Value = "h";
 
-			Assert.That(xml, XmlEquivalent.To
+			CustomAssert.AreXmlEquivalent(string.Concat
 			(
 				"<X>",
 					"<A>",
@@ -120,7 +120,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 						"<B>b</B>",
 					"</A>",
 				"</X>"
-			));
+			), xml);
 		}
 
 		[Test]
@@ -129,12 +129,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		    var xml    = Xml("<X/>");
 		    var cursor = Cursor(xml, "A[B=$test:v]/C", CursorFlags.Multiple);
 
-		    Assert.That(cursor.MoveNext(), Is.False);
+			Assert.False(cursor.MoveNext());
 
 			cursor.Create(TypeA.ClrType);
 			cursor.Value = "c";
 
-			Assert.That(xml, XmlEquivalent.To
+			CustomAssert.AreXmlEquivalent(string.Concat
 			(
 				"<X>",
 					"<A>",
@@ -142,7 +142,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 						"<B>VariableValue</B>",
 					"</A>",
 				"</X>"
-			));
+			), xml);
 		}
 
 		protected override IXmlCursor Cursor(IXmlNode parent, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)

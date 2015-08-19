@@ -15,14 +15,8 @@
 #if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Linq;
-	using System.Xml;
 	using System.Xml.Serialization;
-	using System.Xml.XPath;
-	using Castle.Components.DictionaryAdapter.Tests;
+
 	using NUnit.Framework;
 
 	public class XmlTypeBehaviorTestCase
@@ -64,11 +58,12 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				var foo = Create<IRoot>(xml);
 
 				var baseObj = foo.A;
-				Assert.That(baseObj, Is.Not.Null & Is.InstanceOf<IB>());
+				Assert.IsNotNull(baseObj);
+				Assert.IsInstanceOf<IB>(baseObj);
 
 				var derivedObj = (IB) baseObj;
-				Assert.That(derivedObj.A, Is.EqualTo("a"));
-				Assert.That(derivedObj.B, Is.EqualTo("b"));
+				Assert.AreEqual("a", derivedObj.A);
+				Assert.AreEqual("b", derivedObj.B);
 			}
 		}
 	}

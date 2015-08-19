@@ -23,11 +23,9 @@ namespace Castle.DynamicProxy.Tests
 	using NUnit.Framework;
 
 #if !__MonoCS__ && !SILVERLIGHT // mono doesn't have PEVerify
-	[SetUpFixture]
 	public class FindPeVerify
 	{
-		[SetUp]
-		public void FindPeVerifySetUp()
+		private static string FindPeVerifyPath()
 		{
 			var peVerifyProbingPaths = Settings.Default.PeVerifyProbingPaths;
 			foreach (var path in peVerifyProbingPaths)
@@ -35,26 +33,40 @@ namespace Castle.DynamicProxy.Tests
 				var file = Path.Combine(path, "peverify.exe");
 				if (File.Exists(file))
 				{
-					PeVerifyPath = file;
-					return;
+					return file;
 				}
 			}
 			throw new FileNotFoundException(
 				"Please check the PeVerifyProbingPaths configuration setting and set it to the folder where peverify.exe is located");
 		}
 
-		public static string PeVerifyPath { get; set; }
+		private static string peVerifyPath;
+
+		public static string PeVerifyPath
+		{
+			get { return peVerifyPath ?? (peVerifyPath = FindPeVerifyPath()); }
+		}
 	}
 #endif
 
 	public abstract class BasePEVerifyTestCase
+#if FEATURE_XUNITNET
+		: IDisposable
+#endif
 	{
 		protected ProxyGenerator generator;
 		protected IProxyBuilder builder;
 
 		private bool verificationDisabled;
 
+#if FEATURE_XUNITNET
+		protected BasePEVerifyTestCase()
+		{
+			Init();
+		}
+#else
 		[SetUp]
+#endif
 		public virtual void Init()
 		{
 			ResetGeneratorAndBuilder();
@@ -82,7 +94,14 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 #if !__MonoCS__ && !SILVERLIGHT // mono doesn't have PEVerify
+#if FEATURE_XUNITNET
+		public void Dispose()
+		{
+			TearDown();
+		}
+#else
 		[TearDown]
+#endif
 		public virtual void TearDown()
 		{
 			if (!IsVerificationDisabled)

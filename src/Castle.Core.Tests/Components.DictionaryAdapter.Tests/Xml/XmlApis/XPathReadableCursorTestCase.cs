@@ -15,9 +15,6 @@
 #if !SILVERLIGHT // Until support for other platforms is verified
 namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
-	using System;
-	using System.Xml.XPath;
-	using Castle.Components.DictionaryAdapter;
 	using Castle.Components.DictionaryAdapter.Xml;
 	using NUnit.Framework;
 
@@ -33,7 +30,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		    var xml    = Xml("<X Q='?'> foo <Q/> bar </X>");
 		    var cursor = Cursor(xml, "@A|A", CursorFlags.None);
 
-		    Assert.That(cursor.MoveNext(), Is.False);
+		    Assert.False(cursor.MoveNext());
 		}
 
 		[Test]
@@ -42,10 +39,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		    var xml    = Xml("<X Q='?' A='1' R='?'> <Q/> </X>");
 		    var cursor = Cursor(xml, "@A|A", CursorFlags.None);
 
-		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.Name.LocalName,  Is.EqualTo("A"));
-		    Assert.That(cursor.Value,      Is.EqualTo("1"));
-		    Assert.That(cursor.MoveNext(), Is.False);
+		    Assert.True(cursor.MoveNext());
+		    Assert.AreEqual("A", cursor.Name.LocalName);
+		    Assert.AreEqual("1", cursor.Value);
+		    Assert.False(cursor.MoveNext());
 		}
 
 		[Test]
@@ -54,10 +51,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		    var xml    = Xml("<X Q='?'> <Q/> <A>1</A> <Q/> </X>");
 		    var cursor = Cursor(xml, "@A|A", CursorFlags.None);
 
-		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.Name.LocalName,  Is.EqualTo("A"));
-		    Assert.That(cursor.Value,      Is.EqualTo("1"));
-		    Assert.That(cursor.MoveNext(), Is.False);
+		    Assert.True(cursor.MoveNext());
+		    Assert.AreEqual("A", cursor.Name.LocalName);
+		    Assert.AreEqual("1", cursor.Value);
+		    Assert.False(cursor.MoveNext());
 		}
 
 		[Test]
@@ -66,7 +63,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		    var xml    = Xml("<X Q='?' A='1' R='?'> <Q/> <A>2</A> <Q/> </X>");
 		    var cursor = Cursor(xml, "@A|A", CursorFlags.None);
 
-		    Assert.That(cursor.MoveNext(), Is.False);
+		    Assert.False(cursor.MoveNext());
 		}
 
 		[Test]
@@ -75,13 +72,13 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		    var xml    = Xml("<X Q='?' A='1' R='?'> <Q/> <A>2</A> <Q/> </X>");
 		    var cursor = Cursor(xml, "@A|A", CursorFlags.Multiple);
 
-		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.Name.LocalName,  Is.EqualTo("A"));
-		    Assert.That(cursor.Value,      Is.EqualTo("1"));
-		    Assert.That(cursor.MoveNext(), Is.True);
-		    Assert.That(cursor.Name.LocalName,  Is.EqualTo("A"));
-		    Assert.That(cursor.Value,      Is.EqualTo("2"));
-		    Assert.That(cursor.MoveNext(), Is.False);
+		    Assert.True(cursor.MoveNext());
+		    Assert.AreEqual("A", cursor.Name.LocalName);
+		    Assert.AreEqual("1", cursor.Value);
+		    Assert.True(cursor.MoveNext());
+		    Assert.AreEqual("A", cursor.Name.LocalName);
+		    Assert.AreEqual("2", cursor.Value);
+		    Assert.False(cursor.MoveNext());
 		}
 
 		protected override IXmlCursor Cursor(IXmlNode parent, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags)

@@ -52,14 +52,14 @@ namespace CastleTests
 			// return value is changed by the interceptor
 			Assert.AreEqual(true, instance.Valid);
 
-			Assert.AreEqual(45, instance.Sum((byte)20, (byte)25)); // byte
-			Assert.AreEqual(45, instance.Sum(20L, 25L)); // long
-			Assert.AreEqual(45, instance.Sum((short)20, (short)25)); // short
-			Assert.AreEqual(45, instance.Sum(20f, 25f)); // float
-			Assert.AreEqual(45, instance.Sum(20.0, 25.0)); // double
-			Assert.AreEqual(45, instance.Sum((ushort)20, (ushort)25)); // ushort
-			Assert.AreEqual(45, instance.Sum((uint)20, (uint)25)); // uint
-			Assert.AreEqual(45, instance.Sum((ulong)20, (ulong)25)); // ulong
+			Assert.AreEqual((byte)45, instance.Sum((byte)20, (byte)25)); // byte
+			Assert.AreEqual(45L, instance.Sum(20L, 25L)); // long
+			Assert.AreEqual((short)45, instance.Sum((short)20, (short)25)); // short
+			Assert.AreEqual(45f, instance.Sum(20f, 25f)); // float
+			Assert.AreEqual(45.0, instance.Sum(20.0, 25.0)); // double
+			Assert.AreEqual((ushort)45, instance.Sum((ushort)20, (ushort)25)); // ushort
+			Assert.AreEqual((uint)45, instance.Sum((uint)20, (uint)25)); // uint
+			Assert.AreEqual((ulong)45, instance.Sum((ulong)20, (ulong)25)); // ulong
 		}
 
 		[Test]
@@ -370,13 +370,13 @@ namespace CastleTests
 			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
+
 #if SILVERLIGHT // Silverlight test runner treats Assert.Ignore as failed test :/
 		[Ignore]
 #endif
 		[Test]
 		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies1()
 		{
-			
 			if(TestAssemblySigned())
 			{
 				Assert.Ignore("To get this running, the Tests project must not be signed.");

@@ -25,6 +25,9 @@ namespace CastleTests.Core.Tests.Internal
 
 	[TestFixture]
 	public class WeakKeyDictionaryTestCase
+#if FEATURE_XUNITNET
+		: IDisposable
+#endif
 	{
 		private WeakKeyDictionary<TKey, TValue> Dictionary;
 		private KeyValuePair<TKey, TValue> Item;
@@ -941,11 +944,17 @@ namespace CastleTests.Core.Tests.Internal
 		{
 			int dummy;
 			for (var i = 0; i < 128; i++)
+			{
 				dummy = Dictionary.Count;
+			}
 		}
 
+#if FEATURE_XUNITNET
+		public void Dispose()
+#else
 		[TearDown]
 		public void TearDown()
+#endif
 		{
 			Dictionary = null;
 			ResetItem();

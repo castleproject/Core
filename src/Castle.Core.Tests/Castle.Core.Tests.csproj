@@ -226,6 +226,8 @@
     <Compile Include="BugsReported\Core40.cs" />
     <Compile Include="BugsReported\DynProxy159.cs" />
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
+    <Compile Include="Compatibility\XUnitNetShim.cs" />
+    <Compile Include="Components.DictionaryAdapter.Tests\CustomAssert.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\IPhoneWithFetch.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\NameValueCollectionAdapterTests.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithMethodsWithAllKindsOfOptionalParameters.cs" />
@@ -258,7 +260,6 @@
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlAdapterTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Address.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Color.cs" />
-    <Compile Include="Components.DictionaryAdapter.Tests\XmlEquivalent.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\IEmptyTest.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\IBook.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\MemberwiseEqualityHashCodeStrategyTestCase.cs" />

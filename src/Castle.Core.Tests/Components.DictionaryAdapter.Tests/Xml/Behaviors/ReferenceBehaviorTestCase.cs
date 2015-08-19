@@ -15,7 +15,6 @@
 #if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
-	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using Castle.Components.DictionaryAdapter.Tests;
@@ -71,7 +70,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				);
 				var foo = Create<IFoo>(xml);
 
-				Assert.That(foo.Two, Is.SameAs(foo.One));
+				Assert.AreSame(foo.One, foo.Two);
 			}
 
 			[Test]
@@ -83,12 +82,12 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				foo.One.Value = "One";
 				foo.Two = foo.One;
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One x:id='1'> <Value>One</Value> </One>",
 						"<Two x:ref='1'/>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			[Test]
@@ -99,12 +98,12 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				foo.Two = foo.One;
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<Two x:ref='1'/>",
 						"<One x:id='1'/>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			[Test]
@@ -117,12 +116,12 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				var two = foo.Two;
 				foo.Two = foo.One;
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One x:id='1'> <Value>One</Value> </One>",
 						"<Two x:ref='1'/>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			[Test]
@@ -138,8 +137,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				);
 				var foo = Create<IFoo>(xml);
 
-				Assert.That(foo.Array,    Is.Not.Null & Has.Length.EqualTo(1));
-				Assert.That(foo.Array[0], Is.SameAs(foo.One));
+				Assert.NotNull(foo.Array);
+				Assert.AreEqual(1, foo.Array.Length);
+				Assert.AreSame(foo.One, foo.Array[0]);
 			}
 
 			[Test]
@@ -151,14 +151,14 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				foo.One.Value = "One";
 				foo.Array = new[] { foo.One };
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One x:id='1'> <Value>One</Value> </One>",
 						"<Array>",
 							"<Foo x:ref='1'/>",
 						"</Array>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			[Test]
@@ -174,8 +174,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				);
 				var foo = Create<IFoo>(xml);
 
-				Assert.That(foo.List,    Is.Not.Null & Has.Count.EqualTo(1));
-				Assert.That(foo.List[0], Is.SameAs(foo.One));
+				Assert.AreEqual(1, foo.List.Count);
+				Assert.AreSame(foo.One, foo.List[0]);
 			}
 
 			[Test]
@@ -187,14 +187,14 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				foo.One.Value = "One";
 				foo.List.Add(foo.One);
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One x:id='1'> <Value>One</Value> </One>",
 						"<List>",
 							"<Foo x:ref='1'/>",
 						"</List>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			[Test]
@@ -212,14 +212,14 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				foo.List[0] = foo.One;
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One x:id='1'> <Value>One</Value> </One>",
 						"<List>",
 							"<Foo x:ref='1'/>",
 						"</List>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			[Test]
@@ -237,18 +237,18 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				foo.List[0] = Create<IFoo>("<Foo> <Value>Two</Value> </Foo>");
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One> <Value>One</Value> </One>",
 						"<List>",
 							"<Foo> <Value>Two</Value> </Foo>",
 						"</List>",
 					"</Foo>"
-				)));
+				), xml);
 
-				Assert.That(foo.List,          Is.Not.Null & Has.Count.EqualTo(1));
-				Assert.That(foo.List[0],       Is.Not.SameAs(foo.One));
-				Assert.That(foo.List[0].Value, Is.EquivalentTo("Two"));
+				Assert.AreEqual(1, foo.List.Count);
+				Assert.AreNotSame(foo.One, foo.List[0]);
+				Assert.AreEqual("Two", foo.List[0].Value);
 			}
 
 			[Test]
@@ -266,12 +266,12 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				foo.List.RemoveAt(0);
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One> <Value>One</Value> </One>",
 						"<List/>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			[Test]
@@ -289,12 +289,12 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				foo.List.Clear();
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One> <Value>One</Value> </One>",
 						"<List/>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			#region SetItemReference
@@ -312,8 +312,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				);
 				var foo = Create<IFoo>(xml);
 
-				Assert.That(foo.Set, Is.Not.Null & Has.Count.EqualTo(1));
-				Assert.That(foo.Set, Contains.Item(foo.One));
+				Assert.AreEqual(1, foo.Set.Count);
+				CollectionAssert.Contains(foo.Set, foo.One);
 			}
 
 			[Test]
@@ -328,17 +328,17 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				foo.Set = new HashSet<IFoo> { foo.One };
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One x:id='1'> <Value>One</Value> </One>",
 						"<Set>",
 							"<Foo x:ref='1'/>",
 						"</Set>",
 					"</Foo>"
-				)));
+				), xml);
 
-				Assert.That(foo.Set, Is.Not.Null & Has.Count.EqualTo(1));
-				Assert.That(foo.Set, Contains.Item(foo.One));
+				Assert.AreEqual(1, foo.Set.Count);
+				CollectionAssert.Contains(foo.Set, foo.One);
 			}
 
 			[Test]
@@ -354,16 +354,16 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				fooA.Set = new HashSet<IFoo> { fooB };
 				fooB.Set = new HashSet<IFoo> { fooA };
 
-				Assert.That(xmlA, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<Value>a</Value>",
 						"<Set>",
 							"<Foo> <Value>b</Value> </Foo>",
 						"</Set>",
 					"</Foo>"
-				)));
+				), xmlA);
 
-				Assert.That(xmlB, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x x:id='1'>",
 						"<Value>b</Value>",
 						"<Set>",
@@ -375,11 +375,11 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 							"</Foo>",
 						"</Set>",
 					"</Foo>"
-				)));
+				), xmlB);
 
-				Assert.That(fooA.Set,               Is.Not.Null & Has.Count.EqualTo(1));
-				Assert.That(fooA.Set,               Is.Not.Contains(fooB));
-				Assert.That(fooA.Set.First().Value, Is.EqualTo(fooB.Value));
+				Assert.AreEqual(1, fooA.Set.Count);
+				CollectionAssert.DoesNotContain(fooA.Set, fooB);
+				Assert.AreEqual(fooB.Value, fooA.Set.First().Value);
 			}
 
 			[Test]
@@ -391,14 +391,14 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				foo.One.Value = "One";
 				foo.Set.Add(foo.One);
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One x:id='1'> <Value>One</Value> </One>",
 						"<Set>",
 							"<Foo x:ref='1'/>",
 						"</Set>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			[Test]
@@ -416,12 +416,12 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				foo.Set.Remove(foo.One);
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One> <Value>One</Value> </One>",
 						"<Set/>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			[Test]
@@ -439,12 +439,12 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				foo.Set.Clear();
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One> <Value>One</Value> </One>",
 						"<Set/>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 #endif
 			#endregion
@@ -474,7 +474,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				//c  .Set  = new HashSet<IFoo> { a, b    }; // no effect, due to order of operations
 				//foo.List = new List   <IFoo> { a, b, c };
 
-			    Assert.That(xml, XmlEquivalent.To(Xml(
+			    CustomAssert.AreXmlEquivalent(Xml(
 			        "<Foo $x>",
 			            "<List>",
 			                "<Foo>",
@@ -488,13 +488,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			                "<Foo x:ref='2'/>",
 			            "</List>",
 			        "</Foo>"
-			    )));
+			    ), xml);
 
-				Assert.That(foo.List,                Is.Not.Null & Has.Count.EqualTo(3));
-				Assert.That(foo.List[0].Set,         Is.Not.Null & Has.Count.EqualTo(2));
-				Assert.That(foo.List[0].Set.Contains(foo.List[1]), Is.True);
-				Assert.That(foo.List[0].Set.Contains(foo.List[2]), Is.True);
-				Assert.That(foo.List[0].Set.Contains(foo),         Is.False);
+				Assert.AreEqual(3, foo.List.Count);
+				Assert.AreEqual(2, foo.List[0].Set.Count);
+				CollectionAssert.Contains(foo.List[0].Set, foo.List[1]);
+				CollectionAssert.Contains(foo.List[0].Set, foo.List[2]);
+				CollectionAssert.DoesNotContain(foo.List[0].Set, foo);
 			}
 #endif
 
@@ -511,14 +511,14 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				b.One = c;
 				a.Two = b;
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One x:id='1'> <Value>X</Value> </One>",
 						"<Two>",
 							"<One x:ref='1'/>",
 						"</Two>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			[Test]
@@ -534,14 +534,14 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				b.Two = c;
 				a.One = b;
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One>",
 							"<One x:id='1'> <Value>X</Value> </One>",
 							"<Two x:ref='1'/>",
 						"</One>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			[Test]
@@ -552,11 +552,11 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				foo.One = foo;
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo x:id='1' $x>",
 						"<One x:ref='1'/>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			[Test]
@@ -568,13 +568,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				foo = foo.One;
 				foo.One = foo;
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One x:id='1'>",
 							"<One x:ref='1'/>",
 						"</One>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			[Test]
@@ -585,7 +585,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				var isReference = manager.IsReferenceProperty(adapter, "Value");
 
-				Assert.That(isReference, Is.True);
+				Assert.True(isReference);
 			}
 
 			[Test]
@@ -596,7 +596,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				var isReference = manager.IsReferenceProperty(adapter, "Value");
 
-				Assert.That(isReference, Is.False);
+				Assert.False(isReference);
 			}
 
 			private static IDictionaryReferenceManager GetReferenceManager(IDictionaryAdapter dictionaryAdapter)

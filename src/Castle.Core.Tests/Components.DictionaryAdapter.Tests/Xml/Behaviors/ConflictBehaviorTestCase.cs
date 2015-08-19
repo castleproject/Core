@@ -57,9 +57,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				foo.A = "x";
 				bar.A = "y";
 
-				Assert.That(xml, XmlEquivalent.To("<Foo xmlns:a='urn:a' a:A='x'> <A>y</A> </Foo>"));
-				Assert.That(foo.A, Is.EqualTo("x"), "foo.A");
-				Assert.That(bar.A, Is.EqualTo("y"), "bar.A");
+				CustomAssert.AreXmlEquivalent("<Foo xmlns:a='urn:a' a:A='x'> <A>y</A> </Foo>", xml);
+				Assert.AreEqual("x", foo.A, "foo.A");
+				Assert.AreEqual("y", bar.A, "bar.A");
 			}
 		}
 
@@ -95,8 +95,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				foo.Array = new[] {        itemB };
 				foo.Array = new[] { itemA, itemB };
 
-				var expectedXml = Xml("<Root> <Array> <Item/> <Item/> </Array> </Root>");
-				Assert.That(xml, XmlEquivalent.To(expectedXml));
+				CustomAssert.AreXmlEquivalent(Xml("<Root> <Array> <Item/> <Item/> </Array> </Root>"), xml);
 			}
 
 			[Test]
@@ -110,8 +109,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				foo.List = new[] {        itemB };
 				foo.List = new[] { itemA, itemB };
 
-				var expectedXml = Xml("<Root> <List> <Item/> <Item/> </List> </Root>");
-				Assert.That(xml, XmlEquivalent.To(expectedXml));
+				CustomAssert.AreXmlEquivalent(Xml("<Root> <List> <Item/> <Item/> </List> </Root>"), xml);
 			}
 		}
 
@@ -136,13 +134,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				b.List.Add(c);
 				a.One = b;
 
-				Assert.That(xml, XmlEquivalent.To(Xml(
+				CustomAssert.AreXmlEquivalent(Xml(
 					"<Foo $x>",
 						"<One>",
 							"<List> <Foo/> </List>",
 						"</One>",
 					"</Foo>"
-				)));
+				), xml);
 			}
 
 			protected override T Create<T>(XmlNode storage, Action<PropertyDescriptor> config)

@@ -33,8 +33,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		private IDictionary dictionary;
 		private DictionaryAdapterFactory factory;
 
+#if FEATURE_XUNITNET
+		public DictionaryAdapterFactoryTestCase()
+#else
 		[SetUp]
 		public void SetUp()
+#endif
 		{
 			dictionary = new Hashtable();
 			factory = new DictionaryAdapterFactory();
@@ -432,7 +436,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(22, conversions.Int);
 			Assert.AreEqual(98.6f, conversions.Float);
 			Assert.AreEqual(3.14, conversions.Double);
-			Assert.AreEqual(100, conversions.Decimal);
+			Assert.AreEqual(100m, conversions.Decimal);
 			Assert.AreEqual("Hello World", conversions.String);
 			Assert.AreEqual(now.Date, conversions.DateTime.Date);
 			Assert.AreEqual(guid, conversions.Guid);
@@ -487,7 +491,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(22, conversions.NullInt);
 			Assert.AreEqual(98.6f, conversions.NullFloat);
 			Assert.AreEqual(3.14, conversions.NullDouble);
-			Assert.AreEqual(100, conversions.NullDecimal);
+			Assert.AreEqual(100m, conversions.NullDecimal);
 			Assert.AreEqual(now.Value.Date, conversions.NullDateTime.Value.Date);
 			Assert.AreEqual(guid, conversions.NullGuid);
 		}

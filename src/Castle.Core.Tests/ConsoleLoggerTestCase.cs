@@ -28,8 +28,12 @@ namespace Castle.Core.Logging.Tests
 		private StringWriter outWriter = new StringWriter();
 		private StringWriter errorWriter = new StringWriter();
 
+#if FEATURE_XUNITNET
+		public ConsoleLoggerTestCase()
+#else
 		[SetUp]
 		public void ReplaceOut()
+#endif
 		{
 			outWriter.GetStringBuilder().Length = 0;
 			errorWriter.GetStringBuilder().Length = 0;

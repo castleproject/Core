@@ -15,7 +15,6 @@
 #if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
-	using System;
 	using System.Xml.Serialization;
 	using Castle.Components.DictionaryAdapter.Tests;
     using NUnit.Framework;
@@ -43,9 +42,11 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
                 var foo = Create<IRoot>("<Root> <X> <A X='1'/> <B X='2'/> </X> </Root>");
 
 				var array = foo.Items;
-                Assert.That(array,    Is.Not.Null & Has.Length.EqualTo(2));
-                Assert.That(array[0], Is.InstanceOf<IDerived1>() & Has.Property("X").EqualTo( 1 ));
-                Assert.That(array[1], Is.InstanceOf<IDerived2>() & Has.Property("X").EqualTo("2"));
+				Assert.AreEqual(2, array.Length);
+				Assert.IsInstanceOf<IDerived1>(array[0]);
+				Assert.AreEqual(1, ((IDerived1)array[0]).X);
+				Assert.IsInstanceOf<IDerived2>(array[1]);
+				Assert.AreEqual("2", ((IDerived2)array[1]).X);
             }
 
             [Test]
@@ -60,12 +61,14 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 					Create<IDerived2>("<Derived2 X='2'/>")
 				};
 
-                Assert.That(xml, XmlEquivalent.To("<Root> <X> <A><X>1</X></A> <B><X>2</X></B> </X> </Root>"));
+				CustomAssert.AreXmlEquivalent("<Root> <X> <A><X>1</X></A> <B><X>2</X></B> </X> </Root>", xml);
 
 				var array = foo.Items;
-                Assert.That(array,    Is.Not.Null & Has.Length.EqualTo(2));
-                Assert.That(array[0], Is.InstanceOf<IDerived1>() & Has.Property("X").EqualTo( 1 ));
-                Assert.That(array[1], Is.InstanceOf<IDerived2>() & Has.Property("X").EqualTo("2"));
+				Assert.AreEqual(2, array.Length);
+				Assert.IsInstanceOf<IDerived1>(array[0]);
+				Assert.AreEqual(1, ((IDerived1)array[0]).X);
+				Assert.IsInstanceOf<IDerived2>(array[1]);
+				Assert.AreEqual("2", ((IDerived2)array[1]).X);
             }
         }
 	}

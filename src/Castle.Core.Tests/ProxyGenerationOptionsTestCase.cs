@@ -32,8 +32,12 @@ namespace Castle.DynamicProxy.Tests
 		private ProxyGenerationOptions _options1;
 		private ProxyGenerationOptions _options2;
 
+#if FEATURE_XUNITNET
+		public ProxyGenerationOptionsTestCase()
+#else
 		[SetUp]
 		public void Init()
+#endif
 		{
 			_options1 = new ProxyGenerationOptions();
 			_options2 = new ProxyGenerationOptions();

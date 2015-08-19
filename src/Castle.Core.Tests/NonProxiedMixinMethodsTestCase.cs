@@ -49,21 +49,31 @@ namespace Castle.DynamicProxy.Tests
 			return default(TType);
 		}
 
+		public static readonly object[] AllKinds = {
+			new object[] { ProxyKind.Class },
+			new object[] { ProxyKind.WithoutTarget },
+			new object[] { ProxyKind.WithTarget },
+			new object[] { ProxyKind.WithTargetInterface }
+		};
+
 #if SILVERLIGHT
 		[Test]
 		public void Mixin_method_Silverlight()
 		{
-			Mixin_method(ProxyKind.Class);
-			Mixin_method(ProxyKind.WithoutTarget);
-			Mixin_method(ProxyKind.WithTarget);
-			Mixin_method(ProxyKind.WithTargetInterface);
+			foreach (object[] kind in AllKinds)
+			{
+				Mixin_method((ProxyKind)kind[0]);
+			}
 		}
+#else
+#if FEATURE_XUNITNET
+		[Xunit.Theory]
 #else
 		[Test]
 #endif
-		public void Mixin_method(
-			[Values(ProxyKind.Class, ProxyKind.WithoutTarget, ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind
-				kind)
+		[TestCaseSource("AllKinds")]
+#endif
+		public void Mixin_method(ProxyKind kind)
 		{
 			var proxy = CreateProxyWithMixin<ISimpleInterface>(kind, new ClassWithInterface());
 			var result = -1;
@@ -75,17 +85,20 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Mixin_method_explicit_silverlight()
 		{
-			Mixin_method_explicit(ProxyKind.Class);
-			Mixin_method_explicit(ProxyKind.WithoutTarget);
-			Mixin_method_explicit(ProxyKind.WithTarget);
-			Mixin_method_explicit(ProxyKind.WithTargetInterface);
+			foreach (object[] kind in AllKinds)
+			{
+				Mixin_method_explicit((ProxyKind)kind[0]);
+			}
 		}
+#else
+#if FEATURE_XUNITNET
+		[Xunit.Theory]
 #else
 		[Test]
 #endif
-		public void Mixin_method_explicit(
-			[Values(ProxyKind.Class, ProxyKind.WithoutTarget, ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind
-				kind)
+		[TestCaseSource("AllKinds")]
+#endif
+		public void Mixin_method_explicit(ProxyKind kind)
 		{
 			var proxy = CreateProxyWithMixin<ISimpleInterface>(kind, new SimpleInterfaceExplicit());
 			var result = -1;
@@ -97,17 +110,20 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Mixin_method_generic_silverlight()
 		{
-			Mixin_method_generic(ProxyKind.Class);
-			Mixin_method_generic(ProxyKind.WithoutTarget);
-			Mixin_method_generic(ProxyKind.WithTarget);
-			Mixin_method_generic(ProxyKind.WithTargetInterface);
+			foreach (object[] kind in AllKinds)
+			{
+				Mixin_method_generic((ProxyKind)kind[0]);
+			}
 		}
+#else
+#if FEATURE_XUNITNET
+		[Xunit.Theory]
 #else
 		[Test]
 #endif
-		public void Mixin_method_generic(
-			[Values(ProxyKind.Class, ProxyKind.WithoutTarget, ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind
-				kind)
+		[TestCaseSource("AllKinds")]
+#endif
+		public void Mixin_method_generic(ProxyKind kind)
 		{
 			var proxy = CreateProxyWithMixin<IGenericInterface>(kind, new GenericClass());
 			var result = -1;
@@ -119,17 +135,20 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Mixin_method_out_ref_parameters_silverlight()
 		{
-			Mixin_method_out_ref_parameters(ProxyKind.Class);
-			Mixin_method_out_ref_parameters(ProxyKind.WithoutTarget);
-			Mixin_method_out_ref_parameters(ProxyKind.WithTarget);
-			Mixin_method_out_ref_parameters(ProxyKind.WithTargetInterface);
+			foreach (object[] kind in AllKinds)
+			{
+				Mixin_method_out_ref_parameters((ProxyKind)kind[0]);
+			}
 		}
+#else
+#if FEATURE_XUNITNET
+		[Xunit.Theory]
 #else
 		[Test]
 #endif
-		public void Mixin_method_out_ref_parameters(
-			[Values(ProxyKind.Class, ProxyKind.WithoutTarget, ProxyKind.WithTarget, ProxyKind.WithTargetInterface)] ProxyKind
-				kind)
+		[TestCaseSource("AllKinds")]
+#endif
+		public void Mixin_method_out_ref_parameters(ProxyKind kind)
 		{
 			var proxy = CreateProxyWithMixin<IWithRefOut>(kind, new WithRefOut());
 			int[] result = {-1};

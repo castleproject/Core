@@ -15,7 +15,6 @@
 #if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
-	using System;
 	using System.Xml.Serialization;
 	using NUnit.Framework;
 
@@ -35,8 +34,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				var obj = Create<TX>(xml);
 
 				var x = GetX(obj);
-				Assert.That(x,       Is.InstanceOf<TA>() & Is.Not.InstanceOf<TB>());
-				Assert.That(GetA(x), Is.EqualTo("a"));
+				Assert.IsInstanceOf<TA>(x);
+				Assert.IsNotInstanceOf<TB>(x);
+				Assert.AreEqual("a", GetA(x));
 			}
 
 			[Test]
@@ -46,8 +46,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				var obj = Create<TX>(xml);
 
 				var x = GetX(obj);
-				Assert.That(x,       Is.InstanceOf<TA>() & Is.Not.InstanceOf<TB>());
-				Assert.That(GetA(x), Is.EqualTo("a"));
+				Assert.IsInstanceOf<TA>(x);
+				Assert.IsNotInstanceOf<TB>(x);
+				Assert.AreEqual("a", GetA(x));
 			}
 
 			[Test]
@@ -57,11 +58,11 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				var obj = Create<TX>(xml);
 
 				var x = GetX(obj);
-				Assert.That(x,       Is.InstanceOf<TB>());
-				Assert.That(GetA(x), Is.EqualTo("a"));
+				Assert.IsInstanceOf<TB>(x);
+				Assert.AreEqual("a", GetA(x));
 
-				var b = (TB) x;
-				Assert.That(GetB(b), Is.EqualTo("b"));
+				var b = (TB)x;
+				Assert.AreEqual("b", GetB(b));
 			}
 
 			[Test]
@@ -71,8 +72,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				var obj = Create<TX>(xml);
 
 				var x = GetX(obj);
-				Assert.That(x,       Is.InstanceOf<TA>()); // virtual
-				Assert.That(GetA(x), Is.Null);
+				Assert.IsInstanceOf<TA>(x); // virtual
+				Assert.IsNull(GetA(x));
 			}
 		}
 

@@ -16,7 +16,6 @@
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
 	using NUnit.Framework;
@@ -32,7 +31,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			var items = foo.Strings.ToArray();
 
-			Assert.That(items, Is.EquivalentTo(Strings));
+			CollectionAssert.AreEquivalent(Strings, items);
 		}
 
 		[Test]
@@ -40,7 +39,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		{
 			var foo = Create<IFoo>("<Foo F='1'/>");
 
-			Assert.That(foo.Strings, Is.Empty);
+			CollectionAssert.IsEmpty(foo.Strings);
 		}
 
 		[Test]
@@ -51,7 +50,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			foo.Strings = Strings;
 
-			Assert.That(xml, XmlEquivalent.To(StringsXml));
+			CustomAssert.AreXmlEquivalent(StringsXml, xml);
 		}
 
 		[Test]
@@ -64,9 +63,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var value = foo.Strings[0];
 
 			// TODO: Why is xmlns:xsi not pushed to root?
-			var expectedXml = Xml("<Foo $xsi> <Strings> <string xsi:nil='true'/> <string>b</string> </Strings> </Foo>");
-			Assert.That(xml, XmlEquivalent.To(expectedXml));
-			Assert.That(value, Is.Null);
+			CustomAssert.AreXmlEquivalent(Xml("<Foo $xsi> <Strings> <string xsi:nil='true'/> <string>b</string> </Strings> </Foo>"), xml);
+			Assert.IsNull(value);
 		}
 
 		[Test]
@@ -78,9 +76,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			foo.Strings.Insert(1, "c");
 			var value = foo.Strings[1];
 
-			var expectedXml = Xml("<Foo> <Strings> <string>a</string> <string>c</string> <string>b</string> </Strings> </Foo>");
-			Assert.That(xml, XmlEquivalent.To(expectedXml));
-			Assert.That(value, Is.EqualTo("c"));
+			CustomAssert.AreXmlEquivalent(Xml("<Foo> <Strings> <string>a</string> <string>c</string> <string>b</string> </Strings> </Foo>"), xml);
+			Assert.AreEqual("c", value);
 		}
 
 		private IList<string> GetListOfStrings()

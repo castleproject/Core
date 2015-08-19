@@ -16,7 +16,6 @@
 namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
-	using System.Linq;
 	using Castle.Components.DictionaryAdapter.Xml;
 	using NUnit.Framework;
 
@@ -35,23 +34,24 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("aa"));
-			Assert.That(p.IsCreatable,     Is.True);
-			Assert.That(p.Depth,           Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                 Is.Not.Null);
-			Assert.That(s.Path,            Is.Not.Null);
-			Assert.That(s.Path.Expression, Is.EqualTo("aa"));
-			Assert.That(s.Prefix,          Is.Null);
-			Assert.That(s.LocalName,       Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,     Is.False);
-			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.NextStep,        Is.Null);
-			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,    Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			CollectionAssert.IsEmpty(s.Dependencies);
 		}
 
 		[Test]
@@ -59,23 +59,24 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("pp:aa");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("pp:aa"));
-			Assert.That(p.IsCreatable,     Is.True);
-			Assert.That(p.Depth,           Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("pp:aa", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                 Is.Not.Null);
-			Assert.That(s.Path,            Is.Not.Null);
-			Assert.That(s.Path.Expression, Is.EqualTo("pp:aa"));
-			Assert.That(s.Prefix,          Is.EqualTo("pp"));
-			Assert.That(s.LocalName,       Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,     Is.False);
-			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.NextStep,        Is.Null);
-			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,    Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("pp:aa", s.Path.Expression);
+			Assert.AreEqual("pp", s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			CollectionAssert.IsEmpty(s.Dependencies);
 		}
 
 		[Test]
@@ -83,23 +84,24 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("@pp:aa");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("@pp:aa"));
-			Assert.That(p.IsCreatable,     Is.True);
-			Assert.That(p.Depth,           Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("@pp:aa", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                 Is.Not.Null);
-			Assert.That(s.Path,            Is.Not.Null);
-			Assert.That(s.Path.Expression, Is.EqualTo("@pp:aa"));
-			Assert.That(s.Prefix,          Is.EqualTo("pp"));
-			Assert.That(s.LocalName,       Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,     Is.True);
-			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.NextStep,        Is.Null);
-			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,    Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("@pp:aa", s.Path.Expression);
+			Assert.AreEqual("pp", s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.True(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			CollectionAssert.IsEmpty(s.Dependencies);
 		}
 
 		[Test]
@@ -107,35 +109,37 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa/bb");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("aa/bb"));
-			Assert.That(p.IsCreatable,     Is.True);
-			Assert.That(p.Depth,           Is.EqualTo(2));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa/bb", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(2, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                 Is.Not.Null);
-			Assert.That(s.Path,            Is.Not.Null);
-			Assert.That(s.Path.Expression, Is.EqualTo("aa"));
-			Assert.That(s.Prefix,          Is.Null);
-			Assert.That(s.LocalName,       Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,     Is.False);
-			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,    Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			CollectionAssert.IsEmpty(s.Dependencies);
 
 			s = s.NextStep;
-			Assert.That(s,                 Is.Not.Null);
-			Assert.That(s.Path,            Is.Not.Null);
-			Assert.That(s.Path.Expression, Is.EqualTo("bb"));
-			Assert.That(s.Prefix,          Is.Null);
-			Assert.That(s.LocalName,       Is.EqualTo("bb"));
-			Assert.That(s.IsAttribute,     Is.False);
-			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.NextStep,        Is.Null);
-			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,    Is.SameAs(p.FirstStep));
-			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("bb", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("bb", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.AreSame(p.FirstStep, s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			CollectionAssert.IsEmpty(s.Dependencies);
 		}
 
 		[Test]
@@ -143,35 +147,37 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa/./bb");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("aa/./bb"));
-			Assert.That(p.IsCreatable,     Is.True);
-			Assert.That(p.Depth,           Is.EqualTo(2));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa/./bb", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(2, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                 Is.Not.Null);
-			Assert.That(s.Path,            Is.Not.Null);
-			Assert.That(s.Path.Expression, Is.EqualTo("aa"));
-			Assert.That(s.Prefix,          Is.Null);
-			Assert.That(s.LocalName,       Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,     Is.False);
-			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,    Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			CollectionAssert.IsEmpty(s.Dependencies);
 
 			s = s.NextStep;
-			Assert.That(s,                 Is.Not.Null);
-			Assert.That(s.Path,            Is.Not.Null);
-			Assert.That(s.Path.Expression, Is.EqualTo("bb"));
-			Assert.That(s.Prefix,          Is.Null);
-			Assert.That(s.LocalName,       Is.EqualTo("bb"));
-			Assert.That(s.IsAttribute,     Is.False);
-			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.NextStep,        Is.Null);
-			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,    Is.SameAs(p.FirstStep));
-			Assert.That(s.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("bb", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("bb", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.AreSame(p.FirstStep, s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			CollectionAssert.IsEmpty(s.Dependencies);
 		}
 
 		[Test]
@@ -179,33 +185,35 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa[.]");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("aa[.]"));
-			Assert.That(p.IsCreatable,     Is.True);
-			Assert.That(p.Depth,           Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa[.]", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                 Is.Not.Null);
-			Assert.That(s.Path,            Is.Not.Null);
-			Assert.That(s.Path.Expression, Is.EqualTo("aa[.]"));
-			Assert.That(s.Prefix,          Is.Null);
-			Assert.That(s.LocalName,       Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,     Is.False);
-			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.NextStep,        Is.Null);
-			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,    Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa[.]", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			Assert.AreEqual(1, s.Dependencies.Count);
 
 			var n = s.Dependencies[0];
-			Assert.That(n,                 Is.Not.Null);
-			Assert.That(n.Prefix,          Is.Null);
-			Assert.That(n.LocalName,       Is.Null);
-			Assert.That(n.IsAttribute,     Is.False);
-			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.NextNode,        Is.Null);
-			Assert.That(n.PreviousNode,    Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.IsNull(n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.IsNull(n.Value);
+			Assert.IsNull(n.NextNode);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 		}
 
 		[Test]
@@ -213,33 +221,35 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa[bb]");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("aa[bb]"));
-			Assert.That(p.IsCreatable,     Is.True);
-			Assert.That(p.Depth,           Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa[bb]", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                 Is.Not.Null);
-			Assert.That(s.Path,            Is.Not.Null);
-			Assert.That(s.Path.Expression, Is.EqualTo("aa[bb]"));
-			Assert.That(s.Prefix,          Is.Null);
-			Assert.That(s.LocalName,       Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,     Is.False);
-			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.NextStep,        Is.Null);
-			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,    Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa[bb]", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			Assert.AreEqual(1, s.Dependencies.Count);
 
 			var n = s.Dependencies[0];
-			Assert.That(n,                 Is.Not.Null);
-			Assert.That(n.Prefix,          Is.Null);
-			Assert.That(n.LocalName,       Is.EqualTo("bb"));
-			Assert.That(n.IsAttribute,     Is.False);
-			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.NextNode,        Is.Null);
-			Assert.That(n.PreviousNode,    Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("bb", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.IsNull(n.Value);
+			Assert.IsNull(n.NextNode);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 		}
 
 		[Test]
@@ -247,33 +257,35 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa[pp:bb]");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("aa[pp:bb]"));
-			Assert.That(p.IsCreatable,     Is.True);
-			Assert.That(p.Depth,           Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa[pp:bb]", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                 Is.Not.Null);
-			Assert.That(s.Path,            Is.Not.Null);
-			Assert.That(s.Path.Expression, Is.EqualTo("aa[pp:bb]"));
-			Assert.That(s.Prefix,          Is.Null);
-			Assert.That(s.LocalName,       Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,     Is.False);
-			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.NextStep,        Is.Null);
-			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,    Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa[pp:bb]", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			Assert.AreEqual(1, s.Dependencies.Count);
 
 			var n = s.Dependencies[0];
-			Assert.That(n,                 Is.Not.Null);
-			Assert.That(n.Prefix,          Is.EqualTo("pp"));
-			Assert.That(n.LocalName,       Is.EqualTo("bb"));
-			Assert.That(n.IsAttribute,     Is.False);
-			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.NextNode,        Is.Null);
-			Assert.That(n.PreviousNode,    Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.AreEqual("pp", n.Prefix);
+			Assert.AreEqual("bb", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.IsNull(n.Value);
+			Assert.IsNull(n.NextNode);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 		}
 
 		[Test]
@@ -281,33 +293,35 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa[@pp:bb]");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("aa[@pp:bb]"));
-			Assert.That(p.IsCreatable,     Is.True);
-			Assert.That(p.Depth,           Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa[@pp:bb]", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                 Is.Not.Null);
-			Assert.That(s.Path,            Is.Not.Null);
-			Assert.That(s.Path.Expression, Is.EqualTo("aa[@pp:bb]"));
-			Assert.That(s.Prefix,          Is.Null);
-			Assert.That(s.LocalName,       Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,     Is.False);
-			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.NextStep,        Is.Null);
-			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,    Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa[@pp:bb]", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			Assert.AreEqual(1, s.Dependencies.Count);
 
 			var n = s.Dependencies[0];
-			Assert.That(n,                 Is.Not.Null);
-			Assert.That(n.Prefix,          Is.EqualTo("pp"));
-			Assert.That(n.LocalName,       Is.EqualTo("bb"));
-			Assert.That(n.IsAttribute,     Is.True);
-			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.NextNode,        Is.Null);
-			Assert.That(n.PreviousNode,    Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.AreEqual("pp", n.Prefix);
+			Assert.AreEqual("bb", n.LocalName);
+			Assert.True(n.IsAttribute);
+			Assert.IsNull(n.Value);
+			Assert.IsNull(n.NextNode);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 		}
 
 		[Test]
@@ -315,43 +329,46 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa[bb/cc='1']");
 
-			Assert.That(p.Path,             Is.Not.Null);
-			Assert.That(p.Path.Expression,  Is.EqualTo("aa[bb/cc='1']"));
-			Assert.That(p.IsCreatable,      Is.True);
-			Assert.That(p.Depth,            Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa[bb/cc='1']", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                  Is.Not.Null);
-			Assert.That(s.Path,             Is.Not.Null);
-			Assert.That(s.Path.Expression,  Is.EqualTo("aa[bb/cc='1']"));
-			Assert.That(s.Prefix,           Is.Null);
-			Assert.That(s.LocalName,        Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,      Is.False);
-			Assert.That(s.Value,            Is.Null);
-			Assert.That(s.NextStep,         Is.Null);
-			Assert.That(s.NextNode,         Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,     Is.Null);
-			Assert.That(s.Dependencies,     Is.Not.Null & Has.Count.EqualTo(1));
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa[bb/cc='1']", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			Assert.AreEqual(1, s.Dependencies.Count);
 
 			var n = s.Dependencies[0];
-			Assert.That(n,                  Is.Not.Null);
-			Assert.That(n.Prefix,           Is.Null);
-			Assert.That(n.LocalName,        Is.EqualTo("bb"));
-			Assert.That(n.IsAttribute,      Is.False);
-			Assert.That(n.Value,            Is.Null);
-			Assert.That(n.PreviousNode,     Is.Null);
-			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("bb", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.IsNull(n.Value);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 
 			n = n.NextNode;
-			Assert.That(n,                  Is.Not.Null);
-			Assert.That(n.Prefix,           Is.Null);
-			Assert.That(n.LocalName,        Is.EqualTo("cc"));
-			Assert.That(n.IsAttribute,      Is.False);
-			Assert.That(n.Value,            Is.Not.Null);
-			Assert.That(n.Value.Expression, Is.EqualTo("'1'"));
-			Assert.That(n.NextNode,         Is.Null);
-			Assert.That(n.PreviousNode,     Is.SameAs(s.Dependencies[0]));
-			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("cc", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.NotNull(n.Value);
+			Assert.AreEqual("'1'", n.Value.Expression);
+			Assert.IsNull(n.NextNode);
+			Assert.AreSame(s.Dependencies[0], n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 		}
 
 		[Test]
@@ -359,43 +376,46 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa[bb/cc=\"1\"]");
 
-			Assert.That(p.Path,             Is.Not.Null);
-			Assert.That(p.Path.Expression,  Is.EqualTo("aa[bb/cc=\"1\"]"));
-			Assert.That(p.IsCreatable,      Is.True);
-			Assert.That(p.Depth,            Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa[bb/cc=\"1\"]", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                  Is.Not.Null);
-			Assert.That(s.Path,             Is.Not.Null);
-			Assert.That(s.Path.Expression,  Is.EqualTo("aa[bb/cc=\"1\"]"));
-			Assert.That(s.Prefix,           Is.Null);
-			Assert.That(s.LocalName,        Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,      Is.False);
-			Assert.That(s.Value,            Is.Null);
-			Assert.That(s.NextStep,         Is.Null);
-			Assert.That(s.NextNode,         Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,     Is.Null);
-			Assert.That(s.Dependencies,     Is.Not.Null & Has.Count.EqualTo(1));
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa[bb/cc=\"1\"]", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			Assert.AreEqual(1, s.Dependencies.Count);
 
 			var n = s.Dependencies[0];
-			Assert.That(n,                  Is.Not.Null);
-			Assert.That(n.Prefix,           Is.Null);
-			Assert.That(n.LocalName,        Is.EqualTo("bb"));
-			Assert.That(n.IsAttribute,      Is.False);
-			Assert.That(n.Value,            Is.Null);
-			Assert.That(n.PreviousNode,     Is.Null);
-			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("bb", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.IsNull(n.Value);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 
 			n = n.NextNode;
-			Assert.That(n,                  Is.Not.Null);
-			Assert.That(n.Prefix,           Is.Null);
-			Assert.That(n.LocalName,        Is.EqualTo("cc"));
-			Assert.That(n.IsAttribute,      Is.False);
-			Assert.That(n.Value,            Is.Not.Null);
-			Assert.That(n.Value.Expression, Is.EqualTo("\"1\""));
-			Assert.That(n.NextNode,         Is.Null);
-			Assert.That(n.PreviousNode,     Is.SameAs(s.Dependencies[0]));
-			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("cc", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.NotNull(n.Value);
+			Assert.AreEqual("\"1\"", n.Value.Expression);
+			Assert.IsNull(n.NextNode);
+			Assert.AreSame(s.Dependencies[0], n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 		}
 
 		[Test]
@@ -403,43 +423,46 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa[bb/cc=$dd]");
 
-			Assert.That(p.Path,             Is.Not.Null);
-			Assert.That(p.Path.Expression,  Is.EqualTo("aa[bb/cc=$dd]"));
-			Assert.That(p.IsCreatable,      Is.True);
-			Assert.That(p.Depth,            Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa[bb/cc=$dd]", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                  Is.Not.Null);
-			Assert.That(s.Path,             Is.Not.Null);
-			Assert.That(s.Path.Expression,  Is.EqualTo("aa[bb/cc=$dd]"));
-			Assert.That(s.Prefix,           Is.Null);
-			Assert.That(s.LocalName,        Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,      Is.False);
-			Assert.That(s.Value,            Is.Null);
-			Assert.That(s.NextStep,         Is.Null);
-			Assert.That(s.NextNode,         Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,     Is.Null);
-			Assert.That(s.Dependencies,     Is.Not.Null & Has.Count.EqualTo(1));
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa[bb/cc=$dd]", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			Assert.AreEqual(1, s.Dependencies.Count);
 
 			var n = s.Dependencies[0];
-			Assert.That(n,                  Is.Not.Null);
-			Assert.That(n.Prefix,           Is.Null);
-			Assert.That(n.LocalName,        Is.EqualTo("bb"));
-			Assert.That(n.IsAttribute,      Is.False);
-			Assert.That(n.Value,            Is.Null);
-			Assert.That(n.PreviousNode,     Is.Null);
-			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("bb", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.IsNull(n.Value);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 
 			n = n.NextNode;
-			Assert.That(n,                  Is.Not.Null);
-			Assert.That(n.Prefix,           Is.Null);
-			Assert.That(n.LocalName,        Is.EqualTo("cc"));
-			Assert.That(n.IsAttribute,      Is.False);
-			Assert.That(n.Value,            Is.Not.Null);
-			Assert.That(n.Value.Expression, Is.EqualTo("$dd"));
-			Assert.That(n.NextNode,         Is.Null);
-			Assert.That(n.PreviousNode,     Is.SameAs(s.Dependencies[0]));
-			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("cc", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.NotNull(n.Value);
+			Assert.AreEqual("$dd", n.Value.Expression);
+			Assert.IsNull(n.NextNode);
+			Assert.AreSame(s.Dependencies[0], n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 		}
 
 		[Test]
@@ -447,35 +470,37 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa[.='1']");
 
-			Assert.That(p.Path,             Is.Not.Null);
-			Assert.That(p.Path.Expression,  Is.EqualTo("aa[.='1']"));
-			Assert.That(p.IsCreatable,      Is.True);
-			Assert.That(p.Depth,            Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa[.='1']", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                  Is.Not.Null);
-			Assert.That(s.Path,             Is.Not.Null);
-			Assert.That(s.Path.Expression,  Is.EqualTo("aa[.='1']"));
-			Assert.That(s.Prefix,           Is.Null);
-			Assert.That(s.LocalName,        Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,      Is.False);
-			Assert.That(s.Value,            Is.Not.Null);
-			Assert.That(s.Value.Expression, Is.EqualTo("'1'"));
-			Assert.That(s.NextStep,         Is.Null);
-			Assert.That(s.NextNode,         Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,     Is.Null);
-			Assert.That(s.Dependencies,     Is.Not.Null & Has.Count.EqualTo(1));
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa[.='1']", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.NotNull(s.Value);
+			Assert.AreEqual("'1'", s.Value.Expression);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			Assert.AreEqual(1, s.Dependencies.Count);
 
 			var n = s.Dependencies[0];
-			Assert.That(n,                  Is.Not.Null);
-			Assert.That(n.Prefix,           Is.Null);
-			Assert.That(n.LocalName,        Is.Null);
-			Assert.That(n.IsAttribute,      Is.False);
-			Assert.That(n.Value,            Is.Not.Null);
-			Assert.That(n.Value.Expression, Is.EqualTo("'1'"));
-			Assert.That(n.NextNode,         Is.Null);
-			Assert.That(n.PreviousNode,     Is.Null);
-			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.IsNull(n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.NotNull(n.Value);
+			Assert.AreEqual("'1'", n.Value.Expression);
+			Assert.IsNull(n.NextNode);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 		}
 
 		[Test]
@@ -483,43 +508,46 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa[$dd=bb/cc]");
 
-			Assert.That(p.Path,             Is.Not.Null);
-			Assert.That(p.Path.Expression,  Is.EqualTo("aa[$dd=bb/cc]"));
-			Assert.That(p.IsCreatable,      Is.True);
-			Assert.That(p.Depth,            Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa[$dd=bb/cc]", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                  Is.Not.Null);
-			Assert.That(s.Path,             Is.Not.Null);
-			Assert.That(s.Path.Expression,  Is.EqualTo("aa[$dd=bb/cc]"));
-			Assert.That(s.Prefix,           Is.Null);
-			Assert.That(s.LocalName,        Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,      Is.False);
-			Assert.That(s.Value,            Is.Null);
-			Assert.That(s.NextStep,         Is.Null);
-			Assert.That(s.NextNode,         Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,     Is.Null);
-			Assert.That(s.Dependencies,     Is.Not.Null & Has.Count.EqualTo(1));
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa[$dd=bb/cc]", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			Assert.AreEqual(1, s.Dependencies.Count);
 
 			var n = s.Dependencies[0];
-			Assert.That(n,                  Is.Not.Null);
-			Assert.That(n.Prefix,           Is.Null);
-			Assert.That(n.LocalName,        Is.EqualTo("bb"));
-			Assert.That(n.IsAttribute,      Is.False);
-			Assert.That(n.Value,            Is.Null);
-			Assert.That(n.PreviousNode,     Is.Null);
-			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("bb", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.IsNull(n.Value);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 
 			n = n.NextNode;
-			Assert.That(n,                  Is.Not.Null);
-			Assert.That(n.Prefix,           Is.Null);
-			Assert.That(n.LocalName,        Is.EqualTo("cc"));
-			Assert.That(n.IsAttribute,      Is.False);
-			Assert.That(n.Value,            Is.Not.Null);
-			Assert.That(n.Value.Expression, Is.EqualTo("$dd"));
-			Assert.That(n.NextNode,         Is.Null);
-			Assert.That(n.PreviousNode,     Is.SameAs(s.Dependencies[0]));
-			Assert.That(n.Dependencies,     Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("cc", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.NotNull(n.Value);
+			Assert.AreEqual("$dd", n.Value.Expression);
+			Assert.IsNull(n.NextNode);
+			Assert.AreSame(s.Dependencies[0], n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 		}
 
 		[Test]
@@ -527,43 +555,46 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa[bb and cc]");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("aa[bb and cc]"));
-			Assert.That(p.IsCreatable,     Is.True);
-			Assert.That(p.Depth,           Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa[bb and cc]", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                 Is.Not.Null);
-			Assert.That(s.Path,            Is.Not.Null);
-			Assert.That(s.Path.Expression, Is.EqualTo("aa[bb and cc]"));
-			Assert.That(s.Prefix,          Is.Null);
-			Assert.That(s.LocalName,       Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,     Is.False);
-			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.NextStep,        Is.Null);
-			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,    Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(2));
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa[bb and cc]", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			Assert.AreEqual(2, s.Dependencies.Count);
 
 			var n = s.Dependencies[0];
-			Assert.That(n,                 Is.Not.Null);
-			Assert.That(n.Prefix,          Is.Null);
-			Assert.That(n.LocalName,       Is.EqualTo("bb"));
-			Assert.That(n.IsAttribute,     Is.False);
-			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.NextNode,        Is.Null);
-			Assert.That(n.PreviousNode,    Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("bb", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.IsNull(n.Value);
+			Assert.IsNull(n.NextNode);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 
 			n = s.Dependencies[1];
-			Assert.That(n,                 Is.Not.Null);
-			Assert.That(n.Prefix,          Is.Null);
-			Assert.That(n.LocalName,       Is.EqualTo("cc"));
-			Assert.That(n.IsAttribute,     Is.False);
-			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.NextNode,        Is.Null);
-			Assert.That(n.PreviousNode,    Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("cc", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.IsNull(n.Value);
+			Assert.IsNull(n.NextNode);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 		}
 
 		[Test]
@@ -571,43 +602,46 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa[bb][cc]");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("aa[bb][cc]"));
-			Assert.That(p.IsCreatable,     Is.True);
-			Assert.That(p.Depth,           Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa[bb][cc]", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                 Is.Not.Null);
-			Assert.That(s.Path,            Is.Not.Null);
-			Assert.That(s.Path.Expression, Is.EqualTo("aa[bb][cc]"));
-			Assert.That(s.Prefix,          Is.Null);
-			Assert.That(s.LocalName,       Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,     Is.False);
-			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.NextStep,        Is.Null);
-			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,    Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(2));
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa[bb][cc]", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			Assert.AreEqual(2, s.Dependencies.Count);
 
 			var n = s.Dependencies[0];
-			Assert.That(n,                 Is.Not.Null);
-			Assert.That(n.Prefix,          Is.Null);
-			Assert.That(n.LocalName,       Is.EqualTo("bb"));
-			Assert.That(n.IsAttribute,     Is.False);
-			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.NextNode,        Is.Null);
-			Assert.That(n.PreviousNode,    Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("bb", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.IsNull(n.Value);
+			Assert.IsNull(n.NextNode);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 
 			n = s.Dependencies[1];
-			Assert.That(n,                 Is.Not.Null);
-			Assert.That(n.Prefix,          Is.Null);
-			Assert.That(n.LocalName,       Is.EqualTo("cc"));
-			Assert.That(n.IsAttribute,     Is.False);
-			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.NextNode,        Is.Null);
-			Assert.That(n.PreviousNode,    Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("cc", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.IsNull(n.Value);
+			Assert.IsNull(n.NextNode);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 		}
 
 		[Test]
@@ -615,43 +649,46 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("aa[bb[cc]]");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("aa[bb[cc]]"));
-			Assert.That(p.IsCreatable,     Is.True);
-			Assert.That(p.Depth,           Is.EqualTo(1));
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("aa[bb[cc]]", p.Path.Expression);
+			Assert.True(p.IsCreatable);
+			Assert.AreEqual(1, p.Depth);
 
 			var s = p.FirstStep;
-			Assert.That(s,                 Is.Not.Null);
-			Assert.That(s.Path,            Is.Not.Null);
-			Assert.That(s.Path.Expression, Is.EqualTo("aa[bb[cc]]"));
-			Assert.That(s.Prefix,          Is.Null);
-			Assert.That(s.LocalName,       Is.EqualTo("aa"));
-			Assert.That(s.IsAttribute,     Is.False);
-			Assert.That(s.Value,           Is.Null);
-			Assert.That(s.NextStep,        Is.Null);
-			Assert.That(s.NextNode,        Is.SameAs(s.NextStep));
-			Assert.That(s.PreviousNode,    Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
+			Assert.NotNull(s);
+			Assert.NotNull(s.Path);
+			Assert.AreEqual("aa[bb[cc]]", s.Path.Expression);
+			Assert.IsNull(s.Prefix);
+			Assert.AreEqual("aa", s.LocalName);
+			Assert.False(s.IsAttribute);
+			Assert.IsNull(s.Value);
+			Assert.IsNull(s.NextStep);
+			Assert.AreSame(s.NextStep, s.NextNode);
+			Assert.IsNull(s.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			Assert.AreEqual(1, s.Dependencies.Count);
 
 			var n = s.Dependencies[0];
-			Assert.That(n,                 Is.Not.Null);
-			Assert.That(n.Prefix,          Is.Null);
-			Assert.That(n.LocalName,       Is.EqualTo("bb"));
-			Assert.That(n.IsAttribute,     Is.False);
-			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.NextNode,        Is.Null);
-			Assert.That(n.PreviousNode,    Is.Null);
-			Assert.That(s.Dependencies,    Is.Not.Null & Has.Count.EqualTo(1));
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("bb", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.IsNull(n.Value);
+			Assert.IsNull(n.NextNode);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(s.Dependencies);
+			Assert.AreEqual(1, s.Dependencies.Count);
 
 			n = n.Dependencies[0];
-			Assert.That(n,                 Is.Not.Null);
-			Assert.That(n.Prefix,          Is.Null);
-			Assert.That(n.LocalName,       Is.EqualTo("cc"));
-			Assert.That(n.IsAttribute,     Is.False);
-			Assert.That(n.Value,           Is.Null);
-			Assert.That(n.NextNode,        Is.Null);
-			Assert.That(n.PreviousNode,    Is.Null);
-			Assert.That(n.Dependencies,    Is.Not.Null & Is.Empty);
+			Assert.NotNull(n);
+			Assert.IsNull(n.Prefix);
+			Assert.AreEqual("cc", n.LocalName);
+			Assert.False(n.IsAttribute);
+			Assert.IsNull(n.Value);
+			Assert.IsNull(n.NextNode);
+			Assert.IsNull(n.PreviousNode);
+			Assert.NotNull(n.Dependencies);
+			CollectionAssert.IsEmpty(n.Dependencies);
 		}
 
 		[Test]
@@ -659,7 +696,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a");
 
-			Assert.That(p.FirstStep.IsSimple, Is.True);
+			Assert.True(p.FirstStep.IsSimple);
 		}
 
 		[Test]
@@ -667,8 +704,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a/b");
 
-			Assert.That(p.FirstStep         .IsSimple, Is.False);
-			Assert.That(p.FirstStep.NextStep.IsSimple, Is.True);
+			Assert.False(p.FirstStep.IsSimple);
+			Assert.True(p.FirstStep.NextStep.IsSimple);
 		}
 
 		[Test]
@@ -676,8 +713,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a[b='v']");
 
-			Assert.That(p.FirstStep                .IsSimple, Is.False);
-			Assert.That(p.FirstStep.Dependencies[0].IsSimple, Is.True);
+			Assert.False(p.FirstStep.IsSimple);
+			Assert.True(p.FirstStep.Dependencies[0].IsSimple);
 		}
 
 		[Test]
@@ -685,8 +722,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a[.='v']");
 
-			Assert.That(p.FirstStep                .IsSimple, Is.True);
-			Assert.That(p.FirstStep.Dependencies[0].IsSimple, Is.True);
+			Assert.True(p.FirstStep.IsSimple);
+			Assert.True(p.FirstStep.Dependencies[0].IsSimple);
 		}
 
 		[Test]
@@ -694,11 +731,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("*");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("*"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("*", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 
 		[Test]
@@ -706,11 +743,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("@*");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("@*"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("@*", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 
 		[Test]
@@ -718,11 +755,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a/*");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("a/*"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("a/*", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 
 		[Test]
@@ -730,11 +767,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a[*]");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("a[*]"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("a[*]", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 
 		[Test]
@@ -742,11 +779,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a[@*]");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("a[@*]"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("a[@*]", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 
 		[Test]
@@ -754,11 +791,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a[b/*]");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("a[b/*]"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("a[b/*]", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 
 		[Test]
@@ -766,11 +803,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a:*");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("a:*"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("a:*", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 
 		[Test]
@@ -778,11 +815,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("@a/b");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("@a/b"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("@a/b", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 
 		[Test]
@@ -790,11 +827,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a[@b/c]");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("a[@b/c]"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("a[@b/c]", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 
 		[Test]
@@ -802,11 +839,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a[b or c]");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("a[b or c]"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("a[b or c]", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 
 		[Test]
@@ -814,11 +851,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a[b=c]");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("a[b=c]"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("a[b=c]", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 
 		[Test]
@@ -826,11 +863,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a[$b or c]");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("a[$b or c]"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("a[$b or c]", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 
 		[Test]
@@ -838,11 +875,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a[$b=$c]");
 
-			Assert.That(p.Path,            Is.Not.Null);	
-			Assert.That(p.Path.Expression, Is.EqualTo("a[$b=$c]"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("a[$b=$c]", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 
 		[Test]
@@ -850,11 +887,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("a[.='1'][.='2']");
 
-			Assert.That(p.Path,            Is.Not.Null);	
-			Assert.That(p.Path.Expression, Is.EqualTo("a[.='1'][.='2']"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("a[.='1'][.='2']", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 
 		[Test]
@@ -862,11 +899,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var p = XPathCompiler.Compile("f()");
 
-			Assert.That(p.Path,            Is.Not.Null);
-			Assert.That(p.Path.Expression, Is.EqualTo("f()"));
-			Assert.That(p.IsCreatable,     Is.False);
-			Assert.That(p.Depth,           Is.EqualTo(0));
-			Assert.That(p.FirstStep,       Is.Null);
+			Assert.NotNull(p.Path);
+			Assert.AreEqual("f()", p.Path.Expression);
+			Assert.False(p.IsCreatable);
+			Assert.AreEqual(0, p.Depth);
+			Assert.IsNull(p.FirstStep);
 		}
 	}
 }

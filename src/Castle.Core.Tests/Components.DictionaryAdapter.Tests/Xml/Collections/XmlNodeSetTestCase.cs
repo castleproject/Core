@@ -29,7 +29,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		{
 			var s = GetSetOfStrings();
 
-			Assert.That(s, Is.Not.Null & Is.InstanceOf<XmlNodeSet<string>>());
+			Assert.IsNotNull(s);
+			Assert.IsInstanceOf<XmlNodeSet<string>>(s);
 		}
 
 		[Test]
@@ -37,7 +38,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		{
 			var s = GetSetOfStrings();
 
-			Assert.That(s.Count, Is.EqualTo(Strings.Count));
+			Assert.AreEqual(Strings.Count, s.Count);
 		}
 
 		[Test]
@@ -47,7 +48,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			s.Add("added");
 
-			Assert.That(s.Count, Is.EqualTo(Strings.Count + 1));
+			Assert.AreEqual(Strings.Count + 1, s.Count);
 		}
 
 		[Test]
@@ -57,7 +58,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			s.Add(Strings.First());
 
-			Assert.That(s.Count, Is.EqualTo(Strings.Count));
+			Assert.AreEqual(Strings.Count, s.Count);
 		}
 
 		[Test]
@@ -67,7 +68,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			s.Remove("other");
 
-			Assert.That(s.Count, Is.EqualTo(Strings.Count));
+			Assert.AreEqual(Strings.Count, s.Count);
 		}
 
 		[Test]
@@ -77,7 +78,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			s.Remove(Strings.First());
 
-			Assert.That(s.Count, Is.EqualTo(Strings.Count - 1));
+			Assert.AreEqual(Strings.Count - 1, s.Count);
 		}
 
 		[Test]
@@ -87,7 +88,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			s.Clear();
 
-			Assert.That(s.Count, Is.EqualTo(0));
+			Assert.AreEqual(0, s.Count);
 		}
 
 		[Test]
@@ -95,7 +96,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		{
 			var s = GetSetOfStrings();
 
-			Assert.That(s.Contains(Strings[0]), Is.True);
+			Assert.True(s.Contains(Strings[0]));
 		}
 
 		[Test]
@@ -103,7 +104,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		{
 			var s = GetSetOfStrings();
 
-			Assert.That(s.Contains("unknown"), Is.False);
+			Assert.False(s.Contains("unknown"));
 		}
 
 		[Test]
@@ -113,7 +114,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			s.Add("added");
 
-			Assert.That(s.Contains("added"), Is.True);
+			Assert.True(s.Contains("added"));
 		}
 
 		[Test]
@@ -125,8 +126,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var v = l[0];
 			l[0] = "other";
 
-			Assert.That(s.Contains("other"), Is.True);
-			Assert.That(s.Contains(v),       Is.False);
+			Assert.True(s.Contains("other"));
+			Assert.False(s.Contains(v));
 		}
 
 		[Test]
@@ -136,7 +137,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			s.Remove(Strings.First());
 
-			Assert.That(s.Contains(Strings.First()), Is.False);
+			Assert.False(s.Contains(Strings.First()));
 		}
 
 		[Test]
@@ -148,7 +149,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var v = l[0];
 			l.RemoveAt(0);
 
-			Assert.That(s.Contains(v), Is.False);
+			Assert.False(s.Contains(v));
 		}
 
 		[Test]
@@ -158,7 +159,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			s.Clear();
 
-			Assert.That(s.Contains(Strings.First()), Is.False);
+			Assert.False(s.Contains(Strings.First()));
 		}
 
 		[Test]
@@ -167,7 +168,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var s = GetSetOfStrings();
 			var o = Strings;
 
-			Assert.That(s.IsSubsetOf(o), Is.True);
+			Assert.True(s.IsSubsetOf(o));
 		}
 
 		[Test]
@@ -176,7 +177,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var s = GetSetOfStrings();
 			var o = Strings.Skip(1);
 
-			Assert.That(s.IsSubsetOf(o), Is.False);
+			Assert.False(s.IsSubsetOf(o));
 		}
 
 		[Test]
@@ -185,7 +186,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var s = GetSetOfStrings();
 			var o = Strings;
 
-			Assert.That(s.IsSupersetOf(o), Is.True);
+			Assert.True(s.IsSupersetOf(o));
 		}
 
 		[Test]
@@ -194,7 +195,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var s = GetSetOfStrings();
 			var o = Strings.Concat(new[] { "other" });
 
-			Assert.That(s.IsSupersetOf(o), Is.False);
+			Assert.False(s.IsSupersetOf(o));
 		}
 
 		[Test]
@@ -203,7 +204,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var s = GetSetOfStrings();
 			var o = Strings.Concat(new[] { "other" });
 
-			Assert.That(s.IsProperSubsetOf(o), Is.True);
+			Assert.True(s.IsProperSubsetOf(o));
 		}
 
 		[Test]
@@ -212,7 +213,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var s = GetSetOfStrings();
 			var o = Strings;
 
-			Assert.That(s.IsProperSubsetOf(o), Is.False);
+			Assert.False(s.IsProperSubsetOf(o));
 		}
 
 		[Test]
@@ -221,7 +222,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var s = GetSetOfStrings();
 			var o = Strings.Skip(1);
 
-			Assert.That(s.IsProperSupersetOf(o), Is.True);
+			Assert.True(s.IsProperSupersetOf(o));
 		}
 
 		[Test]
@@ -230,7 +231,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var s = GetSetOfStrings();
 			var o = Strings;
 
-			Assert.That(s.IsProperSupersetOf(o), Is.False);
+			Assert.False(s.IsProperSupersetOf(o));
 		}
 
 		[Test]
@@ -239,7 +240,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var s = GetSetOfStrings();
 			var o = Strings.Take(1).Concat(new[] { "other" });
 
-			Assert.That(s.Overlaps(o), Is.True);
+			Assert.True(s.Overlaps(o));
 		}
 
 		[Test]
@@ -248,7 +249,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var s = GetSetOfStrings();
 			var o = new[] { "other" };
 
-			Assert.That(s.Overlaps(o), Is.False);
+			Assert.False(s.Overlaps(o));
 		}
 
 		[Test]
@@ -257,7 +258,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var s = GetSetOfStrings();
 			var o = Strings.Reverse();
 
-			Assert.That(s.SetEquals(o), Is.True);
+			Assert.True(s.SetEquals(o));
 		}
 
 		[Test]
@@ -266,7 +267,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var s = GetSetOfStrings();
 			var o = Strings.Take(1);
 
-			Assert.That(s.SetEquals(o), Is.False);
+			Assert.False(s.SetEquals(o));
 		}
 
 		[Test]
@@ -279,7 +280,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				while (e.MoveNext())
 					x.Add(e.Current);
 
-			Assert.That(x, Is.EquivalentTo(Strings));
+			CollectionAssert.AreEquivalent(Strings, x);
 		}
 
 		[Test]
@@ -292,7 +293,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				while (e.MoveNext())
 					x.Add(e.Current as string);
 
-			Assert.That(x, Is.EquivalentTo(Strings));
+			CollectionAssert.AreEquivalent(Strings, x);
 		}
 
 		[Test]
@@ -303,7 +304,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			s.UnionWith(t);
 
-			Assert.That(s.ToArray(), Is.EquivalentTo(Strings.Union(t)));
+			CollectionAssert.AreEquivalent(Strings.Union(t), s.ToArray());
 		}
 
 		[Test]
@@ -314,7 +315,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			s.ExceptWith(t);
 
-			Assert.That(s.ToArray(), Is.EquivalentTo(Strings.Except(t)));
+			CollectionAssert.AreEquivalent(Strings.Except(t), s.ToArray());
 		}
 
 		[Test]
@@ -325,7 +326,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			s.IntersectWith(t);
 
-			Assert.That(s.ToArray(), Is.EquivalentTo(Strings.Intersect(t)));
+			CollectionAssert.AreEquivalent(Strings.Intersect(t), s.ToArray());
 		}
 
 		[Test]
@@ -336,8 +337,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			s.SymmetricExceptWith(t);
 
-			var expected = Strings.Skip(1).Concat(new[] { "other" });
-			Assert.That(s.ToArray(), Is.EquivalentTo(expected));
+			CollectionAssert.AreEquivalent(Strings.Skip(1).Concat(new[] { "other" }), s.ToArray());
 		}
 
 		private static readonly IList<string>

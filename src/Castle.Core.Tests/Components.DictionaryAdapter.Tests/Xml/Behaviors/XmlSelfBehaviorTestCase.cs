@@ -15,11 +15,6 @@
 #if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
-	using System;
-	using System.Xml.Serialization;
-	using Castle.Components.DictionaryAdapter.Tests;
-    using NUnit.Framework;
-
 	public class XmlSelfBehaviorTestCase
 	{
 	}

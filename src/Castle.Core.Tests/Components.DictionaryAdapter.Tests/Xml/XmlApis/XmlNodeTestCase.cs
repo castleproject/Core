@@ -29,7 +29,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForElement("<X/>");
 
-			Assert.That(node.ClrType, Is.EqualTo(typeof(T)));
+			Assert.AreEqual(typeof(T), node.ClrType);
 		}
 
 		[Test]
@@ -37,7 +37,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForElement("<X/>");
 
-			Assert.That(node.Name.LocalName, Is.EqualTo("X"));
+			Assert.AreEqual("X", node.Name.LocalName);
 		}
 
 		[Test]
@@ -45,7 +45,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForElement("<a:X xmlns:a='urn:a'/>");
 
-			Assert.That(node.Name.LocalName, Is.EqualTo("X"));
+			Assert.AreEqual("X", node.Name.LocalName);
 		}
 
 		[Test]
@@ -53,7 +53,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForElement("<X/>");
 
-			Assert.That(node.Name.NamespaceUri, Is.Empty);
+			Assert.IsEmpty(node.Name.NamespaceUri);
 		}
 
 		[Test]
@@ -61,7 +61,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForElement("<X xmlns='urn:a'/>");
 
-			Assert.That(node.Name.NamespaceUri, Is.EqualTo("urn:a"));
+			Assert.AreEqual("urn:a", node.Name.NamespaceUri);
 		}
 
 		[Test]
@@ -69,7 +69,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForElement("<a:X xmlns:a='urn:a'/>");
 
-			Assert.That(node.Name.NamespaceUri, Is.EqualTo("urn:a"));
+			Assert.AreEqual("urn:a", node.Name.NamespaceUri);
 		}
 
 		[Test]
@@ -77,7 +77,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForElement("<X/>");
 
-			Assert.That(node.XsiType, Is.EqualTo(XmlName.Empty));
+			Assert.AreEqual(XmlName.Empty, node.XsiType);
 		}
 
 		[Test]
@@ -88,7 +88,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForElement("<X xsi:type='p:T' xmlns:p='urn:a' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'/>");
 
-			Assert.That(node.XsiType, Is.EqualTo(new XmlName("T", "urn:a")));
+			Assert.AreEqual(new XmlName("T", "urn:a"), node.XsiType);
 		}
 
 		[Test]
@@ -96,7 +96,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForAttribute("<X A='a'/>");
 
-			Assert.That(node.XsiType, Is.EqualTo(XmlName.Empty));
+			Assert.AreEqual(XmlName.Empty, node.XsiType);
 		}
 
 		[Test]
@@ -104,8 +104,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForElement("<X/>");
 
-			Assert.That(node.IsElement,   Is.True);
-			Assert.That(node.IsAttribute, Is.False);
+			Assert.True(node.IsElement);
+			Assert.False(node.IsAttribute);
 		}
 
 		[Test]
@@ -113,8 +113,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForAttribute("<X A='a'/>");
 
-			Assert.That(node.IsElement,   Is.False);
-			Assert.That(node.IsAttribute, Is.True);
+			Assert.False(node.IsElement);
+			Assert.True(node.IsAttribute);
 		}
 
 		[Test]
@@ -122,8 +122,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForRoot();
 
-			Assert.That(node.IsElement,   Is.False);
-			Assert.That(node.IsAttribute, Is.False);
+			Assert.False(node.IsElement);
+			Assert.False(node.IsAttribute);
 		}
 
 		[Test]
@@ -131,7 +131,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForElement("<X/>");
 
-			Assert.That(node.IsNil, Is.False);
+			Assert.False(node.IsNil);
 		}
 
 		[Test]
@@ -139,27 +139,27 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForElement("<X xsi:nil='true' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'/>");
 
-			Assert.That(node.IsNil, Is.True);
+			Assert.True(node.IsNil);
 		}
 
 		[Test]
 		public void IsNil_OfElement_WhenSetToTrue()
 		{
-		    var node = NodeForElement("<X> <Y/> </X>");
+			var node = NodeForElement("<X> <Y/> </X>");
 
-		    node.IsNil = true;
+			node.IsNil = true;
 
-		    Assert.That(node.Xml, XmlEquivalent.To("<X xsi:nil='true' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'/>"));
+			CustomAssert.AreXmlEquivalent("<X xsi:nil='true' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'/>", node.Xml);
 		}
 
 		[Test]
 		public void IsNil_OfElement_WhenSetToFalse()
 		{
-		    var node = NodeForElement("<X> <Y/> </X>");
+			var node = NodeForElement("<X> <Y/> </X>");
 
-		    node.IsNil = false;
+			node.IsNil = false;
 
-		    Assert.That(node.Xml, XmlEquivalent.To("<X> <Y/> </X>"));
+			CustomAssert.AreXmlEquivalent("<X> <Y/> </X>", node.Xml);
 		}
 
 		[Test]
@@ -169,7 +169,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			node.Value = "V";
 
-			Assert.That(node.Xml, XmlEquivalent.To("<X>V</X>"));
+			CustomAssert.AreXmlEquivalent("<X>V</X>", node.Xml);
 		}
 
 		[Test]
@@ -177,7 +177,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForAttribute("<X A='a'/>");
 
-			Assert.That(node.IsNil, Is.False);
+			Assert.False(node.IsNil);
 		}
 
 		//[Test]
@@ -196,7 +196,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForElement("<X/>");
 
-			Assert.That(node.Value, Is.Empty);
+			Assert.IsEmpty(node.Value);
 		}
 
 		[Test]
@@ -204,7 +204,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForElement("<X>a</X>");
 
-			Assert.That(node.Value, Is.EqualTo("a"));
+			Assert.AreEqual("a", node.Value);
 		}
 
 		[Test]
@@ -214,7 +214,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			node.Value = "a";
 
-			Assert.That(node.Xml, XmlEquivalent.To("<X>a</X>"));
+			CustomAssert.AreXmlEquivalent("<X>a</X>", node.Xml);
 		}
 
 		[Test]
@@ -222,7 +222,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		{
 			var node = NodeForAttribute("<X A='a'/>");
 
-			Assert.That(node.Value, Is.EqualTo("a"));
+			Assert.AreEqual("a", node.Value);
 		}
 
 		[Test]
@@ -232,7 +232,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			node.Value = "a";
 
-			Assert.That(node.Xml, Is.EqualTo("A='a'") | Is.EqualTo("A=\"a\""));
+			Assert.AreEqual("A=\"a\"", node.Xml);
 		}
 
 		[Test]
@@ -242,10 +242,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			var cursor = node.SelectSelf(typeof(T));
 
-			Assert.That(cursor,                Is.Not.Null);
-			Assert.That(cursor.MoveNext(),     Is.True);
-			Assert.That(cursor.Name.LocalName, Is.EqualTo("X"));
-			Assert.That(cursor.MoveNext(),     Is.False);
+			Assert.NotNull(cursor);
+			Assert.True(cursor.MoveNext());
+			Assert.AreEqual("X", cursor.Name.LocalName);
+			Assert.False(cursor.MoveNext());
 		}
 
 		[Test]
@@ -255,10 +255,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			var cursor = node.SelectChildren(KnownTypes, NamespaceSource.Instance, CursorFlags.Elements);
 
-			Assert.That(cursor,            Is.Not.Null);
-			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.Name.LocalName,  Is.EqualTo("A"));
-			Assert.That(cursor.MoveNext(), Is.False);
+			Assert.NotNull(cursor);
+			Assert.True(cursor.MoveNext());
+			Assert.AreEqual("A", cursor.Name.LocalName);
+			Assert.False(cursor.MoveNext());
 		}
 
 		[Test]
@@ -269,10 +269,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			var cursor = node.Select(path, IncludedTypes, NamespaceSource.Instance, CursorFlags.Elements);
 
-			Assert.That(cursor,            Is.Not.Null);
-			Assert.That(cursor.MoveNext(), Is.True);
-			Assert.That(cursor.Name.LocalName,  Is.EqualTo("A"));
-			Assert.That(cursor.MoveNext(), Is.False);
+			Assert.NotNull(cursor);
+			Assert.True(cursor.MoveNext());
+			Assert.AreEqual("A", cursor.Name.LocalName);
+			Assert.False(cursor.MoveNext());
 		}
 
 		[Test]
@@ -283,7 +283,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			var value = node.Evaluate(path);
 
-			Assert.That(value, Is.EqualTo(1));
+			Assert.AreEqual(1.0, value);
 		}
 
 		[Test]
@@ -293,19 +293,19 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 			using (var reader = node.ReadSubtree())
 			{
-				Assert.That(reader.Read(),    Is.EqualTo(true));
-				Assert.That(reader.NodeType,  Is.EqualTo(XmlNodeType.Element));
-				Assert.That(reader.LocalName, Is.EqualTo("X"));
+				Assert.True(reader.Read());
+				Assert.AreEqual(XmlNodeType.Element, reader.NodeType);
+				Assert.AreEqual("X", reader.LocalName);
 
-				Assert.That(reader.Read(),    Is.EqualTo(true));
-				Assert.That(reader.NodeType,  Is.EqualTo(XmlNodeType.Element));
-				Assert.That(reader.LocalName, Is.EqualTo("A"));
+				Assert.True(reader.Read());
+				Assert.AreEqual(XmlNodeType.Element, reader.NodeType);
+				Assert.AreEqual("A", reader.LocalName);
 
-				Assert.That(reader.Read(),    Is.EqualTo(true));
-				Assert.That(reader.NodeType,  Is.EqualTo(XmlNodeType.EndElement));
-				Assert.That(reader.LocalName, Is.EqualTo("X"));
+				Assert.True(reader.Read());
+				Assert.AreEqual(XmlNodeType.EndElement, reader.NodeType);
+				Assert.AreEqual("X", reader.LocalName);
 
-				Assert.That(reader.Read(),    Is.EqualTo(false));
+				Assert.False(reader.Read());
 			}
 		}
 
@@ -319,7 +319,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				writer.WriteStartElement("A");
 			}
 
-			Assert.That(node.Xml, XmlEquivalent.To("<X> <A/> </X>"));
+			CustomAssert.AreXmlEquivalent("<X> <A/> </X>", node.Xml);
 		}
 
 		[Test]
@@ -332,14 +332,13 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				writer.WriteAttributeString("A", "a");
 			}
 
-			Assert.That(node.Xml, XmlEquivalent.To("<X A='a'/>"));
+			CustomAssert.AreXmlEquivalent("<X A='a'/>", node.Xml);
 		}
 
 		protected abstract IXmlNode NodeForElement  (params string[] xml);
 		protected abstract IXmlNode NodeForAttribute(params string[] xml);
 		protected abstract IXmlNode NodeForRoot();
 
-		[TestFixtureSetUp]
 		public void OneTimeSetUp()
 		{
 			if (KnownTypes == null)
@@ -354,6 +353,11 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				IncludedTypes.DefaultClrType = typeof(T);
 				IncludedTypes.InnerSet.Add(new XmlIncludedType("T", string.Empty, typeof(T)));
 			}
+		}
+
+		protected XmlNodeTestCase()
+		{
+			OneTimeSetUp();
 		}
 
 		protected static XmlKnownTypeSet        KnownTypes;

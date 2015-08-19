@@ -24,8 +24,6 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class ProxyTypeCachingTestCase : BasePEVerifyTestCase
 	{
-		private const string AllKinds = "All";
-
 		private object Proxy(ProxyKind kind, params Type[] additionalInterfacesToProxy)
 		{
 			switch (kind)
@@ -44,52 +42,56 @@ namespace Castle.DynamicProxy.Tests
 			}
 		}
 
-		public static IEnumerable<ProxyKind> All
-		{
-			get
-			{
-				return new[]
-				{
-					ProxyKind.Class,
-					ProxyKind.WithoutTarget,
-					ProxyKind.WithTarget,
-					ProxyKind.WithTargetInterface
-				};
-			}
-		}
+		public static readonly object[] AllKinds = {
+			new object[] { ProxyKind.Class },
+			new object[] { ProxyKind.WithoutTarget },
+			new object[] { ProxyKind.WithTarget },
+			new object[] { ProxyKind.WithTargetInterface }
+		};
 
 #if SILVERLIGHT
 		[Test]
 		public void Duplicated_interfaces_not_significant_SILVERLIGHT()
 		{
-			foreach (var kind in All)
+			foreach (object[] kind in AllKinds)
 			{
-				Duplicated_interfaces_not_significant(kind);
+				Duplicated_interfaces_not_significant((ProxyKind)kind[0]);
 			}
 		}
+
+#else
+#if FEATURE_XUNITNET
+		[Xunit.Theory]
 #else
 		[Test]
 #endif
-		public void Duplicated_interfaces_not_significant([ValueSource(AllKinds)] ProxyKind kind)
+		[TestCaseSource("AllKinds")]
+#endif
+		public void Duplicated_interfaces_not_significant(ProxyKind kind)
 		{
 			var first = Proxy(kind, typeof(IOne), typeof(IOne));
 			var second = Proxy(kind, typeof(IOne));
 			Assert.AreSame(first.GetType(), second.GetType());
 		}
-		
+
 #if SILVERLIGHT
 		[Test]
 		public void Explicit_inclusion_of_base_interfaces_not_significant_SILVERLIGHT()
 		{
-			foreach (var kind in All)
+			foreach (object[] kind in AllKinds)
 			{
-				Explicit_inclusion_of_base_interfaces_not_significant(kind);
+				Explicit_inclusion_of_base_interfaces_not_significant((ProxyKind)kind[0]);
 			}
 		}
 #else
+#if FEATURE_XUNITNET
+		[Xunit.Theory]
+#else
 		[Test]
 #endif
-		public void Explicit_inclusion_of_base_interfaces_not_significant([ValueSource(AllKinds)] ProxyKind kind)
+		[TestCaseSource("AllKinds")]
+#endif
+		public void Explicit_inclusion_of_base_interfaces_not_significant(ProxyKind kind)
 		{
 			var first = Proxy(kind, typeof(IBase), typeof(ISub1));
 			var second = Proxy(kind, typeof(ISub1));
@@ -100,15 +102,20 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Order_of_additional_interfaces_not_significant_SILVERLIGHT()
 		{
-			foreach (var kind in All)
+			foreach (object[] kind in AllKinds)
 			{
-				Order_of_additional_interfaces_not_significant(kind);
+				Order_of_additional_interfaces_not_significant((ProxyKind)kind[0]);
 			}
 		}
 #else
+#if FEATURE_XUNITNET
+		[Xunit.Theory]
+#else
 		[Test]
 #endif
-		public void Order_of_additional_interfaces_not_significant([ValueSource(AllKinds)] ProxyKind kind)
+		[TestCaseSource("AllKinds")]
+#endif
+		public void Order_of_additional_interfaces_not_significant(ProxyKind kind)
 		{
 			var first = Proxy(kind, typeof(IOne), typeof(ITwo));
 			var second = Proxy(kind, typeof(ITwo), typeof(IOne));

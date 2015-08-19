@@ -51,7 +51,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 					"</Foo>"
 				);
 
-				Assert.That(foo.Value, Is.EqualTo("value"));
+				Assert.AreEqual("value", foo.Value);
 			}
 
 			[Test]
@@ -59,7 +59,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			{
 				var foo = Create<IFoo>("<Foo/>");
 
-				Assert.That(foo.Value, Is.Null);
+				Assert.IsNull(foo.Value);
 			}
 
 			[Test]
@@ -73,7 +73,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				foo.Value = "value";
 
-				Assert.That(xml, XmlEquivalent.To
+				CustomAssert.AreXmlEquivalent(string.Concat
 				(
 					"<Foo>",
 						"<A>",
@@ -86,8 +86,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 							"<B>b</B>",
 						"</A>",
 					"</Foo>"
-				));
-				Assert.That(foo.Value, Is.EqualTo("value"));
+				), xml);
+				Assert.AreEqual("value", foo.Value);
 			}
 		}
 
@@ -114,7 +114,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 					"</Foo>"
 				);
 
-				Assert.That(foo.Value, Is.EqualTo("value"));
+				Assert.AreEqual("value", foo.Value);
 			}
 
 			[Test]
@@ -122,7 +122,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			{
 				var foo = Create<IFoo>("<Foo/>");
 
-				Assert.That(foo.Value, Is.Null);
+				Assert.IsNull(foo.Value);
 			}
 
 			[Test]
@@ -136,7 +136,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				foo.Value = "value";
 
-				Assert.That(xml, XmlEquivalent.To
+				CustomAssert.AreXmlEquivalent(string.Concat
 				(
 					"<Foo>",
 						"<A D='value'>",
@@ -145,8 +145,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 							"</B>",
 						"</A>",
 					"</Foo>"
-				));
-				Assert.That(foo.Value, Is.EqualTo("value"));
+				), xml);
+				Assert.AreEqual("value", foo.Value);
 			}
 		}
 
@@ -164,7 +164,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			{
 				var obj = Create<IFoo>("<Foo xmlns:p='urn:a'> <X> <p:A>value</p:A> </X> </Foo>");
 
-				Assert.That(obj.Value, Is.EqualTo("value"));
+				Assert.AreEqual("value", obj.Value);
 			}
 
 			[Test]
@@ -172,7 +172,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			{
 				var obj = Create<IFoo>("<Foo/>");
 
-				Assert.That(obj.Value, Is.Null);
+				Assert.IsNull(obj.Value);
 			}
 
 			[Test]
@@ -204,9 +204,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			{
 				var foo = Create<IFoo>();
 
-				Assert.That(foo.StringValue,  Is.Null);
-				Assert.That(foo.NumberValue,  Is.EqualTo(0));
-				Assert.That(foo.BooleanValue, Is.False);
+				Assert.IsNull(foo.StringValue);
+				Assert.AreEqual(0, foo.NumberValue);
+				Assert.False(foo.BooleanValue);
 			}
 
 			[Test]
@@ -214,9 +214,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			{
 				var foo = Create<IFoo>("<Foo> <A>a</A> </Foo>");
 
-				Assert.That(foo.StringValue,  Is.EqualTo("a"));
-				Assert.That(foo.NumberValue,  Is.EqualTo(1));
-				Assert.That(foo.BooleanValue, Is.EqualTo(true));
+				Assert.AreEqual("a", foo.StringValue);
+				Assert.AreEqual(1, foo.NumberValue);
+				Assert.True(foo.BooleanValue);
 			}
 
 			[Test]
@@ -234,9 +234,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			{
 				var foo = Create<IFoo>("<Foo> <A>a</A> </Foo>");
 
-				Assert.That(XmlAdapter.For(foo).HasProperty("StringValue",  foo), Is.False);
-				Assert.That(XmlAdapter.For(foo).HasProperty("NumberValue",  foo), Is.False);
-				Assert.That(XmlAdapter.For(foo).HasProperty("BooleanValue", foo), Is.False);
+				Assert.False(XmlAdapter.For(foo).HasProperty("StringValue",  foo));
+				Assert.False(XmlAdapter.For(foo).HasProperty("NumberValue",  foo));
+				Assert.False(XmlAdapter.For(foo).HasProperty("BooleanValue", foo));
 			}
 		}
 
@@ -265,14 +265,16 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				var foo = Create<IFoo>(xml);
 
 				var bar = foo.Bar;
-				Assert.That(xml,       XmlEquivalent.To("<Foo/>"));
-				Assert.That(bar,       Is.Not.Null & Is.SameAs(foo.Bar));
-				Assert.That(bar.Value, Is.Null);
+				CustomAssert.AreXmlEquivalent("<Foo/>", xml);
+				Assert.NotNull(bar);
+				Assert.AreSame(foo.Bar, bar);
+				Assert.IsNull(bar.Value);
 
 				bar.Value = "value";
-				Assert.That(xml,       XmlEquivalent.To("<Foo> <A> <B> <C>value</C> </B> </A> </Foo>"));
-				Assert.That(bar,       Is.Not.Null & Is.SameAs(foo.Bar));
-				Assert.That(bar.Value, Is.EqualTo("value"));
+				CustomAssert.AreXmlEquivalent("<Foo> <A> <B> <C>value</C> </B> </A> </Foo>", xml);
+				Assert.NotNull(bar);
+				Assert.AreSame(foo.Bar, bar);
+				Assert.AreEqual("value", bar.Value);
 			}
 
 			[Test]
@@ -285,14 +287,16 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				var foo = Create<IFoo>(xml);
 
 				var bar = foo.Bar;
-				Assert.That(xml,       XmlEquivalent.To("<Foo> <A> <X/> </A> </Foo>"));
-				Assert.That(bar,       Is.Not.Null & Is.SameAs(foo.Bar));
-				Assert.That(bar.Value, Is.Null);
+				CustomAssert.AreXmlEquivalent("<Foo> <A> <X/> </A> </Foo>", xml);
+				Assert.NotNull(bar);
+				Assert.AreSame(foo.Bar, bar);
+				Assert.IsNull(bar.Value);
 
 				bar.Value = "value";
-				Assert.That(xml,       XmlEquivalent.To("<Foo> <A> <X/> <B> <C>value</C> </B> </A> </Foo>"));
-				Assert.That(bar,       Is.Not.Null & Is.SameAs(foo.Bar));
-				Assert.That(bar.Value, Is.EqualTo("value"));
+				CustomAssert.AreXmlEquivalent("<Foo> <A> <X/> <B> <C>value</C> </B> </A> </Foo>", xml);
+				Assert.NotNull(bar);
+				Assert.AreSame(foo.Bar, bar);
+				Assert.AreEqual("value", bar.Value);
 			}
 
 			[Test]
@@ -305,17 +309,19 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				var foo = Create<IFoo>(xml);
 
 				var bar = foo.Bar;
-				Assert.That(xml,       XmlEquivalent.To("<Foo> <A/> </Foo>"));
-				Assert.That(bar,       Is.Not.Null & Is.SameAs(foo.Bar));
+				CustomAssert.AreXmlEquivalent("<Foo> <A/> </Foo>", xml);
+				Assert.NotNull(bar);
+				Assert.AreSame(foo.Bar, bar);
 
 				var value = bar.Value;
-				Assert.That(xml,       XmlEquivalent.To("<Foo> <A/> </Foo>"));
-				Assert.That(value,     Is.Null);
+				CustomAssert.AreXmlEquivalent("<Foo> <A/> </Foo>", xml);
+				Assert.IsNull(value);
 
 				bar.Value = "value";
-				Assert.That(xml,       XmlEquivalent.To("<Foo> <A> <B> <C>value</C> </B> </A> </Foo>"));
-				Assert.That(bar,       Is.Not.Null & Is.SameAs(foo.Bar));
-				Assert.That(bar.Value, Is.EqualTo("value"));
+				CustomAssert.AreXmlEquivalent("<Foo> <A> <B> <C>value</C> </B> </A> </Foo>", xml);
+				Assert.NotNull(bar);
+				Assert.AreSame(foo.Bar, bar);
+				Assert.AreEqual("value", bar.Value);
 			}
 		}
 
@@ -345,14 +351,14 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				Create<IFoo>(xml).A = null;
 
-				Assert.That(xml, XmlEquivalent.To
+				CustomAssert.AreXmlEquivalent(string.Concat
 				(
 					"<Foo>",
 						"<A>",
 							"<B Id='1'> <C>value1</C> </B>",
 						"</A>",
 					"</Foo>"
-				));
+				), xml);
 			}
 
 			[Test]
@@ -373,14 +379,14 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				Create<IFoo>(xml).A = null;
 
-				Assert.That(xml, XmlEquivalent.To
+				CustomAssert.AreXmlEquivalent(string.Concat
 				(
 					"<Foo>",
 						"<A>",
 							"<B Id='1'> <C>value1</C> </B>",
 						"</A>",
 					"</Foo>"
-				));
+				), xml);
 			}
 
 			[Test]
@@ -400,7 +406,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				Create<IFoo>(xml).A = null;
 
-				Assert.That(xml, XmlEquivalent.To("<Foo/>"));
+				CustomAssert.AreXmlEquivalent("<Foo/>", xml);
 			}
 		}
 
@@ -420,7 +426,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				var a = foo.A;
 
-				Assert.That(a, Is.EqualTo("x"));
+				Assert.AreEqual("x", a);
 			}
 
 			[Test]
@@ -430,7 +436,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				var a = foo.A;
 
-				Assert.That(a, Is.EqualTo("y"));
+				Assert.AreEqual("y", a);
 			}
 
 			[Test]
@@ -444,7 +450,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				foo.A = "*";
 
-				Assert.That(xml, XmlEquivalent.To("<Foo> <X>x</X> <Y>*</Y> </Foo>"));
+				CustomAssert.AreXmlEquivalent("<Foo> <X>x</X> <Y>*</Y> </Foo>", xml);
 			}
 		}
 
@@ -520,8 +526,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 					.OfType<IXsltContextVariable>()
 					.Single();
 
-				Assert.That(variable.IsParam, Is.False);
-				Assert.That(variable.IsLocal, Is.False);
+				Assert.False(variable.IsParam);
+				Assert.False(variable.IsLocal);
 			}
 		}
 
@@ -580,10 +586,11 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 					.OfType<IXsltContextFunction>()
 					.Single();
 
-				Assert.That(function.ArgTypes,    Is.Not.Null & Has.Length.EqualTo(1));
-				Assert.That(function.ArgTypes[0], Is.EqualTo(XPathResultType.String));
-				Assert.That(function.Minargs,     Is.EqualTo(1));
-				Assert.That(function.Maxargs,     Is.EqualTo(1));
+				Assert.NotNull(function.ArgTypes);
+				Assert.AreEqual(1, function.ArgTypes.Length);
+				Assert.AreEqual(XPathResultType.String, function.ArgTypes[0]);
+				Assert.AreEqual(1, function.Minargs);
+				Assert.AreEqual(1, function.Maxargs);
 			}
 		}
 
@@ -625,8 +632,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 			public override object Invoke(XsltContext context, object[] args, XPathNavigator node)
 			{
-				Assert.That(args,    Is.Not.Null & Has.Length.EqualTo(1));
-				Assert.That(args[0], Is.EqualTo("a"));
+				Assert.NotNull(args);
+				Assert.AreEqual(1, args.Length);
+				Assert.AreEqual("a", args[0]);
 				return "value";
 			}
 		}
@@ -647,7 +655,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				var value = getter(obj);
 
-				Assert.That(value, Is.EqualTo("correct"));
+				Assert.AreEqual("correct", value);
 			}
 
 			protected void TestSet<T>(Action<T, string> setter)
@@ -657,12 +665,12 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 				setter(obj, "correct");
 
-				Assert.That(xml, XmlEquivalent.To
+				CustomAssert.AreXmlEquivalent(string.Concat
 				(
 					"<Foo>",
 						"<A B='value'>correct</A>",
 					"</Foo>"
-				));
+				), xml);
 			}
 		}
 	}

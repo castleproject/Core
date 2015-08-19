@@ -25,11 +25,15 @@ namespace Castle.Core.Tests.Resources
 	[TestFixture]
 	public class FileResourceFactoryTestCase
 	{
-		private FileResourceFactory resFactory = new FileResourceFactory();
-		private String basePath;
+		private readonly FileResourceFactory resFactory = new FileResourceFactory();
+		private string basePath;
 
-		[TestFixtureSetUp]
+#if FEATURE_XUNITNET
+		public FileResourceFactoryTestCase()
+#else
+		[SetUp]
 		public void Init()
+#endif
 		{
 			var currentDirectory = Directory.GetCurrentDirectory();
 			basePath = Path.Combine(currentDirectory, "Core.Tests" + Path.DirectorySeparatorChar + "Resources");
