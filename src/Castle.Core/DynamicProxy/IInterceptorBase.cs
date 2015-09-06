@@ -14,18 +14,8 @@
 
 namespace Castle.DynamicProxy
 {
-	public interface IProxyTargetAccessor
-	{
-		/// <summary>
-		///   Get the proxy target (note that null is a valid target!)
-		/// </summary>
-		/// <returns></returns>
-		object DynProxyGetTarget();
-
-		/// <summary>
-		///   Gets the interceptors for the proxy
-		/// </summary>
-		/// <returns></returns>
-		IInterceptorBase[] GetInterceptors();
-	}
+    /// <summary>
+	///   New interface that is going to be used by DynamicProxy 2
+	/// </summary>
+    public interface IInterceptorBase { }
 }

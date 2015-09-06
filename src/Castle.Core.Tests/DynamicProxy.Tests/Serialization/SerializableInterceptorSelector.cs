@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Tests.Serialization
 	[Serializable]
 	public class SerializableInterceptorSelector : IInterceptorSelector
 	{
-		public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
+		public IInterceptorBase[] SelectInterceptors(Type type, MethodInfo method, IInterceptorBase[] interceptors)
 		{
 			return interceptors;
 		}

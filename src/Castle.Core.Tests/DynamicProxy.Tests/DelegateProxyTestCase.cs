@@ -32,7 +32,7 @@ namespace Castle.DynamicProxy.Tests
 			return proxyGenerator.GetProxyType();
 		}
 
-		private T GetProxyInstance<T>(T func, params IInterceptor[] interceptors)
+		private T GetProxyInstance<T>(T func, params IInterceptorBase[] interceptors)
 		{
 			var type = GenerateProxyType<T>();
 			var instance = Activator.CreateInstance(type, func, interceptors);

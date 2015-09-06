@@ -239,6 +239,8 @@
     <Compile Include="DynamicProxy.Tests\InterfaceProxyWithMethodsWithOptionalParametersTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Interfaces\InterfaceWithMethodsWithAllKindsOfOptionalParameters.cs" />
     <Compile Include="DynamicProxy.Tests\Interfaces\InterfaceWithMethodWithParameterWithNullDefaultValue.cs" />
+    <Compile Include="DynamicProxyAsync.Test\AsyncInterceptorTestCase.cs" />
+    <Compile Include="DynamicProxyAsync.Test\AsyncInterfaceProxyWithoutTargetTestCase.cs" />
     <Compile Include="MultipleSavedAssembliesTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\VirtualObjectTestCase.cs" />

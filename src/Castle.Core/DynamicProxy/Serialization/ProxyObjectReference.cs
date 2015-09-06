@@ -237,7 +237,7 @@ namespace Castle.DynamicProxy.Serialization
 #endif
 		public void OnDeserialization(object sender)
 		{
-			var interceptors = GetValue<IInterceptor[]>("__interceptors");
+			var interceptors = GetValue<IInterceptorBase[]>("__interceptors");
 			SetInterceptors(interceptors);
 
 			DeserializeProxyMembers();
@@ -308,7 +308,7 @@ namespace Castle.DynamicProxy.Serialization
 			targetField.SetValue(proxy, target);
 		}
 
-		private void SetInterceptors(IInterceptor[] interceptors)
+		private void SetInterceptors(IInterceptorBase[] interceptors)
 		{
 			var interceptorField = proxy.GetType().GetField("__interceptors");
 			if (interceptorField == null)

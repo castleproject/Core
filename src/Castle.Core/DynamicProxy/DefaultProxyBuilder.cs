@@ -112,7 +112,19 @@ namespace Castle.DynamicProxy
 			return generator.GenerateCode(typeof(object), additionalInterfacesToProxy, options);
 		}
 
-		private void AssertValidType(Type target)
+#if DOTNET45
+        public Type CreateAsyncInterfaceProxyTypeWithoutTarget(Type interfaceToProxy, Type[] additionalInterfacesToProxy,
+	        ProxyGenerationOptions options)
+	    {
+            AssertValidType(interfaceToProxy);
+            AssertValidTypes(additionalInterfacesToProxy);
+
+            var generator = new AsyncInterfaceProxyWithoutTargetGenerator(scope, interfaceToProxy) { Logger = logger };
+            return generator.GenerateCode(typeof(object), additionalInterfacesToProxy, options);
+        }
+#endif
+
+        private void AssertValidType(Type target)
 		{
 			AssertValidTypeForTarget(target, target);
 		}

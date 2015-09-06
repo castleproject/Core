@@ -66,7 +66,7 @@ namespace Castle.DynamicProxy.Contributors
 			dynProxyGetTarget.CodeBuilder.AddStatement(
 				new ReturnStatement(new ConvertExpression(typeof(object), targetType, GetTargetReferenceExpression(emitter))));
 
-			var getInterceptors = emitter.CreateMethod("GetInterceptors", typeof(IInterceptor[]));
+			var getInterceptors = emitter.CreateMethod("GetInterceptors", typeof(IInterceptorBase[]));
 
 			getInterceptors.CodeBuilder.AddStatement(
 				new ReturnStatement(interceptorsField));

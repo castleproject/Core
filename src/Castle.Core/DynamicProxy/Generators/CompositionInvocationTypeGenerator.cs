@@ -41,7 +41,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				new ArgumentReference(targetFieldType),
 				new ArgumentReference(typeof(object)),
-				new ArgumentReference(typeof(IInterceptor[])),
+				new ArgumentReference(typeof(IInterceptorBase[])),
 				new ArgumentReference(typeof(MethodInfo)),
 				new ArgumentReference(typeof(object[])),
 			};
