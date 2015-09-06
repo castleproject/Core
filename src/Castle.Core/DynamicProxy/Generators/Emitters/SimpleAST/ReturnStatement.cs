@@ -18,14 +18,16 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	public class ReturnStatement : Statement
 	{
-		private readonly Expression expression;
+	    private readonly bool skipLoadDefaultValueOfTyoe;
+	    private readonly Expression expression;
 		private readonly Reference reference;
 
-		public ReturnStatement()
+		public ReturnStatement(bool skipLoadDefaultValueOfTyoe = false)
 		{
+		    this.skipLoadDefaultValueOfTyoe = skipLoadDefaultValueOfTyoe;
 		}
 
-		public ReturnStatement(Reference reference)
+	    public ReturnStatement(Reference reference)
 		{
 			this.reference = reference;
 		}
@@ -47,7 +49,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else
 			{
-				if (member.ReturnType != typeof(void))
+				if (member.ReturnType != typeof(void) && !skipLoadDefaultValueOfTyoe)
 				{
 					OpCodeUtil.EmitLoadOpCodeForDefaultValueOfType(gen, member.ReturnType);
 				}

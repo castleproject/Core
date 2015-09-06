@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Internal
 		protected InheritanceInvocation(
 			Type targetType,
 			object proxy,
-			IInterceptor[] interceptors,
+			IInterceptorBase[] interceptors,
 			MethodInfo proxiedMethod,
 			object[] arguments)
 			: base(proxy, interceptors, proxiedMethod, arguments)

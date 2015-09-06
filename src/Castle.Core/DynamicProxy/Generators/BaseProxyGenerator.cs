@@ -163,7 +163,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void CreateInterceptorsField(ClassEmitter emitter)
 		{
-			var interceptorsField = emitter.CreateField("__interceptors", typeof(IInterceptor[]));
+			var interceptorsField = emitter.CreateField("__interceptors", typeof(IInterceptorBase[]));
 
 #if FEATURE_SERIALIZATION
 			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(interceptorsField);

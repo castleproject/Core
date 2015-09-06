@@ -133,5 +133,27 @@ namespace Castle.DynamicProxy
 		/// <seealso cref = "InterfaceProxyWithoutTargetGenerator" />
 		Type CreateInterfaceProxyTypeWithoutTarget(Type interfaceToProxy, Type[] additionalInterfacesToProxy,
 		                                           ProxyGenerationOptions options);
-	}
+#if DOTNET45
+        /// <summary>
+        ///   Creates a proxy type for given <paramref name = "interfaceToProxy" /> that delegates all calls to the provided interceptors.
+        /// </summary>
+        /// <param name = "interfaceToProxy">The interface type to proxy.</param>
+        /// <param name = "additionalInterfacesToProxy">Additional interface types to proxy.</param>
+        /// <param name = "options">The proxy generation options.</param>
+        /// <returns>The generated proxy type.</returns>
+        /// <remarks>
+        ///   Implementers should return a proxy type for the specified interface and additional interfaces that delegate all executions to the specified interceptors.
+        /// </remarks>
+        /// <exception cref = "GeneratorException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
+        ///    name = "additionalInterfacesToProxy" /> is a generic type definition.</exception>
+        /// <exception cref = "GeneratorException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
+        ///    name = "additionalInterfacesToProxy" /> is not public.
+        ///   Note that to avoid this exception, you can mark offending type internal, and define <see
+        ///    cref = "InternalsVisibleToAttribute" /> 
+        ///   pointing to Castle Dynamic Proxy assembly, in assembly containing that type, if this is appropriate.</exception>
+        /// <seealso cref = "InterfaceProxyWithoutTargetGenerator" />
+        Type CreateAsyncInterfaceProxyTypeWithoutTarget(Type interfaceToProxy, Type[] additionalInterfacesToProxy,
+                                                   ProxyGenerationOptions options);
+#endif
+    }
 }

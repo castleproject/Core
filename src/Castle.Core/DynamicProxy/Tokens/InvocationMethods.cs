@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Tokens
 			                                             {
 			                                             	typeof(object),
 			                                             	typeof(object),
-			                                             	typeof(IInterceptor[]),
+			                                             	typeof(IInterceptorBase[]),
 			                                             	typeof(MethodInfo),
 			                                             	typeof(object[])
 			                                             },
@@ -54,7 +54,7 @@ namespace Castle.DynamicProxy.Tokens
 			                                             {
 			                                             	typeof(Type),
 			                                             	typeof(object),
-			                                             	typeof(IInterceptor[]),
+			                                             	typeof(IInterceptorBase[]),
 			                                             	typeof(MethodInfo),
 			                                             	typeof(object[])
 			                                             },
@@ -66,11 +66,11 @@ namespace Castle.DynamicProxy.Tokens
 			                                             {
 			                                             	typeof(Type),
 			                                             	typeof(object),
-			                                             	typeof(IInterceptor[]),
+			                                             	typeof(IInterceptorBase[]),
 			                                             	typeof(MethodInfo),
 			                                             	typeof(object[]),
 			                                             	typeof(IInterceptorSelector),
-			                                             	typeof(IInterceptor[]).MakeByRefType()
+			                                             	typeof(IInterceptorBase[]).MakeByRefType()
 			                                             },
 			                                             null);
 
@@ -94,5 +94,11 @@ namespace Castle.DynamicProxy.Tokens
 
 		public static readonly MethodInfo ThrowOnNoTarget =
 			typeof(AbstractInvocation).GetMethod("ThrowOnNoTarget", BindingFlags.Instance | BindingFlags.NonPublic);
-	}
+
+        public static readonly MethodInfo AsyncProceedTask =
+            typeof(AbstractInvocation).GetMethod("ProceedTask", BindingFlags.Instance | BindingFlags.Public);
+
+        public static readonly MethodInfo AsyncProceedTaskReturn =
+            typeof(AbstractInvocation).GetMethod("ProceedTaskReturn", BindingFlags.Instance | BindingFlags.Public);
+    }
 }

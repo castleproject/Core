@@ -22,16 +22,21 @@ namespace Castle.DynamicProxy
 #if DOTNET40
 	using System.Security;
 #endif
-
 	using Castle.DynamicProxy.Serialization;
 #endif
+#if DOTNET45
+    using System.Threading.Tasks;
+#endif
 
-	public abstract class AbstractInvocation : IInvocation
+    public abstract class AbstractInvocation : IInvocation
+#if DOTNET45
+        , IInvocationAsync
+#endif
 #if FEATURE_SERIALIZATION
-		, ISerializable
+        , ISerializable
 #endif
 	{
-		private readonly IInterceptor[] interceptors;
+		private readonly IInterceptorBase[] interceptors;
 		private readonly object[] arguments;
 		private int currentInterceptorIndex = -1;
 		private Type[] genericMethodArguments;
@@ -40,7 +45,7 @@ namespace Castle.DynamicProxy
 
 		protected AbstractInvocation(
 			object proxy,
-			IInterceptor[] interceptors,
+			IInterceptorBase[] interceptors,
 			MethodInfo proxiedMethod,
 			object[] arguments)
 		{
@@ -144,7 +149,7 @@ namespace Castle.DynamicProxy
 				}
 				else
 				{
-					interceptors[currentInterceptorIndex].Intercept(this);
+					((IInterceptor)interceptors[currentInterceptorIndex]).Intercept(this);
 				}
 			}
 			finally
@@ -210,5 +215,63 @@ namespace Castle.DynamicProxy
 			}
 			return method;
 		}
-	}
+
+#if DOTNET45
+        public async Task ProceedTask()
+        {
+            await ProceedAsync();
+        }
+
+        public async Task<TReturn> ProceedTaskReturn<TReturn>()
+        {
+            await ProceedAsync();
+            return await (Task<TReturn>)ReturnValue;
+        }
+
+        public async Task ProceedAsync()
+        {
+            if (interceptors == null)
+            // not yet fully initialized? probably, an intercepted method is called while we are being deserialized
+            {
+                InvokeMethodOnTarget();
+                return;
+            }
+
+            currentInterceptorIndex++;
+            try
+            {
+                if (currentInterceptorIndex == interceptors.Length)
+                {
+                    InvokeMethodOnTarget();
+                }
+                else if (currentInterceptorIndex > interceptors.Length)
+                {
+                    string interceptorsCount;
+                    if (interceptors.Length > 1)
+                    {
+                        interceptorsCount = " each one of " + interceptors.Length + " interceptors";
+                    }
+                    else
+                    {
+                        interceptorsCount = " interceptor";
+                    }
+
+                    var message = "This is a DynamicProxy2 error: invocation.ProceedAsync() has been called more times than expected." +
+                                  "This usually signifies a bug in the calling code. Make sure that" + interceptorsCount +
+                                  " selected for the method '" + Method + "'" +
+                                  "calls invocation.Proceed() at most once.";
+                    throw new InvalidOperationException(message);
+                }
+                else
+                {
+                    await ((IInterceptorAsync)interceptors[currentInterceptorIndex]).InterceptAsync(this);
+                }
+            }
+            finally
+            {
+                currentInterceptorIndex--;
+            }
+        }
+#endif
+    }
 }

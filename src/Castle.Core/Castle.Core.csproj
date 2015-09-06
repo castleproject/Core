@@ -384,9 +384,15 @@
     <Compile Include="DynamicProxy\AbstractInvocation.cs" />
     <Compile Include="DynamicProxy\AllMethodsHook.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="DynamicProxy\Contributors\AsyncInterfaceProxyWithoutTargetContributor.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\TryStatement.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\FinallyStatement.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\EndExceptionBlockStatement.cs" />
+    <Compile Include="DynamicProxy\Generators\AsyncInterfaceProxyWithoutTargetGenerator.cs" />
+    <Compile Include="DynamicProxy\Generators\AsyncMethodWithInvocationGenerator.cs" />
+    <Compile Include="DynamicProxy\IInterceptorAsync.cs" />
+    <Compile Include="DynamicProxy\IInterceptorBase.cs" />
+    <Compile Include="DynamicProxy\IInvocation.cs" />
     <Compile Include="DynamicProxy\Internal\CompositionInvocation.cs" />
     <Compile Include="DynamicProxy\Contributors\ClassProxyWithTargetTargetContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\CompositeTypeContributor.cs" />
@@ -526,6 +532,7 @@
     <Compile Include="DynamicProxy\ProxyGenerationException.cs" />
     <Compile Include="DynamicProxy\ProxyGenerationOptions.cs" />
     <Compile Include="DynamicProxy\ProxyGenerator.cs" />
+    <Compile Include="DynamicProxy\Serialization\RemotableInvocationAsync.cs" />
     <Compile Include="DynamicProxy\Serialization\RemotableInvocation.cs" />
     <Compile Include="DynamicProxy\Serialization\ProxyTypeConstants.cs" />
     <Compile Include="DynamicProxy\Serialization\ProxyObjectReference.cs" />
@@ -557,7 +564,7 @@
     <Compile Include="Core\IServiceProviderExAccessor.cs" />
     <Compile Include="DynamicProxy\IChangeProxyTarget.cs" />
     <Compile Include="DynamicProxy\IInterceptor.cs" />
-    <Compile Include="DynamicProxy\IInvocation.cs" />
+    <Compile Include="DynamicProxy\IInvocationAsync.cs" />
     <Compile Include="DynamicProxy\IProxyTargetAccessor.cs" />
     <Compile Include="DynamicProxy\StandardInterceptor.cs" />
     <Compile Include="Core\IServiceEnabledComponent.cs" />

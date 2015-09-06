@@ -37,6 +37,6 @@ namespace Castle.DynamicProxy
 		///   legal to return other <see cref = "IInterceptor" /> implementations than these provided in
 		///   <paramref name = "interceptors" />.
 		/// </remarks>
-		IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors);
+		IInterceptorBase[] SelectInterceptors(Type type, MethodInfo method, IInterceptorBase[] interceptors);
 	}
 }

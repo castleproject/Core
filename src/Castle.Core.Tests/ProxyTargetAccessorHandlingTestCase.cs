@@ -169,7 +169,7 @@ namespace Castle.DynamicProxy.Tests
 			throw new NotImplementedException();
 		}
 
-		public IInterceptor[] GetInterceptors()
+		public IInterceptorBase[] GetInterceptors()
 		{
 			throw new NotImplementedException();
 		}
@@ -190,7 +190,7 @@ namespace Castle.DynamicProxy.Tests
 			throw new NotImplementedException();
 		}
 
-		public IInterceptor[] GetInterceptors()
+		public IInterceptorBase[] GetInterceptors()
 		{
 			throw new NotImplementedException();
 		}

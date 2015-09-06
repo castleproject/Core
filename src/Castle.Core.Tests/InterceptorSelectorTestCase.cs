@@ -386,9 +386,9 @@ namespace Castle.DynamicProxy.Tests
 	{
 		#region IInterceptorSelector Members
 
-		public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
+		public IInterceptorBase[] SelectInterceptors(Type type, MethodInfo method, IInterceptorBase[] interceptors)
 		{
-			var interceptorsOfT = new List<IInterceptor>();
+			var interceptorsOfT = new List<IInterceptorBase>();
 			foreach (var interceptor in interceptors)
 			{
 				if (interceptor is TInterceptor)
@@ -409,7 +409,7 @@ namespace Castle.DynamicProxy.Tests
 	{
 		#region IInterceptorSelector Members
 
-		public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
+		public IInterceptorBase[] SelectInterceptors(Type type, MethodInfo method, IInterceptorBase[] interceptors)
 		{
 			return interceptors;
 		}
@@ -451,7 +451,7 @@ namespace Castle.DynamicProxy.Tests
 			return state;
 		}
 
-		public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
+		public IInterceptorBase[] SelectInterceptors(Type type, MethodInfo method, IInterceptorBase[] interceptors)
 		{
 			return interceptors;
 		}
@@ -504,14 +504,14 @@ namespace Castle.DynamicProxy.Tests
 		[NonSerialized]
 		[XmlIgnore]
 #endif
-		public IInterceptor[] interceptors_Do;
+		public IInterceptorBase[] interceptors_Do;
 
 		public virtual int Do()
 		{
 			// This item is obfuscated and can not be translated.
 			if (interceptors_Do == null)
 			{
-				interceptors_Do = __selector.SelectInterceptors(TypeUtil.GetTypeOrNull(__target), token_Do, __interceptors) ?? new IInterceptor[0];
+				interceptors_Do = __selector.SelectInterceptors(TypeUtil.GetTypeOrNull(__target), token_Do, __interceptors) ?? new IInterceptorBase[0];
 			}
 			var objArray = new object[0];
 			var @do = new ISimpleInterface_Do(__target, this, interceptors_Do, token_Do, objArray);
@@ -522,7 +522,7 @@ namespace Castle.DynamicProxy.Tests
 
 	public class ISimpleInterface_Do
 	{
-		public ISimpleInterface_Do(SimpleClass simpleClass, FakeProxy fakeProxy, IInterceptor[] interceptorsDo, MethodInfo tokenDo, object[] objArray)
+		public ISimpleInterface_Do(SimpleClass simpleClass, FakeProxy fakeProxy, IInterceptorBase[] interceptorsDo, MethodInfo tokenDo, object[] objArray)
 		{
 			throw new NotImplementedException();
 		}
