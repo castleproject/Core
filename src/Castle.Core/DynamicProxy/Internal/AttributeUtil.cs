@@ -93,8 +93,8 @@ namespace Castle.DynamicProxy.Internal
 			}
 			//special case for handling arrays in attributes
 			var arguments = GetArguments((IList<CustomAttributeTypedArgument>)value);
-            var array = new object[arguments.Length];
-            arguments.CopyTo(array, 0);
+			var array = new object[arguments.Length];
+			arguments.CopyTo(array, 0);
 			return array;
 		}
 

@@ -76,16 +76,16 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 
-    public enum SomeEnumForAttributeWithEnumArrayArgument
-    {
-        Default,
-        Special
-    }
+	public enum SomeEnumForAttributeWithEnumArrayArgument
+	{
+		Default,
+		Special
+	}
 
 	[AttributeUsage(AttributeTargets.All, Inherited = false)]
 	public sealed class AttributeWithEnumArrayArgument : Attribute
 	{
-        public AttributeWithEnumArrayArgument(params SomeEnumForAttributeWithEnumArrayArgument[] attributeEnums)
+		public AttributeWithEnumArrayArgument(params SomeEnumForAttributeWithEnumArrayArgument[] attributeEnums)
 		{
 		}
 	}
@@ -103,7 +103,7 @@ namespace Castle.DynamicProxy.Tests
 	{
 	}
 
-    [AttributeWithEnumArrayArgument(SomeEnumForAttributeWithEnumArrayArgument.Special)]
+	[AttributeWithEnumArrayArgument(SomeEnumForAttributeWithEnumArrayArgument.Special)]
 	public interface IHasAttributeWithEnumArray
 	{
 	}
