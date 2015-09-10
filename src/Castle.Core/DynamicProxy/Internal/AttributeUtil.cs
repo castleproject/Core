@@ -139,7 +139,7 @@ namespace Castle.DynamicProxy.Internal
 			Debug.Assert(member != null, "member != null");
 			var attributes =
 #if SILVERLIGHT || NETCORE
-				member.GetCustomAttributes(false);
+				member.GetCustomAttributes(false) ?? new Attribute[0];
 #else
 				CustomAttributeData.GetCustomAttributes(member);
 #endif
@@ -148,7 +148,7 @@ namespace Castle.DynamicProxy.Internal
 			{
 				var attributeType =
 #if SILVERLIGHT || NETCORE
-				attribute.GetType();
+					attribute.GetType();
 #else
 					attribute.Constructor.DeclaringType;
 #endif
@@ -193,7 +193,7 @@ namespace Castle.DynamicProxy.Internal
 			Debug.Assert(parameter != null, "parameter != null");
 			var attributes =
 #if SILVERLIGHT || NETCORE
-				parameter.GetCustomAttributes(false);
+				parameter.GetCustomAttributes(false) ?? new Attribute[0];
 #else
 				CustomAttributeData.GetCustomAttributes(parameter);
 #endif
@@ -202,7 +202,7 @@ namespace Castle.DynamicProxy.Internal
 			{
 				var attributeType =
 #if SILVERLIGHT || NETCORE
-				attribute.GetType();
+					attribute.GetType();
 #else
 					attribute.Constructor.DeclaringType;
 #endif
