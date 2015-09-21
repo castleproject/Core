@@ -526,7 +526,6 @@
     <Compile Include="DynamicProxy\ProxyGenerationException.cs" />
     <Compile Include="DynamicProxy\ProxyGenerationOptions.cs" />
     <Compile Include="DynamicProxy\ProxyGenerator.cs" />
-    <Compile Include="DynamicProxy\Serialization\RemotableInvocation.cs" />
     <Compile Include="DynamicProxy\Serialization\ProxyTypeConstants.cs" />
     <Compile Include="DynamicProxy\Serialization\ProxyObjectReference.cs" />
     <Compile Include="Core\Extensions\SilverlightExtensions.cs" />
