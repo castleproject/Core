@@ -76,16 +76,79 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 
-	public enum SomeEnumForAttributeWithEnumArrayArgument
+	public enum SomeByteEnumForAttributeWithEnumArrayArgument : byte
 	{
 		Default,
 		Special
 	}
 
-	[AttributeUsage(AttributeTargets.All, Inherited = false)]
+	public enum SomeSbyteEnumForAttributeWithEnumArrayArgument : sbyte
+	{
+		Default,
+		Special
+	}
+
+	public enum SomeShortEnumForAttributeWithEnumArrayArgument : short
+	{
+		Default,
+		Special
+	}
+
+	public enum SomeUshortEnumForAttributeWithEnumArrayArgument : ushort
+	{
+		Default,
+		Special
+	}
+
+	public enum SomeIntEnumForAttributeWithEnumArrayArgument : int
+	{
+		Default,
+		Special
+	}
+
+	public enum SomeUintEnumForAttributeWithEnumArrayArgument : uint
+	{
+		Default,
+		Special
+	}
+
+	public enum SomeLongEnumForAttributeWithEnumArrayArgument : long
+	{
+		Default,
+		Special
+	}
+
+	public enum SomeUlongEnumForAttributeWithEnumArrayArgument : ulong
+	{
+		Default,
+		Special
+	}
+
+	[AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
 	public sealed class AttributeWithEnumArrayArgument : Attribute
 	{
-		public AttributeWithEnumArrayArgument(params SomeEnumForAttributeWithEnumArrayArgument[] attributeEnums)
+		public AttributeWithEnumArrayArgument(params SomeByteEnumForAttributeWithEnumArrayArgument[] attributeEnums)
+		{
+		}
+		public AttributeWithEnumArrayArgument(params SomeSbyteEnumForAttributeWithEnumArrayArgument[] attributeEnums)
+		{
+		}
+		public AttributeWithEnumArrayArgument(params SomeShortEnumForAttributeWithEnumArrayArgument[] attributeEnums)
+		{
+		}
+		public AttributeWithEnumArrayArgument(params SomeUshortEnumForAttributeWithEnumArrayArgument[] attributeEnums)
+		{
+		}
+		public AttributeWithEnumArrayArgument(params SomeIntEnumForAttributeWithEnumArrayArgument[] attributeEnums)
+		{
+		}
+		public AttributeWithEnumArrayArgument(params SomeUintEnumForAttributeWithEnumArrayArgument[] attributeEnums)
+		{
+		}
+		public AttributeWithEnumArrayArgument(params SomeLongEnumForAttributeWithEnumArrayArgument[] attributeEnums)
+		{
+		}
+		public AttributeWithEnumArrayArgument(params SomeUlongEnumForAttributeWithEnumArrayArgument[] attributeEnums)
 		{
 		}
 	}
@@ -103,7 +166,14 @@ namespace Castle.DynamicProxy.Tests
 	{
 	}
 
-	[AttributeWithEnumArrayArgument(SomeEnumForAttributeWithEnumArrayArgument.Special)]
+	[AttributeWithEnumArrayArgument(SomeByteEnumForAttributeWithEnumArrayArgument.Special)]
+	[AttributeWithEnumArrayArgument(SomeSbyteEnumForAttributeWithEnumArrayArgument.Special)]
+	[AttributeWithEnumArrayArgument(SomeShortEnumForAttributeWithEnumArrayArgument.Special)]
+	[AttributeWithEnumArrayArgument(SomeUshortEnumForAttributeWithEnumArrayArgument.Special)]
+	[AttributeWithEnumArrayArgument(SomeIntEnumForAttributeWithEnumArrayArgument.Special)]
+	[AttributeWithEnumArrayArgument(SomeUintEnumForAttributeWithEnumArrayArgument.Special)]
+	[AttributeWithEnumArrayArgument(SomeLongEnumForAttributeWithEnumArrayArgument.Special)]
+	[AttributeWithEnumArrayArgument(SomeUlongEnumForAttributeWithEnumArrayArgument.Special)]
 	public interface IHasAttributeWithEnumArray
 	{
 	}
