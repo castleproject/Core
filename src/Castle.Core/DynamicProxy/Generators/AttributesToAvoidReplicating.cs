@@ -28,11 +28,12 @@ namespace Castle.DynamicProxy.Generators
 			Add<ComImportAttribute>();
 #if !SILVERLIGHT
 			Add<SecurityPermissionAttribute>();
+            Add<UIPermissionAttribute>();
 #endif
 #if DOTNET40
 			Add<TypeIdentifierAttribute>();
 #endif
-		}
+        }
 
 		public static void Add(Type attribute)
 		{
