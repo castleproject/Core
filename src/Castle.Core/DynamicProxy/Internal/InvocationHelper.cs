@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Internal
 		private static readonly Dictionary<KeyValuePair<MethodInfo, Type>, MethodInfo> cache =
 			new Dictionary<KeyValuePair<MethodInfo, Type>, MethodInfo>();
 
-		private static readonly Lock @lock = Lock.Create();
+		private static readonly object @lock = new object();
 
 		public static MethodInfo GetMethodOnObject(object target, MethodInfo proxiedMethod)
 		{
@@ -48,24 +48,24 @@ namespace Castle.DynamicProxy.Internal
 
 			Debug.Assert(proxiedMethod.DeclaringType.IsAssignableFrom(type),
 			             "proxiedMethod.DeclaringType.IsAssignableFrom(type)");
-			using (var locker = @lock.ForReadingUpgradeable())
-			{
-				var methodOnTarget = GetFromCache(proxiedMethod, type);
-				if (methodOnTarget != null)
-				{
-					return methodOnTarget;
-				}
-				locker.Upgrade();
 
-				methodOnTarget = GetFromCache(proxiedMethod, type);
-				if (methodOnTarget != null)
-				{
-					return methodOnTarget;
-				}
-				methodOnTarget = ObtainMethod(proxiedMethod, type);
-				PutToCache(proxiedMethod, type, methodOnTarget);
+            var methodOnTarget = GetFromCache(proxiedMethod, type);
+			if (methodOnTarget != null)
+			{
 				return methodOnTarget;
 			}
+
+		    lock (@lock)
+		    {
+		        methodOnTarget = GetFromCache(proxiedMethod, type);
+		        if (methodOnTarget != null)
+		        {
+		            return methodOnTarget;
+		        }
+		        methodOnTarget = ObtainMethod(proxiedMethod, type);
+		        PutToCache(proxiedMethod, type, methodOnTarget);
+		        return methodOnTarget;
+            }
 		}
 
 		private static MethodInfo GetFromCache(MethodInfo methodInfo, Type type)
