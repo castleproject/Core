@@ -59,7 +59,7 @@ namespace Castle.DynamicProxy.Internal
 					return internalsToDynProxy[asm];
 				}
 
-				var internalsVisibleTo = asm.GetAttributes<InternalsVisibleToAttribute>();
+				var internalsVisibleTo = asm.GetCustomAttributes<InternalsVisibleToAttribute>();
 				var found = internalsVisibleTo.Any(VisibleToDynamicProxy);
 
 				internalsToDynProxy.Add(asm, found);

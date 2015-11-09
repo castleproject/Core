@@ -22,7 +22,11 @@ namespace Castle.Core.Logging
 #if SILVERLIGHT
 	public class ConsoleFactory : ILoggerFactory
 #else
-	public class ConsoleFactory : MarshalByRefObject, ILoggerFactory
+	public class ConsoleFactory :
+#if FEATURE_REMOTING
+		MarshalByRefObject,
+#endif
+		ILoggerFactory
 #endif
 	{
 		private LoggerLevel? level;

@@ -24,7 +24,7 @@ namespace Castle.Core.Resource
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Unc")]
 	public class UncResource : AbstractStreamResource
 	{
-		private String basePath;
+		private string basePath;
 		private string filePath;
 
 		public UncResource(CustomUri resource)

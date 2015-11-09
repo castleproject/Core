@@ -16,18 +16,15 @@
 
 namespace System.Reflection
 {
-	internal static class IntrospectionExtensions
+	// This allows us to use the new reflection API while still supporting .NET 3.5 and 4.0.
+	//
+	// Methods like Attribute.IsDefined no longer exist in .NET Core so this provides a shim
+	// for .NET 3.5 and 4.0.
+	internal static class CustomAttributeExtensions
 	{
-		// This allows us to use the new reflection API which separates Type and TypeInfo
-		// while still supporting .NET 3.5 and 4.0. This class matches the API of the same
-		// class in .NET 4.5+, and so is only needed on .NET Framework versions before that.
-		//
-		// Return the System.Type for now, we will probably need to create a TypeInfo class
-		// which inherits from Type like .NET 4.5+ and implement the additional methods and
-		// properties.
-		public static Type GetTypeInfo(this Type type)
+		public static bool IsDefined(this ParameterInfo element, Type attributeType)
 		{
-			return type;
+			return Attribute.IsDefined(element, attributeType);
 		}
 	}
 }

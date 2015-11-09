@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-*",
+  "version": "0.0.0-*",
   "description": "Castle.Core.Tests",
   "authors": [ "" ],
   "tags": [ "" ],
@@ -22,7 +22,22 @@
     "define": [ "FEATURE_XUNITNET" ]
   },
   "exclude": [
-    "**/*"
+    "BugsReported/**/*",
+    "Compatibility/**/*",
+    "Components.DictionaryAdapter.Tests/**/*",
+    "Core.Tests/**/*",
+    "DynamicProxy.Tests/**/*",
+    "GenClasses/**/*",
+    "GenInterfaces/**/*",
+    "Interceptors/**/*",
+    "InterClasses/**/*",
+    "Interfaces/**/*",
+    "log4netIntegration/**/*",
+    "Mixins/**/*",
+    "NLogIntegration/**/*",
+    "SerilogIntegration/**/*",
+    "Properties/Settings.Designer.cs",
+    "*.cs"
   ],
   "compileFiles": [
     "SlimReadWriteLockTestCase.cs",

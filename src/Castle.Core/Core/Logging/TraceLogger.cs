@@ -18,7 +18,7 @@ namespace Castle.Core.Logging
 	using System;
 	using System.Diagnostics;
 	using System.Collections.Generic;
-#if DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
 	using System.Security;
 #endif
 
@@ -48,7 +48,7 @@ namespace Castle.Core.Logging
 		/// Build a new trace logger based on the named TraceSource
 		/// </summary>
 		/// <param name="name">The name used to locate the best TraceSource. In most cases comes from the using type's fullname.</param>
-#if DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
 		[SecuritySafeCritical]
 #endif
 		public TraceLogger(string name)
@@ -64,7 +64,7 @@ namespace Castle.Core.Logging
 		/// <param name="name">The name used to locate the best TraceSource. In most cases comes from the using type's fullname.</param>
 		/// <param name="level">The default logging level at which this source should write messages. In almost all cases this
 		/// default value will be overridden in the config file. </param>
-#if DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
 		[SecuritySafeCritical]
 #endif
 		public TraceLogger(string name, LoggerLevel level)
@@ -80,7 +80,7 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="loggerName">The Subname of this logger.</param>
 		/// <returns>The New ILogger instance.</returns> 
-#if DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
 		[SecuritySafeCritical]
 #endif
 		public override ILogger CreateChildLogger(string loggerName)
@@ -88,7 +88,7 @@ namespace Castle.Core.Logging
 			return InternalCreateChildLogger(loggerName);
 		}
 
-#if DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
 		[SecurityCritical]
 #endif
 		private ILogger InternalCreateChildLogger(string loggerName)
@@ -108,7 +108,7 @@ namespace Castle.Core.Logging
 			}
 		}
 
-#if DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
 		[SecurityCritical]
 #endif
 		private void Initialize()
@@ -173,7 +173,7 @@ namespace Castle.Core.Logging
 			return null;
 		}
 
-#if DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
 		[SecuritySafeCritical]
 #endif
 		private static bool IsSourceConfigured(TraceSource source)

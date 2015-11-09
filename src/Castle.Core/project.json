@@ -6,8 +6,21 @@
   "projectUrl": "",
   "licenseUrl": "",
   "dependencies": {
+    "System.AppContext": "4.0.0",
+    "System.Collections.Specialized": "4.0.0",
+    "System.Console": "4.0.0-beta-23123",
+    "System.ComponentModel.TypeConverter": "4.0.0",
+    "System.Diagnostics.TraceSource": "4.0.0-beta-23123",
+    "System.Diagnostics.Tools": "4.0.0",
+    "System.Globalization": "4.0.10",
+    "System.Linq": "4.0.0",
+    "System.Reflection": "4.0.10",
+    "System.Reflection.Extensions": "4.0.0",
+    "System.Reflection.TypeExtensions": "4.0.0",
     "System.Runtime": "4.0.20",
-    "System.Threading": "4.0.10"
+    "System.Runtime.Extensions": "4.0.10",
+    "System.Threading": "4.0.10",
+    "System.Xml.XmlDocument": "4.0.0"
   },
   "frameworks": {
     "dotnet": { }
@@ -18,22 +31,10 @@
   "exclude": [
     "Compatibility/**/*",
     "Components.DictionaryAdapter/**/*",
-    "Core/**/*",
     "DynamicProxy/**/*"
   ],
   "compileFiles": [
     "Properties/InternalsVisibleToTests.cs",
-    "Core/Internal/ILockHolder.cs",
-    "Core/Internal/IUpgradeableLockHolder.cs",
-    "Core/Internal/Lock.cs",
-    "Core/Internal/MonitorLock.cs",
-    "Core/Internal/MonitorLockHolder.cs",
-    "Core/Internal/MonitorUpgradeableLockHolder.cs",
-    "Core/Internal/NoOpLock.cs",
-    "Core/Internal/NoOpUpgradeableLock.cs",
-    "Core/Internal/SlimReadLockHolder.cs",
-    "Core/Internal/SlimReadWriteLock.cs",
-    "Core/Internal/SlimUpgradeableReadLockHolder.cs",
-    "Core/Internal/SlimWriteLockHolder.cs"
+    "DynamicProxy/Generators/Emitters/StrongNameUtil.cs"
   ]
 }

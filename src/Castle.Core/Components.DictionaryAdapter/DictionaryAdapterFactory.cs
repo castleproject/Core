@@ -429,7 +429,7 @@ namespace Castle.Components.DictionaryAdapter
 		private static Dictionary<String, PropertyDescriptor> GetPropertyDescriptors(Type type, PropertyDescriptor initializers, out object[] typeBehaviors)
 		{
 			var propertyMap = new Dictionary<String, PropertyDescriptor>();
-			var interfaceBehaviors = typeBehaviors = ExpandBehaviors(AttributesUtil.GetInterfaceAttributes(type)).ToArray();
+			var interfaceBehaviors = typeBehaviors = ExpandBehaviors(InterfaceAttributeUtil.GetAttributes(type, true)).ToArray();
 			var defaultFetch = typeBehaviors.OfType<FetchAttribute>().Select(b => (bool?)b.Fetch).FirstOrDefault().GetValueOrDefault();
 
 #if DOTNET40
@@ -442,17 +442,17 @@ namespace Castle.Components.DictionaryAdapter
 
 			CollectProperties(type, property =>
 			{
-				var propertyBehaviors = ExpandBehaviors(AttributesUtil.GetAttributes<object>(property)).ToArray();
+				var propertyBehaviors = ExpandBehaviors(property.GetCustomAttributes(false)).ToArray();
 				var propertyDescriptor = new PropertyDescriptor(property, propertyBehaviors)
 					.AddBehaviors(propertyBehaviors.OfType<IDictionaryBehavior>())
 					.AddBehaviors(interfaceBehaviors.OfType<IDictionaryBehavior>().Where(b => b is IDictionaryKeyBuilder == false))
 #if DOTNET40
-					.AddBehaviors(ExpandBehaviors(AttributesUtil
-						.GetInterfaceAttributes(property.ReflectedType))
+					.AddBehaviors(ExpandBehaviors(InterfaceAttributeUtil
+						.GetAttributes(property.ReflectedType, true))
 						.OfType<IDictionaryKeyBuilder>());
 #else
-					.AddBehaviors(ExpandBehaviors(AttributesUtil
-						.GetInterfaceAttributes(property.ReflectedType))
+					.AddBehaviors(ExpandBehaviors(InterfaceAttributeUtil
+						.GetAttributes(property.ReflectedType, true))
 						.OfType<IDictionaryKeyBuilder>()
 						.Cast<IDictionaryBehavior>());
 #endif

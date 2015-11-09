@@ -20,7 +20,11 @@ namespace Castle.Core.Logging
 #if SILVERLIGHT
 	public abstract class AbstractExtendedLoggerFactory : IExtendedLoggerFactory
 #else
-	public abstract class AbstractExtendedLoggerFactory : MarshalByRefObject, IExtendedLoggerFactory
+	public abstract class AbstractExtendedLoggerFactory :
+#if FEATURE_REMOTING
+		MarshalByRefObject,
+#endif
+		IExtendedLoggerFactory
 #endif
 	{
 		/// <summary>
@@ -107,7 +111,12 @@ namespace Castle.Core.Logging
 			}
 			else
 			{
-				result = new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName));
+#if FEATURE_APPDOMAIN
+				string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+#else
+				string baseDirectory = AppContext.BaseDirectory;
+#endif
+				result = new FileInfo(Path.Combine(baseDirectory, fileName));
 			}
 
 			return result;

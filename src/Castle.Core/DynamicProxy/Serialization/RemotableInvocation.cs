@@ -113,7 +113,7 @@ namespace Castle.DynamicProxy.Serialization
 			set { parent.ReturnValue = value; }
 		}
 
-#if DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
 		[SecurityCritical]
 #endif
 		public void GetObjectData(SerializationInfo info, StreamingContext context)

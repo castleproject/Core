@@ -32,13 +32,13 @@ namespace Castle.Core.Logging
 	{
 		public override ILogger Create(string name)
 		{
-			return new StreamLogger(name, new FileStream(name + ".log", FileMode.Append, FileAccess.Write), Encoding.Default);
+			return new StreamLogger(name, new FileStream(name + ".log", FileMode.Append, FileAccess.Write));
 		}
 
 		public override ILogger Create(string name, LoggerLevel level)
 		{
 			var logger =
-				new StreamLogger(name, new FileStream(name + ".log", FileMode.Append, FileAccess.Write), Encoding.Default);
+				new StreamLogger(name, new FileStream(name + ".log", FileMode.Append, FileAccess.Write));
 			logger.Level = level;
 			return logger;
 		}

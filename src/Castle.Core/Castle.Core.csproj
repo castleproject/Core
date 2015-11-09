@@ -5,7 +5,23 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
-    <DesktopFrameworkDefineConstants>FEATURE_SERIALIZATION FEATURE_STRONGNAME</DesktopFrameworkDefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DesktopFrameworkDefineConstants>
+    </DesktopFrameworkDefineConstants>
+    <DesktopFrameworkDefineConstants>$(DesktopFrameworkDefineConstants);FEATURE_APPDOMAIN</DesktopFrameworkDefineConstants>
+    <DesktopFrameworkDefineConstants>$(DesktopFrameworkDefineConstants);FEATURE_GAC</DesktopFrameworkDefineConstants>
+    <DesktopFrameworkDefineConstants>$(DesktopFrameworkDefineConstants);FEATURE_GET_REFERENCED_ASSEMBLIES</DesktopFrameworkDefineConstants>
+    <DesktopFrameworkDefineConstants>$(DesktopFrameworkDefineConstants);FEATURE_EVENTLOG</DesktopFrameworkDefineConstants>
+    <DesktopFrameworkDefineConstants>$(DesktopFrameworkDefineConstants);FEATURE_REMOTING</DesktopFrameworkDefineConstants>
+    <DesktopFrameworkDefineConstants>$(DesktopFrameworkDefineConstants);FEATURE_SECURITY_PERMISSIONS</DesktopFrameworkDefineConstants>
+    <DesktopFrameworkDefineConstants>$(DesktopFrameworkDefineConstants);FEATURE_SERIALIZATION</DesktopFrameworkDefineConstants>
+    <DesktopFrameworkDefineConstants>$(DesktopFrameworkDefineConstants);FEATURE_SMTP</DesktopFrameworkDefineConstants>
+    <DesktopFrameworkDefineConstants>$(DesktopFrameworkDefineConstants);FEATURE_STRONGNAME</DesktopFrameworkDefineConstants>
+    <DesktopFrameworkDefineConstants>$(DesktopFrameworkDefineConstants);FEATURE_SYSTEM_CONFIGURATION</DesktopFrameworkDefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' != 'NET45-Debug' and '$(Configuration)' != 'NET45-Release' ">
+    <DesktopFrameworkDefineConstants>$(DesktopFrameworkDefineConstants);FEATURE_LEGACY_REFLECTION_API</DesktopFrameworkDefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">NET40-Debug</Configuration>
@@ -27,7 +43,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <DefineConstants>TRACE;DEBUG;DOTNET40 FEATURE_LEGACY_REFLECTION_API $(DesktopFrameworkDefineConstants)</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET40 $(DesktopFrameworkDefineConstants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -43,7 +59,7 @@
     <OutputPath>bin\NET40-Release\</OutputPath>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <DefineConstants>TRACE;DOTNET40 FEATURE_LEGACY_REFLECTION_API $(DesktopFrameworkDefineConstants)</DefineConstants>
+    <DefineConstants>TRACE;DOTNET40 $(DesktopFrameworkDefineConstants)</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\NET40-Release\Castle.Core.xml</DocumentationFile>
@@ -56,7 +72,7 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <OutputPath>bin\NET35-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;DOTNET35 FEATURE_LEGACY_REFLECTION_API $(DesktopFrameworkDefineConstants)</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DOTNET35 $(DesktopFrameworkDefineConstants)</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <Optimize>true</Optimize>
@@ -73,7 +89,7 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <OutputPath>bin\NET35-Release\</OutputPath>
-    <DefineConstants>TRACE;DOTNET35 FEATURE_LEGACY_REFLECTION_API $(DesktopFrameworkDefineConstants)</DefineConstants>
+    <DefineConstants>TRACE;DOTNET35 $(DesktopFrameworkDefineConstants)</DefineConstants>
     <DocumentationFile>bin\NET35-Release\Castle.Core.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -89,7 +105,7 @@
     </TargetFrameworkProfile>
     <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
     <OutputPath>bin\SL40-Release\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT SL4 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT SL4 $(DesktopFrameworkDefineConstants)</DefineConstants>
     <DocumentationFile>bin\SL40-Release\Castle.Core.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -106,7 +122,7 @@
     <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\SL40-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT SL4 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT SL4 $(DesktopFrameworkDefineConstants)</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -122,7 +138,7 @@
     </TargetFrameworkProfile>
     <MSBuildTargets>Silverlight 5.0</MSBuildTargets>
     <OutputPath>bin\SL50-Release\</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT SL5 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT SL5 $(DesktopFrameworkDefineConstants)</DefineConstants>
     <DocumentationFile>bin\SL50-Release\Castle.Core.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -139,7 +155,7 @@
     <MSBuildTargets>Silverlight 5.0</MSBuildTargets>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\SL40-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT SL5 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT SL5 $(DesktopFrameworkDefineConstants)</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -173,7 +189,7 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup Condition="$(MSBuildTargets)!='Silverlight 5.0' and $(MSBuildTargets)!='Silverlight 4.0'">
-    <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +200,7 @@
     <Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Compatibility\CustomAttributeExtensions.cs" />
     <Compile Include="Compatibility\IntrospectionExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ListProjectionDebugView.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ICollectionAdapter.cs" />

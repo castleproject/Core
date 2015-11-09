@@ -245,7 +245,7 @@ namespace Castle.DynamicProxy.Generators
 			if (baseConstructorParams != null && baseConstructorParams.Length != 0)
 			{
 				var last = baseConstructorParams.Last();
-				if (last.ParameterType.GetTypeInfo().IsArray && last.HasAttribute<ParamArrayAttribute>())
+				if (last.ParameterType.GetTypeInfo().IsArray && last.IsDefined(typeof(ParamArrayAttribute)))
 				{
 					var parameter = constructor.ConstructorBuilder.DefineParameter(args.Length, ParameterAttributes.None, last.Name);
 					var builder = AttributeUtil.CreateBuilder<ParamArrayAttribute>();
