@@ -8,8 +8,8 @@
   "dependencies": {
     "Castle.Core": "3.3.4-*",
     "System.Runtime": "4.0.20",
-    "xunit": "2.1.0-beta4-*",
-    "xunit.runner.dnx": "2.1.0-beta4-*"
+    "xunit": "2.1.0",
+    "xunit.runner.dnx": "2.1.0-beta6-build191"
   },
   "commands": {
     "test": "xunit.runner.dnx"
