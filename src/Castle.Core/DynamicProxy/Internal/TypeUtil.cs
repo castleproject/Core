@@ -42,7 +42,7 @@ namespace Castle.DynamicProxy.Internal
 				Debug.Assert(currentType != null);
 				var currentFields = currentType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 				fields.AddRange(currentFields);
-				currentType = currentType.BaseType;
+				currentType = currentType.GetTypeInfo().BaseType;
 			}
 
 			return fields.ToArray();
@@ -139,6 +139,16 @@ namespace Castle.DynamicProxy.Internal
 				return null;
 			}
 			return target.GetType();
+		}
+
+		public static Type[] AsTypeArray(this TypeInfo[] typeInfos)
+		{
+			Type[] types = new Type[typeInfos.Length];
+			for (int i = 0; i < types.Length; i++)
+			{
+				types[i] = typeInfos[i].AsType();
+			}
+			return types;
 		}
 
 		public static bool IsFinalizer(this MethodInfo methodInfo)

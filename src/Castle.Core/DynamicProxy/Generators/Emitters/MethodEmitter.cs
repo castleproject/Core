@@ -161,17 +161,16 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				{
 					if (parameter.ParameterType == typeof(decimal) || parameter.ParameterType == typeof(decimal?))
 					{
-						/*
-						 * Because of a limitation of the .NET Framework, a decimal value may not 
-						 * be passed to SetConstant(), so omit the call in this instance.
-						 * 
-						 * See https://github.com/castleproject/Core/issues/87 and
-						 * https://msdn.microsoft.com/en-au/library/system.reflection.emit.parameterbuilder.setconstant(v=vs.110).aspx
-						 * for additional information.
-						 */
+						// Because of a limitation of the .NET Framework, a decimal value may not be passed to
+						// SetConstant(), so omit the call in this instance. It was likely not implemented
+						// because a decimal constant cannot be encoded as a single value and is encoded using
+						// 5 constants (scale, sign, hi, mid, low), see DecimalConstantAttribute.
+						//
+						// https://github.com/castleproject/Core/issues/87
+						// https://msdn.microsoft.com/en-au/library/system.reflection.emit.parameterbuilder.setconstant(v=vs.110).aspx
 						continue;
 					}
-					
+
 					parameterBuilder.SetConstant(parameter.DefaultValue);
 				}
 #endif
@@ -188,22 +187,22 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			builder.SetSignature(
 				returnType,
-#if SILVERLIGHT
-				null,
-				null,
-#else
+#if FEATURE_EMIT_CUSTOMMODIFIERS
 				returnParameter.GetRequiredCustomModifiers(),
 				returnParameter.GetOptionalCustomModifiers(),
+#else
+				null,
+				null,
 #endif
 				parameters,
-#if SILVERLIGHT
-				null,
-				null
-#else
+#if FEATURE_EMIT_CUSTOMMODIFIERS
 				baseMethodParameters.Select(x => x.GetRequiredCustomModifiers()).ToArray(),
 				baseMethodParameters.Select(x => x.GetOptionalCustomModifiers()).ToArray()
+#else
+				null,
+				null
 #endif
-				);
+			);
 		}
 	}
 }

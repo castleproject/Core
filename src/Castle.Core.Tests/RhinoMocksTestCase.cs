@@ -111,10 +111,19 @@ namespace Castle.DynamicProxy.Tests
 		{
 			generator.CreateClassProxy(typeof (DataSet), new Type[0], new StandardInterceptor());
 		}
+#endif
 
+#if FEATURE_EMIT_CUSTOMMODIFIERS
 		[Test]
 		public void CanProxyMethodWithModOpt()
 		{
+			// IL of method to proxy:
+			//
+			//.method public hidebysig newslot abstract virtual
+			//        instance void  StartLiveOnSlot(int32 modopt([mscorlib]System.Runtime.CompilerServices.IsLong) slotNumber) cil managed
+			//{
+			//}
+
 			var proxy =
 				(IHaveMethodWithModOpts)
 				generator.CreateInterfaceProxyWithoutTarget(typeof (IHaveMethodWithModOpts), new DoNothingInterceptor());

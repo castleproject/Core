@@ -81,7 +81,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				GenericTypeParameterBuilder value;
 				if (name2GenericType.TryGetValue(paramType.Name, out value))
 				{
-					return value;
+					return value.AsType();
 				}
 			}
 
@@ -139,13 +139,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			else if (constraint.GetTypeInfo().IsGenericParameter)
 			{
 				// Determine the source of the parameter
-				if (constraint.DeclaringMethod != null)
+				if (constraint.GetTypeInfo().DeclaringMethod != null)
 				{
 					// constraint comes from the method
 					var index = Array.IndexOf(originalGenericParameters, constraint);
 					Trace.Assert(index != -1,
 					             "When a generic method parameter has a constraint on another method parameter, both parameters must be declared on the same method.");
-					return newGenericParameters[index];
+					return newGenericParameters[index].AsType();
 				}
 				else // parameter from surrounding type
 				{
@@ -200,9 +200,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				try
 				{
-					var attributes = originalGenericArguments[i].GenericParameterAttributes;
+					var attributes = originalGenericArguments[i].GetTypeInfo().GenericParameterAttributes;
 					newGenericParameters[i].SetGenericParameterAttributes(attributes);
-					var constraints = AdjustGenericConstraints(methodToCopyGenericsFrom, newGenericParameters, originalGenericArguments, originalGenericArguments[i].GetGenericParameterConstraints());
+					var constraints = AdjustGenericConstraints(methodToCopyGenericsFrom, newGenericParameters, originalGenericArguments, originalGenericArguments[i].GetTypeInfo().GetGenericParameterConstraints());
 
 					newGenericParameters[i].SetInterfaceConstraints(constraints);
 					CopyNonInheritableAttributes(newGenericParameters[i], originalGenericArguments[i]);
@@ -223,7 +223,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private static void CopyNonInheritableAttributes(GenericTypeParameterBuilder newGenericParameter,
 		                                                 Type originalGenericArgument)
 		{
-			foreach (var attribute in originalGenericArgument.GetNonInheritableAttributes())
+			foreach (var attribute in originalGenericArgument.GetTypeInfo().GetNonInheritableAttributes())
 			{
 				newGenericParameter.SetCustomAttribute(attribute);
 			}

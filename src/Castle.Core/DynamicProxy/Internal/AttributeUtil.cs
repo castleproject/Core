@@ -54,23 +54,41 @@ namespace Castle.DynamicProxy.Internal
 			disassemblers[typeof(TAttribute)] = disassembler;
 		}
 
-#if !SILVERLIGHT
 		public static CustomAttributeBuilder CreateBuilder(CustomAttributeData attribute)
 		{
 			Debug.Assert(attribute != null, "attribute != null");
+
+			// .NET Core does not provide CustomAttributeData.Constructor, so we'll implement it
+			// by finding a constructor ourselves
+			Type[] constructorArgTypes;
+			object[] constructorArgs;
+			GetArguments(attribute.ConstructorArguments, out constructorArgTypes, out constructorArgs);
+			var constructor = attribute.AttributeType.GetConstructor(constructorArgTypes);
 
 			PropertyInfo[] properties;
 			object[] propertyValues;
 			FieldInfo[] fields;
 			object[] fieldValues;
-			GetSettersAndFields(attribute.NamedArguments, out properties, out propertyValues, out fields, out fieldValues);
-			var constructorArgs = GetArguments(attribute.ConstructorArguments);
-			return new CustomAttributeBuilder(attribute.Constructor,
+			GetSettersAndFields(attribute.AttributeType, attribute.NamedArguments, out properties, out propertyValues, out fields, out fieldValues);
+
+			return new CustomAttributeBuilder(constructor,
 			                                  constructorArgs,
 			                                  properties,
 			                                  propertyValues,
 			                                  fields,
 			                                  fieldValues);
+		}
+
+		private static void GetArguments(IList<CustomAttributeTypedArgument> constructorArguments,
+			out Type[] constructorArgTypes, out object[] constructorArgs)
+		{
+			constructorArgTypes = new Type[constructorArguments.Count];
+			constructorArgs = new object[constructorArguments.Count];
+			for (var i = 0; i < constructorArguments.Count; i++)
+			{
+				constructorArgTypes[i] = constructorArguments[i].ArgumentType;
+				constructorArgs[i] = ReadAttributeValue(constructorArguments[i]);
+			}
 		}
 
 		private static object[] GetArguments(IList<CustomAttributeTypedArgument> constructorArguments)
@@ -98,9 +116,9 @@ namespace Castle.DynamicProxy.Internal
 			return array;
 		}
 
-		private static void GetSettersAndFields(IEnumerable<CustomAttributeNamedArgument> namedArguments,
-		                                        out PropertyInfo[] properties, out object[] propertyValues,
-		                                        out FieldInfo[] fields, out object[] fieldValues)
+		private static void GetSettersAndFields(Type attributeType, IEnumerable<CustomAttributeNamedArgument> namedArguments,
+			out PropertyInfo[] properties, out object[] propertyValues,
+			out FieldInfo[] fields, out object[] fieldValues)
 		{
 			var propertyList = new List<PropertyInfo>();
 			var propertyValuesList = new List<object>();
@@ -108,20 +126,15 @@ namespace Castle.DynamicProxy.Internal
 			var fieldValuesList = new List<object>();
 			foreach (var argument in namedArguments)
 			{
-				switch (argument.MemberInfo.MemberType)
+				if (argument.IsField)
 				{
-					case MemberTypes.Property:
-						propertyList.Add(argument.MemberInfo as PropertyInfo);
-						propertyValuesList.Add(ReadAttributeValue(argument.TypedValue));
-						break;
-					case MemberTypes.Field:
-						fieldList.Add(argument.MemberInfo as FieldInfo);
-						fieldValuesList.Add(ReadAttributeValue(argument.TypedValue));
-						break;
-					default:
-						// NOTE: can this ever happen?
-						throw new ArgumentException(string.Format("Unexpected member type {0} in custom attribute.",
-						                                          argument.MemberInfo.MemberType));
+					fieldList.Add(attributeType.GetField(argument.MemberName));
+					fieldValuesList.Add(ReadAttributeValue(argument.TypedValue));
+				}
+				else
+				{
+					propertyList.Add(attributeType.GetProperty(argument.MemberName));
+					propertyValuesList.Add(ReadAttributeValue(argument.TypedValue));
 				}
 			}
 
@@ -130,28 +143,15 @@ namespace Castle.DynamicProxy.Internal
 			fields = fieldList.ToArray();
 			fieldValues = fieldValuesList.ToArray();
 		}
-#else
-		// CustomAttributeData is internal in Silverlight
-#endif
 
 		public static IEnumerable<CustomAttributeBuilder> GetNonInheritableAttributes(this MemberInfo member)
 		{
 			Debug.Assert(member != null, "member != null");
-			var attributes =
-#if SILVERLIGHT
-				member.GetCustomAttributes(false);
-#else
-				CustomAttributeData.GetCustomAttributes(member);
-#endif
+			var attributes = member.CustomAttributes;
 
 			foreach (var attribute in attributes)
 			{
-				var attributeType =
-#if SILVERLIGHT
-				attribute.GetType();
-#else
-					attribute.Constructor.DeclaringType;
-#endif
+				var attributeType = attribute.AttributeType;
 				if (ShouldSkipAttributeReplication(attributeType))
 				{
 					continue;
@@ -160,18 +160,14 @@ namespace Castle.DynamicProxy.Internal
 				CustomAttributeBuilder builder;
 				try
 				{
-					builder = CreateBuilder(attribute
-#if SILVERLIGHT
-					as Attribute
-#endif
-						);
+					builder = CreateBuilder(attribute);
 				}
 				catch (ArgumentException e)
 				{
 					var message =
 						string.Format(
 							"Due to limitations in CLR, DynamicProxy was unable to successfully replicate non-inheritable attribute {0} on {1}{2}. To avoid this error you can chose not to replicate this attribute type by calling '{3}.Add(typeof({0}))'.",
-							attributeType.FullName, (member.ReflectedType == null) ? "" : member.ReflectedType.FullName,
+							attributeType.FullName, member.DeclaringType.FullName,
 							(member is Type) ? "" : ("." + member.Name), typeof(AttributesToAvoidReplicating).FullName);
 					throw new ProxyGenerationException(message, e);
 				}
@@ -185,31 +181,18 @@ namespace Castle.DynamicProxy.Internal
 		public static IEnumerable<CustomAttributeBuilder> GetNonInheritableAttributes(this ParameterInfo parameter)
 		{
 			Debug.Assert(parameter != null, "parameter != null");
-			var attributes =
-#if SILVERLIGHT
-				parameter.GetCustomAttributes(false);
-#else
-				CustomAttributeData.GetCustomAttributes(parameter);
-#endif
+			var attributes = parameter.CustomAttributes;
 
 			foreach (var attribute in attributes)
 			{
-				var attributeType =
-#if SILVERLIGHT
-				attribute.GetType();
-#else
-					attribute.Constructor.DeclaringType;
-#endif
+				var attributeType = attribute.AttributeType;
+
 				if (ShouldSkipAttributeReplication(attributeType))
 				{
 					continue;
 				}
 
-				var builder = CreateBuilder(attribute
-#if SILVERLIGHT
-					as Attribute
-#endif
-					);
+				var builder = CreateBuilder(attribute);
 				if (builder != null)
 				{
 					yield return builder;

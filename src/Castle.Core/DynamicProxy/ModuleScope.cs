@@ -185,7 +185,7 @@ namespace Castle.DynamicProxy
 		/// <returns></returns>
 		public static byte[] GetKeyPair()
 		{
-			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Castle.DynamicProxy.DynProxy.snk"))
+			using (var stream = typeof(ModuleScope).GetTypeInfo().Assembly.GetManifestResourceStream("Castle.DynamicProxy.DynProxy.snk"))
 			{
 				if (stream == null)
 				{
@@ -337,7 +337,7 @@ namespace Castle.DynamicProxy
 		{
 			var assemblyName = GetAssemblyName(signStrongName);
 			var moduleName = signStrongName ? StrongNamedModuleName : WeakNamedModuleName;
-#if !SILVERLIGHT
+#if FEATURE_APPDOMAIN
 			if (savePhysicalAssembly)
 			{
 				AssemblyBuilder assemblyBuilder;
@@ -353,10 +353,11 @@ namespace Castle.DynamicProxy
 						// I have no idea what that could be
 						throw;
 					}
-					var message =
-						string.Format(
-							"There was an error creating dynamic assembly for your proxies - you don't have permissions required to sign the assembly. To workaround it you can enforce generating non-signed assembly only when creating {0}. ALternatively ensure that your account has all the required permissions.",
-							GetType());
+					var message = string.Format(
+						"There was an error creating dynamic assembly for your proxies - you don't have permissions " +
+						"required to sign the assembly. To workaround it you can enforce generating non-signed assembly " +
+						"only when creating {0}. Alternatively ensure that your account has all the required permissions.",
+						GetType());
 					throw new ArgumentException(message, e);
 				}
 				var module = assemblyBuilder.DefineDynamicModule(moduleName, moduleName, false);
@@ -365,24 +366,25 @@ namespace Castle.DynamicProxy
 			else
 #endif
 			{
+#if FEATURE_APPDOMAIN
 				var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-					assemblyName,
-					AssemblyBuilderAccess.Run);
+					assemblyName, AssemblyBuilderAccess.Run);
+#else
+				var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+#endif
 
-				var module = assemblyBuilder.DefineDynamicModule(moduleName, false);
+				var module = assemblyBuilder.DefineDynamicModule(moduleName);
 				return module;
 			}
 		}
 
 		private AssemblyName GetAssemblyName(bool signStrongName)
 		{
+			var assemblyName = new AssemblyName {
+				Name = signStrongName ? strongAssemblyName : weakAssemblyName
+			};
 
-			var assemblyName = new AssemblyName
-			                   	{
-			                   		Name = signStrongName ? strongAssemblyName : weakAssemblyName
-			                   	};
-
-#if !SILVERLIGHT
+#if FEATURE_STRONGNAME
 			if (signStrongName)
 			{
 				byte[] keyPairStream = GetKeyPair();

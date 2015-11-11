@@ -90,7 +90,7 @@ namespace Castle.DynamicProxy.Internal
 				return true;
 			}
 
-			if (method.DeclaringType.Assembly.IsInternalToDynamicProxy() && method.IsAssembly)
+			if (method.DeclaringType.GetTypeInfo().Assembly.IsInternalToDynamicProxy() && method.IsAssembly)
 			{
 				return true;
 			}

@@ -18,9 +18,11 @@ namespace Castle.DynamicProxy
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
-#if !SILVERLIGHT
 	using System.Runtime.InteropServices;
+#if FEATURE_REMOTING
 	using System.Runtime.Remoting;
+#endif
+#if FEATURE_SECURITY_PERMISSIONS
 	using System.Security;
 	using System.Security.Permissions;
 #endif
@@ -579,7 +581,7 @@ namespace Castle.DynamicProxy
 			}
 
 			var isRemotingProxy = false;
-#if !SILVERLIGHT
+#if FEATURE_REMOTING
 			if (target != null)
 			{
 				isRemotingProxy = RemotingServices.IsTransparentProxy(target);

@@ -147,7 +147,7 @@ namespace Castle.DynamicProxy
 
 		private bool IsAccessible(Type target)
 		{
-			return IsInternal(target) && target.Assembly.IsInternalToDynamicProxy();
+			return IsInternal(target) && target.GetTypeInfo().Assembly.IsInternalToDynamicProxy();
 		}
 
 		private bool IsPublic(Type target)
@@ -159,7 +159,7 @@ namespace Castle.DynamicProxy
 		{
 			var isTargetNested = target.IsNested;
 			var isNestedAndInternal = isTargetNested && (target.GetTypeInfo().IsNestedAssembly || target.GetTypeInfo().IsNestedFamORAssem);
-			var isInternalNotNested = target.IsVisible == false && isTargetNested == false;
+			var isInternalNotNested = target.GetTypeInfo().IsVisible == false && isTargetNested == false;
 
 			return isInternalNotNested || isNestedAndInternal;
 		}

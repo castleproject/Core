@@ -62,7 +62,7 @@ namespace Castle.DynamicProxy.Contributors
 		protected bool IsGeneratedByTheCompiler(FieldInfo field)
 		{
 			// for example fields backing autoproperties
-			return Attribute.IsDefined(field, typeof(CompilerGeneratedAttribute));
+			return field.IsDefined(typeof(CompilerGeneratedAttribute));
 		}
 
 		protected virtual bool IsOKToBeOnProxy(FieldInfo field)

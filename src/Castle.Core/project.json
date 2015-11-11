@@ -15,6 +15,7 @@
     "System.Globalization": "4.0.10",
     "System.Linq": "4.0.0",
     "System.Reflection": "4.0.10",
+    "System.Reflection.Emit": "4.0.0",
     "System.Reflection.Extensions": "4.0.0",
     "System.Reflection.TypeExtensions": "4.0.0",
     "System.Runtime": "4.0.20",
@@ -29,12 +30,9 @@
     "warningsAsErrors": true
   },
   "exclude": [
-    "Compatibility/**/*",
-    "Components.DictionaryAdapter/**/*",
-    "DynamicProxy/**/*"
+    "Components.DictionaryAdapter/**/*"
   ],
   "compileFiles": [
-    "Properties/InternalsVisibleToTests.cs",
-    "DynamicProxy/Generators/Emitters/StrongNameUtil.cs"
+    "Properties/InternalsVisibleToTests.cs"
   ]
 }

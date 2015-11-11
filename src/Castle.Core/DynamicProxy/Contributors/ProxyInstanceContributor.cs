@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
+	using System.Reflection;
 #if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
 #endif
@@ -53,7 +54,7 @@ namespace Castle.DynamicProxy.Contributors
 			ImplementGetObjectData(@class);
 #endif
 			ImplementProxyTargetAccessor(@class, interceptors);
-			foreach (var attribute in targetType.GetNonInheritableAttributes())
+			foreach (var attribute in targetType.GetTypeInfo().GetNonInheritableAttributes())
 			{
 				@class.DefineCustomAttribute(attribute);
 			}

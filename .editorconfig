@@ -3,6 +3,10 @@ root = true
 [*]
 indent_style = tab
 
+[*.csproj]
+intent_style = space
+indent_size = 2
+
 [{project,global}.json]
 indent_style = space
 indent_size = 2

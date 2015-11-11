@@ -427,14 +427,10 @@ namespace Castle.DynamicProxy.Generators
 
 		private bool IsConstructorVisible(ConstructorInfo constructor)
 		{
-			return constructor.IsPublic
-			       || constructor.IsFamily
-			       || constructor.IsFamilyOrAssembly
-#if !SILVERLIGHT
-			       || (constructor.IsAssembly && InternalsUtil.IsInternalToDynamicProxy(constructor.DeclaringType.Assembly));
-#else
-            ;
-#endif
+			return constructor.IsPublic ||
+				constructor.IsFamily ||
+				constructor.IsFamilyOrAssembly ||
+				(constructor.IsAssembly && InternalsUtil.IsInternalToDynamicProxy(constructor.DeclaringType.GetTypeInfo().Assembly));
 		}
 
 		private bool OverridesEqualsAndGetHashCode(Type type)
