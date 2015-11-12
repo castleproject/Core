@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Internal
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Linq;
 	using System.Reflection;
 	using System.Reflection.Emit;
 
@@ -217,13 +218,10 @@ namespace Castle.DynamicProxy.Internal
 				return true;
 			}
 
-			var attrs = attribute.GetCustomAttributes(typeof(AttributeUsageAttribute), true);
-
+			var attrs = attribute.GetTypeInfo().GetCustomAttributes<AttributeUsageAttribute>(true).ToArray();
 			if (attrs.Length != 0)
 			{
-				var usage = (AttributeUsageAttribute)attrs[0];
-
-				return usage.Inherited;
+				return attrs[0].Inherited;
 			}
 
 			return true;

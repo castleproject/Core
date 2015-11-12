@@ -397,7 +397,7 @@ namespace Castle.DynamicProxy
 			return assemblyName;
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		/// <summary>
 		///   Saves the generated assembly with the name and directory information given when this <see cref = "ModuleScope" /> instance was created (or with
 		///   the <see cref = "DEFAULT_FILE_NAME" /> and current directory if none was given).

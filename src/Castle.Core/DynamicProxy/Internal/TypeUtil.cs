@@ -168,11 +168,19 @@ namespace Castle.DynamicProxy.Internal
 
 		public static void SetStaticField(this Type type, string fieldName, BindingFlags additionalFlags, object value)
 		{
-			var flags = additionalFlags | BindingFlags.Static | BindingFlags.SetField;
+			var flags = additionalFlags | BindingFlags.Static;
+
+			FieldInfo field = type.GetField(fieldName, flags);
+			if (field == null)
+			{
+				throw new ProxyGenerationException(string.Format(
+					"Could not find field named '{0}' on type {1}. This is likely a bug in DynamicProxy. Please report it.",
+					fieldName, type));
+			}
 
 			try
 			{
-				type.InvokeMember(fieldName, flags, null, null, new[] { value });
+				field.SetValue(null, value);
 			}
 			catch (MissingFieldException e)
 			{
