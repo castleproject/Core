@@ -27,7 +27,8 @@
     "dotnet": { }
   },
   "compilationOptions": {
-    "warningsAsErrors": true
+    "warningsAsErrors": true,
+    "define": [ "FEATURE_NETCORE_REFLECTION_API" ]
   },
   "exclude": [
     "Components.DictionaryAdapter/**/*"

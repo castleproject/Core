@@ -40,7 +40,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			gen.Emit(OpCodes.Ldtoken, declaringType);
 
-			var minfo = MethodBaseMethods.GetMethodFromHandle2;
+			var minfo = MethodBaseMethods.GetMethodFromHandle;
 			gen.Emit(OpCodes.Call, minfo);
 			gen.Emit(OpCodes.Castclass, typeof(MethodInfo));
 		}

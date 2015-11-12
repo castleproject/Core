@@ -182,6 +182,7 @@ namespace Castle.DynamicProxy.Internal
 						fieldName,
 						type), e);
 			}
+#if FEATURE_TARGETEXCEPTION
 			catch (TargetException e)
 			{
 				throw new ProxyGenerationException(
@@ -190,6 +191,7 @@ namespace Castle.DynamicProxy.Internal
 						fieldName,
 						type), e);
 			}
+#endif
 			catch (TargetInvocationException e) // yes, this is not documented in MSDN. Yay for documentation
 			{
 				if ((e.InnerException is TypeInitializationException) == false)

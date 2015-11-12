@@ -184,6 +184,7 @@
     </Compile>
     <Compile Include="Compatibility\CustomAttributeExtensions.cs" />
     <Compile Include="Compatibility\IntrospectionExtensions.cs" />
+    <Compile Include="Compatibility\NetCoreReflectionExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ListProjectionDebugView.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ICollectionAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\ReferenceAttribute.cs" />
@@ -536,7 +537,6 @@
     <Compile Include="DynamicProxy\Tokens\InvocationMethods.cs" />
     <Compile Include="DynamicProxy\Tokens\MethodBaseMethods.cs" />
     <Compile Include="DynamicProxy\Tokens\SerializationInfoMethods.cs" />
-    <Compile Include="DynamicProxy\Tokens\TypeBuilderMethods.cs" />
     <Compile Include="DynamicProxy\Tokens\TypeMethods.cs" />
     <Compile Include="DynamicProxy\IAttributeDisassembler.cs" />
     <Compile Include="DynamicProxy\IInterceptorSelector.cs" />
