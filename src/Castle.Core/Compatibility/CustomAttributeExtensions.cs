@@ -16,12 +16,32 @@
 
 namespace System.Reflection
 {
+	using System.Collections.Generic;
+
 	// This allows us to use the new reflection API while still supporting .NET 3.5 and 4.0.
 	//
 	// Methods like Attribute.IsDefined no longer exist in .NET Core so this provides a shim
 	// for .NET 3.5 and 4.0.
+	//
+	// This class only implemented the required extensions so add more if needed in the order
+	// from https://github.com/dotnet/corefx/blob/master/src/System.Reflection.Extensions/ref/System.Reflection.Extensions.cs
 	internal static class CustomAttributeExtensions
 	{
+		public static IEnumerable<T> GetCustomAttributes<T>(this Assembly element) where T : Attribute
+		{
+			return (IEnumerable<T>)Attribute.GetCustomAttributes(element, typeof(T));
+		}
+
+		public static IEnumerable<T> GetCustomAttributes<T>(this MemberInfo element, bool inherit) where T : Attribute
+		{
+			return (IEnumerable<T>)Attribute.GetCustomAttributes(element, typeof(T), inherit);
+		}
+
+		public static bool IsDefined(this MemberInfo element, Type attributeType)
+		{
+			return Attribute.IsDefined(element, attributeType);
+		}
+
 		public static bool IsDefined(this ParameterInfo element, Type attributeType)
 		{
 			return Attribute.IsDefined(element, attributeType);

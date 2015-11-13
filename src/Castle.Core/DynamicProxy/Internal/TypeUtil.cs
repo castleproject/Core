@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Internal
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
+	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Generators.Emitters;
 
@@ -141,7 +142,7 @@ namespace Castle.DynamicProxy.Internal
 			return target.GetType();
 		}
 
-		public static Type[] AsTypeArray(this TypeInfo[] typeInfos)
+		public static Type[] AsTypeArray(this GenericTypeParameterBuilder[] typeInfos)
 		{
 			Type[] types = new Type[typeInfos.Length];
 			for (int i = 0; i < types.Length; i++)

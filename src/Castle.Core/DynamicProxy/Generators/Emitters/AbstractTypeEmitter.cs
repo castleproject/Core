@@ -327,7 +327,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			try
 			{
+#if FEATURE_LEGACY_REFLECTION_API
+				return type.CreateType();
+#else
 				return type.CreateTypeInfo().AsType();
+#endif
 			}
 			catch (BadImageFormatException ex)
 			{

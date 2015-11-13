@@ -183,8 +183,10 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Compatibility\CustomAttributeExtensions.cs" />
+    <Compile Include="Compatibility\TypeBuilderExtensions.cs" />
     <Compile Include="Compatibility\IntrospectionExtensions.cs" />
     <Compile Include="Compatibility\NetCoreReflectionExtensions.cs" />
+    <Compile Include="Compatibility\RuntimeReflectionExtensions.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ListProjectionDebugView.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ICollectionAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\ReferenceAttribute.cs" />

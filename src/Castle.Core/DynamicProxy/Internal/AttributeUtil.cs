@@ -64,13 +64,23 @@ namespace Castle.DynamicProxy.Internal
 			Type[] constructorArgTypes;
 			object[] constructorArgs;
 			GetArguments(attribute.ConstructorArguments, out constructorArgTypes, out constructorArgs);
+#if FEATURE_LEGACY_REFLECTION_API
+			var constructor = attribute.Constructor;
+#else
 			var constructor = attribute.AttributeType.GetConstructor(constructorArgTypes);
+#endif
 
 			PropertyInfo[] properties;
 			object[] propertyValues;
 			FieldInfo[] fields;
 			object[] fieldValues;
-			GetSettersAndFields(attribute.AttributeType, attribute.NamedArguments, out properties, out propertyValues, out fields, out fieldValues);
+			GetSettersAndFields(
+#if FEATURE_LEGACY_REFLECTION_API
+				null,
+#else
+				attribute.AttributeType,
+#endif
+				attribute.NamedArguments, out properties, out propertyValues, out fields, out fieldValues);
 
 			return new CustomAttributeBuilder(constructor,
 			                                  constructorArgs,
@@ -127,6 +137,18 @@ namespace Castle.DynamicProxy.Internal
 			var fieldValuesList = new List<object>();
 			foreach (var argument in namedArguments)
 			{
+#if FEATURE_LEGACY_REFLECTION_API
+				if (argument.MemberInfo.MemberType == MemberTypes.Field)
+				{
+					fieldList.Add(argument.MemberInfo as FieldInfo);
+					fieldValuesList.Add(ReadAttributeValue(argument.TypedValue));
+				}
+				else
+				{
+					propertyList.Add(argument.MemberInfo as PropertyInfo);
+					propertyValuesList.Add(ReadAttributeValue(argument.TypedValue));
+				}
+#else
 				if (argument.IsField)
 				{
 					fieldList.Add(attributeType.GetField(argument.MemberName));
@@ -137,6 +159,7 @@ namespace Castle.DynamicProxy.Internal
 					propertyList.Add(attributeType.GetProperty(argument.MemberName));
 					propertyValuesList.Add(ReadAttributeValue(argument.TypedValue));
 				}
+#endif
 			}
 
 			properties = propertyList.ToArray();
@@ -148,11 +171,19 @@ namespace Castle.DynamicProxy.Internal
 		public static IEnumerable<CustomAttributeBuilder> GetNonInheritableAttributes(this MemberInfo member)
 		{
 			Debug.Assert(member != null, "member != null");
+#if FEATURE_LEGACY_REFLECTION_API
+			var attributes = CustomAttributeData.GetCustomAttributes(member);
+#else
 			var attributes = member.CustomAttributes;
+#endif
 
 			foreach (var attribute in attributes)
 			{
+#if FEATURE_LEGACY_REFLECTION_API
+				var attributeType = attribute.Constructor.DeclaringType;
+#else
 				var attributeType = attribute.AttributeType;
+#endif
 				if (ShouldSkipAttributeReplication(attributeType))
 				{
 					continue;
@@ -189,11 +220,20 @@ namespace Castle.DynamicProxy.Internal
 		public static IEnumerable<CustomAttributeBuilder> GetNonInheritableAttributes(this ParameterInfo parameter)
 		{
 			Debug.Assert(parameter != null, "parameter != null");
+
+#if FEATURE_LEGACY_REFLECTION_API
+			var attributes = CustomAttributeData.GetCustomAttributes(parameter);
+#else
 			var attributes = parameter.CustomAttributes;
+#endif
 
 			foreach (var attribute in attributes)
 			{
+#if FEATURE_LEGACY_REFLECTION_API
+				var attributeType = attribute.Constructor.DeclaringType;
+#else
 				var attributeType = attribute.AttributeType;
+#endif
 
 				if (ShouldSkipAttributeReplication(attributeType))
 				{
