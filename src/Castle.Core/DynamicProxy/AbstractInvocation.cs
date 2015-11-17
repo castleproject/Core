@@ -17,19 +17,8 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Diagnostics;
 	using System.Reflection;
-#if FEATURE_SERIALIZATION
-	using System.Runtime.Serialization;
-#if DOTNET40
-	using System.Security;
-#endif
-
-	using Castle.DynamicProxy.Serialization;
-#endif
 
 	public abstract class AbstractInvocation : IInvocation
-#if FEATURE_SERIALIZATION
-		, ISerializable
-#endif
 	{
 		private readonly IInterceptor[] interceptors;
 		private readonly object[] arguments;
@@ -152,17 +141,6 @@ namespace Castle.DynamicProxy
 				currentInterceptorIndex--;
 			}
 		}
-
-#if FEATURE_SERIALIZATION
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
-		[SecurityCritical]
-#endif
-		public void GetObjectData(SerializationInfo info, StreamingContext context)
-		{
-			info.SetType(typeof(RemotableInvocation));
-			info.AddValue("invocation", new RemotableInvocation(this));
-		}
-#endif
 
 		protected abstract void InvokeMethodOnTarget();
 
