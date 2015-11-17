@@ -314,9 +314,9 @@ namespace CastleTests
 		{
 			const bool shouldBeSigned = true;
 			Type t = typeof(List<object>);
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t.Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t.GetTypeInfo().Assembly));
 			object proxy = generator.CreateClassProxy(t, new StandardInterceptor());
-			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
+			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
 		}
 
 		[Test]
@@ -325,10 +325,10 @@ namespace CastleTests
 			const bool shouldBeSigned = true;
 			Type t1 = typeof(List<object>);
 			Type t2 = typeof(IServiceProvider);
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t1.Assembly));
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t2.Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t1.GetTypeInfo().Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t2.GetTypeInfo().Assembly));
 			object proxy = generator.CreateClassProxy(t1, new Type[] { t2 }, new StandardInterceptor());
-			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
+			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
 		}
 #endif
 
@@ -343,14 +343,14 @@ namespace CastleTests
 				Assert.Ignore("To get this running, the Tests project must not be signed.");
 			}
 			Type t = typeof (MyClass);
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t.Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t.GetTypeInfo().Assembly));
 			object proxy = generator.CreateClassProxy(t, new StandardInterceptor());
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
 		}
 
 		private bool TestAssemblySigned()
 		{
-			return StrongNameUtil.IsAssemblySigned(GetType().Assembly);
+			return StrongNameUtil.IsAssemblySigned(GetType().GetTypeInfo().Assembly);
 		}
 
 #if SILVERLIGHT // Silverlight test runner treats Assert.Ignore as failed test :/
@@ -365,10 +365,10 @@ namespace CastleTests
 			}
 			Type t1 = typeof (MyClass);
 			Type t2 = typeof (IService);
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t1.Assembly));
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t2.Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t1.GetTypeInfo().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t2.GetTypeInfo().Assembly));
 			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
 		}
 
 #if SILVERLIGHT // Silverlight test runner treats Assert.Ignore as failed test :/
@@ -383,10 +383,10 @@ namespace CastleTests
 			}
 			Type t1 = typeof (MyClass);
 			Type t2 = typeof (IServiceProvider);
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t1.Assembly));
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t2.Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t1.GetTypeInfo().Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t2.GetTypeInfo().Assembly));
 			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
 		}
 
 #if SILVERLIGHT // Silverlight test runner treats Assert.Ignore as failed test :/
@@ -401,10 +401,10 @@ namespace CastleTests
 			}
 			Type t1 = typeof (List<int>);
 			Type t2 = typeof (IService);
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t1.Assembly));
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t2.Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t1.GetTypeInfo().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t2.GetTypeInfo().Assembly));
 			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
 		}
 
 		[Test]

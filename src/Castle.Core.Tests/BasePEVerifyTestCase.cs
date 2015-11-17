@@ -15,19 +15,31 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 	using System.Diagnostics;
+#endif
 	using System.IO;
-
-	using CastleTests.Properties;
 
 	using NUnit.Framework;
 
 #if !__MonoCS__ && !SILVERLIGHT // mono doesn't have PEVerify
 	public class FindPeVerify
 	{
+		private static readonly string[] PeVerifyProbingPaths =
+		{
+			@"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\NETFX 4.0 Tools",
+			@"C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\NETFX 4.0 Tools",
+			@"C:\Program Files\Microsoft SDKs\Windows\v6.0A\Bin",
+			@"C:\Program Files (x86)\Microsoft SDKs\Windows\v8.0A\bin\NETFX 4.0 Tools",
+			@"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1\Bin\NETFX 4.0 Tools",
+			@"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin\NETFX 4.0 Tools",
+			@"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin",
+			@"C:\Program Files (x86)\Microsoft Visual Studio 8\SDK\v2.0\bin"
+		};
+
 		private static string FindPeVerifyPath()
 		{
-			var peVerifyProbingPaths = Settings.Default.PeVerifyProbingPaths;
+			var peVerifyProbingPaths = PeVerifyProbingPaths;
 			foreach (var path in peVerifyProbingPaths)
 			{
 				var file = Path.Combine(path, "peverify.exe");
@@ -75,10 +87,10 @@ namespace Castle.DynamicProxy.Tests
 
 		public void ResetGeneratorAndBuilder()
 		{
-#if SILVERLIGHT // no PersistentProxyBuilder in Silverlight
-			builder = new DefaultProxyBuilder();
-#else
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 			builder = new PersistentProxyBuilder();
+#else
+			builder = new DefaultProxyBuilder();
 #endif
 			generator = new ProxyGenerator(builder);
 		}
@@ -93,13 +105,15 @@ namespace Castle.DynamicProxy.Tests
 			get { return verificationDisabled; }
 		}
 
-#if !__MonoCS__ && !SILVERLIGHT // mono doesn't have PEVerify
 #if FEATURE_XUNITNET
 		public void Dispose()
 		{
 			TearDown();
 		}
-#else
+#endif
+
+#if FEATURE_ASSEMBLYBUILDER_SAVE && !__MonoCS__ // mono doesn't have PEVerify
+#if !FEATURE_XUNITNET
 		[TearDown]
 #endif
 		public virtual void TearDown()
@@ -144,7 +158,7 @@ namespace Castle.DynamicProxy.Tests
 			}
 		}
 #else
-#if !SILVERLIGHT
+#if !FEATURE_XUNITNET
 		[TearDown]
 #endif
 		public virtual void TearDown()

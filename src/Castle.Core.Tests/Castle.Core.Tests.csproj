@@ -410,10 +410,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingNameValueCollectionsTestCase.cs" />
@@ -544,11 +540,6 @@
     <Compile Include="OutRefParamsTestCase.cs" />
     <Compile Include="PersistentProxyBuilderTestCase.cs" />
     <Compile Include="Interceptors\ProceedOnTypeInterceptor.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Include="ProxyGenerationOptionsTestCase.cs" />
     <Compile Include="Interceptors\RequiredParamInterceptor.cs" />
     <Compile Include="ProxyKind.cs" />
