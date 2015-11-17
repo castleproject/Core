@@ -426,7 +426,7 @@ namespace Castle.DynamicProxy.Tests
 		                    +
 		                    "This test ensures we do not trigger it across AppDomains. If we do, MethodFinder must provide a cross-AppDomain workaround."
 			)]
-#if SILVERLIGHT
+#if !FEATURE_APPDOMAIN
 		[Ignore("Cannot create seperate AppDomain in silverlight.")]
 		public void TypeGetMethodsIsStableInDifferentAppDomains()
 		{
