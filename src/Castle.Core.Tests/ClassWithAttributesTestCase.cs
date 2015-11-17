@@ -113,7 +113,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var proxy = generator.CreateClassProxy<HasNonInheritableAttribute>();
 			var nameProperty = proxy.GetType().GetMethod("OnGenericArgument").GetGenericArguments().Single();
-			Assert.IsTrue(nameProperty.IsDefined(typeof(NonInheritableAttribute), false));
+			Assert.IsTrue(nameProperty.GetTypeInfo().IsDefined(typeof(NonInheritableAttribute), false));
 		}
 
 		[Test]

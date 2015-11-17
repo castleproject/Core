@@ -74,7 +74,7 @@ namespace Castle.DynamicProxy.Tests
 			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes,
 			                                        TypeAttributes.Public, false);
 			Type t = emitter.BuildType();
-			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(t.Assembly));
+			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(t.GetTypeInfo().Assembly));
 		}
 #endif
 
@@ -84,7 +84,7 @@ namespace Castle.DynamicProxy.Tests
 			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes,
 			                                        TypeAttributes.Public, true);
 			Type t = emitter.BuildType();
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t.Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t.GetTypeInfo().Assembly));
 		}
 
 		[Test]

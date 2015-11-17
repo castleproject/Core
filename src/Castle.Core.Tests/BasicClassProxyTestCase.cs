@@ -469,14 +469,13 @@ namespace CastleTests
 			var baseMethod = @class.GetMethod("Do");
 			var interceptor = new SetReturnValueInterceptor(123);
 			var proxy = generator.CreateClassProxy(@class, new[] {@interface}, interceptor);
-			var mapping = proxy.GetType().GetInterfaceMap(@interface);
+			var mapping = proxy.GetType().GetTypeInfo().GetRuntimeInterfaceMap(@interface);
 
 			Assert.AreEqual(mapping.TargetMethods[0].GetBaseDefinition(), baseMethod);
 
 			Assert.AreEqual(123, (proxy as ClassWithVirtualInterface).Do());
 			Assert.AreEqual(123, (proxy as ISimpleInterface).Do());
 		}
-
 
 		[Test]
 		public void ClassImplementingInterfacePropertyVirtuallyWithInterface()
