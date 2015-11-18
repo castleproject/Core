@@ -33,11 +33,11 @@ namespace Castle.DynamicProxy.Tests
 			HasNonInheritableAttribute instance = (HasNonInheritableAttribute)
 			                           generator.CreateClassProxy(typeof (HasNonInheritableAttribute), new StandardInterceptor());
 
-			object[] attributes = instance.GetType().GetCustomAttributes(typeof (NonInheritableAttribute), false);
+			object[] attributes = instance.GetType().GetTypeInfo().GetCustomAttributes(typeof (NonInheritableAttribute), false).ToArray();
 			Assert.AreEqual(1, attributes.Length);
 			Assert.IsInstanceOf(typeof (NonInheritableAttribute), attributes[0]);
 
-			attributes = instance.GetType().GetMethod("OnMethod").GetCustomAttributes(typeof (NonInheritableAttribute), false);
+			attributes = instance.GetType().GetMethod("OnMethod").GetCustomAttributes(typeof (NonInheritableAttribute), false).ToArray();
 			Assert.AreEqual(1, attributes.Length);
 			Assert.IsInstanceOf(typeof (NonInheritableAttribute), attributes[0]);
 		}
@@ -48,7 +48,7 @@ namespace Castle.DynamicProxy.Tests
 			AttributedClass2 instance = (AttributedClass2)
 			                            generator.CreateClassProxy(typeof (AttributedClass2), new StandardInterceptor());
 
-			object[] attributes = instance.GetType().GetCustomAttributes(typeof (ComplexNonInheritableAttribute), false);
+			object[] attributes = instance.GetType().GetTypeInfo().GetCustomAttributes(typeof (ComplexNonInheritableAttribute), false).ToArray();
 			Assert.AreEqual(1, attributes.Length);
 			Assert.IsInstanceOf(typeof (ComplexNonInheritableAttribute), attributes[0]);
 			ComplexNonInheritableAttribute att = (ComplexNonInheritableAttribute) attributes[0];
@@ -59,7 +59,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("class", att.Name);
 			Assert.AreEqual(FileAccess.Write, att.Access);
 
-			attributes = instance.GetType().GetMethod("Do1").GetCustomAttributes(typeof (ComplexNonInheritableAttribute), false);
+			attributes = instance.GetType().GetMethod("Do1").GetCustomAttributes(typeof (ComplexNonInheritableAttribute), false).ToArray();
 			Assert.AreEqual(1, attributes.Length);
 			Assert.IsInstanceOf(typeof (ComplexNonInheritableAttribute), attributes[0]);
 			att = (ComplexNonInheritableAttribute) attributes[0];
@@ -70,7 +70,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("Do1", att.Name);
 			Assert.AreEqual(FileAccess.ReadWrite, att.Access);
 
-			attributes = instance.GetType().GetMethod("Do2").GetCustomAttributes(typeof (ComplexNonInheritableAttribute), false);
+			attributes = instance.GetType().GetMethod("Do2").GetCustomAttributes(typeof (ComplexNonInheritableAttribute), false).ToArray();
 			Assert.AreEqual(1, attributes.Length);
 			Assert.IsInstanceOf(typeof (ComplexNonInheritableAttribute), attributes[0]);
 			att = (ComplexNonInheritableAttribute) attributes[0];
@@ -120,8 +120,8 @@ namespace Castle.DynamicProxy.Tests
 		public void Can_proxy_type_with_non_inheritable_attribute_depending_on_array_of_something_via_property()
 		{
 			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHasNonInheritableAttributeWithArray>();
-			var attribute = proxy.GetType()
-				.GetCustomAttributes(typeof(NonInheritableWithArrayAttribute), false)
+			var attribute = proxy.GetType().GetTypeInfo()
+                .GetCustomAttributes(typeof(NonInheritableWithArrayAttribute), false)
 				.Cast<NonInheritableWithArrayAttribute>().Single();
 			CollectionAssert.AreEqual(attribute.Values, new[] {"1", "2", "3"});
 		}
@@ -130,8 +130,8 @@ namespace Castle.DynamicProxy.Tests
 		public void Can_proxy_type_with_non_inheritable_attribute_depending_on_array_of_something_via_field()
 		{
 			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHasNonInheritableAttributeWithArray2>();
-			var attribute = proxy.GetType()
-				.GetCustomAttributes(typeof(NonInheritableWithArray2Attribute), false)
+			var attribute = proxy.GetType().GetTypeInfo()
+                .GetCustomAttributes(typeof(NonInheritableWithArray2Attribute), false)
 				.Cast<NonInheritableWithArray2Attribute>().Single();
 			CollectionAssert.AreEqual(attribute.Values, new[] { "1", "2", "3" });
 		}
