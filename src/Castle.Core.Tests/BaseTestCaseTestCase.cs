@@ -77,7 +77,7 @@ namespace Castle.DynamicProxy.Tests
 			MethodBuilder invalidMethod = invalidType.DefineMethod("InvalidMethod", MethodAttributes.Public);
 			invalidMethod.GetILGenerator().Emit(OpCodes.Ldnull); // missing RET statement
 
-			invalidType.CreateType();
+			invalidType.CreateTypeInfo().AsType();
 
 			if (!IsVerificationDisabled)
 			{
