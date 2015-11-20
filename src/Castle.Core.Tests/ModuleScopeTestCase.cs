@@ -110,6 +110,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(@"d:\Bar", scope.WeakNamedModuleDirectory);
 		}
 
+#if FEATURE_STRONGNAME
 		private static void CheckSignedSavedAssembly(string path)
 		{
 			Assert.IsTrue(File.Exists(path));
@@ -149,6 +150,7 @@ namespace Castle.DynamicProxy.Tests
 			CheckSignedSavedAssembly(path);
 			File.Delete(path);
 		}
+#endif
 
 		[Test]
 #if __MonoCS__
