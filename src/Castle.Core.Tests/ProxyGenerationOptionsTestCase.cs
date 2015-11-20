@@ -24,7 +24,11 @@ namespace Castle.DynamicProxy.Tests
 
 	using NUnit.Framework;
 
-	using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
+	public class DescriptionAttribute : Attribute
+	{
+		public string Description { get; set; }
+		public DescriptionAttribute(string description) { Description = description; }
+	}
 
 	[TestFixture]
 	public class ProxyGenerationOptionsTestCase
