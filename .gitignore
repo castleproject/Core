@@ -19,3 +19,4 @@ artifacts
 *.lock.json
 packages
 .vs
+*.nuget.targets
