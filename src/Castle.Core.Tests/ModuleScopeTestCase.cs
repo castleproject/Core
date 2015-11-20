@@ -203,20 +203,18 @@ namespace Castle.DynamicProxy.Tests
 			File.Delete(strongModulePath);
 			File.Delete(weakModulePath);
 		}
-#endif
 
 		private static void CheckUnsignedSavedAssembly(string path)
 		{
 			Assert.IsTrue(File.Exists(path));
 
-			var assemblyName = AssemblyName.GetAssemblyName(path);
+			var assemblyName = new AssemblyName(Path.GetFileNameWithoutExtension(path));
 			Assert.AreEqual(ModuleScope.DEFAULT_ASSEMBLY_NAME, assemblyName.Name);
 
 			var loadedPublicKey = assemblyName.GetPublicKey();
 			Assert.IsNull(loadedPublicKey);
 		}
 
-#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
 		public void SaveReturnsNullWhenNoModuleObtained()
 		{
