@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Reflection;
 	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Tests.Mixins;
