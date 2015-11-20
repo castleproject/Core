@@ -152,10 +152,12 @@ namespace Castle.DynamicProxy.Tests
 		}
 #endif
 
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
 #if __MonoCS__
 		[Ignore("Expected: CastleDynProxy2.dll  But was:  /home/teamcity/buildagent/work/...")]
 #endif
+
 		public void SaveUnsigned()
 		{
 			var scope = new ModuleScope(true);
@@ -173,7 +175,9 @@ namespace Castle.DynamicProxy.Tests
 			CheckUnsignedSavedAssembly(path);
 			File.Delete(path);
 		}
+#endif
 
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
 		public void SaveWithPath()
 		{
@@ -199,6 +203,7 @@ namespace Castle.DynamicProxy.Tests
 			File.Delete(strongModulePath);
 			File.Delete(weakModulePath);
 		}
+#endif
 
 		private static void CheckUnsignedSavedAssembly(string path)
 		{
@@ -211,6 +216,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsNull(loadedPublicKey);
 		}
 
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
 		public void SaveReturnsNullWhenNoModuleObtained()
 		{
@@ -271,6 +277,7 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.Throws<InvalidOperationException>(() => scope.SaveAssembly(true));
 		}
+#endif
 
 #if FEATURE_SERIALIZATION
 		[Test]
@@ -342,6 +349,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("Weak", weak.Assembly.GetName().Name);
 		}
 
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
 		public void ModuleScopeDoesntTryToDeleteFromCurrentDirectory()
 		{
@@ -372,6 +380,7 @@ namespace Castle.DynamicProxy.Tests
 			File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Strong.dll"));
 			File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Weak.dll"));
 		}
+#endif // FEATURE_ASSEMBLYBUILDER_SAVE
 #endif
 
 		[Test]
