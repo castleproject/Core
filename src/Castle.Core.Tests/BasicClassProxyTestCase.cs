@@ -308,7 +308,7 @@ namespace CastleTests
 			return methodInfo.GetParameters();
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_STRONGNAME
 		[Test]
 		public void ProxyForBaseTypeFromSignedAssembly()
 		{
