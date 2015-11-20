@@ -62,7 +62,8 @@ limitations under the License.
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_GAC</AdditionalDefineConstants>
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_GET_REFERENCED_ASSEMBLIES</AdditionalDefineConstants>
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_REMOTING</AdditionalDefineConstants>
-		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_SECURITY_PERMISSIONS</AdditionalDefineConstants>
+    <AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_RHINOMOCKS</AdditionalDefineConstants>
+    <AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_SECURITY_PERMISSIONS</AdditionalDefineConstants>
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_SERIALIZATION</AdditionalDefineConstants>
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_SMTP</AdditionalDefineConstants>
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_STRONGNAME</AdditionalDefineConstants>

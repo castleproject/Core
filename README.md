@@ -49,6 +49,7 @@ Symbol                              | NET35              | NET40              | 
 `FEATURE_GET_REFERENCED_ASSEMBLIES` | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_LEGACY_REFLECTION_API`     | :white_check_mark: | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:
 `FEATURE_NETCORE_REFLECTION_API`    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
+`FEATURE_RHINOMOCKS`                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_REMOTING`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_SECURITY_PERMISSIONS`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_SERIALIZATION`             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
@@ -67,7 +68,7 @@ Symbol                              | NET35              | NET40              | 
 
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.
-* `FEATURE_COM` - enable support for COM Interop.
+* `FEATURE_COM` - enables support for COM Interop.
 * `FEATURE_EMIT_CUSTOMMODIFIERS` - enables emitting optional and required custom modifiers defined on parameters including return parameters. It seems like a defect in corefx not to expose these methods because they are still implemented.
 * `FEATURE_EVENTLOG` - provides a diagnostics logger using the Windows Event Log.
 * `FEATURE_GAC` - enables support for obtaining assemblies using an assembly long form name.
@@ -75,6 +76,7 @@ Symbol                              | NET35              | NET40              | 
 * `FEATURE_LEGACY_REFLECTION_API` - provides a shim for .NET 3.5/4.0 that emulates the `TypeInfo` API available in .NET 4.5+ and .NET Core.
 * `FEATURE_NETCORE_REFLECTION_API` - provides shims to implement missing functionality in .NET Core that has no alternatives.
 * `FEATURE_REMOTING` - supports remoting on various types including inheriting from MarshalByRefObject.
+* `FEATURE_RHINOMOCKS` - enables the RhinoMocks tests.
 * `FEATURE_SECURITY_PERMISSIONS` - enables the use of CAS and Security[Critical|SafeCritical|Transparent].
 * `FEATURE_SERIALIZATION` - enables support for serialization of dynamic proxies and other types.
 * `FEATURE_SMTP` - providers the email sender abstraction and implementation.
