@@ -19,7 +19,8 @@
   },
   "compilationOptions": {
     "warningsAsErrors": true,
-    "define": [ "FEATURE_XUNITNET" ]
+    "define": [ "FEATURE_XUNITNET" ],
+    "keyFile": "../../buildscripts/CastleKey.snk"
   },
   "resource": [
     "Core.Tests/Ressources/MoreRes/TestRes.resx"
