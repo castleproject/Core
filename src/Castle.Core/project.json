@@ -29,7 +29,7 @@
   },
   "compilationOptions": {
     "warningsAsErrors": true,
-    "define": [ "FEATURE_NETCORE_REFLECTION_API" ]
+    "define": [ "FEATURE_NETCORE_REFLECTION_API", "FEATURE_NETCORE_EXCEPTION_API", "FEATURE_NETCORE_CONVERTER_API" ]
   },
   "exclude": [
     "Components.DictionaryAdapter/**/*"

@@ -48,6 +48,8 @@ Symbol                              | NET35              | NET40              | 
 `FEATURE_GAC`                       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_GET_REFERENCED_ASSEMBLIES` | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_LEGACY_REFLECTION_API`     | :white_check_mark: | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:
+`FEATURE_NETCORE_CONVERTER_API`     | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
+`FEATURE_NETCORE_EXCEPTION_API`     | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
 `FEATURE_NETCORE_REFLECTION_API`    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
 `FEATURE_RHINOMOCKS`                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_REMOTING`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
@@ -74,6 +76,8 @@ Symbol                              | NET35              | NET40              | 
 * `FEATURE_GAC` - enables support for obtaining assemblies using an assembly long form name.
 * `FEATURE_GET_REFERENCED_ASSEMBLIES` - enables code that takes advantage of System.Reflection.Assembly.GetReferencedAssemblies().
 * `FEATURE_LEGACY_REFLECTION_API` - provides a shim for .NET 3.5/4.0 that emulates the `TypeInfo` API available in .NET 4.5+ and .NET Core.
+* `FEATURE_NETCORE_CONVERTER_API` - provides shims to implement missing Converter in .NET Core.
+* `FEATURE_NETCORE_EXCEPTION_API` - provides shims to implement missing exception types in .NET Core.
 * `FEATURE_NETCORE_REFLECTION_API` - provides shims to implement missing functionality in .NET Core that has no alternatives.
 * `FEATURE_REMOTING` - supports remoting on various types including inheriting from MarshalByRefObject.
 * `FEATURE_RHINOMOCKS` - enables the RhinoMocks tests.
