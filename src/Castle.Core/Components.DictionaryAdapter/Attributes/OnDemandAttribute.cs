@@ -118,11 +118,13 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					using (dictionaryAdapter.SuppressNotificationsBlock())
 					{
+#if FEATURE_ISUPPORTINITIALIZE
 						if (storedValue is ISupportInitialize)
 						{
 							((ISupportInitialize)storedValue).BeginInit();
 							((ISupportInitialize)storedValue).EndInit();
 						}
+#endif
 						if (initializer != null)
 						{
 							initializer.Initialize(dictionaryAdapter, storedValue);
