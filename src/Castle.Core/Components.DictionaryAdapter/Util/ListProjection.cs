@@ -88,7 +88,9 @@ namespace Castle.Components.DictionaryAdapter
 		bool IBindingList<T>.SupportsSorting                { get { return false; } }
 		bool IBindingList<T>.IsSorted                       { get { return false; } }
 		SysPropertyDescriptor IBindingList<T>.SortProperty  { get { return null;  } }
+#if FEATURE_LISTSORT
 		ListSortDirection     IBindingList<T>.SortDirection { get { return ListSortDirection.Ascending; } }
+#endif
 
 #if FEATURE_BINDINGLIST
 		// System IBindingList Properties
@@ -623,10 +625,12 @@ namespace Castle.Components.DictionaryAdapter
 		}
 #endif
 
+#if FEATURE_LISTSORT
 		void IBindingList<T>.ApplySort(SysPropertyDescriptor property, ListSortDirection direction)
 		{
 			throw new NotSupportedException();
 		}
+#endif
 
 #if FEATURE_BINDINGLIST
 		void IBindingList.ApplySort(SysPropertyDescriptor property, ListSortDirection direction)

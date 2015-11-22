@@ -31,7 +31,9 @@ namespace Castle.Components.DictionaryAdapter
 		bool SupportsSorting               { get; }
 		bool IsSorted                      { get; }
 		SysPropertyDescriptor SortProperty { get; }
+#if FEATURE_LISTSORT
 		ListSortDirection SortDirection    { get; }
+#endif
 
 #if FEATURE_BINDINGLIST
 		event ListChangedEventHandler ListChanged;
@@ -41,7 +43,9 @@ namespace Castle.Components.DictionaryAdapter
 		int  Find       (SysPropertyDescriptor property, object key);
 		void AddIndex   (SysPropertyDescriptor property);
 		void RemoveIndex(SysPropertyDescriptor property);
+#if FEATURE_LISTSORT
 		void ApplySort  (SysPropertyDescriptor property, ListSortDirection direction);
+#endif
 		void RemoveSort ();
 	}
 }
