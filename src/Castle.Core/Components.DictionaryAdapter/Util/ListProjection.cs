@@ -27,7 +27,7 @@ namespace Castle.Components.DictionaryAdapter
 	[DebuggerTypeProxy(typeof(ListProjectionDebugView<>))]
 	public class ListProjection<T> :
 		IBindingList<T>, // Castle
-#if SILVERLIGHT
+#if !FEATURE_BINDINGLIST
 		IList,
 #else
 		IBindingList,    // System
@@ -41,7 +41,7 @@ namespace Castle.Components.DictionaryAdapter
 		private int addNewIndex  = NoIndex;
 		private int addedIndex   = NoIndex;
 		private int suspendLevel = 0;
-#if !SILVERLIGHT
+#if FEATURE_BINDINGLIST
 		private int changedIndex = NoIndex;
 		private PropertyChangedEventHandler propertyHandler;
 		private static PropertyDescriptorCollection itemProperties;
@@ -62,7 +62,7 @@ namespace Castle.Components.DictionaryAdapter
 			get { return adapter.Count; }
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_BINDINGLIST
 		public IBindingList AsBindingList
 		{
 			get { return this; }
@@ -90,7 +90,7 @@ namespace Castle.Components.DictionaryAdapter
 		SysPropertyDescriptor IBindingList<T>.SortProperty  { get { return null;  } }
 		ListSortDirection     IBindingList<T>.SortDirection { get { return ListSortDirection.Ascending; } }
 
-#if !SILVERLIGHT
+#if FEATURE_BINDINGLIST
 		// System IBindingList Properties
 		bool IBindingList.AllowEdit                      { get { return true;  } }
 		bool IBindingList.AllowNew                       { get { return true;  } }
@@ -107,7 +107,7 @@ namespace Castle.Components.DictionaryAdapter
 #endif
 
 		// IList Properties
-		bool   IList.IsFixedSize          { get { return false; } }
+		bool IList.IsFixedSize          { get { return false; } }
 		bool   IList.IsReadOnly           { get { return false; } }
 		bool   ICollection<T>.IsReadOnly  { get { return false; } }
 		bool   ICollection.IsSynchronized { get { return false; } }
@@ -227,7 +227,7 @@ namespace Castle.Components.DictionaryAdapter
 			return item;
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_BINDINGLIST
 		object IBindingList.AddNew()
 		{
 			return AddNew();
@@ -425,7 +425,7 @@ namespace Castle.Components.DictionaryAdapter
 			CancelEdit();
 		}
 
-#if SILVERLIGHT
+#if !FEATURE_BINDINGLIST
 		[Conditional("NOP")]
 		private void AttachPropertyChanged(T value) { }
 
@@ -528,7 +528,7 @@ namespace Castle.Components.DictionaryAdapter
 		}
 #endif
 
-#if !SILVERLIGHT
+#if FEATURE_BINDINGLIST
 		public event ListChangedEventHandler ListChanged;
 		protected virtual void OnListChanged(ListChangedEventArgs args)
 		{
@@ -538,7 +538,7 @@ namespace Castle.Components.DictionaryAdapter
 		}
 #endif
 
-#if SILVERLIGHT
+#if !FEATURE_BINDINGLIST
 		protected enum ListChangedType
 		{
 			ItemAdded,
@@ -592,7 +592,7 @@ namespace Castle.Components.DictionaryAdapter
 			// Do nothing
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_BINDINGLIST
 		void IBindingList.AddIndex(SysPropertyDescriptor property)
 		{
 			// Do nothing
@@ -604,7 +604,7 @@ namespace Castle.Components.DictionaryAdapter
 			// Do nothing
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_BINDINGLIST
 		void IBindingList.RemoveIndex(SysPropertyDescriptor property)
 		{
 			// Do nothing
@@ -616,7 +616,7 @@ namespace Castle.Components.DictionaryAdapter
 			throw new NotSupportedException();
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_BINDINGLIST
 		int IBindingList.Find(SysPropertyDescriptor property, object key)
 		{
 			throw new NotSupportedException();
@@ -628,7 +628,7 @@ namespace Castle.Components.DictionaryAdapter
 			throw new NotSupportedException();
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_BINDINGLIST
 		void IBindingList.ApplySort(SysPropertyDescriptor property, ListSortDirection direction)
 		{
 			throw new NotSupportedException();
@@ -640,7 +640,7 @@ namespace Castle.Components.DictionaryAdapter
 			throw new NotSupportedException();
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_BINDINGLIST
 		void IBindingList.RemoveSort()
 		{
 			throw new NotSupportedException();

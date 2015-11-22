@@ -42,7 +42,8 @@ Symbol                              | NET35              | NET40              | 
 ----------------------------------- | ------------------ | ------------------ | ------------------ | ------------------
 `FEATURE_APPDOMAIN`                 | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_COM`                `      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_BINDINGLIST`               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_COM`                       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_EMIT_CUSTOMMODIFIERS`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_EVENTLOG`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_GAC`                       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
@@ -70,6 +71,7 @@ Symbol                              | NET35              | NET40              | 
 
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.
+* `FEATURE_BINDINGLIST` - enables support features that make use of System.ComponentModel.BindingList.
 * `FEATURE_COM` - enables support for COM Interop.
 * `FEATURE_EMIT_CUSTOMMODIFIERS` - enables emitting optional and required custom modifiers defined on parameters including return parameters. It seems like a defect in corefx not to expose these methods because they are still implemented.
 * `FEATURE_EVENTLOG` - provides a diagnostics logger using the Windows Event Log.
