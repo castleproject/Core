@@ -91,7 +91,7 @@ namespace Castle.Components.DictionaryAdapter
 			return GetAdapter(type, new NameValueCollectionAdapter(nameValues));
 		}
 
-#if !SILVERLIGHT // Until support for other platforms is verified
+#if FEATURE_DICTIONARYADAPTER_XML // Until support for other platforms is verified
 		/// <inheritdoc />
 		public T GetAdapter<T>(System.Xml.XmlNode xmlNode)
 		{
