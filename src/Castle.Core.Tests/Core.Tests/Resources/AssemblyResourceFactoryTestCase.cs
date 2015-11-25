@@ -35,11 +35,7 @@ namespace CastleTests.Core.Tests.Resources
 		}
 
 		private AssemblyResourceFactory resFactory;
-#if FEATURE_LEGACY_REFLECTION_API
-		private static readonly String AssemblyName = Assembly.GetExecutingAssembly().FullName;
-#else
 		private static readonly String AssemblyName = typeof(AssemblyResourceFactory).GetTypeInfo().Assembly.FullName;
-#endif
 		private const String ResPath = "Resources";
 
 		[Test]
