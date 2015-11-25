@@ -77,7 +77,7 @@ namespace Castle.Core.Logging.Tests
 				}
 				catch (Exception ex)
 				{
-					throw new ApplicationException("Inner error is " + ex.Message, ex);
+					throw new Exception("Inner error is " + ex.Message, ex);
 				}
 			}
 			catch (Exception ex)
@@ -87,7 +87,7 @@ namespace Castle.Core.Logging.Tests
 
 			Listener.AssertContains("testsrule", "Castle.Core.Logging.Tests.TraceLoggerTests");
 			Listener.AssertContains("testsrule", "Problem handled");
-			Listener.AssertContains("testsrule", "ApplicationException");
+			Listener.AssertContains("testsrule", "Exception");
 			Listener.AssertContains("testsrule", "Inner error is");
 			Listener.AssertContains("testsrule", "ArgumentOutOfRangeException");
 			Listener.AssertContains("testsrule", "fakearg");
