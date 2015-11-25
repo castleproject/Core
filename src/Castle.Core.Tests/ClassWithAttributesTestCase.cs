@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Tests
 		public void EnsureProxyHasAttributesOnClassAndMethods()
 		{
 			HasNonInheritableAttribute instance = (HasNonInheritableAttribute)
-			                           generator.CreateClassProxy(typeof (HasNonInheritableAttribute), new StandardInterceptor());
+										generator.CreateClassProxy(typeof (HasNonInheritableAttribute), new StandardInterceptor());
 
 			object[] attributes = instance.GetType().GetTypeInfo().GetCustomAttributes(typeof (NonInheritableAttribute), false).ToArray();
 			Assert.AreEqual(1, attributes.Length);
@@ -46,7 +46,7 @@ namespace Castle.DynamicProxy.Tests
 		public void EnsureProxyHasAttributesOnClassAndMethods_ComplexAttributes()
 		{
 			AttributedClass2 instance = (AttributedClass2)
-			                            generator.CreateClassProxy(typeof (AttributedClass2), new StandardInterceptor());
+										generator.CreateClassProxy(typeof (AttributedClass2), new StandardInterceptor());
 
 			object[] attributes = instance.GetType().GetTypeInfo().GetCustomAttributes(typeof (ComplexNonInheritableAttribute), false).ToArray();
 			Assert.AreEqual(1, attributes.Length);
@@ -121,7 +121,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHasNonInheritableAttributeWithArray>();
 			var attribute = proxy.GetType().GetTypeInfo()
-                .GetCustomAttributes(typeof(NonInheritableWithArrayAttribute), false)
+				.GetCustomAttributes(typeof(NonInheritableWithArrayAttribute), false)
 				.Cast<NonInheritableWithArrayAttribute>().Single();
 			CollectionAssert.AreEqual(attribute.Values, new[] {"1", "2", "3"});
 		}
@@ -131,7 +131,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHasNonInheritableAttributeWithArray2>();
 			var attribute = proxy.GetType().GetTypeInfo()
-                .GetCustomAttributes(typeof(NonInheritableWithArray2Attribute), false)
+				.GetCustomAttributes(typeof(NonInheritableWithArray2Attribute), false)
 				.Cast<NonInheritableWithArray2Attribute>().Single();
 			CollectionAssert.AreEqual(attribute.Values, new[] { "1", "2", "3" });
 		}

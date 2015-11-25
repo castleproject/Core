@@ -157,7 +157,6 @@ namespace Castle.DynamicProxy.Tests
 #if __MonoCS__
 		[Ignore("Expected: CastleDynProxy2.dll  But was:  /home/teamcity/buildagent/work/...")]
 #endif
-
 		public void SaveUnsigned()
 		{
 			var scope = new ModuleScope(true);

@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Tests
 	{
 		public class SkipCallingMethodInterceptorWithOutputParams : IInterceptor
 		{
-#region IInterceptor Members
+			#region IInterceptor Members
 
 			public void Intercept(IInvocation invocation)
 			{
@@ -39,7 +39,7 @@ namespace Castle.DynamicProxy.Tests
 				invocation.ReturnValue = 5;
 			}
 
-#endregion
+			#endregion
 		}
 
 		public interface IWithEvents
@@ -49,11 +49,11 @@ namespace Castle.DynamicProxy.Tests
 
 		public class FakeWithEvents : IWithEvents
 		{
-#region IWithEvents Members
+			#region IWithEvents Members
 
 			public virtual event EventHandler Foo;
 
-#endregion
+			#endregion
 
 			public void MethodToGetAroundFooNotUsedError()
 			{
@@ -71,7 +71,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			// NON-virtual method
 
-#region IMulti Members
+			#region IMulti Members
 
 			public void OriginalMethod1()
 			{
@@ -82,7 +82,7 @@ namespace Castle.DynamicProxy.Tests
 			{
 			}
 
-#endregion
+			#endregion
 		}
 
 		public interface ISpecialMulti : IMulti
@@ -323,14 +323,14 @@ namespace Castle.DynamicProxy.Tests
 			this.x = x;
 		}
 
-#region IInterceptor Members
+		#region IInterceptor Members
 
 		public void Intercept(IInvocation invocation)
 		{
 			invocation.Arguments[0] = x;
 		}
 
-#endregion
+		#endregion
 	}
 
 	public class WithInternalMethod
@@ -352,14 +352,14 @@ namespace Castle.DynamicProxy.Tests
 
 	public class DoubleGenericImpl<One> : IDoubleGeneric<One>
 	{
-#region IDoubleGeneric<One> Members
+		#region IDoubleGeneric<One> Members
 
 		public object Call<T>(One one, T two)
 		{
 			return two;
 		}
 
-#endregion
+		#endregion
 	}
 
 	[ComImport]
@@ -406,7 +406,7 @@ namespace Castle.DynamicProxy.Tests
 
 	public class Foo : IFooWithOutIntPtr
 	{
-#region IFooWithOutIntPtr Members
+		#region IFooWithOutIntPtr Members
 
 		public int Bar(out IntPtr i)
 		{
@@ -414,7 +414,7 @@ namespace Castle.DynamicProxy.Tests
 			return 5;
 		}
 
-#endregion
+		#endregion
 
 		private object Test()
 		{

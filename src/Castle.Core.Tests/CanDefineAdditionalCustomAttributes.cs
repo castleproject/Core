@@ -15,13 +15,13 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+	using System.Reflection;
 
 	using Castle.DynamicProxy.Internal;
 
 	using CastleTests;
 
 	using NUnit.Framework;
-	using System.Reflection;
 
 	[TestFixture]
 	public class CanDefineAdditionalCustomAttributes : BasePEVerifyTestCase

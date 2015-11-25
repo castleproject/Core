@@ -14,10 +14,10 @@
 
 namespace Castle.DynamicProxy.Tests.Interceptors
 {
+	using System.Linq;
 	using System.Reflection;
 
 	using Castle.Core.Tests.Classes;
-	using System.Linq;
 
 	public class RequiredParamInterceptor : IInterceptor
 	{
