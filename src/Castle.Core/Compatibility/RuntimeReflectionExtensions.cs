@@ -27,16 +27,6 @@ namespace System.Reflection
 		{
 			return type.GetInterfaceMap(interfaceType);
 		}
-
-		public static Type CreateTypeInfo(this Emit.TypeBuilder typeBuilder)
-		{
-			return typeBuilder.CreateType();
-		}
-
-		public static Type AsType(this Type type)
-		{
-			return type;
-		}
 	}
 }
 
