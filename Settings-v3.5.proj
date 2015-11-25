@@ -5,7 +5,7 @@
   <!-- Project Properties -->
   <PropertyGroup>
     <ProjectName>Castle.Core-v3.5</ProjectName>
-    <AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_COM</AdditionalDefineConstants>
+    <AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_TEST_COM</AdditionalDefineConstants>
   </PropertyGroup>
 
 </Project>
