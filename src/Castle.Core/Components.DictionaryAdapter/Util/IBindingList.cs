@@ -19,7 +19,7 @@ namespace Castle.Components.DictionaryAdapter
 	using SysPropertyDescriptor = System.ComponentModel.PropertyDescriptor;
 
 	public interface IBindingList<T> : IList<T>
-#if !SILVERLIGHT
+#if FEATURE_BINDINGLIST
 		, IBindingListSource, ICancelAddNew, IRaiseItemChangedEvents
 #endif
 	{
@@ -31,17 +31,21 @@ namespace Castle.Components.DictionaryAdapter
 		bool SupportsSorting               { get; }
 		bool IsSorted                      { get; }
 		SysPropertyDescriptor SortProperty { get; }
+#if FEATURE_LISTSORT
 		ListSortDirection SortDirection    { get; }
+#endif
 
-#if !SILVERLIGHT
+#if FEATURE_BINDINGLIST
 		event ListChangedEventHandler ListChanged;
 #endif
 
-		T    AddNew     ();
+		T AddNew     ();
 		int  Find       (SysPropertyDescriptor property, object key);
 		void AddIndex   (SysPropertyDescriptor property);
 		void RemoveIndex(SysPropertyDescriptor property);
+#if FEATURE_LISTSORT
 		void ApplySort  (SysPropertyDescriptor property, ListSortDirection direction);
+#endif
 		void RemoveSort ();
 	}
 }
