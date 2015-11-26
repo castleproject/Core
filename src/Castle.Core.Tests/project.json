@@ -27,6 +27,7 @@
     "Core.Tests/Resources/MoreRes/TestRes.resx"
   ],
   "exclude": [
+    "AssemblyInfo.cs",
     "Components.DictionaryAdapter.Tests/Xml/**/*",
     "log4netIntegration/**/*",
     "NLogIntegration/**/*",
