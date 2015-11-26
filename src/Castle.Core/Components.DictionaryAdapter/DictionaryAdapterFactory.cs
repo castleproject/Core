@@ -155,8 +155,12 @@ namespace Castle.Components.DictionaryAdapter
 					if (descriptor == null && other != null)
 						descriptor = other.CreateDescriptor();
 
+#if FEATURE_APPDOMAIN
 					var appDomain = Thread.GetDomain();
 					var typeBuilder = CreateTypeBuilder(type, appDomain);
+#else
+					var typeBuilder = CreateTypeBuilder(type);
+#endif
 					meta = CreateAdapterMeta(type, typeBuilder, descriptor);
 					interfaceToMeta.Add(type, meta);
 					return meta;
@@ -170,8 +174,9 @@ namespace Castle.Components.DictionaryAdapter
 			return meta.CreateInstance(dictionary, descriptor);
 		}
 
-		#region Type Builders
-	
+#region Type Builders
+
+#if FEATURE_APPDOMAIN
 		private static TypeBuilder CreateTypeBuilder(Type type, AppDomain appDomain)
 		{
 			var assemblyName = new AssemblyName("CastleDictionaryAdapterAssembly");
@@ -179,6 +184,16 @@ namespace Castle.Components.DictionaryAdapter
 			var moduleBuilder = assemblyBuilder.DefineDynamicModule("CastleDictionaryAdapterModule");
 			return CreateAdapterType(type, moduleBuilder);
 		}
+#else
+		private static TypeBuilder CreateTypeBuilder(Type type)
+		{
+			var assemblyName = new AssemblyName("CastleDictionaryAdapterAssembly");
+			var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+			var moduleBuilder = assemblyBuilder.DefineDynamicModule("CastleDictionaryAdapterModule");
+			return CreateAdapterType(type, moduleBuilder);
+		}
+
+#endif
 
 		private static TypeBuilder CreateAdapterType(Type type, ModuleBuilder moduleBuilder)
 		{
@@ -227,6 +242,7 @@ namespace Castle.Components.DictionaryAdapter
 				CreateAdapterProperty(typeBuilder, property.Value);
 			}
 
+#if FEATURE_LEGACY_REFLECTION_API
 			var implementation = typeBuilder.CreateType();
 			var creator = (Func<DictionaryAdapterInstance, IDictionaryAdapter>)Delegate.CreateDelegate
 			(
@@ -234,21 +250,33 @@ namespace Castle.Components.DictionaryAdapter
 				implementation,
 				"__Create"
 			);
-		
+#else
+			var implementation = typeBuilder.CreateTypeInfo().AsType();
+			var creator = (Func<DictionaryAdapterInstance, IDictionaryAdapter>)implementation
+				.GetTypeInfo().GetDeclaredMethod("__Create")
+				.CreateDelegate(typeof(Func<DictionaryAdapterInstance, IDictionaryAdapter>));
+#endif
+
 			var meta = new DictionaryAdapterMeta(type, implementation, typeBehaviors,
 				initializers.MetaInitializers.ToArray(), initializers.Initializers.ToArray(),
 				propertyMap, this, creator);
 
+#if FEATURE_LEGACY_REFLECTION_API
 			const BindingFlags metaBindings = BindingFlags.Public | BindingFlags.Static | BindingFlags.SetField;
 			implementation.InvokeMember("__meta", metaBindings, null, null, new[] { meta });
+#else
+			const BindingFlags metaBindings = BindingFlags.Public | BindingFlags.Static;
+			var field = implementation.GetField("__meta", metaBindings);
+			field.SetValue(implementation, meta);
+#endif
 			return meta;
 		}
 
 		private static readonly PropertyInfo AdapterGetMeta = typeof(IDictionaryAdapter).GetProperty("Meta");
 
-		#endregion
+#endregion
 
-		#region Constructors
+#region Constructors
 
 		private static ConstructorInfo CreateAdapterConstructor(TypeBuilder typeBuilder)
 		{
@@ -286,9 +314,9 @@ namespace Castle.Components.DictionaryAdapter
 		private static readonly ConstructorInfo BaseCtor = typeof(DictionaryAdapterBase).GetConstructors()[0];
 		private static readonly Type[] ConstructorParameterTypes = { typeof(DictionaryAdapterInstance) };
 
-		#endregion
+#endregion
 
-		#region Properties
+#region Properties
 
 		private static void CreateMetaProperty(TypeBuilder typeBuilder, PropertyInfo prop, FieldInfo field)
 		{
@@ -341,9 +369,9 @@ namespace Castle.Components.DictionaryAdapter
 			propILGenerator.Emit(OpCodes.Stloc_0);
 		}
 
-		#endregion
+#endregion
 
-		#region Getters
+#region Getters
 
 		private static void CreatePropertyGetMethod(TypeBuilder typeBuilder, PropertyBuilder propertyBuilder, 
 			PropertyDescriptor descriptor, MethodAttributes propAttribs)
@@ -391,9 +419,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static readonly MethodInfo AdapterGetProperty = typeof(IDictionaryAdapter).GetMethod("GetProperty");
 
-		#endregion
+#endregion
 
-		#region Setters
+#region Setters
 
 		private static void CreatePropertySetMethod(TypeBuilder typeBuilder, PropertyBuilder propertyBuilder,
 			PropertyDescriptor descriptor, MethodAttributes propAttribs)
@@ -422,9 +450,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static readonly MethodInfo AdapterSetProperty = typeof(IDictionaryAdapter).GetMethod("SetProperty");
 
-		#endregion
+#endregion
 
-		#region Descriptors
+#region Descriptors
 
 		private static Dictionary<String, PropertyDescriptor> GetPropertyDescriptors(Type type, PropertyDescriptor initializers, out object[] typeBehaviors)
 		{
@@ -452,7 +480,11 @@ namespace Castle.Components.DictionaryAdapter
 						.OfType<IDictionaryKeyBuilder>());
 #else
 					.AddBehaviors(ExpandBehaviors(InterfaceAttributeUtil
+#if FEATURE_LEGACY_REFLECTION_API
 						.GetAttributes(property.ReflectedType, true))
+#else
+						.GetAttributes(type, true))
+#endif
 						.OfType<IDictionaryKeyBuilder>()
 						.Cast<IDictionaryBehavior>());
 #endif
@@ -537,6 +569,6 @@ namespace Castle.Components.DictionaryAdapter
 				typeof (IDictionaryValidate), typeof (IDictionaryAdapter)
 			};
 
-		#endregion
+#endregion
 	}
 }

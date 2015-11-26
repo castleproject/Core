@@ -32,11 +32,10 @@
   },
   "compilationOptions": {
     "warningsAsErrors": true,
-    "define": [ "FEATURE_NETCORE_REFLECTION_API" ],
+    "define": [ "FEATURE_NETCORE_REFLECTION_API", "FEATURE_NETCORE_COMPONENTMODEL_API" ],
     "keyFile": "../../buildscripts/CastleKey.snk"
   },
   "exclude": [
-    "Components.DictionaryAdapter/**/*"
   ],
   "compileFiles": [
     "Properties/InternalsVisibleToTests.cs"

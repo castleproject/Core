@@ -7,6 +7,7 @@
   "licenseUrl": "",
   "dependencies": {
     "Castle.Core": "3.3.4-*",
+    "Microsoft.CSharp": "4.0.0",
     "System.Runtime": "4.0.20",
     "xunit": "2.1.0",
     "xunit.runner.dnx": "2.1.0-beta6-build191"
@@ -26,11 +27,9 @@
     "Core.Tests/Resources/MoreRes/TestRes.resx"
   ],
   "exclude": [
-    "Components.DictionaryAdapter.Tests/**/*",
+    "Components.DictionaryAdapter.Tests/Xml/**/*",
     "log4netIntegration/**/*",
     "NLogIntegration/**/*",
-    "SerilogIntegration/**/*",
-    "TestDictionaryValidator.cs",
-    "IdEqualityHashCodeStrategy.cs"
+    "SerilogIntegration/**/*"
   ]
 }
