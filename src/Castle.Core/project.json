@@ -12,11 +12,14 @@
     "System.ComponentModel.TypeConverter": "4.0.0",
     "System.Diagnostics.TraceSource": "4.0.0-beta-23123",
     "System.Diagnostics.Tools": "4.0.0",
+    "System.Dynamic.Runtime": "4.0.10",
     "System.Globalization": "4.0.10",
     "System.Linq": "4.0.0",
+    "System.ObjectModel": "4.0.10",
     "System.Reflection": "4.0.10",
     "System.Reflection.Emit": "4.0.0",
     "System.Reflection.Extensions": "4.0.0",
+    "System.Reflection.Emit.Lightweight": "4.0.0",
     "System.Reflection.TypeExtensions": "4.0.0",
     "System.Runtime": "4.0.20",
     "System.Runtime.Extensions": "4.0.10",
@@ -29,7 +32,7 @@
   },
   "compilationOptions": {
     "warningsAsErrors": true,
-    "define": [ "FEATURE_NETCORE_REFLECTION_API", "FEATURE_NETCORE_CONVERTER_API" ],
+    "define": [ "FEATURE_NETCORE_REFLECTION_API" ],
     "keyFile": "../../buildscripts/CastleKey.snk"
   },
   "exclude": [

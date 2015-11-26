@@ -51,7 +51,6 @@ Symbol                              | NET35              | NET40              | 
 `FEATURE_ISUPPORTINITIALIZE`        | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_LEGACY_REFLECTION_API`     | :white_check_mark: | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:
 `FEATURE_LISTSORT`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_NETCORE_CONVERTER_API`     | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
 `FEATURE_NETCORE_COMPONENTMODEL_API | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
 `FEATURE_NETCORE_REFLECTION_API`    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
 `FEATURE_REMOTING`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
@@ -82,7 +81,6 @@ Symbol                              | NET35              | NET40              | 
 * `FEATURE_ISUPPORTINITIALIZE` - enables support for features that make use of System.ComponentModel.ISupportInitialize.
 * `FEATURE_LISTSORT` - enables support for features that make use of System.ComponentModel.ListSortDescription.
 * `FEATURE_LEGACY_REFLECTION_API` - provides a shim for .NET 3.5/4.0 that emulates the `TypeInfo` API available in .NET 4.5+ and .NET Core.
-* `FEATURE_NETCORE_CONVERTER_API` - provides shims to implement missing Converter in .NET Core.
 * `FEATURE_NETCORE_COMPONENTMODEL_API` - provides shims to implement missing System.ComponentModel features in .Net Core.
 * `FEATURE_NETCORE_REFLECTION_API` - provides shims to implement missing functionality in .NET Core that has no alternatives.
 * `FEATURE_REMOTING` - supports remoting on various types including inheriting from MarshalByRefObject.
