@@ -10,6 +10,7 @@
 
 namespace CastleTests.Core.Tests.Resources.MoreRes {
     using System;
+    using System.Reflection;
     
     
     /// <summary>
@@ -39,7 +40,7 @@ namespace CastleTests.Core.Tests.Resources.MoreRes {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CastleTests.Core.Tests.Resources.MoreRes.TestRes", typeof(TestRes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CastleTests.Core.Tests.Resources.MoreRes.TestRes", typeof(TestRes).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

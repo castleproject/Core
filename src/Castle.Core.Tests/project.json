@@ -23,14 +23,13 @@
     "keyFile": "../../buildscripts/CastleKey.snk"
   },
   "resource": [
-    "Core.Tests/Ressources/MoreRes/TestRes.resx"
+    "Core.Tests/Resources/MoreRes/TestRes.resx"
   ],
   "exclude": [
     "Components.DictionaryAdapter.Tests/**/*",
     "log4netIntegration/**/*",
     "NLogIntegration/**/*",
     "SerilogIntegration/**/*",
-    "Core.Tests/Resources/MoreRes/TestRes.Designer.cs",
     "TestDictionaryValidator.cs",
     "IdEqualityHashCodeStrategy.cs"
   ]
