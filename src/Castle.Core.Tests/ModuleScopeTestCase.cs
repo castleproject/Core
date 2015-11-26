@@ -207,7 +207,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			Assert.IsTrue(File.Exists(path));
 
-			var assemblyName = new AssemblyName(Path.GetFileNameWithoutExtension(path));
+			var assemblyName = AssemblyName.GetAssemblyName(path);
 			Assert.AreEqual(ModuleScope.DEFAULT_ASSEMBLY_NAME, assemblyName.Name);
 
 			var loadedPublicKey = assemblyName.GetPublicKey();
