@@ -32,8 +32,7 @@
   },
   "compilationOptions": {
     "warningsAsErrors": true,
-    "define": [ "FEATURE_NETCORE_REFLECTION_API", "FEATURE_NETCORE_COMPONENTMODEL_API" ],
-    "keyFile": "../../buildscripts/CastleKey.snk"
+    "define": [ "FEATURE_NETCORE_REFLECTION_API", "FEATURE_NETCORE_COMPONENTMODEL_API" ]
   },
   "exclude": [
   ],
