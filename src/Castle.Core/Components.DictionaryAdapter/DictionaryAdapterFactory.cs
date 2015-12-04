@@ -30,7 +30,7 @@ namespace Castle.Components.DictionaryAdapter
 #endif
 	using System.Diagnostics;
 
-#if FEATURE_DICTIONARYADAPTER_XML // Until support for other platforms is verified
+#if FEATURE_DICTIONARYADAPTER_XML
 	using Castle.Components.DictionaryAdapter.Xml;
 #endif
 	using Castle.Core.Internal;
@@ -91,7 +91,7 @@ namespace Castle.Components.DictionaryAdapter
 			return GetAdapter(type, new NameValueCollectionAdapter(nameValues));
 		}
 
-#if FEATURE_DICTIONARYADAPTER_XML // Until support for other platforms is verified
+#if FEATURE_DICTIONARYADAPTER_XML
 		/// <inheritdoc />
 		public T GetAdapter<T>(System.Xml.XmlNode xmlNode)
 		{
