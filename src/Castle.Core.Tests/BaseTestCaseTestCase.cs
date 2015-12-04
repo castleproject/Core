@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if SILVERLIGHT
+#if !FEATURE_ASSEMBLYBUILDER_SAVE
 		[Ignore("Cannot do in Silverlight")]
 #endif
 #if __MonoCS__

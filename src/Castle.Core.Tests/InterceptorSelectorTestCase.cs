@@ -299,6 +299,7 @@ namespace Castle.DynamicProxy.Tests
 				ex.Message);
 		}
 
+#if FEATURE_STRONGNAME
 		[Test]
 		public void Cannot_proxy_generic_interface_with_inaccessible_type_argument()
 		{
@@ -308,6 +309,7 @@ namespace Castle.DynamicProxy.Tests
 				"Can not create proxy for type System.Collections.Generic.IList`1[[Castle.DynamicProxy.Tests.InterceptorSelectorTestCase+PrivateInterface, Castle.Core.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc]] because type Castle.DynamicProxy.Tests.InterceptorSelectorTestCase+PrivateInterface is not accessible. Make it public, or internal",
 				ex.Message);
 		}
+#endif
 
 		[Test]
 		public void Cannot_proxy_generic_interface_with_type_argument_that_has_inaccessible_type_argument()
@@ -351,14 +353,14 @@ namespace Castle.DynamicProxy.Tests
 #endif
 	public class GenericClass : IGenericInterface
 	{
-		#region IGenericInterface Members
+#region IGenericInterface Members
 
 		public T GenericMethod<T>()
 		{
 			return default(T);
 		}
 
-		#endregion
+#endregion
 	}
 
 	public interface IGenericInterface
@@ -384,7 +386,7 @@ namespace Castle.DynamicProxy.Tests
 #endif
 	internal class TypeInterceptorSelector<TInterceptor> : IInterceptorSelector where TInterceptor : IInterceptor
 	{
-		#region IInterceptorSelector Members
+#region IInterceptorSelector Members
 
 		public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
 		{
@@ -399,7 +401,7 @@ namespace Castle.DynamicProxy.Tests
 			return interceptorsOfT.ToArray();
 		}
 
-		#endregion
+#endregion
 	}
 
 #if FEATURE_SERIALIZATION
@@ -407,14 +409,14 @@ namespace Castle.DynamicProxy.Tests
 #endif
 	public class AllInterceptorSelector : IInterceptorSelector
 	{
-		#region IInterceptorSelector Members
+#region IInterceptorSelector Members
 
 		public IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors)
 		{
 			return interceptors;
 		}
 
-		#endregion
+#endregion
 	}
 
 #if FEATURE_SERIALIZATION
@@ -467,14 +469,14 @@ namespace Castle.DynamicProxy.Tests
 #endif
 	public class SimpleClass : ISimpleInterface
 	{
-		#region ISimpleInterface Members
+#region ISimpleInterface Members
 
 		public int Do()
 		{
 			return 3;
 		}
 
-		#endregion
+#endregion
 	}
 
 	public interface ISimpleInterface
