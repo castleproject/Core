@@ -21,14 +21,15 @@
     "System.Runtime": "4.0.20",
     "System.Runtime.Extensions": "4.0.10",
     "System.Threading": "4.0.10",
-    "System.Xml.XmlDocument": "4.0.0"
+    "System.Xml.XmlDocument": "4.0.0",
+    "System.Xml.XmlSerializer": "4.0.10"
   },
   "frameworks": {
     "dotnet": { }
   },
   "compilationOptions": {
     "warningsAsErrors": true,
-    "define": [ "FEATURE_NETCORE_REFLECTION_API" ]
+    "define": [ "FEATURE_NETCORE_REFLECTION_API", "FEATURE_NETCORE_CONVERTER_API" ]
   },
   "exclude": [
     "Components.DictionaryAdapter/**/*"

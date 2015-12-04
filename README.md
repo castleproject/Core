@@ -47,6 +47,7 @@ Symbol                              | NET35              | NET40              | 
 `FEATURE_GAC`                       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_GET_REFERENCED_ASSEMBLIES` | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_LEGACY_REFLECTION_API`     | :white_check_mark: | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:
+`FEATURE_NETCORE_CONVERTER_API`     | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
 `FEATURE_NETCORE_REFLECTION_API`    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
 `FEATURE_REMOTING`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_SECURITY_PERMISSIONS`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
@@ -55,6 +56,7 @@ Symbol                              | NET35              | NET40              | 
 `FEATURE_STRONGNAME`                | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_TARGETEXCEPTION`           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_TEST_COM`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_XUNITNET`                  | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
 ---                                 |                    |                    |                    | 
 `DOTNET35`                          | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:
@@ -71,6 +73,7 @@ Symbol                              | NET35              | NET40              | 
 * `FEATURE_GAC` - enables support for obtaining assemblies using an assembly long form name.
 * `FEATURE_GET_REFERENCED_ASSEMBLIES` - enables code that takes advantage of System.Reflection.Assembly.GetReferencedAssemblies().
 * `FEATURE_LEGACY_REFLECTION_API` - provides a shim for .NET 3.5/4.0 that emulates the `TypeInfo` API available in .NET 4.5+ and .NET Core.
+* `FEATURE_NETCORE_CONVERTER_API` - provides shims to implement missing Converter in .NET Core.
 * `FEATURE_NETCORE_REFLECTION_API` - provides shims to implement missing functionality in .NET Core that has no alternatives.
 * `FEATURE_REMOTING` - supports remoting on various types including inheriting from MarshalByRefObject.
 * `FEATURE_SECURITY_PERMISSIONS` - enables the use of CAS and Security[Critical|SafeCritical|Transparent].
@@ -79,6 +82,7 @@ Symbol                              | NET35              | NET40              | 
 * `FEATURE_STRONGNAME` - supports a strong named `Castle.Core.dll` assembly.
 * `FEATURE_SYSTEM_CONFIGURATION` - enables features that use System.Configuration and the ConfigurationManager.
 * `FEATURE_TARGETEXCEPTION` - enabled catching a `TargetException`. `System.Reflection.TargetException` is implemented by .NET Core but not exposed by corefx.
+* `FEATURE_TEST_COM` - enables COM Interop tests.
 * `FEATURE_XUNITNET` - provides an NUnit shim that runs over xUnit.net to be used for .NET Core.
 
 The `__MonoCS__` symbol is used only in unit tests when compiled on Mono to work around Mono defects and non-Windows differences,

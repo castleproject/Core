@@ -21,6 +21,9 @@
     "warningsAsErrors": true,
     "define": [ "FEATURE_XUNITNET" ]
   },
+  "resource": [
+    "Core.Tests/Resources/MoreRes/TestRes.resx"
+  ],
   "exclude": [
     "Components.DictionaryAdapter.Tests/**/*",
     "log4netIntegration/**/*",

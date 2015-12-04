@@ -68,6 +68,7 @@ limitations under the License.
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_STRONGNAME</AdditionalDefineConstants>
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_SYSTEM_CONFIGURATION</AdditionalDefineConstants>
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_TARGETEXCEPTION</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_TEST_COM</AdditionalDefineConstants>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)' != 'NET45-Debug' and '$(Configuration)' != 'NET45-Release' ">
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_LEGACY_REFLECTION_API</AdditionalDefineConstants>

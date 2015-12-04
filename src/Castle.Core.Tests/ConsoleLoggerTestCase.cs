@@ -113,13 +113,13 @@ namespace Castle.Core.Logging.Tests
 		{
 			ConsoleLogger log = new ConsoleLogger("Logger", LoggerLevel.Debug);
 
-			log.Debug("Some debug message", new ApplicationException("Some exception message"));
+			log.Debug("Some debug message", new Exception("Some exception message"));
 
 			String logcontents = outWriter.GetStringBuilder().ToString();
 			
 			StringWriter expected = new StringWriter();
 			expected.WriteLine("[Debug] 'Logger' Some debug message");
-			expected.WriteLine("[Debug] 'Logger' System.ApplicationException: Some exception message ");
+			expected.WriteLine("[Debug] 'Logger' System.Exception: Some exception message ");
 
 			Assert.AreEqual(expected.GetStringBuilder().ToString(), logcontents, "logcontents don't match");
 		}
