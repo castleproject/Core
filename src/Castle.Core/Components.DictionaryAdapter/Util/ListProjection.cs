@@ -109,7 +109,7 @@ namespace Castle.Components.DictionaryAdapter
 #endif
 
 		// IList Properties
-		bool IList.IsFixedSize          { get { return false; } }
+		bool   IList.IsFixedSize          { get { return false; } }
 		bool   IList.IsReadOnly           { get { return false; } }
 		bool   ICollection<T>.IsReadOnly  { get { return false; } }
 		bool   ICollection.IsSynchronized { get { return false; } }
