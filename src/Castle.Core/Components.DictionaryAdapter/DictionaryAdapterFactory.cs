@@ -174,7 +174,7 @@ namespace Castle.Components.DictionaryAdapter
 			return meta.CreateInstance(dictionary, descriptor);
 		}
 
-#region Type Builders
+		#region Type Builders
 
 #if FEATURE_APPDOMAIN
 		private static TypeBuilder CreateTypeBuilder(Type type, AppDomain appDomain)
@@ -274,9 +274,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static readonly PropertyInfo AdapterGetMeta = typeof(IDictionaryAdapter).GetProperty("Meta");
 
-#endregion
+		#endregion
 
-#region Constructors
+		#region Constructors
 
 		private static ConstructorInfo CreateAdapterConstructor(TypeBuilder typeBuilder)
 		{
@@ -314,9 +314,9 @@ namespace Castle.Components.DictionaryAdapter
 		private static readonly ConstructorInfo BaseCtor = typeof(DictionaryAdapterBase).GetConstructors()[0];
 		private static readonly Type[] ConstructorParameterTypes = { typeof(DictionaryAdapterInstance) };
 
-#endregion
+		#endregion
 
-#region Properties
+		#region Properties
 
 		private static void CreateMetaProperty(TypeBuilder typeBuilder, PropertyInfo prop, FieldInfo field)
 		{
@@ -369,9 +369,9 @@ namespace Castle.Components.DictionaryAdapter
 			propILGenerator.Emit(OpCodes.Stloc_0);
 		}
 
-#endregion
+		#endregion
 
-#region Getters
+		#region Getters
 
 		private static void CreatePropertyGetMethod(TypeBuilder typeBuilder, PropertyBuilder propertyBuilder, 
 			PropertyDescriptor descriptor, MethodAttributes propAttribs)
@@ -419,9 +419,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static readonly MethodInfo AdapterGetProperty = typeof(IDictionaryAdapter).GetMethod("GetProperty");
 
-#endregion
+		#endregion
 
-#region Setters
+		#region Setters
 
 		private static void CreatePropertySetMethod(TypeBuilder typeBuilder, PropertyBuilder propertyBuilder,
 			PropertyDescriptor descriptor, MethodAttributes propAttribs)
@@ -450,9 +450,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static readonly MethodInfo AdapterSetProperty = typeof(IDictionaryAdapter).GetMethod("SetProperty");
 
-#endregion
+		#endregion
 
-#region Descriptors
+		#region Descriptors
 
 		private static Dictionary<String, PropertyDescriptor> GetPropertyDescriptors(Type type, PropertyDescriptor initializers, out object[] typeBehaviors)
 		{
@@ -569,6 +569,6 @@ namespace Castle.Components.DictionaryAdapter
 				typeof (IDictionaryValidate), typeof (IDictionaryAdapter)
 			};
 
-#endregion
+		#endregion
 	}
 }

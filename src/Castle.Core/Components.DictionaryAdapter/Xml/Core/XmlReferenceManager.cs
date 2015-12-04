@@ -40,7 +40,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Populate(root);
 		}
 
-#region Populate
+		#region Populate
 
 		private void Populate(IXmlNode node)
 		{
@@ -90,7 +90,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
-#endregion
+		#endregion
 
 		public bool TryGet(object keyObject, out object inGraphObject)
 		{

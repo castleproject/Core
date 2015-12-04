@@ -39,7 +39,7 @@ namespace Castle.Components.DictionaryAdapter
 		event ListChangedEventHandler ListChanged;
 #endif
 
-		T AddNew     ();
+		T    AddNew     ();
 		int  Find       (SysPropertyDescriptor property, object key);
 		void AddIndex   (SysPropertyDescriptor property);
 		void RemoveIndex(SysPropertyDescriptor property);
