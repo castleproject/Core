@@ -91,6 +91,7 @@ namespace Castle.DynamicProxy.Tests
 			base.TearDown();
 		}
 
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
 #if SILVERLIGHT
 		[Ignore("Cannot do in Silverlight")]
@@ -106,6 +107,7 @@ namespace Castle.DynamicProxy.Tests
 			StringAssert.Contains("PeVerify reported error(s)", ex.Message);
 			StringAssert.Contains("fall through end of the method without returning", ex.Message);
 		}
+#endif
 
 		[Test]
 		public void DisableVerification_DisablesVerificationForTestCase()
