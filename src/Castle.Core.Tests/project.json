@@ -22,7 +22,7 @@
   },
   "compilationOptions": {
     "warningsAsErrors": true,
-    "define": [ "FEATURE_XUNITNET" ]
+    "define": [ "FEATURE_XUNITNET", "FEATURE_NETCORE_RESOURCE" ]
   },
   "resource": [
     "Core.Tests/Resources/MoreRes/TestRes.resx"

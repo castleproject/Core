@@ -55,7 +55,12 @@ namespace CastleTests.Core.Tests.Resources
 		{
 			IResource resource =
 				new AssemblyBundleResource(
-					new CustomUri("assembly://" + AssemblyName + "/CastleTests.Core.Tests.Resources.MoreRes.TestRes/content1"));
+#if !FEATURE_NETCORE_RESOURCE
+					new CustomUri("assembly://" + AssemblyName + "/CastleTests.Core.Tests.Resources.MoreRes.TestRes/content1")
+#else
+					new CustomUri("assembly://" + AssemblyName + "/Castle.Core.Tests.Core.Tests.Resources.MoreRes.TestRes/content1")
+#endif
+				);
 
 			Assert.IsNotNull(resource);
 			var line = resource.GetStreamReader().ReadLine();

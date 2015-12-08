@@ -53,6 +53,7 @@ Symbol                              | NET35              | NET40              | 
 `FEATURE_LISTSORT`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_NETCORE_COMPONENTMODEL_API | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
 `FEATURE_NETCORE_REFLECTION_API`    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
+`FEATURE_NETCORE_RESOURCE`          | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
 `FEATURE_REMOTING`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_SECURITY_PERMISSIONS`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_SERIALIZATION`             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
@@ -83,10 +84,11 @@ Symbol                              | NET35              | NET40              | 
 * `FEATURE_LEGACY_REFLECTION_API` - provides a shim for .NET 3.5/4.0 that emulates the `TypeInfo` API available in .NET 4.5+ and .NET Core.
 * `FEATURE_NETCORE_COMPONENTMODEL_API` - provides shims to implement missing System.ComponentModel features in .Net Core.
 * `FEATURE_NETCORE_REFLECTION_API` - provides shims to implement missing functionality in .NET Core that has no alternatives.
+* `FEATURE_NETCORE_RESOURCE` - enables different resource probing behavior on .Net Core.
 * `FEATURE_REMOTING` - supports remoting on various types including inheriting from MarshalByRefObject.
 * `FEATURE_SECURITY_PERMISSIONS` - enables the use of CAS and Security[Critical|SafeCritical|Transparent].
 * `FEATURE_SERIALIZATION` - enables support for serialization of dynamic proxies and other types.
-* `FEATURE_SMTP` - providers the email sender abstraction and implementation.
+* `FEATURE_SMTP` - provides the email sender abstraction and implementation.
 * `FEATURE_STRONGNAME` - supports a strong named `Castle.Core.dll` assembly.
 * `FEATURE_SYSTEM_CONFIGURATION` - enables features that use System.Configuration and the ConfigurationManager.
 * `FEATURE_TARGETEXCEPTION` - enabled catching a `TargetException`. `System.Reflection.TargetException` is implemented by .NET Core but not exposed by corefx.
