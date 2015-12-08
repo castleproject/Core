@@ -468,26 +468,21 @@ namespace Castle.Components.DictionaryAdapter
 						.AddBehaviors(typeBehaviors.OfType<IDictionaryInitializer>    ().Cast<IDictionaryBehavior>());
 #endif
 
-			CollectProperties(type, property =>
+			CollectProperties(type, (property, reflectedType) =>
 			{
 				var propertyBehaviors = ExpandBehaviors(property.GetCustomAttributes(false)).ToArray();
 				var propertyDescriptor = new PropertyDescriptor(property, propertyBehaviors)
 					.AddBehaviors(propertyBehaviors.OfType<IDictionaryBehavior>())
-					.AddBehaviors(interfaceBehaviors.OfType<IDictionaryBehavior>().Where(b => b is IDictionaryKeyBuilder == false))
+					.AddBehaviors(interfaceBehaviors.OfType<IDictionaryBehavior>().Where(b => b is IDictionaryKeyBuilder == false));
+				var expandedBehaviors = ExpandBehaviors(InterfaceAttributeUtil
+					.GetAttributes(reflectedType, true))
 #if DOTNET40
-					.AddBehaviors(ExpandBehaviors(InterfaceAttributeUtil
-						.GetAttributes(property.ReflectedType, true))
-						.OfType<IDictionaryKeyBuilder>());
+					.OfType<IDictionaryKeyBuilder>();
 #else
-					.AddBehaviors(ExpandBehaviors(InterfaceAttributeUtil
-#if FEATURE_LEGACY_REFLECTION_API
-						.GetAttributes(property.ReflectedType, true))
-#else
-						.GetAttributes(type, true))
+					.OfType<IDictionaryKeyBuilder>()
+					.Cast<IDictionaryBehavior>();
 #endif
-						.OfType<IDictionaryKeyBuilder>()
-						.Cast<IDictionaryBehavior>());
-#endif
+				propertyDescriptor = propertyDescriptor.AddBehaviors(expandedBehaviors);
 
 				AddDefaultGetter(propertyDescriptor);
 
@@ -519,7 +514,7 @@ namespace Castle.Components.DictionaryAdapter
 						return;
 					}
 				}
-	
+
 				propertyMap.Add(property.Name, propertyDescriptor);
 			});
 
@@ -542,17 +537,17 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
-		private static void CollectProperties(Type currentType, Action<PropertyInfo> onProperty)
+		private static void CollectProperties(Type currentType, Action<PropertyInfo, Type> onProperty)
 		{
 			var types = new List<Type>();
 			types.Add(currentType);
 			types.AddRange(currentType.GetInterfaces());
 			const BindingFlags publicBindings = BindingFlags.Public | BindingFlags.Instance;
 
-			foreach (var type in types.Where(t => InfrastructureTypes.Contains(t) == false))
-			foreach (var property in type.GetProperties(publicBindings))
+			foreach (var reflectedType in types.Where(t => InfrastructureTypes.Contains(t) == false))
+			foreach (var property in reflectedType.GetProperties(publicBindings))
 			{
-				onProperty(property);
+				onProperty(property, reflectedType);
 			}
 		}
 
