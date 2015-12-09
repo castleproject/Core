@@ -70,8 +70,11 @@ namespace CastleTests.Core.Tests.Resources
 		[Test]
 		public void CreateWithAbsolutePath()
 		{
+#if !FEATURE_NETCORE_RESOURCE
 			var resource = resFactory.Create(new CustomUri("assembly://" + AssemblyName + "/CastleTests.Core.Tests.Resources.file1.txt"));
-
+#else
+			var resource = resFactory.Create(new CustomUri("assembly://" + AssemblyName + "/Castle.Core.Tests.Core.Tests.Resources.file1.txt"));
+#endif
 			Assert.IsNotNull(resource);
 			var line = resource.GetStreamReader().ReadLine();
 			Assert.AreEqual("Something", line);

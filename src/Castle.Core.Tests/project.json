@@ -25,7 +25,8 @@
     "define": [ "FEATURE_XUNITNET", "FEATURE_NETCORE_RESOURCE" ]
   },
   "resource": [
-    "Core.Tests/Resources/MoreRes/TestRes.resx"
+    "Core.Tests/Resources/MoreRes/TestRes.resx",
+    "Core.Tests/Resources/file1.txt"
   ],
   "exclude": [
     "AssemblyInfo.cs",
