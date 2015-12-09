@@ -58,6 +58,7 @@ limitations under the License.
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_APPDOMAIN</AdditionalDefineConstants>
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_ASSEMBLYBUILDER_SAVE</AdditionalDefineConstants>
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_BINDINGLIST</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_CONFIGURATION</AdditionalDefineConstants>
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_DICTIONARYADAPTER_XML</AdditionalDefineConstants>
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_EMIT_CUSTOMMODIFIERS</AdditionalDefineConstants>
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_EVENTLOG</AdditionalDefineConstants>

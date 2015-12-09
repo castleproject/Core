@@ -51,6 +51,7 @@ namespace Castle.Core.Logging.Tests
 			Listener.ClearMessages();
 		}
 
+#if FEATURE_CONFIGURATION
 		[Test]
 		[Platform(Exclude = "mono", Reason = "Mono has a bug that causes the listeners to not fully work.")]
 		public void WritingToLoggerByType()
@@ -118,6 +119,7 @@ namespace Castle.Core.Logging.Tests
 			Listener.AssertContains("defaultrule", "System.Xml.XmlDocument");
 			Listener.AssertContains("defaultrule", "Logging to non-configured namespace namespace");
 		}
+#endif
 
 		#region in-memory listener class
 
