@@ -155,7 +155,7 @@ namespace Castle.Components.DictionaryAdapter
 					if (descriptor == null && other != null)
 						descriptor = other.CreateDescriptor();
 
-#if FEATURE_APPDOMAIN
+#if FEATURE_LEGACY_REFLECTION_API
 					var appDomain = Thread.GetDomain();
 					var typeBuilder = CreateTypeBuilder(type, appDomain);
 #else
@@ -176,7 +176,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region Type Builders
 
-#if FEATURE_APPDOMAIN
+#if FEATURE_LEGACY_REFLECTION_API
 		private static TypeBuilder CreateTypeBuilder(Type type, AppDomain appDomain)
 		{
 			var assemblyName = new AssemblyName("CastleDictionaryAdapterAssembly");
