@@ -51,7 +51,7 @@ namespace Castle.Core.Logging.Tests
 			Listener.ClearMessages();
 		}
 
-#if FEATURE_CONFIGURATION
+#if FEATURE_SYSTEM_CONFIGURATION
 		[Test]
 		[Platform(Exclude = "mono", Reason = "Mono has a bug that causes the listeners to not fully work.")]
 		public void WritingToLoggerByType()

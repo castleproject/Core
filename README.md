@@ -43,7 +43,6 @@ Symbol                              | NET35              | NET40              | 
 `FEATURE_APPDOMAIN`                 | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_BINDINGLIST`               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_CONFIGURATION`             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_DICTIONARYADAPTER_XML`     | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_EMIT_CUSTOMMODIFIERS`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_EVENTLOG`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
@@ -75,15 +74,14 @@ Symbol                              | NET35              | NET40              | 
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.
 * `FEATURE_BINDINGLIST` - enables support features that make use of System.ComponentModel.BindingList.
-* `FEATURE_CONFIGURATION` - enables System.Configuration features.
 * `FEATURE_DICTIONARYADAPTER_XML` - enable DictionaryAdapter Xml features.
 * `FEATURE_EMIT_CUSTOMMODIFIERS` - enables emitting optional and required custom modifiers defined on parameters including return parameters. It seems like a defect in corefx not to expose these methods because they are still implemented.
 * `FEATURE_EVENTLOG` - provides a diagnostics logger using the Windows Event Log.
 * `FEATURE_GAC` - enables support for obtaining assemblies using an assembly long form name.
 * `FEATURE_GET_REFERENCED_ASSEMBLIES` - enables code that takes advantage of System.Reflection.Assembly.GetReferencedAssemblies().
 * `FEATURE_ISUPPORTINITIALIZE` - enables support for features that make use of System.ComponentModel.ISupportInitialize.
-* `FEATURE_LISTSORT` - enables support for features that make use of System.ComponentModel.ListSortDescription.
 * `FEATURE_LEGACY_REFLECTION_API` - provides a shim for .NET 3.5/4.0 that emulates the `TypeInfo` API available in .NET 4.5+ and .NET Core.
+* `FEATURE_LISTSORT` - enables support for features that make use of System.ComponentModel.ListSortDescription.
 * `FEATURE_NETCORE_COMPONENTMODEL_API` - provides shims to implement missing System.ComponentModel features in .Net Core.
 * `FEATURE_NETCORE_REFLECTION_API` - provides shims to implement missing functionality in .NET Core that has no alternatives.
 * `FEATURE_NETCORE_RESOURCE` - enables different resource probing behavior on .Net Core.
