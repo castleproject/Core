@@ -24,10 +24,10 @@
     "warningsAsErrors": true,
     "define": [ "FEATURE_XUNITNET", "FEATURE_NETCORE_RESOURCE" ]
   },
-  "resource": [
-    "Core.Tests/Resources/MoreRes/TestRes.resx",
-    "Core.Tests/Resources/file1.txt"
-  ],
+  "namedResource": {
+    "CastleTests.Core.Tests.Resources.MoreRes.TestRes": "Core.Tests/Resources/MoreRes/TestRes.resx",
+    "CastleTests.Core.Tests.Resources.file1.txt": "Core.Tests/Resources/file1.txt"
+  },
   "exclude": [
     "AssemblyInfo.cs",
     "Components.DictionaryAdapter.Tests/Xml/**/*",
