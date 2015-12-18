@@ -560,7 +560,10 @@ namespace Castle.Components.DictionaryAdapter
 		private static readonly HashSet<Type> InfrastructureTypes =	new HashSet<Type>
 			{
 				typeof (IEditableObject), typeof (IDictionaryEdit), typeof (IChangeTracking),
-				typeof (IRevertibleChangeTracking), typeof (IDictionaryNotify),	typeof (IDataErrorInfo),
+				typeof (IRevertibleChangeTracking), typeof (IDictionaryNotify),
+#if FEATURE_IDATAERRORINFO
+				typeof (IDataErrorInfo),
+#endif
 				typeof (IDictionaryValidate), typeof (IDictionaryAdapter)
 			};
 

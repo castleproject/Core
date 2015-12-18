@@ -1124,6 +1124,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsTrue(((IDictionaryAdapter)name).Validators.OfType<TestDictionaryValidator>().Any());
 		}
 
+#if FEATURE_IDATAERRORINFO
 		[Test]
 		public void CanValidateAndObtainDataErrorInformation()
 		{
@@ -1189,6 +1190,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			name.LastName = "Monster";
 			Assert.IsTrue(notifyCalled);
 		}
+#endif
 
 		[Test]
 		public void CanCreateDictionaryAdapterFromExistingAdapter()
