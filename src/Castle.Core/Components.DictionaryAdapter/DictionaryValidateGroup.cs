@@ -60,7 +60,7 @@ namespace Castle.Components.DictionaryAdapter
 #if FEATURE_IDATAERRORINFO
 			get { return string.IsNullOrEmpty(Error); }
 #else
-			get { throw new NotSupportedException("IDataErrorInfo is not supported on .Net Core."); }
+			get { throw new NotSupportedException("IDataErrorInfo is not supported on this runtime."); }
 #endif
 		}
 

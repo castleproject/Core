@@ -22,7 +22,7 @@
   },
   "compilationOptions": {
     "warningsAsErrors": true,
-    "define": [ "FEATURE_XUNITNET", "FEATURE_NETCORE_RESOURCE" ]
+    "define": [ "FEATURE_XUNITNET" ]
   },
   "namedResource": {
     "CastleTests.Core.Tests.Resources.MoreRes.TestRes": "Core.Tests/Resources/MoreRes/TestRes.resx",
