@@ -14,12 +14,13 @@
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
-	using System;
-	using System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
-	using Castle.Core.Internal;
+    using Castle.Core.Internal;
 
-	public interface IValidationRule
+    public interface IValidationRule
 	{
 		void Apply(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, 
 				   object propertyValue, IList<String> errors);
@@ -51,7 +52,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 			foreach (var property in dictionaryAdapter.This.Properties.Values)
 			{
-				var propertyRules = AttributesUtil.GetAttributes<ValidationRuleAttribute>(property.Property);
+				var propertyRules = AttributesUtil.GetAttributes<ValidationRuleAttribute>(property.Property).Select(x => (IValidationRule)x);
 				var propertyValue = dictionaryAdapter.GetProperty(property.PropertyName, true);
 				ApplyValidationRules(dictionaryAdapter, propertyRules, property, propertyValue, errors);
 				ApplyValidationRules(dictionaryAdapter, globalRules, property, propertyValue, errors);
@@ -65,7 +66,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			List<String> errors = new List<string>();
 			var globalRules = AttributesUtil.GetTypeAttributes<ValidationRuleAttribute>(dictionaryAdapter.Meta.Type);
 
-			var propertyRules = AttributesUtil.GetAttributes<ValidationRuleAttribute>(property.Property);
+			var propertyRules = AttributesUtil.GetAttributes<ValidationRuleAttribute>(property.Property).Select(x => (IValidationRule)x);
 			var propertyValue = dictionaryAdapter.GetProperty(property.PropertyName, true);
 			ApplyValidationRules(dictionaryAdapter, propertyRules, property, propertyValue, errors);
 			ApplyValidationRules(dictionaryAdapter, globalRules, property, propertyValue, errors);
