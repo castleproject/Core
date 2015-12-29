@@ -49,10 +49,8 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsFalse(File.Exists(path));
 		}
 
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
-#if SILVERLIGHT
-		[Ignore("Cannot do in Silverlight")]
-#endif
 #if __MonoCS__
 		[Ignore("Expected: True  But was: False")]
 #endif
@@ -69,6 +67,7 @@ namespace Castle.DynamicProxy.Tests
 			base.TearDown();
 			Assert.IsTrue(File.Exists(path));
 		}
+#endif
 
 		private void FindVerificationErrors()
 		{
@@ -91,6 +90,7 @@ namespace Castle.DynamicProxy.Tests
 			base.TearDown();
 		}
 
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
 #if SILVERLIGHT
 		[Ignore("Cannot do in Silverlight")]
@@ -106,6 +106,7 @@ namespace Castle.DynamicProxy.Tests
 			StringAssert.Contains("PeVerify reported error(s)", ex.Message);
 			StringAssert.Contains("fall through end of the method without returning", ex.Message);
 		}
+#endif
 
 		[Test]
 		public void DisableVerification_DisablesVerificationForTestCase()

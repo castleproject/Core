@@ -17,7 +17,7 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 	using System.Collections;
-#if !SILVERLIGHT
+#if FEATURE_DICTIONARYADAPTER_XML
 	using System.Collections.Specialized;
 	using System.Xml.XPath;
 #endif
@@ -60,8 +60,8 @@ namespace Castle.Components.DictionaryAdapter
 		/// The type represented by T must be an interface with properties.
 		/// </remarks>
 		object GetAdapter(Type type, IDictionary dictionary, PropertyDescriptor descriptor);
-		
-#if !SILVERLIGHT
+
+#if FEATURE_DICTIONARYADAPTER_XML
 		/// <summary>
 		/// Gets a typed adapter bound to the <see cref="NameValueCollection"/>.
 		/// </summary>

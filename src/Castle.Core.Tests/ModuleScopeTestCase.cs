@@ -65,6 +65,7 @@ namespace Castle.DynamicProxy.Tests
 
 #if !SILVERLIGHT
 
+#if FEATURE_STRONGNAME
 		[Test]
 #if __MonoCS__
 		[Ignore("Expected: CastleDynProxy2.dll  But was:  /home/teamcity/buildagent/work/...")]
@@ -110,7 +111,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(@"d:\Bar", scope.WeakNamedModuleDirectory);
 		}
 
-#if FEATURE_STRONGNAME
 		private static void CheckSignedSavedAssembly(string path)
 		{
 			Assert.IsTrue(File.Exists(path));

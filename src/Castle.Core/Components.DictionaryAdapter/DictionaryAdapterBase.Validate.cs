@@ -36,6 +36,7 @@ namespace Castle.Components.DictionaryAdapter
 			}
 		}
 
+#if FEATURE_IDATAERRORINFO
 		public string Error
 		{
 			get
@@ -66,6 +67,7 @@ namespace Castle.Components.DictionaryAdapter
 				return String.Empty;
 			}
 		}
+#endif
 
 		public DictionaryValidateGroup ValidateGroups(params object[] groups)
 		{
