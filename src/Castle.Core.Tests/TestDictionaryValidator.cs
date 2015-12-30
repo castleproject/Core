@@ -14,13 +14,13 @@
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 
-    using Castle.Core.Internal;
+	using Castle.Core.Internal;
 
-    public interface IValidationRule
+	public interface IValidationRule
 	{
 		void Apply(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, 
 				   object propertyValue, IList<String> errors);
