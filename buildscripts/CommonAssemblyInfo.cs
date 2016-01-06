@@ -16,3 +16,8 @@ using System.Reflection;
 
 [assembly: AssemblyCompany("Castle Project")]
 [assembly: AssemblyCopyright("Copyright (c) 2004-2014 Castle Project - http://www.castleproject.org")]
+#if ASSEMBLY_CLSCOMPLIANT_FALSE
+[assembly: System.CLSCompliant(false)]
+#else
+[assembly: System.CLSCompliant(true)]
+#endif
