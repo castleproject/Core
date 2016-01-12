@@ -164,7 +164,6 @@ limitations under the License.
 
 		<MakeDir Directories="$(NuSpecDir)/lib/NET35" />
 		<MakeDir Directories="$(NuSpecDir)/lib/NET40cp" />
-		<MakeDir Directories="$(NuSpecDir)/lib/SL4" />
 
 		<CreateProperty Value="$(NuSpecDir)/$(ProjectName).nuspec">
 			<Output PropertyName="NuSpecFile" TaskParameter="Value"/>
@@ -191,9 +190,9 @@ limitations under the License.
 		Condition="$(TestRunner_Enabled)"
 		>
 
-		<CallTarget Targets="_ExecNUnit" Condition="$(BuildConfigKey) != 'SL50' and $(BuildConfigKey) != 'SL40'" />
+		<CallTarget Targets="_ExecNUnit" Condition="$(BuildConfigKey) != 'SL50'" />
 
-		<CallTarget Targets="_ExecStatLight" Condition="$(BuildConfigKey) == 'SL50' or $(BuildConfigKey) == 'SL40'" />
+		<CallTarget Targets="_ExecStatLight" Condition="$(BuildConfigKey) == 'SL50'" />
 
 	</Target>
 

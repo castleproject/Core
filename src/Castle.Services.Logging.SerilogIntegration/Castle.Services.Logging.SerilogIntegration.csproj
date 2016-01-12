@@ -83,14 +83,6 @@
     <OutputPath>bin\NET35-Release\</OutputPath>
     <DefineConstants>FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Debug|AnyCPU'">
-    <OutputPath>bin\SL40-Debug\</OutputPath>
-    <DefineConstants>FEATURE_LEGACY_REFLECTION_API</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Release|AnyCPU'">
-    <OutputPath>bin\SL40-Release\</OutputPath>
-    <DefineConstants>FEATURE_LEGACY_REFLECTION_API</DefineConstants>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50-Debug|AnyCPU'">
     <OutputPath>bin\SL50-Debug\</OutputPath>
     <DefineConstants>FEATURE_LEGACY_REFLECTION_API</DefineConstants>
