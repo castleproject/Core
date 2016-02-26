@@ -22,7 +22,8 @@
   },
   "compilationOptions": {
     "warningsAsErrors": true,
-    "define": [ "FEATURE_XUNITNET" ]
+    "define": [ "FEATURE_XUNITNET" ],
+    "keyFile": "../../buildscripts/CastleKey.snk"
   },
   "namedResource": {
     "CastleTests.Core.Tests.Resources.MoreRes.TestRes": "Core.Tests/Resources/MoreRes/TestRes.resx",
