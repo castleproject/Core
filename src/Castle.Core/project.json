@@ -35,6 +35,7 @@
     "define": [ "FEATURE_NETCORE_REFLECTION_API" ]
   },
   "compileFiles": [
-    "Properties/InternalsVisibleToTests.cs"
+    "Properties/InternalsVisibleToTests.cs",
+    "../../buildscripts/CommonAssemblyInfo.cs"
   ]
 }

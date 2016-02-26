@@ -4,11 +4,11 @@ root = true
 indent_style = tab
 
 [*.csproj]
-intent_style = space
+indent_style = space
 indent_size = 2
 
 [*.cs]
-intent_style = tab
+indent_style = tab
 indent_size = 4
 
 [{project,global}.json]
