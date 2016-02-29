@@ -24,9 +24,14 @@ namespace Castle.Core.Logging.Tests
 
 	[TestFixture]
 	public class ConsoleLoggerTestCase
+#if FEATURE_XUNITNET
+		: IDisposable
+#endif
 	{
 		private StringWriter outWriter = new StringWriter();
 		private StringWriter errorWriter = new StringWriter();
+		private TextWriter oldOut;
+		private TextWriter oldError;
 
 #if FEATURE_XUNITNET
 		public ConsoleLoggerTestCase()
@@ -38,8 +43,19 @@ namespace Castle.Core.Logging.Tests
 			outWriter.GetStringBuilder().Length = 0;
 			errorWriter.GetStringBuilder().Length = 0;
 
+			oldOut = Console.Out;
+			oldError = Console.Error;
 			Console.SetOut(outWriter);
 			Console.SetError(errorWriter);
+		}
+
+#if !FEATURE_XUNITNET
+		[TearDown]
+#endif
+		public void Dispose()
+		{
+			Console.SetOut(oldOut);
+			Console.SetError(oldError);
 		}
 
 		[Test]
