@@ -30,6 +30,7 @@
     "CastleTests.Core.Tests.Resources.file1.txt": "Core.Tests/Resources/file1.txt"
   },
   "exclude": [
+    "AssemblyInfo.cs",
     "Components.DictionaryAdapter.Tests/Xml/**/*",
     "log4netIntegration/**/*",
     "NLogIntegration/**/*",
