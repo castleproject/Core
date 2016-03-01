@@ -34,6 +34,7 @@ dnu build src/Castle.Core src/Castle.Core.Tests --configuration Release --out bu
 
 Write-Host "Running tests"
 
-dnx -p src/Castle.Core.Tests test
+cd src/Castle.Core.Tests
+dnx test
 
 exit $LASTEXITCODE
