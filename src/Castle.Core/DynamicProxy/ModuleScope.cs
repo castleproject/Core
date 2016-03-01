@@ -386,15 +386,15 @@ namespace Castle.DynamicProxy
 
 			if (signStrongName)
 			{
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 				byte[] keyPairStream = GetKeyPair();
 				if (keyPairStream != null)
 				{
-#if FEATURE_STRONGNAME
 					assemblyName.KeyPair = new StrongNameKeyPair(keyPairStream);
-#else
-					assemblyName.SetPublicKey(InternalsVisible.DynamicProxyGenAssembly2PublicKey);
-#endif
 				}
+#else
+				assemblyName.SetPublicKey(InternalsVisible.DynamicProxyGenAssembly2PublicKey);
+#endif
 			}
 
 			return assemblyName;

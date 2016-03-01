@@ -307,7 +307,6 @@ namespace CastleTests
 			return methodInfo.GetParameters();
 		}
 
-#if FEATURE_STRONGNAME
 		[Test]
 		public void ProxyForBaseTypeFromSignedAssembly()
 		{
@@ -329,7 +328,6 @@ namespace CastleTests
 			object proxy = generator.CreateClassProxy(t1, new Type[] { t2 }, new StandardInterceptor());
 			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
 		}
-#endif
 
 #if SILVERLIGHT // Silverlight test runner treats Assert.Ignore as failed test :/
 		[Ignore]

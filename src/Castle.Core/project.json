@@ -38,8 +38,5 @@
   "compileFiles": [
     "Properties/InternalsVisibleToTests.cs",
     "../../buildscripts/CommonAssemblyInfo.cs"
-  ],
-  "namedResource": {
-    "Castle.DynamicProxy.DynProxy.snk": "DynamicProxy/DynProxy.snk"
-  }
+  ]
 }

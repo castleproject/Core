@@ -65,7 +65,7 @@ namespace Castle.DynamicProxy.Tests
 
 #if !SILVERLIGHT
 
-#if FEATURE_STRONGNAME
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
 #if __MonoCS__
 		[Ignore("Expected: CastleDynProxy2.dll  But was:  /home/teamcity/buildagent/work/...")]
