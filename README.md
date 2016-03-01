@@ -60,6 +60,7 @@ Symbol                              | NET35              | NET40              | 
 `FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_TARGETEXCEPTION`           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_TEST_COM`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_TEST_SERILOGINTEGRATION`   | :no_entry_sign:    | :white_check_mark: | :white_check_mark: | :white_check_mark:
 `FEATURE_XUNITNET`                  | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
 ---                                 |                    |                    |                    | 
 `DOTNET35`                          | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:
@@ -89,6 +90,7 @@ Symbol                              | NET35              | NET40              | 
 * `FEATURE_SYSTEM_CONFIGURATION` - enables features that use System.Configuration and the ConfigurationManager.
 * `FEATURE_TARGETEXCEPTION` - enabled catching a `TargetException`. `System.Reflection.TargetException` is implemented by .NET Core but not exposed by corefx.
 * `FEATURE_TEST_COM` - enables COM Interop tests.
+* `FEATURE_TEST_SERILOGINTEGRATION` - enables Serilog intergration tests.
 * `FEATURE_XUNITNET` - provides an NUnit shim that runs over xUnit.net to be used for .NET Core.
 
 The following conditional compilation symbols can be used to enable certain features/options that are not pertinent to build configurations:

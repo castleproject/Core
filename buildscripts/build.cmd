@@ -19,6 +19,13 @@ IF NOT EXIST %~dp0..\Settings.proj GOTO msbuild_not_configured
 REM Set Framework version based on passed in parameter
 IF "%1" == "" goto no_nothing
 
+REM nesting the netcore build in an IF body prevents reporting of the error level
+IF /i "%1" NEQ "NETCORE" goto not_netcore
+
+PowerShell.exe -NoProfile -NonInteractive -NoLogo -ExecutionPolicy Unrestricted -Command %~dp0Build-NetCore.ps1
+EXIT /B %ERRORLEVEL%
+
+:not_netcore
 IF /i "%1" == "NET40" (SET FrameworkVersion=v4.0)
 IF /i "%1" == "NET40" (SET BuildConfigKey=NET40)
 

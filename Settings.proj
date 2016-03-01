@@ -79,6 +79,10 @@ limitations under the License.
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_LEGACY_REFLECTION_API</AdditionalDefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition=" '$(Configuration)' == 'NET40-Debug' or '$(Configuration)' == 'NET40-Release' or '$(Configuration)' == 'NET45-Debug' or '$(Configuration)' == 'NET45-Release' ">
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_TEST_SERILOGINTEGRATION</AdditionalDefineConstants>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- 
 		Specify additional items to package here, they are added to the package

@@ -6,8 +6,10 @@
   "projectUrl": "",
   "licenseUrl": "",
   "dependencies": {
-    "Castle.Core": "3.3.4-*",
+    "Castle.Core": { "target": "project", "version" : "" },
+    "Castle.Services.Logging.SerilogIntegration": { "target": "project", "version" : "" },
     "Microsoft.CSharp": "4.0.0",
+    "Serilog.Sinks.TextWriter": "2.0.0-beta-505",
     "System.Console": "4.0.0-beta-23516",
     "System.Diagnostics.TraceSource": "4.0.0-beta-23516",
     "System.Runtime": "4.0.20",
@@ -22,7 +24,7 @@
   },
   "compilationOptions": {
     "warningsAsErrors": true,
-    "define": [ "FEATURE_XUNITNET" ],
+    "define": [ "FEATURE_XUNITNET", "FEATURE_TEST_SERILOGINTEGRATION" ],
     "keyFile": "../../buildscripts/CastleKey.snk"
   },
   "namedResource": {

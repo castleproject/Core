@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A5B576EC-7D05-4C55-9055-EFEBECB0BA37}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,6 +11,8 @@ EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Castle.Core", "src\Castle.Core\Castle.Core.xproj", "{AC6203A9-8DB5-4E4B-84F9-D8AB03CD20EE}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Castle.Core.Tests", "src\Castle.Core.Tests\Castle.Core.Tests.xproj", "{19201FA5-D864-4DE0-966E-8EA0DE905107}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Castle.Services.Logging.SerilogIntegration", "src\Castle.Services.Logging.SerilogIntegration\Castle.Services.Logging.SerilogIntegration.xproj", "{43F06DBA-4F4E-4969-8DBF-B9884F6E581E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{19201FA5-D864-4DE0-966E-8EA0DE905107}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19201FA5-D864-4DE0-966E-8EA0DE905107}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19201FA5-D864-4DE0-966E-8EA0DE905107}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43F06DBA-4F4E-4969-8DBF-B9884F6E581E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43F06DBA-4F4E-4969-8DBF-B9884F6E581E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43F06DBA-4F4E-4969-8DBF-B9884F6E581E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43F06DBA-4F4E-4969-8DBF-B9884F6E581E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
