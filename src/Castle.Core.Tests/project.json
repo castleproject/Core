@@ -35,7 +35,6 @@
     "AssemblyInfo.cs",
     "Components.DictionaryAdapter.Tests/Xml/**/*",
     "log4netIntegration/**/*",
-    "NLogIntegration/**/*",
-    "SerilogIntegration/**/*"
+    "NLogIntegration/**/*"
   ]
 }
