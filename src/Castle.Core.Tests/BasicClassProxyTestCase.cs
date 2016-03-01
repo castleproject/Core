@@ -117,7 +117,7 @@ namespace CastleTests
 			generator.CreateClassProxy(typeof(HasCtorWithParamsStrings), new object[] { new string[0] });
 		}
 
-#if !SILVERLIGHT && FEATURE_STRONGNAME
+#if !SILVERLIGHT
 		[Test]
 		public void ClassWithDifferentAccessLevelOnProperties()
 		{
@@ -428,7 +428,7 @@ namespace CastleTests
 			object proxy2 = Activator.CreateInstance(proxy.GetType());
 			Assert.AreEqual("Something", ((ClassWithDefaultConstructor)proxy2).SomeString);
 		}
-#if !SILVERLIGHT && FEATURE_STRONGNAME
+#if !SILVERLIGHT
 		[Test]
 		public void ClassProxyShouldHaveDefaultConstructorWhenBaseClassHasInternal()
 		{

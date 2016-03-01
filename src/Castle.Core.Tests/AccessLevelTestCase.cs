@@ -79,7 +79,7 @@ namespace Castle.DynamicProxy.Tests
 			}
 		}
 
-#if !SILVERLIGHT && FEATURE_STRONGNAME
+#if !SILVERLIGHT
 		[Test]
 		public void InternalConstructorIsReplicatedWhenInternalsVisibleTo()
 		{
