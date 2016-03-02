@@ -15,6 +15,6 @@
   },
   "compilationOptions": {
     "warningsAsErrors": true,
-    "define": [ "test" ]
+    "keyFile": "../../buildscripts/CastleKey.snk"
   }
 }

@@ -24,13 +24,15 @@
   },
   "compilationOptions": {
     "warningsAsErrors": true,
-    "define": [ "FEATURE_XUNITNET", "FEATURE_TEST_SERILOGINTEGRATION" ]
+    "define": [ "FEATURE_XUNITNET", "FEATURE_TEST_SERILOGINTEGRATION" ],
+    "keyFile": "../../buildscripts/CastleKey.snk"
   },
   "namedResource": {
     "CastleTests.Core.Tests.Resources.MoreRes.TestRes": "Core.Tests/Resources/MoreRes/TestRes.resx",
     "CastleTests.Core.Tests.Resources.file1.txt": "Core.Tests/Resources/file1.txt"
   },
   "exclude": [
+    "AssemblyInfo.cs",
     "Components.DictionaryAdapter.Tests/Xml/**/*",
     "log4netIntegration/**/*",
     "NLogIntegration/**/*"

@@ -32,7 +32,8 @@
   },
   "compilationOptions": {
     "warningsAsErrors": true,
-    "define": [ "FEATURE_NETCORE_REFLECTION_API" ]
+    "define": [ "FEATURE_NETCORE_REFLECTION_API" ],
+    "keyFile": "../../buildscripts/CastleKey.snk"
   },
   "compileFiles": [
     "Properties/InternalsVisibleToTests.cs",
