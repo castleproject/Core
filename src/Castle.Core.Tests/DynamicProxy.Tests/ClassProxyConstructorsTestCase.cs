@@ -129,7 +129,6 @@ namespace Castle.DynamicProxy.Tests
 				ex.Message);
 		}
 
-#if FEATURE_STRONGNAME
 		[Test]
 		public void Cannot_proxy_generic_class_with_inaccessible_type_argument()
 		{
@@ -139,7 +138,6 @@ namespace Castle.DynamicProxy.Tests
 				"Can not create proxy for type System.Collections.Generic.List`1[[Castle.DynamicProxy.Tests.ClassProxyConstructorsTestCase+PrivateClass, Castle.Core.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc]] because type Castle.DynamicProxy.Tests.ClassProxyConstructorsTestCase+PrivateClass is not accessible. Make it public, or internal",
 				ex.Message);
 		}
-#endif
 
 		[Test]
 		public void Cannot_proxy_generic_class_with_type_argument_that_has_inaccessible_type_argument()
