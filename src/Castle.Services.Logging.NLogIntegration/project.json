@@ -7,13 +7,14 @@
   "licenseUrl": "",
   "dependencies": {
     "Castle.Core": { "target": "project", "version": "" },
-    "NLog": "4.4.0-alpha2"
+    "NLog": "4.4.0-alpha3"
   },
   "frameworks": {
     "dotnet5.4": {
     }
   },
   "compilationOptions": {
-    "warningsAsErrors": true
+    "warningsAsErrors": true,
+    "keyFile": "../../buildscripts/CastleKey.snk"
   }
 }

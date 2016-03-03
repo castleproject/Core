@@ -23,7 +23,7 @@ namespace Castle.Services.Logging.NLogIntegration
 	/// <summary>
 	///   Implementation of <see cref="ILogger" /> for NLog.
 	/// </summary>
-	public class NLogLogger : Core.Logging.ILogger
+	public class NLogLogger : Castle.Core.Logging.ILogger
 	{
 		/// <summary>
 		///   Initializes a new instance of the <see cref="NLogLogger" /> class.
