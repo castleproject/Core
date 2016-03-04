@@ -1,0 +1,20 @@
+{
+  "version": "3.3.4-*",
+  "description": "Castle.Services.Logging.NLogIntegration",
+  "authors": [ "" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "dependencies": {
+    "Castle.Core": { "target": "project", "version": "" },
+    "NLog": "4.4.0-alpha3"
+  },
+  "frameworks": {
+    "dotnet5.4": {
+    }
+  },
+  "compilationOptions": {
+    "warningsAsErrors": true,
+    "keyFile": "../../buildscripts/CastleKey.snk"
+  }
+}
