@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2014 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2016 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,12 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Security;
+
+[assembly: AssemblyProduct(
+	#if DOTNET45 // order is important
+	"Castle Core for .NET Framework 4.5"
+	#elif DOTNET40
+	"Castle Core for .NET Framework 4.0"
+	#elif DOTNET35
+	"Castle Core for .NET Framework 3.5"
+	#else
+	"Castle Core for .NET Core 1.0"
+	#endif
+)]
 
 [assembly: AssemblyCompany("Castle Project")]
-[assembly: AssemblyCopyright("Copyright (c) 2004-2014 Castle Project - http://www.castleproject.org")]
-#if ASSEMBLY_CLSCOMPLIANT_FALSE
-[assembly: System.CLSCompliant(false)]
-#else
-[assembly: System.CLSCompliant(true)]
+[assembly: AssemblyCopyright("Copyright (c) 2004-2016 Castle Project - http://www.castleproject.org")]
+
+[assembly: AssemblyVersion("3.3.0")]
+[assembly: AssemblyFileVersion("3.3.4")]
+
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#endif
+
+[assembly: ComVisible(false)]
+
+[assembly: CLSCompliant(true)]
+
+#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+[assembly: SecurityRules(SecurityRuleSet.Level2)]
+#endif
+
+#if FEATURE_SECURITY_PERMISSIONS && FEATURE_APTCA
+[assembly: AllowPartiallyTrustedCallers]
 #endif
