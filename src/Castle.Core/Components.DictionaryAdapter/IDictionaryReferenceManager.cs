@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
@@ -25,4 +24,3 @@ namespace Castle.Components.DictionaryAdapter
 		void    AddReference(object keyObject,     object relatedObject, bool isInGraph);
 	}
 }
-#endif

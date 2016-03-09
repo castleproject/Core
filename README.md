@@ -16,14 +16,13 @@ Castle Core is &copy; 2004-2015 Castle Project. It is free software, and may be 
 
 ## Building
 
-### .NET Framework and Silverlight
+### .NET Framework and .NET Core
 
 ```
-msbuild /p:Configuration=NET45-Release /t:RunAllTests buildscripts/Build.proj
-msbuild /p:Configuration=NET40-Release /t:RunAllTests buildscripts/Build.proj
 msbuild /p:Configuration=NET35-Release /t:RunAllTests buildscripts/Build.proj
-msbuild /p:Configuration=SL50-Release /t:RunAllTests buildscripts/Build.proj
-msbuild /p:Configuration=SL40-Release /t:RunAllTests buildscripts/Build.proj
+msbuild /p:Configuration=NET40-Release /t:RunAllTests buildscripts/Build.proj
+msbuild /p:Configuration=NET45-Release /t:RunAllTests buildscripts/Build.proj
+build NETCORE
 ```
 
 ### Mono
@@ -66,9 +65,6 @@ Symbol                              | NET35              | NET40              | 
 `DOTNET35`                          | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:
 `DOTNET40`                          | :no_entry_sign:    | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `DOTNET45`                          | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark: | :no_entry_sign:
-`SILVERLIGHT`                       | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:
-`SL4`                               | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:
-`SL5`                               | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:
 
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.

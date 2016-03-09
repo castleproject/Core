@@ -14,7 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-#if !(SILVERLIGHT || DOTNET35)
+#if !DOTNET35
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Dynamic;

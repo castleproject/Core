@@ -14,7 +14,6 @@
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
-#if !SILVERLIGHT
 	using System.Collections.Specialized;
 
 	using NUnit.Framework;
@@ -86,5 +85,4 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			int? Legs { get; set; }
 		}
 	}
-#endif
 }

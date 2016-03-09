@@ -17,15 +17,11 @@ namespace Castle.Core.Logging
 	using System;
 	using System.IO;
 
-#if SILVERLIGHT
-	public abstract class AbstractExtendedLoggerFactory : IExtendedLoggerFactory
-#else
 	public abstract class AbstractExtendedLoggerFactory :
 #if FEATURE_REMOTING
 		MarshalByRefObject,
 #endif
 		IExtendedLoggerFactory
-#endif
 	{
 		/// <summary>
 		///   Creates a new extended logger, getting the logger name from the specified type.
@@ -102,7 +98,6 @@ namespace Castle.Core.Logging
 		/// <returns></returns>
 		protected static FileInfo GetConfigFile(string fileName)
 		{
-#if !SILVERLIGHT
 			FileInfo result;
 
 			if (Path.IsPathRooted(fileName))
@@ -120,9 +115,6 @@ namespace Castle.Core.Logging
 			}
 
 			return result;
-#else
-			return new FileInfo(fileName);
-#endif
 		}
 	}
 }

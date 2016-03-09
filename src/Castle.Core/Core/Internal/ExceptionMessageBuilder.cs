@@ -63,22 +63,7 @@ namespace Castle.Core.Internal
 
 		private static string GetAssemblyName(Assembly targetAssembly)
 		{
-#if SILVERLIGHT
-			// SILVERLIGHT doesn't allow us to call assembly.GetName()
-			var fullName = targetAssembly.FullName;
-			if (string.IsNullOrEmpty(fullName))
-			{
-				return fullName;
-			}
-			var index = fullName.IndexOf(", Version=", StringComparison.OrdinalIgnoreCase);
-			if (index > 0)
-			{
-				return fullName.Substring(0, index);
-			}
-			return fullName;
-#else
 			return targetAssembly.GetName().Name;
-#endif
 		}
 
 		private static bool ReferencesCastleCore(Assembly inspectedAssembly)

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT // Until support for other platforms is verified
 namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
 	using Castle.Components.DictionaryAdapter.Xml;
@@ -33,4 +32,3 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		}
 	}
 }
-#endif

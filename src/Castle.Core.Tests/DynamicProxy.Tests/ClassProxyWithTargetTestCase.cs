@@ -49,7 +49,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(42, result);
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		[Bug("DYNPROXY-170")]
 		public void Can_proxy_class_with_protected_generic_method()
@@ -58,7 +57,6 @@ namespace Castle.DynamicProxy.Tests
 			var result = proxy.PublicMethod<int>();
 			Assert.AreEqual(42, result);
 		}
-#endif
 
 		[Test]
 		public void Can_proxy_virtual_class_with_protected_method()
@@ -68,7 +66,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(42, result);
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		[Bug("DYNPROXY-170")]
 		public void Can_proxy_class_with_protected_method()
@@ -77,7 +74,6 @@ namespace Castle.DynamicProxy.Tests
 			var result = proxy.PublicMethod();
 			Assert.AreEqual(42, result);
 		}
-#endif
 
 		[Test]
 		public void Can_proxy_class_with_two_protected_methods_differing_by_return_type()
@@ -199,7 +195,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsInstanceOf(typeof(ISimpleMixin), proxy);
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		[Bug("DYNPROXY-185")]
 		public void Returns_proxy_target_instead_of_self()
@@ -209,7 +204,6 @@ namespace Castle.DynamicProxy.Tests
 			var result = (CastleTests.DynamicProxy.Tests.Classes.EmptyClass)((IProxyTargetAccessor)proxy).DynProxyGetTarget();
 			Assert.AreEqual(target, result);
 		}
-#endif
 
 		private class PrivateClass { }
 	}

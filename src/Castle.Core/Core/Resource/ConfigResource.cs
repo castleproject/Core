@@ -14,8 +14,6 @@
 
 #if FEATURE_SYSTEM_CONFIGURATION
 
-#if !SILVERLIGHT
-
 namespace Castle.Core.Resource
 {
 	using System;
@@ -76,7 +74,5 @@ namespace Castle.Core.Resource
 		}
 	}
 }
-
-#endif
 
 #endif

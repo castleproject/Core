@@ -24,7 +24,6 @@ namespace Castle.DynamicProxy.Tests
 
 	using NUnit.Framework;
 
-#if !SILVERLIGHT
 	[TestFixture]
 	public class ExplicitInterfaceTestCase : BasePEVerifyTestCase
 	{
@@ -178,7 +177,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(5, result);
 		}
 	}
-#endif
 
 	public class ExplicitInterfaceWithPropertyImplementation : ISimpleInterfaceWithProperty
 	{

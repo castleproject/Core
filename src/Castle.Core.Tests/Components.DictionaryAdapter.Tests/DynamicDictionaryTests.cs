@@ -18,7 +18,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 	using NUnit.Framework;
 
-#if !(SILVERLIGHT || DOTNET35)
+#if !DOTNET35
 	public class DynamicDictionaryTests
 	{
 		[Test]

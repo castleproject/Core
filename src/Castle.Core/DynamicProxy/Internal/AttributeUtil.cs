@@ -299,7 +299,7 @@ namespace Castle.DynamicProxy.Internal
 			return new CustomAttributeBuilder(constructor, constructorArguments);
 		}
 
-		// NOTE: Use other overloads if possible. This method is here to support Silverlight and legacy scenarios.
+		// NOTE: Use other overloads if possible. This method is here to support legacy scenarios.
 		internal static CustomAttributeBuilder CreateBuilder(Attribute attribute)
 		{
 			var type = attribute.GetType();

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !DOTNET35 && !SILVERLIGHT
+#if !DOTNET35
 namespace CastleTests.DynamicProxy.Tests.Interfaces
 {
 	public interface InterfaceWithMethodsWithAllKindsOfOptionalParameters

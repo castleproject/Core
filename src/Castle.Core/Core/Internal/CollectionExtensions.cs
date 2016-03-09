@@ -25,25 +25,12 @@ namespace Castle.Core.Internal
 	{
 		public static T Find<T>(this T[] items, Predicate<T> predicate)
 		{
-#if SILVERLIGHT
-			if (items == null)
-				throw new ArgumentNullException("items");
-
-			if (predicate == null)
-				throw new ArgumentNullException("predicate");
-			return items.FirstOrDefault(predicate.Invoke);
-#else
 			return Array.Find(items, predicate);
-#endif
 		}
 
 		public static T[] FindAll<T>(this T[] items, Predicate<T> predicate)
 		{
-#if SILVERLIGHT
-			return items.Where(predicate.Invoke).ToArray();
-#else
 			return Array.FindAll(items, predicate);
-#endif
 		}
 
 		/// <summary>

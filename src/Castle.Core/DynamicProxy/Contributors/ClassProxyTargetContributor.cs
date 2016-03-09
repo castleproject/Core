@@ -73,11 +73,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (ExplicitlyImplementedInterfaceMethod(method))
 			{
-#if SILVERLIGHT
-				return null;
-#else
 				return ExplicitlyImplementedInterfaceMethodGenerator(method, @class, options, overrideMethod);
-#endif
 			}
 
 			var invocation = GetInvocationType(method, @class, options);

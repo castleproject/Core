@@ -32,10 +32,6 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 
-#if SILVERLIGHT
-	using Castle.DynamicProxy.SilverlightExtensions;
-#endif
-
 	/// <summary>
 	///   Base class that exposes the common functionalities
 	///   to proxy generation.

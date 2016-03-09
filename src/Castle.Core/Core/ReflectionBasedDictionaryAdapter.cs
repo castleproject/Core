@@ -245,22 +245,7 @@ namespace Castle.Core
 
 		private static object GetPropertyValue(object target, PropertyInfo property)
 		{
-			try
-			{
-				return property.GetValue(target, null);
-			}
-			catch (MethodAccessException
-#if SILVERLIGHT
-				e)
-			{
-				string message = "Could not read properties of anonymous object due to restrictive behavior of Silverlight. Make your assembly internal types visible to Castle.Core by adding the following attribute: [assembly: InternalsVisibleTo(InternalsVisible.ToCastleCore)]";
-				throw new InvalidOperationException(message,e);
-#else
-				)
-			{
-				throw;
-#endif
-			}
+			return property.GetValue(target, null);
 		}
 
 		private static IEnumerable<PropertyInfo> GetReadableProperties(Type targetType)

@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Tests
 
 	using NUnit.Framework;
 
-#if !__MonoCS__ && !SILVERLIGHT // mono doesn't have PEVerify
+#if !__MonoCS__ // mono doesn't have PEVerify
 	public class FindPeVerify
 	{
 		private static readonly string[] PeVerifyProbingPaths =
