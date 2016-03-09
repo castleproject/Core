@@ -153,9 +153,6 @@
     <Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GlobalContextProperties.cs" />
     <Compile Include="ExtendedLog4netFactory.cs" />
     <Compile Include="ExtendedLog4netLogger.cs" />
@@ -165,7 +162,6 @@
     <Compile Include="Log4netLogger.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SecurityAssemblyInfo.cs" />
     <Compile Include="ThreadContextProperties.cs" />
     <Compile Include="ThreadContextStack.cs" />
     <Compile Include="ThreadContextStacks.cs" />

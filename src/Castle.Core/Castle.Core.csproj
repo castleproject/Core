@@ -319,7 +319,6 @@
     <Compile Include="Core\Logging\LoggerLevel.cs" />
     <Compile Include="DynamicProxy\AbstractInvocation.cs" />
     <Compile Include="DynamicProxy\AllMethodsHook.cs" />
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\TryStatement.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\FinallyStatement.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\EndExceptionBlockStatement.cs" />
@@ -541,7 +540,6 @@
     <Compile Include="Core\Smtp\IEmailSender.cs" />
     <Compile Include="Core\Smtp\DefaultSmtpSender.cs" />
     <Compile Include="Core\StringObjectDictionaryAdapter.cs" />
-    <Compile Include="SecurityAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DynamicProxy\DynProxy.snk" />

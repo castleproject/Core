@@ -67,6 +67,7 @@ Symbol                              | NET35              | NET40              | 
 `DOTNET45`                          | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark: | :no_entry_sign:
 
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
+* `FEATURE_APTCA` - marks the assembly with the AllowPartiallyTrustedCallersAttribute.
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.
 * `FEATURE_BINDINGLIST` - enables support features that make use of System.ComponentModel.BindingList.
 * `FEATURE_DICTIONARYADAPTER_XML` - enable DictionaryAdapter Xml features.
@@ -88,10 +89,6 @@ Symbol                              | NET35              | NET40              | 
 * `FEATURE_TEST_COM` - enables COM Interop tests.
 * `FEATURE_TEST_SERILOGINTEGRATION` - enables Serilog intergration tests.
 * `FEATURE_XUNITNET` - provides an NUnit shim that runs over xUnit.net to be used for .NET Core.
-
-The following conditional compilation symbols can be used to enable certain features/options that are not pertinent to build configurations:
-
-* `ASSEMBLY_CLSCOMPLIANT_FALSE` - marks assembly with `[assembly: System.CLSCompliant(false)]`; if not defined, assembly is marked with `[assembly: System.CLSCompliant(true)]`.
 
 The `__MonoCS__` symbol is used only in unit tests when compiled on Mono to work around Mono defects and non-Windows differences,
 however we are trying to move away from platform specific symbols as much as possible.

@@ -16,5 +16,8 @@
   "compilationOptions": {
     "warningsAsErrors": true,
     "keyFile": "../../buildscripts/CastleKey.snk"
-  }
+  },
+  "compileFiles": [
+    "../../buildscripts/CommonAssemblyInfo.cs"
+  ]
 }
