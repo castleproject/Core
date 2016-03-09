@@ -16,7 +16,6 @@ namespace Castle.Core.Internal
 {
 	using System.Threading;
 
-#if !SILVERLIGHT
 	internal class SlimWriteLockHolder : ILockHolder
 	{
 		private readonly ReaderWriterLockSlim locker;
@@ -47,5 +46,4 @@ namespace Castle.Core.Internal
 			get { return lockAcquired; }
 		}
 	}
-#endif
 }

@@ -20,15 +20,11 @@ namespace Castle.Core.Logging
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
-#if SILVERLIGHT
-	public abstract class AbstractLoggerFactory : ILoggerFactory
-#else
 	public abstract class AbstractLoggerFactory :
 #if FEATURE_REMOTING
 		MarshalByRefObject,
 #endif
 		ILoggerFactory
-#endif
 	{
 		public virtual ILogger Create(Type type)
 		{
@@ -61,7 +57,6 @@ namespace Castle.Core.Logging
 		/// <returns></returns>
 		protected static FileInfo GetConfigFile(string fileName)
 		{
-#if !SILVERLIGHT
 			FileInfo result;
 
 			if (Path.IsPathRooted(fileName))
@@ -79,9 +74,6 @@ namespace Castle.Core.Logging
 			}
 
 			return result;
-#else
-			return new FileInfo(fileName);
-#endif
 		}
 	}
 }

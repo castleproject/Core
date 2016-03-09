@@ -95,10 +95,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				return XmlEnumerationSerializer.Instance;
 			if (type.IsCustomSerializable())
 				return XmlCustomSerializer.Instance;
-#if !SILVERLIGHT
 			if (typeof(System.Xml.XmlNode).IsAssignableFrom(type))
 				return XmlXmlNodeSerializer.Instance;
-#endif
 			return new XmlDefaultSerializer(type);
 		}
 	}

@@ -32,15 +32,11 @@ namespace Castle.Core.Logging
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
-#if SILVERLIGHT
-	public abstract class LevelFilteredLogger : ILogger
-#else
 	public abstract class LevelFilteredLogger :
 #if FEATURE_REMOTING
 		MarshalByRefObject,
 #endif
 		ILogger
-#endif
 	{
 		private LoggerLevel level = LoggerLevel.Off;
 		private String name = "unnamed";

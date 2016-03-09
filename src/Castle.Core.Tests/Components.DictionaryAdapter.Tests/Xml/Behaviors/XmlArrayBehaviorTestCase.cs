@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
 	using System.Xml.Serialization;
 	using Castle.Components.DictionaryAdapter.Tests;
-    using NUnit.Framework;
+	using NUnit.Framework;
 
 	public class XmlArrayBehaviorTestCase
 	{
@@ -73,4 +72,3 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
         }
 	}
 }
-#endif

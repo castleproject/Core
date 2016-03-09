@@ -117,7 +117,6 @@ namespace Castle.Core.Logging.Tests
 			Assert.AreEqual(LoggerLevel.Off, logger.Level, "Default LevelFilteredLogger.Level is not Off");
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		public void Level()
 		{
@@ -129,7 +128,6 @@ namespace Castle.Core.Logging.Tests
 				Assert.AreEqual(level, logger.Level, "LevelFilteredLogger.Level did not change");
 			}
 		}
-#endif
 
 		[Test]
 		public void DefaultName()

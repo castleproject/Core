@@ -63,8 +63,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(two, four);
 		}
 
-#if !SILVERLIGHT
-
 #if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
 #if __MonoCS__
@@ -378,7 +376,6 @@ namespace Castle.DynamicProxy.Tests
 			File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Weak.dll"));
 		}
 #endif // FEATURE_ASSEMBLYBUILDER_SAVE
-#endif
 
 		[Test]
 		public void DefaultProxyBuilderWithSpecificScope()

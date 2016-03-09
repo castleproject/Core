@@ -79,13 +79,11 @@ namespace Castle.DynamicProxy.Tests
 			}
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		public void InternalConstructorIsReplicatedWhenInternalsVisibleTo()
 		{
 			object proxy = generator.CreateClassProxy(typeof(InternalClass), new StandardInterceptor());
 			Assert.IsNotNull(proxy.GetType().GetConstructor(new[] { typeof(IInterceptor[]) }));
 		}
-#endif
 	}
 }

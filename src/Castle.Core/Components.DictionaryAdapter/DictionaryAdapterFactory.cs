@@ -17,17 +17,12 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-#if !SILVERLIGHT
 	using System.Collections.Specialized;
-#endif
 	using System.ComponentModel;
 	using System.Linq;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Threading;
-#if !SILVERLIGHT
-
-#endif
 	using System.Diagnostics;
 
 #if FEATURE_DICTIONARYADAPTER_XML
@@ -78,8 +73,7 @@ namespace Castle.Components.DictionaryAdapter
 			return InternalGetAdapter(type, adapter, null);
 		}
 
-#if! SILVERLIGHT
-        /// <inheritdoc />
+		/// <inheritdoc />
 		public T GetAdapter<T>(NameValueCollection nameValues)
 		{
 			return GetAdapter<T>(new NameValueCollectionAdapter(nameValues));
@@ -106,7 +100,6 @@ namespace Castle.Components.DictionaryAdapter
 				.AddBehavior(XmlMetadataBehavior.Default)
 				.AddBehavior(xml));
 		}
-#endif
 #endif
 
 		/// <inheritdoc />

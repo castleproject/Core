@@ -75,58 +75,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Release|AnyCPU'">
-    <OutputPath>bin\SL40-Release\</OutputPath>
-    <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
-    <DefineConstants>TRACE;SILVERLIGHT SL4</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>
-    </DocumentationFile>
-    <NoWarn>1685</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
-    <OutputPath>bin\SL40-Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT SL4</DefineConstants>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <NoWarn>1685</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50-Release|AnyCPU'">
-    <OutputPath>bin\SL50-Release\</OutputPath>
-    <MSBuildTargets>Silverlight 5.0</MSBuildTargets>
-    <DefineConstants>TRACE;SILVERLIGHT SL5</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>
-    </DocumentationFile>
-    <NoWarn>1685</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50-Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <MSBuildTargets>Silverlight 5.0</MSBuildTargets>
-    <OutputPath>bin\SL50-Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT SL5</DefineConstants>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <NoWarn>1685</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -192,31 +140,13 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <Choose>
-    <When Condition="$(MSBuildTargets)!='Silverlight 5.0' and $(MSBuildTargets)!='Silverlight 4.0'">
-      <ItemGroup>
-        <Reference Include="System.Data" />
-        <Reference Include="nunit.framework">
-          <SpecificVersion>False</SpecificVersion>
-          <HintPath>..\..\lib\nunit.framework.dll</HintPath>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(MSBuildTargets) == 'Silverlight 5.0' or $(MSBuildTargets) == 'Silverlight 4.0'">
-      <ItemGroup>
-        <Reference Include="NUnit.Silverlight.Framework">
-          <SpecificVersion>False</SpecificVersion>
-          <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NUnit.Silverlight.Framework.dll</HintPath>
-        </Reference>
-        <Reference Include="NUnit.Silverlight.Compatibility">
-          <SpecificVersion>False</SpecificVersion>
-          <HintPath>$(RootPath)\lib\$(BuildConfigKey)\NUnit.Silverlight.Compatibility.dll</HintPath>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
+  <ItemGroup>
+    <Reference Include="System.Data" />
+    <Reference Include="nunit.framework">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessLevelTestCase.cs" />
     <Compile Include="BasePEVerifyTestCase.cs" />
@@ -391,18 +321,14 @@
     <Compile Include="XmlConfigurationDeserializerTests.cs" />
     <Compile Include="XmlSerializationTestCase.cs" />
   </ItemGroup>
-  <Choose>
-    <When Condition="$(MSBuildTargets)!='Silverlight 5.0' and $(MSBuildTargets)!='Silverlight 4.0'">
-      <ItemGroup>
-        <Compile Include="log4netIntegration\log4netConfig.Designer.cs">
-          <AutoGen>True</AutoGen>
-          <DesignTime>True</DesignTime>
-          <DependentUpon>log4netConfig.resx</DependentUpon>
-        </Compile>
-        <Compile Include="log4netIntegration\Log4netFactoryTestCase.cs" />
-      </ItemGroup>
-    </When>
-  </Choose>
+  <ItemGroup>
+    <Compile Include="log4netIntegration\log4netConfig.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>log4netConfig.resx</DependentUpon>
+    </Compile>
+    <Compile Include="log4netIntegration\Log4netFactoryTestCase.cs" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="..\..\buildscripts\CastleKey.snk">
       <Link>CastleKey.snk</Link>
@@ -553,7 +479,6 @@
     <Compile Include="ConsoleLoggerTestCase.cs" />
     <Compile Include="DiagnosticsLoggerTestCase.cs" />
     <Compile Include="LevelFilteredLoggerTests.cs" />
-    <Compile Include="MonitorLockTestCase.cs" />
     <Compile Include="SlimReadWriteLockTestCase.cs" />
     <Compile Include="ReflectionBasedDictionaryAdapterTestCase.cs" />
     <Compile Include="Core.Tests\Resources\AssemblyResourceFactoryTestCase.cs" />
@@ -600,23 +525,17 @@
       <Name>Castle.Services.Logging.SerilogIntegration</Name>
     </ProjectReference>
   </ItemGroup>
-  <Choose>
-    <When Condition="$(MSBuildTargets)!='Silverlight 5.0' and $(MSBuildTargets)!='Silverlight 4.0'">
-      <ItemGroup>
-        <ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj">
-          <Project>{FA79D6B4-30B1-444A-A627-ED283BF6406B}</Project>
-          <Name>Castle.Services.Logging.log4netIntegration</Name>
-        </ProjectReference>
-        <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-          <SpecificVersion>False</SpecificVersion>
-          <HintPath>..\..\lib\net35\log4net.dll</HintPath>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition="($(MSBuildTargets) == '') Or ($(MSBuildTargets) == 'CSharp')" />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 4.0'" />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 5.0'" />
+  <ItemGroup>
+    <ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj">
+      <Project>{FA79D6B4-30B1-444A-A627-ED283BF6406B}</Project>
+      <Name>Castle.Services.Logging.log4netIntegration</Name>
+    </ProjectReference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\net35\log4net.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(RootPath)\Settings.proj" />
   <PropertyGroup>
     <DefineConstants>$(DefineConstants) $(AdditionalDefineConstants)</DefineConstants>

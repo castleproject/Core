@@ -117,7 +117,6 @@ namespace CastleTests
 			generator.CreateClassProxy(typeof(HasCtorWithParamsStrings), new object[] { new string[0] });
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		public void ClassWithDifferentAccessLevelOnProperties()
 		{
@@ -134,8 +133,6 @@ namespace CastleTests
 
 			Assert.AreEqual("10 11 12 13 name", type.ToString());
 		}
-
-#endif
 
 		[Test]
 		public void GetPropertyByReflectionTest()
@@ -332,9 +329,6 @@ namespace CastleTests
 			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
 		}
 
-#if SILVERLIGHT // Silverlight test runner treats Assert.Ignore as failed test :/
-		[Ignore]
-#endif
 		[Test]
 		public void ProxyForBaseTypeFromUnsignedAssembly()
 		{
@@ -353,9 +347,6 @@ namespace CastleTests
 			return StrongNameUtil.IsAssemblySigned(GetType().GetTypeInfo().Assembly);
 		}
 
-#if SILVERLIGHT // Silverlight test runner treats Assert.Ignore as failed test :/
-		[Ignore]
-#endif
 		[Test]
 		public void ProxyForBaseTypeAndInterfaceFromUnsignedAssembly()
 		{
@@ -371,9 +362,6 @@ namespace CastleTests
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
 		}
 
-#if SILVERLIGHT // Silverlight test runner treats Assert.Ignore as failed test :/
-		[Ignore]
-#endif
 		[Test]
 		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies1()
 		{
@@ -389,9 +377,6 @@ namespace CastleTests
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
 		}
 
-#if SILVERLIGHT // Silverlight test runner treats Assert.Ignore as failed test :/
-		[Ignore]
-#endif
 		[Test]
 		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies2()
 		{
@@ -429,7 +414,7 @@ namespace CastleTests
 			object proxy2 = Activator.CreateInstance(proxy.GetType());
 			Assert.AreEqual("Something", ((ClassWithDefaultConstructor)proxy2).SomeString);
 		}
-#if !SILVERLIGHT
+
 		[Test]
 		public void ClassProxyShouldHaveDefaultConstructorWhenBaseClassHasInternal()
 		{
@@ -444,7 +429,6 @@ namespace CastleTests
 			object proxy2 = Activator.CreateInstance(proxy.GetType());
 			Assert.AreEqual("Something", ((ClassWithInternalDefaultConstructor)proxy2).SomeString);
 		}
-#endif
 
 		[Test]
 		public void ClassProxyShouldHaveDefaultConstructorWhenBaseClassHasProtected()

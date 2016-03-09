@@ -28,12 +28,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		object IDictionaryCreateStrategy.Create(IDictionaryAdapter adapter, Type type, IDictionary dictionary)
 		{
-			dictionary = dictionary ??
-#if SILVERLIGHT
-			             new Dictionary<object, object>();
-#else
-			             new Hashtable();
-#endif
+			dictionary = dictionary ?? new Hashtable();
 			return adapter.This.Factory.GetAdapter(type, dictionary, adapter.This.Descriptor); ;
 		}
 	}

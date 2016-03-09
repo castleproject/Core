@@ -42,7 +42,6 @@ namespace Castle.Core.Tests.Resources
 			Assert.IsFalse( resFactory.Accept( new CustomUri("http://www.castleproject.org") ) );
 		}
 
-#if !SILVERLIGHT // Silverlight test runner does not handle explicit tests
 		[Test, Explicit]
 		public void CreateWithAbsolutePath()
 		{
@@ -76,6 +75,5 @@ namespace Castle.Core.Tests.Resources
 
 			Assert.Throws<ResourceException>(() => resource.GetStreamReader());
 		}
-#endif
 	}
 }

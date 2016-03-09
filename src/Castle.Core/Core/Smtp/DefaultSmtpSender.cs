@@ -16,8 +16,6 @@
 
 namespace Castle.Core.Smtp
 {
-#if !SILVERLIGHT
-
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
@@ -285,7 +283,6 @@ namespace Castle.Core.Smtp
 			return new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).IsGranted();
 		}
 	}
-#endif
 }
 
 #endif

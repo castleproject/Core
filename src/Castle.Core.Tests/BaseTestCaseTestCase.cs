@@ -33,9 +33,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if SILVERLIGHT
-		[Ignore("This passes in NUnit, but when run in a Browser test harness like UnitDriven this failed because of access to the disk???")]
-#endif
 		public void TearDown_DoesNotSaveAnything_IfNoProxyGenerated()
 		{
 			string path = ModuleScope.DEFAULT_FILE_NAME;
@@ -92,9 +89,6 @@ namespace Castle.DynamicProxy.Tests
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
-#if SILVERLIGHT
-		[Ignore("Cannot do in Silverlight")]
-#endif
 		[Platform(Exclude = "mono", Reason = "Mono doesn't have peverify, so we can't perform verification.")]
 		public void TearDown_FindsVerificationErrors()
 		{

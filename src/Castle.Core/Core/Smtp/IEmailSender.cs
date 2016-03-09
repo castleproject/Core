@@ -16,8 +16,6 @@
 
 namespace Castle.Core.Smtp
 {
-	#if !SILVERLIGHT
-
 	using System.Collections.Generic;
 	using System.Net.Mail;
 
@@ -47,7 +45,6 @@ namespace Castle.Core.Smtp
 		/// <param name="messages">List of <see cref="MailMessage">messages</see></param>
 		void Send(IEnumerable<MailMessage> messages);
 	}
-	#endif
 }
 
 #endif

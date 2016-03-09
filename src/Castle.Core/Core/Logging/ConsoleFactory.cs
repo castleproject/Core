@@ -19,15 +19,11 @@ namespace Castle.Core.Logging
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
-#if SILVERLIGHT
-	public class ConsoleFactory : ILoggerFactory
-#else
 	public class ConsoleFactory :
 #if FEATURE_REMOTING
 		MarshalByRefObject,
 #endif
 		ILoggerFactory
-#endif
 	{
 		private LoggerLevel? level;
 

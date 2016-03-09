@@ -57,7 +57,6 @@ namespace Castle.Core.Tests.Resources
 			Assert.AreEqual(false, uri1.IsUnc);
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		public void UriWithEnvironmentVariable()
 		{
@@ -72,7 +71,6 @@ namespace Castle.Core.Tests.Resources
 			Assert.AreEqual(true, uri1.IsFile);
 			Assert.AreEqual(false, uri1.IsUnc);
 		}
-#endif
 
 		[Test]
 		public void AssemblyUri()

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace CastleTests.Core.Tests.Internal
 {
 	using System;
@@ -974,4 +973,3 @@ namespace CastleTests.Core.Tests.Internal
 		private sealed class TValue { }
 	}
 }
-#endif
