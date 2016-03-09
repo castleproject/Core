@@ -200,20 +200,13 @@ namespace Castle.DynamicProxy.Contributors
 		/// <returns></returns>
 		protected bool AcceptMethod(MethodInfo method, bool onlyVirtuals, IProxyGenerationHook hook)
 		{
-			// we can never intercept a sealed (final) method
-			if (method.IsFinal)
-			{
-				Logger.DebugFormat("Excluded sealed method {0} on {1} because it cannot be intercepted.", method.Name,
-				                   method.DeclaringType.FullName);
-				return false;
-			}
-
 			if (IsInternalAndNotVisibleToDynamicProxy(method))
 			{
 				return false;
 			}
 
-			if (onlyVirtuals && !method.IsVirtual)
+			var isOverridable = method.IsVirtual && !method.IsFinal;
+			if (onlyVirtuals && !isOverridable)
 			{
 				if (
 #if FEATURE_REMOTING
@@ -222,10 +215,18 @@ namespace Castle.DynamicProxy.Contributors
 					method.IsGetType() == false &&
 					method.IsMemberwiseClone() == false)
 				{
-					Logger.DebugFormat("Excluded non-virtual method {0} on {1} because it cannot be intercepted.", method.Name,
+					Logger.DebugFormat("Excluded non-overridable method {0} on {1} because it cannot be intercepted.", method.Name,
 					                   method.DeclaringType.FullName);
 					hook.NonProxyableMemberNotification(type, method);
 				}
+				return false;
+			}
+
+			// we can never intercept a sealed (final) method
+			if (method.IsFinal)
+			{
+				Logger.DebugFormat("Excluded sealed method {0} on {1} because it cannot be intercepted.", method.Name,
+				                   method.DeclaringType.FullName);
 				return false;
 			}
 
