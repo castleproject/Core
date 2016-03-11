@@ -7,7 +7,7 @@
   "licenseUrl": "",
   "dependencies": {
     "Castle.Core": { "target": "project", "version": "" },
-    "NLog": "4.4.0-alpha3"
+    "NLog": "4.4.0-beta1"
   },
   "frameworks": {
     "dotnet5.4": {
