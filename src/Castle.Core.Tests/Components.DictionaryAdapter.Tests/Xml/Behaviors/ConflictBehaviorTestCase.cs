@@ -19,6 +19,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 	using System.Xml;
 	using System.Xml.Serialization;
 	using Castle.Components.DictionaryAdapter.Tests;
+	using Castle.Core.Tests.Compatibility;
 	using NUnit.Framework;
 
 	public class ConflictBehaviorTestCase
@@ -42,11 +43,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 			public void Set()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object");
+				}
+
 				XmlMetadataBehavior.Default.AddReservedNamespaceUri("urn:a");
 
 				var xml = Xml("<Foo/>");

@@ -18,6 +18,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 	using System.Xml;
 	using Castle.Components.DictionaryAdapter.Tests;
 	using Castle.Components.DictionaryAdapter.Xml;
+	using Castle.Core.Tests.Compatibility;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -80,11 +81,13 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("Expected: urn:a:T  But was: T")]
-#endif
 		public void XsiType_OfElement_WhenXsiTypeAttributeIsPresent()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] Expected: urn:a:T  But was: T.");
+			}
+
 			var node = NodeForElement("<X xsi:type='p:T' xmlns:p='urn:a' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'/>");
 
 			Assert.AreEqual(new XmlName("T", "urn:a"), node.XsiType);

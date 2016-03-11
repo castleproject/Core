@@ -21,8 +21,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 	using System.Xml;
 	using System.Xml.Schema;
 	using System.Xml.Serialization;
-	using NUnit.Framework;
 	using Castle.Components.DictionaryAdapter.Tests;
+	using Castle.Core.Tests.Compatibility;
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class XmlAdapterAcceptanceTestCase
@@ -79,11 +80,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 		public void Adapter_OnXml_CanTargetWithXPath()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
 			var line1 = "2922 South Highway 205";
 			var city = "Rockwall";
 			var state = "TX";
@@ -244,11 +247,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 		public void Adapter_OnXml_CanWriteProperties()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
 			var name = "Soccer Adult Winter II 2010";
 			var minAge = 30;
 			var division = Division.Coed;
@@ -329,11 +334,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 		public void Adapter_OnXml_CanCopySubTree()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
 			var xml = string.Format(
 				@"<Season xmlns='RISE' xmlns:rise='RISE'>
 					 <Name>Soccer Adult Spring II 2010</Name>
@@ -427,11 +434,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 		public void Adapter_OnXml_CanCreate_Other_Adapter()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
 			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
 					 <Name>Soccer Adult Spring II 2010</Name>
 					 <MinimumAge>16</MinimumAge>
@@ -832,11 +841,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 		public void Can_Reassign_Lists()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
 			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
 					 <League>
 						<Team name='Hit And Run'>

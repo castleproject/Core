@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.Reflection.Emit;
 
 	using Castle.Core.Tests;
+	using Castle.Core.Tests.Compatibility;
 
 	using NUnit.Framework;
 
@@ -48,11 +49,13 @@ namespace Castle.DynamicProxy.Tests
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
-#if __MonoCS__
-		[Ignore("Expected: True  But was: False")]
-#endif
 		public void TearDown_SavesAssembly_IfProxyGenerated()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] Expected: True  But was: False");
+			}
+
 			string path = ModuleScope.DEFAULT_FILE_NAME;
 			if (File.Exists(path))
 			{

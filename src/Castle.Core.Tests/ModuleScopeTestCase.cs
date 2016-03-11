@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.IO;
 	using System.Reflection;
+	using Castle.Core.Tests.Compatibility;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Serialization;
 	using Castle.DynamicProxy.Tests.InterClasses;
@@ -65,11 +66,13 @@ namespace Castle.DynamicProxy.Tests
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
-#if __MonoCS__
-		[Ignore("Expected: CastleDynProxy2.dll  But was:  /home/teamcity/buildagent/work/...")]
-#endif
 		public void ImplicitModulePaths()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] Expected: CastleDynProxy2.dll  But was:  /home/teamcity/buildagent/work/....");
+			}
+
 			var scope = new ModuleScope(true);
 			Assert.AreEqual(ModuleScope.DEFAULT_FILE_NAME, scope.StrongNamedModuleName);
 			Assert.AreEqual(Path.Combine(Directory.GetCurrentDirectory(), ModuleScope.DEFAULT_FILE_NAME),
@@ -83,11 +86,13 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("Expected: StrongModule.dll  But was:  /home/teamcity/buildagent/work/...")]
-#endif
 		public void ExplicitModulePaths()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] Expected: StrongModule.dll  But was:  /home/teamcity/buildagent/work/...");
+			}
+
 			var scope = new ModuleScope(true, false, "Strong", "StrongModule.dll", "Weak", "WeakModule.dll");
 			Assert.AreEqual("StrongModule.dll", scope.StrongNamedModuleName);
 			Assert.AreEqual(Path.Combine(Directory.GetCurrentDirectory(), "StrongModule.dll"),
@@ -128,11 +133,13 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("Expected: CastleDynProxy2.dll  But was:  /home/teamcity/buildagent/work/...")]
-#endif
 		public void SaveSigned()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] Expected: CastleDynProxy2.dll  But was:  /home/teamcity/buildagent/work/....");
+			}
+
 			var scope = new ModuleScope(true);
 			scope.ObtainDynamicModuleWithStrongName();
 
@@ -152,11 +159,13 @@ namespace Castle.DynamicProxy.Tests
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
-#if __MonoCS__
-		[Ignore("Expected: CastleDynProxy2.dll  But was:  /home/teamcity/buildagent/work/...")]
-#endif
 		public void SaveUnsigned()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] Expected: CastleDynProxy2.dll  But was:  /home/teamcity/buildagent/work/....");
+			}
+
 			var scope = new ModuleScope(true);
 			scope.ObtainDynamicModuleWithWeakName();
 

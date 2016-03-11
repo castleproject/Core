@@ -16,9 +16,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
 	using System.Xml;
-	using Castle.Components.DictionaryAdapter.Xml;
-	using NUnit.Framework;
 	using Castle.Components.DictionaryAdapter.Tests;
+	using Castle.Components.DictionaryAdapter.Xml;
+	using Castle.Core.Tests.Compatibility;
+	using NUnit.Framework;
 	using System.Xml.Serialization;
 	using System.Runtime.Serialization;
 
@@ -372,11 +373,13 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 		public void Create_BeforeEnd_IsInsert_ForAttribute()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
 			var xml    = Xml("<X Other='2'/>");
 			var cursor = Cursor(xml, CursorFlags.Attributes);
 
@@ -412,11 +415,13 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 		public void Create_AtEnd_IsAppend_ForAttribute()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
 			var xml    = Xml("<X/>");
 			var cursor = Cursor(xml, CursorFlags.Attributes);
 

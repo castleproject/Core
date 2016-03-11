@@ -18,6 +18,7 @@ namespace CastleTests
 	using System.Reflection;
 	using System.Reflection.Emit;
 
+	using Castle.Core.Tests.Compatibility;
 	using Castle.DynamicProxy;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests;
@@ -78,11 +79,13 @@ namespace CastleTests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("Expected: Castle.DynamicProxy.Generators.GeneratorException, But was: System.ArgumentNullException")]
-#endif
 		public void ProxyForNonPublicClass()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] Expected: Castle.DynamicProxy.Generators.GeneratorException, But was: System.ArgumentNullException");
+			}
+
 			// have to use a type that is not from this assembly, because it is marked as internals visible to 
 			// DynamicProxy2
 

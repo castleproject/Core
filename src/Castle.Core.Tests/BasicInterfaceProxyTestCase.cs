@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.Collections.Generic;
 	using System.Reflection;
 
+	using Castle.Core.Tests.Compatibility;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.BugsReported;
 	using Castle.DynamicProxy.Tests.Interceptors;
@@ -236,13 +237,17 @@ namespace Castle.DynamicProxy.Tests
 			var innerType = typeof(IList<>);
 			var targetType = innerType.MakeGenericType(typeof(IList<>));
 			var ex = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithoutTarget(targetType, new IInterceptor[0]));
-			StringAssert.StartsWith(
-#if __MonoCS__
-				"Can not create proxy for type System.Collections.Generic.IList`1[[System.Collections.Generic.IList`1, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] because type System.Collections.Generic.IList`1 is an open generic type.",
-#else
-				"Can not create proxy for type IList`1 because type System.Collections.Generic.IList`1 is an open generic type.",
-#endif
-				ex.Message);
+			string expectedMessage;
+			if (RuntimeUtility.IsMono)
+			{
+				expectedMessage = "Can not create proxy for type System.Collections.Generic.IList`1[[System.Collections.Generic.IList`1, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] because type System.Collections.Generic.IList`1 is an open generic type.";
+			}
+			else
+			{
+				expectedMessage = "Can not create proxy for type IList`1 because type System.Collections.Generic.IList`1 is an open generic type.";
+			}
+
+			StringAssert.StartsWith(expectedMessage, ex.Message);
 		}
 
 		[Test]
