@@ -522,7 +522,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			{
 				if (RuntimeUtility.IsMono)
 				{
-					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+					Assert.Ignore("[mono] System.Xml.XPath.XPathException : variable p:v not found.");
 				}
 
 				TestGet<IFoo>(f => f.Item);
@@ -566,7 +566,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			{
 				if (RuntimeUtility.IsMono)
 				{
-					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+					Assert.Ignore("[mono] System.Xml.XPath.XPathException : variable p:v not found.");
 				}
 
 				TestGet<IFoo>(f => f.Item);
@@ -599,7 +599,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			{
 				if (RuntimeUtility.IsMono)
 				{
-					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+					Assert.Ignore("[mono] String lengths are both 7. Strings differ at index 0.  Expected: 'correct'  But was: 'wrong B'.");
 				}
 
 				TestGet<IFoo>(f => f.Item);
@@ -635,7 +635,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			{
 				if (RuntimeUtility.IsMono)
 				{
-					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+					Assert.Ignore("[mono] String lengths are both 7. Strings differ at index 0.  Expected: 'correct'  But was: 'wrong B'.");
 				}
 
 				TestGet<IFoo>(f => f.Item);
