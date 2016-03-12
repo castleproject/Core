@@ -29,7 +29,6 @@
     <Optimize>false</Optimize>
     <DefineConstants>TRACE;DEBUG;DOTNET40 FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
@@ -43,7 +42,6 @@
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;DOTNET40 FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <DocumentationFile>
     </DocumentationFile>
