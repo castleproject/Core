@@ -88,9 +88,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (firstStep != null)
 				firstStep.SetContext(context);
 		}
-
-		private static readonly IList<CompiledXPathStep>
-			NoSteps = Array.AsReadOnly(new CompiledXPathStep[0]);
 	}
 }
 #endif

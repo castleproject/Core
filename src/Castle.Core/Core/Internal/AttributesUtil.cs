@@ -44,9 +44,26 @@ namespace Castle.Core.Internal
 		{
 			if (typeof(T) != typeof(object))
 			{
+#if __MonoCS__
+				foreach (var a in type.GetTypeInfo().GetCustomAttributes(typeof(T), false))
+				{
+					yield return (T)a;
+				}
+#else
 				return (IEnumerable<T>)type.GetTypeInfo().GetCustomAttributes(typeof(T), false);
+#endif
 			}
-			return (IEnumerable<T>)type.GetTypeInfo().GetCustomAttributes(false);
+			else
+			{
+#if __MonoCS__
+				foreach (var a in type.GetTypeInfo().GetCustomAttributes(false))
+				{
+					yield return (T)a;
+				}
+#else
+				return (IEnumerable<T>)type.GetTypeInfo().GetCustomAttributes(false);
+#endif
+			}
 		}
 
 		/// <summary>
@@ -68,9 +85,26 @@ namespace Castle.Core.Internal
 		{
 			if (typeof(T) != typeof(object))
 			{
+#if __MonoCS__
+				foreach (var a in member.GetCustomAttributes(typeof(T), false))
+				{
+					yield return (T)a;
+				}
+#else
 				return (IEnumerable<T>)member.GetCustomAttributes(typeof(T), false);
+#endif
 			}
-			return (IEnumerable<T>)member.GetCustomAttributes(false);
+			else
+			{
+#if __MonoCS__
+				foreach (var a in member.GetCustomAttributes(false))
+				{
+					yield return (T)a;
+				}
+#else
+				return (IEnumerable<T>)member.GetCustomAttributes(false);
+#endif
+			}
 		}
 
 		/// <summary>
