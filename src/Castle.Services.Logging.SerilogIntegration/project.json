@@ -7,8 +7,8 @@
   "licenseUrl": "",
   "dependencies": {
     "Castle.Core": { "target": "project", "version": "" },
-    "Serilog": "2.0.0-beta-505",
-    "Serilog.Sinks.ColoredConsole": "2.0.0-beta-505"
+    "Serilog": "2.0.0-beta-509",
+    "Serilog.Sinks.ColoredConsole": "2.0.0-beta-509"
   },
   "frameworks": {
     "dotnet5.4": { }
