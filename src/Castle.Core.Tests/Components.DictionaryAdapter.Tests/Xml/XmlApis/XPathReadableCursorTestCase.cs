@@ -15,18 +15,21 @@
 namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
 	using Castle.Components.DictionaryAdapter.Xml;
+	using Castle.Core.Tests.Compatibility;
 	using NUnit.Framework;
 
 	[TestFixture]
-#if __MonoCS__
-	[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 	public class XPathMutableCursorTestCase : XPathCursorTestCase
 	{
 		[Test]
 		public void Iterate_AllNodes_WhenNoMatchExists()
 		{
-		    var xml    = Xml("<X Q='?'> foo <Q/> bar </X>");
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
+			var xml    = Xml("<X Q='?'> foo <Q/> bar </X>");
 		    var cursor = Cursor(xml, "@A|A", CursorFlags.None);
 
 		    Assert.False(cursor.MoveNext());
@@ -35,7 +38,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Iterate_AllNodes_WhenOneMatchExists_AsAttribute()
 		{
-		    var xml    = Xml("<X Q='?' A='1' R='?'> <Q/> </X>");
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
+			var xml    = Xml("<X Q='?' A='1' R='?'> <Q/> </X>");
 		    var cursor = Cursor(xml, "@A|A", CursorFlags.None);
 
 		    Assert.True(cursor.MoveNext());
@@ -47,7 +55,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Iterate_AllNodes_WhenOneMatchExists_AsElement()
 		{
-		    var xml    = Xml("<X Q='?'> <Q/> <A>1</A> <Q/> </X>");
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
+			var xml    = Xml("<X Q='?'> <Q/> <A>1</A> <Q/> </X>");
 		    var cursor = Cursor(xml, "@A|A", CursorFlags.None);
 
 		    Assert.True(cursor.MoveNext());
@@ -59,7 +72,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Iterate_AllNodes_WhenMultipleMatchesExist_InSingleMode()
 		{
-		    var xml    = Xml("<X Q='?' A='1' R='?'> <Q/> <A>2</A> <Q/> </X>");
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
+			var xml    = Xml("<X Q='?' A='1' R='?'> <Q/> <A>2</A> <Q/> </X>");
 		    var cursor = Cursor(xml, "@A|A", CursorFlags.None);
 
 		    Assert.False(cursor.MoveNext());
@@ -68,7 +86,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Iterate_AllNodes_WhenMultipleMatchesExist_InMultipleMode()
 		{
-		    var xml    = Xml("<X Q='?' A='1' R='?'> <Q/> <A>2</A> <Q/> </X>");
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
+			var xml    = Xml("<X Q='?' A='1' R='?'> <Q/> <A>2</A> <Q/> </X>");
 		    var cursor = Cursor(xml, "@A|A", CursorFlags.Multiple);
 
 		    Assert.True(cursor.MoveNext());

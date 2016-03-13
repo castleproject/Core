@@ -20,9 +20,10 @@ namespace Castle.DynamicProxy.Tests
 #endif
 	using System.IO;
 
+	using Castle.Core.Tests.Compatibility;
+
 	using NUnit.Framework;
 
-#if !__MonoCS__ // mono doesn't have PEVerify
 	public class FindPeVerify
 	{
 		private static readonly string[] PeVerifyProbingPaths =
@@ -62,7 +63,6 @@ namespace Castle.DynamicProxy.Tests
 			get { return peVerifyPath ?? (peVerifyPath = FindPeVerifyPath()); }
 		}
 	}
-#endif
 
 	public abstract class BasePEVerifyTestCase
 #if FEATURE_XUNITNET
@@ -115,13 +115,13 @@ namespace Castle.DynamicProxy.Tests
 		}
 #endif
 
-#if FEATURE_ASSEMBLYBUILDER_SAVE && !__MonoCS__ // mono doesn't have PEVerify
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 #if !FEATURE_XUNITNET
 		[TearDown]
 #endif
 		public virtual void TearDown()
 		{
-			if (!IsVerificationDisabled)
+			if (!IsVerificationDisabled && !RuntimeUtility.IsMono) // mono doesn't have PEVerify
 			{
 				// Note: only supports one generated assembly at the moment
 				var path = ((PersistentProxyBuilder)builder).SaveAssembly();

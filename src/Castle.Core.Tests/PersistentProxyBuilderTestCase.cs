@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.IO;
+	using Castle.Core.Tests.Compatibility;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -32,11 +33,13 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("Expected: True  But was:  False")]
-#endif
 		public void PersistentProxyBuilder_SavesSignedFile()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] Expected: True  But was:  False");
+			}
+
 			PersistentProxyBuilder builder = new PersistentProxyBuilder();
 			builder.CreateClassProxyType(typeof(object), Type.EmptyTypes, ProxyGenerationOptions.Default);
 			string path = builder.SaveAssembly();

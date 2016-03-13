@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
+	using Castle.Core.Tests.Compatibility;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.GenClasses;
 	using Castle.DynamicProxy.Tests.Interceptors;
@@ -115,11 +116,12 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.InvalidCastException : Cannot cast from source type to destination type.")]
-#endif
 		public void ProxyWithMethodReturningGenericOfGenericOfT()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.InvalidCastException : Cannot cast from source type to destination type.");
+			}
 			var proxy = generator.CreateClassProxy<ClassWithMethodWithReturnArrayOfListOfT>();
 			proxy.GenericMethodReturnsListArray<string>();
 			proxy.GenericMethodReturnsGenericOfGenericType<int>();

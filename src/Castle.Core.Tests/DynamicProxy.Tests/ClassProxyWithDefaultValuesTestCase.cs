@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
 
+	using Castle.Core.Tests.Compatibility;
 	using CastleTests.DynamicProxy.Tests.Classes;
 	using CastleTests.DynamicProxy.Tests.Interfaces;
 
@@ -29,13 +30,15 @@ namespace Castle.DynamicProxy.Tests
 	{
 #if DOTNET45
 		[Test]
-#if __MonoCS__
-		// Seems like mono is too strict, and doesn't handle a nullable default parameter in ParameterBuilder
-		// https://github.com/mono/mono/blob/master/mcs/class/corlib/System.Reflection.Emit/ParameterBuilder.cs#L101
-		[Ignore("System.ArgumentException : Constant does not match the defined type.")]
-#endif
 		public void MethodParameterWithDefaultValue_DefaultValueIsSetOnProxiedMethodAsWell()
 		{
+			// Seems like mono is too strict, and doesn't handle a nullable default parameter in ParameterBuilder
+			// https://github.com/mono/mono/blob/master/mcs/class/corlib/System.Reflection.Emit/ParameterBuilder.cs#L101
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.ArgumentException : Constant does not match the defined type.");
+			}
+
 			var proxiedType = generator.CreateClassProxy<ClassWithMethodWithParameterWithDefaultValue>().GetType();
 
 			var parameter = proxiedType.GetMethod("Method").GetParameters().Single(paramInfo => paramInfo.Name == "value");
@@ -45,11 +48,13 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("Expected: False  But was: True")]
-#endif
 		public void MethodParameterWithDefaultValue_DefaultValueNullIsSetOnProxiedMethodAsWell()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] Expected: False  But was: True.");
+			}
+
 			var proxiedType = generator.CreateClassProxy<ClassWithMethodWithParameterWithNullDefaultValue>().GetType();
 
 			var parameter = proxiedType.GetMethod("Method").GetParameters().Single(paramInfo => paramInfo.Name == "value");

@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.Linq;
 	using System.Reflection;
 
+	using Castle.Core.Tests.Compatibility;
 	using Castle.DynamicProxy.Tests.Classes;
 
 	using CastleTests.DynamicProxy.Tests.Classes;
@@ -106,11 +107,13 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("Expected: True  But was: False")]
-#endif
 		public void EnsureProxyHasAttributesOnGenericArgument()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] Expected: True  But was: False");
+			}
+
 			var proxy = generator.CreateClassProxy<HasNonInheritableAttribute>();
 			var nameProperty = proxy.GetType().GetMethod("OnGenericArgument").GetGenericArguments().Single();
 			Assert.IsTrue(nameProperty.GetTypeInfo().IsDefined(typeof(NonInheritableAttribute), false));

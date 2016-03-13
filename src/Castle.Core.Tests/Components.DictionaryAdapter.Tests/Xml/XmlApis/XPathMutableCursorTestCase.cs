@@ -19,18 +19,21 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 	using Castle.Components.DictionaryAdapter;
 	using Castle.Components.DictionaryAdapter.Tests;
 	using Castle.Components.DictionaryAdapter.Xml;
+	using Castle.Core.Tests.Compatibility;
 	using NUnit.Framework;
 
 	[TestFixture]
-#if __MonoCS__
-	[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 	public class XPathReadableCursorTestCase : XPathCursorTestCase
 	{
 		[Test]
 		public void AsVirtual_WhenParentIsRealNode()
 		{
-			IXmlNode   root, node;
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
+			IXmlNode root, node;
 			IXmlCursor cursor;
 
 			root = Node("<X/>");
@@ -46,7 +49,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void AsVirtual_WhenParentIsVirtualNode()
 		{
-			IXmlNode   root, node;
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
+			IXmlNode root, node;
 			IXmlCursor cursor;
 
 			root = Node("<X/>");
@@ -64,7 +72,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Iterate_ComplexPath_WhenPartialMatchesExist()
 		{
-		    var xml    = Xml("<X> <A><B/></A> </X>");
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
+			var xml    = Xml("<X> <A><B/></A> </X>");
 		    var cursor = Cursor(xml, "A/B/@C", CursorFlags.Multiple);
 
 			Assert.True(cursor.MoveNext());
@@ -76,7 +89,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Bug_SaveAfterCreate()
 		{
-		    var xml    = Xml("<X/>");
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
+			var xml    = Xml("<X/>");
 		    var cursor = Cursor(xml, "A/B/@C", CursorFlags.Multiple);
 
 			Assert.False(cursor.MoveNext());
@@ -87,7 +105,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Bug_CoerceAttributeInAWayThatRequiresXsiType()
 		{
-		    var xml    = Xml("<X/>");
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
+			var xml    = Xml("<X/>");
 		    var cursor = Cursor(xml, "A/B/@C", CursorFlags.Multiple);
 
 			Assert.False(cursor.MoveNext());
@@ -100,7 +123,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Create()
 		{
-		    var xml    = Xml("<X/>");
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
+			var xml    = Xml("<X/>");
 		    var cursor = Cursor(xml, "A[B='b']/C[D[E][F='f'] and G]/@H", CursorFlags.Multiple);
 
 			Assert.False(cursor.MoveNext());
@@ -125,7 +153,12 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Create_WithVariable()
 		{
-		    var xml    = Xml("<X/>");
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+			}
+
+			var xml    = Xml("<X/>");
 		    var cursor = Cursor(xml, "A[B=$test:v]/C", CursorFlags.Multiple);
 
 			Assert.False(cursor.MoveNext());

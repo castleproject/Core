@@ -15,6 +15,7 @@
 #if !DOTNET35
 namespace Castle.DynamicProxy.Tests
 {
+	using Castle.Core.Tests.Compatibility;
 	using CastleTests.DynamicProxy.Tests.Interfaces;
 
 	using NUnit.Framework;
@@ -23,13 +24,15 @@ namespace Castle.DynamicProxy.Tests
 	public class InterfaceProxyWithMethodsWithOptionalParametersTestCase
 	{
 		[Test]
-#if __MonoCS__
-		// Seems like mono is too strict, and doesn't handle a nullable default parameter in ParameterBuilder
-		// https://github.com/mono/mono/blob/master/mcs/class/corlib/System.Reflection.Emit/ParameterBuilder.cs#L101
-		[Ignore("System.ArgumentException : Constant does not match the defined type.")]
-#endif
 		public void CanCreateInterfaceProxy()
 		{
+			// Seems like mono is too strict, and doesn't handle a nullable default parameter in ParameterBuilder
+			// https://github.com/mono/mono/blob/master/mcs/class/corlib/System.Reflection.Emit/ParameterBuilder.cs#L101
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] System.ArgumentException : Constant does not match the defined type.");
+			}
+
 			var proxyGenerator = new ProxyGenerator();
 			proxyGenerator.CreateInterfaceProxyWithoutTarget<InterfaceWithMethodsWithAllKindsOfOptionalParameters>();
 		}

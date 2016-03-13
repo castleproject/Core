@@ -29,12 +29,18 @@ namespace System.Reflection
 	{
 		public static IEnumerable<T> GetCustomAttributes<T>(this Assembly element) where T : Attribute
 		{
-			return (IEnumerable<T>)Attribute.GetCustomAttributes(element, typeof(T));
+			foreach (T a in Attribute.GetCustomAttributes(element, typeof(T)))
+			{
+				yield return a;
+			}
 		}
 
 		public static IEnumerable<T> GetCustomAttributes<T>(this MemberInfo element, bool inherit) where T : Attribute
 		{
-			return (IEnumerable<T>)Attribute.GetCustomAttributes(element, typeof(T), inherit);
+			foreach (T a in Attribute.GetCustomAttributes(element, typeof(T), inherit))
+			{
+				yield return a;
+			}
 		}
 
 		public static bool IsDefined(this MemberInfo element, Type attributeType)

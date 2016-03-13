@@ -19,8 +19,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 	using System.Xml.XPath;
 	using System.Xml.Xsl;
 	using Castle.Components.DictionaryAdapter.Tests;
-    using NUnit.Framework;
-
+	using Castle.Core.Tests.Compatibility;
+	using NUnit.Framework;
 	public class XPathBehaviorTestCase
 	{
 		[TestFixture]
@@ -62,11 +62,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 			public void Set()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+				}
+
 				var xml = Xml("<Foo/>");
 				var foo = Create<IFoo>(xml);
 
@@ -125,11 +127,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 			public void Set()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] Expected: System.NullReferenceException : Object reference not set to an instance of an object.");
+				}
+
 				var xml = Xml("<Foo/>");
 				var foo = Create<IFoo>(xml);
 
@@ -255,11 +259,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 			public void Realize_Missing()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+				}
+
 				var xml = Xml("<Foo/>");
 				var foo = Create<IFoo>(xml);
 
@@ -277,11 +283,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 			public void Realize_Partial()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+				}
+
 				var xml = Xml("<Foo> <A> <X/> </A> </Foo>");
 				var foo = Create<IFoo>(xml);
 
@@ -299,11 +307,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 			public void SelectOnVirtual()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+				}
+
 				var xml = Xml("<Foo> <A/> </Foo>");
 				var foo = Create<IFoo>(xml);
 
@@ -334,11 +344,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 			public void Delete_NotDoAnything()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+				}
+
 				var xml = Xml
 				(
 					"<Foo>",
@@ -361,11 +373,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 			public void Delete_Partial()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+				}
+
 				var xml = Xml
 				(
 					"<Foo>",
@@ -389,11 +403,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 			public void Delete_Whole()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+				}
+
 				var xml = Xml
 				(
 					"<Foo>",
@@ -439,11 +455,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 			public void Set()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+				}
+
 				var xml = Xml("<Foo> <X>x</X> <Y>y</Y> </Foo>");
 				var foo = Create<IFoo>(xml);
 
@@ -500,20 +518,24 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.Xml.XPath.XPathException : variable p:v not found")]
-#endif
 			public void Get()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] System.Xml.XPath.XPathException : variable p:v not found.");
+				}
+
 				TestGet<IFoo>(f => f.Item);
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 			public void Set()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+				}
+
 				TestSet<IFoo>((f, v) => f.Item = v);
 			}
 
@@ -540,20 +562,24 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.Xml.XPath.XPathException : variable p:v not found")]
-#endif
 			public void Get()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] System.Xml.XPath.XPathException : variable p:v not found.");
+				}
+
 				TestGet<IFoo>(f => f.Item);
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 			public void Set()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] System.NullReferenceException : Object reference not set to an instance of an object.");
+				}
+
 				TestSet<IFoo>((f, v) => f.Item = v);
 			}
 		}
@@ -569,11 +595,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("String lengths are both 7. Strings differ at index 0.  Expected: 'correct'  But was: 'wrong B'")]
-#endif
 			public void Get()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] String lengths are both 7. Strings differ at index 0.  Expected: 'correct'  But was: 'wrong B'.");
+				}
+
 				TestGet<IFoo>(f => f.Item);
 			}
 
@@ -603,11 +631,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("String lengths are both 7. Strings differ at index 0.  Expected: 'correct'  But was: 'wrong B'")]
-#endif
 			public void Get()
 			{
+				if (RuntimeUtility.IsMono)
+				{
+					Assert.Ignore("[mono] String lengths are both 7. Strings differ at index 0.  Expected: 'correct'  But was: 'wrong B'.");
+				}
+
 				TestGet<IFoo>(f => f.Item);
 			}
 		}

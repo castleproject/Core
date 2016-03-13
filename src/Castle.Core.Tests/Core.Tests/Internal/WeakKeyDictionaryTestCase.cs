@@ -19,6 +19,7 @@ namespace CastleTests.Core.Tests.Internal
 	using System.Collections.Generic;
 
 	using Castle.Core.Internal;
+	using Castle.Core.Tests.Compatibility;
 
 	using NUnit.Framework;
 
@@ -47,11 +48,13 @@ namespace CastleTests.Core.Tests.Internal
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("Expected: 0  But was: 1")]
-#endif
 		public void AfterExplicitTrim_DeadObject()
 		{
+			if (RuntimeUtility.IsMono)
+			{
+				Assert.Ignore("[mono] Expected: 0  But was: 1.");
+			}
+
 			CreateDictionary(); AddItem(); ResetItem();
 
 			GC.Collect();
