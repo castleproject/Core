@@ -27,7 +27,6 @@
     <Optimize>false</Optimize>
     <DefineConstants>TRACE;DEBUG;DOTNET40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile>
     </DocumentationFile>
@@ -43,7 +42,6 @@
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;DOTNET40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\NET40-Release\Castle.Core.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

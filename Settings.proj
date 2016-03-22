@@ -93,8 +93,8 @@ limitations under the License.
 		<PackageFiles Include="$(OutputPath)NLog.xml"  Condition="Exists('$(OutputPath)NLog.xml')"/>
 		<PackageFiles Include="$(OutputPath)Serilog.dll" Condition="Exists('$(OutputPath)Serilog.dll')"/>
 		<PackageFiles Include="$(OutputPath)Serilog.xml" Condition="Exists('$(OutputPath)Serilog.xml')"/>
-		<PackageFiles Include="$(OutputPath)Serilog.FullNetFX.dll" Condition="Exists('$(OutputPath)Serilog.FullNetFX.dll')"/>
-		<PackageFiles Include="$(OutputPath)Serilog.FullNetFX.xml" Condition="Exists('$(OutputPath)Serilog.FullNetFX.xml')"/>
+		<PackageFiles Include="$(OutputPath)Serilog.FullNetFx.dll" Condition="Exists('$(OutputPath)Serilog.FullNetFx.dll')"/>
+		<PackageFiles Include="$(OutputPath)Serilog.FullNetFx.xml" Condition="Exists('$(OutputPath)Serilog.FullNetFx.xml')"/>
 	</ItemGroup>
 
 	<Target Name="_InitializeDynamicProperties">
