@@ -34,14 +34,13 @@ namespace Castle.DynamicProxy.Tests
 		// https://github.com/mono/mono/blob/master/mcs/class/corlib/System.Reflection.Emit/ParameterBuilder.cs#L101
 		[Ignore("System.ArgumentException : Constant does not match the defined type.")]
 #endif
-		public void MethodParameterWithDefaultValue_DefaultValueIsSetOnProxiedMethodAsWell()
+		public void MethodParameterWithDefaultValue_DefaultValueIsNotSetOnProxiedMethod()
 		{
 			var proxiedType = generator.CreateClassProxy<ClassWithMethodWithParameterWithDefaultValue>().GetType();
 
 			var parameter = proxiedType.GetMethod("Method").GetParameters().Single(paramInfo => paramInfo.Name == "value");
 
-			Assert.True(parameter.HasDefaultValue);
-			Assert.AreEqual(3, parameter.DefaultValue);
+			Assert.False(parameter.HasDefaultValue);
 		}
 
 		[Test]
