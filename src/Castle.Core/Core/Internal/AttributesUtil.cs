@@ -44,9 +44,18 @@ namespace Castle.Core.Internal
 		{
 			if (typeof(T) != typeof(object))
 			{
-				return (IEnumerable<T>)type.GetTypeInfo().GetCustomAttributes(typeof(T), false);
+				foreach (var a in type.GetTypeInfo().GetCustomAttributes(typeof(T), false))
+				{
+					yield return (T)a;
+				}
 			}
-			return (IEnumerable<T>)type.GetTypeInfo().GetCustomAttributes(false);
+			else
+			{
+				foreach (var a in type.GetTypeInfo().GetCustomAttributes(false))
+				{
+					yield return (T)a;
+				}
+			}
 		}
 
 		/// <summary>
@@ -68,9 +77,18 @@ namespace Castle.Core.Internal
 		{
 			if (typeof(T) != typeof(object))
 			{
-				return (IEnumerable<T>)member.GetCustomAttributes(typeof(T), false);
+				foreach (var a in member.GetCustomAttributes(typeof(T), false))
+				{
+					yield return (T)a;
+				}
 			}
-			return (IEnumerable<T>)member.GetCustomAttributes(false);
+			else
+			{
+				foreach (var a in member.GetCustomAttributes(false))
+				{
+					yield return (T)a;
+				}
+			}
 		}
 
 		/// <summary>
