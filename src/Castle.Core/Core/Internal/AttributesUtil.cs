@@ -30,7 +30,7 @@ namespace Castle.Core.Internal
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns>The type attribute.</returns>
-		public static T GetAttribute<T>(this Type type) where T : class
+		public static T GetAttribute<T>(this Type type) where T : Attribute
 		{
 			return GetAttributes<T>(type).FirstOrDefault();
 		}
@@ -40,20 +40,20 @@ namespace Castle.Core.Internal
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns>The type attributes.</returns>
-		public static IEnumerable<T> GetAttributes<T>(this Type type) where T : class
+		public static IEnumerable<T> GetAttributes<T>(this Type type) where T : Attribute
 		{
 			if (typeof(T) != typeof(object))
 			{
-				foreach (var a in type.GetTypeInfo().GetCustomAttributes(typeof(T), false))
+				foreach (T a in type.GetTypeInfo().GetCustomAttributes(typeof(T), false))
 				{
-					yield return (T)a;
+					yield return a;
 				}
 			}
 			else
 			{
-				foreach (var a in type.GetTypeInfo().GetCustomAttributes(false))
+				foreach (T a in type.GetTypeInfo().GetCustomAttributes(false))
 				{
-					yield return (T)a;
+					yield return a;
 				}
 			}
 		}
@@ -63,7 +63,7 @@ namespace Castle.Core.Internal
 		/// </summary>
 		/// <param name="member">The member.</param>
 		/// <returns>The member attribute.</returns>
-		public static T GetAttribute<T>(this MemberInfo member) where T : class
+		public static T GetAttribute<T>(this MemberInfo member) where T : Attribute
 		{
 			return GetAttributes<T>(member).FirstOrDefault();
 		}
@@ -73,20 +73,20 @@ namespace Castle.Core.Internal
 		/// </summary>
 		/// <param name="member">The member.</param>
 		/// <returns>The member attributes.</returns>
-		public static IEnumerable<T> GetAttributes<T>(this MemberInfo member) where T : class
+		public static IEnumerable<T> GetAttributes<T>(this MemberInfo member) where T : Attribute
 		{
 			if (typeof(T) != typeof(object))
 			{
-				foreach (var a in member.GetCustomAttributes(typeof(T), false))
+				foreach (T a in member.GetCustomAttributes(typeof(T), false))
 				{
-					yield return (T)a;
+					yield return a;
 				}
 			}
 			else
 			{
-				foreach (var a in member.GetCustomAttributes(false))
+				foreach (T a in member.GetCustomAttributes(false))
 				{
-					yield return (T)a;
+					yield return a;
 				}
 			}
 		}
@@ -96,7 +96,7 @@ namespace Castle.Core.Internal
 		/// </summary>
 		/// <param name = "type">The type.</param>
 		/// <returns>The type attribute.</returns>
-		public static T GetTypeAttribute<T>(this Type type) where T : class
+		public static T GetTypeAttribute<T>(this Type type) where T : Attribute
 		{
 			var attribute = GetAttribute<T>(type);
 
@@ -120,7 +120,7 @@ namespace Castle.Core.Internal
 		/// </summary>
 		/// <param name = "type">The type.</param>
 		/// <returns>The type attributes.</returns>
-		public static T[] GetTypeAttributes<T>(Type type) where T : class
+		public static T[] GetTypeAttributes<T>(Type type) where T : Attribute
 		{
 			var attributes = GetAttributes<T>(type).ToArray();
 
