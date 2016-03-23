@@ -46,14 +46,14 @@ namespace Castle.Core.Internal
 			{
 				foreach (var a in type.GetTypeInfo().GetCustomAttributes(typeof(T), false))
 				{
-					yield return (T)a;
+					yield return a as T;
 				}
 			}
 			else
 			{
 				foreach (var a in type.GetTypeInfo().GetCustomAttributes(false))
 				{
-					yield return (T)a;
+					yield return a as T;
 				}
 			}
 		}
@@ -79,14 +79,14 @@ namespace Castle.Core.Internal
 			{
 				foreach (var a in member.GetCustomAttributes(typeof(T), false))
 				{
-					yield return (T)a;
+					yield return a as T;
 				}
 			}
 			else
 			{
 				foreach (var a in member.GetCustomAttributes(false))
 				{
-					yield return (T)a;
+					yield return a as T;
 				}
 			}
 		}
