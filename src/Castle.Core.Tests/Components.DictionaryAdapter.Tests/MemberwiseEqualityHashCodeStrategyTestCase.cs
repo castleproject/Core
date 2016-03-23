@@ -14,7 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
-#if !SILVERLIGHT
+#if FEATURE_DICTIONARYADAPTER_XML
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;

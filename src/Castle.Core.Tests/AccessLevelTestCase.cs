@@ -14,10 +14,13 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System.Collections.Generic;
+	using System.Reflection;
+
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
+
 	using NUnit.Framework;
-	using System.Collections.Generic;
 
 	[TestFixture]
 	public class AccessLevelTestCase : BasePEVerifyTestCase
@@ -76,13 +79,11 @@ namespace Castle.DynamicProxy.Tests
 			}
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		public void InternalConstructorIsReplicatedWhenInternalsVisibleTo()
 		{
 			object proxy = generator.CreateClassProxy(typeof(InternalClass), new StandardInterceptor());
 			Assert.IsNotNull(proxy.GetType().GetConstructor(new[] { typeof(IInterceptor[]) }));
 		}
-#endif
 	}
 }

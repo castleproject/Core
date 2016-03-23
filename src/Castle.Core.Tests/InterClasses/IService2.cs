@@ -21,11 +21,11 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 		void DoOperation2();
 	}
 
-#if SILVERLIGHT
-	public class Service2 : IService2
-#else
-	public class Service2 : MarshalByRefObject, IService2
+	public class Service2 :
+#if FEATURE_REMOTING
+		MarshalByRefObject,
 #endif
+		IService2
 	{
 		public void DoOperation2()
 		{

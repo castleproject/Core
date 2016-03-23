@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
@@ -100,4 +99,3 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		protected readonly Guid   GuidValue   = new Guid(GuidString);
 	}
 }
-#endif

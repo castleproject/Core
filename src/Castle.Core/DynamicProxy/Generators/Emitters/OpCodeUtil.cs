@@ -176,7 +176,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private static Type GetUnderlyingTypeOfEnum(Type enumType)
 		{
-			var baseType = (Enum)Activator.CreateInstance(enumType);
+			var baseType = (IConvertible)Activator.CreateInstance(enumType);
 			var code = baseType.GetTypeCode();
 
 			switch (code)

@@ -47,7 +47,7 @@ namespace Castle.DynamicProxy.Generators
 
 		public Type GetGeneratedType()
 		{
-			var cacheKey = new CacheKey(targetType, targetType, additionalInterfacesToProxy, ProxyGenerationOptions);
+			var cacheKey = new CacheKey(targetType.GetTypeInfo(), targetType, additionalInterfacesToProxy, ProxyGenerationOptions);
 			return ObtainProxyType(cacheKey, GenerateType);
 		}
 

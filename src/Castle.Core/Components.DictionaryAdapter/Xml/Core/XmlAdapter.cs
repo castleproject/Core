@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT // Until support for other platforms is verified
+#if FEATURE_DICTIONARYADAPTER_XML
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -42,7 +42,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private Dictionary<Type, XmlMetadata> secondaryXmlMetas;
 		private readonly bool isRoot;
 
-#if !SILVERLIGHT
 		public XmlAdapter()
 		    : this(new XmlDocument()) { }
 
@@ -54,7 +53,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			this.source = node;
 			this.isRoot = true;
 		}
-#endif
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="XmlAdapter"/> class
@@ -90,12 +88,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		object IDictionaryCreateStrategy.Create(IDictionaryAdapter parent, Type type, IDictionary dictionary)
 		{
-#if !SILVERLIGHT
 			var adapter = new XmlAdapter(new XmlDocument());
-#endif
-#if SILVERLIGHT
-			// TODO: Create XNode-based XmlAdapter
-#endif
 			return parent.CreateChildAdapter(type, adapter, dictionary);
 		}
 
@@ -246,11 +239,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private IXmlNode GetSourceNode()
 		{
-#if !SILVERLIGHT
 			var xmlNode = source as XmlNode;
 			if (xmlNode != null)
 				return new SysXmlNode(xmlNode, primaryXmlMeta.ClrType, primaryXmlMeta.Context);
-#endif
 
 			throw Error.NotSupported();
 		}

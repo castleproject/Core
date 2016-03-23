@@ -18,7 +18,6 @@ namespace Castle.Core.Tests
 	using Castle.Core.Internal;
 	using NUnit.Framework;
 
-#if !SILVERLIGHT
 	[TestFixture]
 	public class SlimReadWriteLockTestCase
 	{
@@ -181,5 +180,4 @@ namespace Castle.Core.Tests
 			}
 		}
 	}
-#endif
 }

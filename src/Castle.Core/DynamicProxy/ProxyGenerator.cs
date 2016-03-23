@@ -18,9 +18,11 @@ namespace Castle.DynamicProxy
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
-#if !SILVERLIGHT
 	using System.Runtime.InteropServices;
+#if FEATURE_REMOTING
 	using System.Runtime.Remoting;
+#endif
+#if FEATURE_SECURITY_PERMISSIONS
 	using System.Security;
 	using System.Security.Permissions;
 #endif
@@ -47,15 +49,15 @@ namespace Castle.DynamicProxy
 		{
 			proxyBuilder = builder;
 
-#if !SILVERLIGHT
+#if FEATURE_SECURITY_PERMISSIONS
 			if (HasSecurityPermission())
+#endif
 			{
 				Logger = new TraceLogger("Castle.DynamicProxy", LoggerLevel.Warn);
 			}
-#endif
 		}
 
-#if !SILVERLIGHT
+#if FEATURE_SECURITY_PERMISSIONS
 		private bool HasSecurityPermission()
 		{
 			const SecurityPermissionFlag flag = SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy;
@@ -548,7 +550,7 @@ namespace Castle.DynamicProxy
 		///   This method uses <see cref = "IProxyBuilder" /> implementation to generate a proxy type.
 		///   As such caller should expect any type of exception that given <see cref = "IProxyBuilder" /> implementation may throw.
 		/// </remarks>
-#if DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
 		[SecuritySafeCritical]
 #endif
 		public virtual object CreateInterfaceProxyWithTargetInterface(Type interfaceToProxy,
@@ -579,7 +581,7 @@ namespace Castle.DynamicProxy
 			}
 
 			var isRemotingProxy = false;
-#if !SILVERLIGHT
+#if FEATURE_REMOTING
 			if (target != null)
 			{
 				isRemotingProxy = RemotingServices.IsTransparentProxy(target);

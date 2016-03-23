@@ -144,9 +144,13 @@ namespace Castle.Core.Resource
 		{
 			try
 			{
+#if FEATURE_GAC
 				return Assembly.Load(assemblyName);
+#else
+				return Assembly.Load(new AssemblyName(assemblyName));
+#endif
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				String message = String.Format(CultureInfo.InvariantCulture, "The assembly {0} could not be loaded", assemblyName);
 				throw new ResourceException(message, ex);

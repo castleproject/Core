@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !__MonoCS__ // Avoid loading Rhino.Mocks.CPP.Interfaces.dll
+#if FEATURE_TEST_COM && !__MonoCS__ // Avoid loading Rhino.Mocks.CPP.Interfaces.dll
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Collections.Generic;
-#if !SILVERLIGHT
 	using System.Data;
-#endif
 	using System.Runtime.InteropServices;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.Interfaces;
@@ -105,16 +103,23 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(IntPtr.Zero, buffer);
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		public void CanProxyDataSet()
 		{
 			generator.CreateClassProxy(typeof (DataSet), new Type[0], new StandardInterceptor());
 		}
 
+#if FEATURE_EMIT_CUSTOMMODIFIERS
 		[Test]
 		public void CanProxyMethodWithModOpt()
 		{
+			// IL of method to proxy:
+			//
+			//.method public hidebysig newslot abstract virtual
+			//        instance void  StartLiveOnSlot(int32 modopt([mscorlib]System.Runtime.CompilerServices.IsLong) slotNumber) cil managed
+			//{
+			//}
+
 			var proxy =
 				(IHaveMethodWithModOpts)
 				generator.CreateInterfaceProxyWithoutTarget(typeof (IHaveMethodWithModOpts), new DoNothingInterceptor());
@@ -182,7 +187,6 @@ namespace Castle.DynamicProxy.Tests
 				new DoNothingInterceptor());
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		public void InternalClassWithInternalMethodAndProperty()
 		{
@@ -197,7 +201,6 @@ namespace Castle.DynamicProxy.Tests
 			var t = o.TestProperty;
 			Assert.AreEqual(2, logging.Invocations.Count);
 		}
-#endif
 
 		[Test]
 		public void NeedingToCreateNewMethodTableSlot()
@@ -205,7 +208,6 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateClassProxy(typeof (MultiClass), new[] {typeof (ISpecialMulti)});
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		public void ProxyInternalMethod()
 		{
@@ -215,7 +217,6 @@ namespace Castle.DynamicProxy.Tests
 			o.Foo();
 			Assert.AreEqual("Foo ", logging.LogContents);
 		}
-#endif
 
 		[Test]
 		public void ProxyingComInteraces()
@@ -240,14 +241,12 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsNotNull(o);
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		public void ProxyingInternalInterface()
 		{
 			var o = generator.CreateInterfaceProxyWithoutTarget(typeof (IInternal), new StandardInterceptor());
 			Assert.IsNotNull(o);
 		}
-#endif
 
 		[Test]
 		public void ProxyingProtectedInternalAbstractMethod()

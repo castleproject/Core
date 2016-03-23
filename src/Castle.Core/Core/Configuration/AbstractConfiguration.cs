@@ -15,7 +15,7 @@
 namespace Castle.Core.Configuration
 {
 	using System;
-	using System.Threading;
+	using System.Globalization;
 
 	/// <summary>
 	///   This is an abstract <see cref = "IConfiguration" /> implementation
@@ -88,7 +88,7 @@ namespace Castle.Core.Configuration
 
 			try
 			{
-				return Convert.ChangeType(Value, type, Thread.CurrentThread.CurrentCulture);
+				return Convert.ChangeType(Value, type, CultureInfo.CurrentCulture);
 			}
 			catch (InvalidCastException)
 			{

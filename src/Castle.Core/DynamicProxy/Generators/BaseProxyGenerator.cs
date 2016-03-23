@@ -32,10 +32,6 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 
-#if SILVERLIGHT
-	using Castle.DynamicProxy.SilverlightExtensions;
-#endif
-
 	/// <summary>
 	///   Base class that exposes the common functionalities
 	///   to proxy generation.
@@ -245,7 +241,7 @@ namespace Castle.DynamicProxy.Generators
 			if (baseConstructorParams != null && baseConstructorParams.Length != 0)
 			{
 				var last = baseConstructorParams.Last();
-				if (last.ParameterType.GetTypeInfo().IsArray && last.HasAttribute<ParamArrayAttribute>())
+				if (last.ParameterType.GetTypeInfo().IsArray && last.IsDefined(typeof(ParamArrayAttribute)))
 				{
 					var parameter = constructor.ConstructorBuilder.DefineParameter(args.Length, ParameterAttributes.None, last.Name);
 					var builder = AttributeUtil.CreateBuilder<ParamArrayAttribute>();
@@ -427,14 +423,10 @@ namespace Castle.DynamicProxy.Generators
 
 		private bool IsConstructorVisible(ConstructorInfo constructor)
 		{
-			return constructor.IsPublic
-			       || constructor.IsFamily
-			       || constructor.IsFamilyOrAssembly
-#if !SILVERLIGHT
-			       || (constructor.IsAssembly && InternalsUtil.IsInternalToDynamicProxy(constructor.DeclaringType.Assembly));
-#else
-            ;
-#endif
+			return constructor.IsPublic ||
+				constructor.IsFamily ||
+				constructor.IsFamilyOrAssembly ||
+				(constructor.IsAssembly && InternalsUtil.IsInternalToDynamicProxy(constructor.DeclaringType.GetTypeInfo().Assembly));
 		}
 
 		private bool OverridesEqualsAndGetHashCode(Type type)

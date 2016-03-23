@@ -63,8 +63,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(two, four);
 		}
 
-#if !SILVERLIGHT
-
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
 #if __MonoCS__
 		[Ignore("Expected: CastleDynProxy2.dll  But was:  /home/teamcity/buildagent/work/...")]
@@ -73,12 +72,12 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var scope = new ModuleScope(true);
 			Assert.AreEqual(ModuleScope.DEFAULT_FILE_NAME, scope.StrongNamedModuleName);
-			Assert.AreEqual(Path.Combine(Environment.CurrentDirectory, ModuleScope.DEFAULT_FILE_NAME),
+			Assert.AreEqual(Path.Combine(Directory.GetCurrentDirectory(), ModuleScope.DEFAULT_FILE_NAME),
 			                scope.ObtainDynamicModuleWithStrongName().FullyQualifiedName);
 			Assert.IsNull(scope.StrongNamedModuleDirectory);
 
 			Assert.AreEqual(ModuleScope.DEFAULT_FILE_NAME, scope.WeakNamedModuleName);
-			Assert.AreEqual(Path.Combine(Environment.CurrentDirectory, ModuleScope.DEFAULT_FILE_NAME),
+			Assert.AreEqual(Path.Combine(Directory.GetCurrentDirectory(), ModuleScope.DEFAULT_FILE_NAME),
 			                scope.ObtainDynamicModuleWithWeakName().FullyQualifiedName);
 			Assert.IsNull(scope.WeakNamedModuleDirectory);
 		}
@@ -91,12 +90,12 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var scope = new ModuleScope(true, false, "Strong", "StrongModule.dll", "Weak", "WeakModule.dll");
 			Assert.AreEqual("StrongModule.dll", scope.StrongNamedModuleName);
-			Assert.AreEqual(Path.Combine(Environment.CurrentDirectory, "StrongModule.dll"),
+			Assert.AreEqual(Path.Combine(Directory.GetCurrentDirectory(), "StrongModule.dll"),
 			                scope.ObtainDynamicModuleWithStrongName().FullyQualifiedName);
 			Assert.IsNull(scope.StrongNamedModuleDirectory);
 
 			Assert.AreEqual("WeakModule.dll", scope.WeakNamedModuleName);
-			Assert.AreEqual(Path.Combine(Environment.CurrentDirectory, "WeakModule.dll"),
+			Assert.AreEqual(Path.Combine(Directory.GetCurrentDirectory(), "WeakModule.dll"),
 			                scope.ObtainDynamicModuleWithWeakName().FullyQualifiedName);
 			Assert.IsNull(scope.WeakNamedModuleDirectory);
 
@@ -149,7 +148,9 @@ namespace Castle.DynamicProxy.Tests
 			CheckSignedSavedAssembly(path);
 			File.Delete(path);
 		}
+#endif
 
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
 #if __MonoCS__
 		[Ignore("Expected: CastleDynProxy2.dll  But was:  /home/teamcity/buildagent/work/...")]
@@ -171,7 +172,9 @@ namespace Castle.DynamicProxy.Tests
 			CheckUnsignedSavedAssembly(path);
 			File.Delete(path);
 		}
+#endif
 
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
 		public void SaveWithPath()
 		{
@@ -269,6 +272,7 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.Throws<InvalidOperationException>(() => scope.SaveAssembly(true));
 		}
+#endif
 
 #if FEATURE_SERIALIZATION
 		[Test]
@@ -340,10 +344,11 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("Weak", weak.Assembly.GetName().Name);
 		}
 
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
 		public void ModuleScopeDoesntTryToDeleteFromCurrentDirectory()
 		{
-			var moduleDirectory = Path.Combine(Environment.CurrentDirectory, "GeneratedDlls");
+			var moduleDirectory = Path.Combine(Directory.GetCurrentDirectory(), "GeneratedDlls");
 			if (Directory.Exists(moduleDirectory))
 				Directory.Delete(moduleDirectory, true);
 
@@ -353,13 +358,13 @@ namespace Castle.DynamicProxy.Tests
 			Directory.CreateDirectory(moduleDirectory);
 			var scope = new ModuleScope(true, false, "Strong", strongModulePath, "Weak", weakModulePath);
 
-			using (File.Create(Path.Combine(Environment.CurrentDirectory, "Strong.dll")))
+			using (File.Create(Path.Combine(Directory.GetCurrentDirectory(), "Strong.dll")))
 			{
 				scope.ObtainDynamicModuleWithStrongName();
 				scope.SaveAssembly(true); // this will throw if SaveAssembly tries to delete from the current directory
 			}
 
-			using (File.Create(Path.Combine(Environment.CurrentDirectory, "Weak.dll")))
+			using (File.Create(Path.Combine(Directory.GetCurrentDirectory(), "Weak.dll")))
 			{
 				scope.ObtainDynamicModuleWithWeakName();
 				scope.SaveAssembly(false); // this will throw if SaveAssembly tries to delete from the current directory
@@ -367,10 +372,10 @@ namespace Castle.DynamicProxy.Tests
 
 			// Clean up the generated DLLs because the FileStreams are now closed
 			Directory.Delete(moduleDirectory, true);
-			File.Delete(Path.Combine(Environment.CurrentDirectory, "Strong.dll"));
-			File.Delete(Path.Combine(Environment.CurrentDirectory, "Weak.dll"));
+			File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Strong.dll"));
+			File.Delete(Path.Combine(Directory.GetCurrentDirectory(), "Weak.dll"));
 		}
-#endif
+#endif // FEATURE_ASSEMBLYBUILDER_SAVE
 
 		[Test]
 		public void DefaultProxyBuilderWithSpecificScope()

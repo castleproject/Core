@@ -35,7 +35,11 @@ namespace CastleTests.Core.Tests.Resources
 		}
 
 		private AssemblyResourceFactory resFactory;
+#if FEATURE_LEGACY_REFLECTION_API
 		private static readonly String AssemblyName = Assembly.GetExecutingAssembly().FullName;
+#else
+		private static readonly String AssemblyName = typeof(AssemblyResourceFactoryTestCase).GetTypeInfo().Assembly.FullName;
+#endif
 		private const String ResPath = "Resources";
 
 		[Test]
@@ -51,7 +55,8 @@ namespace CastleTests.Core.Tests.Resources
 		{
 			IResource resource =
 				new AssemblyBundleResource(
-					new CustomUri("assembly://" + AssemblyName + "/CastleTests.Core.Tests.Resources.MoreRes.TestRes/content1"));
+					new CustomUri("assembly://" + AssemblyName + "/CastleTests.Core.Tests.Resources.MoreRes.TestRes/content1")
+				);
 
 			Assert.IsNotNull(resource);
 			var line = resource.GetStreamReader().ReadLine();
@@ -62,7 +67,6 @@ namespace CastleTests.Core.Tests.Resources
 		public void CreateWithAbsolutePath()
 		{
 			var resource = resFactory.Create(new CustomUri("assembly://" + AssemblyName + "/CastleTests.Core.Tests.Resources.file1.txt"));
-
 			Assert.IsNotNull(resource);
 			var line = resource.GetStreamReader().ReadLine();
 			Assert.AreEqual("Something", line);

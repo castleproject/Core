@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy
 		protected static readonly ICollection<Type> SkippedTypes = new[]
 		{
 			typeof(object),
-#if !SILVERLIGHT
+#if FEATURE_REMOTING
 			typeof(MarshalByRefObject),
 			typeof(ContextBoundObject)
 #endif

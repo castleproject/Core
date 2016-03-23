@@ -16,6 +16,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	using Castle.Core.Internal;
 
@@ -47,11 +48,11 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		public string Validate(IDictionaryAdapter dictionaryAdapter)
 		{
 			List<String> errors = new List<string>();
-			var globalRules = AttributesUtil.GetTypeAttributes<IValidationRule>(dictionaryAdapter.Meta.Type);
+			var globalRules = AttributesUtil.GetTypeAttributes<ValidationRuleAttribute>(dictionaryAdapter.Meta.Type);
 
 			foreach (var property in dictionaryAdapter.This.Properties.Values)
 			{
-				var propertyRules = AttributesUtil.GetAttributes<IValidationRule>(property.Property);
+				var propertyRules = AttributesUtil.GetAttributes<ValidationRuleAttribute>(property.Property).Select(x => (IValidationRule)x);
 				var propertyValue = dictionaryAdapter.GetProperty(property.PropertyName, true);
 				ApplyValidationRules(dictionaryAdapter, propertyRules, property, propertyValue, errors);
 				ApplyValidationRules(dictionaryAdapter, globalRules, property, propertyValue, errors);
@@ -63,9 +64,9 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		public string Validate(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
 		{
 			List<String> errors = new List<string>();
-			var globalRules = AttributesUtil.GetTypeAttributes<IValidationRule>(dictionaryAdapter.Meta.Type);
+			var globalRules = AttributesUtil.GetTypeAttributes<ValidationRuleAttribute>(dictionaryAdapter.Meta.Type);
 
-			var propertyRules = AttributesUtil.GetAttributes<IValidationRule>(property.Property);
+			var propertyRules = AttributesUtil.GetAttributes<ValidationRuleAttribute>(property.Property).Select(x => (IValidationRule)x);
 			var propertyValue = dictionaryAdapter.GetProperty(property.PropertyName, true);
 			ApplyValidationRules(dictionaryAdapter, propertyRules, property, propertyValue, errors);
 			ApplyValidationRules(dictionaryAdapter, globalRules, property, propertyValue, errors);
@@ -75,9 +76,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		public void Invalidate(IDictionaryAdapter dictionaryAdapter)
 		{
-			
 		}
-        
+
 		private void ApplyValidationRules(IDictionaryAdapter dictionaryAdapter, IEnumerable<IValidationRule> rules,
 										  PropertyDescriptor property, object propertyValue, IList<String> errors)
 		{

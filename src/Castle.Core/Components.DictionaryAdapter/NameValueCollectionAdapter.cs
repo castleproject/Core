@@ -14,7 +14,6 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-#if! SILVERLIGHT
 	using System;
 	using System.Collections.Specialized;
 	using System.Linq;
@@ -94,5 +93,4 @@ namespace Castle.Components.DictionaryAdapter
 			return new NameValueCollectionAdapter(nameValues);
 		}
 	}
-#endif
 }
