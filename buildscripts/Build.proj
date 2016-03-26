@@ -115,12 +115,8 @@ limitations under the License.
 
 	<Target
 		Name="RunAllTests"
-		DependsOnTargets="BuildProject"
-		>
-
-		<CallTarget Targets="_ExecTestRunner" />
-
-	</Target>
+		DependsOnTargets="BuildProject;_ExecTestRunner"
+		/>
 
 	<!-- Creates Zip file for Release -->
 	<Target
@@ -188,11 +184,7 @@ limitations under the License.
 	<Target
 		Name="_ExecTestRunner"
 		Condition="$(TestRunner_Enabled)"
-		>
-
-		<CallTarget Targets="_ExecNUnit" />
-
-	</Target>
+		DependsOnTargets="_ExecNUnit" />
 
 	<Target
 		Name="_ExecNUnit"
