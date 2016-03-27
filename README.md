@@ -30,7 +30,7 @@ build NETCORE
 Castle Core supports Mono 4.0.2+, previous 4.x releases have serious runtime bugs that cause runtime crashes. Mono 3.x releases used to work well, but are not supported.
 
 ```
-xbuild /p:Configuration=NET45-Release /t:RunAllTests buildscripts/Build.proj
+build MONO
 ```
 
 ### Conditional Compilation Symbols
