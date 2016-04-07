@@ -7,7 +7,7 @@
     <owners>Castle Project Contributors</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
     <projectUrl>http://www.castleproject.org/</projectUrl>
-    <iconUrl>http://docs.castleproject.org/GetFile.aspx?File=/castleLogo100px.png</iconUrl>
+    <iconUrl>http://www.castleproject.org/img/castle-logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Castle Project Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</description>
     <summary>Castle Project Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</summary>
