@@ -27,7 +27,7 @@ build NETCORE
 
 ### Mono
 
-Castle Core supports Mono 4.0.2+, previous 4.x releases have serious runtime bugs that cause runtime crashes. Mono 3.x releases used to work well, but are not supported.
+Castle Core works with some limitations and defects on Mono 4.0.2+, previous 4.x releases have serious runtime bugs that cause runtime crashes. Mono 3.x releases used to work well, but are not supported.
 
 ```
 build MONO
