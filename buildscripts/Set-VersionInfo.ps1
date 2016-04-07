@@ -26,7 +26,7 @@ if ( $env:release_build -eq "true" )
 }
 else
 {
-    $version_suffix = "-ci.{0}" -f $build_number
+    $version_suffix = "-ci{0:00000}" -f $build_number
 }
 
 $assembly_version = "$major.0.0";
