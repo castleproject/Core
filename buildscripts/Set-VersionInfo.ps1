@@ -57,5 +57,5 @@ Get-ChildItem -Filter project.json -Recurse |
 
         $json.version = $assembly_informational_version
 
-        $json | ConvertTo-Json | Set-Content -Encoding UTF8 $_.FullName
+        $json | ConvertTo-Json -Depth 99 | Set-Content -Encoding UTF8 $_.FullName
     }
