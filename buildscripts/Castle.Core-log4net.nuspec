@@ -8,7 +8,7 @@
     <owners>Castle Project Contributors</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
     <projectUrl>http://www.castleproject.org/</projectUrl>
-    <iconUrl>http://docs.castleproject.org/GetFile.aspx?File=/castleLogo100px.png</iconUrl>
+    <iconUrl>http://www.castleproject.org/img/castle-logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Castle logging services integration with log4net 1.2.10</description>
     <copyright>Copyright 2004-$CurrentYear$ Castle Project - http://www.castleproject.org/</copyright>
