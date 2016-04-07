@@ -13,6 +13,29 @@
     <summary>Castle Project Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</summary>
     <copyright>Copyright 2004-$CurrentYear$ Castle Project - http://www.castleproject.org/</copyright>
     <tags>castle dynamicproxy dynamic proxy dynamicproxy2 dictionaryadapter emailsender</tags>
+    <dependencies>
+      <group targetFramework=".NETPlatform5.4">
+        <dependency id="System.AppContext" version="4.0.0" />
+        <dependency id="System.Collections.Specialized" version="4.0.0" />
+        <dependency id="System.ComponentModel.TypeConverter" version="4.0.0" />
+        <dependency id="System.Console" version="4.0.0-beta-23516" />
+        <dependency id="System.Diagnostics.Tools" version="4.0.0" />
+        <dependency id="System.Diagnostics.TraceSource" version="4.0.0-beta-23516" />
+        <dependency id="System.Dynamic.Runtime" version="4.0.10" />
+        <dependency id="System.Globalization" version="4.0.10" />
+        <dependency id="System.Linq" version="4.0.0" />
+        <dependency id="System.ObjectModel" version="4.0.10" />
+        <dependency id="System.Reflection" version="4.0.10" />
+        <dependency id="System.Reflection.Emit" version="4.0.0" />
+        <dependency id="System.Reflection.Emit.Lightweight" version="4.0.0" />
+        <dependency id="System.Reflection.Extensions" version="4.0.0" />
+        <dependency id="System.Reflection.TypeExtensions" version="4.0.0" />
+        <dependency id="System.Runtime.Extensions" version="4.0.10" />
+        <dependency id="System.Threading" version="4.0.10" />
+        <dependency id="System.Xml.XmlDocument" version="4.0.0" />
+        <dependency id="System.Xml.XmlSerializer" version="4.0.10" />
+      </group>
+    </dependencies>
   </metadata>
   <files>
     <file src="BreakingChanges.txt" />
