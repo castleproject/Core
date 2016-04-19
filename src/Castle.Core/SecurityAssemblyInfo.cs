@@ -1,5 +1,7 @@
 ﻿// Sets up assembly level security settings
-#if ! SILVERLIGHT
+#if SILVERLIGHT
+[assembly: System.Security.SecurityTransparent]
+#else
 [assembly: System.Security.AllowPartiallyTrustedCallers]
 #if DOTNET40
 [assembly: System.Security.SecurityRules(System.Security.SecurityRuleSet.Level2)]
