@@ -14,26 +14,30 @@
     <copyright>Copyright 2004-$CurrentYear$ Castle Project - http://www.castleproject.org/</copyright>
     <tags>castle dynamicproxy dynamic proxy dynamicproxy2 dictionaryadapter emailsender</tags>
     <dependencies>
-      <group targetFramework=".NETPlatform5.4">
-        <dependency id="System.AppContext" version="4.0.0" />
-        <dependency id="System.Collections.Specialized" version="4.0.0" />
-        <dependency id="System.ComponentModel.TypeConverter" version="4.0.0" />
-        <dependency id="System.Console" version="4.0.0-beta-23516" />
-        <dependency id="System.Diagnostics.Tools" version="4.0.0" />
-        <dependency id="System.Diagnostics.TraceSource" version="4.0.0-beta-23516" />
-        <dependency id="System.Dynamic.Runtime" version="4.0.10" />
-        <dependency id="System.Globalization" version="4.0.10" />
-        <dependency id="System.Linq" version="4.0.0" />
-        <dependency id="System.ObjectModel" version="4.0.10" />
-        <dependency id="System.Reflection" version="4.0.10" />
-        <dependency id="System.Reflection.Emit" version="4.0.0" />
-        <dependency id="System.Reflection.Emit.Lightweight" version="4.0.0" />
-        <dependency id="System.Reflection.Extensions" version="4.0.0" />
-        <dependency id="System.Reflection.TypeExtensions" version="4.0.0" />
-        <dependency id="System.Runtime.Extensions" version="4.0.10" />
-        <dependency id="System.Threading" version="4.0.10" />
-        <dependency id="System.Xml.XmlDocument" version="4.0.0" />
-        <dependency id="System.Xml.XmlSerializer" version="4.0.10" />
+      <group targetFramework=".NETStandard1.3">
+        <dependency id="System.AppContext" version="4.1.0-rc2-24027" />
+        <dependency id="System.Collections.Specialized" version="4.0.1-rc2-24027" />
+        <dependency id="System.ComponentModel.TypeConverter" version="4.0.1-rc2-24027" />
+        <dependency id="System.Console" version="4.0.0-rc2-24027" />
+        <dependency id="System.Diagnostics.Debug" version="4.0.11-rc2-24027" />
+        <dependency id="System.Diagnostics.Tools" version="4.0.1-rc2-24027" />
+        <dependency id="System.Diagnostics.TraceSource" version="4.0.0-rc2-24027" />
+        <dependency id="System.Dynamic.Runtime" version="4.0.11-rc2-24027" />
+        <dependency id="System.Globalization" version="4.0.11-rc2-24027" />
+        <dependency id="System.IO.FileSystem" version="4.0.1-rc2-24027" />
+        <dependency id="System.Linq" version="4.1.0-rc2-24027" />
+        <dependency id="System.ObjectModel" version="4.0.12-rc2-24027" />
+        <dependency id="System.Reflection" version="4.1.0-rc2-24027" />
+        <dependency id="System.Reflection.Emit" version="4.0.1-rc2-24027" />
+        <dependency id="System.Reflection.Emit.Lightweight" version="4.0.1-rc2-24027" />
+        <dependency id="System.Reflection.Extensions" version="4.0.1-rc2-24027" />
+        <dependency id="System.Reflection.TypeExtensions" version="4.1.0-rc2-24027" />
+        <dependency id="System.Resources.ResourceManager" version="4.0.1-rc2-24027" />
+        <dependency id="System.Runtime.Extensions" version="4.1.0-rc2-24027" />
+        <dependency id="System.Runtime.InteropServices" version="4.1.0-rc2-24027" />
+        <dependency id="System.Threading" version="4.0.11-rc2-24027" />
+        <dependency id="System.Xml.XmlDocument" version="4.0.1-rc2-24027" />
+        <dependency id="System.Xml.XmlSerializer" version="4.0.11-rc2-24027" />
       </group>
     </dependencies>
   </metadata>
@@ -50,9 +54,9 @@
     <file src="build/NET45/NET45-Release/pkg/bin/Castle.Core.dll" target="lib/net45" />
     <file src="build/NET45/NET45-Release/pkg/bin/Castle.Core.pdb" target="lib/net45" />
     <file src="build/NET45/NET45-Release/pkg/bin/Castle.Core.xml" target="lib/net45" />
-    <file src="build/NETCORE/Release/pkg/Castle.Core.dll" target="lib/dotnet5.4" />
-    <file src="build/NETCORE/Release/pkg/Castle.Core.pdb" target="lib/dotnet5.4" />
-    <file src="build/NETCORE/Release/pkg/Castle.Core.xml" target="lib/dotnet5.4" />
+    <file src="build/NETCORE/Release/pkg/Castle.Core.dll" target="lib/netstandard1.3" />
+    <file src="build/NETCORE/Release/pkg/Castle.Core.pdb" target="lib/netstandard1.3" />
+    <file src="build/NETCORE/Release/pkg/Castle.Core.xml" target="lib/netstandard1.3" />
     <file src="buildscripts/ASL - Apache Software Foundation License.txt" />
     <file src="buildscripts/readme.txt" />
     <file src="src/Castle.Core/**/*.cs" />
