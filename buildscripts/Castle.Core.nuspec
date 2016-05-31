@@ -14,6 +14,9 @@
     <copyright>Copyright 2004-$CurrentYear$ Castle Project - http://www.castleproject.org/</copyright>
     <tags>castle dynamicproxy dynamic proxy dynamicproxy2 dictionaryadapter emailsender</tags>
     <dependencies>
+      <group targetFramework="net35" />
+      <group targetFramework="net40" />
+      <group targetFramework="net45" />
       <group targetFramework=".NETStandard1.3">
         <dependency id="System.AppContext" version="4.1.0-rc2-24027" />
         <dependency id="System.Collections.Specialized" version="4.0.1-rc2-24027" />
