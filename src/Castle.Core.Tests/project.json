@@ -20,7 +20,7 @@
       "target": "project",
       "version": ""
     },
-    "Serilog.Sinks.TextWriter": "2.0.0-beta-505",
+    "Serilog.Sinks.TextWriter": "2.0.0-rc-703",
     "xunit": "2.1.0"
   },
   "testRunner": "xunit",
@@ -35,7 +35,7 @@
           "type": "platform",
           "version": "1.0.0-rc2-3002702"
         },
-        "dotnet-test-xunit": "1.0.0-rc2-build10015"
+        "dotnet-test-xunit": "1.0.0-rc2-build10025"
       },
       "buildOptions": {
         "define": [ "FEATURE_XUNITNET", "FEATURE_TEST_SERILOGINTEGRATION" ]
