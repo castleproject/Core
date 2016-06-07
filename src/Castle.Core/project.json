@@ -2,44 +2,52 @@
   "version": "0.0.0",
   "description": "Castle.Core",
   "authors": [ "" ],
-  "tags": [ "" ],
-  "projectUrl": "",
-  "licenseUrl": "",
+  "packOptions": {
+    "tags": [ "" ],
+    "projectUrl": "",
+    "licenseUrl": ""
+  },
   "dependencies": {
   },
   "frameworks": {
-    "dotnet5.4": {
-      "compilationOptions": {
-        "define": [ "FEATURE_NETCORE_REFLECTION_API" ]
-      },
+    "netstandard1.3": {
       "dependencies": {
-        "System.AppContext": "4.0.0",
-        "System.Collections.Specialized": "4.0.0",
-        "System.ComponentModel.TypeConverter": "4.0.0",
-        "System.Console": "4.0.0-beta-23516",
-        "System.Diagnostics.Tools": "4.0.0",
-        "System.Diagnostics.TraceSource": "4.0.0-beta-23516",
-        "System.Dynamic.Runtime": "4.0.10",
-        "System.Globalization": "4.0.10",
-        "System.Linq": "4.0.0",
-        "System.ObjectModel": "4.0.10",
-        "System.Reflection": "4.0.10",
-        "System.Reflection.Emit": "4.0.0",
-        "System.Reflection.Emit.Lightweight": "4.0.0",
-        "System.Reflection.Extensions": "4.0.0",
-        "System.Reflection.TypeExtensions": "4.0.0",
-        "System.Runtime.Extensions": "4.0.10",
-        "System.Threading": "4.0.10",
-        "System.Xml.XmlDocument": "4.0.0",
-        "System.Xml.XmlSerializer": "4.0.10"
+        "System.AppContext": "4.1.0-rc2-24027",
+        "System.Collections.Specialized": "4.0.1-rc2-24027",
+        "System.ComponentModel.TypeConverter": "4.0.1-rc2-24027",
+        "System.Console": "4.0.0-rc2-24027",
+        "System.Diagnostics.Debug": "4.0.11-rc2-24027",
+        "System.Diagnostics.Tools": "4.0.1-rc2-24027",
+        "System.Diagnostics.TraceSource": "4.0.0-rc2-24027",
+        "System.Dynamic.Runtime": "4.0.11-rc2-24027",
+        "System.Globalization": "4.0.11-rc2-24027",
+        "System.IO.FileSystem": "4.0.1-rc2-24027",
+        "System.Linq": "4.1.0-rc2-24027",
+        "System.ObjectModel": "4.0.12-rc2-24027",
+        "System.Reflection": "4.1.0-rc2-24027",
+        "System.Reflection.Emit": "4.0.1-rc2-24027",
+        "System.Reflection.Emit.Lightweight": "4.0.1-rc2-24027",
+        "System.Reflection.Extensions": "4.0.1-rc2-24027",
+        "System.Reflection.TypeExtensions": "4.1.0-rc2-24027",
+        "System.Resources.ResourceManager": "4.0.1-rc2-24027",
+        "System.Runtime.Extensions": "4.1.0-rc2-24027",
+        "System.Runtime.InteropServices": "4.1.0-rc2-24027",
+        "System.Threading": "4.0.11-rc2-24027",
+        "System.Xml.XmlDocument": "4.0.1-rc2-24027",
+        "System.Xml.XmlSerializer": "4.0.11-rc2-24027"
+      },
+      "buildOptions": {
+        "define": [ "FEATURE_NETCORE_REFLECTION_API" ]
       }
     }
   },
-  "compilationOptions": {
+  "buildOptions": {
     "warningsAsErrors": true,
-    "keyFile": "../../buildscripts/CastleKey.snk"
-  },
-  "compileFiles": [
-    "../../buildscripts/CommonAssemblyInfo.cs"
-  ]
+    "keyFile": "../../buildscripts/CastleKey.snk",
+    "compile": {
+      "includeFiles": [
+        "../../buildscripts/CommonAssemblyInfo.cs"
+      ]
+    }
+  }
 }
