@@ -43,6 +43,8 @@
   },
   "buildOptions": {
     "warningsAsErrors": true,
+    "xmlDoc": true,
+    "nowarn": [ "1591" ],
     "keyFile": "../../buildscripts/CastleKey.snk",
     "compile": {
       "includeFiles": [
