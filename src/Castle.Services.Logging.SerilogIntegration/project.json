@@ -9,8 +9,8 @@
   },
   "dependencies": {
     "Castle.Core": { "target": "project", "version": "" },
-    "Serilog": "2.0.0-rc-598",
-    "Serilog.Sinks.ColoredConsole": "2.0.0-beta-700"
+    "Serilog": "2.0.0-rc-600",
+    "Serilog.Sinks.ColoredConsole": "2.0.0-rc-704"
   },
   "frameworks": {
     "netstandard1.3": {
