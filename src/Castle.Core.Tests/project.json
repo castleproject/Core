@@ -33,9 +33,9 @@
       "dependencies": {
         "Microsoft.NETCore.App": {
           "type": "platform",
-          "version": "1.0.0-rc2-3002702"
+          "version": "1.0.0"
         },
-        "dotnet-test-xunit": "1.0.0-rc2-build10025"
+        "dotnet-test-xunit": "2.2.0-preview2-build1029"
       },
       "buildOptions": {
         "define": [ "FEATURE_XUNITNET", "FEATURE_TEST_SERILOGINTEGRATION" ]

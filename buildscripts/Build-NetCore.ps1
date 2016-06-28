@@ -7,11 +7,11 @@ if (!(Test-Path $dotnetPath)) { md $dotnetPath | Out-Null }
 $installPs1Path = Join-Path $dotnetPath "install.ps1"
 
 $wc = New-Object System.Net.WebClient
-$wc.DownloadFile('https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview1/scripts/obtain/install.ps1', $installPs1Path)
+$wc.DownloadFile('https://raw.githubusercontent.com/dotnet/cli/v1.0.0-preview2/scripts/obtain/dotnet-install.ps1', $installPs1Path)
 
 $env:InstallDir = $dotnetHome
-if (!(Test-Path env:\DOTNET_CLI_CHANNEL)) { $env:DOTNET_CLI_CHANNEL = "beta" }
-if (!(Test-Path env:\DOTNET_CLI_VERSION)) { $env:DOTNET_CLI_VERSION = "1.0.0-preview1-002702" }
+if (!(Test-Path env:\DOTNET_CLI_CHANNEL)) { $env:DOTNET_CLI_CHANNEL = "preview" }
+if (!(Test-Path env:\DOTNET_CLI_VERSION)) { $env:DOTNET_CLI_VERSION = "1.0.0-preview2-003121" }
 
 Write-Host "Downloading dotnet/cli"
 
