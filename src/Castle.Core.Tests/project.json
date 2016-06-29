@@ -20,7 +20,7 @@
       "target": "project",
       "version": ""
     },
-    "Serilog.Sinks.TextWriter": "2.0.0-rc-703",
+    "Serilog.Sinks.TextWriter": "2.0.0",
     "xunit": "2.1.0"
   },
   "testRunner": "xunit",
