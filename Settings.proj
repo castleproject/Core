@@ -77,7 +77,7 @@ limitations under the License.
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_LEGACY_REFLECTION_API</AdditionalDefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition=" '$(Configuration)' == 'NET40-Debug' or '$(Configuration)' == 'NET40-Release' or '$(Configuration)' == 'NET45-Debug' or '$(Configuration)' == 'NET45-Release' ">
+	<PropertyGroup Condition=" '$(Configuration)' == 'NET45-Debug' or '$(Configuration)' == 'NET45-Release' ">
 		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_TEST_SERILOGINTEGRATION</AdditionalDefineConstants>
 	</PropertyGroup>
 
@@ -93,8 +93,10 @@ limitations under the License.
 		<PackageFiles Include="$(OutputPath)NLog.xml"  Condition="Exists('$(OutputPath)NLog.xml')"/>
 		<PackageFiles Include="$(OutputPath)Serilog.dll" Condition="Exists('$(OutputPath)Serilog.dll')"/>
 		<PackageFiles Include="$(OutputPath)Serilog.xml" Condition="Exists('$(OutputPath)Serilog.xml')"/>
-		<PackageFiles Include="$(OutputPath)Serilog.FullNetFx.dll" Condition="Exists('$(OutputPath)Serilog.FullNetFx.dll')"/>
-		<PackageFiles Include="$(OutputPath)Serilog.FullNetFx.xml" Condition="Exists('$(OutputPath)Serilog.FullNetFx.xml')"/>
+		<PackageFiles Include="$(OutputPath)Serilog.Sinks.ColoredConsole.dll" Condition="Exists('$(OutputPath)Serilog.Sinks.ColoredConsole.dll')"/>
+		<PackageFiles Include="$(OutputPath)Serilog.Sinks.ColoredConsole.xml" Condition="Exists('$(OutputPath)Serilog.Sinks.ColoredConsole.xml')"/>
+		<PackageFiles Include="$(OutputPath)Serilog.Sinks.TextWriter.dll" Condition="Exists('$(OutputPath)Serilog.Sinks.TextWriter.dll')"/>
+		<PackageFiles Include="$(OutputPath)Serilog.Sinks.TextWriter.xml" Condition="Exists('$(OutputPath)Serilog.Sinks.TextWriter.xml')"/>
 	</ItemGroup>
 
 	<Target Name="_InitializeDynamicProperties">
