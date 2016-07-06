@@ -17,7 +17,7 @@
       <group targetFramework="net35" />
       <group targetFramework="net40" />
       <group targetFramework="net45" />
-      <group targetFramework=".NETStandard1.3">
+      <group targetFramework="netstandard1.3">
         <dependency id="System.AppContext" version="4.1.0" />
         <dependency id="System.Collections.Specialized" version="4.0.1" />
         <dependency id="System.ComponentModel.TypeConverter" version="4.0.1" />
