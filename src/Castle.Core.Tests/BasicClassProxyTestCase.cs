@@ -1,4 +1,4 @@
-// Copyright 2004-2014 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2016 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -83,13 +83,17 @@ namespace CastleTests
 #endif
 		public void ProxyForNonPublicClass()
 		{
-			// have to use a type that is not from this assembly, because it is marked as internals visible to 
-			// DynamicProxy2
+			// We need to use a type that is not from our assembly, because we are marked as internals visible to DynamicProxy2
+			var type = Type.GetType("System.__Canon"); // Don't specify the assembly name (it'll be either mscorlib or System.Private.CorLib)
+			Assert.True(type.GetTypeInfo().IsNotPublic); // Just ensure it is internal as a good use case for this test
 
-			var type = Type.GetType("System.StubHelpers.StubHelpers, mscorlib");
-			var exception = Assert.Throws<GeneratorException>(() => generator.CreateClassProxy(type, new StandardInterceptor()));
-			Assert.IsTrue(exception.Message.StartsWith(
-				"Can not create proxy for type System.StubHelpers.StubHelpers because it is not accessible. Make it public, or internal and mark your assembly with [assembly: InternalsVisibleTo(\"DynamicProxyGenAssembly2, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7\")] attribute, because assembly"));
+			var ex = Assert.Throws<GeneratorException>(() => generator.CreateClassProxy(type, new StandardInterceptor()));
+			StringAssert.StartsWith(
+				"Can not create proxy for type System.__Canon because it is not accessible. Make it public, or internal and mark your assembly with " +
+				"[assembly: InternalsVisibleTo(\"DynamicProxyGenAssembly2, PublicKey=002400000480000094000000060200000024000052534131000400000100010" +
+				"0c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0" +
+				"a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7\")] " +
+				"attribute, because assembly ", ex.Message);
 		}
 
 		[Test]
