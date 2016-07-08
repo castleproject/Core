@@ -118,15 +118,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Serilog, Version=1.3.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\Serilog.dll</HintPath>
-      <HintPath Condition="'$(Configuration)' == 'NET40-Release' or '$(Configuration)' == 'NET40-Debug'">..\..\lib\net40\Serilog.dll</HintPath>
     </Reference>
-    <Reference Include="Serilog.FullNetFx, Version=1.3.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+    <Reference Include="Serilog.Sinks.TextWriter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\Serilog.FullNetFx.dll</HintPath>
-      <HintPath Condition="'$(Configuration)' == 'NET40-Release' or '$(Configuration)' == 'NET40-Debug'">..\..\lib\net40\Serilog.FullNetFx.dll</HintPath>
+      <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\Serilog.Sinks.TextWriter.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -518,7 +516,8 @@
       <Project>{D680B5DB-B943-4BB5-891A-1695DEF86A3A}</Project>
       <Name>Castle.Services.Logging.NLogIntegration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Castle.Services.Logging.SerilogIntegration\Castle.Services.Logging.SerilogIntegration.csproj" Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug' or '$(Configuration)' == 'NET40-Debug' or '$(Configuration)' == 'NET40-Release'">
+    <ProjectReference Include="..\Castle.Services.Logging.SerilogIntegration\Castle.Services.Logging.SerilogIntegration.csproj"
+                      Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">
       <Project>{15410e1f-e79f-43b6-b403-228768df793d}</Project>
       <Name>Castle.Services.Logging.SerilogIntegration</Name>
     </ProjectReference>
