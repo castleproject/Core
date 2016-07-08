@@ -145,7 +145,7 @@ namespace Castle.DynamicProxy.Tests
 						FileName = FindPeVerify.PeVerifyPath,
 						RedirectStandardOutput = true,
 						UseShellExecute = false,
-						WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory,
+						WorkingDirectory = TestContext.CurrentContext.TestDirectory,
 						Arguments = "\"" + assemblyPath + "\" /VERBOSE",
 						CreateNoWindow = true
 					}

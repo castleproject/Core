@@ -304,7 +304,7 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 #if FEATURE_XUNITNET
 		protected XPathCursorTestCase()
 #else
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void OneTimeSetUp()
 #endif
 

@@ -20,10 +20,9 @@
       "target": "project",
       "version": ""
     },
-    "Serilog.Sinks.TextWriter": "2.0.0",
-    "xunit": "2.1.0"
+    "Serilog.Sinks.TextWriter": "2.0.0"
   },
-  "testRunner": "xunit",
+  "testRunner": "nunit",
   "frameworks": {
     "netcoreapp1.0": {
       "imports": [
@@ -35,10 +34,11 @@
           "type": "platform",
           "version": "1.0.0"
         },
-        "dotnet-test-xunit": "2.2.0-preview2-build1029"
+        "NUnit": "3.4.1",
+        "dotnet-test-nunit": "3.4.0-beta-1"
       },
       "buildOptions": {
-        "define": [ "FEATURE_XUNITNET", "FEATURE_TEST_SERILOGINTEGRATION" ]
+        "define": [ "FEATURE_TEST_SERILOGINTEGRATION" ]
       }
     }
   },
@@ -55,6 +55,11 @@
       "mappings": {
         "CastleTests.Core.Tests.Resources.MoreRes.TestRes": "Core.Tests/Resources/MoreRes/TestRes.resx",
         "CastleTests.Core.Tests.Resources.file1.txt": "Core.Tests/Resources/file1.txt"
+      }
+    },
+    "copyToOutput": {
+      "mappings": {
+        "Core.Tests/Resources/file1.txt": "Core.Tests/Resources/file1.txt"
       }
     }
   }
