@@ -57,9 +57,9 @@
     <file src="build/NET45/NET45-Release/pkg/bin/Castle.Core.dll" target="lib/net45" />
     <file src="build/NET45/NET45-Release/pkg/bin/Castle.Core.pdb" target="lib/net45" />
     <file src="build/NET45/NET45-Release/pkg/bin/Castle.Core.xml" target="lib/net45" />
-    <file src="build/NETCORE/Release/pkg/Castle.Core.dll" target="lib/netstandard1.3" />
-    <file src="build/NETCORE/Release/pkg/Castle.Core.pdb" target="lib/netstandard1.3" />
-    <file src="build/NETCORE/Release/pkg/Castle.Core.xml" target="lib/netstandard1.3" />
+    <file src="build/NETCORE/Release/pkg/bin/Castle.Core.dll" target="lib/netstandard1.3" />
+    <file src="build/NETCORE/Release/pkg/bin/Castle.Core.pdb" target="lib/netstandard1.3" />
+    <file src="build/NETCORE/Release/pkg/bin/Castle.Core.xml" target="lib/netstandard1.3" />
     <file src="buildscripts/ASL - Apache Software Foundation License.txt" />
     <file src="buildscripts/readme.txt" />
     <file src="src/Castle.Core/**/*.cs" />
