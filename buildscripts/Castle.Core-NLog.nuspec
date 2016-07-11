@@ -15,7 +15,7 @@
     <tags>castle, logging, NLog</tags>
     <dependencies>
       <dependency id="Castle.Core" version="$CastleCoreVersion$" />
-      <dependency id="NLog" version="2.0.0" />
+      <dependency id="NLog" version="4.4.0-beta13" />
     </dependencies>
   </metadata>
   <files>
@@ -26,6 +26,8 @@
     <file src="build/NET40/NET40-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.pdb" target="lib/net40-client" />
     <file src="build/NET45/NET45-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.dll" target="lib/net45" />
     <file src="build/NET45/NET45-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.pdb" target="lib/net45" />
+    <file src="build/NETCORE/Release/pkg/bin/Castle.Services.Logging.NLogIntegration.dll" target="lib/netstandard1.3" />
+    <file src="build/NETCORE/Release/pkg/bin/Castle.Services.Logging.NLogIntegration.pdb" target="lib/netstandard1.3" />
     <file src="buildscripts/ASL - Apache Software Foundation License.txt" />
     <file src="buildscripts/readme.txt" />
     <file src="src/Castle.Services.Logging.NLogIntegration/**/*.cs" />

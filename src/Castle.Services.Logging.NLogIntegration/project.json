@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "Castle.Core": { "target": "project", "version": "" },
-    "NLog": "4.4.0-beta12"
+    "NLog": "4.4.0-beta13"
   },
   "frameworks": {
     "netstandard1.3": {
