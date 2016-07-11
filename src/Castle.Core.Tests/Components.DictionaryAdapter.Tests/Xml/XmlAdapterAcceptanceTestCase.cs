@@ -1186,7 +1186,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			{
 				var serializer = new XmlSerializer(typeof(Group));
 				var groupRead = (Group)serializer.Deserialize(stream);
-				Assert.IsNull(group.Owner);
+				Assert.IsNull(groupRead.Owner);
 			}
 		}
 
