@@ -30,6 +30,10 @@ Write-Host "Building"
 
 cd Castle.Core
 dotnet build --configuration Release --framework netstandard1.3 --output build/NETCORE
+cd ../Castle.Services.Logging.NLogIntegration
+dotnet build --configuration Release --framework netstandard1.3 --output build/NETCORE
+cd ../Castle.Services.Logging.SerilogIntegration
+dotnet build --configuration Release --framework netstandard1.3 --output build/NETCORE
 
 Write-Host "Running tests"
 
