@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_TEST_SERILOGINTEGRATION
+
 namespace CastleTests.SerilogIntegration
 {
-#if FEATURE_TEST_SERILOGINTEGRATION
     using System;
     using System.IO;
 
@@ -182,5 +183,6 @@ namespace CastleTests.SerilogIntegration
             StringAssert.Contains("MyLogger2", logs);
         }
     }
-#endif
 }
+
+#endif
