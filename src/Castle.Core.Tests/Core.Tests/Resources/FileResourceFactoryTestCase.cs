@@ -16,6 +16,7 @@ namespace Castle.Core.Tests.Resources
 {
 	using System;
 	using System.IO;
+	using System.Reflection;
 
 	using NUnit.Framework;
 
@@ -34,7 +35,7 @@ namespace Castle.Core.Tests.Resources
 		public void Init()
 #endif
 		{
-			var currentDirectory = Directory.GetCurrentDirectory();
+			var currentDirectory = new FileInfo(typeof(FileResourceFactoryTestCase).GetTypeInfo().Assembly.Location).Directory.FullName;
 			basePath = Path.Combine(currentDirectory, "Core.Tests" + Path.DirectorySeparatorChar + "Resources");
 		}
 

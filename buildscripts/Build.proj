@@ -201,8 +201,9 @@ limitations under the License.
 
 		<Message Text="Running tests from assemblies: $(TestAssemblies)" />
 
-		<Exec Command="$(NUnitPath)$(NUnitExecutable) /nologo $(TestAssemblies) /xml=$(NUnitTestResultXmlFiles) /framework=$(TargetFrameworkVersion)" Condition=" '$(OS)' == 'Windows_NT' " ContinueOnError="true" />
-		<Exec Command="mono --runtime=v4.0 ../tools/NUnit/bin/nunit-console.exe $(OutputPath)Castle.Core.Tests.dll -nologo -noshadow -xml=$(NUnitTestResultXmlFiles)" Condition=" '$(OS)' != 'Windows_NT' " ContinueOnError="true" />
+		<Exec Command="$(NUnitPath)$(NUnitExecutable) $(TestAssemblies) --noheader -result=$(NUnitTestResultXmlFiles) --framework=$(TargetFrameworkVersion) --x86" Condition=" '$(OS)' == 'Windows_NT' " ContinueOnError="true"
+						WorkingDirectory="$(OutputPath)"/>
+		<Exec Command="mono --runtime=v4.0 ../tools/NUnit-3.4.0/bin/nunit3-console.exe $(OutputPath)Castle.Core.Tests.dll --noheader -result:$(NUnitTestResultXmlFiles)" Condition=" '$(OS)' != 'Windows_NT' " ContinueOnError="true" />
 
 		<!-- Publish the unit test results if we are running under TeamCity -->
 		<Message Text="##teamcity[importData type='nunit' path='$(NUnitTestResultXmlFiles)']" Condition="$(TEAMCITY_VERSION) != ''" />

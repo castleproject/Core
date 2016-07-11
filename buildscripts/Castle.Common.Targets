@@ -98,8 +98,8 @@ limitations under the License.
 
 	<!-- 3rd Party Program Paths -->
 	<PropertyGroup>
-		<NUnitExecutable Condition="'$(NUnitExecutable)' == ''">nunit-console-x86.exe</NUnitExecutable>
-		<NUnitPath Condition="'$(NUnitPath)' == ''">$(ToolsPath)/NUnit/bin/</NUnitPath>
+		<NUnitExecutable Condition="'$(NUnitExecutable)' == ''">nunit3-console.exe</NUnitExecutable>
+		<NUnitPath Condition="'$(NUnitPath)' == ''">$(ToolsPath)/NUnit-3.4.0/bin/</NUnitPath>
 		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">$(ToolsPath)/MSBuildCommunityTasks</MSBuildCommunityTasksPath>
 	</PropertyGroup>
 
