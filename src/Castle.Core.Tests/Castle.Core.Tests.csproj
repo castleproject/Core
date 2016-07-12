@@ -97,18 +97,21 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="adodb, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <Reference Include="nunit.framework">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\net35\adodb.dll</HintPath>
+      <HintPath Condition="'$(Configuration)' == 'NET35-Release' or '$(Configuration)' == 'NET35-Debug'">..\..\lib\net35\nunit.framework.dll</HintPath>
+      <HintPath Condition="'$(Configuration)' == 'NET40-Release' or '$(Configuration)' == 'NET40-Debug'">..\..\lib\net40\nunit.framework.dll</HintPath>
+      <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <Choose>
-    <When Condition="$(TargetFrameworkVersion)!='v3.5'">
-      <ItemGroup>
-        <Reference Include="Microsoft.CSharp" />
-      </ItemGroup>
-    </When>
-  </Choose>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath Condition="'$(Configuration)' == 'NET35-Release' or '$(Configuration)' == 'NET35-Debug'">..\..\lib\net35\log4net.dll</HintPath>
+      <HintPath Condition="'$(Configuration)' == 'NET40-Release' or '$(Configuration)' == 'NET40-Debug'">..\..\lib\net40\log4net.dll</HintPath>
+      <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\log4net.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="NLog">
       <SpecificVersion>False</SpecificVersion>
@@ -117,32 +120,43 @@
       <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\NLog.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <Choose>
+    <When Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">
+      <ItemGroup>
+        <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>..\..\lib\net45\Serilog.dll</HintPath>
+        </Reference>
+        <Reference Include="Serilog.Sinks.TextWriter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+          <SpecificVersion>False</SpecificVersion>
+          <HintPath>..\..\lib\net45\Serilog.Sinks.TextWriter.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
   <ItemGroup>
-    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+    <Reference Include="adodb, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\Serilog.dll</HintPath>
+      <HintPath>..\..\lib\net35\adodb.dll</HintPath>
     </Reference>
-    <Reference Include="Serilog.Sinks.TextWriter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\Serilog.Sinks.TextWriter.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="Rhino.Mocks.CPP.Interfaces">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net35\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="System.Data" />
-    <Reference Include="nunit.framework">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\nunit.framework.dll</HintPath>
-    </Reference>
   </ItemGroup>
+  <Choose>
+    <When Condition="$(TargetFrameworkVersion)!='v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.CSharp" />
+      </ItemGroup>
+    </When>
+  </Choose>
   <ItemGroup>
     <Compile Include="AccessLevelTestCase.cs" />
     <Compile Include="BasePEVerifyTestCase.cs" />
@@ -512,6 +526,10 @@
       <Project>{E4FA5B53-7D36-429E-8E5C-53D5479242BA}</Project>
       <Name>Castle.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj">
+      <Project>{FA79D6B4-30B1-444A-A627-ED283BF6406B}</Project>
+      <Name>Castle.Services.Logging.log4netIntegration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration.csproj">
       <Project>{D680B5DB-B943-4BB5-891A-1695DEF86A3A}</Project>
       <Name>Castle.Services.Logging.NLogIntegration</Name>
@@ -520,16 +538,6 @@
       <Project>{15410e1f-e79f-43b6-b403-228768df793d}</Project>
       <Name>Castle.Services.Logging.SerilogIntegration</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj">
-      <Project>{FA79D6B4-30B1-444A-A627-ED283BF6406B}</Project>
-      <Name>Castle.Services.Logging.log4netIntegration</Name>
-    </ProjectReference>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\net35\log4net.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(RootPath)\Settings.proj" />

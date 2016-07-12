@@ -304,7 +304,9 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 #if FEATURE_XUNITNET
 		protected XPathCursorTestCase()
 #else
+#pragma warning disable 618 // Don't use OneTimeSetUp yet because ReSharper doesn't support it
 		[TestFixtureSetUp]
+#pragma warning restore 618
 		public void OneTimeSetUp()
 #endif
 
