@@ -38,6 +38,7 @@ dotnet build --configuration Release --framework netstandard1.3 --output build/N
 Write-Host "Running tests"
 
 cd ../Castle.Core.Tests
-dotnet test
+dotnet test --result=nunit-results.xml
+echo "##teamcity[importData type='nunit' path='src/Castle.Core.Tests/nunit-results.xml']"
 
 exit $LASTEXITCODE
