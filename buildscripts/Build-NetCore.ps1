@@ -39,6 +39,25 @@ Write-Host "Running tests"
 
 cd ../Castle.Core.Tests
 dotnet test --result=nunit-results.xml
-echo "##teamcity[importData type='nunit' path='src/Castle.Core.Tests/nunit-results.xml']"
+
+# Publish unit test results to TeamCity manually until TeamCity supports NUnit 3's result format
+$xml = [xml](Get-Content nunit-results.xml)
+$xml.SelectNodes("//test-case") | % {
+    $testName = $_.fullname
+    $result = $_.result
+
+    Write-Output "##teamcity[testStarted name='$testName']"
+
+    if ($result -eq "Skipped") {
+        Write-Output "##teamcity[testIgnored name='$testName' message='Ignored']"
+    } elseif ($result -eq "Inconclusive") {
+        Write-Output "##teamcity[testIgnored name='$testName' message='Inconclusive']"
+    } elseif ($result -ne "Passed") {
+        Write-Output "##teamcity[testFailed name='$testName' message='Failed' details='See nunit-results.xml']"
+    }
+
+    Write-Output "##teamcity[testFinished name='$testName']"
+}
+#echo "##teamcity[importData type='nunit' path='src/Castle.Core.Tests/nunit-results.xml']"
 
 exit $LASTEXITCODE
