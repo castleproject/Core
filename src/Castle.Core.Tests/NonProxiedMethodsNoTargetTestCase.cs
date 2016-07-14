@@ -72,11 +72,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsNull(result);
 		}
 
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
 		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
 		public void AdditionalInterfaces_method(ProxyKind kind)
 		{

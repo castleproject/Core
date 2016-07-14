@@ -25,12 +25,8 @@ namespace Castle.Core.Tests.Resources
 	{
 		private UncResourceFactory resFactory;
 
-#if FEATURE_XUNITNET
-		public UncResourceFactoryTestCase()
-#else
 		[SetUp]
 		public void SetUp()
-#endif
 		{
 			resFactory = new UncResourceFactory();
 		}

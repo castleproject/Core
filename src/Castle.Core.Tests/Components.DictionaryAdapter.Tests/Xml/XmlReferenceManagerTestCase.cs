@@ -402,12 +402,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				OtherB = new TX(),
 				OtherC = new TX();
 
-#if FEATURE_XUNITNET
-			protected TestScenario()
-#else
 			[SetUp]
 			public void SetUp()
-#endif
 			{
 				OriginalXml = GetXmlText();
 				Document    = Xml(OriginalXml);

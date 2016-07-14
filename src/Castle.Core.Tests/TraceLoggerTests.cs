@@ -26,26 +26,15 @@ namespace Castle.Core.Logging.Tests
 	/// </summary>
 	[TestFixture]
 	public class TraceLoggerTests
-#if FEATURE_XUNITNET
-		: IDisposable
-#endif
 	{
-#if FEATURE_XUNITNET
-		public TraceLoggerTests()
-#else
 		[SetUp]
 		public void Initialize()
-#endif
 		{
 			Listener.ClearMessages();
 		}
 
-#if FEATURE_XUNITNET
-		public void Dispose()
-#else
 		[TearDown]
 		public void Cleanup()
-#endif
 		{
 			Listener.ClearMessages();
 		}

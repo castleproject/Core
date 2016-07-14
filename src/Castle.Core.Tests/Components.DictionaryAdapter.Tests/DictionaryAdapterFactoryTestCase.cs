@@ -30,12 +30,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		private IDictionary dictionary;
 		private DictionaryAdapterFactory factory;
 
-#if FEATURE_XUNITNET
-		public DictionaryAdapterFactoryTestCase()
-#else
 		[SetUp]
 		public void SetUp()
-#endif
 		{
 			dictionary = new Hashtable();
 			factory = new DictionaryAdapterFactory();

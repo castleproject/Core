@@ -29,12 +29,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 	{
 		private DictionaryAdapterFactory factory;
 
-#if FEATURE_XUNITNET
-		public XmlAdapterAcceptanceTestCase()
-#else
 		[SetUp]
 		public void SetUp()
-#endif
 		{
 			factory = new DictionaryAdapterFactory();
 		}

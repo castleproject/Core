@@ -166,7 +166,6 @@
     <Compile Include="BugsReported\Core40.cs" />
     <Compile Include="BugsReported\DynProxy159.cs" />
     <Compile Include="BugsReported\DynProxy145_SynchronizationContext.cs" />
-    <Compile Include="Compatibility\XUnitNetShim.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\CustomAssert.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\IPhoneWithFetch.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\NameValueCollectionAdapterTests.cs" />

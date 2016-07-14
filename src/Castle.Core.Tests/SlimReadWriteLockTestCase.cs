@@ -23,12 +23,8 @@ namespace Castle.Core.Tests
 	{
 		private SlimReadWriteLock @lock;
 
-#if FEATURE_XUNITNET
-		public SlimReadWriteLockTestCase()
-#else
 		[SetUp]
 		public void SetUp()
-#endif
 		{
 			@lock = new SlimReadWriteLock();
 		}

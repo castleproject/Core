@@ -56,11 +56,7 @@ namespace Castle.DynamicProxy.Tests
 			new object[] { ProxyKind.WithTargetInterface }
 		};
 
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
 		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
 		public void Mixin_method(ProxyKind kind)
 		{
@@ -70,11 +66,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(5, result);
 		}
 
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
 		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
 		public void Mixin_method_explicit(ProxyKind kind)
 		{
@@ -84,11 +76,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(5, result);
 		}
 
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
 		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
 		public void Mixin_method_generic(ProxyKind kind)
 		{
@@ -98,11 +86,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(0, result);
 		}
 
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
 		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
 		public void Mixin_method_out_ref_parameters(ProxyKind kind)
 		{
