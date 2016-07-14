@@ -56,12 +56,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(23, player.Points);
 		}
 
-#if FEATURE_XUNITNET
-		public AdaptingGenericDictionaryTestCase()
-#else
 		[SetUp]
 		public void Setup()
-#endif
 		{
 			_factory = new DictionaryAdapterFactory();
 		}

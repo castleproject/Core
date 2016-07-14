@@ -24,12 +24,8 @@ namespace CastleTests.Core.Tests.Resources
 	[TestFixture]
 	public class AssemblyResourceFactoryTestCase
 	{
-#if FEATURE_XUNITNET
-		public AssemblyResourceFactoryTestCase()
-#else
 		[SetUp]
 		public void SetUp()
-#endif
 		{
 			resFactory = new AssemblyResourceFactory();
 		}

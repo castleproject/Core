@@ -69,23 +69,13 @@ namespace Castle.DynamicProxy.Tests
 #endif
 
 	public abstract class BasePEVerifyTestCase
-#if FEATURE_XUNITNET
-		: IDisposable
-#endif
 	{
 		protected ProxyGenerator generator;
 		protected IProxyBuilder builder;
 
 		private bool verificationDisabled;
 
-#if FEATURE_XUNITNET
-		protected BasePEVerifyTestCase()
-		{
-			Init();
-		}
-#else
 		[SetUp]
-#endif
 		public virtual void Init()
 		{
 			ResetGeneratorAndBuilder();
@@ -112,17 +102,8 @@ namespace Castle.DynamicProxy.Tests
 			get { return verificationDisabled; }
 		}
 
-#if FEATURE_XUNITNET
-		public void Dispose()
-		{
-			TearDown();
-		}
-#endif
-
 #if FEATURE_ASSEMBLYBUILDER_SAVE && !__MonoCS__ // mono doesn't have PEVerify
-#if !FEATURE_XUNITNET
 		[TearDown]
-#endif
 		public virtual void TearDown()
 		{
 			if (!IsVerificationDisabled)
@@ -165,9 +146,7 @@ namespace Castle.DynamicProxy.Tests
 			}
 		}
 #else
-#if !FEATURE_XUNITNET
 		[TearDown]
-#endif
 		public virtual void TearDown()
 		{
 		}

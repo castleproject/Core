@@ -49,11 +49,7 @@ namespace Castle.DynamicProxy.Tests
 			new object[] { ProxyKind.WithTargetInterface }
 		};
 
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
 		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
 		public void Duplicated_interfaces_not_significant(ProxyKind kind)
 		{
@@ -62,11 +58,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(first.GetType(), second.GetType());
 		}
 
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
 		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
 		public void Explicit_inclusion_of_base_interfaces_not_significant(ProxyKind kind)
 		{
@@ -75,11 +67,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(first.GetType(), second.GetType());
 		}
 
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
 		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
 		public void Order_of_additional_interfaces_not_significant(ProxyKind kind)
 		{

@@ -27,12 +27,8 @@ namespace Castle.Core.Tests.Resources
 		private readonly FileResourceFactory resFactory = new FileResourceFactory();
 		private string basePath;
 
-#if FEATURE_XUNITNET
-		public FileResourceFactoryTestCase()
-#else
 		[SetUp]
 		public void Init()
-#endif
 		{
 			var currentDirectory = Directory.GetCurrentDirectory();
 			basePath = Path.Combine(currentDirectory, "Core.Tests" + Path.DirectorySeparatorChar + "Resources");

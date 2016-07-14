@@ -23,12 +23,9 @@ namespace CastleTests.Components.DictionaryAdapter.Tests
     [TestFixture]
     public class NameValueCollectionAdapterTests
     {
-#if FEATURE_XUNITNET
-        public NameValueCollectionAdapterTests()
-#else
+
         [SetUp]
         public void SetUp()
-#endif
         {
             nameValueCollection = new NameValueCollection();
         }

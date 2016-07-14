@@ -24,12 +24,8 @@ namespace Castle.DynamicProxy.Tests
 		ProxyGenerator proxyGenerator;
 		ProxyGenerationOptions options;
 
-#if FEATURE_XUNITNET
-		public GenericInterfaceWithGenericMethod()
-#else
 		[SetUp]
 		public void Setup()
-#endif
 		{
 			proxyGenerator = new ProxyGenerator();
 			options = new ProxyGenerationOptions();

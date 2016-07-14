@@ -26,12 +26,8 @@ namespace Castle.DynamicProxy.Tests
 		private OtherMixin otherMixin;
 		private ComplexMixin complexMixin;
 
-#if FEATURE_XUNITNET
-		public MixinDataTestCase()
-#else
 		[SetUp]
 		public void SetUp()
-#endif
 		{
 			simpleMixin = new SimpleMixin();
 			otherMixin = new OtherMixin();
