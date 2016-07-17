@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Reflection;
 	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Tests.Mixins;
@@ -24,7 +25,11 @@ namespace Castle.DynamicProxy.Tests
 
 	using NUnit.Framework;
 
-	using DescriptionAttribute = System.ComponentModel.DescriptionAttribute;
+	public class DescriptionAttribute : Attribute
+	{
+		public string Description { get; set; }
+		public DescriptionAttribute(string description) { Description = description; }
+	}
 
 	[TestFixture]
 	public class ProxyGenerationOptionsTestCase
@@ -32,12 +37,8 @@ namespace Castle.DynamicProxy.Tests
 		private ProxyGenerationOptions _options1;
 		private ProxyGenerationOptions _options2;
 
-#if FEATURE_XUNITNET
-		public ProxyGenerationOptionsTestCase()
-#else
 		[SetUp]
 		public void Init()
-#endif
 		{
 			_options1 = new ProxyGenerationOptions();
 			_options2 = new ProxyGenerationOptions();

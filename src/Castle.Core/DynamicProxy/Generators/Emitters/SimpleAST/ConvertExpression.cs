@@ -55,7 +55,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				target = target.GetElementType();
 			}
 
-			if (target.IsValueType)
+			if (target.GetTypeInfo().IsValueType)
 			{
 				if (fromType.GetTypeInfo().IsValueType)
 				{
@@ -103,11 +103,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			{
 				gen.Emit(OpCodes.Box, from);
 			}
-			else if (target.IsGenericType && target != from)
+			else if (target.GetTypeInfo().IsGenericType && target != from)
 			{
 				gen.Emit(OpCodes.Castclass, target);
 			}
-			else if (target.IsSubclassOf(from))
+			else if (target.GetTypeInfo().IsSubclassOf(from))
 			{
 				gen.Emit(OpCodes.Castclass, target);
 			}

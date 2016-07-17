@@ -14,7 +14,6 @@
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
-#if !SILVERLIGHT
 	using System.Collections.Specialized;
 
 	using NUnit.Framework;
@@ -25,12 +24,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		private NameValueCollection nameValueCollection;
 		private DictionaryAdapterFactory factory;
 
-#if FEATURE_XUNITNET
-		public AdaptingNameValueCollectionsTestCase()
-#else
 		[SetUp]
 		public void SetUp()
-#endif
 		{
 			nameValueCollection = new NameValueCollection();
 			factory = new DictionaryAdapterFactory();
@@ -86,5 +81,4 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			int? Legs { get; set; }
 		}
 	}
-#endif
 }

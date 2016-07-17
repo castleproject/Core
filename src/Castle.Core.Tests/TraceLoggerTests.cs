@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace Castle.Core.Logging.Tests
 {
 	using System;
@@ -27,30 +26,20 @@ namespace Castle.Core.Logging.Tests
 	/// </summary>
 	[TestFixture]
 	public class TraceLoggerTests
-#if FEATURE_XUNITNET
-		: IDisposable
-#endif
 	{
-#if FEATURE_XUNITNET
-		public TraceLoggerTests()
-#else
 		[SetUp]
 		public void Initialize()
-#endif
 		{
 			Listener.ClearMessages();
 		}
 
-#if FEATURE_XUNITNET
-		public void Dispose()
-#else
 		[TearDown]
 		public void Cleanup()
-#endif
 		{
 			Listener.ClearMessages();
 		}
 
+#if FEATURE_SYSTEM_CONFIGURATION
 		[Test]
 		[Platform(Exclude = "mono", Reason = "Mono has a bug that causes the listeners to not fully work.")]
 		public void WritingToLoggerByType()
@@ -77,7 +66,7 @@ namespace Castle.Core.Logging.Tests
 				}
 				catch (Exception ex)
 				{
-					throw new ApplicationException("Inner error is " + ex.Message, ex);
+					throw new Exception("Inner error is " + ex.Message, ex);
 				}
 			}
 			catch (Exception ex)
@@ -87,7 +76,7 @@ namespace Castle.Core.Logging.Tests
 
 			Listener.AssertContains("testsrule", "Castle.Core.Logging.Tests.TraceLoggerTests");
 			Listener.AssertContains("testsrule", "Problem handled");
-			Listener.AssertContains("testsrule", "ApplicationException");
+			Listener.AssertContains("testsrule", "Exception");
 			Listener.AssertContains("testsrule", "Inner error is");
 			Listener.AssertContains("testsrule", "ArgumentOutOfRangeException");
 			Listener.AssertContains("testsrule", "fakearg");
@@ -118,6 +107,7 @@ namespace Castle.Core.Logging.Tests
 			Listener.AssertContains("defaultrule", "System.Xml.XmlDocument");
 			Listener.AssertContains("defaultrule", "Logging to non-configured namespace namespace");
 		}
+#endif
 
 		#region in-memory listener class
 
@@ -174,4 +164,3 @@ namespace Castle.Core.Logging.Tests
 		#endregion
 	}
 }
-#endif

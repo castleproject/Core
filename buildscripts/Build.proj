@@ -115,12 +115,8 @@ limitations under the License.
 
 	<Target
 		Name="RunAllTests"
-		DependsOnTargets="BuildProject"
-		>
-
-		<CallTarget Targets="_ExecTestRunner" />
-
-	</Target>
+		DependsOnTargets="BuildProject;_ExecTestRunner"
+		/>
 
 	<!-- Creates Zip file for Release -->
 	<Target
@@ -164,7 +160,6 @@ limitations under the License.
 
 		<MakeDir Directories="$(NuSpecDir)/lib/NET35" />
 		<MakeDir Directories="$(NuSpecDir)/lib/NET40cp" />
-		<MakeDir Directories="$(NuSpecDir)/lib/SL4" />
 
 		<CreateProperty Value="$(NuSpecDir)/$(ProjectName).nuspec">
 			<Output PropertyName="NuSpecFile" TaskParameter="Value"/>
@@ -189,13 +184,7 @@ limitations under the License.
 	<Target
 		Name="_ExecTestRunner"
 		Condition="$(TestRunner_Enabled)"
-		>
-
-		<CallTarget Targets="_ExecNUnit" Condition="$(BuildConfigKey) != 'SL50' and $(BuildConfigKey) != 'SL40'" />
-
-		<CallTarget Targets="_ExecStatLight" Condition="$(BuildConfigKey) == 'SL50' or $(BuildConfigKey) == 'SL40'" />
-
-	</Target>
+		DependsOnTargets="_ExecNUnit" />
 
 	<Target
 		Name="_ExecNUnit"
@@ -212,31 +201,13 @@ limitations under the License.
 
 		<Message Text="Running tests from assemblies: $(TestAssemblies)" />
 
-		<Exec Command="$(NUnitPath)$(NUnitExecutable) /nologo $(TestAssemblies) /xml=$(NUnitTestResultXmlFiles) /framework=$(TargetFrameworkVersion)" Condition=" '$(OS)' == 'Windows_NT' " ContinueOnError="true" />
-		<Exec Command="mono --runtime=v4.0 ../tools/NUnit/bin/nunit-console.exe $(OutputPath)Castle.Core.Tests.dll -nologo -noshadow -xml=$(NUnitTestResultXmlFiles)" Condition=" '$(OS)' != 'Windows_NT' " ContinueOnError="true" />
+		<Exec Command="$(NUnitPath)$(NUnitExecutable) --noheader $(TestAssemblies) --result=$(NUnitTestResultXmlFiles);format=nunit2 --framework=$(TargetFrameworkVersion) --x86" WorkingDirectory="$(OutputPath)" Condition=" '$(OS)' == 'Windows_NT' " ContinueOnError="true" />
+		<Exec Command="mono --runtime=v4.0 $(NUnitPath)$(NUnitExecutable) $(OutputPath)Castle.Core.Tests.dll --noheader --result=$(NUnitTestResultXmlFiles);format=nunit2" WorkingDirectory="$(OutputPath)" Condition=" '$(OS)' != 'Windows_NT' " ContinueOnError="true" />
 
 		<!-- Publish the unit test results if we are running under TeamCity -->
 		<Message Text="##teamcity[importData type='nunit' path='$(NUnitTestResultXmlFiles)']" Condition="$(TEAMCITY_VERSION) != ''" />
 
 	</Target>
-
-
-	<Target
-		Name="_ExecStatLight"
-		>
-
-		<CreateProperty Value='$(ToolsPath)\StatLight\StatLight.exe -b -x="$(OutputPath)Castle.Core.Tests.xap" -o=NUnit'>
-			<Output PropertyName="StatLightCmdLine" TaskParameter="Value"/>
-		</CreateProperty>
-
-		<CreateProperty Value='$(StatLightCmdLine) --teamcity' Condition=" '$(TEAMCITY_VERSION)' != '' ">
-			<Output PropertyName="StatLightCmdLine" TaskParameter="Value"/>
-		</CreateProperty>
-
-		<Exec Command="$(StatLightCmdLine)" />
-
-	</Target>
-
 
 	<!-- Prepare package directory -->
 	<Target Name="_PreparePackage">

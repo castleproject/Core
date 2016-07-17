@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT // In Silverlight Console.SetOut throws security exception
 namespace Castle.Core.Logging.Tests
 {
 	using System;
@@ -27,19 +26,26 @@ namespace Castle.Core.Logging.Tests
 	{
 		private StringWriter outWriter = new StringWriter();
 		private StringWriter errorWriter = new StringWriter();
+		private TextWriter oldOut;
+		private TextWriter oldError;
 
-#if FEATURE_XUNITNET
-		public ConsoleLoggerTestCase()
-#else
 		[SetUp]
 		public void ReplaceOut()
-#endif
 		{
 			outWriter.GetStringBuilder().Length = 0;
 			errorWriter.GetStringBuilder().Length = 0;
 
+			oldOut = Console.Out;
+			oldError = Console.Error;
 			Console.SetOut(outWriter);
 			Console.SetError(errorWriter);
+		}
+
+		[TearDown]
+		public void TearDown()
+		{
+			Console.SetOut(oldOut);
+			Console.SetError(oldError);
 		}
 
 		[Test]
@@ -113,16 +119,15 @@ namespace Castle.Core.Logging.Tests
 		{
 			ConsoleLogger log = new ConsoleLogger("Logger", LoggerLevel.Debug);
 
-			log.Debug("Some debug message", new ApplicationException("Some exception message"));
+			log.Debug("Some debug message", new Exception("Some exception message"));
 
 			String logcontents = outWriter.GetStringBuilder().ToString();
 			
 			StringWriter expected = new StringWriter();
 			expected.WriteLine("[Debug] 'Logger' Some debug message");
-			expected.WriteLine("[Debug] 'Logger' System.ApplicationException: Some exception message ");
+			expected.WriteLine("[Debug] 'Logger' System.Exception: Some exception message ");
 
 			Assert.AreEqual(expected.GetStringBuilder().ToString(), logcontents, "logcontents don't match");
 		}
 	}
 }
-#endif

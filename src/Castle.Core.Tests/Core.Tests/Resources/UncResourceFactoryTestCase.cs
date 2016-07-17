@@ -25,12 +25,8 @@ namespace Castle.Core.Tests.Resources
 	{
 		private UncResourceFactory resFactory;
 
-#if FEATURE_XUNITNET
-		public UncResourceFactoryTestCase()
-#else
 		[SetUp]
 		public void SetUp()
-#endif
 		{
 			resFactory = new UncResourceFactory();
 		}
@@ -42,8 +38,7 @@ namespace Castle.Core.Tests.Resources
 			Assert.IsFalse( resFactory.Accept( new CustomUri("http://www.castleproject.org") ) );
 		}
 
-#if !SILVERLIGHT // Silverlight test runner does not handle explicit tests
-		[Test, Explicit]
+		[Test, Ignore("Relies on external network shares")]
 		public void CreateWithAbsolutePath()
 		{
 			CustomUri uri = new CustomUri(@"\\hammet\C$\file.txt");
@@ -55,7 +50,7 @@ namespace Castle.Core.Tests.Resources
 			Assert.AreEqual("The long and winding road", line);
 		}
 
-		[Test, Explicit]
+		[Test, Ignore("Relies on external network shares")]
 		public void CreateRelative()
 		{
 			CustomUri uri = new CustomUri(@"\\hammet\C$\file.txt");
@@ -69,13 +64,12 @@ namespace Castle.Core.Tests.Resources
 			Assert.AreEqual("Something", line);
 		}
 
-		[Test, Explicit]
+		[Test, Ignore("Relies on external network shares")]
 		public void NonExistingResource()
 		{
 			IResource resource = resFactory.Create(new CustomUri(@"\\hammettz\C$\file1.txt"));
 
 			Assert.Throws<ResourceException>(() => resource.GetStreamReader());
 		}
-#endif
 	}
 }

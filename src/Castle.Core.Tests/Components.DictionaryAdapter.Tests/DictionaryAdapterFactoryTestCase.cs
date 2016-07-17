@@ -18,14 +18,11 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Reflection;
 
 	using CastleTests.Components.DictionaryAdapter.Tests;
 
 	using NUnit.Framework;
-
-#if SILVERLIGHT
-	using Hashtable = System.Collections.Generic.Dictionary<object, object>;
-#endif
 
 	[TestFixture]
 	public class DictionaryAdapterFactoryTestCase
@@ -33,12 +30,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		private IDictionary dictionary;
 		private DictionaryAdapterFactory factory;
 
-#if FEATURE_XUNITNET
-		public DictionaryAdapterFactoryTestCase()
-#else
 		[SetUp]
 		public void SetUp()
-#endif
 		{
 			dictionary = new Hashtable();
 			factory = new DictionaryAdapterFactory();
@@ -429,7 +422,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			dictionary["Double"] = string.Format("{0}", 3.14D);
 			dictionary["Decimal"] = string.Format("{0}", 100M);
 			dictionary["String"] = "Hello World";
-			dictionary["DateTime"] = now.ToShortDateString();
+			dictionary["DateTime"] = now.ToString("d");
 			dictionary["Guid"] = guid.ToString();
 
 			var conversions = factory.GetAdapter<IConversions>(dictionary);
@@ -441,10 +434,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(now.Date, conversions.DateTime.Date);
 			Assert.AreEqual(guid, conversions.Guid);
 		}
-
-#if SILVERLIGHT
-		[Ignore("Conversion of phone is not working. fixme")]
-#endif
 
 		[Test]
 		public void UpdateAdapter_WithDefaultConversions_WorksFine()
@@ -465,11 +454,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(string.Format("{0}", 98.6), dictionary["Float"]);
 			Assert.AreEqual(string.Format("{0}", 3.14D), dictionary["Double"]);
 			Assert.AreEqual(string.Format("{0}", 100M), dictionary["Decimal"]);
-#if SILVERLIGHT // SL impl limitation
-			Assert.AreEqual(today.ToString(), dictionary["DateTime"]);
-#else
-			Assert.AreEqual(today.ToShortDateString(), dictionary["DateTime"]);
-#endif
+			Assert.AreEqual(today.ToString("d"), dictionary["DateTime"]);
 			Assert.AreEqual(guid.ToString(), dictionary["Guid"]);
 			Assert.AreEqual("2124751012,22", dictionary["Phone"]);
 		}
@@ -484,7 +469,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			dictionary["NullFloat"] = string.Format("{0}", 98.6);
 			dictionary["NullDouble"] = string.Format("{0}", 3.14D);
 			dictionary["NullDecimal"] = string.Format("{0}", 100M);
-			dictionary["NullDateTime"] = now.Value.ToShortDateString();
+			dictionary["NullDateTime"] = now.Value.ToString("d");
 			dictionary["NullGuid"] = guid.ToString();
 
 			var conversions = factory.GetAdapter<IConversions>(dictionary);
@@ -514,11 +499,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(string.Format("{0}", 98.6), dictionary["NullFloat"]);
 			Assert.AreEqual(string.Format("{0}", 3.14D), dictionary["NullDouble"]);
 			Assert.AreEqual(string.Format("{0}", 100M), dictionary["NullDecimal"]);
-#if SILVERLIGHT // SL impl limitation
-			Assert.AreEqual(today.Value.ToString(), dictionary["NullDateTime"]);
-#else
-			Assert.AreEqual(today.Value.ToShortDateString(), dictionary["NullDateTime"]);
-#endif
+			Assert.AreEqual(today.Value.ToString("d"), dictionary["NullDateTime"]);
 			Assert.AreEqual(guid.ToString(), dictionary["NullGuid"]);
 		}
 
@@ -552,10 +533,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsNull(dictionary["NullGuid"]);
 		}
 
-#if SILVERLIGHT
-		[Ignore("String lists don't seem to work under Silverlight! - fixme")]
-#endif
-
 		[Test]
 		public void ReadAdapter_WithStringLists_WorksFine()
 		{
@@ -581,10 +558,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(3, ages[3]);
 			Assert.AreEqual(1, ages[4]);
 		}
-
-#if SILVERLIGHT
-		[Ignore("String lists don't seem to work under Silverlight! - fixme")]
-#endif
 
 		[Test]
 		public void UpdateAdapter_WithStringLists_WorksFine()
@@ -728,7 +701,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.Name = "Craig";
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		public void CanCancelPropertyChanges()
 		{
@@ -738,7 +710,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			person.Name = "Craig";
 			Assert.AreEqual(null, person.Name);
 		}
-#endif
 
 		[Test]
 		public void WillRaisePropertyChangedEventWhenNestedPropertyChanged()
@@ -767,7 +738,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			container.Item.Name = "Craig";
 		}
 
-#if !SILVERLIGHT //no BindingList in Silverlight
+#if FEATURE_BINDINGLIST
 
 		[Test]
 		public void WillPropagatePropertyChangedEventWhenBindingListPropertyChanged()
@@ -1123,6 +1094,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsTrue(((IDictionaryAdapter)name).Validators.OfType<TestDictionaryValidator>().Any());
 		}
 
+#if FEATURE_IDATAERRORINFO
 		[Test]
 		public void CanValidateAndObtainDataErrorInformation()
 		{
@@ -1188,6 +1160,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			name.LastName = "Monster";
 			Assert.IsTrue(notifyCalled);
 		}
+#endif
 
 		[Test]
 		public void CanCreateDictionaryAdapterFromExistingAdapter()
@@ -1257,7 +1230,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsNotNull(container.Phone);
 		}
 
-#if !SILVERLIGHT //no BindingList in Silverlight
+#if FEATURE_BINDINGLIST
 
 		[Test]
 		public void CanAddBindingListItemsOnDemand()
@@ -1321,7 +1294,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		public void CanDetermineTheAdaptedInterface()
 		{
 			var person = factory.GetAdapter<IPerson>(dictionary);
-			var type = person.GetType().GetCustomAttributes(
+			var type = person.GetType().GetTypeInfo().GetCustomAttributes(
 				typeof(DictionaryAdapterAttribute), false).Cast<DictionaryAdapterAttribute>()
 				.FirstOrDefault();
 			Assert.IsNotNull(type);

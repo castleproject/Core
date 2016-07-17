@@ -48,9 +48,8 @@ namespace Castle.DynamicProxy.Contributors
 
 			foreach (var @interface in interfaces)
 			{
-				var item = new InterfaceMembersOnClassCollector(@interface,
-				                                                true,
-				                                                targetType.GetInterfaceMap(@interface)) { Logger = Logger };
+				var item = new InterfaceMembersOnClassCollector(@interface, true,
+					targetType.GetTypeInfo().GetRuntimeInterfaceMap(@interface)) { Logger = Logger };
 				item.CollectMembersToProxy(hook);
 				yield return item;
 			}
@@ -120,7 +119,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			var scope = @class.ModuleScope;
 			var key = new CacheKey(
-				typeof(Delegate),
+				typeof(Delegate).GetTypeInfo(),
 				targetType,
 				new[] { method.MethodOnTarget.ReturnType }
 					.Concat(ArgumentsUtil.GetTypes(method.MethodOnTarget.GetParameters())).

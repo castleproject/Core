@@ -1,8 +1,16 @@
-# EditorConfig is awesome: http://EditorConfig.org
-
-# top-most EditorConfig file
 root = true
 
-# Unix-style newlines with a newline ending every file
 [*]
 indent_style = tab
+
+[*.csproj]
+indent_style = space
+indent_size = 2
+
+[*.cs]
+indent_style = tab
+indent_size = 4
+
+[{project,global}.json]
+indent_style = space
+indent_size = 2

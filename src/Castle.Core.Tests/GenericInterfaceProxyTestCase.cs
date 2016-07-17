@@ -403,35 +403,29 @@ namespace Castle.DynamicProxy.Tests
 			);
 		}
 
-		[Test(Description = "There is a strange CLR bug resulting from our loading the tokens of methods in generic types. "
-		                    + "This test ensures we do not trigger it.")]
-		//[Ignore("Currently, we trigger the bug, and work around it - see MethodFinder")]
+		[Test(Description =
+			"There is a strange CLR bug resulting from our loading the tokens of methods in generic types. " +
+			"This test ensures we do not trigger it.")]
 		public void TypeGetMethodsIsStable()
 		{
 			ProxyWithGenInterfaceWithBase();
 			Assert.AreEqual(4, typeof(IGenInterfaceHierarchyBase<int>).GetMethods().Length);
 		}
 
-		[Test(Description = "There is a strange CLR bug resulting from our loading the tokens of methods in generic types. "
-		                    + "This test ensures we correctly work around it.")]
+		[Test(Description =
+			"There is a strange CLR bug resulting from our loading the tokens of methods in generic types. " +
+			"This test ensures we correctly work around it.")]
 		public void MethodFinderIsStable()
 		{
 			ProxyWithGenInterfaceWithBase();
-			Assert.AreEqual(4,
-			                MethodFinder.GetAllInstanceMethods(typeof(IGenInterfaceHierarchyBase<int>),
-			                                                   BindingFlags.Public | BindingFlags.Instance).Length);
+			Assert.AreEqual(4, MethodFinder.GetAllInstanceMethods(
+				typeof(IGenInterfaceHierarchyBase<int>), BindingFlags.Public | BindingFlags.Instance).Length);
 		}
 
-		[Test(Description = "There is a strange CLR bug resulting from our loading the tokens of methods in generic types. "
-		                    +
-		                    "This test ensures we do not trigger it across AppDomains. If we do, MethodFinder must provide a cross-AppDomain workaround."
-			)]
-#if SILVERLIGHT
-		[Ignore("Cannot create seperate AppDomain in silverlight.")]
-		public void TypeGetMethodsIsStableInDifferentAppDomains()
-		{
-		}
-#else
+#if FEATURE_APPDOMAIN
+		[Test(Description =
+			"There is a strange CLR bug resulting from our loading the tokens of methods in generic types. " +
+			"This test ensures we do not trigger it across AppDomains. If we do, MethodFinder must provide a cross-AppDomain workaround.")]
 		public void TypeGetMethodsIsStableInDifferentAppDomains()
 		{
 			ProxyWithGenInterfaceWithBase();

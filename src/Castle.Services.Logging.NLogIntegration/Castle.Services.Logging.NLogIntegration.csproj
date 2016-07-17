@@ -2,8 +2,7 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <RootPath Condition=" '$(RootPath)' == '' ">$(MSBuildProjectDirectory)\..\..</RootPath>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkProfile />
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -31,7 +30,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -57,7 +56,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -83,7 +82,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -105,7 +104,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\NET45-Release\</OutputPath>
-    <DefineConstants>TRACE;FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -118,7 +117,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <OutputPath>bin\NET35-Debug\</OutputPath>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>TRACE;FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -132,7 +131,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <OutputPath>bin\NET35-Release\</OutputPath>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>TRACE;FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -140,70 +139,6 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Release|AnyCPU'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
-    <OutputPath>bin\SL40-Release\</OutputPath>
-    <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>TRACE;SILVERLIGHT SL40 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
-    <BaseAddress>285212672</BaseAddress>
-    <Optimize>true</Optimize>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <FileAlignment>4096</FileAlignment>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\SL40-Release\Castle.Services.Logging.NLogIntegration.XML</DocumentationFile>
-    <NoWarn>1685</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Debug|AnyCPU'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <MSBuildTargets>Silverlight 4.0</MSBuildTargets>
-    <OutputPath>bin\SL40-Debug\</OutputPath>
-    <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT SL40 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
-    <BaseAddress>285212672</BaseAddress>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <FileAlignment>4096</FileAlignment>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <NoWarn>1685</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50-Release|AnyCPU'">
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
-    <MSBuildTargets>Silverlight 5.0</MSBuildTargets>
-    <OutputPath>bin\SL50-Release\</OutputPath>
-    <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>TRACE;SILVERLIGHT SL50 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
-    <BaseAddress>285212672</BaseAddress>
-    <Optimize>true</Optimize>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <FileAlignment>4096</FileAlignment>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\SL50-Release\Castle.Services.Logging.NLogIntegration.XML</DocumentationFile>
-    <NoWarn>1685</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50-Debug|AnyCPU'">
-    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
-    <MSBuildTargets>Silverlight 5.0</MSBuildTargets>
-    <OutputPath>bin\SL50-Debug\</OutputPath>
-    <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>TRACE;DEBUG;SILVERLIGHT SL50 FEATURE_LEGACY_REFLECTION_API</DefineConstants>
-    <BaseAddress>285212672</BaseAddress>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <FileAlignment>4096</FileAlignment>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <NoWarn>1685</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
@@ -218,13 +153,11 @@
     <Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ExtendedNLogFactory.cs" />
     <Compile Include="ExtendedNLogLogger.cs" />
     <Compile Include="GlobalContextProperties.cs" />
     <Compile Include="NLogFactory.cs" />
     <Compile Include="NLogLogger.cs" />
-    <Compile Include="SecurityAssemblyInfo.cs" />
     <Compile Include="ThreadContextProperties.cs" />
     <Compile Include="ThreadContextStack.cs" />
     <Compile Include="ThreadContextStacks.cs" />
@@ -240,12 +173,11 @@
       <Name>Castle.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition="$(MSBuildTargets) != 'Silverlight 5.0' and $(MSBuildTargets) != 'Silverlight 4.0'" />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v4.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 4.0'" />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\v5.0\Microsoft.Silverlight.CSharp.targets" Condition="$(MSBuildTargets) == 'Silverlight 5.0'" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(RootPath)\Settings.proj" />
   <PropertyGroup>
     <ProjectName>Castle.Services.Logging.NLogIntegration</ProjectName>
+    <DefineConstants>$(DefineConstants) $(AdditionalDefineConstants)</DefineConstants>
   </PropertyGroup>
   <Import Project="$(BuildScriptsPath)\Castle.Common.targets" />
   <PropertyGroup>

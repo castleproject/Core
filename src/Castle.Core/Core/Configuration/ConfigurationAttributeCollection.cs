@@ -23,31 +23,11 @@ namespace Castle.Core.Configuration
 	[Serializable]
 #endif
 	public class ConfigurationAttributeCollection
-#if SILVERLIGHT
-		: System.Collections.Generic.Dictionary<string, string>
-#else
 		: System.Collections.Specialized.NameValueCollection
-#endif
 	{
 		public ConfigurationAttributeCollection()
 		{
 		}
-
-#if SILVERLIGHT
-		public new string this[string key]
-		{
-			get
-			{
-				string result;
-				TryGetValue(key, out result);
-				return result;
-			}
-			set
-			{
-				base[key] = value;
-			}
-		}
-#endif
 
 #if FEATURE_SERIALIZATION
 		protected ConfigurationAttributeCollection(SerializationInfo info, StreamingContext context) : base(info, context)

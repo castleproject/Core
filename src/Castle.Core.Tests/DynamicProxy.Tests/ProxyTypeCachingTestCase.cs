@@ -49,24 +49,8 @@ namespace Castle.DynamicProxy.Tests
 			new object[] { ProxyKind.WithTargetInterface }
 		};
 
-#if SILVERLIGHT
 		[Test]
-		public void Duplicated_interfaces_not_significant_SILVERLIGHT()
-		{
-			foreach (object[] kind in AllKinds)
-			{
-				Duplicated_interfaces_not_significant((ProxyKind)kind[0]);
-			}
-		}
-
-#else
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
-		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
-#endif
 		public void Duplicated_interfaces_not_significant(ProxyKind kind)
 		{
 			var first = Proxy(kind, typeof(IOne), typeof(IOne));
@@ -74,23 +58,8 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(first.GetType(), second.GetType());
 		}
 
-#if SILVERLIGHT
 		[Test]
-		public void Explicit_inclusion_of_base_interfaces_not_significant_SILVERLIGHT()
-		{
-			foreach (object[] kind in AllKinds)
-			{
-				Explicit_inclusion_of_base_interfaces_not_significant((ProxyKind)kind[0]);
-			}
-		}
-#else
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
-		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
-#endif
 		public void Explicit_inclusion_of_base_interfaces_not_significant(ProxyKind kind)
 		{
 			var first = Proxy(kind, typeof(IBase), typeof(ISub1));
@@ -98,23 +67,8 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(first.GetType(), second.GetType());
 		}
 
-#if SILVERLIGHT
 		[Test]
-		public void Order_of_additional_interfaces_not_significant_SILVERLIGHT()
-		{
-			foreach (object[] kind in AllKinds)
-			{
-				Order_of_additional_interfaces_not_significant((ProxyKind)kind[0]);
-			}
-		}
-#else
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
-		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
-#endif
 		public void Order_of_additional_interfaces_not_significant(ProxyKind kind)
 		{
 			var first = Proxy(kind, typeof(IOne), typeof(ITwo));

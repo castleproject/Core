@@ -21,9 +21,7 @@ namespace Castle.Components.DictionaryAdapter
 	/// Contract for managing Dictionary adapter notifications.
 	/// </summary>
 	public interface IDictionaryNotify :
-#if !SILVERLIGHT
 		INotifyPropertyChanging,
-#endif
 		INotifyPropertyChanged
 	{
 		bool CanNotify { get; }

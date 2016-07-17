@@ -72,23 +72,8 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsNull(result);
 		}
 
-#if SILVERLIGHT
 		[Test]
-		public void AdditionalInterfaces_method()
-		{
-			foreach (object[] kind in AllKinds)
-			{
-				AdditionalInterfaces_method((ProxyKind)kind[0]);
-			}
-		}
-#else
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
-		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
-#endif
 		public void AdditionalInterfaces_method(ProxyKind kind)
 		{
 			var proxy = CreateProxyWithAdditionalInterface<IWithRefOut>(kind);

@@ -19,11 +19,11 @@ namespace Castle.DynamicProxy
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
-#if SILVERLIGHT
-	public class StandardInterceptor : IInterceptor
-#else
-	public class StandardInterceptor : MarshalByRefObject, IInterceptor
+	public class StandardInterceptor :
+#if FEATURE_REMOTING
+		MarshalByRefObject,
 #endif
+		IInterceptor
 	{
 		public void Intercept(IInvocation invocation)
 		{

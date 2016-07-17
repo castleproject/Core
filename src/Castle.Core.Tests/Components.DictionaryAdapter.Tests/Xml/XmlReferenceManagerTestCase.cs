@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT // Until support for other platforms is verified
 namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
@@ -403,12 +402,8 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 				OtherB = new TX(),
 				OtherC = new TX();
 
-#if FEATURE_XUNITNET
-			protected TestScenario()
-#else
 			[SetUp]
 			public void SetUp()
-#endif
 			{
 				OriginalXml = GetXmlText();
 				Document    = Xml(OriginalXml);
@@ -490,4 +485,3 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		public sealed class TY { }
     }
 }
-#endif
