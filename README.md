@@ -40,6 +40,7 @@ The following conditional compilation symbols (vertical) are currently defined f
 Symbol                              | NET35              | NET40              | NET45              | .NET Core
 ----------------------------------- | ------------------ | ------------------ | ------------------ | ------------------
 `FEATURE_APPDOMAIN`                 | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_APTCA`                     | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:
 `FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_BINDINGLIST`               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_DICTIONARYADAPTER_XML`     | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
@@ -59,7 +60,7 @@ Symbol                              | NET35              | NET40              | 
 `FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_TARGETEXCEPTION`           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_TEST_COM`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_TEST_SERILOGINTEGRATION`   | :no_entry_sign:    | :white_check_mark: | :white_check_mark: | :white_check_mark:
+`FEATURE_TEST_SERILOGINTEGRATION`   | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark: | :white_check_mark:
 ---                                 |                    |                    |                    | 
 `DOTNET35`                          | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:
 `DOTNET40`                          | :no_entry_sign:    | :white_check_mark: | :white_check_mark: | :no_entry_sign:
