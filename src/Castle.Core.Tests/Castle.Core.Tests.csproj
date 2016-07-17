@@ -188,7 +188,6 @@
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\Behaviors\XmlAttributeBehaviorTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\Behaviors\XmlElementBehaviorTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\Behaviors\XmlIncludeBehaviorTestCase.cs" />
-    <Compile Include="Components.DictionaryAdapter.Tests\Xml\Behaviors\XmlSelfBehaviorTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\Behaviors\XPathBehaviorTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlAdapterAcceptanceTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\Behaviors\DefaultBehaviorTestCase.cs" />
@@ -227,7 +226,6 @@
     <Compile Include="Components.DictionaryAdapter.Tests\Phone.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\PhoneConverter.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\XmlStructureComparer.cs" />
-    <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlApis\DummyLazy.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlApis\MockXmlIncludedTypeMap.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlApis\MockXPathFunction.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\Xml\XmlApis\MockXPathVariable.cs" />

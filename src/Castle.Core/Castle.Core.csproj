@@ -550,9 +550,6 @@
       <Link>CastleKey.snk</Link>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Components.DictionaryAdapter\Xml\Internal\Cursors\XLinq\" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(RootPath)\Settings.proj" />
   <PropertyGroup>
