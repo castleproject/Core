@@ -119,6 +119,7 @@
     <Compile Include="Compatibility\IntrospectionExtensions.cs" />
     <Compile Include="Compatibility\NetCoreReflectionExtensions.cs" />
     <Compile Include="Compatibility\RuntimeReflectionExtensions.cs" />
+    <Compile Include="Components.DictionaryAdapter\DynamicDictionary.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ListProjectionDebugView.cs" />
     <Compile Include="Components.DictionaryAdapter\Util\ICollectionAdapter.cs" />
     <Compile Include="Components.DictionaryAdapter\Attributes\ReferenceAttribute.cs" />
