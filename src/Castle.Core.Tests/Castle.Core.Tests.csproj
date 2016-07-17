@@ -120,20 +120,16 @@
       <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\NLog.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <Choose>
-    <When Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">
-      <ItemGroup>
-        <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-          <SpecificVersion>False</SpecificVersion>
-          <HintPath>..\..\lib\net45\Serilog.dll</HintPath>
-        </Reference>
-        <Reference Include="Serilog.Sinks.TextWriter, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-          <SpecificVersion>False</SpecificVersion>
-          <HintPath>..\..\lib\net45\Serilog.Sinks.TextWriter.dll</HintPath>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
+  <ItemGroup>
+    <Reference Include="Serilog">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\Serilog.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog.Sinks.TextWriter">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\Serilog.Sinks.TextWriter.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="adodb, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>

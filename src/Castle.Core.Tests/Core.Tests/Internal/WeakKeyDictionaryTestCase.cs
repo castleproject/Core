@@ -938,7 +938,9 @@ namespace CastleTests.Core.Tests.Internal
 
 		private void TriggerAutomaticTrim()
 		{
+#pragma warning disable 219
 			int dummy;
+#pragma warning restore 219
 			for (var i = 0; i < 128; i++)
 			{
 				dummy = Dictionary.Count;

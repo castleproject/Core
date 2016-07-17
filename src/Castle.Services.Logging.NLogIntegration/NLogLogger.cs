@@ -16,12 +16,10 @@ namespace Castle.Services.Logging.NLogIntegration
 {
 	using System;
 
-	using Castle.Core.Logging;
-
 	using NLog;
 
 	/// <summary>
-	///   Implementation of <see cref="ILogger" /> for NLog.
+	///   Implementation of <see cref="Castle.Core.Logging.ILogger" /> for NLog.
 	/// </summary>
 	public class NLogLogger : Castle.Core.Logging.ILogger
 	{

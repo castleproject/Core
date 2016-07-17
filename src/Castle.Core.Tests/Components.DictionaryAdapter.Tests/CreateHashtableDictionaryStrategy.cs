@@ -16,7 +16,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 {
 	using System;
 	using System.Collections;
-	using System.Collections.Generic;
 
 	public class CreateHashtableStrategy : DictionaryBehaviorAttribute, IDictionaryInitializer,
 										   IDictionaryCreateStrategy
@@ -29,7 +28,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		object IDictionaryCreateStrategy.Create(IDictionaryAdapter adapter, Type type, IDictionary dictionary)
 		{
 			dictionary = dictionary ?? new Hashtable();
-			return adapter.This.Factory.GetAdapter(type, dictionary, adapter.This.Descriptor); ;
+			return adapter.This.Factory.GetAdapter(type, dictionary, adapter.This.Descriptor);
 		}
 	}
 }

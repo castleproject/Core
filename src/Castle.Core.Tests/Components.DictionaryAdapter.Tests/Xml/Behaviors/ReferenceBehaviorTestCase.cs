@@ -53,7 +53,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				);
 				var foo = Create<IFoo>(xml);
 
+#pragma warning disable 219
 				IFoo dummy;
+#pragma warning restore 219
 				Assert.Throws<KeyNotFoundException>(() =>
 					dummy = foo.Two);
 			}
