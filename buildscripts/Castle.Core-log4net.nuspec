@@ -10,7 +10,7 @@
     <projectUrl>http://www.castleproject.org/</projectUrl>
     <iconUrl>http://www.castleproject.org/img/castle-logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Castle logging services integration with log4net 1.2.10</description>
+    <description>Castle logging services integration with log4net</description>
     <copyright>Copyright 2004-$CurrentYear$ Castle Project - http://www.castleproject.org/</copyright>
     <tags>castle, logging, log4net</tags>
     <dependencies>
