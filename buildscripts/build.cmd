@@ -15,6 +15,8 @@ REM limitations under the License.
 REM ****************************************************************************
 
 IF NOT EXIST %~dp0..\Settings.proj GOTO msbuild_not_configured
+REM Invoke the following to update the version informaiton.
+PowerShell.exe -NoProfile -NonInteractive -NoLogo -ExecutionPolicy Unrestricted -Command %~dp0Set-VersionInfo.ps1
 
 REM Set Framework version based on passed in parameter
 IF "%1" == "" goto no_nothing
