@@ -12,7 +12,7 @@ See the [Releases](https://github.com/castleproject/Core/releases).
 
 ## License
 
-Castle Core is &copy; 2004-2015 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
+Castle Core is &copy; 2004-2016 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
 
 ## Building
 
@@ -28,6 +28,7 @@ build NETCORE
 ### Mono
 
 Castle Core works with some limitations and defects on Mono 4.0.2+, previous 4.x releases have serious runtime bugs that cause runtime crashes. Mono 3.x releases used to work well, but are not supported.
+Check [our issue tracker](https://github.com/castleproject/Core/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20mono) for known Mono defects.
 
 ```
 build MONO
@@ -89,5 +90,5 @@ Symbol                              | NET35              | NET40              | 
 * `FEATURE_TEST_COM` - enables COM Interop tests.
 * `FEATURE_TEST_SERILOGINTEGRATION` - enables Serilog intergration tests.
 
-The `__MonoCS__` symbol is used only in unit tests when compiled on Mono to work around Mono defects and non-Windows differences,
-however we are trying to move away from platform specific symbols as much as possible.
+The `__MonoCS__` symbol is used only in unit tests when compiled on Mono to work around Mono defects and limitations,
+however we are moving away from platform specific symbols as much as possible.
