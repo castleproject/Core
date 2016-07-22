@@ -16,7 +16,6 @@
     <dependencies>
       <dependency id="Castle.Core" version="$CastleCoreVersion$" />
       <dependency id="Serilog" version="2.0.0" />
-      <dependency id="Serilog.Sinks.ColoredConsole" version="2.0.0" />
     </dependencies>
   </metadata>
   <files>
