@@ -20,7 +20,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="License.txt" />
+    <file src="LICENSE" />
     <file src="build/NET45/NET45-Release/pkg/bin/Castle.Services.Logging.SerilogIntegration.dll" target="lib/net45" />
     <file src="build/NET45/NET45-Release/pkg/bin/Castle.Services.Logging.SerilogIntegration.pdb" target="lib/net45" />
     <file src="build/NETCORE/Release/pkg/bin/Castle.Services.Logging.SerilogIntegration.dll" target="lib/netstandard1.3" />

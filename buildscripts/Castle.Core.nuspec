@@ -47,7 +47,7 @@
   <files>
     <file src="BreakingChanges.txt" />
     <file src="Changes.txt" />
-    <file src="License.txt" />
+    <file src="LICENSE" />
     <file src="build/NET35/NET35-Release/pkg/bin/Castle.Core.dll" target="lib/net35" />
     <file src="build/NET35/NET35-Release/pkg/bin/Castle.Core.pdb" target="lib/net35" />
     <file src="build/NET35/NET35-Release/pkg/bin/Castle.Core.xml" target="lib/net35" />
