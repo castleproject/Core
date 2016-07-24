@@ -100,6 +100,46 @@ Bugfixes:
 - fixed DYNPROXY-162 - ref or out parameters can not be passed back if proxied method throw an exception
 
 ## 3.0.0 beta 1 (2011-08-14)
+
+Breaking Changes:
+* Removed overloads of logging methods that were taking format string from ILogger and ILogger and IExtendedLogger and didn't have word Format in their name.
+  * For example:
+    * void Error(string format, params object[] args); // was removed
+    * void ErrorFormat(string format, params object[] args); //use this one instead
+  * impact - low
+  * fixability - medium
+  * description - To minimize confusion and duplication those methods were removed.
+  * fix - Use methods that have explicit "Format" word in their name and same signature.
+* Removed WebLogger and WebLoggerFactory
+  * impact - low
+  * fixability - medium
+  * description - To minimize management overhead the classes were removed so that only single Client Profile version of Castle.Core can be distributed.
+  * fix - You can use NLog or Log4Net web logger integration, or reuse implementation of existing web logger and use it as a custom logger.
+* Removed obsolete overload of ProxyGenerator.CreateClassProxy
+  * impact - low
+  * fixability - trivial
+  * description - Deprecated overload of ProxyGenerator.CreateClassProxy was removed to keep the method consistent with other methods and to remove confusion
+  * fix - whenever removed overload was used, use one of the other overloads.
+* IProxyGenerationHook.NonVirtualMemberNotification method was renamed
+  * impact - high
+  * fixability - easy
+  * description - to accommodate class proxies with target method NonVirtualMemberNotification on IProxyGenerationHook type was renamed to more accurate
+    NonProxyableMemberNotification 	since for class proxies with target not just methods but also fields and other member that break the abstraction will
+    be passed to this method.
+  * fix - whenever NonVirtualMemberNotification is used/implemented change the method name to
+	  NonProxyableMemberNotification. Implementors should also accommodate possibility that not
+	  only MethodInfos will be passed as method's second parameter.
+* DynamicProxy will now allow to intercept members of System.Object
+  * impact - very low
+  * fixability - easy
+  * description - to allow scenarios like mocking of System.Object members, DynamicProxy will not
+	  disallow proxying of these methods anymore. AllMethodsHook (default IProxyGenerationHook)
+	  will still filter them out though.
+  * fix - whenever custom IProxyGenerationHook is used, user should account for System.Object's
+	  members being now passed to ShouldInterceptMethod and NonVirtualMemberNotification methods
+	  and if neccessary update the code to handle them appropriately.
+
+Bugfixes:
 - fixed CORE-37 - TAB characters in the XML Configuration of a component parameter is read as String.Empty
 - fixed DYNPROXY-161 - Strong Named DynamicProxy Assembly Not Available in Silverligh
 - fixed DYNPROXY-159 - Sorting MemberInfo array for serialization has side effects
