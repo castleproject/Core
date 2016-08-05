@@ -8,7 +8,7 @@ Breaking Changes:
 Enhancements:
 * Add IProxyGenerator interface for the ProxyGenerator class (#215)
 
-## 4.0.0-beta001 (2016-07-17, [diff](https://github.com/castleproject/Core/compare/v4.0.0-alpha001...v4.0.0-beta001))
+## 4.0.0-beta001 (2016-07-17)
 
 Breaking Changes:
 * Update to log4net 1.2.15/2.0.5 (#199)
@@ -22,7 +22,7 @@ Enhancements:
 Bugfixes:
 * Fix target framework moniker in NuGet package for .NET Core (#174)
 
-## 4.0.0-alpha001 (2016-04-07, [diff](https://github.com/castleproject/Core/compare/v3.3.3...v4.0.0-alpha001))
+## 4.0.0-alpha001 (2016-04-07)
 
 Breaking Changes:
 * Remove all Silverlight support (#100, #150)
@@ -42,7 +42,7 @@ Bugfixes:
 * Fix ProxyGenerator cache does not take into account AdditionalAttributes (@cmerat, #77, #78)
 * Fix Castle.Services.Logging.SerilogIntegration.dll missing some assembly info attributes (@imzshh, #20, #82)
 
-## 3.3.3 (2014-11-06, [diff](http://github.com/castleproject/Core/compare/v3.3.2...v3.3.3))
+## 3.3.3 (2014-11-06)
 * Fix Serilog integration modifies LoggerConfiguration.MinimumLevel (#70)
 * Add SourceContext to the Serilog logger (@KevivL, #69)
 
