@@ -5,6 +5,9 @@
 Breaking Changes:
 * Rework Serilog integration to accept an ILogger rather than a LoggerConfiguration  to work correctly with Serilog (#142, #211)
 
+Enhancements:
+* Add IProxyGenerator interface for the ProxyGenerator class (#215)
+
 ## 4.0.0-beta001 (2016-07-17, [diff](https://github.com/castleproject/Core/compare/v4.0.0-alpha001...v4.0.0-beta001))
 
 Breaking Changes:
