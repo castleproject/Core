@@ -30,11 +30,7 @@ namespace Castle.Core.Internal
 		/// <returns></returns>
 		public static Lock Create()
 		{
-#if SILVERLIGHT
-			return new MonitorLock();
-#else
 			return new SlimReadWriteLock();
-#endif
 		}
 	}
 }

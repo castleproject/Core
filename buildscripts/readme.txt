@@ -1,5 +1,5 @@
 Thanks for downloading this Castle package.
-You can find full list of changes in Changes.txt
+You can find full list of changes in CHANGELOG.md
 
 Documentation (work in progress, contributions appreciated):
 DictionaryAdapter:  https://github.com/castleproject/Core/blob/master/docs/dictionaryadapter.md

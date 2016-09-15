@@ -14,7 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
-#if !SILVERLIGHT
+#if FEATURE_DICTIONARYADAPTER_XML
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
@@ -27,12 +27,8 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	{
 		private DictionaryAdapterFactory factory;
 
-#if FEATURE_XUNITNET
-		public MemberwiseEqualityHashCodeStrategyTestCase()
-#else
 		[SetUp]
 		public void SetUp()
-#endif
 		{
 			factory = new DictionaryAdapterFactory();
 			GetAdapter<IPhone>();

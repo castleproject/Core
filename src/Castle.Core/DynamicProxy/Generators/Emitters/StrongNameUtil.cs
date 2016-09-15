@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
-#if !SILVERLIGHT
+#if FEATURE_SECURITY_PERMISSIONS
 	using System.Security;
 	using System.Security.Permissions;
 #endif
@@ -28,15 +28,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private static readonly IDictionary<Assembly, bool> signedAssemblyCache = new Dictionary<Assembly, bool>();
 		private static readonly object lockObject = new object();
 
-
-#if DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
 		[SecuritySafeCritical]
 #endif
 		static StrongNameUtil()
 		{
-#if SILVERLIGHT
-			CanStrongNameAssembly = true;
-#else
+#if FEATURE_SECURITY_PERMISSIONS
 			//idea after http://blogs.msdn.com/dmitryr/archive/2007/01/23/finding-out-the-current-trust-level-in-asp-net.aspx
 			try
 			{
@@ -47,9 +44,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				CanStrongNameAssembly = false;
 			}
+#else
+			CanStrongNameAssembly = true;
 #endif
 		}
-
 
 		public static bool IsAssemblySigned(this Assembly assembly)
 		{
@@ -72,12 +70,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static bool IsAnyTypeFromUnsignedAssembly(IEnumerable<Type> types)
 		{
-			return types.Any(t => t.Assembly.IsAssemblySigned() == false);
+			return types.Any(t => t.GetTypeInfo().Assembly.IsAssemblySigned() == false);
 		}
 
 		public static bool IsAnyTypeFromUnsignedAssembly(Type baseType, IEnumerable<Type> interfaces)
 		{
-			if (baseType != null && baseType.Assembly.IsAssemblySigned() == false)
+			if (baseType != null && baseType.GetTypeInfo().Assembly.IsAssemblySigned() == false)
 			{
 				return true;
 			}

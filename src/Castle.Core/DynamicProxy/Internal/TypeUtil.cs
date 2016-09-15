@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Internal
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
+	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Generators.Emitters;
 
@@ -42,7 +43,7 @@ namespace Castle.DynamicProxy.Internal
 				Debug.Assert(currentType != null);
 				var currentFields = currentType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 				fields.AddRange(currentFields);
-				currentType = currentType.BaseType;
+				currentType = currentType.GetTypeInfo().BaseType;
 			}
 
 			return fields.ToArray();
@@ -141,6 +142,16 @@ namespace Castle.DynamicProxy.Internal
 			return target.GetType();
 		}
 
+		public static Type[] AsTypeArray(this GenericTypeParameterBuilder[] typeInfos)
+		{
+			Type[] types = new Type[typeInfos.Length];
+			for (int i = 0; i < types.Length; i++)
+			{
+				types[i] = typeInfos[i].AsType();
+			}
+			return types;
+		}
+
 		public static bool IsFinalizer(this MethodInfo methodInfo)
 		{
 			return string.Equals("Finalize", methodInfo.Name) && methodInfo.GetBaseDefinition().DeclaringType == typeof(object);
@@ -158,11 +169,19 @@ namespace Castle.DynamicProxy.Internal
 
 		public static void SetStaticField(this Type type, string fieldName, BindingFlags additionalFlags, object value)
 		{
-			var flags = additionalFlags | BindingFlags.Static | BindingFlags.SetField;
+			var flags = additionalFlags | BindingFlags.Static;
+
+			FieldInfo field = type.GetField(fieldName, flags);
+			if (field == null)
+			{
+				throw new ProxyGenerationException(string.Format(
+					"Could not find field named '{0}' on type {1}. This is likely a bug in DynamicProxy. Please report it.",
+					fieldName, type));
+			}
 
 			try
 			{
-				type.InvokeMember(fieldName, flags, null, null, new[] { value });
+				field.SetValue(null, value);
 			}
 			catch (MissingFieldException e)
 			{
@@ -172,6 +191,7 @@ namespace Castle.DynamicProxy.Internal
 						fieldName,
 						type), e);
 			}
+#if FEATURE_TARGETEXCEPTION
 			catch (TargetException e)
 			{
 				throw new ProxyGenerationException(
@@ -180,6 +200,7 @@ namespace Castle.DynamicProxy.Internal
 						fieldName,
 						type), e);
 			}
+#endif
 			catch (TargetInvocationException e) // yes, this is not documented in MSDN. Yay for documentation
 			{
 				if ((e.InnerException is TypeInitializationException) == false)

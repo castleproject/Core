@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
-
 namespace Castle.Core.Logging
 {
 	using System;
@@ -32,17 +30,15 @@ namespace Castle.Core.Logging
 	{
 		public override ILogger Create(string name)
 		{
-			return new StreamLogger(name, new FileStream(name + ".log", FileMode.Append, FileAccess.Write), Encoding.Default);
+			return new StreamLogger(name, new FileStream(name + ".log", FileMode.Append, FileAccess.Write));
 		}
 
 		public override ILogger Create(string name, LoggerLevel level)
 		{
 			var logger =
-				new StreamLogger(name, new FileStream(name + ".log", FileMode.Append, FileAccess.Write), Encoding.Default);
+				new StreamLogger(name, new FileStream(name + ".log", FileMode.Append, FileAccess.Write));
 			logger.Level = level;
 			return logger;
 		}
 	}
 }
-
-#endif

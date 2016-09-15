@@ -16,7 +16,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 {
 	using System.Collections.Generic;
 
-#if !SILVERLIGHT && !DOTNET35
+#if !DOTNET35
 	public interface IBook
 	{
 		IDeweyDecimalNumber DDC { get; set; }

@@ -17,6 +17,7 @@ namespace Castle.Core.Internal
 	using System;
 	using System.Linq;
 	using System.Reflection;
+
 	using Castle.DynamicProxy.Generators.Emitters;
 
 	internal static class ExceptionMessageBuilder
@@ -29,7 +30,7 @@ namespace Castle.Core.Internal
 		/// <param name="typeToProxy">the type that couldn't be proxied</param>
 		public static string CreateMessageForInaccessibleType(Type inaccessibleType, Type typeToProxy)
 		{
-			var targetAssembly = typeToProxy.Assembly;
+			var targetAssembly = typeToProxy.GetTypeInfo().Assembly;
 
 			string strongNamedOrNotIndicator = " not"; // assume not strong-named
 			string assemblyToBeVisibleTo = "\"DynamicProxyGenAssembly2\""; // appropriate for non-strong-named
@@ -62,32 +63,18 @@ namespace Castle.Core.Internal
 
 		private static string GetAssemblyName(Assembly targetAssembly)
 		{
-#if SILVERLIGHT
-			// SILVERLIGHT doesn't allow us to call assembly.GetName()
-			var fullName = targetAssembly.FullName;
-			if (string.IsNullOrEmpty(fullName))
-			{
-				return fullName;
-			}
-			var index = fullName.IndexOf(", Version=", StringComparison.OrdinalIgnoreCase);
-			if (index > 0)
-			{
-				return fullName.Substring(0, index);
-			}
-			return fullName;
-#else
 			return targetAssembly.GetName().Name;
-#endif
 		}
 
 		private static bool ReferencesCastleCore(Assembly inspectedAssembly)
 		{
-#if SILVERLIGHT
-			// no way to check that in SILVERLIGHT, so we just fall back to the solution that will definitely work
-			return false;
-#else
+#if FEATURE_GET_REFERENCED_ASSEMBLIES
 			return inspectedAssembly.GetReferencedAssemblies()
 				.Any(r => r.FullName == Assembly.GetExecutingAssembly().FullName);
+#else
+			// .NET Core does not provide an API to do this, so we just fall back to the solution that will definitely work.
+			// After all it is just an exception message.
+			return false;
 #endif
 		}
 	}

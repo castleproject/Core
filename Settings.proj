@@ -32,22 +32,53 @@ limitations under the License.
 	<!-- Project Properties -->
 	<PropertyGroup>
 		<ProjectName>Castle.Core</ProjectName>
-		<SilverlightBuild>false</SilverlightBuild>
-		<SilverlightBuild Condition="'$(BuildConfigKey)'== 'SL40' Or '$(BuildConfigKey)'== 'SL50'">true</SilverlightBuild>
-		
+
 		<!-- Used for display purposes. Should start with a space to look better -->
 		<BuildName></BuildName>
 		<!-- Versioning -->
-		<Project_Major>3</Project_Major>
-		<Project_Minor>3</Project_Minor>
-		<Project_Build>4</Project_Build>
+		<Project_Major>4</Project_Major>
+		<Project_Minor>0</Project_Minor>
+		<Project_Build>0</Project_Build>
 
 		<AssemblyVersion_Build>0</AssemblyVersion_Build> <!-- By default it's (and should be) equal to $(Project_Build) -->
 
 		<!-- Project folders -->
 		<BuildScriptsPath Condition="'$(BuildScriptsPath)' ==''">$(RootPath)\buildscripts</BuildScriptsPath>
-
 	</PropertyGroup>	
+
+	<!--
+	Conditional compilation symbols. This cannot be an item group, otherwise the item group doesn't
+	expand when included in a property and shows with the @() syntax in the project properties pane
+	and breaks ReSharper.
+	-->
+	<PropertyGroup>
+		<AdditionalDefineConstants></AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_APPDOMAIN</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_ASSEMBLYBUILDER_SAVE</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_BINDINGLIST</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_DICTIONARYADAPTER_XML</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_EMIT_CUSTOMMODIFIERS</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_EVENTLOG</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_GAC</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_GET_REFERENCED_ASSEMBLIES</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_IDATAERRORINFO</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_ISUPPORTINITIALIZE</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_LISTSORT</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_REMOTING</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_SECURITY_PERMISSIONS</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_SERIALIZATION</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_SMTP</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_SYSTEM_CONFIGURATION</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_TARGETEXCEPTION</AdditionalDefineConstants>
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_TEST_COM</AdditionalDefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' != 'NET45-Debug' and '$(Configuration)' != 'NET45-Release' ">
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_LEGACY_REFLECTION_API</AdditionalDefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)' == 'NET45-Debug' or '$(Configuration)' == 'NET45-Release' ">
+		<AdditionalDefineConstants>$(AdditionalDefineConstants) FEATURE_TEST_SERILOGINTEGRATION</AdditionalDefineConstants>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- 
@@ -61,8 +92,6 @@ limitations under the License.
 		<PackageFiles Include="$(OutputPath)NLog.xml"  Condition="Exists('$(OutputPath)NLog.xml')"/>
 		<PackageFiles Include="$(OutputPath)Serilog.dll" Condition="Exists('$(OutputPath)Serilog.dll')"/>
 		<PackageFiles Include="$(OutputPath)Serilog.xml" Condition="Exists('$(OutputPath)Serilog.xml')"/>
-		<PackageFiles Include="$(OutputPath)Serilog.FullNetFX.dll" Condition="Exists('$(OutputPath)Serilog.FullNetFX.dll')"/>
-		<PackageFiles Include="$(OutputPath)Serilog.FullNetFX.xml" Condition="Exists('$(OutputPath)Serilog.FullNetFX.xml')"/>
 	</ItemGroup>
 
 	<Target Name="_InitializeDynamicProperties">
@@ -86,12 +115,6 @@ limitations under the License.
 	<Import
 		Project="$(RootPath)\Settings-$(TargetFrameworkVersion).proj"
 		Condition="'$(TargetFrameworkVersion)' != '' and Exists('$(RootPath)\Settings-$(TargetFrameworkVersion).proj')"
-		/>
-
-	<!-- Import Silverlight specific settings -->
-	<Import
-		Project="$(RootPath)\Settings-SL.proj"
-		Condition="'$(SilverlightBuild)' == 'true' and Exists('$(RootPath)\Settings-SL.proj')"
 		/>
 
 </Project>

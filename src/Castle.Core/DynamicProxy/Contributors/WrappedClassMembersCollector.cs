@@ -37,13 +37,6 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
 		{
-#if SILVERLIGHT
-			if(method.IsFamily)
-			{
-				// we can't proxy protected methods like this on Silverlight
-				return null;
-			}
-#endif
 			if (method.IsAccessible() == false)
 			{
 				return null;
@@ -62,7 +55,7 @@ namespace Castle.DynamicProxy.Contributors
 		protected bool IsGeneratedByTheCompiler(FieldInfo field)
 		{
 			// for example fields backing autoproperties
-			return Attribute.IsDefined(field, typeof(CompilerGeneratedAttribute));
+			return field.IsDefined(typeof(CompilerGeneratedAttribute));
 		}
 
 		protected virtual bool IsOKToBeOnProxy(FieldInfo field)

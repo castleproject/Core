@@ -16,11 +16,13 @@ namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Diagnostics;
+	using System.Linq;
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
 	public class InvocationWithGenericDelegateContributor : IInvocationCreationContributor
@@ -62,9 +64,10 @@ namespace Castle.DynamicProxy.Contributors
 
 		private Reference GetDelegate(AbstractTypeEmitter invocation, MethodEmitter invokeMethodOnTarget)
 		{
-			var closedDelegateType = delegateType.MakeGenericType(invocation.GenericTypeParams);
+			var genericTypeParameters = invocation.GenericTypeParams.AsTypeArray();
+			var closedDelegateType = delegateType.MakeGenericType(genericTypeParameters);
 			var localReference = invokeMethodOnTarget.CodeBuilder.DeclareLocal(closedDelegateType);
-			var closedMethodOnTarget = method.MethodOnTarget.MakeGenericMethod(invocation.GenericTypeParams);
+			var closedMethodOnTarget = method.MethodOnTarget.MakeGenericMethod(genericTypeParameters);
 			var localTarget = new ReferenceExpression(targetReference);
 			invokeMethodOnTarget.CodeBuilder.AddStatement(
 				SetDelegate(localReference, localTarget, closedDelegateType, closedMethodOnTarget));

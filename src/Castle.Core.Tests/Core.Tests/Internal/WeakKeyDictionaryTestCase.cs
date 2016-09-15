@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
 namespace CastleTests.Core.Tests.Internal
 {
 	using System;
@@ -25,9 +24,6 @@ namespace CastleTests.Core.Tests.Internal
 
 	[TestFixture]
 	public class WeakKeyDictionaryTestCase
-#if FEATURE_XUNITNET
-		: IDisposable
-#endif
 	{
 		private WeakKeyDictionary<TKey, TValue> Dictionary;
 		private KeyValuePair<TKey, TValue> Item;
@@ -942,19 +938,17 @@ namespace CastleTests.Core.Tests.Internal
 
 		private void TriggerAutomaticTrim()
 		{
+#pragma warning disable 219
 			int dummy;
+#pragma warning restore 219
 			for (var i = 0; i < 128; i++)
 			{
 				dummy = Dictionary.Count;
 			}
 		}
 
-#if FEATURE_XUNITNET
-		public void Dispose()
-#else
 		[TearDown]
 		public void TearDown()
-#endif
 		{
 			Dictionary = null;
 			ResetItem();
@@ -974,4 +968,3 @@ namespace CastleTests.Core.Tests.Internal
 		private sealed class TValue { }
 	}
 }
-#endif

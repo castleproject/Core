@@ -56,23 +56,8 @@ namespace Castle.DynamicProxy.Tests
 			new object[] { ProxyKind.WithTargetInterface }
 		};
 
-#if SILVERLIGHT
 		[Test]
-		public void Mixin_method_Silverlight()
-		{
-			foreach (object[] kind in AllKinds)
-			{
-				Mixin_method((ProxyKind)kind[0]);
-			}
-		}
-#else
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
-		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
-#endif
 		public void Mixin_method(ProxyKind kind)
 		{
 			var proxy = CreateProxyWithMixin<ISimpleInterface>(kind, new ClassWithInterface());
@@ -81,23 +66,8 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(5, result);
 		}
 
-#if SILVERLIGHT
 		[Test]
-		public void Mixin_method_explicit_silverlight()
-		{
-			foreach (object[] kind in AllKinds)
-			{
-				Mixin_method_explicit((ProxyKind)kind[0]);
-			}
-		}
-#else
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
-		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
-#endif
 		public void Mixin_method_explicit(ProxyKind kind)
 		{
 			var proxy = CreateProxyWithMixin<ISimpleInterface>(kind, new SimpleInterfaceExplicit());
@@ -106,23 +76,8 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(5, result);
 		}
 
-#if SILVERLIGHT
 		[Test]
-		public void Mixin_method_generic_silverlight()
-		{
-			foreach (object[] kind in AllKinds)
-			{
-				Mixin_method_generic((ProxyKind)kind[0]);
-			}
-		}
-#else
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
-		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
-#endif
 		public void Mixin_method_generic(ProxyKind kind)
 		{
 			var proxy = CreateProxyWithMixin<IGenericInterface>(kind, new GenericClass());
@@ -131,23 +86,8 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(0, result);
 		}
 
-#if SILVERLIGHT
 		[Test]
-		public void Mixin_method_out_ref_parameters_silverlight()
-		{
-			foreach (object[] kind in AllKinds)
-			{
-				Mixin_method_out_ref_parameters((ProxyKind)kind[0]);
-			}
-		}
-#else
-#if FEATURE_XUNITNET
-		[Xunit.Theory]
-#else
-		[Test]
-#endif
 		[TestCaseSource("AllKinds")]
-#endif
 		public void Mixin_method_out_ref_parameters(ProxyKind kind)
 		{
 			var proxy = CreateProxyWithMixin<IWithRefOut>(kind, new WithRefOut());

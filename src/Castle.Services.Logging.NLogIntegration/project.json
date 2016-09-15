@@ -1,0 +1,30 @@
+{
+  "version": "0.0.0",
+  "description": "Castle.Services.Logging.NLogIntegration",
+  "authors": [ "" ],
+  "packOptions": {
+    "tags": [ "" ],
+    "projectUrl": "",
+    "licenseUrl": ""
+  },
+  "dependencies": {
+    "Castle.Core": { "target": "project", "version": "" },
+    "NLog": "4.4.0-beta13"
+  },
+  "frameworks": {
+    "netstandard1.3": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    }
+  },
+  "buildOptions": {
+    "warningsAsErrors": true,
+    "keyFile": "../../buildscripts/CastleKey.snk",
+    "compile": {
+      "includeFiles": [
+        "../../buildscripts/CommonAssemblyInfo.cs"
+      ]
+    }
+  }
+}

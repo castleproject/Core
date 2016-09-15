@@ -92,7 +92,6 @@ namespace Castle.DynamicProxy.Tests
 				"If these are not correctly overridden caching will fail to work causing performance problems."));
 		}
 
-#if !SILVERLIGHT
 		[Test]
 		public void ExcludedNonVirtualMethods()
 		{
@@ -104,12 +103,12 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateClassProxy<NonVirtualMethodClass>();
 
 			// Assert
-			Assert.True(logger.RecordedMessage(LoggerLevel.Debug, "Excluded non-virtual method ClassMethod on " +
+			Assert.True(logger.RecordedMessage(LoggerLevel.Debug, "Excluded non-overridable method ClassMethod on " +
 				"Castle.DynamicProxy.Tests.LoggingTestCase+NonVirtualMethodClass because it cannot be intercepted."));
-			Assert.True(logger.RecordedMessage(LoggerLevel.Debug, "Excluded sealed method InterfaceMethod on " +
+			Assert.True(logger.RecordedMessage(LoggerLevel.Debug, "Excluded non-overridable method InterfaceMethod on " +
 				"Castle.DynamicProxy.Tests.LoggingTestCase+NonVirtualMethodClass because it cannot be intercepted."));
 		}
-#endif
+
 		#region Test Types
 
 		public interface IEmptyInterface

@@ -133,11 +133,7 @@ namespace Castle.Core.Resource
 				}
 			}
 
-#if SILVERLIGHT
-			path = sb.ToString();
-#else
 			path = Environment.ExpandEnvironmentVariables(sb.ToString());
-#endif
 		}
 	}
 }

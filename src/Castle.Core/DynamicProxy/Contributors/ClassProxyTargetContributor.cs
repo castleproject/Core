@@ -24,6 +24,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
 	public class ClassProxyTargetContributor : CompositeTypeContributor
@@ -48,9 +49,8 @@ namespace Castle.DynamicProxy.Contributors
 
 			foreach (var @interface in interfaces)
 			{
-				var item = new InterfaceMembersOnClassCollector(@interface,
-				                                                true,
-				                                                targetType.GetInterfaceMap(@interface)) { Logger = Logger };
+				var item = new InterfaceMembersOnClassCollector(@interface, true,
+					targetType.GetTypeInfo().GetRuntimeInterfaceMap(@interface)) { Logger = Logger };
 				item.CollectMembersToProxy(hook);
 				yield return item;
 			}
@@ -73,11 +73,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (ExplicitlyImplementedInterfaceMethod(method))
 			{
-#if SILVERLIGHT
-				return null;
-#else
 				return ExplicitlyImplementedInterfaceMethodGenerator(method, @class, options, overrideMethod);
-#endif
 			}
 
 			var invocation = GetInvocationType(method, @class, options);
@@ -116,7 +112,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (targetMethod.IsGenericMethod)
 			{
-				targetMethod = targetMethod.MakeGenericMethod(callBackMethod.GenericTypeParams);
+				targetMethod = targetMethod.MakeGenericMethod(callBackMethod.GenericTypeParams.AsTypeArray());
 			}
 
 			var exps = new Expression[callBackMethod.Arguments.Length];
@@ -173,7 +169,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			var scope = @class.ModuleScope;
 			var key = new CacheKey(
-				typeof(Delegate),
+				typeof(Delegate).GetTypeInfo(),
 				targetType,
 				new[] { method.MethodOnTarget.ReturnType }
 					.Concat(ArgumentsUtil.GetTypes(method.MethodOnTarget.GetParameters())).

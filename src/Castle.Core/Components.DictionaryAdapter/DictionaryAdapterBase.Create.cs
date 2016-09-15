@@ -16,11 +16,8 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 	using System.Collections;
-#if !SILVERLIGHT
 	using System.Collections.Specialized;
-#else
-	using HybridDictionary = System.Collections.Generic.Dictionary<object, object>;
-#endif
+
 	public abstract partial class DictionaryAdapterBase : IDictionaryCreate
 	{
 		public T Create<T>()

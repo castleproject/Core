@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT // Until support for other platforms is verified
+#if FEATURE_BINDINGLIST // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;

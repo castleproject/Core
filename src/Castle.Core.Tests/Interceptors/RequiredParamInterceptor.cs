@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests.Interceptors
 {
+	using System.Linq;
 	using System.Reflection;
 
 	using Castle.Core.Tests.Classes;
@@ -31,7 +32,7 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 				if (parameters[i].IsDefined(typeof(RequiredAttribute), false))
 				{
 					RequiredAttribute required =
-						parameters[i].GetCustomAttributes(typeof(RequiredAttribute), false)[0] as RequiredAttribute;
+						parameters[i].GetCustomAttributes(typeof(RequiredAttribute), false).First() as RequiredAttribute;
 
 					if ((required.BadValue == null && args[i] == null) ||
 						(required.BadValue != null && required.BadValue.Equals(args[i])))

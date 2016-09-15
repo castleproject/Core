@@ -33,9 +33,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if SILVERLIGHT
-		[Ignore("This passes in NUnit, but when run in a Browser test harness like UnitDriven this failed because of access to the disk???")]
-#endif
 		public void TearDown_DoesNotSaveAnything_IfNoProxyGenerated()
 		{
 			string path = ModuleScope.DEFAULT_FILE_NAME;
@@ -49,10 +46,8 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsFalse(File.Exists(path));
 		}
 
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
-#if SILVERLIGHT
-		[Ignore("Cannot do in Silverlight")]
-#endif
 #if __MonoCS__
 		[Ignore("Expected: True  But was: False")]
 #endif
@@ -69,6 +64,7 @@ namespace Castle.DynamicProxy.Tests
 			base.TearDown();
 			Assert.IsTrue(File.Exists(path));
 		}
+#endif
 
 		private void FindVerificationErrors()
 		{
@@ -77,7 +73,11 @@ namespace Castle.DynamicProxy.Tests
 			MethodBuilder invalidMethod = invalidType.DefineMethod("InvalidMethod", MethodAttributes.Public);
 			invalidMethod.GetILGenerator().Emit(OpCodes.Ldnull); // missing RET statement
 
+#if FEATURE_LEGACY_REFLECTION_API
 			invalidType.CreateType();
+#else
+			invalidType.CreateTypeInfo().AsType();
+#endif
 
 			if (!IsVerificationDisabled)
 			{
@@ -87,21 +87,16 @@ namespace Castle.DynamicProxy.Tests
 			base.TearDown();
 		}
 
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
-#if SILVERLIGHT
-		[Ignore("Cannot do in Silverlight")]
-#endif
 		[Platform(Exclude = "mono", Reason = "Mono doesn't have peverify, so we can't perform verification.")]
 		public void TearDown_FindsVerificationErrors()
 		{
-#if FEATURE_XUNITNET
-			var ex = Assert.Throws<Xunit.Sdk.TrueException>(() => FindVerificationErrors());
-#else
 			var ex = Assert.Throws<AssertionException>(() => FindVerificationErrors());
-#endif
 			StringAssert.Contains("PeVerify reported error(s)", ex.Message);
 			StringAssert.Contains("fall through end of the method without returning", ex.Message);
 		}
+#endif
 
 		[Test]
 		public void DisableVerification_DisablesVerificationForTestCase()

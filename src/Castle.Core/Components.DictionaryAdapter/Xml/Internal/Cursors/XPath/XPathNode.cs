@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT // Until support for other platforms is verified
+#if FEATURE_DICTIONARYADAPTER_XML
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -20,9 +20,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Xml.XPath;
 
 	public class XPathNode : XmlNodeBase, IXmlNode, IRealizable<XPathNavigator>
-#if !SILVERLIGHT
 		, IRealizable<XmlNode>
-#endif
 	{
 		protected XPathNavigator node;
 		protected readonly CompiledXPath xpath;
@@ -55,12 +53,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			get { Realize(); return node; }
 		}
 
-#if !SILVERLIGHT
 		XmlNode IRealizable<XmlNode>.Value
 		{
 			get { Realize(); return (XmlNode) node.UnderlyingObject; }
 		}
-#endif
 
 		public override CompiledXPath Path
 		{
@@ -170,15 +166,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public bool UnderlyingPositionEquals(IXmlNode node)
 		{
-#if !SILVERLIGHT
 			var sysXmlNode = node.AsRealizable<XmlNode>();
 			if (sysXmlNode != null)
 				return sysXmlNode.IsReal
 					&& sysXmlNode.Value == this.node.UnderlyingObject;
-#endif
-#if SILVERLIGHT
-			// TODO: XNode-based
-#endif
+
 			var xPathNode = node.AsRealizable<XPathNavigator>();
 			if (xPathNode != null)
 				return xPathNode.IsReal
@@ -199,20 +191,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public IXmlCursor SelectChildren(IXmlKnownTypeMap knownTypes, IXmlNamespaceSource namespaces, CursorFlags flags)
 		{
-#if !SILVERLIGHT
 			return new SysXmlCursor(this, knownTypes, namespaces, flags);
-#else
-			// TODO: XNode-based
-#endif
 		}
 
 		public IXmlIterator SelectSubtree()
 		{
-#if !SILVERLIGHT
 			return new SysXmlSubtreeIterator(this, Namespaces);
-#else
-			// TODO: XNode-based
-#endif
 		}
 
 		public IXmlCursor Select(CompiledXPath path, IXmlIncludedTypeMap includedTypes, IXmlNamespaceSource namespaces, CursorFlags flags)

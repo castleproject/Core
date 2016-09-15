@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
-#if !SILVERLIGHT
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
@@ -31,12 +29,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 	{
 		private DictionaryAdapterFactory factory;
 
-#if FEATURE_XUNITNET
-		public XmlAdapterAcceptanceTestCase()
-#else
 		[SetUp]
 		public void SetUp()
-#endif
 		{
 			factory = new DictionaryAdapterFactory();
 		}
@@ -1188,7 +1182,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			{
 				var serializer = new XmlSerializer(typeof(Group));
 				var groupRead = (Group)serializer.Deserialize(stream);
-				Assert.IsNull(group.Owner);
+				Assert.IsNull(groupRead.Owner);
 			}
 		}
 
@@ -1340,6 +1334,4 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 	}
 
 	#endregion
-#endif
 }
-#endif

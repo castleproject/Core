@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+	using System.Reflection;
 
 	using Castle.DynamicProxy.Internal;
 
@@ -53,7 +54,7 @@ namespace Castle.DynamicProxy.Tests
 
 			var proxy = generator.CreateClassProxy(typeof(CanDefineAdditionalCustomAttributes), options);
 
-			Assert.IsTrue(proxy.GetType().IsDefined(typeof(__Protect), false));
+			Assert.IsTrue(proxy.GetType().GetTypeInfo().IsDefined(typeof(__Protect), false));
 		}
 
 		[Test]
@@ -64,7 +65,7 @@ namespace Castle.DynamicProxy.Tests
 
 			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(IDisposable), new Type[0], options);
 
-			Assert.IsTrue(proxy.GetType().IsDefined(typeof(__Protect), false));
+			Assert.IsTrue(proxy.GetType().GetTypeInfo().IsDefined(typeof(__Protect), false));
 		}
 	}
 

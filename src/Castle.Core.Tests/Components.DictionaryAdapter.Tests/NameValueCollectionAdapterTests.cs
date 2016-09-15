@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-#if! SILVERLIGHT
-
 namespace CastleTests.Components.DictionaryAdapter.Tests
 {
     using System.Collections.Specialized;
@@ -26,12 +23,9 @@ namespace CastleTests.Components.DictionaryAdapter.Tests
     [TestFixture]
     public class NameValueCollectionAdapterTests
     {
-#if FEATURE_XUNITNET
-        public NameValueCollectionAdapterTests()
-#else
+
         [SetUp]
         public void SetUp()
-#endif
         {
             nameValueCollection = new NameValueCollection();
         }
@@ -57,5 +51,3 @@ namespace CastleTests.Components.DictionaryAdapter.Tests
         }
     }
 }
-
-#endif

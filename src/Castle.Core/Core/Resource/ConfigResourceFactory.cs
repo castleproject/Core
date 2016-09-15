@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_SYSTEM_CONFIGURATION
+
 namespace Castle.Core.Resource
 {
-	#if !SILVERLIGHT
-
 	using System;
 
 	public class ConfigResourceFactory : IResourceFactory
@@ -39,6 +39,6 @@ namespace Castle.Core.Resource
 			return Create(uri);
 		}
 	}
-	
-	#endif
 }
+
+#endif

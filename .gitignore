@@ -1,17 +1,14 @@
-
-/build
-AssemblyInfo.cs
-
-# Standard VS.NET and ReSharper Foo
-src/*/obj
-src/*/bin
-*.csproj.user
-_ReSharper*
+# User-specific files
+*.suo
 *.user
-*.suo*
-*.cache
-* Thumbs.db
+.vs
+_ReSharper*/
 *.csproj.ReSharper
 
-*.orig
-*~
+# Build output
+build/
+artifacts/
+src/**/obj/
+src/**/bin/
+project.lock.json
+/.dnx/

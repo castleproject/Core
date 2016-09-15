@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2014 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2016 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,7 +22,11 @@ namespace Castle.Services.Logging.SerilogIntegration
 #if FEATURE_SERIALIZATION
     [Serializable]
 #endif
-    public class SerilogLogger : MarshalByRefObject, Castle.Core.Logging.ILogger
+    public class SerilogLogger :
+#if FEATURE_APPDOMAIN
+        MarshalByRefObject,
+#endif
+        Castle.Core.Logging.ILogger
     {
         public SerilogLogger(ILogger logger, SerilogFactory factory)
         {

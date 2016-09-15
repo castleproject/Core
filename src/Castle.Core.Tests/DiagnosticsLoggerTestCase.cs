@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
+#if FEATURE_EVENTLOG
 namespace Castle.Core.Logging.Tests
 {
 	using System;
@@ -24,18 +24,11 @@ namespace Castle.Core.Logging.Tests
 
 	[TestFixture]
 	public class DiagnosticsLoggerTestCase
-#if FEATURE_XUNITNET
-		: IDisposable
-#endif
 	{
 		private static bool ignore;
 
-#if FEATURE_XUNITNET
-		public DiagnosticsLoggerTestCase()
-#else
 		[SetUp]
 		public void Clear()
-#endif
 		{
 			AssertAdmin();
 			if (EventLog.Exists("castle_testlog"))
@@ -44,12 +37,8 @@ namespace Castle.Core.Logging.Tests
 			}
 		}
 
-#if FEATURE_XUNITNET
-		public void Dispose()
-#else
 		[TearDown]
 		public void Reset()
-#endif
 		{
 			if (ignore) return;
 			EventLog.Delete("castle_testlog");

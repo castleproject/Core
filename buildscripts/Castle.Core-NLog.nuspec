@@ -8,30 +8,26 @@
     <owners>Castle Project Contributors</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
     <projectUrl>http://www.castleproject.org/</projectUrl>
-    <iconUrl>http://docs.castleproject.org/GetFile.aspx?File=/castleLogo100px.png</iconUrl>
+    <iconUrl>http://www.castleproject.org/img/castle-logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Castle logging services integration with NLog</description>
     <copyright>Copyright 2004-$CurrentYear$ Castle Project - http://www.castleproject.org/</copyright>
     <tags>castle, logging, NLog</tags>
     <dependencies>
       <dependency id="Castle.Core" version="$CastleCoreVersion$" />
-      <dependency id="NLog" version="2.0.0" />
+      <dependency id="NLog" version="4.4.0-beta13" />
     </dependencies>
   </metadata>
   <files>
-    <file src="License.txt" />
+    <file src="LICENSE" />
     <file src="build/NET35/NET35-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.dll" target="lib/net35" />
     <file src="build/NET35/NET35-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.pdb" target="lib/net35" />
     <file src="build/NET40/NET40-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.dll" target="lib/net40-client" />
     <file src="build/NET40/NET40-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.pdb" target="lib/net40-client" />
     <file src="build/NET45/NET45-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.dll" target="lib/net45" />
     <file src="build/NET45/NET45-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.pdb" target="lib/net45" />
-    <file src="build/SL4/SL4-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.dll" target="lib/sl4" />
-    <file src="build/SL4/SL4-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.pdb" target="lib/sl4" />
-    <file src="build/SL4/SL4-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.xml" target="lib/sl4" />
-    <file src="build/SL5/SL5-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.dll" target="lib/sl5" />
-    <file src="build/SL5/SL5-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.pdb" target="lib/sl5" />
-    <file src="build/SL5/SL5-Release/pkg/bin/Castle.Services.Logging.NLogIntegration.xml" target="lib/sl5" />
+    <file src="build/NETCORE/Release/pkg/bin/Castle.Services.Logging.NLogIntegration.dll" target="lib/netstandard1.3" />
+    <file src="build/NETCORE/Release/pkg/bin/Castle.Services.Logging.NLogIntegration.pdb" target="lib/netstandard1.3" />
     <file src="buildscripts/ASL - Apache Software Foundation License.txt" />
     <file src="buildscripts/readme.txt" />
     <file src="src/Castle.Services.Logging.NLogIntegration/**/*.cs" />

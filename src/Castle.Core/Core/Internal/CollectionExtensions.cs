@@ -23,46 +23,14 @@ namespace Castle.Core.Internal
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public static class CollectionExtensions
 	{
-		public static TResult[] ConvertAll<T, TResult>(this T[] items, Converter<T, TResult> transformation)
-		{
-#if SILVERLIGHT
-			return items.Select(transformation.Invoke).ToArray();
-#else
-			return Array.ConvertAll(items, transformation);
-#endif
-		}
-
-		public static void ForEach<T>(this IEnumerable<T> items, Action<T> action)
-		{
-			if (items == null) return;
-
-			foreach (var item in items)
-			{
-				action(item);
-			}
-		}
-
 		public static T Find<T>(this T[] items, Predicate<T> predicate)
 		{
-#if SILVERLIGHT
-			if (items == null)
-				throw new ArgumentNullException("items");
-
-			if (predicate == null)
-				throw new ArgumentNullException("predicate");
-			return items.FirstOrDefault(predicate.Invoke);
-#else
 			return Array.Find(items, predicate);
-#endif
 		}
 
 		public static T[] FindAll<T>(this T[] items, Predicate<T> predicate)
 		{
-#if SILVERLIGHT
-			return items.Where(predicate.Invoke).ToArray();
-#else
 			return Array.FindAll(items, predicate);
-#endif
 		}
 
 		/// <summary>
@@ -76,7 +44,7 @@ namespace Castle.Core.Internal
 		}
 
 		/// <summary>
-		///	  Generates a HashCode for the contents for the list. Order of items does not matter.
+		///   Generates a HashCode for the contents for the list. Order of items does not matter.
 		/// </summary>
 		/// <typeparam name="T">The type of object contained within the list.</typeparam>
 		/// <param name="list">The list.</param>

@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-#if !SILVERLIGHT
-
 namespace Castle.log4netIntegration
 {
 	using System.IO;
@@ -100,5 +97,3 @@ namespace Castle.log4netIntegration
 		}
 	}
 }
-
-#endif

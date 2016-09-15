@@ -75,7 +75,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			get
 			{
+#if FEATURE_LEGACY_REFLECTION_API
 				var attributes = builder.GetMethodImplementationFlags();
+#else
+				var attributes = builder.MethodImplementationFlags;
+#endif
 				return (attributes & MethodImplAttributes.Runtime) != 0;
 			}
 		}

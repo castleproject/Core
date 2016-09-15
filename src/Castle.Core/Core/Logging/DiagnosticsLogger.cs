@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
+#if FEATURE_EVENTLOG
 
 namespace Castle.Core.Logging
 {
@@ -21,7 +21,7 @@ namespace Castle.Core.Logging
 	using System.Globalization;
 
 	/// <summary>
-	///   The Logger using standart Diagnostics namespace.
+	///   The Logger using standard Diagnostics namespace.
 	/// </summary>
 #if FEATURE_SERIALIZATION
 	[Serializable]
