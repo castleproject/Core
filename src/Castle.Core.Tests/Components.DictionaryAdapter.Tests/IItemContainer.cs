@@ -43,7 +43,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		IList<TItem> GenericItems { get; set; }
 
-#if !SILVERLIGHT
+#if FEATURE_BINDINGLIST
 		BindingList<TItem> Bindingtems { get; set; }
 #endif
 

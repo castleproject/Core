@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !DOTNET35 && !SILVERLIGHT
+#if !DOTNET35
 namespace CastleTests.DynamicProxy.Tests.Classes
 {
+	using System;
 	using CastleTests.DynamicProxy.Tests.Interfaces;
 
 	public class ClassWithMethodsWithAllKindsOfOptionalParameters : InterfaceWithMethodsWithAllKindsOfOptionalParameters
@@ -236,6 +237,12 @@ namespace CastleTests.DynamicProxy.Tests.Classes
 		}
 
 		public virtual void MethodWithOptionalNonDefaultNullableDecimalParameter(decimal? d = 3m)
+		{
+		}
+		public void MethodWithOptionalNullableEnumParameter(ConsoleColor? c = null)
+		{
+		}
+		public void MethodWithOptionalNonDefaultNullableEnumParameter(ConsoleColor? c = ConsoleColor.Cyan)
 		{
 		}
 	}

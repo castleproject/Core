@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -30,7 +30,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -44,7 +44,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET45-Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\NET45-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -52,63 +52,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET45-Release|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\NET45-Release\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;FEATURE_SERIALIZATION</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET40-Release|AnyCPU'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\NET40-Release\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET40-Debug|AnyCPU'">
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\NET40-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Debug|AnyCPU'">
-    <OutputPath>bin\NET35-Debug\</OutputPath>
-    <DefineConstants>FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET35-Release|AnyCPU'">
-    <OutputPath>bin\NET35-Release\</OutputPath>
-    <DefineConstants>FEATURE_LEGACY_REFLECTION_API FEATURE_SERIALIZATION</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Debug|AnyCPU'">
-    <OutputPath>bin\SL40-Debug\</OutputPath>
-    <DefineConstants>FEATURE_LEGACY_REFLECTION_API</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40-Release|AnyCPU'">
-    <OutputPath>bin\SL40-Release\</OutputPath>
-    <DefineConstants>FEATURE_LEGACY_REFLECTION_API</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50-Debug|AnyCPU'">
-    <OutputPath>bin\SL50-Debug\</OutputPath>
-    <DefineConstants>FEATURE_LEGACY_REFLECTION_API</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50-Release|AnyCPU'">
-    <OutputPath>bin\SL50-Release\</OutputPath>
-    <DefineConstants>FEATURE_LEGACY_REFLECTION_API</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Serilog, Version=1.3.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\Serilog.dll</HintPath>
-      <HintPath Condition="'$(Configuration)' == 'NET40-Release' or '$(Configuration)' == 'NET40-Debug'">..\..\lib\net40\Serilog.dll</HintPath>
-    </Reference>
-    <Reference Include="Serilog.FullNetFX, Version=1.3.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\Serilog.FullNetFX.dll</HintPath>
-      <HintPath Condition="'$(Configuration)' == 'NET40-Release' or '$(Configuration)' == 'NET40-Debug'">..\..\lib\net40\Serilog.FullNetFX.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -124,7 +76,6 @@
     <Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="SerilogFactory.cs" />
     <Compile Include="SerilogLogger.cs" />
   </ItemGroup>
@@ -141,6 +92,7 @@
   <Import Project="$(RootPath)\Settings.proj" />
   <PropertyGroup>
     <ProjectName>Castle.Services.Logging.SerilogIntegration</ProjectName>
+    <DefineConstants>$(DefineConstants) $(AdditionalDefineConstants)</DefineConstants>
   </PropertyGroup>
   <Import Project="$(BuildScriptsPath)\Castle.Common.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

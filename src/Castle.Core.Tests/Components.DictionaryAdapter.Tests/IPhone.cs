@@ -16,7 +16,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 {
 	using System.ComponentModel;
 
-	public interface IPhone : IEditableObject, INotifyPropertyChanged, IDataErrorInfo
+	public interface IPhone : IEditableObject, INotifyPropertyChanged
+#if FEATURE_IDATAERRORINFO
+		, IDataErrorInfo
+#endif
 	{
 		[Fetch]string Number { get; set; }
 		string Extension { get; set; }

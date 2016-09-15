@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT && !__MonoCS__ // Avoid loading adodb.dll
+#if FEATURE_TEST_COM && !__MonoCS__ // Avoid loading adodb.dll
 namespace Castle.DynamicProxy.Tests
 {
 	using System.Reflection;

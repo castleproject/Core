@@ -14,7 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-#if !SILVERLIGHT
+#if FEATURE_BINDINGLIST
 	using System;
 	using System.ComponentModel;
 

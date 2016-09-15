@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy
 	using System.Reflection.Emit;
 
 	/// <summary>
-	///   Provides functionality for disassembling instances of attributes to CustomAttributeBuilder form, during the process of emiting new types by Dynamic Proxy.
+	///   Provides functionality for disassembling instances of attributes to CustomAttributeBuilder form, during the process of emiting new types by DynamicProxy.
 	/// </summary>
 	public interface IAttributeDisassembler
 	{

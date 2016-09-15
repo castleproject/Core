@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !DOTNET35
+
 namespace Castle.Components.DictionaryAdapter.Tests
 {
 	using System.Collections.Generic;
 
 	using NUnit.Framework;
 
-#if !(SILVERLIGHT || DOTNET35)
 	public class DynamicDictionaryTests
 	{
 		[Test]
@@ -61,5 +62,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsNull(adapter.Name);
 		}
 	}
-#endif
 }
+
+#endif

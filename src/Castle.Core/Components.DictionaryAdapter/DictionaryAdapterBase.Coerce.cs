@@ -15,6 +15,7 @@
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
+	using System.Reflection;
 
 	public abstract partial class DictionaryAdapterBase
 	{

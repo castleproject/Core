@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_SMTP
+
 namespace Castle.Core.Smtp
 {
-	#if !SILVERLIGHT
-
 	using System.Collections.Generic;
 	using System.Net.Mail;
 
@@ -45,5 +45,6 @@ namespace Castle.Core.Smtp
 		/// <param name="messages">List of <see cref="MailMessage">messages</see></param>
 		void Send(IEnumerable<MailMessage> messages);
 	}
-	#endif
 }
+
+#endif

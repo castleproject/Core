@@ -40,11 +40,13 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 			return new T();
 		}
 
-		public virtual void DoSomethingElse<T2>(Converter<int, T2> converter, int value)
+		public virtual void DoSomethingElse<T2>(TestConverter<int, T2> converter, int value)
 		{
 			invoked = true;
 
 			savedParam = converter(value);
 		}
 	}
+
+	public delegate TOutput TestConverter<TInput, TOutput>(TInput input);
 }

@@ -83,7 +83,7 @@ namespace Castle.DynamicProxy.Generators
 
 			ImplemementInvokeMethodOnTarget(invocation, methodInfo.GetParameters(), targetField, callback);
 
-#if !SILVERLIGHT
+#if FEATURE_SERIALIZATION
 			invocation.DefineCustomAttribute<SerializableAttribute>();
 #endif
 
@@ -302,7 +302,7 @@ namespace Castle.DynamicProxy.Generators
 			var changeInvocationTarget = invocation.CreateMethod("ChangeProxyTarget", typeof(void), new[] { typeof(object) });
 			changeInvocationTarget.CodeBuilder.AddStatement(
 				new ExpressionStatement(
-					new ConvertExpression(@class.TypeBuilder, new FieldReference(InvocationMethods.ProxyObject).ToExpression())));
+					new ConvertExpression(@class.TypeBuilder.AsType(), new FieldReference(InvocationMethods.ProxyObject).ToExpression())));
 
 			var field = @class.GetField("__target");
 			changeInvocationTarget.CodeBuilder.AddStatement(

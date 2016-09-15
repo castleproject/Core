@@ -14,10 +14,8 @@
 
 namespace Castle.DynamicProxy.Tests.Serialization
 {
-#if !SILVERLIGHT
 	public interface IMixedInterface
 	{
 		object GetExecutingObject();
 	}
-#endif
 }

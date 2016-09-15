@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !DOTNET35
+
 namespace Castle.Components.DictionaryAdapter
 {
-#if !(SILVERLIGHT || DOTNET35)
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Dynamic;
@@ -50,5 +51,6 @@ namespace Castle.Components.DictionaryAdapter
 			return true;
 		}
 	}
-#endif
 }
+
+#endif

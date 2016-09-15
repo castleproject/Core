@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_SECURITY_PERMISSIONS
+
 namespace Castle.Core.Tests.Internal
 {
-#if !SILVERLIGHT
 	using System.Security.Permissions;
 
 	using Castle.Core.Internal;
@@ -33,5 +34,6 @@ namespace Castle.Core.Tests.Internal
 			Assert.IsTrue(securityPermission.IsGranted());
 		}
 	}
-#endif
 }
+
+#endif

@@ -16,14 +16,12 @@ namespace Castle.Services.Logging.NLogIntegration
 {
 	using System;
 
-	using Castle.Core.Logging;
-
 	using NLog;
 
 	/// <summary>
-	///   Implementation of <see cref="ILogger" /> for NLog.
+	///   Implementation of <see cref="Castle.Core.Logging.ILogger" /> for NLog.
 	/// </summary>
-	public class NLogLogger : ILogger
+	public class NLogLogger : Castle.Core.Logging.ILogger
 	{
 		/// <summary>
 		///   Initializes a new instance of the <see cref="NLogLogger" /> class.
@@ -111,7 +109,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// </summary>
 		/// <param name="name"> The name. </param>
 		/// <returns> </returns>
-		public virtual ILogger CreateChildLogger(String name)
+		public virtual Core.Logging.ILogger CreateChildLogger(String name)
 		{
 			return Factory.Create(Logger.Name + "." + name);
 		}

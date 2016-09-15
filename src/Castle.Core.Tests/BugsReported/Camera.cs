@@ -33,11 +33,11 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 		void Record(ICamera cam);
 	}
 
-#if SILVERLIGHT
-	public class CameraService : ICameraService
-#else
-	public class CameraService : MarshalByRefObject, ICameraService
+	public class CameraService :
+#if FEATURE_REMOTING
+		MarshalByRefObject,
 #endif
+		ICameraService
 	{
 		public ICamera Add(String name, String ipNumber)
 		{

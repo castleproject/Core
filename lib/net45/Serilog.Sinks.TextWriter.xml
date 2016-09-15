@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Serilog.Sinks.TextWriter</name>
+    </assembly>
+    <members>
+        <member name="T:Serilog.TextWriterLoggerConfigurationExtensions">
+            <summary>
+            Adds the WriteTo.TextWriter() extension method to <see cref="T:Serilog.LoggerConfiguration"/>.
+            </summary>
+        </member>
+        <member name="M:Serilog.TextWriterLoggerConfigurationExtensions.TextWriter(Serilog.Configuration.LoggerSinkConfiguration,System.IO.TextWriter,Serilog.Events.LogEventLevel,System.String,System.IFormatProvider,Serilog.Core.LoggingLevelSwitch)">
+            <summary>
+            Write log events to the provided <see cref="M:Serilog.TextWriterLoggerConfigurationExtensions.TextWriter(Serilog.Configuration.LoggerSinkConfiguration,System.IO.TextWriter,Serilog.Events.LogEventLevel,System.String,System.IFormatProvider,Serilog.Core.LoggingLevelSwitch)"/>.
+            </summary>
+            <param name="sinkConfiguration">Logger sink configuration.</param>
+            <param name="textWriter">The text writer to write log events to.</param>
+            <param name="outputTemplate">Message template describing the output format.</param>
+            <param name="restrictedToMinimumLevel">The minimum level for
+            events passed through the sink. Ignored when <paramref name="levelSwitch"/> is specified.</param>
+            <param name="levelSwitch">A switch allowing the pass-through minimum level
+            to be changed at runtime.</param>
+            <returns>Configuration object allowing method chaining.</returns>
+            <param name="formatProvider">Supplies culture-specific formatting information, or null.</param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+    </members>
+</doc>

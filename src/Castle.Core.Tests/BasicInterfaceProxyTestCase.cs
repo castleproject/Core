@@ -105,6 +105,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+#if DOTNET35
+		[Ignore("Signature of the body and declaration in a method implementation do not match. https://support.microsoft.com/en-us/kb/960240")]
+#endif
 		public void ProxyTypeWithMultiDimentionalArrayAsParameter()
 		{
 			var proxy = generator.CreateInterfaceProxyWithTarget<IClassWithMultiDimentionalArray>(
@@ -209,7 +212,7 @@ namespace Castle.DynamicProxy.Tests
 				generator.CreateInterfaceProxyWithoutTarget(typeof(IIdenticalOne), new[] { typeof(IIdenticalTwo) }).GetType();
 			MethodInfo method = type.GetMethod("Foo", BindingFlags.Instance | BindingFlags.Public);
 			Assert.IsNotNull(method);
-			Assert.AreSame(method, type.GetInterfaceMap(typeof(IIdenticalOne)).TargetMethods[0]);
+			Assert.AreSame(method, type.GetTypeInfo().GetRuntimeInterfaceMap(typeof(IIdenticalOne)).TargetMethods[0]);
 			MethodInfo method2 = type.GetMethod("IIdenticalTwo.Foo", BindingFlags.Instance | BindingFlags.Public);
 			Assert.IsNotNull(method2);
 		}

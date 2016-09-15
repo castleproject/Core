@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
+	using System.Reflection;
 	using System.Reflection.Emit;
 
 	public class ThrowStatement : Statement

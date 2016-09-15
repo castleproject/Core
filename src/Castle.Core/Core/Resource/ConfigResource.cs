@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
+#if FEATURE_SYSTEM_CONFIGURATION
 
 namespace Castle.Core.Resource
 {
@@ -22,7 +22,6 @@ namespace Castle.Core.Resource
 	using System.IO;
 	using System.Text;
 	using System.Xml;
-
 
 	public class ConfigResource : AbstractResource
 	{

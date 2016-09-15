@@ -15,13 +15,16 @@
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Reflection;
+#if FEATURE_REMOTING
 	using System.Runtime.Remoting;
+#endif
 
 	public class ProxyUtil
 	{
 		public static object GetUnproxiedInstance(object instance)
 		{
-#if (!SILVERLIGHT)
+#if FEATURE_REMOTING
 			if (!RemotingServices.IsTransparentProxy(instance))
 #endif
 			{
@@ -37,7 +40,7 @@ namespace Castle.DynamicProxy
 
 		public static Type GetUnproxiedType(object instance)
 		{
-#if (!SILVERLIGHT)
+#if FEATURE_REMOTING
 			if (!RemotingServices.IsTransparentProxy(instance))
 #endif
 			{
@@ -51,7 +54,7 @@ namespace Castle.DynamicProxy
 					{
 						if (ReferenceEquals(target, instance))
 						{
-							return instance.GetType().BaseType;
+							return instance.GetType().GetTypeInfo().BaseType;
 						}
 
 						instance = target;
@@ -64,7 +67,7 @@ namespace Castle.DynamicProxy
 
 		public static bool IsProxy(object instance)
 		{
-#if (!SILVERLIGHT)
+#if FEATURE_REMOTING
 			if (RemotingServices.IsTransparentProxy(instance))
 			{
 				return true;

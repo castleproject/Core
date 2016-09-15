@@ -14,8 +14,6 @@
 
 namespace CastleTests
 {
-#if !SILVERLIGHT
-
 	using System.IO;
 	using System.Xml;
 
@@ -32,7 +30,6 @@ namespace CastleTests
 			Assert.AreEqual("\t", result);
 		}
 
-
 		[Test]
 		[Bug("CORE-37")]
 		public void Tab_character_is_not_trimmed_from_config_value_XML()
@@ -42,5 +39,4 @@ namespace CastleTests
 			Assert.AreEqual("\t", result.Value);
 		}
 	}
-#endif
 }

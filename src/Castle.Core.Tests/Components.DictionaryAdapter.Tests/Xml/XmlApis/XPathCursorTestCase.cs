@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT // Until support for other platforms is verified
 namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
@@ -302,13 +301,10 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 
 		protected abstract IXmlCursor Cursor(IXmlNode parent, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags);
 
-#if FEATURE_XUNITNET
-		protected XPathCursorTestCase()
-#else
+#pragma warning disable 618 // Don't use OneTimeSetUp yet because ReSharper doesn't support it
 		[TestFixtureSetUp]
+#pragma warning restore 618
 		public void OneTimeSetUp()
-#endif
-
 		{
 			if (IncludedTypes == null)
 			{
@@ -338,4 +334,3 @@ namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
 		private class _TypeB : _TypeA { }
 	}
 }
-#endif

@@ -51,11 +51,7 @@ namespace Castle.DynamicProxy.Tests
 				AssertArraysAreEqualUnsorted(new object[] { null, "one", null }, new object[] { "one", "one", null });
 				Assert.Fail();
 			}
-#if FEATURE_XUNITNET
-			catch (Xunit.Sdk.XunitException)
-#else
 			catch (AssertionException)
-#endif
 			{
 				// ok
 			}
@@ -64,11 +60,7 @@ namespace Castle.DynamicProxy.Tests
 				AssertArraysAreEqualUnsorted(new object[] { null, "one" }, new object[] { "one", null, null });
 				Assert.Fail();
 			}
-#if FEATURE_XUNITNET
-			catch (Xunit.Sdk.XunitException)
-#else
 			catch (AssertionException)
-#endif
 			{
 				// ok
 			}
@@ -77,11 +69,7 @@ namespace Castle.DynamicProxy.Tests
 				AssertArraysAreEqualUnsorted(new object[] { null, "one", null }, new object[] { "one", null });
 				Assert.Fail();
 			}
-#if FEATURE_XUNITNET
-			catch (Xunit.Sdk.XunitException)
-#else
 			catch (AssertionException)
-#endif
 			{
 				// ok
 			}

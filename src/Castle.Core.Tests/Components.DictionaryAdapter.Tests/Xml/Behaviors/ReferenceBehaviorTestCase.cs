@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
 	using System.Collections.Generic;
@@ -54,7 +53,9 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				);
 				var foo = Create<IFoo>(xml);
 
+#pragma warning disable 219
 				IFoo dummy;
+#pragma warning restore 219
 				Assert.Throws<KeyNotFoundException>(() =>
 					dummy = foo.Two);
 			}
@@ -607,4 +608,3 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 	}
 }
-#endif

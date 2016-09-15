@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2014 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2016 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,31 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_TEST_SERILOGINTEGRATION
+
 namespace CastleTests.SerilogIntegration
 {
-#if DOTNET45 || DOTNET40
     using System;
     using System.IO;
 
     using Castle.Services.Logging.SerilogIntegration;
 
     using Serilog;
-    using Serilog.Events;
 
     using NUnit.Framework;
 
     public class SerilogTests
     {
         [Test]
+        public void should_use_serilog_silent_logger()
+        {
+            var factory = new SerilogFactory();
+            var logger = factory.Create("TestingLogger");
+
+            WriteTestLogs(logger);
+        }
+
+        [Test]
         public void should_log_work_with_first_creator()
         {
             var output = new StringWriter();
 
-            var config = new LoggerConfiguration()
-                .MinimumLevel.Is(LogEventLevel.Debug)
-                .WriteTo.TextWriter(output);
+            var serilogLogger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.TextWriter(output)
+                .CreateLogger();
 
-            var factory = new SerilogFactory(config);
+            var factory = new SerilogFactory(serilogLogger);
             var logger = factory.Create("TestingLogger");
 
             WriteTestLogs(logger);
@@ -52,11 +62,12 @@ namespace CastleTests.SerilogIntegration
         {
             var output = new StringWriter();
 
-            var config = new LoggerConfiguration()
-                .MinimumLevel.Is(LogEventLevel.Debug)
-                .WriteTo.TextWriter(output);
+            var serilogLogger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.TextWriter(output)
+                .CreateLogger();
 
-            var factory = new SerilogFactory(config);
+            var factory = new SerilogFactory(serilogLogger);
             var logger = factory.Create("TestingLogger");
 
             WriteTestLogs(logger);
@@ -73,10 +84,11 @@ namespace CastleTests.SerilogIntegration
             var output = new StringWriter();
 
             // New LoggerConfiguration which defaults to Information
-            var config = new LoggerConfiguration()
-                .WriteTo.TextWriter(output);
+            var serilogLogger = new LoggerConfiguration()
+                .WriteTo.TextWriter(output)
+                .CreateLogger();
 
-            var factory = new SerilogFactory(config);
+            var factory = new SerilogFactory(serilogLogger);
             var logger = factory.Create("TestingLogger");
 
             WriteTestLogs(logger);
@@ -100,11 +112,12 @@ namespace CastleTests.SerilogIntegration
         {
             var output = new StringWriter();
 
-            var config = new LoggerConfiguration()
-                .MinimumLevel.Is(LogEventLevel.Debug)
-                .WriteTo.TextWriter(output);
+            var serilogLogger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.TextWriter(output)
+                .CreateLogger();
 
-            var factory = new SerilogFactory(config);
+            var factory = new SerilogFactory(serilogLogger);
             var logger = factory.Create("TestingLogger");
 
             logger.DebugFormat("Testing Debug {@TestingData}", new { Name = "test", Value = 55 });
@@ -119,11 +132,12 @@ namespace CastleTests.SerilogIntegration
         {
             var output = new StringWriter();
 
-            var config = new LoggerConfiguration()
+            var serilogLogger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.TextWriter(output);
+                .WriteTo.TextWriter(output)
+                .CreateLogger();
 
-            var factory = new SerilogFactory(config);
+            var factory = new SerilogFactory(serilogLogger);
             var logger = factory.Create("TestingLogger");
 
             logger.Debug("Debug", new Exception("Debug Exception 1"));
@@ -164,11 +178,12 @@ namespace CastleTests.SerilogIntegration
         public void should_log_with_source_context()
         {
             var output = new StringWriter();
-            var config = new LoggerConfiguration()
+            var serilogLogger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
-                .WriteTo.TextWriter(output);
+                .WriteTo.TextWriter(output)
+                .CreateLogger();
 
-            var factory = new SerilogFactory(config);
+            var factory = new SerilogFactory(serilogLogger);
 
             var logger1 = factory.Create("MyLogger1");
             var logger2 = factory.Create("MyLogger2");
@@ -181,5 +196,6 @@ namespace CastleTests.SerilogIntegration
             StringAssert.Contains("MyLogger2", logs);
         }
     }
-#endif
 }
+
+#endif

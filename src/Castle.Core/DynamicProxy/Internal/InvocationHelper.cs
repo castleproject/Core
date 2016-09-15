@@ -88,7 +88,7 @@ namespace Castle.DynamicProxy.Internal
 			MethodInfo methodOnTarget = null;
 			if (declaringType.GetTypeInfo().IsInterface)
 			{
-				var mapping = type.GetInterfaceMap(declaringType);
+				var mapping = type.GetTypeInfo().GetRuntimeInterfaceMap(declaringType);
 				var index = Array.IndexOf(mapping.InterfaceMethods, proxiedMethod);
 				Debug.Assert(index != -1);
 				methodOnTarget = mapping.TargetMethods[index];

@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
+	using System.Reflection;
 #if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
 #endif
@@ -31,8 +32,6 @@ namespace Castle.DynamicProxy.Contributors
 
 	public abstract class ProxyInstanceContributor : ITypeContributor
 	{
-		// TODO: this whole type (and its descendants) should be #if !SILVERLIGHT... and empty type should be used instead for SL
-
 		protected readonly Type targetType;
 		private readonly string proxyTypeId;
 		private readonly Type[] interfaces;
@@ -53,7 +52,7 @@ namespace Castle.DynamicProxy.Contributors
 			ImplementGetObjectData(@class);
 #endif
 			ImplementProxyTargetAccessor(@class, interceptors);
-			foreach (var attribute in targetType.GetNonInheritableAttributes())
+			foreach (var attribute in targetType.GetTypeInfo().GetNonInheritableAttributes())
 			{
 				@class.DefineCustomAttribute(attribute);
 			}

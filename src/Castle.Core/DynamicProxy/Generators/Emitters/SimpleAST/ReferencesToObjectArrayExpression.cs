@@ -53,7 +53,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 				if (reference.Type.GetTypeInfo().IsValueType)
 				{
-					gen.Emit(OpCodes.Box, reference.Type.UnderlyingSystemType);
+					gen.Emit(OpCodes.Box, reference.Type);
 				}
 				else if (reference.Type.GetTypeInfo().IsGenericParameter)
 				{

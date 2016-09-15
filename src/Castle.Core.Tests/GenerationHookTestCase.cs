@@ -74,6 +74,28 @@ namespace CastleTests
 		}
 
 		[Test]
+		public void HookDetectsNonVirtualAlthoughInterfaceImplementation()
+		{
+			var logger = new LogInvocationInterceptor();
+			var hook = new LogHook(typeof(ServiceImpl), true);
+
+			var options = new ProxyGenerationOptions(hook);
+
+			// we are creating a class proxy although the creation of an interface proxy is possible too...
+			// since the members of our implementation are not explicitly marked as virtual, the runtime
+			// marks them as virtual but final --> not good for us, but intended by .net :-(
+			//
+			// see: https://msdn.microsoft.com/library/system.reflection.methodbase.isvirtual
+			//
+			// thus, a non virtual notification for this particular situation is appropriate
+			var proxy = (ServiceImpl)generator.CreateClassProxy(typeof(ServiceImpl), options, logger);
+
+			Assert.IsTrue(hook.Completed);
+			Assert.AreEqual(3, hook.AskedMembers.Count);
+			Assert.AreEqual(11, hook.NonVirtualMembers.Count);
+		}
+
+		[Test]
 		public void Hook_can_NOT_see_GetType_method()
 		{
 			var hook = new LogHook(typeof(EmptyClass));

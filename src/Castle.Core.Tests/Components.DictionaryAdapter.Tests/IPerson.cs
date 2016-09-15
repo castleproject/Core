@@ -19,7 +19,10 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System.ComponentModel;
 
 	[MultiLevelEdit]
-	public interface IPerson : IDictionaryAdapter, IEditableObject, IDictionaryNotify, IDataErrorInfo
+	public interface IPerson : IDictionaryAdapter, IEditableObject, IDictionaryNotify
+#if FEATURE_IDATAERRORINFO
+		, IDataErrorInfo
+#endif
 	{
 		[RemoveIf(null)]
 		string Name { get; set; }
