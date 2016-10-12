@@ -37,7 +37,7 @@ namespace Castle.DynamicProxy
 
 		private List<object> mixins;
 		internal readonly IList<Attribute> attributesToAddToGeneratedTypes = new List<Attribute>();
-		private readonly IList<CustomAttributeBuilder> additionalAttributes = new List<CustomAttributeBuilder>();
+		private readonly IList<CustomAttributeInfo> additionalAttributes = new List<CustomAttributeInfo>();
 
 #if FEATURE_SERIALIZATION
 		[NonSerialized]
@@ -115,7 +115,7 @@ namespace Castle.DynamicProxy
 			get { return attributesToAddToGeneratedTypes; }
 		}
 
-		public IList<CustomAttributeBuilder> AdditionalAttributes
+		public IList<CustomAttributeInfo> AdditionalAttributes
 		{
 			get { return additionalAttributes; }
 		}

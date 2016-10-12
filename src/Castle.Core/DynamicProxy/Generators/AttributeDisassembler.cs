@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
-	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Internal;
 
@@ -27,7 +26,7 @@ namespace Castle.DynamicProxy.Generators
 #endif
 	public class AttributeDisassembler : IAttributeDisassembler
 	{
-		public CustomAttributeBuilder Disassemble(Attribute attribute)
+		public CustomAttributeInfo Disassemble(Attribute attribute)
 		{
 			var type = attribute.GetType();
 
@@ -40,7 +39,7 @@ namespace Castle.DynamicProxy.Generators
 				var propertyValues = GetPropertyValues(type, out properties, attribute, replicated);
 				FieldInfo[] fields;
 				var fieldValues = GetFieldValues(type, out fields, attribute, replicated);
-				return new CustomAttributeBuilder(ctor, ctorArgs, properties, propertyValues, fields, fieldValues);
+				return new CustomAttributeInfo(ctor, ctorArgs, properties, propertyValues, fields, fieldValues);
 			}
 			catch (Exception ex)
 			{
@@ -55,7 +54,7 @@ namespace Castle.DynamicProxy.Generators
 		/// <param name = "attributeType">Type of the attribute being disassembled</param>
 		/// <param name = "exception">Exception thrown during the process</param>
 		/// <returns>usually null, or (re)throws the exception</returns>
-		protected virtual CustomAttributeBuilder HandleError(Type attributeType, Exception exception)
+		protected virtual CustomAttributeInfo HandleError(Type attributeType, Exception exception)
 		{
 			// ouch...
 			var message = "DynamicProxy was unable to disassemble attribute " + attributeType.Name +

@@ -137,7 +137,7 @@ namespace Castle.DynamicProxy.Contributors
 			                                        property.DeclaringType,
 			                                        getter,
 			                                        setter,
-			                                        nonInheritableAttributes,
+			                                        nonInheritableAttributes.Select(a => a.Builder),
 			                                        arguments.Select(a => a.ParameterType).ToArray());
 		}
 

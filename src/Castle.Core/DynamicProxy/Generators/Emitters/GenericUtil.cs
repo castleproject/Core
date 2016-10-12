@@ -225,7 +225,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			foreach (var attribute in originalGenericArgument.GetTypeInfo().GetNonInheritableAttributes())
 			{
-				newGenericParameter.SetCustomAttribute(attribute);
+				newGenericParameter.SetCustomAttribute(attribute.Builder);
 			}
 		}
 

@@ -92,16 +92,16 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			foreach (var attr in proxyGenerationOptions.attributesToAddToGeneratedTypes)
 			{
-				var customAttributeBuilder = AttributeUtil.CreateBuilder(attr);
-				if (customAttributeBuilder != null)
+				var attributeInfo = AttributeUtil.CreateInfo(attr);
+				if (attributeInfo != null)
 				{
-					typebuilder.SetCustomAttribute(customAttributeBuilder);
+					typebuilder.SetCustomAttribute(attributeInfo.Builder);
 				}
 			}
 
 			foreach (var attribute in proxyGenerationOptions.AdditionalAttributes)
 			{
-				typebuilder.SetCustomAttribute(attribute);
+				typebuilder.SetCustomAttribute(attribute.Builder);
 			}
 		}
 
@@ -241,26 +241,26 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public void DefineCustomAttribute<TAttribute>(object[] constructorArguments) where TAttribute : Attribute
 		{
-			var customAttributeBuilder = AttributeUtil.CreateBuilder(typeof(TAttribute), constructorArguments);
-			typebuilder.SetCustomAttribute(customAttributeBuilder);
+			var customAttributeInfo = AttributeUtil.CreateInfo(typeof(TAttribute), constructorArguments);
+			typebuilder.SetCustomAttribute(customAttributeInfo.Builder);
 		}
 
 		public void DefineCustomAttribute<TAttribute>() where TAttribute : Attribute, new()
 		{
-			var customAttributeBuilder = AttributeUtil.CreateBuilder<TAttribute>();
-			typebuilder.SetCustomAttribute(customAttributeBuilder);
+			var customAttributeInfo = AttributeUtil.CreateInfo<TAttribute>();
+			typebuilder.SetCustomAttribute(customAttributeInfo.Builder);
 		}
 
 		public void DefineCustomAttributeFor<TAttribute>(FieldReference field) where TAttribute : Attribute, new()
 		{
-			var customAttributeBuilder = AttributeUtil.CreateBuilder<TAttribute>();
+			var customAttributeInfo = AttributeUtil.CreateInfo<TAttribute>();
 			var fieldbuilder = field.Fieldbuilder;
 			if (fieldbuilder == null)
 			{
 				throw new ArgumentException(
 					"Invalid field reference.This reference does not point to field on type being generated", "field");
 			}
-			fieldbuilder.SetCustomAttribute(customAttributeBuilder);
+			fieldbuilder.SetCustomAttribute(customAttributeInfo.Builder);
 		}
 
 		public IEnumerable<FieldReference> GetAllFields()

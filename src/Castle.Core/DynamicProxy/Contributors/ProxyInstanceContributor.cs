@@ -54,7 +54,7 @@ namespace Castle.DynamicProxy.Contributors
 			ImplementProxyTargetAccessor(@class, interceptors);
 			foreach (var attribute in targetType.GetTypeInfo().GetNonInheritableAttributes())
 			{
-				@class.DefineCustomAttribute(attribute);
+				@class.DefineCustomAttribute(attribute.Builder);
 			}
 		}
 
