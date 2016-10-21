@@ -8,6 +8,9 @@ Breaking Changes:
 Enhancements:
 * Add IProxyGenerator interface for the ProxyGenerator class (#215)
 
+Bugfixes:
+* Fix building on Mono 4.6.1
+
 ## 4.0.0-beta001 (2016-07-17)
 
 Breaking Changes:

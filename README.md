@@ -27,7 +27,9 @@ build.cmd NETCORE
 
 ### Mono
 
-Castle Core works with some limitations and defects on Mono 4.0.2+, previous 4.x releases have serious runtime bugs that cause runtime crashes. Mono 3.x releases used to work well, but are not supported.
+Castle Core works with some limitations and defects on Mono 4.0.2+, however Mono 4.6.1+ is highly
+recommended, Mono 4.0.0 and 4.0.1 have serious runtime bugs that cause runtime crashes. Mono 3.x
+releases used to work well, but are not supported.
 Check [our issue tracker](https://github.com/castleproject/Core/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20mono) for known Mono defects.
 
 ```
