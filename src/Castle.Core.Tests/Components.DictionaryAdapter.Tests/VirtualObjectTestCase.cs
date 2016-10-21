@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2012 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2016 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
 namespace CastleTests.Components.DictionaryAdapter.Tests
 {
 	using System;
-	using System.Collections.Generic;
 	using Castle.Components.DictionaryAdapter;
 	using NUnit.Framework;
 
@@ -145,8 +144,7 @@ namespace CastleTests.Components.DictionaryAdapter.Tests
 		}
 
 		private static readonly Node
-			NodeA = new Node(),
-			NodeB = new Node();
+			NodeA = new Node();
 
 		private static readonly Member
 			MemberA = new Member(),
