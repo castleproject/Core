@@ -24,36 +24,6 @@ namespace Castle.DynamicProxy.Internal
 
 	public static class AttributeUtil
 	{
-		private static readonly IDictionary<Type, IAttributeDisassembler> disassemblers =
-			new Dictionary<Type, IAttributeDisassembler>();
-
-		private static IAttributeDisassembler fallbackDisassembler = new AttributeDisassembler();
-
-		public static IAttributeDisassembler FallbackDisassembler
-		{
-			get { return fallbackDisassembler; }
-			set { fallbackDisassembler = value; }
-		}
-
-		/// <summary>
-		///   Registers custom disassembler to handle disassembly of specified type of attributes.
-		/// </summary>
-		/// <typeparam name = "TAttribute">Type of attributes to handle</typeparam>
-		/// <param name = "disassembler">Disassembler converting existing instances of Attributes to CustomAttributeInfos</param>
-		/// <remarks>
-		///   When disassembling an attribute Dynamic Proxy will first check if an custom disassembler has been registered to handle attributes of that type, 
-		///   and if none is found, it'll use the <see cref = "FallbackDisassembler" />.
-		/// </remarks>
-		public static void AddDisassembler<TAttribute>(IAttributeDisassembler disassembler) where TAttribute : Attribute
-		{
-			if (disassembler == null)
-			{
-				throw new ArgumentNullException("disassembler");
-			}
-
-			disassemblers[typeof(TAttribute)] = disassembler;
-		}
-
 		public static CustomAttributeInfo CreateInfo(CustomAttributeData attribute)
 		{
 			Debug.Assert(attribute != null, "attribute != null");
@@ -296,19 +266,6 @@ namespace Castle.DynamicProxy.Internal
 			Debug.Assert(constructor != null, "constructor != null");
 
 			return new CustomAttributeInfo(constructor, constructorArguments);
-		}
-
-		// NOTE: Use other overloads if possible. This method is here to support legacy scenarios.
-		internal static CustomAttributeInfo CreateInfo(Attribute attribute)
-		{
-			var type = attribute.GetType();
-
-			IAttributeDisassembler disassembler;
-			if (disassemblers.TryGetValue(type, out disassembler))
-			{
-				return disassembler.Disassemble(attribute);
-			}
-			return FallbackDisassembler.Disassemble(attribute);
 		}
 
 		private static Type[] GetTypes(object[] objects)

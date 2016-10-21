@@ -107,14 +107,6 @@ namespace Castle.DynamicProxy
 
 		public Type BaseTypeForInterfaceProxy { get; set; }
 
-		[Obsolete(
-			"This property is obsolete and will be removed in future versions. Use AdditionalAttributes property instead. " +
-			"You can use AttributeUtil class to simplify creating CustomAttributeBuilder instances for common cases.")]
-		public IList<Attribute> AttributesToAddToGeneratedTypes
-		{
-			get { return attributesToAddToGeneratedTypes; }
-		}
-
 		public IList<CustomAttributeInfo> AdditionalAttributes
 		{
 			get { return additionalAttributes; }
