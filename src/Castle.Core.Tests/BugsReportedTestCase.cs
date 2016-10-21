@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Tests
 	using Interceptors;
 	using InterClasses;
 	using NUnit.Framework;
+	using Assembly = System.Reflection.Assembly;
 
 	[TestFixture]
 	public class BugsReportedTestCase : BasePEVerifyTestCase
@@ -125,6 +126,15 @@ namespace Castle.DynamicProxy.Tests
 			Type type = generator.CreateInterfaceProxyWithoutTarget(typeof(IService)).GetType();
 			Assert.IsNotNull(type.Namespace);
 			Assert.AreEqual("Castle.Proxies", type.Namespace);
+		}
+		[Test]
+		public void DYNPROXY_99_ClassProxyFromControl()
+		{
+			Assembly assembly = Assembly.Load("System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
+			var typeControl = assembly.GetType("System.Windows.Forms.Control");
+			Assert.IsNotNull(typeControl);
+			object control = generator.CreateClassProxy(typeControl);
+			Assert.IsNotNull(control);
 		}
 	}
 

@@ -31,6 +31,7 @@ namespace Castle.DynamicProxy.Generators
 #if FEATURE_SECURITY_PERMISSIONS
 			Add<SecurityPermissionAttribute>();
 #endif
+			Add<UIPermissionAttribute>();
 #if !DOTNET35
 			Add<TypeIdentifierAttribute>();
 #endif
