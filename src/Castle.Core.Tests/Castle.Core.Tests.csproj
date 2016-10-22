@@ -166,6 +166,7 @@
     <Compile Include="Components.DictionaryAdapter.Tests\DynamicDictionaryTests.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\IPhoneWithFetch.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\NameValueCollectionAdapterTests.cs" />
+    <Compile Include="DynamicProxy.Tests\AttributesToAvoidReplicatingTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithMethodsWithAllKindsOfOptionalParameters.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithMethodWithParameterWithDefaultValue.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithMethodWithParameterWithNullDefaultValue.cs" />

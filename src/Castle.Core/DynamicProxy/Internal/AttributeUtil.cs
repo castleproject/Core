@@ -260,7 +260,7 @@ namespace Castle.DynamicProxy.Internal
 				return true;
 			}
 
-			if (SpecialCaseAttributThatShouldNotBeReplicated(attribute))
+			if (SpecialCaseAttributeThatShouldNotBeReplicated(attribute))
 			{
 				return true;
 			}
@@ -274,9 +274,9 @@ namespace Castle.DynamicProxy.Internal
 			return true;
 		}
 
-		private static bool SpecialCaseAttributThatShouldNotBeReplicated(Type attribute)
+		private static bool SpecialCaseAttributeThatShouldNotBeReplicated(Type attribute)
 		{
-			return AttributesToAvoidReplicating.Contains(attribute);
+			return AttributesToAvoidReplicating.ShouldAvoid(attribute);
 		}
 
 		public static CustomAttributeBuilder CreateBuilder<TAttribute>() where TAttribute : Attribute, new()
