@@ -170,6 +170,7 @@
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithMethodsWithAllKindsOfOptionalParameters.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithMethodWithParameterWithDefaultValue.cs" />
     <Compile Include="DynamicProxy.Tests\Classes\ClassWithMethodWithParameterWithNullDefaultValue.cs" />
+    <Compile Include="DynamicProxy.Tests\Classes\InheritableAttribute.cs" />
     <Compile Include="DynamicProxy.Tests\ClassProxyWithDefaultValuesTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\ClassProxyWithMethodsWithOptionalParametersTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\GenericInterfaceWithGenericMethod.cs" />

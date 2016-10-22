@@ -14,12 +14,14 @@
 
 namespace Castle.DynamicProxy.Tests
 {
-	using System.ComponentModel;
+	using System;
 	using System.Linq;
 	using System.Reflection;
 #if FEATURE_SECURITY_PERMISSIONS
 	using System.Security.Permissions;
 #endif
+
+	using Castle.DynamicProxy.Tests.Classes;
 
 	using NUnit.Framework;
 
@@ -27,14 +29,26 @@ namespace Castle.DynamicProxy.Tests
 	public class AttributesToAvoidReplicatingTestCase : BasePEVerifyTestCase
 	{
 		[Test]
-		public void DisplayNameAttribute_should_be_replicated_as_it_is_not_inherited()
+		public void NonInheritableAttribute_should_be_replicated_as_it_is_not_inherited()
 		{
-			var proxy = generator.CreateClassProxy<AttributedClass_DisplayName>();
-			Assert.AreEqual(1, proxy.GetType().GetTypeInfo().GetCustomAttributes<DisplayNameAttribute>().Count());
+			var proxy = generator.CreateClassProxy<AttributedClass_NonInheritable>();
+			Assert.AreEqual(1, AttributeCount<NonInheritableAttribute>(proxy));
 		}
 
-		[DisplayName("Test")]
-		public class AttributedClass_DisplayName
+		[NonInheritable]
+		public class AttributedClass_NonInheritable
+		{
+		}
+
+		[Test]
+		public void InheritableAttribute_should_not_be_replicated_as_it_is_inherited_by_the_runtime()
+		{
+			var proxy = generator.CreateClassProxy<AttributedClass_Inheritable>();
+			Assert.AreEqual(0, AttributeCount<InheritableAttribute>(proxy));
+		}
+
+		[Inheritable]
+		public class AttributedClass_Inheritable
 		{
 		}
 
@@ -43,7 +57,7 @@ namespace Castle.DynamicProxy.Tests
 		public void SecurityPermissionAttribute_should_not_be_replicated_as_it_is_part_of_cas()
 		{
 			var proxy = generator.CreateClassProxy<AttributedClass_SecurityPermission>();
-			Assert.IsEmpty(proxy.GetType().GetTypeInfo().GetCustomAttributes<SecurityPermissionAttribute>());
+			Assert.AreEqual(0, AttributeCount<SecurityPermissionAttribute>(proxy));
 		}
 
 		[SecurityPermission(SecurityAction.Demand)]
@@ -55,7 +69,7 @@ namespace Castle.DynamicProxy.Tests
 		public void ReflectionPermissionAttribute_should_not_be_replicated_as_it_is_part_of_cas()
 		{
 			var proxy = generator.CreateClassProxy<AttributedClass_ReflectionPermission>();
-			Assert.IsEmpty(proxy.GetType().GetTypeInfo().GetCustomAttributes<ReflectionPermissionAttribute>());
+			Assert.AreEqual(0, AttributeCount<ReflectionPermissionAttribute>(proxy));
 		}
 
 		[ReflectionPermission(SecurityAction.Demand)]
@@ -63,5 +77,11 @@ namespace Castle.DynamicProxy.Tests
 		{
 		}
 #endif
+
+		private int AttributeCount<TAttribute>(object proxy)
+			where TAttribute : Attribute
+		{
+			return proxy.GetType().GetTypeInfo().GetCustomAttributes(typeof(TAttribute), false).Count();
+		}
 	}
 }
