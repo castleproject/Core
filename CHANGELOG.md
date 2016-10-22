@@ -7,6 +7,7 @@ Breaking Changes:
 
 Enhancements:
 * Add IProxyGenerator interface for the ProxyGenerator class (#215)
+* Improve default list of attributes to avoid replicating. Code Access Security attributes and MarshalAsAttribute will no longer be replicated (#221)
 
 Bugfixes:
 * Fix building on Mono 4.6.1
