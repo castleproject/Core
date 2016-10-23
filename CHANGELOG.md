@@ -4,6 +4,9 @@
 
 Breaking Changes:
 * Rework Serilog integration to accept an ILogger rather than a LoggerConfiguration  to work correctly with Serilog (#142, #211)
+* Remove obsolete property `AttributesToAddToGeneratedTypes` from `ProxyGenerationOptions` (#219)
+* Change type of `ProxyGenerationOptions.AdditionalAttributes` to `IList<CustomAttributeInfo>` (#219)
+* Remove `IAttributeDisassembler` which is no longer necessary (#219)
 
 Enhancements:
 * Add IProxyGenerator interface for the ProxyGenerator class (#215)
@@ -11,6 +14,7 @@ Enhancements:
 
 Bugfixes:
 * Fix building on Mono 4.6.1
+* Different attributes in `ProxyGenerationOptions.AdditionalAttributes` now generates different proxy types (#219)
 
 ## 4.0.0-beta001 (2016-07-17)
 
