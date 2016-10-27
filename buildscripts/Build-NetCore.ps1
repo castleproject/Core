@@ -44,6 +44,10 @@ dotnet test --result=nunit-results.xml
 $xml = [xml](Get-Content nunit-results.xml)
 $xml.SelectNodes("//test-case") | % {
     $testName = $_.fullname
+        .Replace("'", "|'")
+        .Replace("|", "||")
+        .Replace("[", "|[")
+        .Replace("]", "|]")
     $result = $_.result
 
     Write-Output "##teamcity[testStarted name='$testName']"
