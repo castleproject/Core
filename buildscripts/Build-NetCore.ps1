@@ -43,10 +43,10 @@ dotnet test --result=nunit-results.xml
 # Publish unit test results to TeamCity manually until TeamCity supports NUnit 3's result format
 $xml = [xml](Get-Content nunit-results.xml)
 $xml.SelectNodes("//test-case") | % {
-    $testName = $_.fullname
-        .Replace("'", "|'")
-        .Replace("|", "||")
-        .Replace("[", "|[")
+    $testName = $_.fullname `
+        .Replace("'", "|'") `
+        .Replace("|", "||") `
+        .Replace("[", "|[") `
         .Replace("]", "|]")
     $result = $_.result
 
