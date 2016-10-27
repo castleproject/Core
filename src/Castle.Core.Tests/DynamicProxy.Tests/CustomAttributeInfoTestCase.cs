@@ -11,13 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq.Expressions;
-	using System.Reflection;
-	
+
 	using Castle.DynamicProxy;
 
 	using NUnit.Framework;
@@ -202,7 +202,7 @@ namespace Castle.DynamicProxy.Tests
 				() => new MyAttribute1 { IntProperty = 42, StringProperty = "foo", ArrayProperty = new[] { 1, 2, 3 } },
 				new CustomAttributeInfo(
 					defaultCtor,
-					new object[0], 
+					new object[0],
 					new [] {intProperty, stringProperty, arrayProperty},
 					new object[] { 42, "foo", new[] { 1, 2, 3 } }));
 
