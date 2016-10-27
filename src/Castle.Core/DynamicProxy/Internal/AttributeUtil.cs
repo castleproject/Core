@@ -19,43 +19,12 @@ namespace Castle.DynamicProxy.Internal
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Reflection;
-	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Generators;
 
 	public static class AttributeUtil
 	{
-		private static readonly IDictionary<Type, IAttributeDisassembler> disassemblers =
-			new Dictionary<Type, IAttributeDisassembler>();
-
-		private static IAttributeDisassembler fallbackDisassembler = new AttributeDisassembler();
-
-		public static IAttributeDisassembler FallbackDisassembler
-		{
-			get { return fallbackDisassembler; }
-			set { fallbackDisassembler = value; }
-		}
-
-		/// <summary>
-		///   Registers custom disassembler to handle disassembly of specified type of attributes.
-		/// </summary>
-		/// <typeparam name = "TAttribute">Type of attributes to handle</typeparam>
-		/// <param name = "disassembler">Disassembler converting existing instances of Attributes to CustomAttributeBuilders</param>
-		/// <remarks>
-		///   When disassembling an attribute Dynamic Proxy will first check if an custom disassembler has been registered to handle attributes of that type, 
-		///   and if none is found, it'll use the <see cref = "FallbackDisassembler" />.
-		/// </remarks>
-		public static void AddDisassembler<TAttribute>(IAttributeDisassembler disassembler) where TAttribute : Attribute
-		{
-			if (disassembler == null)
-			{
-				throw new ArgumentNullException("disassembler");
-			}
-
-			disassemblers[typeof(TAttribute)] = disassembler;
-		}
-
-		public static CustomAttributeBuilder CreateBuilder(CustomAttributeData attribute)
+		public static CustomAttributeInfo CreateInfo(CustomAttributeData attribute)
 		{
 			Debug.Assert(attribute != null, "attribute != null");
 
@@ -82,12 +51,12 @@ namespace Castle.DynamicProxy.Internal
 #endif
 				attribute.NamedArguments, out properties, out propertyValues, out fields, out fieldValues);
 
-			return new CustomAttributeBuilder(constructor,
-			                                  constructorArgs,
-			                                  properties,
-			                                  propertyValues,
-			                                  fields,
-			                                  fieldValues);
+			return new CustomAttributeInfo(constructor,
+			                               constructorArgs,
+			                               properties,
+			                               propertyValues,
+			                               fields,
+			                               fieldValues);
 		}
 
 		private static void GetArguments(IList<CustomAttributeTypedArgument> constructorArguments,
@@ -168,7 +137,7 @@ namespace Castle.DynamicProxy.Internal
 			fieldValues = fieldValuesList.ToArray();
 		}
 
-		public static IEnumerable<CustomAttributeBuilder> GetNonInheritableAttributes(this MemberInfo member)
+		public static IEnumerable<CustomAttributeInfo> GetNonInheritableAttributes(this MemberInfo member)
 		{
 			Debug.Assert(member != null, "member != null");
 #if FEATURE_LEGACY_REFLECTION_API
@@ -189,10 +158,10 @@ namespace Castle.DynamicProxy.Internal
 					continue;
 				}
 
-				CustomAttributeBuilder builder;
+				CustomAttributeInfo info;
 				try
 				{
-					builder = CreateBuilder(attribute);
+					info = CreateInfo(attribute);
 				}
 				catch (ArgumentException e)
 				{
@@ -210,14 +179,14 @@ namespace Castle.DynamicProxy.Internal
 							typeof(AttributesToAvoidReplicating).FullName);
 					throw new ProxyGenerationException(message, e);
 				}
-				if (builder != null)
+				if (info != null)
 				{
-					yield return builder;
+					yield return info;
 				}
 			}
 		}
 
-		public static IEnumerable<CustomAttributeBuilder> GetNonInheritableAttributes(this ParameterInfo parameter)
+		public static IEnumerable<CustomAttributeInfo> GetNonInheritableAttributes(this ParameterInfo parameter)
 		{
 			Debug.Assert(parameter != null, "parameter != null");
 
@@ -240,10 +209,10 @@ namespace Castle.DynamicProxy.Internal
 					continue;
 				}
 
-				var builder = CreateBuilder(attribute);
-				if (builder != null)
+				var info = CreateInfo(attribute);
+				if (info != null)
 				{
-					yield return builder;
+					yield return info;
 				}
 			}
 		}
@@ -279,15 +248,15 @@ namespace Castle.DynamicProxy.Internal
 			return AttributesToAvoidReplicating.ShouldAvoid(attribute);
 		}
 
-		public static CustomAttributeBuilder CreateBuilder<TAttribute>() where TAttribute : Attribute, new()
+		public static CustomAttributeInfo CreateInfo<TAttribute>() where TAttribute : Attribute, new()
 		{
 			var constructor = typeof(TAttribute).GetConstructor(Type.EmptyTypes);
 			Debug.Assert(constructor != null, "constructor != null");
 
-			return new CustomAttributeBuilder(constructor, new object[0]);
+			return new CustomAttributeInfo(constructor, new object[0]);
 		}
 
-		public static CustomAttributeBuilder CreateBuilder(Type attribute, object[] constructorArguments)
+		public static CustomAttributeInfo CreateInfo(Type attribute, object[] constructorArguments)
 		{
 			Debug.Assert(attribute != null, "attribute != null");
 			Debug.Assert(typeof(Attribute).IsAssignableFrom(attribute), "typeof(Attribute).IsAssignableFrom(attribute)");
@@ -296,20 +265,7 @@ namespace Castle.DynamicProxy.Internal
 			var constructor = attribute.GetConstructor(GetTypes(constructorArguments));
 			Debug.Assert(constructor != null, "constructor != null");
 
-			return new CustomAttributeBuilder(constructor, constructorArguments);
-		}
-
-		// NOTE: Use other overloads if possible. This method is here to support legacy scenarios.
-		internal static CustomAttributeBuilder CreateBuilder(Attribute attribute)
-		{
-			var type = attribute.GetType();
-
-			IAttributeDisassembler disassembler;
-			if (disassemblers.TryGetValue(type, out disassembler))
-			{
-				return disassembler.Disassemble(attribute);
-			}
-			return FallbackDisassembler.Disassemble(attribute);
+			return new CustomAttributeInfo(constructor, constructorArguments);
 		}
 
 		private static Type[] GetTypes(object[] objects)

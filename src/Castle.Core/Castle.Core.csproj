@@ -318,6 +318,7 @@
     <Compile Include="Core\Logging\LoggerLevel.cs" />
     <Compile Include="DynamicProxy\AbstractInvocation.cs" />
     <Compile Include="DynamicProxy\AllMethodsHook.cs" />
+    <Compile Include="DynamicProxy\CustomAttributeInfo.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\TryStatement.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\FinallyStatement.cs" />
     <Compile Include="DynamicProxy\Generators\Emitters\SimpleAST\EndExceptionBlockStatement.cs" />
@@ -330,7 +331,6 @@
     <Compile Include="DynamicProxy\Contributors\InvocationWithGenericDelegateContributor.cs" />
     <Compile Include="DynamicProxy\Contributors\OptionallyForwardingMethodGenerator.cs" />
     <Compile Include="DynamicProxy\Contributors\WrappedClassMembersCollector.cs" />
-    <Compile Include="DynamicProxy\Generators\AttributeDisassembler.cs" />
     <Compile Include="DynamicProxy\Internal\TypeUtil.cs" />
     <Compile Include="DynamicProxy\InvalidProxyConstructorArgumentsException.cs" />
     <Compile Include="DynamicProxy\IProxyGenerator.cs" />
@@ -470,7 +470,6 @@
     <Compile Include="DynamicProxy\Tokens\MethodBaseMethods.cs" />
     <Compile Include="DynamicProxy\Tokens\SerializationInfoMethods.cs" />
     <Compile Include="DynamicProxy\Tokens\TypeMethods.cs" />
-    <Compile Include="DynamicProxy\IAttributeDisassembler.cs" />
     <Compile Include="DynamicProxy\IInterceptorSelector.cs" />
     <Compile Include="DynamicProxy\Tokens\TypeUtilMethods.cs" />
     <Compile Include="Properties\InternalsVisibleToTests.cs" />
