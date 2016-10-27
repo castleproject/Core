@@ -143,6 +143,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Data" />
   </ItemGroup>
@@ -178,6 +179,7 @@
     <Compile Include="DynamicProxy.Tests\InterfaceProxyWithMethodsWithOptionalParametersTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Interfaces\InterfaceWithMethodsWithAllKindsOfOptionalParameters.cs" />
     <Compile Include="DynamicProxy.Tests\Interfaces\InterfaceWithMethodWithParameterWithNullDefaultValue.cs" />
+    <Compile Include="DynamicProxy.Tests\WinFormsTestCase.cs" />
     <Compile Include="MultipleSavedAssembliesTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\VirtualObjectTestCase.cs" />
