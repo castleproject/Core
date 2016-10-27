@@ -1,6 +1,6 @@
 # Castle Core Changelog
 
-## Unreleased
+## 4.0.0-beta002 (2016-10-28)
 
 Breaking Changes:
 * Rework Serilog integration to accept an ILogger rather than a LoggerConfiguration  to work correctly with Serilog (#142, #211)
