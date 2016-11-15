@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Bugfixes:
+* Fix CustomAttributeInfo.FromExpression for VB.NET (@thomaslevesque, #223)
+
 ## 4.0.0-beta002 (2016-10-28)
 
 Breaking Changes:
