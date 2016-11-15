@@ -92,10 +92,12 @@ namespace Castle.DynamicProxy
 			var namedFields = new List<FieldInfo>();
 			var fieldValues = new List<object>();
 
-			var newExpression = expression.Body as NewExpression;
+			var body = UnwrapBody(expression.Body);
+
+			var newExpression = body as NewExpression;
 			if (newExpression == null)
 			{
-				var memberInitExpression = expression.Body as MemberInitExpression;
+				var memberInitExpression = body as MemberInitExpression;
 				if (memberInitExpression == null)
 				{
 					throw new ArgumentException("The expression must be either a simple constructor call or an object initializer expression");
@@ -149,6 +151,20 @@ namespace Castle.DynamicProxy
 				propertyValues.ToArray(),
 				namedFields.ToArray(),
 				fieldValues.ToArray());
+		}
+
+		private static Expression UnwrapBody(Expression body)
+		{
+			// In VB.NET, a lambda expression like `Function() New MyAttribute()` introduces
+			// a conversion to the return type. We need to remove this conversion expression
+			// to get the actual constructor call.
+
+			var convertExpression = body as UnaryExpression;
+			if (convertExpression != null && convertExpression.NodeType == ExpressionType.Convert)
+			{
+				return convertExpression.Operand;
+			}
+			return body;
 		}
 
 		private static object GetAttributeArgumentValue(Expression arg, bool allowArray)
