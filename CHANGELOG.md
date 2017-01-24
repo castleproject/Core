@@ -1,6 +1,10 @@
 # Castle Core Changelog
 
-## Unreleased
+## 4.0.0 (2017-01-25)
+
+Breaking Changes:
+* Update to NLog 4.4.1 and remove beta .NET Core support for NLog (#228)
+* Update to log4net 2.0.7 (#229)
 
 Bugfixes:
 * Fix CustomAttributeInfo.FromExpression for VB.NET (@thomaslevesque, #223)
