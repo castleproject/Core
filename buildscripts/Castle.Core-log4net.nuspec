@@ -15,7 +15,7 @@
     <tags>castle, logging, log4net</tags>
     <dependencies>
       <dependency id="Castle.Core" version="$CastleCoreVersion$" />
-      <dependency id="log4net" version="2.0.5" />
+      <dependency id="log4net" version="2.0.7" />
     </dependencies>
   </metadata>
   <files>
