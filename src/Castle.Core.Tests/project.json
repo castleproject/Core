@@ -12,11 +12,11 @@
       "target": "project",
       "version": ""
     },
-    "Castle.Services.Logging.SerilogIntegration": {
+    "Castle.Services.Logging.NLogIntegration": {
       "target": "project",
       "version": ""
     },
-    "Castle.Services.Logging.NLogIntegration": {
+    "Castle.Services.Logging.SerilogIntegration": {
       "target": "project",
       "version": ""
     },

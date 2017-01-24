@@ -1,4 +1,4 @@
-// Copyright 2004-2010 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2017 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,12 +21,14 @@ namespace Castle.Services.Logging.Log4netIntegration
 	using log4net.Core;
 	using log4net.Util;
 
-	using Logger = Castle.Core.Logging.ILogger;
-
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
-	public class Log4netLogger : MarshalByRefObject, Logger
+	public class Log4netLogger :
+#if FEATURE_APPDOMAIN
+		MarshalByRefObject,
+#endif
+		Castle.Core.Logging.ILogger
 	{
 		private static readonly Type declaringType = typeof(Log4netLogger);
 
@@ -78,7 +80,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			return Logger.ToString();
 		}
 
-		public virtual Logger CreateChildLogger(String name)
+		public virtual Castle.Core.Logging.ILogger CreateChildLogger(String name)
 		{
 			return Factory.Create(Logger.Name + "." + name);
 		}
