@@ -74,7 +74,9 @@ namespace Castle.DynamicProxy.Generators
 				// TODO: redo it
 				if (contributor is MixinContributor)
 				{
-					constructorArguments.AddRange((contributor as MixinContributor).Fields);
+                    // constructor arguments are ordered by interface name as the MixinsData does
+                    var orderedFields = (contributor as MixinContributor).Fields.OrderBy(x => x.Fieldbuilder.FieldType.Name);
+                    constructorArguments.AddRange(orderedFields);
 				}
 			}
 
