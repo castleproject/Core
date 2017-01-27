@@ -10,6 +10,9 @@ Enhancements:
 * Add ProxyUtil.IsAccessible to check if a method is accessible to DynamicProxyGenAssembly2 (Blair Conrad, #235)
 * Refactor build engineering to support AppVeyor and TravisCI (@fir3pho3nixx, #241)
 
+Bugfixes:
+* Fix order of class proxy constructor arguments when using multiple mixins (@sebastienros, #230)
+
 ## 4.0.0 (2017-01-25)
 
 Breaking Changes:

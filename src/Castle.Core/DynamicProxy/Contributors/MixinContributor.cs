@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Contributors
 	{
 		private readonly bool canChangeTarget;
 		private readonly IList<Type> empty = new List<Type>();
-		private readonly IDictionary<Type, FieldReference> fields = new Dictionary<Type, FieldReference>();
+		private readonly IDictionary<Type, FieldReference> fields = new SortedDictionary<Type, FieldReference>(new FieldReferenceComparer());
 		private readonly GetTargetExpressionDelegate getTargetExpression;
 
 		public MixinContributor(INamingScope namingScope, bool canChangeTarget)
