@@ -72,11 +72,10 @@ namespace Castle.DynamicProxy.Generators
 				contributor.Generate(emitter, ProxyGenerationOptions);
 
 				// TODO: redo it
-				if (contributor is MixinContributor)
+				var mixinContributor = contributor as MixinContributor;
+				if (mixinContributor != null)
 				{
-                    // constructor arguments are ordered by interface name as the MixinsData does
-                    var orderedFields = (contributor as MixinContributor).Fields.OrderBy(x => x.Fieldbuilder.FieldType.Name);
-                    constructorArguments.AddRange(orderedFields);
+					constructorArguments.AddRange(mixinContributor.Fields);
 				}
 			}
 
@@ -103,8 +102,8 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		protected virtual IEnumerable<Type> GetTypeImplementerMapping(Type[] interfaces,
-		                                                              out IEnumerable<ITypeContributor> contributors,
-		                                                              INamingScope namingScope)
+																	  out IEnumerable<ITypeContributor> contributors,
+																	  INamingScope namingScope)
 		{
 			var methodsToSkip = new List<MethodInfo>();
 			var proxyInstance = new ClassProxyInstanceContributor(targetType, methodsToSkip, interfaces, ProxyTypeConstants.Class);
@@ -146,7 +145,7 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 			var additionalInterfacesContributor = new InterfaceProxyWithoutTargetContributor(namingScope,
-			                                                                                 (c, m) => NullExpression.Instance)
+																							 (c, m) => NullExpression.Instance)
 			{ Logger = Logger };
 			// 3. then additional interfaces
 			foreach (var @interface in additionalInterfaces)
