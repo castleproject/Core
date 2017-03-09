@@ -1,4 +1,4 @@
-// Copyright 2004-2014 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2017 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Internal
+namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Linq;
 	using System.Reflection;
 
+	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators.Emitters;
 
 	internal static class ExceptionMessageBuilder
