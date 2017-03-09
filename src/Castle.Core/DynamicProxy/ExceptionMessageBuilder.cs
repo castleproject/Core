@@ -15,11 +15,10 @@
 namespace Castle.DynamicProxy
 {
 	using System;
-	using System.Linq;
 	using System.Reflection;
 
 	using Castle.Core.Internal;
-	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Internal;
 
 	internal static class ExceptionMessageBuilder
 	{
@@ -33,50 +32,19 @@ namespace Castle.DynamicProxy
 		{
 			var targetAssembly = typeToProxy.GetTypeInfo().Assembly;
 
-			string strongNamedOrNotIndicator = " not"; // assume not strong-named
-			string assemblyToBeVisibleTo = "\"DynamicProxyGenAssembly2\""; // appropriate for non-strong-named
-	
-			if (targetAssembly.IsAssemblySigned())
-			{
-				strongNamedOrNotIndicator = "";
-				assemblyToBeVisibleTo = ReferencesCastleCore(targetAssembly)
-					? assemblyToBeVisibleTo = "InternalsVisible.ToDynamicProxyGenAssembly2"
-					: assemblyToBeVisibleTo = '"' + InternalsVisible.ToDynamicProxyGenAssembly2 + '"';
-			}
-
 			string inaccessibleTypeDescription = inaccessibleType == typeToProxy
 				? "it"
 				: "type " + inaccessibleType.GetBestName();
-			
-			var messageFormat =
-				"Can not create proxy for type {0} because {1} is not accessible. " +
-				"Make it public, or internal and mark your assembly with " +
-				"[assembly: InternalsVisibleTo({2})] attribute, because assembly {3} " +
-				"is{4} strong-named.";
 
-			return string.Format(messageFormat,
+			var messageFormat = "Can not create proxy for type {0} because {1} is not accessible. ";
+
+			var message = string.Format(messageFormat,
 				typeToProxy.GetBestName(),
-				inaccessibleTypeDescription,
-				assemblyToBeVisibleTo,
-				GetAssemblyName(targetAssembly),
-				strongNamedOrNotIndicator);
-		}
+				inaccessibleTypeDescription);
 
-		private static string GetAssemblyName(Assembly targetAssembly)
-		{
-			return targetAssembly.GetName().Name;
-		}
+			var instructions = InternalsUtil.CreateInstructionsToMakeVisible(targetAssembly);
 
-		private static bool ReferencesCastleCore(Assembly inspectedAssembly)
-		{
-#if FEATURE_GET_REFERENCED_ASSEMBLIES
-			return inspectedAssembly.GetReferencedAssemblies()
-				.Any(r => r.FullName == Assembly.GetExecutingAssembly().FullName);
-#else
-			// .NET Core does not provide an API to do this, so we just fall back to the solution that will definitely work.
-			// After all it is just an exception message.
-			return false;
-#endif
+			return message + instructions;
 		}
 	}
 }

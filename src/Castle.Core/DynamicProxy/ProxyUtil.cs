@@ -16,6 +16,8 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Reflection;
+
+	using Castle.DynamicProxy.Internal;
 #if FEATURE_REMOTING
 	using System.Runtime.Remoting;
 #endif
@@ -79,6 +81,46 @@ namespace Castle.DynamicProxy
 		public static bool IsProxyType(Type type)
 		{
 			return typeof(IProxyTargetAccessor).IsAssignableFrom(type);
+		}
+
+		/// <summary>
+		/// Checks to see if a method is accessible to DynamicProxyGenAssembly2.</summary>
+		/// <param name="method">The method to check</param>
+		/// <returns><c>true</c> if the method is accessible, <c>false</c> otherwise</returns>
+		public static bool IsAccessible(MethodBase method)
+		{
+			return method.IsAccessible();
+		}
+
+		/// <summary>
+		/// Checks to see if a method is accessible to DynamicProxyGenAssembly2.</summary>
+		/// <param name="method">The method to check</param>
+		/// <param name="message">If the method is accessible, <c>null</c>; otherwise, an explanation of why the method is not accessible</param>
+		/// <returns><c>true</c> if the method is accessible, <c>false</c> otherwise</returns>
+		public static bool IsAccessible(MethodBase method, out string message)
+		{
+			if (method.IsAccessible())
+			{
+				message = null;
+				return true;
+			}
+
+			message = CreateMessageForInaccessibleMethod(method);
+			return false;
+		}
+
+		private static string CreateMessageForInaccessibleMethod(MethodBase inaccessibleMethod)
+		{
+			var containingType = inaccessibleMethod.DeclaringType;
+			var targetAssembly = containingType.GetTypeInfo().Assembly;
+
+			var messageFormat = "Can not create proxy for method {0} because it is not accessible. ";
+
+			var message = string.Format(messageFormat,
+				inaccessibleMethod);
+
+			var instructions = InternalsUtil.CreateInstructionsToMakeVisible(targetAssembly);
+			return message + instructions;
 		}
 	}
 }

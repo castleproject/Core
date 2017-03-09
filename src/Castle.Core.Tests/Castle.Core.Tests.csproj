@@ -179,6 +179,7 @@
     <Compile Include="DynamicProxy.Tests\InterfaceProxyWithMethodsWithOptionalParametersTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\Interfaces\InterfaceWithMethodsWithAllKindsOfOptionalParameters.cs" />
     <Compile Include="DynamicProxy.Tests\Interfaces\InterfaceWithMethodWithParameterWithNullDefaultValue.cs" />
+    <Compile Include="DynamicProxy.Tests\ProxyUtilTestCase.cs" />
     <Compile Include="DynamicProxy.Tests\WinFormsTestCase.cs" />
     <Compile Include="MultipleSavedAssembliesTestCase.cs" />
     <Compile Include="Components.DictionaryAdapter.Tests\AdaptingGenericDictionaryTestCase.cs" />
