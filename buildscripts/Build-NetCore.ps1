@@ -38,10 +38,15 @@ dotnet build --configuration Release --framework netstandard1.3 --output build/N
 Write-Host "Running tests"
 
 cd ../Castle.Core.Tests
-dotnet test --result=nunit-results.xml
+
+$testResultsDirectory='..\..\build\NETCORE\NETCORE-Release\bin\test-results'
+if (!(Test-Path $testResultsDirectory)) { New-Item -ItemType Directory $testResultsDirectory }
+
+$testResultsFile = (Join-Path $testResultsDirectory 'nunit-results.xml')
+dotnet test --result=$testResultsFile
 
 # Publish unit test results to TeamCity manually until TeamCity supports NUnit 3's result format
-$xml = [xml](Get-Content nunit-results.xml)
+$xml = [xml](Get-Content $testResultsFile)
 $xml.SelectNodes("//test-case") | % {
     $testName = $_.fullname.Replace("'", "|'").Replace("|", "||").Replace("[", "|[").Replace("]", "|]")
     $result = $_.result
@@ -53,7 +58,7 @@ $xml.SelectNodes("//test-case") | % {
     } elseif ($result -eq "Inconclusive") {
         Write-Output "##teamcity[testIgnored name='$testName' message='Inconclusive']"
     } elseif ($result -ne "Passed") {
-        Write-Output "##teamcity[testFailed name='$testName' message='Failed' details='See nunit-results.xml']"
+        Write-Output "##teamcity[testFailed name='$testName' message='Failed' details='See $testResultsFile']"
     }
 
     Write-Output "##teamcity[testFinished name='$testName']"
