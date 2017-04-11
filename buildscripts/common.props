@@ -1,0 +1,21 @@
+<Project>
+  <PropertyGroup>
+    <VersionPrefix>5.0.0</VersionPrefix>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/cryosharp/fortress</RepositoryUrl>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net40'">
+    <DefineConstants>NET40;FEATURE_APPDOMAIN;FEATURE_SYSTEM_CONVERTER;FEATURE_LEGACY_REFLECTION_API;FEATURE_ISUPPORTINITIALIZE;FEATURE_DICTIONARYADAPTER_XML;FEATURE_BINDINGLIST;FEATURE_LISTSORT;FEATURE_IDATAERRORINFO;FEATURE_SERIALIZATION;FEATURE_GET_REFERENCED_ASSEMBLIES;FEATURE_SECURITY_PERMISSIONS;FEATURE_REMOTING;FEATURE_GAC;FEATURE_SYSTEM_CONFIGURATION;FEATURE_ASSEMBLYBUILDER_SAVE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.5'">
+    <DefineConstants></DefineConstants>
+  </PropertyGroup>
+
+</Project>

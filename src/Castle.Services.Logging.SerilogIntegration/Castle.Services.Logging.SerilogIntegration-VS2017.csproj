@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\buildscripts\common.props"></Import>
+  
+  <PropertyGroup>
+    <TargetFrameworks>net40</TargetFrameworks>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+ 
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.5'">
+    <PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
+    <PackageReference Include="System.ComponentModel" Version="4.3.0" />
+    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Serilog" Version="1.5.14" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Castle.Core\Castle.Core-VS2017.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+  
+</Project>
