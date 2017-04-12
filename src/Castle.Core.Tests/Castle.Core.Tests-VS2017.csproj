@@ -1,8 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 <Import Project="..\..\buildscripts\common.props"></Import>
   <PropertyGroup>
-    <TargetFrameworks>net40</TargetFrameworks>
+    <TargetFrameworks>net45</TargetFrameworks>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <AssemblyName>Castle.Core.Tests</AssemblyName>
+    <RootNamespace>Castle.Core.Tests</RootNamespace>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Core.Tests\Resources\file1.txt" />

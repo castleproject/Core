@@ -3,10 +3,16 @@
   <Import Project="..\..\buildscripts\common.props"></Import>
   
   <PropertyGroup>
-    <TargetFrameworks>net40</TargetFrameworks>
+    <TargetFrameworks>net45</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <AssemblyName>Castle.Services.Logging.log4netIntegration</AssemblyName>
+    <RootNamespace>Castle.Services.Logging.log4netIntegration</RootNamespace>
   </PropertyGroup>
  
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.5'">
     <PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
     <PackageReference Include="System.ComponentModel" Version="4.3.0" />
@@ -25,8 +31,5 @@
     <ProjectReference Include="..\Castle.Core\Castle.Core-VS2017.csproj" />
   </ItemGroup>
   
-  <ItemGroup>
-    <Reference Include="System.Configuration" />
-  </ItemGroup>
   
 </Project>

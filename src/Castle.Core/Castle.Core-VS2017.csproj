@@ -3,11 +3,23 @@
   <Import Project="..\..\buildscripts\common.props"></Import>
   
   <PropertyGroup>
-    <TargetFrameworks>net40</TargetFrameworks>
+    <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <AssemblyName>Castle.Core</AssemblyName>
+    <RootNamespace>Castle.Core</RootNamespace>
   </PropertyGroup>
  
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.5'">
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
+    <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0"/>
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0"/>
+    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0"/>
+    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
     <PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
     <PackageReference Include="System.ComponentModel" Version="4.3.0" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
@@ -15,10 +27,6 @@
   
   <ItemGroup>
     <Folder Include="Properties\" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Reference Include="System.Configuration" />
   </ItemGroup>
   
 </Project>
