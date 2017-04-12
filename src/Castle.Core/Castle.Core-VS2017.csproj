@@ -7,6 +7,8 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <AssemblyName>Castle.Core</AssemblyName>
     <RootNamespace>Castle.Core</RootNamespace>
+    <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
  
   <ItemGroup>
@@ -14,9 +16,9 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
-    <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0"/>
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0"/>
-    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0"/>
+    <PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
+    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
     <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />

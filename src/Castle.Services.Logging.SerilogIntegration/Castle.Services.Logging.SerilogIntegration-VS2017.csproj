@@ -7,6 +7,8 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <AssemblyName>Castle.Services.Logging.SerilogIntegration</AssemblyName>
     <RootNamespace>Castle.Services.Logging.SerilogIntegration</RootNamespace>
+    <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
  
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">

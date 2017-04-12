@@ -7,6 +7,8 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <AssemblyName>Castle.Services.Logging.log4netIntegration</AssemblyName>
     <RootNamespace>Castle.Services.Logging.log4netIntegration</RootNamespace>
+    <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
  
   <ItemGroup Condition="'$(TargetFramework)'=='net45'">
