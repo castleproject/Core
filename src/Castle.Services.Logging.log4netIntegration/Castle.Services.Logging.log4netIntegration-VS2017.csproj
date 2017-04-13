@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\buildscripts\common.props"></Import>
+  
+  <PropertyGroup>
+    <TargetFrameworks>net45</TargetFrameworks>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <AssemblyName>Castle.Services.Logging.log4netIntegration</AssemblyName>
+    <RootNamespace>Castle.Services.Logging.log4netIntegration</RootNamespace>
+    <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>True</SignAssembly>
+  </PropertyGroup>
+ 
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.5'">
+    <PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
+    <PackageReference Include="System.ComponentModel" Version="4.3.0" />
+    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.8" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Castle.Core\Castle.Core-VS2017.csproj" />
+  </ItemGroup>
+  
+  
+</Project>

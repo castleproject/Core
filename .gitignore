@@ -10,6 +10,8 @@ build/
 artifacts/
 src/**/obj/
 src/**/bin/
+buildscripts/**/obj/
+buildscripts/**/bin/
 project.lock.json
 /.dnx/
 /.dotnet/

@@ -1,5 +1,9 @@
 # Castle Core Changelog
 
+## Unreleased
+
+* Refactor build engineering to support AppVeyor and TravisCI (@fir3pho3nixx, #241)
+
 ## 4.0.0 (2017-01-25)
 
 Breaking Changes:
