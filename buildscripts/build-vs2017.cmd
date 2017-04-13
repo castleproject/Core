@@ -21,3 +21,5 @@ dotnet restore ./src/Castle.Services.Logging.NLogIntegration/Castle.Services.Log
 dotnet restore ./src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration-VS2017.csproj
 
 dotnet build Castle.Core-VS2017.sln
+
+dotnet test ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj
