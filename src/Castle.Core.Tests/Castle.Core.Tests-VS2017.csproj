@@ -9,8 +9,12 @@
     <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Core.Tests\Resources\file1.txt" />
-    <EmbeddedResource Include="Core.Tests\Resources\MoreRes\file2.txt" />
+    <EmbeddedResource Include="Core.Tests\Resources\file1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core.Tests\Resources\MoreRes\file2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NUnit" Version="2.6.4" />

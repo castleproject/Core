@@ -10,6 +10,14 @@
     <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>True</SignAssembly>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <None Remove="DynamicProxy\DynProxy.snk" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="DynamicProxy\DynProxy.snk" />
+  </ItemGroup>
  
   <ItemGroup>
     <Reference Include="System.Configuration" />
