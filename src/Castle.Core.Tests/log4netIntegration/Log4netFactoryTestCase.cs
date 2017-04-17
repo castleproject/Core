@@ -20,8 +20,6 @@ namespace Castle.log4netIntegration
 
 	using Castle.Services.Logging.Log4netIntegration;
 
-	using CastleTests.log4netIntegration;
-
 	using NUnit.Framework;
 
 	using log4net;
@@ -31,6 +29,7 @@ namespace Castle.log4netIntegration
 	[TestFixture]
 	public class Log4netFactoryTestCase
 	{
+		private const string log4netXmlPath = "./log4netIntegration/log4net.xml";
 		private const string logMessage = "testing log4net configuration using a stream for configuration";
 		private const string loggerName = "Log4netFactoryTestCase";
 
@@ -51,7 +50,7 @@ namespace Castle.log4netIntegration
 		public void CanCreateExtendedLog4NetConfigUsingStream()
 		{
 			ExtendedLog4netFactory factory;
-			using (var stream = StringToStream(log4netConfig.Config))
+			using (var stream = StringToStream(File.ReadAllText(log4netXmlPath)))
 			{
 				factory = new ExtendedLog4netFactory(stream);
 			}
@@ -68,7 +67,7 @@ namespace Castle.log4netIntegration
 		public void CanCreateLog4NetConfigUsingStream()
 		{
 			Log4netFactory factory;
-			using (var stream = StringToStream(log4netConfig.Config))
+			using (var stream = StringToStream(File.ReadAllText(log4netXmlPath)))
 			{
 				factory = new Log4netFactory(stream);
 			}
@@ -84,7 +83,7 @@ namespace Castle.log4netIntegration
 		[Test]
 		public void CanCreateStreamFromString()
 		{
-			var original = log4netConfig.Config;
+			var original = File.ReadAllText(log4netXmlPath);
 			using (var stream = StringToStream(original))
 			{
 				using (var reader = new StreamReader(stream))

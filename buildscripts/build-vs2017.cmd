@@ -14,12 +14,29 @@ REM See the License for the specific language governing permissions and
 REM limitations under the License.
 REM ****************************************************************************
 
+if "%1" == "" goto no_config 
+if "%1" NEQ "" goto set_config 
+
+:set_config
+SET Configuration=%1
+GOTO restore_packages
+
+:no_config
+SET Configuration=Release
+GOTO restore_packages
+
+:restore_packages
 dotnet restore ./src/Castle.Core/Castle.Core-VS2017.csproj
 dotnet restore ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj
 dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration-VS2017.csproj
 dotnet restore ./src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration-VS2017.csproj
 dotnet restore ./src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration-VS2017.csproj
+GOTO build
 
-dotnet build Castle.Core-VS2017.sln
+:build
+dotnet build Castle.Core-VS2017.sln -c %Configuration%
+GOTO test
 
-dotnet test ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj
+:test
+%UserProfile%\.nuget\packages\nunit.consolerunner\3.6.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net45/Castle.Core.Tests.dll
+rem dotnet test ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj

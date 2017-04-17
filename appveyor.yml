@@ -10,6 +10,8 @@ branches:
 
 skip_tags: true
 
+test: off
+
 build_script:
   
   - cmd: build-vs2017.cmd
