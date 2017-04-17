@@ -6,7 +6,7 @@
     <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <AssemblyName>Castle.Core</AssemblyName>
-    <RootNamespace>Castle.Core</RootNamespace>
+    <RootNamespace>Castle</RootNamespace>
     <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>True</SignAssembly>
   </PropertyGroup>
@@ -18,8 +18,8 @@
   <ItemGroup>
     <EmbeddedResource Include="DynamicProxy\DynProxy.snk" />
   </ItemGroup>
- 
-  <ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
     <Reference Include="System.Configuration" />
   </ItemGroup>
   

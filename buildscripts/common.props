@@ -1,21 +1,41 @@
 <Project>
-  <PropertyGroup>
-    <VersionPrefix>5.0.0</VersionPrefix>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/castleproject/Core</RepositoryUrl>
-  </PropertyGroup>
+	<PropertyGroup>
+		<NoWarn>$(NoWarn);CS1591;CS3014;CS3003;CS3001;CS3021</NoWarn>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/castleproject/Core</RepositoryUrl>
+		<BuildVersion Condition="'$(APPVEYOR_BUILD_VERSION)'==''">0.0.0</BuildVersion>
+		<BuildVersion Condition="'$(APPVEYOR_BUILD_VERSION)'!=''">$(APPVEYOR_BUILD_VERSION)</BuildVersion>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup>
+		<Product>Castle Core</Product>
+		<Version>$(BuildVersion)</Version>
+		<AssemblyVersion>$(BuildVersion)</AssemblyVersion>
+		<AssemblyTitle>Castle Project Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</AssemblyTitle>
+		<Authors>Castle Project Contributors</Authors>
+		<Copyright>Copyright 2004-$CurrentYear$ Castle Project - http://www.castleproject.org/</Copyright>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net45'">
-    <DefineConstants>NET45;FEATURE_APPDOMAIN;FEATURE_SYSTEM_CONVERTER;FEATURE_ISUPPORTINITIALIZE;FEATURE_DICTIONARYADAPTER_XML;FEATURE_BINDINGLIST;FEATURE_LISTSORT;FEATURE_IDATAERRORINFO;FEATURE_SERIALIZATION;FEATURE_GET_REFERENCED_ASSEMBLIES;FEATURE_SECURITY_PERMISSIONS;FEATURE_REMOTING;FEATURE_GAC;FEATURE_SYSTEM_CONFIGURATION;FEATURE_ASSEMBLYBUILDER_SAVE</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup>
+		<DiagnosticsConstants>DEBUG</DiagnosticsConstants>
+		<NetStandardConstants>TRACE;FEATURE_NETCORE_REFLECTION_API</NetStandardConstants>
+		<DesktopClrConstants>TRACE;DOTNET45;DOTNET40;FEATURE_APPDOMAIN;FEATURE_SYSTEM_CONVERTER;FEATURE_ISUPPORTINITIALIZE;FEATURE_DICTIONARYADAPTER_XML;FEATURE_BINDINGLIST;FEATURE_LISTSORT;FEATURE_IDATAERRORINFO;FEATURE_SERIALIZATION;FEATURE_GET_REFERENCED_ASSEMBLIES;FEATURE_SECURITY_PERMISSIONS;FEATURE_REMOTING;FEATURE_GAC;FEATURE_SYSTEM_CONFIGURATION;FEATURE_ASSEMBLYBUILDER_SAVE</DesktopClrConstants>
+	</PropertyGroup>
+		
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net45|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants)</DefineConstants>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
-    <DefineConstants>FEATURE_NETCORE_REFLECTION_API</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net45|Release'">
+		<DefineConstants>$(DesktopClrConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard1.3|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(NetStandardConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard1.3|Release'">
+		<DefineConstants>$(NetStandardConstants)</DefineConstants>
+	</PropertyGroup>
 
 </Project>
