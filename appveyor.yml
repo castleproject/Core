@@ -1,0 +1,15 @@
+version: 4.0.{build}
+
+image: Visual Studio 2017
+
+branches:
+
+  except:
+  
+    - gh-pages
+
+skip_tags: true
+
+build_script:
+  
+  - cmd: build-vs2017.cmd
