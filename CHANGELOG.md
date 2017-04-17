@@ -1,5 +1,8 @@
 # Castle Core Changelog
 
+Bugfixes:
+* Fix order of class proxy constructor arguments when using multiple mixins (@sebastienros, #230)
+
 ## 4.0.0 (2017-01-25)
 
 Breaking Changes:
