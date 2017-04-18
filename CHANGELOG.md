@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Enhancements:
+* Add ProxyUtil.IsAccessible to check if a method is accessible to DynamicProxyGenAssembly2 (Blair Conrad, #235)
+
 ## 4.0.0 (2017-01-25)
 
 Breaking Changes:
