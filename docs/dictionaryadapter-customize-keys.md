@@ -113,7 +113,7 @@ public interface IPerson
 
 Now:
 
-```cs`harp
+```csharp
 adapter.Full_Name == dictionary["Full.Name"];
 ```
 
