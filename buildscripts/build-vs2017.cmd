@@ -38,5 +38,5 @@ dotnet build Castle.Core-VS2017.sln -c %Configuration%
 GOTO test
 
 :test
-%UserProfile%\.nuget\packages\nunit.consolerunner\3.6.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net45/Castle.Core.Tests.dll
+%UserProfile%\.nuget\packages\nunit.consolerunner\3.6.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net46/Castle.Core.Tests.dll
 rem dotnet test ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj

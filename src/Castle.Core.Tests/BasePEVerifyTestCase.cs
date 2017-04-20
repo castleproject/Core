@@ -75,6 +75,12 @@ namespace Castle.DynamicProxy.Tests
 
 		private bool verificationDisabled;
 
+		[OneTimeSetUp]
+		public void OneTimeSetUp()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
+
 		[SetUp]
 		public virtual void Init()
 		{

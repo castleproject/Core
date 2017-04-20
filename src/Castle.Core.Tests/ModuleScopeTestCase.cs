@@ -25,6 +25,12 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class ModuleScopeTestCase
 	{
+		[OneTimeSetUp]
+		public void OneTimeSetUp()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
+
 		[Test]
 		public void ModuleScopeStoresModuleBuilder()
 		{

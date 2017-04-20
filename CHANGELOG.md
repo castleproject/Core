@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Upgraded Castle.Core.Tests to net46 framework (@fir3pho3nixx, #241)
+* Upgraded nunit to v3.6.1 (@fir3pho3nixx, #241)
 * Upgraded log4net to v2.0.8 (@fir3pho3nixx, #241)
 * Refactor build engineering to support AppVeyor and TravisCI (@fir3pho3nixx, #241)
 
