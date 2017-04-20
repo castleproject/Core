@@ -1,4 +1,5 @@
 <Project>
+	
 	<PropertyGroup>
 		<NoWarn>$(NoWarn);CS1591;CS3014;CS3003;CS3001;CS3021</NoWarn>
 		<RepositoryType>git</RepositoryType>
@@ -21,7 +22,7 @@
 		<NetStandardConstants>TRACE;FEATURE_NETCORE_REFLECTION_API</NetStandardConstants>
 		<DesktopClrConstants>TRACE;DOTNET45;DOTNET40;FEATURE_APPDOMAIN;FEATURE_SYSTEM_CONVERTER;FEATURE_ISUPPORTINITIALIZE;FEATURE_DICTIONARYADAPTER_XML;FEATURE_BINDINGLIST;FEATURE_LISTSORT;FEATURE_IDATAERRORINFO;FEATURE_SERIALIZATION;FEATURE_GET_REFERENCED_ASSEMBLIES;FEATURE_SECURITY_PERMISSIONS;FEATURE_REMOTING;FEATURE_GAC;FEATURE_SYSTEM_CONFIGURATION;FEATURE_ASSEMBLYBUILDER_SAVE</DesktopClrConstants>
 	</PropertyGroup>
-		
+
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net45|Debug'">
 		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants)</DefineConstants>
 	</PropertyGroup>
@@ -30,11 +31,27 @@
 		<DefineConstants>$(DesktopClrConstants)</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net46|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net46|Release'">
+		<DefineConstants>$(DesktopClrConstants)</DefineConstants>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard1.3|Debug'">
 		<DefineConstants>$(DiagnosticsConstants);$(NetStandardConstants)</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard1.3|Release'">
+		<DefineConstants>$(NetStandardConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp1.0|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(NetStandardConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp1.0|Release'">
 		<DefineConstants>$(NetStandardConstants)</DefineConstants>
 	</PropertyGroup>
 

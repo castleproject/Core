@@ -3,7 +3,7 @@
   <Import Project="..\..\buildscripts\common.props"></Import>
   
   <PropertyGroup>
-    <TargetFrameworks>net45</TargetFrameworks>
+    <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <AssemblyName>Castle.Services.Logging.SerilogIntegration</AssemblyName>
     <RootNamespace>Castle.Services.Logging.SerilogIntegration</RootNamespace>
@@ -22,7 +22,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Serilog" Version="1.5.14" />
+    <PackageReference Include="Serilog" Version="2.0.0" />
   </ItemGroup>
   
   <ItemGroup>
