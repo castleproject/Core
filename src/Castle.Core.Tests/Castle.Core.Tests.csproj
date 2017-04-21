@@ -331,11 +331,6 @@
     <Compile Include="XmlSerializationTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="log4netIntegration\log4netConfig.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>log4netConfig.resx</DependentUpon>
-    </Compile>
     <Compile Include="log4netIntegration\Log4netFactoryTestCase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -514,11 +509,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="Core.Tests\Resources\MoreRes\file2.txt" />
-    <EmbeddedResource Include="log4netIntegration\log4netConfig.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>log4netConfig.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Castle.Core\Castle.Core.csproj">
