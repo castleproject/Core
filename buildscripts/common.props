@@ -32,11 +32,11 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net461|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);FEATURE_TEST_SERILOGINTEGRATION</DefineConstants>
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants)</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net461|Release'">
-		<DefineConstants>$(DesktopClrConstants);FEATURE_TEST_SERILOGINTEGRATION</DefineConstants>
+		<DefineConstants>$(DesktopClrConstants)</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard1.3|Debug'">

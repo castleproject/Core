@@ -56,7 +56,6 @@
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
 		<ProjectReference Include="..\Castle.Core\Castle.Core-VS2017.csproj" />
-		<ProjectReference Include="..\Castle.Services.Logging.SerilogIntegration\Castle.Services.Logging.SerilogIntegration-VS2017.csproj" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='net461'">
 		<Reference Include="Microsoft.CSharp" />
