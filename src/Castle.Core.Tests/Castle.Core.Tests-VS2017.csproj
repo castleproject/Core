@@ -32,6 +32,8 @@
 		<PackageReference Include="NUnit" Version="3.6.1" />
 		<PackageReference Include="NUnit.Console" Version="3.6.1" />
 		<PackageReference Include="NUnitLite" Version="3.6.1" />
+		<PackageReference Include="log4net" Version="2.0.8" />
+		<PackageReference Include="Serilog" Version="2.0.0" />
 		<PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
 		<PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
 		<PackageReference Include="System.Xml.ReaderWriter" Version="4.3.0" />
@@ -49,6 +51,9 @@
 		<PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='net461'">
+		<PackageReference Include="NLog" Version="4.4.1" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)'=='net461'">
 		<ProjectReference Include="..\Castle.Core\Castle.Core-VS2017.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration-VS2017.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration-VS2017.csproj" />
@@ -56,6 +61,7 @@
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
 		<ProjectReference Include="..\Castle.Core\Castle.Core-VS2017.csproj" />
+		<ProjectReference Include="..\Castle.Services.Logging.SerilogIntegration\Castle.Services.Logging.SerilogIntegration-VS2017.csproj" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='net461'">
 		<Reference Include="Microsoft.CSharp" />
