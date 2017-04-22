@@ -31,11 +31,11 @@
 		<DefineConstants>$(DesktopClrConstants)</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net46|Debug'">
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net461|Debug'">
 		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants)</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net46|Release'">
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net461|Release'">
 		<DefineConstants>$(DesktopClrConstants)</DefineConstants>
 	</PropertyGroup>
 
@@ -47,11 +47,11 @@
 		<DefineConstants>$(NetStandardConstants)</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp1.0|Debug'">
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp1.1|Debug'">
 		<DefineConstants>$(DiagnosticsConstants);$(NetStandardConstants)</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp1.0|Release'">
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp1.1|Release'">
 		<DefineConstants>$(NetStandardConstants)</DefineConstants>
 	</PropertyGroup>
 
