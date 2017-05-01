@@ -2,7 +2,7 @@ language: csharp
 
 solution: Castle.Core-VS2017.sln
 
-mono: none
+mono: latest
 
 dotnet: none
 
