@@ -18,8 +18,23 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
+		<IsWindows Condition="'$(OsName)' == ''">true</IsWindows>
+		<IsOSX Condition="'$(OsName)' == 'Darwin'">true</IsOSX>
+		<IsLinux Condition="'$(OsName)' == 'Linux'">true</IsLinux>
+	</PropertyGroup>
+
+	<Target Name="PrintOSVariables" BeforeTargets="Build">
+		<Message Text="OsName: $(OsName)" />
+		<Message Text="IsOSX: $(IsOSX)" />
+		<Message Text="IsLinux: $(IsLinux)" />
+		<Message Text="IsWindows: $(IsWindows)" />
+	</Target>
+
+	<PropertyGroup>
 		<DiagnosticsConstants>DEBUG</DiagnosticsConstants>
-		<NetStandardConstants>TRACE;FEATURE_NETCORE_REFLECTION_API;FEATURE_TEST_SERILOGINTEGRATION</NetStandardConstants>
+		<SharedNetStandardConstants>TRACE;FEATURE_NETCORE_REFLECTION_API;FEATURE_TEST_SERILOGINTEGRATION</SharedNetStandardConstants>
+		<NetStandardConstants Condition="'$(IsWindows)'=='true'">$(SharedNetStandardConstants)</NetStandardConstants>
+		<NetStandardConstants Condition="'$(IsWindows)'==''">$(SharedNetStandardConstants);FEATURE_TEST_STRONGNAMING</NetStandardConstants>
 		<DesktopClrConstants>TRACE;DOTNET45;DOTNET40;FEATURE_APPDOMAIN;FEATURE_SYSTEM_CONVERTER;FEATURE_ISUPPORTINITIALIZE;FEATURE_DICTIONARYADAPTER_XML;FEATURE_BINDINGLIST;FEATURE_LISTSORT;FEATURE_IDATAERRORINFO;FEATURE_SERIALIZATION;FEATURE_GET_REFERENCED_ASSEMBLIES;FEATURE_SECURITY_PERMISSIONS;FEATURE_REMOTING;FEATURE_GAC;FEATURE_SYSTEM_CONFIGURATION;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_TEST_SERILOGINTEGRATION</DesktopClrConstants>
 	</PropertyGroup>
 

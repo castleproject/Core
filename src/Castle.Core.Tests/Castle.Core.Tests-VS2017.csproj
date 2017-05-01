@@ -1,22 +1,45 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	
 	<Import Project="..\..\buildscripts\common.props"></Import>
+
 	<PropertyGroup>
-		<TargetFrameworks>net461;netcoreapp1.1</TargetFrameworks>
+		<TargetFrameworks Condition="'$(IsOSX)'=='true'">netcoreapp1.1</TargetFrameworks>
+		<TargetFrameworks Condition="'$(IsLinux)'=='true'">netcoreapp1.1</TargetFrameworks>
+		<TargetFrameworks Condition="'$(IsWindows)'=='true'">net461;netcoreapp1.1</TargetFrameworks>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<RuntimeIdentifier Condition="'$(IsOSX)'=='true'AND'$(TargetFramework)'=='net461'">osx.10.12-x64</RuntimeIdentifier>
+		<RuntimeIdentifier Condition="'$(IsOSX)'=='true'AND'$(TargetFramework)'=='netcoreapp1.1'"></RuntimeIdentifier>
+		<RuntimeIdentifier Condition="'$(IsLinux)'=='true'AND'$(TargetFramework)'=='net461'">ubuntu.16.04-x64</RuntimeIdentifier>
+		<RuntimeIdentifier Condition="'$(IsLinux)'=='true'AND'$(TargetFramework)'=='netcoreapp1.1'"></RuntimeIdentifier>
+		<RuntimeIdentifier Condition="'$(IsWindows)'=='true'">win7-x64</RuntimeIdentifier>
+	</PropertyGroup>
+	
+	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<AssemblyName>Castle.Core.Tests</AssemblyName>
 		<RootNamespace>CastleTests</RootNamespace>
-		<SignAssembly>True</SignAssembly>
+		 <SignAssembly Condition="'$(IsWindows)'=='true'">True</SignAssembly>
 		<Version>0.0.0.0</Version>
 		<AssemblyVersion>0.0.0.0</AssemblyVersion>
 		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
-		<RuntimeIdentifier>win7-x64</RuntimeIdentifier>
 	</PropertyGroup>
+	
 	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
 	  <Compile Remove="Components.DictionaryAdapter.Tests\Xml\**" />
 	  <Compile Remove="log4netIntegration\**" />
 	  <Compile Remove="NLogIntegration\**" />
+	  <Compile Remove="Core.Tests\Internal\**" Condition="'$(IsWindows)'==''" />
+	  <Compile Remove="AccessLevelTestCase.cs" Condition="'$(IsWindows)'==''" />
+	  <Compile Remove="BasicClassProxyTestCase.cs" Condition="'$(IsWindows)'==''" />
+	  <Compile Remove="BasicInterfaceProxyTestCase.cs" Condition="'$(IsWindows)'==''" />
+	  <Compile Remove="DynamicProxy.Tests\ClassProxyConstructorsTestCase.cs" Condition="'$(IsWindows)'==''" />
+	  <Compile Remove="DynamicProxy.Tests\ClassProxyWithTargetTestCase.cs" Condition="'$(IsWindows)'==''" />
+	  <Compile Remove="SlimReadWriteLockTestCase.cs" Condition="'$(IsWindows)'==''" />
 	</ItemGroup>
+	
 	<ItemGroup>
 		<None Update="log4netIntegration\log4net.xml">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -28,6 +51,7 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</EmbeddedResource>
 	</ItemGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="NUnit" Version="3.6.1" />
 		<PackageReference Include="NUnit.Console" Version="3.6.1" />
