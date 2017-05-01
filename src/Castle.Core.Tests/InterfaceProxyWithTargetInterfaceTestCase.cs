@@ -195,9 +195,11 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var ex = Assert.Throws<GeneratorException>(() =>
 				generator.CreateInterfaceProxyWithTargetInterface<IList<PrivateInterface>>(new List<PrivateInterface>(), new IInterceptor[0]));
+			#if !FEATURE_TEST_STRONGNAMING
 			StringAssert.StartsWith(
 				"Can not create proxy for type System.Collections.Generic.IList`1[[Castle.DynamicProxy.Tests.InterfaceProxyWithTargetInterfaceTestCase+PrivateInterface, Castle.Core.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc]] because type Castle.DynamicProxy.Tests.InterfaceProxyWithTargetInterfaceTestCase+PrivateInterface is not accessible. Make it public, or internal",
 				ex.Message);
+			#endif
 		}
 
 		[Test]

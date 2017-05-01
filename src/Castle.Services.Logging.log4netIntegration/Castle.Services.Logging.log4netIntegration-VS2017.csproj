@@ -3,7 +3,12 @@
   <Import Project="..\..\buildscripts\common.props"></Import>
   
   <PropertyGroup>
-    <TargetFrameworks>net45</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsOSX)'=='true'"></TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsLinux)'=='true'"></TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsWindows)'=='true'">net45</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <AssemblyName>Castle.Services.Logging.log4netIntegration</AssemblyName>
     <RootNamespace>Castle.Services.Logging.log4netIntegration</RootNamespace>

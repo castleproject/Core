@@ -39,13 +39,17 @@ GOTO test
 
 :test
 
+echo --------------------
 echo Running NET461 Tests
 echo --------------------
 
-%UserProfile%\.nuget\packages\nunit.consolerunner\3.6.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net461/win7-x64/Castle.Core.Tests.exe
+%UserProfile%\.nuget\packages\nunit.consolerunner\3.6.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net461/win7-x64/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3
 
+echo ---------------------------
 echo Running NETCOREAPP1.1 Tests
 echo ---------------------------
 
-.\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\win7-x64\Castle.Core.Tests.exe
+dir .\src\Castle.Core.Tests\bin\%Configuration%\*.*
+
+.\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\win7-x64\Castle.Core.Tests.exe --result=NetCoreClrTestResults.xml;format=nunit3
 

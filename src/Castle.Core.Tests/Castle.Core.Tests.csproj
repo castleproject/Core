@@ -499,7 +499,9 @@
     <Compile Include="TraceLoggerTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="log4netIntegration\log4net.xml" />
+    <Content Include="log4netIntegration\log4net.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="Core.Tests\Resources\file1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
