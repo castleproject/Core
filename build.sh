@@ -52,6 +52,12 @@ echo "OSNAME: $OSNAME"
 
 ./.dotnet/dotnet build ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj /p:Configuration=Release /p:OsName=$OSNAME
 
+echo --------------------
+echo Running NET461 Tests
+echo --------------------
+
+xbuild /p:Configuration=NET45-Release /t:RunAllTests buildscripts/Build.proj
+
 echo ---------------------------
 echo Running NETCOREAPP1.1 Tests
 echo ---------------------------
