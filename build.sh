@@ -62,4 +62,14 @@ echo ---------------------------
 
 ./.dotnet/dotnet build ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj /p:Configuration=Release /p:OsName=$OSNAME
 
-./.dotnet/dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp1.1/Castle.Core.Tests.dll 
+./.dotnet/dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp1.1/Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3
+
+# Build Failure 
+
+MONO_FAILCOUNT=$(grep -F "One or more child tests had errors" build/NET45/NET45-Release/bin/test-results/nunit-results.xml | wc -l)
+
+if [ $MONO_FAILCOUNT -ne 0 ]
+    then
+        echo "Mono Tests have failed, failing the build"
+        exit 1 
+    fi
