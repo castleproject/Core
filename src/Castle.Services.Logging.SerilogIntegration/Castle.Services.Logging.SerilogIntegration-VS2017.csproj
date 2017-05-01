@@ -3,12 +3,17 @@
   <Import Project="..\..\buildscripts\common.props"></Import>
   
   <PropertyGroup>
-    <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsOSX)'=='true'">netstandard1.3</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsLinux)'=='true'">netstandard1.3</TargetFrameworks>
+    <TargetFrameworks Condition="'$(IsWindows)'=='true'">net45;netstandard1.3</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <AssemblyName>Castle.Services.Logging.SerilogIntegration</AssemblyName>
     <RootNamespace>Castle.Services.Logging.SerilogIntegration</RootNamespace>
     <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>True</SignAssembly>
+    <SignAssembly Condition="'$(IsWindows)'=='true'">True</SignAssembly>
   </PropertyGroup>
  
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
