@@ -3,23 +3,15 @@ version: 4.0.{build}
 image: Visual Studio 2017
 
 branches:
-
   except:
-  
     - gh-pages
 
 skip_commits:
-
   files:
-
     - .gitattributes
-
     - .gitignore
-
     - README.md
-
     - CHANGELOG.md
-
     - LICENSE
 
 skip_tags: true

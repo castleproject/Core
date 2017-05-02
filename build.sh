@@ -15,34 +15,33 @@
 # limitations under the License.
 # ****************************************************************************
 
-if [ ! -d "./.dotnet" ]; then
+if [ ! -f (which -s dotnet) ]; then
 
-    sudo apt-get -qq update
+	echo "Please install Microsoft/netcore from: https://www.microsoft.com/net/core"
 
-    sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-
-    sudo apt-get install -y libunwind8
-
-    wget -O - https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0/scripts/obtain/dotnet-install.sh | bash -s -- -i ./.dotnet/
+	exit 1
 
 fi
 
-#RUNTIME="ubuntu.12.04-x64"
-#RUNTIME="ubuntu.16.04-x64"
-#RUNTIMEOPTS=" --runtime $RUNTIME"
-RUNTIMEOPTS=""
+if [ ! -f (which -s mono) ]; then
 
-./.dotnet/dotnet restore ./buildscripts/BuildScripts.csproj "$RUNTIMEOPS"
+	echo "Please install Xamarin/mono from: http://www.mono-project.com/docs/getting-started/install/"
 
-./.dotnet/dotnet restore ./src/Castle.Core/Castle.Core-VS2017.csproj "$RUNTIMEOPS"
+	exit 1
 
-./.dotnet/dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration-VS2017.csproj "$RUNTIMEOPS"
+fi
 
-./.dotnet/dotnet restore ./src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration-VS2017.csproj "$RUNTIMEOPS"
+dotnet restore ./buildscripts/BuildScripts.csproj
 
-./.dotnet/dotnet restore ./src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration-VS2017.csproj "$RUNTIMEOPS"
+dotnet restore ./src/Castle.Core/Castle.Core-VS2017.csproj
 
-./.dotnet/dotnet restore ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj "$RUNTIMEOPS"
+dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration-VS2017.csproj
+
+dotnet restore ./src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration-VS2017.csproj
+
+dotnet restore ./src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration-VS2017.csproj
+
+dotnet restore ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj
 
 # Linux/Darwin
 
@@ -60,9 +59,9 @@ echo ---------------------------
 echo Running NETCOREAPP1.1 Tests
 echo ---------------------------
 
-./.dotnet/dotnet build ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj /p:Configuration=Release /p:OsName=$OSNAME
+dotnet build ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj /p:Configuration=Release /p:OsName=$OSNAME
 
-./.dotnet/dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp1.1/Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3
+dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp1.1/Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3
 
 # Build Failure 
 
