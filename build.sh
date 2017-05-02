@@ -15,7 +15,9 @@
 # limitations under the License.
 # ****************************************************************************
 
-if [ ! -f (which -s dotnet) ]; then
+DOTNETPATH=$(which dotnet)
+
+if [ ! -f "$DOTNETPATH" ]; then
 
 	echo "Please install Microsoft/netcore from: https://www.microsoft.com/net/core"
 
@@ -23,7 +25,9 @@ if [ ! -f (which -s dotnet) ]; then
 
 fi
 
-if [ ! -f (which -s mono) ]; then
+MONOPATH=$(which mono)
+
+if [ ! -f "$MONOPATH" ]; then
 
 	echo "Please install Xamarin/mono from: http://www.mono-project.com/docs/getting-started/install/"
 
