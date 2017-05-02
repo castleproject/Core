@@ -49,7 +49,4 @@ echo ---------------------------
 echo Running NETCOREAPP1.1 Tests
 echo ---------------------------
 
-dir .\src\Castle.Core.Tests\bin\%Configuration%\*.*
-
 .\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\win7-x64\Castle.Core.Tests.exe --result=NetCoreClrTestResults.xml;format=nunit3
-
