@@ -69,6 +69,14 @@ dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp1.1/Castle.Core.Tests.dll -
 
 # Build Failure 
 
+NETCORE_FAILCOUNT=$(grep -F "One or more child tests had errors" NetCoreClrTestResults.xml | wc -l)
+
+if [ $NETCORE_FAILCOUNT -ne 0 ]
+    then
+        echo "NetCore Tests have failed, failing the build"
+        exit 1 
+    fi
+
 MONO_FAILCOUNT=$(grep -F "One or more child tests had errors" build/NET45/NET45-Release/bin/test-results/nunit-results.xml | wc -l)
 
 if [ $MONO_FAILCOUNT -ne 0 ]
