@@ -63,7 +63,7 @@ echo ---------------------------
 echo Running NETCOREAPP1.1 Tests
 echo ---------------------------
 
-dotnet build ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj /p:Configuration=Release /p:OsName=$OSNAME
+dotnet build ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj /p:Configuration=Release
 
 dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp1.1/Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3
 
