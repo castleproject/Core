@@ -3,9 +3,8 @@
   <Import Project="..\..\buildscripts\common.props"></Import>
   
   <PropertyGroup>
-    <TargetFrameworks Condition="'$(IsOSX)'=='true'"></TargetFrameworks>
-    <TargetFrameworks Condition="'$(IsLinux)'=='true'"></TargetFrameworks>
-    <TargetFrameworks Condition="'$(IsWindows)'=='true'">net45</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)'=='Unix'">net45</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net45</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -13,7 +12,8 @@
     <AssemblyName>Castle.Services.Logging.NLogIntegration</AssemblyName>
     <RootNamespace>Castle.Services.Logging.NLogIntegration</RootNamespace>
     <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>True</SignAssembly>
+    <SignAssembly Condition="'$(OS)'=='Windows_NT'">True</SignAssembly>
+    <FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
   </PropertyGroup>
  
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
@@ -27,7 +27,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.4.1" />
+    <PackageReference Condition="'$(OS)'=='Windows_NT'" Include="NLog" Version="4.4.1" />
   </ItemGroup>
   
   <ItemGroup>

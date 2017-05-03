@@ -3,9 +3,8 @@
 	<Import Project="common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks Condition="'$(IsOSX)'=='true'">netcoreapp1.1</TargetFrameworks>
-		<TargetFrameworks Condition="'$(IsLinux)'=='true'">netcoreapp1.1</TargetFrameworks>
-		<TargetFrameworks Condition="'$(IsWindows)'=='true'">net461</TargetFrameworks>
+		<TargetFrameworks Condition="'$(OS)'=='Unix'">netcoreapp1.1</TargetFrameworks>
+		<TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net461</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -28,7 +27,8 @@
 		<PackageReference Include="Microsoft.Net.Compilers" version="2.0.1" />
 		<PackageReference Include="NuGet.Build.Tasks" version="4.0.0" />
 		<PackageReference Include="NuGet.Build.Tasks.Pack" version="4.0.0" />
-		<PackageReference Include="System.Runtime" version="4.1.0" />
+		<PackageReference Include="System.Runtime" version="4.3.0" />
+		<PackageReference Condition="'$(OS)'=='Unix'" Include="Microsoft.TargetingPack.NETFramework.v4.6.1" Version="1.0.1" ExcludeAssets="All" PrivateAssets="All" />
 	</ItemGroup>
 
 </Project>

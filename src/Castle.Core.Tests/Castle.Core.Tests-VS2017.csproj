@@ -3,17 +3,14 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks Condition="'$(IsOSX)'=='true'">netcoreapp1.1</TargetFrameworks>
-		<TargetFrameworks Condition="'$(IsLinux)'=='true'">netcoreapp1.1</TargetFrameworks>
-		<TargetFrameworks Condition="'$(IsWindows)'=='true'">net461;netcoreapp1.1</TargetFrameworks>
+		<TargetFrameworks Condition="'$(OS)'=='Unix'">netcoreapp1.1</TargetFrameworks>
+		<TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net461;netcoreapp1.1</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<RuntimeIdentifier Condition="'$(IsOSX)'=='true'AND'$(TargetFramework)'=='net461'">osx.10.12-x64</RuntimeIdentifier>
-		<RuntimeIdentifier Condition="'$(IsOSX)'=='true'AND'$(TargetFramework)'=='netcoreapp1.1'"></RuntimeIdentifier>
-		<RuntimeIdentifier Condition="'$(IsLinux)'=='true'AND'$(TargetFramework)'=='net461'">ubuntu.16.04-x64</RuntimeIdentifier>
-		<RuntimeIdentifier Condition="'$(IsLinux)'=='true'AND'$(TargetFramework)'=='netcoreapp1.1'"></RuntimeIdentifier>
-		<RuntimeIdentifier Condition="'$(IsWindows)'=='true'">win7-x64</RuntimeIdentifier>
+		<RuntimeIdentifier Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='net461'">ubuntu.16.04-x64</RuntimeIdentifier>
+		<RuntimeIdentifier Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='netcoreapp1.1'"></RuntimeIdentifier>
+		<RuntimeIdentifier Condition="'$(OS)'=='Windows_NT'">win7-x64</RuntimeIdentifier>
 	</PropertyGroup>
 	
 	<PropertyGroup>
@@ -21,23 +18,24 @@
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<AssemblyName>Castle.Core.Tests</AssemblyName>
 		<RootNamespace>CastleTests</RootNamespace>
-		 <SignAssembly Condition="'$(IsWindows)'=='true'">True</SignAssembly>
+		 <SignAssembly Condition="'$(OS)'=='Windows_NT'">True</SignAssembly>
 		<Version>0.0.0.0</Version>
 		<AssemblyVersion>0.0.0.0</AssemblyVersion>
 		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
+		<FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
 	</PropertyGroup>
 	
 	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
 	  <Compile Remove="Components.DictionaryAdapter.Tests\Xml\**" />
 	  <Compile Remove="log4netIntegration\**" />
 	  <Compile Remove="NLogIntegration\**" />
-	  <Compile Remove="Core.Tests\Internal\**" Condition="'$(IsWindows)'==''" />
-	  <Compile Remove="AccessLevelTestCase.cs" Condition="'$(IsWindows)'==''" />
-	  <Compile Remove="BasicClassProxyTestCase.cs" Condition="'$(IsWindows)'==''" />
-	  <Compile Remove="BasicInterfaceProxyTestCase.cs" Condition="'$(IsWindows)'==''" />
-	  <Compile Remove="DynamicProxy.Tests\ClassProxyConstructorsTestCase.cs" Condition="'$(IsWindows)'==''" />
-	  <Compile Remove="DynamicProxy.Tests\ClassProxyWithTargetTestCase.cs" Condition="'$(IsWindows)'==''" />
-	  <Compile Remove="SlimReadWriteLockTestCase.cs" Condition="'$(IsWindows)'==''" />
+	  <Compile Remove="Core.Tests\Internal\**" Condition="'$(OS)'=='Unix'" />
+	  <Compile Remove="AccessLevelTestCase.cs" Condition="'$(OS)'=='Unix'" />
+	  <Compile Remove="BasicClassProxyTestCase.cs" Condition="'$(OS)'=='Unix'" />
+	  <Compile Remove="BasicInterfaceProxyTestCase.cs" Condition="'$(OS)'=='Unix'" />
+	  <Compile Remove="DynamicProxy.Tests\ClassProxyConstructorsTestCase.cs" Condition="'$(OS)'=='Unix'" />
+	  <Compile Remove="DynamicProxy.Tests\ClassProxyWithTargetTestCase.cs" Condition="'$(OS)'=='Unix'" />
+	  <Compile Remove="SlimReadWriteLockTestCase.cs" Condition="'$(OS)'=='Unix'" />
 	</ItemGroup>
 	
 	<ItemGroup>
