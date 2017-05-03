@@ -3,9 +3,8 @@
   <Import Project="..\..\buildscripts\common.props"></Import>
   
   <PropertyGroup>
-    <TargetFrameworks Condition="'$(IsOSX)'=='true'">netstandard1.3</TargetFrameworks>
-    <TargetFrameworks Condition="'$(IsLinux)'=='true'">netstandard1.3</TargetFrameworks>
-    <TargetFrameworks Condition="'$(IsWindows)'=='true'">net45;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)'=='Unix'">netstandard1.3</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net45;netstandard1.3</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -13,7 +12,8 @@
     <AssemblyName>Castle.Services.Logging.SerilogIntegration</AssemblyName>
     <RootNamespace>Castle.Services.Logging.SerilogIntegration</RootNamespace>
     <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly Condition="'$(IsWindows)'=='true'">True</SignAssembly>
+    <SignAssembly Condition="'$(OS)'=='Windows_NT'">True</SignAssembly>
+    <FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
   </PropertyGroup>
  
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
