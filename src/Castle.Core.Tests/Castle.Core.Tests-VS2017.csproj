@@ -31,13 +31,6 @@
 	  <Compile Remove="Components.DictionaryAdapter.Tests\Xml\**" />
 	  <Compile Remove="log4netIntegration\**" />
 	  <Compile Remove="NLogIntegration\**" />
-	  <Compile Remove="Core.Tests\Internal\**" Condition="'$(OS)'=='Unix'" />
-	  <Compile Remove="AccessLevelTestCase.cs" Condition="'$(OS)'=='Unix'" />
-	  <Compile Remove="BasicClassProxyTestCase.cs" Condition="'$(OS)'=='Unix'" />
-	  <Compile Remove="BasicInterfaceProxyTestCase.cs" Condition="'$(OS)'=='Unix'" />
-	  <Compile Remove="DynamicProxy.Tests\ClassProxyConstructorsTestCase.cs" Condition="'$(OS)'=='Unix'" />
-	  <Compile Remove="DynamicProxy.Tests\ClassProxyWithTargetTestCase.cs" Condition="'$(OS)'=='Unix'" />
-	  <Compile Remove="SlimReadWriteLockTestCase.cs" Condition="'$(OS)'=='Unix'" />
 	</ItemGroup>
 	
 	<ItemGroup>

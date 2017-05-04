@@ -57,7 +57,8 @@ echo --------------------
 echo Running NET461 Tests
 echo --------------------
 
-xbuild /p:Configuration=NET45-Release /t:RunAllTests buildscripts/Build.proj
+# Dont commit this!
+# xbuild /p:Configuration=NET45-Release /t:RunAllTests buildscripts/Build.proj
 
 echo ---------------------------
 echo Running NETCOREAPP1.1 Tests
