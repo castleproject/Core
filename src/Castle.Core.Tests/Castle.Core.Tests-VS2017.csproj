@@ -19,10 +19,11 @@
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<AssemblyName>Castle.Core.Tests</AssemblyName>
 		<RootNamespace>CastleTests</RootNamespace>
-		 <SignAssembly Condition="'$(OS)'=='Windows_NT'">True</SignAssembly>
+		<SignAssembly>True</SignAssembly>
 		<Version>0.0.0.0</Version>
 		<AssemblyVersion>0.0.0.0</AssemblyVersion>
 		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
+		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
 		<FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
 	</PropertyGroup>
 	
