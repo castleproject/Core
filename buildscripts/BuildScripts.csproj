@@ -3,15 +3,14 @@
 	<Import Project="common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks Condition="'$(OS)'=='Unix'">netcoreapp1.1</TargetFrameworks>
-		<TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net461</TargetFrameworks>
+		<TargetFrameworks Condition="'$(OS)'=='Unix'">net461;netcoreapp1.1</TargetFrameworks>
+		<TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net461;netcoreapp1.1</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<SignAssembly>False</SignAssembly>
 		<AssemblyOriginatorKeyFile>CastleKey.snk</AssemblyOriginatorKeyFile>
-		<Version>0.0.0.0</Version>
-		<AssemblyVersion>0.0.0.0</AssemblyVersion>
+		<FrameworkPathOverride Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='net461'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -19,16 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Build.Runtime" version="15.1.548" />
-		<PackageReference Include="Microsoft.NET.Sdk" version="1.0.0-alpha-20170224-6" />
-		<PackageReference Include="Microsoft.NET.Sdk.Web" version="1.0.0-alpha-20170130-3-281" />
-		<PackageReference Include="Microsoft.NET.Sdk.Publish" version="1.0.0-alpha-20170130-3-281" />
-		<PackageReference Include="Microsoft.NET.Sdk.Web.ProjectSystem" version="1.0.0-alpha-20170130-3-281" />
-		<PackageReference Include="Microsoft.Net.Compilers" version="2.0.1" />
-		<PackageReference Include="NuGet.Build.Tasks" version="4.0.0" />
-		<PackageReference Include="NuGet.Build.Tasks.Pack" version="4.0.0" />
-		<PackageReference Include="System.Runtime" version="4.3.0" />
-		<PackageReference Condition="'$(OS)'=='Unix'" Include="Microsoft.TargetingPack.NETFramework.v4.6.1" Version="1.0.1" ExcludeAssets="All" PrivateAssets="All" />
+		<PackageReference Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='net461'" Include="Microsoft.TargetingPack.NETFramework.v4.6.1" Version="1.0.1" ExcludeAssets="All" PrivateAssets="All" />
 	</ItemGroup>
 
 </Project>

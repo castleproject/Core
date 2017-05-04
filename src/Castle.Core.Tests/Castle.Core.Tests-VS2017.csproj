@@ -3,15 +3,14 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks Condition="'$(OS)'=='Unix'">netcoreapp1.1</TargetFrameworks>
-		<TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net461;netcoreapp1.1</TargetFrameworks>
+		<TargetFrameworks>net461;netcoreapp1.1</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<!--This was the only way at the time of writing to $(OutputType) to honour the 'Exe' setting. This can probably be deleted from netcoreapp2.0(inclusive) onwards. Pathing dependencies: build.sh, build-vs2017.cmd -->
 		<RuntimeIdentifier Condition="'$(OS)'=='Windows_NT'">win7-x64</RuntimeIdentifier>
 		<RuntimeIdentifier Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='netcoreapp1.1'"></RuntimeIdentifier>
-		<RuntimeIdentifier Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='net461'">ubuntu.16.04-x64</RuntimeIdentifier>
+		<RuntimeIdentifier Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='net461'"></RuntimeIdentifier>
 	</PropertyGroup>
 	
 	<PropertyGroup>
@@ -19,9 +18,9 @@
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<AssemblyName>Castle.Core.Tests</AssemblyName>
 		<RootNamespace>CastleTests</RootNamespace>
-		<SignAssembly>True</SignAssembly>
 		<Version>0.0.0.0</Version>
 		<AssemblyVersion>0.0.0.0</AssemblyVersion>
+		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
 		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
 		<FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
@@ -31,13 +30,6 @@
 	  <Compile Remove="Components.DictionaryAdapter.Tests\Xml\**" />
 	  <Compile Remove="log4netIntegration\**" />
 	  <Compile Remove="NLogIntegration\**" />
-	  <Compile Remove="Core.Tests\Internal\**" Condition="'$(OS)'=='Unix'" />
-	  <Compile Remove="AccessLevelTestCase.cs" Condition="'$(OS)'=='Unix'" />
-	  <Compile Remove="BasicClassProxyTestCase.cs" Condition="'$(OS)'=='Unix'" />
-	  <Compile Remove="BasicInterfaceProxyTestCase.cs" Condition="'$(OS)'=='Unix'" />
-	  <Compile Remove="DynamicProxy.Tests\ClassProxyConstructorsTestCase.cs" Condition="'$(OS)'=='Unix'" />
-	  <Compile Remove="DynamicProxy.Tests\ClassProxyWithTargetTestCase.cs" Condition="'$(OS)'=='Unix'" />
-	  <Compile Remove="SlimReadWriteLockTestCase.cs" Condition="'$(OS)'=='Unix'" />
 	</ItemGroup>
 	
 	<ItemGroup>
