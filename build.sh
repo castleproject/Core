@@ -15,6 +15,8 @@
 # limitations under the License.
 # ****************************************************************************
 
+clear
+
 DOTNETPATH=$(which dotnet)
 
 if [ ! -f "$DOTNETPATH" ]; then
@@ -35,7 +37,7 @@ if [ ! -f "$MONOPATH" ]; then
 
 fi
 
-dotnet restore ./buildscripts/BuildScripts.csproj
+dotnet restore ./buildscripts/BuildScripts.csproj -s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json
 
 dotnet restore ./src/Castle.Core/Castle.Core-VS2017.csproj
 
@@ -53,18 +55,17 @@ OSNAME=$(uname -s)
 
 echo "OSNAME: $OSNAME"
 
+dotnet build ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj /p:Configuration=Release
+
 echo --------------------
 echo Running NET461 Tests
 echo --------------------
 
-# Dont commit this!
-# xbuild /p:Configuration=NET45-Release /t:RunAllTests buildscripts/Build.proj
+./src/Castle.Core.Tests/bin/Release/net461/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3
 
 echo ---------------------------
 echo Running NETCOREAPP1.1 Tests
 echo ---------------------------
-
-dotnet build ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj /p:Configuration=Release
 
 dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp1.1/Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3
 
@@ -78,10 +79,10 @@ if [ $NETCORE_FAILCOUNT -ne 0 ]
         exit 1 
     fi
 
-MONO_FAILCOUNT=$(grep -F "One or more child tests had errors" build/NET45/NET45-Release/bin/test-results/nunit-results.xml | wc -l)
+MONO_FAILCOUNT=$(grep -F "One or more child tests had errors" DesktopClrTestResults.xml | wc -l)
 
 if [ $MONO_FAILCOUNT -ne 0 ]
     then
-        echo "Mono Tests have failed, failing the build"
+        echo "DesktopClr Tests have failed, failing the build"
         exit 1 
     fi

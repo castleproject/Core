@@ -28,7 +28,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Condition="'$(OS)'=='Windows_NT'" Include="NLog" Version="4.4.1" />
+    <PackageReference Include="NLog" Version="4.4.1" />
   </ItemGroup>
   
   <ItemGroup>

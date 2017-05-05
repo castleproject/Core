@@ -14,6 +14,8 @@ REM See the License for the specific language governing permissions and
 REM limitations under the License.
 REM ****************************************************************************
 
+cls
+
 if "%1" == "" goto no_config 
 if "%1" NEQ "" goto set_config 
 
@@ -26,6 +28,7 @@ SET Configuration=Release
 GOTO restore_packages
 
 :restore_packages
+dotnet restore ./buildscripts/BuildScripts.csproj
 dotnet restore ./src/Castle.Core/Castle.Core-VS2017.csproj
 dotnet restore ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj
 dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration-VS2017.csproj
@@ -43,10 +46,12 @@ echo --------------------
 echo Running NET461 Tests
 echo --------------------
 
-%UserProfile%\.nuget\packages\nunit.consolerunner\3.6.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net461/win7-x64/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3
+rem TODO: GVDM: Failures should propogate up to appveyor, this is hiding error codes > 0
+%UserProfile%\.nuget\packages\nunit.consolerunner\3.6.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net461/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3
 
 echo ---------------------------
 echo Running NETCOREAPP1.1 Tests
 echo ---------------------------
 
-.\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\win7-x64\Castle.Core.Tests.exe --result=NetCoreClrTestResults.xml;format=nunit3
+rem TODO: GVDM: Failures should propogate up to appveyor, this is the default result, so think we are ok here.
+.\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\Castle.Core.Tests.exe --result=NetCoreClrTestResults.xml;format=nunit3
