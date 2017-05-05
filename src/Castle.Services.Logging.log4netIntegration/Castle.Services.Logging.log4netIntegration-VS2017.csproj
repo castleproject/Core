@@ -12,7 +12,8 @@
     <AssemblyName>Castle.Services.Logging.log4netIntegration</AssemblyName>
     <RootNamespace>Castle.Services.Logging.log4netIntegration</RootNamespace>
     <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly Condition="'$(OS)'=='Windows_NT'">True</SignAssembly>
+    <SignAssembly>True</SignAssembly>
+    <PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
     <FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
   </PropertyGroup>
  
@@ -31,7 +32,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Condition="'$(OS)'=='Windows_NT'" Include="log4net" Version="2.0.8" />
+    <PackageReference Include="log4net" Version="2.0.8" />
   </ItemGroup>
   
   <ItemGroup>

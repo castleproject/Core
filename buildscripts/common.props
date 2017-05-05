@@ -6,6 +6,7 @@
 		<RepositoryUrl>https://github.com/castleproject/Core</RepositoryUrl>
 		<BuildVersion Condition="'$(APPVEYOR_BUILD_VERSION)'==''">0.0.0</BuildVersion>
 		<BuildVersion Condition="'$(APPVEYOR_BUILD_VERSION)'!=''">$(APPVEYOR_BUILD_VERSION)</BuildVersion>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath> 
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -19,10 +20,10 @@
 
 	<PropertyGroup>
 		<DiagnosticsConstants>DEBUG</DiagnosticsConstants>
-		<SharedNetStandardConstants>TRACE;FEATURE_NETCORE_REFLECTION_API;FEATURE_TEST_SERILOGINTEGRATION</SharedNetStandardConstants>
-		<NetStandardConstants Condition="'$(OS)'=='Windows_NT'">$(SharedNetStandardConstants)</NetStandardConstants>
-		<NetStandardConstants Condition="'$(OS)'=='Unix'">$(SharedNetStandardConstants);FEATURE_TEST_STRONGNAMING</NetStandardConstants>
-		<DesktopClrConstants>TRACE;DOTNET45;DOTNET40;FEATURE_APPDOMAIN;FEATURE_SYSTEM_CONVERTER;FEATURE_ISUPPORTINITIALIZE;FEATURE_DICTIONARYADAPTER_XML;FEATURE_BINDINGLIST;FEATURE_LISTSORT;FEATURE_IDATAERRORINFO;FEATURE_SERIALIZATION;FEATURE_GET_REFERENCED_ASSEMBLIES;FEATURE_SECURITY_PERMISSIONS;FEATURE_REMOTING;FEATURE_GAC;FEATURE_SYSTEM_CONFIGURATION;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_TEST_SERILOGINTEGRATION</DesktopClrConstants>
+		<NetStandardConstants>TRACE;FEATURE_NETCORE_REFLECTION_API;FEATURE_TEST_SERILOGINTEGRATION</NetStandardConstants>
+		<CommonDesktopClrConstants>TRACE;DOTNET45;DOTNET40;FEATURE_APPDOMAIN;FEATURE_SYSTEM_CONVERTER;FEATURE_ISUPPORTINITIALIZE;FEATURE_DICTIONARYADAPTER_XML;FEATURE_BINDINGLIST;FEATURE_LISTSORT;FEATURE_IDATAERRORINFO;FEATURE_SERIALIZATION;FEATURE_GET_REFERENCED_ASSEMBLIES;FEATURE_SECURITY_PERMISSIONS;FEATURE_REMOTING;FEATURE_GAC;FEATURE_SYSTEM_CONFIGURATION;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_TEST_SERILOGINTEGRATION</CommonDesktopClrConstants>
+		<DesktopClrConstants Condition="'$(OS)'=='Unix'">$(CommonDesktopClrConstants);__MonoCS__</DesktopClrConstants>
+		<DesktopClrConstants Condition="'$(OS)'=='Windows_NT'">$(CommonDesktopClrConstants)</DesktopClrConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net45|Debug'">
