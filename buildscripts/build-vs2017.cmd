@@ -14,8 +14,6 @@ REM See the License for the specific language governing permissions and
 REM limitations under the License.
 REM ****************************************************************************
 
-cls
-
 if "%1" == "" goto no_config 
 if "%1" NEQ "" goto set_config 
 
