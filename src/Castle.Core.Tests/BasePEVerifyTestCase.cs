@@ -143,9 +143,6 @@ namespace Castle.DynamicProxy.Tests
 
 			var result = process.ExitCode + " code ";
 
-			// Clutters logs.
-			// Console.WriteLine(GetType().FullName + ": " + result);
-
 			if (process.ExitCode != 0)
 			{
 				Console.WriteLine(processOutput);

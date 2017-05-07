@@ -3,8 +3,7 @@
   <Import Project="..\..\buildscripts\common.props"></Import>
   
   <PropertyGroup>
-    <TargetFrameworks Condition="'$(OS)'=='Unix'">net45</TargetFrameworks>
-    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net45</TargetFrameworks>
+    <TargetFrameworks>net45</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
