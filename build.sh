@@ -15,44 +15,30 @@
 # limitations under the License.
 # ****************************************************************************
 
-clear
-
 DOTNETPATH=$(which dotnet)
 
 if [ ! -f "$DOTNETPATH" ]; then
-
 	echo "Please install Microsoft/netcore from: https://www.microsoft.com/net/core"
-
 	exit 1
-
 fi
 
 MONOPATH=$(which mono)
 
 if [ ! -f "$MONOPATH" ]; then
-
 	echo "Please install Xamarin/mono from: http://www.mono-project.com/docs/getting-started/install/"
-
 	exit 1
-
 fi
 
 dotnet restore ./buildscripts/BuildScripts.csproj -s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json
-
 dotnet restore ./src/Castle.Core/Castle.Core-VS2017.csproj
-
 dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration-VS2017.csproj
-
 dotnet restore ./src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration-VS2017.csproj
-
 dotnet restore ./src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration-VS2017.csproj
-
 dotnet restore ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj
 
 # Linux/Darwin
 
 OSNAME=$(uname -s)
-
 echo "OSNAME: $OSNAME"
 
 dotnet build ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj /p:Configuration=Release
@@ -74,15 +60,15 @@ dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp1.1/Castle.Core.Tests.dll -
 NETCORE_FAILCOUNT=$(grep -F "One or more child tests had errors" NetCoreClrTestResults.xml | wc -l)
 
 if [ $NETCORE_FAILCOUNT -ne 0 ]
-    then
-        echo "NetCore Tests have failed, failing the build"
-        exit 1 
-    fi
+then
+    echo "NetCore Tests have failed, failing the build"
+    exit 1 
+fi
 
 MONO_FAILCOUNT=$(grep -F "One or more child tests had errors" DesktopClrTestResults.xml | wc -l)
 
 if [ $MONO_FAILCOUNT -ne 0 ]
-    then
-        echo "DesktopClr Tests have failed, failing the build"
-        exit 1 
-    fi
+then
+    echo "DesktopClr Tests have failed, failing the build"
+    exit 1 
+fi
