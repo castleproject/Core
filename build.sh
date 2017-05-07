@@ -30,7 +30,7 @@ if [ ! -f "$MONOPATH" ]; then
 fi
 
 # This installs the latest build of the dotnet targetting pack net461 via NuGet for linux desktop clr builds. 
-# The package source can be removed once Microsoft.TargetingPack.NETFramework.v4.6.1 comes out of alpha. 
+# The package source can be removed once Microsoft.TargetingPack.NETFramework.v4.6.1 comes out of alpha on NuGet. 
 dotnet restore ./buildscripts/BuildScripts.csproj -s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json
 dotnet restore ./src/Castle.Core/Castle.Core-VS2017.csproj
 dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration-VS2017.csproj
