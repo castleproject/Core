@@ -44,12 +44,10 @@ echo --------------------
 echo Running NET461 Tests
 echo --------------------
 
-rem TODO: GVDM: Failures should propogate up to appveyor, this is hiding error codes > 0
-%UserProfile%\.nuget\packages\nunit.consolerunner\3.6.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net461/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3
+%UserProfile%\.nuget\packages\nunit.consolerunner\3.6.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net461/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3 || exit /b 1
 
 echo ---------------------------
 echo Running NETCOREAPP1.1 Tests
 echo ---------------------------
 
-rem TODO: GVDM: Failures should propogate up to appveyor, this is the default result, so think we are ok here.
-.\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\Castle.Core.Tests.exe --result=NetCoreClrTestResults.xml;format=nunit3
+.\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\Castle.Core.Tests.exe --result=NetCoreClrTestResults.xml;format=nunit3 || exit /b 1
