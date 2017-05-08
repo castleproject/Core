@@ -1,22 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	
 	<Import Project="..\..\buildscripts\common.props"></Import>
+
 	<PropertyGroup>
 		<TargetFrameworks>net461;netcoreapp1.1</TargetFrameworks>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<!--This was the only way at the time of writing to $(OutputType) to honour the 'Exe' setting. This can probably be deleted from netcoreapp2.0(inclusive) onwards. Pathing dependencies: build.sh, build-vs2017.cmd -->
+		<RuntimeIdentifier Condition="'$(OS)'=='Windows_NT'">win7-x64</RuntimeIdentifier>
+		<RuntimeIdentifier Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='netcoreapp1.1'"></RuntimeIdentifier>
+		<RuntimeIdentifier Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='net461'"></RuntimeIdentifier>
+	</PropertyGroup>
+	
+	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<AssemblyName>Castle.Core.Tests</AssemblyName>
 		<RootNamespace>CastleTests</RootNamespace>
-		<SignAssembly>True</SignAssembly>
 		<Version>0.0.0.0</Version>
 		<AssemblyVersion>0.0.0.0</AssemblyVersion>
+		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
-		<RuntimeIdentifier>win7-x64</RuntimeIdentifier>
+		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
+		<FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
 	</PropertyGroup>
+	
 	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
 	  <Compile Remove="Components.DictionaryAdapter.Tests\Xml\**" />
 	  <Compile Remove="log4netIntegration\**" />
 	  <Compile Remove="NLogIntegration\**" />
 	</ItemGroup>
+	
 	<ItemGroup>
 		<None Update="log4netIntegration\log4net.xml">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -28,6 +43,7 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</EmbeddedResource>
 	</ItemGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="NUnit" Version="3.6.1" />
 		<PackageReference Include="NUnit.Console" Version="3.6.1" />
