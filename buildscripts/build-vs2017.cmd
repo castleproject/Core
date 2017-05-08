@@ -26,6 +26,7 @@ SET Configuration=Release
 GOTO restore_packages
 
 :restore_packages
+dotnet restore ./buildscripts/BuildScripts.csproj
 dotnet restore ./src/Castle.Core/Castle.Core-VS2017.csproj
 dotnet restore ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj
 dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration-VS2017.csproj
@@ -39,13 +40,14 @@ GOTO test
 
 :test
 
+echo --------------------
 echo Running NET461 Tests
 echo --------------------
 
-%UserProfile%\.nuget\packages\nunit.consolerunner\3.6.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net461/win7-x64/Castle.Core.Tests.exe
+%UserProfile%\.nuget\packages\nunit.consolerunner\3.6.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net461/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3 || exit /b 1
 
+echo ---------------------------
 echo Running NETCOREAPP1.1 Tests
 echo ---------------------------
 
-.\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\win7-x64\Castle.Core.Tests.exe
-
+.\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\Castle.Core.Tests.exe --result=NetCoreClrTestResults.xml;format=nunit3 || exit /b 1

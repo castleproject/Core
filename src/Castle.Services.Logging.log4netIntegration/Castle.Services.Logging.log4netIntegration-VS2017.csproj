@@ -4,11 +4,16 @@
   
   <PropertyGroup>
     <TargetFrameworks>net45</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <AssemblyName>Castle.Services.Logging.log4netIntegration</AssemblyName>
     <RootNamespace>Castle.Services.Logging.log4netIntegration</RootNamespace>
     <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>True</SignAssembly>
+    <PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
+    <FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
   </PropertyGroup>
  
   <ItemGroup Condition="'$(TargetFramework)'=='net45'">
