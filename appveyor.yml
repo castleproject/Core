@@ -3,15 +3,28 @@ version: 4.0.{build}
 image: Visual Studio 2017
 
 branches:
-
   except:
-  
     - gh-pages
+
+skip_commits:
+  files:
+    - .gitattributes
+    - .gitignore
+    - README.md
+    - CHANGELOG.md
+    - LICENSE
 
 skip_tags: true
 
 test: off
 
+after_build:
+- ps: >-
+    $wc = New-Object System.Net.WebClient
+
+    $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "NetCoreClrTestResults.xml"))
+
+    $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "DesktopClrTestResults.xml"))
+
 build_script:
-  
-  - cmd: build-vs2017.cmd
+- cmd: build-vs2017.cmd

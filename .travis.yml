@@ -2,32 +2,14 @@ language: csharp
 
 solution: Castle.Core-VS2017.sln
 
-mono: none
+mono: 4.6.1
 
-dotnet: none
+dotnet: 1.0.1
 
 sudo: required
 
 dist: trusty
 
-before_install:  
-
-    - sudo apt-get -qq update
-    
-    - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  
-    - sudo apt-get install -y libunwind8
-
-    - wget -O - https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0/scripts/obtain/dotnet-install.sh | bash -s -- -i ./dotnetcli/
-
 script:
-
-    - ./dotnetcli/dotnet restore ./src/Castle.Core/Castle.Core-VS2017.csproj
-    
-    - ./dotnetcli/dotnet restore ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj
-    
-    - ./dotnetcli/dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration-VS2017.csproj
-    
-    - ./dotnetcli/dotnet restore ./src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration-VS2017.csproj
-    
-    - ./dotnetcli/dotnet restore ./src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration-VS2017.csproj
+    - uname -a
+    - ./build.sh
