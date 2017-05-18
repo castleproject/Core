@@ -1,5 +1,3 @@
-version: 4.0.{build}
-
 image: Visual Studio 2017
 
 branches:
@@ -14,9 +12,16 @@ skip_commits:
     - CHANGELOG.md
     - LICENSE
 
-skip_tags: true
+skip_tags: false
 
 test: off
+
+init:
+- ps: >-
+    if ($env:APPVEYOR_REPO_TAG -eq "true")
+    {
+        Update-AppveyorBuild -Version "$env:APPVEYOR_REPO_TAG_NAME"
+    }
 
 after_build:
 - ps: >-
@@ -26,5 +31,19 @@ after_build:
 
     $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "DesktopClrTestResults.xml"))
 
+on_success:
+- ps: >-
+    if ($env:APPVEYOR_REPO_TAG -eq "true")
+    {
+        nuget push ".\build\Castle.Core.${env:APPVEYOR_REPO_TAG_NAME}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
+        nuget push ".\build\Castle.Services.Logging.log4netIntegration.${env:APPVEYOR_REPO_TAG_NAME}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
+        nuget push ".\build\Castle.Services.Logging.NLogIntegration.${env:APPVEYOR_REPO_TAG_NAME}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
+        nuget push ".\build\Castle.Services.Logging.SerilogIntegration.${env:APPVEYOR_REPO_TAG_NAME}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
+    }
+
 build_script:
 - cmd: build-vs2017.cmd
+
+artifacts:
+- path: build\*.nupkg
+  name: core
