@@ -32,18 +32,18 @@ fi
 # This installs the latest build of the dotnet targetting pack net461 via NuGet for linux desktop clr builds. 
 # The package source can be removed once Microsoft.TargetingPack.NETFramework.v4.6.1 comes out of alpha on NuGet. 
 dotnet restore ./buildscripts/BuildScripts.csproj -s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json
-dotnet restore ./src/Castle.Core/Castle.Core-VS2017.csproj
-dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration-VS2017.csproj
-dotnet restore ./src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration-VS2017.csproj
-dotnet restore ./src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration-VS2017.csproj
-dotnet restore ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj
+dotnet restore ./src/Castle.Core/Castle.Core.csproj
+dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration.csproj
+dotnet restore ./src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration.csproj
+dotnet restore ./src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration.csproj
+dotnet restore ./src/Castle.Core.Tests/Castle.Core.Tests.csproj
 
 # Linux/Darwin
 
 OSNAME=$(uname -s)
 echo "OSNAME: $OSNAME"
 
-dotnet build ./src/Castle.Core.Tests/Castle.Core.Tests-VS2017.csproj /p:Configuration=Release
+dotnet build ./src/Castle.Core.Tests/Castle.Core.Tests.csproj /p:Configuration=Release
 
 echo --------------------
 echo Running NET461 Tests

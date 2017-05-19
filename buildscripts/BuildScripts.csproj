@@ -13,10 +13,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="CommonAssemblyInfo.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='net461'" Include="Microsoft.TargetingPack.NETFramework.v4.6.1" Version="1.0.1" ExcludeAssets="All" PrivateAssets="All" />
 	</ItemGroup>
 

@@ -14,34 +14,9 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Reflection;
 using System.Security;
 
-[assembly: AssemblyProduct(
-	#if DOTNET45 // order is important
-	"Castle Core for .NET Framework 4.5"
-	#elif DOTNET40
-	"Castle Core for .NET Framework 4.0"
-	#elif DOTNET35
-	"Castle Core for .NET Framework 3.5"
-	#else
-	"Castle Core for .NET Core 1.0"
-	#endif
-)]
-
-[assembly: AssemblyCompany("Castle Project")]
-[assembly: AssemblyCopyright("Copyright (c) 2004-$CurrentYear$ Castle Project - http://www.castleproject.org")]
-
-[assembly: AssemblyVersion("0.0.0")]
-[assembly: AssemblyFileVersion("0.0.0")]
-[assembly: AssemblyInformationalVersion("0.0.0")]
-
-#if DEBUG
-[assembly: AssemblyConfiguration("Debug")]
-#endif
-
 [assembly: ComVisible(false)]
-
 [assembly: CLSCompliant(true)]
 
 #if FEATURE_SECURITY_PERMISSIONS && DOTNET40
