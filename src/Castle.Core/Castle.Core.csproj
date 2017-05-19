@@ -3,7 +3,7 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
+		<TargetFrameworks>net35;net40;net45;netstandard1.3</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -24,7 +24,7 @@
 		<EmbeddedResource Include="DynamicProxy\DynProxy.snk" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='net45'">
+	<ItemGroup Condition="'$(TargetFramework)'=='net35'OR'$(TargetFramework)'=='net40'OR'$(TargetFramework)'=='net45'">
 		<Reference Include="System.Configuration" />
 	</ItemGroup>
 

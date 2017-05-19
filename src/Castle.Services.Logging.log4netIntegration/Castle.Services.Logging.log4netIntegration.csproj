@@ -3,7 +3,7 @@
   <Import Project="..\..\buildscripts\common.props"></Import>
   
   <PropertyGroup>
-    <TargetFrameworks>net45</TargetFrameworks>
+    <TargetFrameworks>net35;net40;net45</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -16,7 +16,7 @@
     <FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
   </PropertyGroup>
  
-  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+  <ItemGroup Condition="'$(TargetFramework)'=='net35'OR'$(TargetFramework)'=='net40'OR'$(TargetFramework)'=='net45'">
     <Reference Include="System.Configuration" />
   </ItemGroup>
 

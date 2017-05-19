@@ -3,7 +3,7 @@
   <Import Project="..\..\buildscripts\common.props"></Import>
   
   <PropertyGroup>
-    <TargetFrameworks>net45</TargetFrameworks>
+    <TargetFrameworks>net35;net40;net45</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup>
