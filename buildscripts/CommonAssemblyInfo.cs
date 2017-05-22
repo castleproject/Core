@@ -22,7 +22,3 @@ using System.Security;
 #if FEATURE_SECURITY_PERMISSIONS && DOTNET40
 [assembly: SecurityRules(SecurityRuleSet.Level2)]
 #endif
-
-#if FEATURE_SECURITY_PERMISSIONS && FEATURE_APTCA
-[assembly: AllowPartiallyTrustedCallers]
-#endif
