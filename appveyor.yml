@@ -42,7 +42,7 @@ on_success:
     }
 
 build_script:
-- cmd: build-vs2017.cmd
+- cmd: build.cmd
 
 artifacts:
 - path: build\*.nupkg

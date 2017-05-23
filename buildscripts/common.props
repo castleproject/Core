@@ -41,25 +41,41 @@
 	<PropertyGroup>
 		<DiagnosticsConstants>DEBUG</DiagnosticsConstants>
 		<NetStandardConstants>TRACE;FEATURE_NETCORE_REFLECTION_API;FEATURE_TEST_SERILOGINTEGRATION</NetStandardConstants>
-		<CommonDesktopClrConstants>TRACE;DOTNET45;DOTNET40;FEATURE_APPDOMAIN;FEATURE_SYSTEM_CONVERTER;FEATURE_ISUPPORTINITIALIZE;FEATURE_DICTIONARYADAPTER_XML;FEATURE_BINDINGLIST;FEATURE_LISTSORT;FEATURE_IDATAERRORINFO;FEATURE_SERIALIZATION;FEATURE_GET_REFERENCED_ASSEMBLIES;FEATURE_SECURITY_PERMISSIONS;FEATURE_REMOTING;FEATURE_GAC;FEATURE_SYSTEM_CONFIGURATION;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_TEST_SERILOGINTEGRATION</CommonDesktopClrConstants>
+		<CommonDesktopClrConstants>TRACE;FEATURE_APPDOMAIN;FEATURE_SYSTEM_CONVERTER;FEATURE_ISUPPORTINITIALIZE;FEATURE_DICTIONARYADAPTER_XML;FEATURE_BINDINGLIST;FEATURE_LISTSORT;FEATURE_IDATAERRORINFO;FEATURE_SERIALIZATION;FEATURE_GET_REFERENCED_ASSEMBLIES;FEATURE_SECURITY_PERMISSIONS;FEATURE_REMOTING;FEATURE_GAC;FEATURE_SYSTEM_CONFIGURATION;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_TEST_SERILOGINTEGRATION</CommonDesktopClrConstants>
 		<DesktopClrConstants Condition="'$(OS)'=='Unix'">$(CommonDesktopClrConstants);__MonoCS__</DesktopClrConstants>
 		<DesktopClrConstants Condition="'$(OS)'=='Windows_NT'">$(CommonDesktopClrConstants)</DesktopClrConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net35|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);DOTNET35</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net35|Release'">
+		<DefineConstants>$(DesktopClrConstants);DOTNET35</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net40|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);FEATURE_LEGACY_REFLECTION_API;DOTNET40</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net40|Release'">
+		<DefineConstants>$(DesktopClrConstants);FEATURE_LEGACY_REFLECTION_API;DOTNET40</DefineConstants>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net45|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants)</DefineConstants>
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);DOTNET45;DOTNET40</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net45|Release'">
-		<DefineConstants>$(DesktopClrConstants)</DefineConstants>
+		<DefineConstants>$(DesktopClrConstants);DOTNET45;DOTNET40;</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net461|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants)</DefineConstants>
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);DOTNET45;DOTNET40</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net461|Release'">
-		<DefineConstants>$(DesktopClrConstants)</DefineConstants>
+		<DefineConstants>$(DesktopClrConstants);DOTNET45;DOTNET40</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard1.3|Debug'">

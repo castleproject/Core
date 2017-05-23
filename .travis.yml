@@ -1,6 +1,6 @@
 language: csharp
 
-solution: Castle.Core-VS2017.sln
+solution: Castle.Core.sln
 
 mono: 4.6.1
 
