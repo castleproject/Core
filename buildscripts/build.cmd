@@ -35,7 +35,11 @@ dotnet restore ./src/Castle.Services.Logging.SerilogIntegration/Castle.Services.
 GOTO build
 
 :build
-dotnet build Castle.Core.sln -c %Configuration%
+rem Should be the line below but because of https://github.com/Microsoft/msbuild/issues/1333 we needed to use msbuild instead.
+rem dotnet build Castle.Core.sln -c %Configuration%
+msbuild /p:Configuration=%Configuration%
+rem The line below kicks out ugly errors for BuildScripts.csproj whilst packing NuGet's, it is benign though. Just need a way of excluding this from the pack sequence.
+msbuild /p:Configuration=%Configuration% /t:Pack
 GOTO test
 
 :test

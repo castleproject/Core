@@ -14,7 +14,7 @@
     <SignAssembly>True</SignAssembly>
     <PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
     <FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
-	<FrameworkPathOverride Condition="'$(OS)'=='Windows_NT'AND'$(TargetFramework)'=='net35'">C:\Windows\Microsoft.NET\Framework\v4.0.30319\</FrameworkPathOverride>
+	<!--<FrameworkPathOverride Condition="'$(OS)'=='Windows_NT'AND'$(TargetFramework)'=='net35'">C:\Windows\Microsoft.NET\Framework\v4.0.30319\</FrameworkPathOverride>-->
   </PropertyGroup>
  
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
