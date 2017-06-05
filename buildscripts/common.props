@@ -15,7 +15,7 @@
 		<Version>$(BuildVersion)</Version>
 		<AssemblyVersion>$(BuildVersion)</AssemblyVersion>
 		<AssemblyTitle>Castle Project Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</AssemblyTitle>
-		<Authors>Castle Project Contributors</Authors>
+		<Authors>Castle Project</Authors>
 		<PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
 		<PackageProjectUrl>http://www.castleproject.org/</PackageProjectUrl>
 		<PackageIconUrl>http://www.castleproject.org/img/castle-logo.png</PackageIconUrl>
@@ -25,7 +25,7 @@
 		<IncludeSymbols>true</IncludeSymbols>
 		<IncludeSource>false</IncludeSource>
 		<CurrentYear>$([System.DateTime]::Now.ToString("yyyy"))</CurrentYear>
-		<Copyright>Copyright 2004-$(CurrentYear) Castle Project - http://www.castleproject.org/ </Copyright>
+		<Copyright>Copyright (c) 2004-$(CurrentYear) Castle Project - http://www.castleproject.org/ </Copyright>
 		<ContentTargetFolders>.</ContentTargetFolders>
 	</PropertyGroup>
 

@@ -12,7 +12,7 @@ See the [Releases](https://github.com/castleproject/Core/releases).
 
 ## License
 
-Castle Core is &copy; 2004-2016 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
+Castle Core is &copy; 2004-2017 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
 
 ## Building
 
