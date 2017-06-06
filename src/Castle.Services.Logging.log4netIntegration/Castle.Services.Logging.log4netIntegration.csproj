@@ -1,45 +1,50 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\buildscripts\common.props"></Import>
-  
-  <PropertyGroup>
-    <TargetFrameworks>net35;net40;net45</TargetFrameworks>
-  </PropertyGroup>
+	<Import Project="..\..\buildscripts\common.props"></Import>
 
-  <PropertyGroup>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <AssemblyName>Castle.Services.Logging.log4netIntegration</AssemblyName>
-    <RootNamespace>Castle.Services.Logging.log4netIntegration</RootNamespace>
-    <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>True</SignAssembly>
-    <PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
-    <FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
-  </PropertyGroup>
- 
-  <ItemGroup Condition="'$(TargetFramework)'=='net35'OR'$(TargetFramework)'=='net40'OR'$(TargetFramework)'=='net45'">
-    <Reference Include="System.Configuration" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net35;net40;net45</TargetFrameworks>
+	</PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
-    <PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
-    <PackageReference Include="System.ComponentModel" Version="4.3.0" />
-    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.8" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\Castle.Core\Castle.Core.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<PackageId>Castle.Core-log4net</PackageId>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageOutputPath>../../build/</PackageOutputPath>
+		<AssemblyName>Castle.Services.Logging.log4netIntegration</AssemblyName>
+		<RootNamespace>Castle.Services.Logging.log4netIntegration</RootNamespace>
+		<AssemblyTitle>Castle log4net integration</AssemblyTitle>
+		<Description>Castle log4net integration, logging services from Apache based on log4j</Description>
+		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
+		<SignAssembly>True</SignAssembly>
+		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
+		<FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
+		<PackageTags>castle logging log4net</PackageTags>
+	</PropertyGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='net35'OR'$(TargetFramework)'=='net40'OR'$(TargetFramework)'=='net45'">
+		<Reference Include="System.Configuration" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
+		<PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
+		<PackageReference Include="System.ComponentModel" Version="4.3.0" />
+		<PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Properties\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="log4net" Version="2.0.8" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Castle.Core\Castle.Core.csproj" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs" />
 	</ItemGroup>
-	
+
 </Project>

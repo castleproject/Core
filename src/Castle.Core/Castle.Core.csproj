@@ -7,13 +7,18 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
+		<PackageId>Castle.Core</PackageId>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageOutputPath>../../build/</PackageOutputPath>
 		<AssemblyName>Castle.Core</AssemblyName>
 		<RootNamespace>Castle</RootNamespace>
+		<AssemblyTitle>Castle Core</AssemblyTitle>
+		<Description>Castle Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</Description>
 		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
 		<SignAssembly>True</SignAssembly>
 		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
 		<FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
+		<PackageTags>castle dynamicproxy dynamic proxy dynamicproxy2 dictionaryadapter emailsender</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
