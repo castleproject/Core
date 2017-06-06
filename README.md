@@ -12,7 +12,7 @@ See the [Releases](https://github.com/castleproject/Core/releases).
 
 ## License
 
-Castle Core is &copy; 2004-2016 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
+Castle Core is &copy; 2004-2017 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
 
 ## Building
 
@@ -43,7 +43,6 @@ The following conditional compilation symbols (vertical) are currently defined f
 Symbol                              | NET35              | NET40              | NET45              | .NET Core
 ----------------------------------- | ------------------ | ------------------ | ------------------ | ------------------
 `FEATURE_APPDOMAIN`                 | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_APTCA`                     | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:
 `FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_BINDINGLIST`               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
 `FEATURE_DICTIONARYADAPTER_XML`     | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
@@ -70,7 +69,6 @@ Symbol                              | NET35              | NET40              | 
 `DOTNET45`                          | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark: | :no_entry_sign:
 
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
-* `FEATURE_APTCA` - marks the assembly with the AllowPartiallyTrustedCallersAttribute.
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.
 * `FEATURE_BINDINGLIST` - enables support features that make use of System.ComponentModel.BindingList.
 * `FEATURE_DICTIONARYADAPTER_XML` - enable DictionaryAdapter Xml features.

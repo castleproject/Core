@@ -15,7 +15,7 @@
 		<Version>$(BuildVersion)</Version>
 		<AssemblyVersion>$(BuildVersion)</AssemblyVersion>
 		<AssemblyTitle>Castle Project Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</AssemblyTitle>
-		<Authors>Castle Project Contributors</Authors>
+		<Authors>Castle Project</Authors>
 		<PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
 		<PackageProjectUrl>http://www.castleproject.org/</PackageProjectUrl>
 		<PackageIconUrl>http://www.castleproject.org/img/castle-logo.png</PackageIconUrl>
@@ -25,7 +25,7 @@
 		<IncludeSymbols>true</IncludeSymbols>
 		<IncludeSource>false</IncludeSource>
 		<CurrentYear>$([System.DateTime]::Now.ToString("yyyy"))</CurrentYear>
-		<Copyright>Copyright 2004-$(CurrentYear) Castle Project - http://www.castleproject.org/ </Copyright>
+		<Copyright>Copyright (c) 2004-$(CurrentYear) Castle Project - http://www.castleproject.org/ </Copyright>
 		<ContentTargetFolders>.</ContentTargetFolders>
 	</PropertyGroup>
 
@@ -41,7 +41,7 @@
 	<PropertyGroup>
 		<DiagnosticsConstants>DEBUG</DiagnosticsConstants>
 		<NetStandardConstants>TRACE;FEATURE_NETCORE_REFLECTION_API;FEATURE_TEST_SERILOGINTEGRATION</NetStandardConstants>
-		<CommonDesktopClrConstants>TRACE;FEATURE_APPDOMAIN;FEATURE_SYSTEM_CONVERTER;FEATURE_ISUPPORTINITIALIZE;FEATURE_DICTIONARYADAPTER_XML;FEATURE_BINDINGLIST;FEATURE_LISTSORT;FEATURE_IDATAERRORINFO;FEATURE_SERIALIZATION;FEATURE_GET_REFERENCED_ASSEMBLIES;FEATURE_SECURITY_PERMISSIONS;FEATURE_REMOTING;FEATURE_GAC;FEATURE_SYSTEM_CONFIGURATION;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_TEST_SERILOGINTEGRATION</CommonDesktopClrConstants>
+		<CommonDesktopClrConstants>TRACE;FEATURE_APPDOMAIN;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_BINDINGLIST;FEATURE_DICTIONARYADAPTER_XML;FEATURE_EMIT_CUSTOMMODIFIERS;FEATURE_EVENTLOG;FEATURE_GAC;FEATURE_GET_REFERENCED_ASSEMBLIES;FEATURE_IDATAERRORINFO;FEATURE_ISUPPORTINITIALIZE;FEATURE_LISTSORT;FEATURE_REMOTING;FEATURE_SECURITY_PERMISSIONS;FEATURE_SERIALIZATION;FEATURE_SMTP;FEATURE_SYSTEM_CONFIGURATION;FEATURE_TARGETEXCEPTION;FEATURE_TEST_COM;FEATURE_TEST_SERILOGINTEGRATION</CommonDesktopClrConstants>
 		<DesktopClrConstants Condition="'$(OS)'=='Unix'">$(CommonDesktopClrConstants);__MonoCS__</DesktopClrConstants>
 		<DesktopClrConstants Condition="'$(OS)'=='Windows_NT'">$(CommonDesktopClrConstants)</DesktopClrConstants>
 	</PropertyGroup>
