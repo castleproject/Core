@@ -14,13 +14,11 @@
 		<Product>Castle Core</Product>
 		<Version>$(BuildVersion)</Version>
 		<AssemblyVersion>$(BuildVersion)</AssemblyVersion>
-		<AssemblyTitle>Castle Project Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</AssemblyTitle>
-		<Authors>Castle Project</Authors>
+		<Authors>Castle Project Contributors</Authors>
 		<PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
 		<PackageProjectUrl>http://www.castleproject.org/</PackageProjectUrl>
 		<PackageIconUrl>http://www.castleproject.org/img/castle-logo.png</PackageIconUrl>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<PackageOutputPath>../../build/</PackageOutputPath>
 		<PackageVersion>$(BuildVersion)</PackageVersion>
 		<IncludeSymbols>true</IncludeSymbols>
 		<IncludeSource>false</IncludeSource>

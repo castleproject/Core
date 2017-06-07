@@ -36,9 +36,9 @@ on_success:
     if ($env:APPVEYOR_REPO_TAG -eq "true")
     {
         nuget push ".\build\Castle.Core.${env:APPVEYOR_REPO_TAG_NAME}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
-        nuget push ".\build\Castle.Services.Logging.log4netIntegration.${env:APPVEYOR_REPO_TAG_NAME}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
-        nuget push ".\build\Castle.Services.Logging.NLogIntegration.${env:APPVEYOR_REPO_TAG_NAME}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
-        nuget push ".\build\Castle.Services.Logging.SerilogIntegration.${env:APPVEYOR_REPO_TAG_NAME}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
+        nuget push ".\build\Castle.Core-log4net.${env:APPVEYOR_REPO_TAG_NAME}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
+        nuget push ".\build\Castle.Core-NLog.${env:APPVEYOR_REPO_TAG_NAME}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
+        nuget push ".\build\Castle.Core-Serilog.${env:APPVEYOR_REPO_TAG_NAME}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
     }
 
 build_script:
