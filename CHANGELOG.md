@@ -12,6 +12,7 @@ Enhancements:
 
 Bugfixes:
 * Fix order of class proxy constructor arguments when using multiple mixins (@sebastienros, #230)
+* Fix dependency on "System.ComponentModel.TypeConverter" NuGet package version that does not exist (#239)
 
 ## 4.0.0 (2017-01-25)
 
@@ -21,7 +22,6 @@ Breaking Changes:
 
 Bugfixes:
 * Fix CustomAttributeInfo.FromExpression for VB.NET (@thomaslevesque, #223)
-* Fix dependency on "System.ComponentModel.TypeConverter" NuGet package version that does not exist (#239)
 
 ## 4.0.0-beta002 (2016-10-28)
 
