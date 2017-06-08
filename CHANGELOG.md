@@ -21,6 +21,7 @@ Breaking Changes:
 
 Bugfixes:
 * Fix CustomAttributeInfo.FromExpression for VB.NET (@thomaslevesque, #223)
+* Fix dependency on "System.ComponentModel.TypeConverter" NuGet package version that does not exist (#239)
 
 ## 4.0.0-beta002 (2016-10-28)
 
