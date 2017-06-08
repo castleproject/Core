@@ -2,8 +2,13 @@
 
 ## Unreleased
 
+Breaking Changes:
+* Removed AllowPartiallyTrustedCallersAttribute, which wasn't defined by default (@fir3pho3nixx, #241)
+* Upgraded log4net to v2.0.8 (@fir3pho3nixx, #241)
+
 Enhancements:
 * Add ProxyUtil.IsAccessible to check if a method is accessible to DynamicProxyGenAssembly2 (Blair Conrad, #235)
+* Refactor build engineering to support AppVeyor and TravisCI (@fir3pho3nixx, #241)
 
 ## 4.0.0 (2017-01-25)
 

@@ -75,6 +75,12 @@ namespace Castle.DynamicProxy.Tests
 
 		private bool verificationDisabled;
 
+		[OneTimeSetUp]
+		public void OneTimeSetUp()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
+
 		[SetUp]
 		public virtual void Init()
 		{
@@ -136,8 +142,6 @@ namespace Castle.DynamicProxy.Tests
 			process.WaitForExit();
 
 			var result = process.ExitCode + " code ";
-
-			Console.WriteLine(GetType().FullName + ": " + result);
 
 			if (process.ExitCode != 0)
 			{

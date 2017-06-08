@@ -14,71 +14,43 @@ REM See the License for the specific language governing permissions and
 REM limitations under the License.
 REM ****************************************************************************
 
-IF NOT EXIST %~dp0..\Settings.proj GOTO msbuild_not_configured
+if "%1" == "" goto no_config 
+if "%1" NEQ "" goto set_config 
 
-REM Set Framework version based on passed in parameter
-IF "%1" == "" goto no_nothing
-
-REM nesting the build command in an IF body prevents reporting of the error level
-IF /i "%1" NEQ "NETCORE" goto not_netcore
-PowerShell.exe -NoProfile -NonInteractive -NoLogo -ExecutionPolicy Unrestricted -Command %~dp0Build-NetCore.ps1
-EXIT /B %ERRORLEVEL%
-
-:not_netcore
-IF /i "%1" NEQ "MONO" goto not_mono
-xbuild /p:Configuration=NET45-Release /t:RunAllTests buildscripts/Build.proj
-EXIT /B %ERRORLEVEL%
-
-:not_mono
-IF /i "%1" == "NET40" (SET FrameworkVersion=v4.0)
-IF /i "%1" == "NET40" (SET BuildConfigKey=NET40)
-
-IF /i "%1" == "NET35" (SET FrameworkVersion=v3.5)
-IF /i "%1" == "NET35" (SET BuildConfigKey=NET35)
-
-IF /i "%1" == "NET45" (SET FrameworkVersion=v4.5)
-IF /i "%1" == "NET45" (SET BuildConfigKey=NET45)
-
-IF "%2" == "" goto no_target_and_config
-SET BuildTarget=%2
-
-IF "%3" == "" goto no_config
-SET BuildConfiguration=%3
-goto build
-
-:no_nothing
-SET FrameworkVersion=v4.0
-SET BuildConfigKey=NET40
-SET BuildTarget=RunAllTests
-SET BuildConfiguration=NET40-Release
-goto build
-
-:no_target_and_config
-SET BuildTarget=RunAllTests
-SET BuildConfiguration=%BuildConfigKey%-Release
-goto build
+:set_config
+SET Configuration=%1
+GOTO restore_packages
 
 :no_config
-SET BuildConfiguration=%BuildConfigKey%-Release
-goto build
+SET Configuration=Release
+GOTO restore_packages
+
+:restore_packages
+dotnet restore ./buildscripts/BuildScripts.csproj
+dotnet restore ./src/Castle.Core/Castle.Core.csproj
+dotnet restore ./src/Castle.Core.Tests/Castle.Core.Tests.csproj
+dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration.csproj
+dotnet restore ./src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration.csproj
+dotnet restore ./src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration.csproj
+GOTO build
 
 :build
-echo Framework version is: %FrameworkVersion%
-echo Build Target is: %BuildTarget%
-echo Building configuration: %BuildConfiguration%
+rem Should be the line below but because of https://github.com/Microsoft/msbuild/issues/1333 we needed to use msbuild instead.
+rem dotnet build Castle.Core.sln -c %Configuration%
+msbuild /p:Configuration=%Configuration% || exit /b 1
+msbuild /p:Configuration=%Configuration% /t:Pack || exit /b 1
+GOTO test
 
-SET __MSBUILD_EXE__=%windir%\microsoft.net\framework\v4.0.30319\msbuild.exe
+:test
 
-@echo on
-%__MSBUILD_EXE__% /m "%~dp0Build.proj" /p:Platform="Any CPU" /p:BuildConfigKey=%BuildConfigKey% /p:TargetFrameworkVersion=%FrameworkVersion% /ToolsVersion:4.0  /property:Configuration=%BuildConfiguration% /t:%BuildTarget%
-@echo off
+echo --------------------
+echo Running NET461 Tests
+echo --------------------
 
-IF %ERRORLEVEL% NEQ 0 GOTO err
-EXIT /B 0
+%UserProfile%\.nuget\packages\nunit.consolerunner\3.6.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net461/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3 || exit /b 1
 
-:err
-EXIT /B 1
+echo ---------------------------
+echo Running NETCOREAPP1.1 Tests
+echo ---------------------------
 
-:msbuild_not_configured
-echo This project is not configured to be built with MSBuild.
-echo Please use the NAnt script in the root folder of this project.
+.\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\Castle.Core.Tests.exe --result=NetCoreClrTestResults.xml;format=nunit3 || exit /b 1

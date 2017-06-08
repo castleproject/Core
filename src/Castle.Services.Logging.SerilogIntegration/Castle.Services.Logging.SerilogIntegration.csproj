@@ -1,105 +1,46 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <RootPath Condition=" '$(RootPath)' == '' ">$(MSBuildProjectDirectory)\..\..</RootPath>
-  </PropertyGroup>
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{15410E1F-E79F-43B6-B403-228768DF793D}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Castle.Services.Logging.SerilogIntegration</RootNamespace>
-    <AssemblyName>Castle.Services.Logging.SerilogIntegration</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET45-Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\NET45-Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NET45-Release|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\NET45-Release\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath Condition="'$(Configuration)' == 'NET45-Release' or '$(Configuration)' == 'NET45-Debug'">..\..\lib\net45\Serilog.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="SerilogFactory.cs" />
-    <Compile Include="SerilogLogger.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Castle.Core\Castle.Core.csproj">
-      <Project>{e4fa5b53-7d36-429e-8e5c-53d5479242ba}</Project>
-      <Name>Castle.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(RootPath)\Settings.proj" />
-  <PropertyGroup>
-    <ProjectName>Castle.Services.Logging.SerilogIntegration</ProjectName>
-    <DefineConstants>$(DefineConstants) $(AdditionalDefineConstants)</DefineConstants>
-  </PropertyGroup>
-  <Import Project="$(BuildScriptsPath)\Castle.Common.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\buildscripts\common.props"></Import>
+
+	<PropertyGroup>
+		<TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Castle.Core-Serilog</PackageId>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageOutputPath>../../build/</PackageOutputPath>
+		<AssemblyName>Castle.Services.Logging.SerilogIntegration</AssemblyName>
+		<RootNamespace>Castle.Services.Logging.SerilogIntegration</RootNamespace>
+		<AssemblyTitle>Castle Serilog integration</AssemblyTitle>
+		<Description>Castle Serilog integration, for simple logging with structured events</Description>
+		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
+		<SignAssembly>True</SignAssembly>
+		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
+		<FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
+		<PackageTags>castle logging serilog</PackageTags>
+	</PropertyGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
+		<PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
+		<PackageReference Include="System.ComponentModel" Version="4.3.0" />
+		<PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Properties\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Serilog" Version="2.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Castle.Core\Castle.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='net45'">
+		<Reference Include="System.Configuration" />
+	</ItemGroup>
+
 </Project>

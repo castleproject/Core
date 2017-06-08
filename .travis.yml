@@ -1,0 +1,15 @@
+language: csharp
+
+solution: Castle.Core.sln
+
+mono: 4.6.1
+
+dotnet: 1.0.1
+
+sudo: required
+
+dist: trusty
+
+script:
+    - uname -a
+    - ./build.sh

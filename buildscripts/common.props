@@ -1,0 +1,95 @@
+<Project>
+	
+	<PropertyGroup>
+		<NoWarn>$(NoWarn);CS1591;CS3014;CS3003;CS3001;CS3021</NoWarn>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/castleproject/Core</RepositoryUrl>
+		<BuildVersion Condition="'$(APPVEYOR_BUILD_VERSION)'==''AND'$(APPVEYOR_REPO_TAG)'!='true'">0.0.0</BuildVersion>
+		<BuildVersion Condition="'$(APPVEYOR_BUILD_VERSION)'!=''AND'$(APPVEYOR_REPO_TAG)'!='true'">$(APPVEYOR_BUILD_VERSION)</BuildVersion>
+		<BuildVersion Condition="'$(APPVEYOR_REPO_TAG)'=='true'">$(APPVEYOR_REPO_TAG_NAME)</BuildVersion>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath> 
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<Product>Castle Core</Product>
+		<Version>$(BuildVersion)</Version>
+		<AssemblyVersion>$(BuildVersion)</AssemblyVersion>
+		<Authors>Castle Project Contributors</Authors>
+		<PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
+		<PackageProjectUrl>http://www.castleproject.org/</PackageProjectUrl>
+		<PackageIconUrl>http://www.castleproject.org/img/castle-logo.png</PackageIconUrl>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageVersion>$(BuildVersion)</PackageVersion>
+		<IncludeSymbols>true</IncludeSymbols>
+		<IncludeSource>false</IncludeSource>
+		<CurrentYear>$([System.DateTime]::Now.ToString("yyyy"))</CurrentYear>
+		<Copyright>Copyright (c) 2004-$(CurrentYear) Castle Project - http://www.castleproject.org/ </Copyright>
+		<ContentTargetFolders>.</ContentTargetFolders>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="..\..\CHANGELOG.md" />
+		<Content Include="..\..\LICENSE">
+			<PackagePath></PackagePath>
+		</Content>
+		<Content Include="..\..\buildscripts\ASL - Apache Software Foundation License.txt" />
+		<Content Include="..\..\buildscripts\readme.txt" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<DiagnosticsConstants>DEBUG</DiagnosticsConstants>
+		<NetStandardConstants>TRACE;FEATURE_NETCORE_REFLECTION_API;FEATURE_TEST_SERILOGINTEGRATION</NetStandardConstants>
+		<CommonDesktopClrConstants>TRACE;FEATURE_APPDOMAIN;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_BINDINGLIST;FEATURE_DICTIONARYADAPTER_XML;FEATURE_EMIT_CUSTOMMODIFIERS;FEATURE_EVENTLOG;FEATURE_GAC;FEATURE_GET_REFERENCED_ASSEMBLIES;FEATURE_IDATAERRORINFO;FEATURE_ISUPPORTINITIALIZE;FEATURE_LISTSORT;FEATURE_REMOTING;FEATURE_SECURITY_PERMISSIONS;FEATURE_SERIALIZATION;FEATURE_SMTP;FEATURE_SYSTEM_CONFIGURATION;FEATURE_TARGETEXCEPTION;FEATURE_TEST_COM;FEATURE_TEST_SERILOGINTEGRATION</CommonDesktopClrConstants>
+		<DesktopClrConstants Condition="'$(OS)'=='Unix'">$(CommonDesktopClrConstants);__MonoCS__</DesktopClrConstants>
+		<DesktopClrConstants Condition="'$(OS)'=='Windows_NT'">$(CommonDesktopClrConstants)</DesktopClrConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net35|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);FEATURE_LEGACY_REFLECTION_API;DOTNET35</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net35|Release'">
+		<DefineConstants>$(DesktopClrConstants);FEATURE_LEGACY_REFLECTION_API;DOTNET35</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net40|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);FEATURE_LEGACY_REFLECTION_API;DOTNET40</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net40|Release'">
+		<DefineConstants>$(DesktopClrConstants);FEATURE_LEGACY_REFLECTION_API;DOTNET40</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net45|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);DOTNET45;DOTNET40</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net45|Release'">
+		<DefineConstants>$(DesktopClrConstants);DOTNET45;DOTNET40;</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net461|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);DOTNET45;DOTNET40</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net461|Release'">
+		<DefineConstants>$(DesktopClrConstants);DOTNET45;DOTNET40</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard1.3|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(NetStandardConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard1.3|Release'">
+		<DefineConstants>$(NetStandardConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp1.1|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(NetStandardConstants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp1.1|Release'">
+		<DefineConstants>$(NetStandardConstants)</DefineConstants>
+	</PropertyGroup>
+
+</Project>
