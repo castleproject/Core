@@ -14,12 +14,14 @@
 
 namespace Castle.DynamicProxy.Internal
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
 
 	using Castle.Core.Internal;
+	using Castle.DynamicProxy.Generators.Emitters;
 
 	public static class InternalsUtil
 	{
@@ -95,6 +97,53 @@ namespace Castle.DynamicProxy.Internal
 				return true;
 			}
 			return false;
+		}
+
+		/// <summary>
+		/// Provides instructions that a user could follow to make a type or method in <paramref name="targetAssembly"/>
+		/// visible to DynamicProxyGenAssembly2.</summary>
+		/// <param name="targetAssembly">The assembly containing the type or method.</param>
+		/// <returns>Instructions that a user could follow to make a type or method visible to DynamicProxyGenAssembly2.</returns>
+		internal static string CreateInstructionsToMakeVisible(Assembly targetAssembly)
+		{
+			string strongNamedOrNotIndicator = " not"; // assume not strong-named
+			string assemblyToBeVisibleTo = "\"DynamicProxyGenAssembly2\""; // appropriate for non-strong-named
+
+			if (targetAssembly.IsAssemblySigned())
+			{
+				strongNamedOrNotIndicator = "";
+				assemblyToBeVisibleTo = ReferencesCastleCore(targetAssembly)
+					? "InternalsVisible.ToDynamicProxyGenAssembly2"
+					: '"' + InternalsVisible.ToDynamicProxyGenAssembly2 + '"';
+			}
+
+			var instructionsFormat =
+				"Make it public, or internal and mark your assembly with " +
+				"[assembly: InternalsVisibleTo({0})] attribute, because assembly {1} " +
+				"is{2} strong-named.";
+
+			var instructions = String.Format(instructionsFormat,
+				assemblyToBeVisibleTo,
+				GetAssemblyName(targetAssembly),
+				strongNamedOrNotIndicator);
+			return instructions;
+		}
+
+		private static string GetAssemblyName(Assembly targetAssembly)
+		{
+			return targetAssembly.GetName().Name;
+		}
+
+		private static bool ReferencesCastleCore(Assembly inspectedAssembly)
+		{
+#if FEATURE_GET_REFERENCED_ASSEMBLIES
+			return inspectedAssembly.GetReferencedAssemblies()
+				.Any(r => r.FullName == Assembly.GetExecutingAssembly().FullName);
+#else
+			// .NET Core does not provide an API to do this, so we just fall back to the solution that will definitely work.
+			// After all it is just an exception message.
+			return false;
+#endif
 		}
 	}
 }
