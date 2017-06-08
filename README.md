@@ -19,10 +19,7 @@ Castle Core is &copy; 2004-2017 Castle Project. It is free software, and may be 
 ### .NET Framework and .NET Core
 
 ```
-msbuild /p:Configuration=NET35-Release /t:RunAllTests buildscripts/Build.proj
-msbuild /p:Configuration=NET40-Release /t:RunAllTests buildscripts/Build.proj
-msbuild /p:Configuration=NET45-Release /t:RunAllTests buildscripts/Build.proj
-build.cmd NETCORE
+build.cmd
 ```
 
 ### Mono
@@ -33,7 +30,7 @@ releases used to work well, but are not supported.
 Check [our issue tracker](https://github.com/castleproject/Core/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20mono) for known Mono defects.
 
 ```
-xbuild /p:Configuration=NET45-Release /t:RunAllTests buildscripts/Build.proj
+./build.sh
 ```
 
 ### Conditional Compilation Symbols
