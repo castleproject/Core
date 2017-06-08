@@ -28,7 +28,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Include="..\..\CHANGELOG.MD" />
+		<Content Include="..\..\CHANGELOG.md" />
 		<Content Include="..\..\LICENSE">
 			<PackagePath></PackagePath>
 		</Content>
