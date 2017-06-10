@@ -234,6 +234,15 @@ namespace Castle.DynamicProxy.Internal
 				return true;
 			}
 
+			// Later, there might be more special cases requiring attribute replication,
+			// which might justify creating a `SpecialCaseAttributeThatShouldBeReplicated`
+			// method and an `AttributesToAlwaysReplicate` class. For the moment, `Param-
+			// ArrayAttribute` is the only special case, so keep it simple for now:
+			if (attribute == typeof(ParamArrayAttribute))
+			{
+				return false;
+			}
+
 			var attrs = attribute.GetTypeInfo().GetCustomAttributes<AttributeUsageAttribute>(true).ToArray();
 			if (attrs.Length != 0)
 			{
