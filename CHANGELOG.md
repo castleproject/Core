@@ -13,6 +13,7 @@ Enhancements:
 Bugfixes:
 * Fix order of class proxy constructor arguments when using multiple mixins (@sebastienros, #230)
 * Fix dependency on "System.ComponentModel.TypeConverter" NuGet package version that does not exist (#239)
+* Fix ParamArrayAttribute not being replicated in proxy (@stakx, #121)
 
 ## 4.0.0 (2017-01-25)
 
