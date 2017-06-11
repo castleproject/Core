@@ -1,4 +1,4 @@
-// Copyright 2004-2009 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2017 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
 // limitations under the License.
 
 #if FEATURE_SMTP
+
+#pragma warning disable 618 // Mono marked SmtpClient obsolete
 
 namespace Castle.Core.Smtp
 {
@@ -284,5 +286,7 @@ namespace Castle.Core.Smtp
 		}
 	}
 }
+
+#pragma warning restore 618 // Mono marked SmtpClient obsolete
 
 #endif
