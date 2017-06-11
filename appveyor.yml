@@ -1,9 +1,5 @@
 image: Visual Studio 2017
 
-branches:
-  except:
-    - gh-pages
-
 skip_tags: false
 
 test: off
