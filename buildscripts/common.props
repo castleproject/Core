@@ -4,9 +4,8 @@
 		<NoWarn>$(NoWarn);CS1591;CS3014;CS3003;CS3001;CS3021</NoWarn>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/castleproject/Core</RepositoryUrl>
-		<BuildVersion Condition="'$(APPVEYOR_BUILD_VERSION)'==''AND'$(APPVEYOR_REPO_TAG)'!='true'">0.0.0</BuildVersion>
-		<BuildVersion Condition="'$(APPVEYOR_BUILD_VERSION)'!=''AND'$(APPVEYOR_REPO_TAG)'!='true'">$(APPVEYOR_BUILD_VERSION)</BuildVersion>
-		<BuildVersion Condition="'$(APPVEYOR_REPO_TAG)'=='true'">$(APPVEYOR_REPO_TAG_NAME)</BuildVersion>
+		<BuildVersion>0.0.0</BuildVersion>
+		<BuildVersion Condition="'$(APPVEYOR_BUILD_VERSION)'!=''">$(APPVEYOR_BUILD_VERSION)</BuildVersion>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath> 
 	</PropertyGroup>
 
