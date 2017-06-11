@@ -4,14 +4,6 @@ branches:
   except:
     - gh-pages
 
-skip_commits:
-  files:
-    - .gitattributes
-    - .gitignore
-    - README.md
-    - CHANGELOG.md
-    - LICENSE
-
 skip_tags: false
 
 test: off
