@@ -11,7 +11,7 @@ See the [documentation](docs/README.md).
 
 | Platform | Build Status |
 |----------|:------------:|
-| Windows  | [![Build status](https://ci.appveyor.com/api/projects/status/9lbxnkji7ifaws2k?svg=true)](https://ci.appveyor.com/project/castleproject/core) |
+| Windows  | [![Build status](https://ci.appveyor.com/api/projects/status/!!!token!!!?svg=true)](https://ci.appveyor.com/project/castleproject/core) |
 | Linux    | [![Build Status](https://travis-ci.org/castleproject/Core.svg?branch=master)](https://travis-ci.org/castleproject/Core) |
 
 ## Releases
