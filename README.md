@@ -2,19 +2,13 @@
 
 <img align="right" src="docs/images/castle-logo.png">
 
-[![Join the chat at https://gitter.im/castleproject/all](https://badges.gitter.im/castleproject/all.svg)](https://gitter.im/castleproject/all?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![NuGet](https://img.shields.io/nuget/v/Castle.Core.svg)](https://www.nuget.org/packages/Castle.Core/)
-
 Castle Core provides common Castle Project abstractions including logging services. It also features **Castle DynamicProxy** a lightweight runtime proxy generator, and **Castle DictionaryAdapter**.
 
 See the [documentation](docs/README.md).
 
-| Platform | Build Status |
-|----------|:------------:|
-| Windows  | [![Build status](https://ci.appveyor.com/api/projects/status/!!!token!!!?svg=true)](https://ci.appveyor.com/project/castleproject/core) |
-| Linux    | [![Build Status](https://travis-ci.org/castleproject/Core.svg?branch=master)](https://travis-ci.org/castleproject/Core) |
-
 ## Releases
+
+[![NuGet](https://img.shields.io/nuget/v/Castle.Core.svg)](https://www.nuget.org/packages/Castle.Core/)
 
 See the [Releases](https://github.com/castleproject/Core/releases).
 
@@ -23,6 +17,11 @@ See the [Releases](https://github.com/castleproject/Core/releases).
 Castle Core is &copy; 2004-2017 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
 
 ## Building
+
+| Platform | Build Status |
+|----------|-------------:|
+| Windows  | [![Build status](https://ci.appveyor.com/api/projects/status/49a6i0ydiku56r5b/branch/master?svg=true)](https://ci.appveyor.com/project/castleproject/core) |
+| Linux    | [![Build Status](https://travis-ci.org/castleproject/Core.svg?branch=master)](https://travis-ci.org/castleproject/Core) |
 
 ### .NET Framework and .NET Core
 
@@ -40,6 +39,15 @@ Check [our issue tracker](https://github.com/castleproject/Core/issues?utf8=%E2%
 ```
 ./build.sh
 ```
+
+## Contributing
+
+There a lot of ways to contribute to the project.
+
+* [![Join the chat at https://gitter.im/castleproject/all](https://badges.gitter.im/castleproject/all.svg)](https://gitter.im/castleproject/all?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+* [Coding Standards](coding-standards.md)
+* [How to submit a fix](how-to-submit-a-fix.md)
+* [Getting Pre-Release Castle Packages](prerelease-packages.md)
 
 ### Conditional Compilation Symbols
 
