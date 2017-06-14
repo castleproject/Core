@@ -2,9 +2,17 @@
 
 <img align="right" src="docs/images/castle-logo.png">
 
+[![Join the chat at https://gitter.im/castleproject/all](https://badges.gitter.im/castleproject/all.svg)](https://gitter.im/castleproject/all?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![NuGet](https://img.shields.io/nuget/v/Castle.Core.svg)](https://www.nuget.org/packages/Castle.Core/)
+
 Castle Core provides common Castle Project abstractions including logging services. It also features **Castle DynamicProxy** a lightweight runtime proxy generator, and **Castle DictionaryAdapter**.
 
 See the [documentation](docs/README.md).
+
+| Platform | Build Status |
+|----------|:------------:|
+| Windows  | [![Build status](https://ci.appveyor.com/api/projects/status/9lbxnkji7ifaws2k?svg=true)](https://ci.appveyor.com/project/castleproject/core) |
+| Linux    | [![Build Status](https://travis-ci.org/castleproject/Core.svg?branch=master)](https://travis-ci.org/castleproject/Core) |
 
 ## Releases
 
