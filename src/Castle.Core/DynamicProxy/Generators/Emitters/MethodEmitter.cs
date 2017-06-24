@@ -174,8 +174,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			builder.SetSignature(
 				returnType,
 #if FEATURE_EMIT_CUSTOMMODIFIERS
-				returnParameter.GetRequiredCustomModifiers(),
-				returnParameter.GetOptionalCustomModifiers(),
+				returnParameter.GetRequiredCustomModifiers().Reverse().ToArray(),
+				returnParameter.GetOptionalCustomModifiers().Reverse().ToArray(),
 #else
 				null,
 				null,
