@@ -19,10 +19,16 @@ namespace Castle.DynamicProxy.Tests
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Runtime.InteropServices;
+
+#if FEATURE_EMIT_CUSTOMMODIFIERS
+	using System.Reflection;
+	using System.Runtime.CompilerServices;
+#endif
+
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.Interfaces;
+
 	using NUnit.Framework;
-	using RhinoMocksCPPInterfaces;
 
 	[TestFixture]
 	public class RhinoMocksTestCase : BasePEVerifyTestCase
@@ -110,20 +116,89 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 #if FEATURE_EMIT_CUSTOMMODIFIERS
+		private Type iHaveMethodWithModOptsType;
+
+		[OneTimeSetUp]
+		public void GenerateDynamicAssemblyHavingModopts()
+		{
+			// One test below tries to proxy a type that has a method whose signature
+			// involves an optional modifier (modopt). These are never produced by the
+			// C# nor VB.NET compilers, but the C++/CLI compiler produces those. However,
+			// if we added a C++/CLI project to this solution, it could only be compiled
+			// on Windows (since the only extant C++/CLI compiler is MSVC). So what we do
+			// instead to get some modopts is to generate a dynamic test assembly.
+			//
+			// Instead of using System.Reflection.AssemblyBuilder directly, we use
+			// Castle's own ModuleScope since that seems the easiest way to get a strong-
+			// named persistent assembly that can be referenced by DynamicProxy.
+
+			const string assemblyName = "Rhino.Mocks.CPP.Interfaces";
+			const string assemblyFileName = "Rhino.Mocks.CPP.Interfaces.dll";
+
+			var moduleScope = new ModuleScope(
+				savePhysicalAssembly: true,
+				disableSignedModule: false,
+				namingScope: new Generators.NamingScope(),
+				strongAssemblyName: assemblyName,
+				strongModulePath: assemblyFileName,
+				weakAssemblyName: assemblyName,
+				weakModulePath: assemblyFileName);
+
+			// This is the C++/CLI type we want to generate:
+			//
+			//   namespace RhinoMocksCPPInterfaces {
+			//       public interface class IHaveMethodWithModOpts {
+			//	         virtual void StartLiveOnSlot(long int slotNumber);
+			//       };
+			//   }
+			//
+			// which corresponds to this IL:
+			//
+			//   .class interface public abstract auto ansi beforefieldinit RhinoMocksCPPInterfaces.IHaveMethodWithModOpts
+			//   {
+			//       .method public hidebysig newslot abstract virtual instance void StartLiveOnSlot(int32 modopt([mscorlib]System.Runtime.CompilerServices.IsLong) slotNumber) cil managed
+			//       { }
+			//   }
+
+			var typeBuilder = moduleScope.DefineType(
+				true,
+				"RhinoMocksCPPInterfaces.IHaveMethodWithModOpts",
+				TypeAttributes.Class | TypeAttributes.Interface | TypeAttributes.Public | TypeAttributes.Abstract | TypeAttributes.AutoLayout | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit);
+
+			var methodBuilder = typeBuilder.DefineMethod(
+				"StartLiveOnSlot",
+				MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Abstract | MethodAttributes.Virtual,
+				returnType: typeof(void),
+				returnTypeRequiredCustomModifiers: null,
+				returnTypeOptionalCustomModifiers: null,
+				parameterTypes: new[]
+				{
+					typeof(int)
+				},
+				parameterTypeRequiredCustomModifiers: null,
+				parameterTypeOptionalCustomModifiers: new[]
+				{
+					new[] { typeof(IsLong) }
+				},
+				callingConvention: CallingConventions.Standard);
+
+			var iHaveMethodWithModOptsType = typeBuilder.CreateType();
+
+			// Let's persist and PE-verify the dynamic assembly before it gets used in tests:
+			var assemblyPath = moduleScope.SaveAssembly();
+			base.RunPEVerifyOnGeneratedAssembly(assemblyPath);
+
+			this.iHaveMethodWithModOptsType = iHaveMethodWithModOptsType;
+		}
+
 		[Test]
 		public void CanProxyMethodWithModOpt()
 		{
-			// IL of method to proxy:
-			//
-			//.method public hidebysig newslot abstract virtual
-			//        instance void  StartLiveOnSlot(int32 modopt([mscorlib]System.Runtime.CompilerServices.IsLong) slotNumber) cil managed
-			//{
-			//}
+			Assume.That(iHaveMethodWithModOptsType != null);
 
-			var proxy =
-				(IHaveMethodWithModOpts)
-				generator.CreateInterfaceProxyWithoutTarget(typeof (IHaveMethodWithModOpts), new DoNothingInterceptor());
-			proxy.StartLiveOnSlot(4);
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(iHaveMethodWithModOptsType, new DoNothingInterceptor());
+			var startLiveOnSlotMethod = iHaveMethodWithModOptsType.GetMethod("StartLiveOnSlot");
+			startLiveOnSlotMethod.Invoke(proxy, new object[] { 4 });
 		}
 #endif
 

@@ -89,9 +89,6 @@
 		<Reference Include="ADODB">
 			<HintPath>..\..\lib\net35\adodb.dll</HintPath>
 		</Reference>
-		<Reference Include="Rhino.Mocks.CPP.Interfaces">
-			<HintPath>..\..\lib\net35\Rhino.Mocks.CPP.Interfaces.dll</HintPath>
-		</Reference>
 	</ItemGroup>
 
 </Project>
