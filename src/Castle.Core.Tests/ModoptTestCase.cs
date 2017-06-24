@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
 
@@ -104,7 +105,9 @@ namespace Castle.DynamicProxy.Tests
 			Assume.That(this.generatedTypes.ContainsKey(typeName));
 
 			var modopts = this.generatedTypes[typeName].GetMethod("Foo").GetParameters()[0].GetOptionalCustomModifiers();
-			CollectionAssert.AreEqual(expected: ModoptTestCase.modopts[typeName], actual: modopts);
+			CollectionAssert.AreEqual(expected: ModoptTestCase.modopts[typeName].Reverse(), actual: modopts);
+			// ^ Interesting detail: .NET appears to report modopts in reverse order.
+			//   That is why we need to `.Reverse()` the original sequence.
 		}
 
 		/// <summary>
