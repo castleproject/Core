@@ -182,8 +182,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 #endif
 				parameters,
 #if FEATURE_EMIT_CUSTOMMODIFIERS
-				baseMethodParameters.Select(x => x.GetRequiredCustomModifiers()).ToArray(),
-				baseMethodParameters.Select(x => x.GetOptionalCustomModifiers()).ToArray()
+				baseMethodParameters.Select(x => x.GetRequiredCustomModifiers().Reverse().ToArray()).ToArray(),
+				baseMethodParameters.Select(x => x.GetOptionalCustomModifiers().Reverse().ToArray()).ToArray()
 #else
 				null,
 				null
