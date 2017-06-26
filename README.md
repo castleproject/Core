@@ -42,12 +42,7 @@ Check [our issue tracker](https://github.com/castleproject/Core/issues?utf8=%E2%
 
 ## Contributing
 
-There a lot of ways to contribute to the project.
-
-* [![Join the chat at https://gitter.im/castleproject/all](https://badges.gitter.im/castleproject/all.svg)](https://gitter.im/castleproject/all?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-* [Coding Standards](coding-standards.md)
-* [How to submit a fix](how-to-submit-a-fix.md)
-* [Getting Pre-Release Castle Packages](prerelease-packages.md)
+Have a look at the [contributing section](https://github.com/castleproject/Home#its-community-driven) in our _Home_ repo to get involved.
 
 ### Conditional Compilation Symbols
 
