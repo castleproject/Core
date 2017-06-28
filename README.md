@@ -20,8 +20,8 @@ Castle Core is &copy; 2004-2017 Castle Project. It is free software, and may be 
 
 | Platform | Build Status |
 |----------|-------------:|
-| Windows  | [![Build status](https://ci.appveyor.com/api/projects/status/49a6i0ydiku56r5b/branch/master?svg=true)](https://ci.appveyor.com/project/castleproject/core) |
-| Linux    | [![Build Status](https://travis-ci.org/castleproject/Core.svg?branch=master)](https://travis-ci.org/castleproject/Core) |
+| Windows  | [![Build status](https://ci.appveyor.com/api/projects/status/49a6i0ydiku56r5b/branch/master?svg=true)](https://ci.appveyor.com/project/castleproject/core/branch/master) |
+| Linux    | [![Build Status](https://travis-ci.org/castleproject/Core.svg?branch=master)](https://travis-ci.org/castleproject/Core/branches) |
 
 ### .NET Framework and .NET Core
 
