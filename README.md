@@ -8,13 +8,24 @@ See the [documentation](docs/README.md).
 
 ## Releases
 
+[![NuGet](https://img.shields.io/nuget/v/Castle.Core.svg)](https://www.nuget.org/packages/Castle.Core/)
+
 See the [Releases](https://github.com/castleproject/Core/releases).
 
 ## License
 
 Castle Core is &copy; 2004-2017 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
 
+## Contributing
+
+Browse the [contributing section](https://github.com/castleproject/Home#its-community-driven) of our _Home_ repository to get involved.
+
 ## Building
+
+| Platform | Build Status |
+|----------|-------------:|
+| Windows  | [![Build status](https://ci.appveyor.com/api/projects/status/49a6i0ydiku56r5b/branch/master?svg=true)](https://ci.appveyor.com/project/castleproject/core/branch/master) |
+| Linux    | [![Build Status](https://travis-ci.org/castleproject/Core.svg?branch=master)](https://travis-ci.org/castleproject/Core/branches) |
 
 ### .NET Framework and .NET Core
 
