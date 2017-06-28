@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Bugfixes:
+ * Fix incorrect replication (reversed order) of custom modifiers (modopts and modreqs) (@stakx, #277)
+
 ## 4.1.0 (2017-06-11)
 
 Breaking Changes:
