@@ -16,6 +16,10 @@ See the [Releases](https://github.com/castleproject/Core/releases).
 
 Castle Core is &copy; 2004-2017 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
 
+## Contributing
+
+Browse the [contributing section](https://github.com/castleproject/Home#its-community-driven) of our _Home_ repository to get involved.
+
 ## Building
 
 | Platform | Build Status |
@@ -39,10 +43,6 @@ Check [our issue tracker](https://github.com/castleproject/Core/issues?utf8=%E2%
 ```
 ./build.sh
 ```
-
-## Contributing
-
-Have a look at the [contributing section](https://github.com/castleproject/Home#its-community-driven) in our _Home_ repo to get involved.
 
 ### Conditional Compilation Symbols
 
