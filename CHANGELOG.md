@@ -3,7 +3,8 @@
 ## Unreleased
 
 Bugfixes:
- * Fix incorrect replication (reversed order) of custom modifiers (modopts and modreqs) (@stakx, #277)
+* Fix incorrect replication (reversed order) of custom modifiers (modopts and modreqs) (@stakx, #277)
+* Fix COM interface proxy error case throwing exceptions trying to release null pointer from QueryInterface (@stakx, #281)
 
 ## 4.1.0 (2017-06-11)
 
