@@ -3,87 +3,87 @@
 ## Unreleased
 
 Bugfixes:
-* Fix incorrect replication (reversed order) of custom modifiers (modopts and modreqs) (@stakx, #277)
-* Fix COM interface proxy error case throwing exceptions trying to release null pointer from QueryInterface (@stakx, #281)
+- Fix incorrect replication (reversed order) of custom modifiers (modopts and modreqs) (@stakx, #277)
+- Fix COM interface proxy error case throwing exceptions trying to release null pointer from QueryInterface (@stakx, #281)
 
 ## 4.1.0 (2017-06-11)
 
 Breaking Changes:
-* Remove AllowPartiallyTrustedCallersAttribute, which wasn't defined by default (@fir3pho3nixx, #241)
-* Upgrade log4net to v2.0.8 (@fir3pho3nixx, #241)
+- Remove AllowPartiallyTrustedCallersAttribute, which wasn't defined by default (@fir3pho3nixx, #241)
+- Upgrade log4net to v2.0.8 (@fir3pho3nixx, #241)
 
 Enhancements:
-* Add ProxyUtil.IsAccessible to check if a method is accessible to DynamicProxyGenAssembly2 (Blair Conrad, #235)
-* Refactor build engineering to support AppVeyor and TravisCI (@fir3pho3nixx, #241)
+- Add ProxyUtil.IsAccessible to check if a method is accessible to DynamicProxyGenAssembly2 (Blair Conrad, #235)
+- Refactor build engineering to support AppVeyor and TravisCI (@fir3pho3nixx, #241)
 
 Bugfixes:
-* Fix order of class proxy constructor arguments when using multiple mixins (@sebastienros, #230)
-* Fix dependency on "System.ComponentModel.TypeConverter" NuGet package version that does not exist (#239)
-* Fix ParamArrayAttribute not being replicated in proxy (@stakx, #121)
-* Fix System.Net.Mail.SmtpClient is obsolete on Mono warning (#254)
+- Fix order of class proxy constructor arguments when using multiple mixins (@sebastienros, #230)
+- Fix dependency on "System.ComponentModel.TypeConverter" NuGet package version that does not exist (#239)
+- Fix ParamArrayAttribute not being replicated in proxy (@stakx, #121)
+- Fix System.Net.Mail.SmtpClient is obsolete on Mono warning (#254)
 
 ## 4.0.0 (2017-01-25)
 
 Breaking Changes:
-* Update to NLog 4.4.1 and remove beta .NET Core support for NLog (#228)
-* Update to log4net 2.0.7 (#229)
+- Update to NLog 4.4.1 and remove beta .NET Core support for NLog (#228)
+- Update to log4net 2.0.7 (#229)
 
 Bugfixes:
-* Fix CustomAttributeInfo.FromExpression for VB.NET (@thomaslevesque, #223)
+- Fix CustomAttributeInfo.FromExpression for VB.NET (@thomaslevesque, #223)
 
 ## 4.0.0-beta002 (2016-10-28)
 
 Breaking Changes:
-* Rework Serilog integration to accept an ILogger rather than a LoggerConfiguration  to work correctly with Serilog (#142, #211)
-* Remove obsolete property `AttributesToAddToGeneratedTypes` from `ProxyGenerationOptions` (#219)
-* Change type of `ProxyGenerationOptions.AdditionalAttributes` to `IList<CustomAttributeInfo>` (#219)
-* Remove `IAttributeDisassembler` which is no longer necessary (#219)
+- Rework Serilog integration to accept an ILogger rather than a LoggerConfiguration  to work correctly with Serilog (#142, #211)
+- Remove obsolete property `AttributesToAddToGeneratedTypes` from `ProxyGenerationOptions` (#219)
+- Change type of `ProxyGenerationOptions.AdditionalAttributes` to `IList<CustomAttributeInfo>` (#219)
+- Remove `IAttributeDisassembler` which is no longer necessary (#219)
 
 Enhancements:
-* Add IProxyGenerator interface for the ProxyGenerator class (#215)
-* Improve default list of attributes to avoid replicating. Code Access Security attributes and MarshalAsAttribute will no longer be replicated (#221)
+- Add IProxyGenerator interface for the ProxyGenerator class (#215)
+- Improve default list of attributes to avoid replicating. Code Access Security attributes and MarshalAsAttribute will no longer be replicated (#221)
 
 Bugfixes:
-* Fix building on Mono 4.6.1
-* Different attributes in `ProxyGenerationOptions.AdditionalAttributes` now generates different proxy types (#219)
+- Fix building on Mono 4.6.1
+- Different attributes in `ProxyGenerationOptions.AdditionalAttributes` now generates different proxy types (#219)
 
 ## 4.0.0-beta001 (2016-07-17)
 
 Breaking Changes:
-* Update to log4net 1.2.15/2.0.5 (#199)
-* Update to NLog 4.4.0-beta13 (#199)
-* Update to Serilog 2.0.0 (#199)
+- Update to log4net 1.2.15/2.0.5 (#199)
+- Update to NLog 4.4.0-beta13 (#199)
+- Update to Serilog 2.0.0 (#199)
 
 Enhancements:
-* .NET Core 1.0 and .NET Standard 1.3 support (Jonathon Rossi, Jeremy Meng)
-* Restore DynamicDictionary class
+- .NET Core 1.0 and .NET Standard 1.3 support (Jonathon Rossi, Jeremy Meng)
+- Restore DynamicDictionary class
 
 Bugfixes:
-* Fix target framework moniker in NuGet package for .NET Core (#174)
+- Fix target framework moniker in NuGet package for .NET Core (#174)
 
 ## 4.0.0-alpha001 (2016-04-07)
 
 Breaking Changes:
-* Remove all Silverlight support (#100, #150)
-* Remove DynamicProxy's RemotableInvocation and remoting support for invocations (#110, #65)
+- Remove all Silverlight support (#100, #150)
+- Remove DynamicProxy's RemotableInvocation and remoting support for invocations (#110, #65)
 
 Enhancements:
-* .NET Core DNX and dotnet5.4 support via feature conditional compilation (Jonathon Rossi, Jeremy Meng)
-* Build script improvements and consolidate version numbers (Blair Conrad, #75, #152, #153)
+- .NET Core DNX and dotnet5.4 support via feature conditional compilation (Jonathon Rossi, Jeremy Meng)
+- Build script improvements and consolidate version numbers (Blair Conrad, #75, #152, #153)
 
 Bugfixes:
-* Fix 'System.ArgumentException: Constant does not match the defined type' with optional, nullable enum method parameters (Daniel Yankowsky, #141, #149)
-* Fix proxy generation hook notification for virtual but final methods (Axel Heer, #148)
-* Fix InvalidCastException with custom attribute having an enum array parameter with non-int enum (@csharper2010, #104, #105)
-* Update to Mono 4.0.2 and improve Mono support (#79, #95, #102)
-* Fix 'System.ArrayTypeMismatchException: Source array type cannot be assigned to destination array type' on Mono (#81)
-* Fix 'System.ArgumentException: System.Decimal is not a supported constant type' with optional method parameters (@fknx, #87, #91)
-* Fix ProxyGenerator cache does not take into account AdditionalAttributes (@cmerat, #77, #78)
-* Fix Castle.Services.Logging.SerilogIntegration.dll missing some assembly info attributes (@imzshh, #20, #82)
+- Fix 'System.ArgumentException: Constant does not match the defined type' with optional, nullable enum method parameters (Daniel Yankowsky, #141, #149)
+- Fix proxy generation hook notification for virtual but final methods (Axel Heer, #148)
+- Fix InvalidCastException with custom attribute having an enum array parameter with non-int enum (@csharper2010, #104, #105)
+- Update to Mono 4.0.2 and improve Mono support (#79, #95, #102)
+- Fix 'System.ArrayTypeMismatchException: Source array type cannot be assigned to destination array type' on Mono (#81)
+- Fix 'System.ArgumentException: System.Decimal is not a supported constant type' with optional method parameters (@fknx, #87, #91)
+- Fix ProxyGenerator cache does not take into account AdditionalAttributes (@cmerat, #77, #78)
+- Fix Castle.Services.Logging.SerilogIntegration.dll missing some assembly info attributes (@imzshh, #20, #82)
 
 ## 3.3.3 (2014-11-06)
-* Fix Serilog integration modifies LoggerConfiguration.MinimumLevel (#70)
-* Add SourceContext to the Serilog logger (@KevivL, #69)
+- Fix Serilog integration modifies LoggerConfiguration.MinimumLevel (#70)
+- Add SourceContext to the Serilog logger (@KevivL, #69)
 
 ## 3.3.2 (2014-11-03)
 - fixed #66 - SerilogLogger implementation bug where exceptions were passed through incorrectly
