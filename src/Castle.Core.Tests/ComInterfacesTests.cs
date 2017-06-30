@@ -15,13 +15,23 @@
 #if FEATURE_TEST_COM && !__MonoCS__ // Avoid loading adodb.dll
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
 	using System.Reflection;
+	using System.Runtime.InteropServices;
+
 	using ADODB;
+
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class ComInterfacesTests:BasePEVerifyTestCase
 	{
+		[Test]
+		public void Marshal_Release_throws_when_called_with_IntPtr_Zero()
+		{
+			Assert.Throws<ArgumentNullException>(() => Marshal.Release(IntPtr.Zero));
+		}
+
 		[Test]
 		public void Can_proxy_ADO_RecorsSet()
 		{

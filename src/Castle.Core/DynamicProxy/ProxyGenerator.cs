@@ -595,7 +595,10 @@ namespace Castle.DynamicProxy
 						var result = Marshal.QueryInterface(iUnknown, ref interfaceId, out interfacePointer); // Increment the reference count
 						var isInterfacePointerNull = interfacePointer == IntPtr.Zero;
 						Marshal.Release(iUnknown); // Decrement the reference count
-						Marshal.Release(interfacePointer); // Decrement the reference count
+						if (!isInterfacePointerNull)
+						{
+							Marshal.Release(interfacePointer); // Decrement the reference count
+						}
 
 						if (result == 0 && isInterfacePointerNull)
 						{
