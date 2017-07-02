@@ -217,6 +217,52 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsNotNull(method2);
 		}
 
+		[Test]
+		public void Should_choose_noncolliding_member_names_when_implementing_same_generic_interface_several_times()
+		{
+			var boolInterfaceType = typeof(IGenericWithNonGenericMethod<bool>);
+			var intInterfaceType = typeof(IGenericWithNonGenericMethod<int>);
+			var nestedGenericBoolInterfaceType = typeof(IGenericWithNonGenericMethod<IGenericWithNonGenericMethod<bool>>);
+
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(
+				boolInterfaceType,
+				new[] { intInterfaceType, nestedGenericBoolInterfaceType });
+
+			var type = proxy.GetType().GetTypeInfo();
+
+			var boolMethod = type.GetRuntimeInterfaceMap(boolInterfaceType).TargetMethods[0];
+			Assert.AreEqual("DoSomething", boolMethod.Name);
+
+			var intMethod = type.GetRuntimeInterfaceMap(intInterfaceType).TargetMethods[0];
+			Assert.AreEqual("IGenericWithNonGenericMethod`1[Int32].DoSomething", intMethod.Name);
+
+			var nestedGenericBoolMethod = type.GetRuntimeInterfaceMap(nestedGenericBoolInterfaceType).TargetMethods[0];
+			Assert.AreEqual("IGenericWithNonGenericMethod`1[IGenericWithNonGenericMethod`1[Boolean]].DoSomething", nestedGenericBoolMethod.Name);
+		}
+
+		[Test]
+		public void Should_choose_noncolliding_member_names_when_implementing_same_generic_interface_with_two_type_args_several_times()
+		{
+			var boolIntInterfaceType = typeof(IGenericWithNonGenericMethod<bool, int>);
+			var intBoolInterfaceType = typeof(IGenericWithNonGenericMethod<int, bool>);
+			var intNestedGenericBoolInterfaceType = typeof(IGenericWithNonGenericMethod<int, IGenericWithNonGenericMethod<bool>>);
+
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(
+				boolIntInterfaceType,
+				new[] { intBoolInterfaceType, intNestedGenericBoolInterfaceType });
+
+			var type = proxy.GetType().GetTypeInfo();
+
+			var boolIntMethod = type.GetRuntimeInterfaceMap(boolIntInterfaceType).TargetMethods[0];
+			Assert.AreEqual("DoSomething", boolIntMethod.Name);
+
+			var intBoolMethod = type.GetRuntimeInterfaceMap(intBoolInterfaceType).TargetMethods[0];
+			Assert.AreEqual("IGenericWithNonGenericMethod`2[Int32,Boolean].DoSomething", intBoolMethod.Name);
+
+			var intNestedGenericBoolMethod = type.GetRuntimeInterfaceMap(intNestedGenericBoolInterfaceType).TargetMethods[0];
+			Assert.AreEqual("IGenericWithNonGenericMethod`2[Int32,IGenericWithNonGenericMethod`1[Boolean]].DoSomething", intNestedGenericBoolMethod.Name);
+		}
+
 		private ParameterInfo[] GetMyTestMethodParams(Type type)
 		{
 			MethodInfo methodInfo = type.GetMethod("MyTestMethod", BindingFlags.Instance | BindingFlags.Public);
