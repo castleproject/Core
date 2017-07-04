@@ -26,6 +26,11 @@ namespace Castle.DynamicProxy.Tests
 	using NUnit.Framework;
 
 	[TestFixture]
+	[Platform(Exclude = "Mono", Reason = "The tests in this fixture do not pass on Mono, " +
+		"because Mono handles custom modifiers in a slightly different way than the CLR does. " +
+		"Since custom modifiers are less likely to be used on Mono (no C++/CLI compiler), we " +
+		"exclude these tests on Mono for now. For details regarding this decision, see " +
+		"https://github.com/castleproject/Core/issues/277.")]
 	public class CustomModifiersTestCase : BasePEVerifyTestCase
 	{
 		private static Dictionary<string, Type[]> customModifiers;
@@ -147,7 +152,10 @@ namespace Castle.DynamicProxy.Tests
 
 			var modopts = this.generatedTypes[typeName].GetMethod("Foo").GetParameters()[0].GetOptionalCustomModifiers();
 			CollectionAssert.AreEqual(expected: CustomModifiersTestCase.customModifiers[typeNameWithoutSuffix].Reverse(), actual: modopts);
-			// ^ The `.Reverse()` is needed because .NET reports custom modifiers in reverse order.
+			// ^ The `.Reverse()` is needed because the CLR reports custom modifiers in reverse order.
+			//   Note to future maintainers: Mono either does not report custom modifiers at all,
+			//   or it reports them in the correct order. This needs further investigation, but
+			//   in either case, the above assertion would make the test fail on Mono!
 		}
 
 		/// <summary>
@@ -167,7 +175,7 @@ namespace Castle.DynamicProxy.Tests
 
 			var modreqs = this.generatedTypes[typeName].GetMethod("Foo").GetParameters()[0].GetRequiredCustomModifiers();
 			CollectionAssert.AreEqual(expected: CustomModifiersTestCase.customModifiers[typeNameWithoutSuffix].Reverse(), actual: modreqs);
-			// ^ The `.Reverse()` is needed because .NET reports custom modifiers in reverse order.
+			// ^ see comment about `.Reverse()` above.
 		}
 
 		/// <summary>
@@ -187,7 +195,7 @@ namespace Castle.DynamicProxy.Tests
 
 			var modopts = this.generatedTypes[typeName].GetMethod("Foo").ReturnParameter.GetOptionalCustomModifiers();
 			CollectionAssert.AreEqual(expected: CustomModifiersTestCase.customModifiers[typeNameWithoutSuffix].Reverse(), actual: modopts);
-			// ^ The `.Reverse()` is needed because .NET reports custom modifiers in reverse order.
+			// ^ see comment about `.Reverse()` above.
 		}
 
 		/// <summary>
@@ -207,7 +215,7 @@ namespace Castle.DynamicProxy.Tests
 
 			var modreqs = this.generatedTypes[typeName].GetMethod("Foo").ReturnParameter.GetRequiredCustomModifiers();
 			CollectionAssert.AreEqual(expected: CustomModifiersTestCase.customModifiers[typeNameWithoutSuffix].Reverse(), actual: modreqs);
-			// ^ The `.Reverse()` is needed because .NET reports custom modifiers in reverse order.
+			// ^ see comment about `.Reverse()` above.
 		}
 
 		/// <summary>
