@@ -171,24 +171,43 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private void SetSignature(Type returnType, ParameterInfo returnParameter, Type[] parameters,
 		                          ParameterInfo[] baseMethodParameters)
 		{
+			Type[] returnRequiredCustomModifiers;
+			Type[] returnOptionalCustomModifiers;
+			Type[][] parametersRequiredCustomModifiers;
+			Type[][] parametersOptionalCustomModifiers;
+
+#if FEATURE_EMIT_CUSTOMMODIFIERS
+			returnRequiredCustomModifiers = returnParameter.GetRequiredCustomModifiers();
+			Array.Reverse(returnRequiredCustomModifiers);
+
+			returnOptionalCustomModifiers = returnParameter.GetOptionalCustomModifiers();
+			Array.Reverse(returnOptionalCustomModifiers);
+
+			int parameterCount = baseMethodParameters.Length;
+			parametersRequiredCustomModifiers = new Type[parameterCount][];
+			parametersOptionalCustomModifiers = new Type[parameterCount][];
+			for (int i = 0; i < parameterCount; ++i)
+			{
+				parametersRequiredCustomModifiers[i] = baseMethodParameters[i].GetRequiredCustomModifiers();
+				Array.Reverse(parametersRequiredCustomModifiers[i]);
+
+				parametersOptionalCustomModifiers[i] = baseMethodParameters[i].GetOptionalCustomModifiers();
+				Array.Reverse(parametersOptionalCustomModifiers[i]);
+			}
+#else
+			returnRequiredCustomModifiers = null;
+			returnOptionalCustomModifiers = null;
+			parametersRequiredCustomModifiers = null;
+			parametersOptionalCustomModifiers = null;
+#endif
+
 			builder.SetSignature(
 				returnType,
-#if FEATURE_EMIT_CUSTOMMODIFIERS
-				returnParameter.GetRequiredCustomModifiers().Reverse().ToArray(),
-				returnParameter.GetOptionalCustomModifiers().Reverse().ToArray(),
-#else
-				null,
-				null,
-#endif
+				returnRequiredCustomModifiers,
+				returnOptionalCustomModifiers,
 				parameters,
-#if FEATURE_EMIT_CUSTOMMODIFIERS
-				baseMethodParameters.Select(x => x.GetRequiredCustomModifiers().Reverse().ToArray()).ToArray(),
-				baseMethodParameters.Select(x => x.GetOptionalCustomModifiers().Reverse().ToArray()).ToArray()
-#else
-				null,
-				null
-#endif
-			);
+				parametersRequiredCustomModifiers,
+				parametersOptionalCustomModifiers);
 		}
 	}
 }
