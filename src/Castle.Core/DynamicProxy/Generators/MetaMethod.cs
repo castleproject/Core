@@ -17,7 +17,6 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Diagnostics;
 	using System.Reflection;
-	using System.Text;
 
 	using Castle.DynamicProxy.Internal;
 
@@ -102,30 +101,7 @@ namespace Castle.DynamicProxy.Generators
 				Attributes |= MethodAttributes.SpecialName;
 			}
 
-			var nameBuilder = new StringBuilder();
-			AppendTypeNameTo(nameBuilder, Method.DeclaringType);
-			nameBuilder.Append('.');
-			nameBuilder.Append(Method.Name);
-			name = nameBuilder.ToString();
-		}
-
-		private static void AppendTypeNameTo(StringBuilder stringBuilder, Type type)
-		{
-			stringBuilder.Append(type.Name);
-			if (type.GetTypeInfo().IsGenericType)
-			{
-				stringBuilder.Append('[');
-				var genericTypeArguments = type.GetGenericArguments();
-				for (int i = 0, n = genericTypeArguments.Length; i < n; ++i)
-				{
-					if (i > 0)
-					{
-						stringBuilder.Append(',');
-					}
-					AppendTypeNameTo(stringBuilder, genericTypeArguments[i]);
-				}
-				stringBuilder.Append(']');
-			}
+			name = MetaTypeElementUtil.CreateNameForExplicitImplementation(sourceType, Method.Name);
 		}
 
 		private MethodAttributes ObtainAttributes()

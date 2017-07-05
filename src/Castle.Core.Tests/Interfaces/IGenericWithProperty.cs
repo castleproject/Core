@@ -14,13 +14,8 @@
 
 namespace Castle.DynamicProxy.Tests.Interfaces
 {
-	public interface IGenericWithNonGenericMethod<T>
+	public interface IGenericWithProperty<T>
 	{
-		void SomeMethod();
-	}
-
-	public interface IGenericWithNonGenericMethod<T1, T2>
-	{
-		void SomeMethod();
+		object SomeProperty { get; set; }
 	}
 }

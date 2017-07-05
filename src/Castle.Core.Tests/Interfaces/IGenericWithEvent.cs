@@ -14,13 +14,10 @@
 
 namespace Castle.DynamicProxy.Tests.Interfaces
 {
-	public interface IGenericWithNonGenericMethod<T>
-	{
-		void SomeMethod();
-	}
+	using System;
 
-	public interface IGenericWithNonGenericMethod<T1, T2>
+	public interface IGenericWithEvent<T>
 	{
-		void SomeMethod();
+		event EventHandler SomeEvent;
 	}
 }
