@@ -19,24 +19,21 @@ namespace Castle.DynamicProxy.Generators
 	using System.Text;
 
 	internal static class MetaTypeElementUtil
-    {
-		[ThreadStatic]
-		private static StringBuilder sharedNameBuilder;
-
+	{
 		public static string CreateNameForExplicitImplementation(Type sourceType, string name)
 		{
-			if (sharedNameBuilder == null)
+			if (sourceType.GetTypeInfo().IsGenericType)
 			{
-				sharedNameBuilder = new StringBuilder();
+				var nameBuilder = new StringBuilder();
+				nameBuilder.AppendNameOf(sourceType);
+				nameBuilder.Append('.');
+				nameBuilder.Append(name);
+				return nameBuilder.ToString();
 			}
-
-			var nameBuilder = sharedNameBuilder;
-			nameBuilder.Length = 0;
-			nameBuilder.AppendNameOf(sourceType);
-			nameBuilder.Append('.');
-			nameBuilder.Append(name);
-
-			return nameBuilder.ToString();
+			else
+			{
+				return string.Concat(sourceType.Name, ".", name);
+			}
 		}
 
 		private static void AppendNameOf(this StringBuilder nameBuilder, Type type)
