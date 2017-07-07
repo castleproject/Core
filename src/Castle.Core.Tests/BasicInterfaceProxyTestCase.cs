@@ -217,6 +217,110 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsNotNull(method2);
 		}
 
+		[Test]
+		public void Should_choose_noncolliding_method_names_when_implementing_same_generic_interface_several_times()
+		{
+			var boolInterfaceType = typeof(IGenericWithNonGenericMethod<bool>);
+			var intInterfaceType = typeof(IGenericWithNonGenericMethod<int>);
+			var nestedGenericBoolInterfaceType = typeof(IGenericWithNonGenericMethod<IGenericWithNonGenericMethod<bool>>);
+
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(
+				boolInterfaceType,
+				new[] { intInterfaceType, nestedGenericBoolInterfaceType });
+
+			var type = proxy.GetType().GetTypeInfo();
+
+			var boolMethod = type.GetRuntimeInterfaceMap(boolInterfaceType).TargetMethods[0];
+			Assert.AreEqual("SomeMethod", boolMethod.Name);
+
+			var intMethod = type.GetRuntimeInterfaceMap(intInterfaceType).TargetMethods[0];
+			Assert.AreEqual("IGenericWithNonGenericMethod`1[Int32].SomeMethod", intMethod.Name);
+
+			var nestedGenericBoolMethod = type.GetRuntimeInterfaceMap(nestedGenericBoolInterfaceType).TargetMethods[0];
+			Assert.AreEqual("IGenericWithNonGenericMethod`1[IGenericWithNonGenericMethod`1[Boolean]].SomeMethod", nestedGenericBoolMethod.Name);
+		}
+
+		[Test]
+		public void Should_choose_noncolliding_property_accessor_names_when_implementing_same_generic_interface_several_times()
+		{
+			var boolInterfaceType = typeof(IGenericWithProperty<bool>);
+			var intInterfaceType = typeof(IGenericWithProperty<int>);
+			var nestedGenericBoolInterfaceType = typeof(IGenericWithProperty<IGenericWithProperty<bool>>);
+
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(
+				boolInterfaceType,
+				new[] { intInterfaceType, nestedGenericBoolInterfaceType });
+
+			var type = proxy.GetType().GetTypeInfo();
+
+			var boolGetter = type.GetRuntimeInterfaceMap(boolInterfaceType).TargetMethods[0];
+			var boolSetter = type.GetRuntimeInterfaceMap(boolInterfaceType).TargetMethods[1];
+			Assert.AreEqual("get_SomeProperty", boolGetter.Name);
+			Assert.AreEqual("set_SomeProperty", boolSetter.Name);
+
+			var intGetter = type.GetRuntimeInterfaceMap(intInterfaceType).TargetMethods[0];
+			var intSetter = type.GetRuntimeInterfaceMap(intInterfaceType).TargetMethods[1];
+			Assert.AreEqual("IGenericWithProperty`1[Int32].get_SomeProperty", intGetter.Name);
+			Assert.AreEqual("IGenericWithProperty`1[Int32].set_SomeProperty", intSetter.Name);
+
+			var nestedGenericBoolGetter = type.GetRuntimeInterfaceMap(nestedGenericBoolInterfaceType).TargetMethods[0];
+			var nestedGenericBoolSetter = type.GetRuntimeInterfaceMap(nestedGenericBoolInterfaceType).TargetMethods[1];
+			Assert.AreEqual("IGenericWithProperty`1[IGenericWithProperty`1[Boolean]].get_SomeProperty", nestedGenericBoolGetter.Name);
+			Assert.AreEqual("IGenericWithProperty`1[IGenericWithProperty`1[Boolean]].set_SomeProperty", nestedGenericBoolSetter.Name);
+		}
+
+		[Test]
+		public void Should_choose_noncolliding_event_accessor_names_when_implementing_same_generic_interface_several_times()
+		{
+			var boolInterfaceType = typeof(IGenericWithEvent<bool>);
+			var intInterfaceType = typeof(IGenericWithEvent<int>);
+			var nestedGenericBoolInterfaceType = typeof(IGenericWithEvent<IGenericWithEvent<bool>>);
+
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(
+				boolInterfaceType,
+				new[] { intInterfaceType, nestedGenericBoolInterfaceType });
+
+			var type = proxy.GetType().GetTypeInfo();
+
+			var boolAdder = type.GetRuntimeInterfaceMap(boolInterfaceType).TargetMethods[0];
+			var boolRemover = type.GetRuntimeInterfaceMap(boolInterfaceType).TargetMethods[1];
+			Assert.AreEqual("add_SomeEvent", boolAdder.Name);
+			Assert.AreEqual("remove_SomeEvent", boolRemover.Name);
+
+			var intAdder = type.GetRuntimeInterfaceMap(intInterfaceType).TargetMethods[0];
+			var intRemover = type.GetRuntimeInterfaceMap(intInterfaceType).TargetMethods[1];
+			Assert.AreEqual("IGenericWithEvent`1[Int32].add_SomeEvent", intAdder.Name);
+			Assert.AreEqual("IGenericWithEvent`1[Int32].remove_SomeEvent", intRemover.Name);
+
+			var nestedGenericBoolAdder = type.GetRuntimeInterfaceMap(nestedGenericBoolInterfaceType).TargetMethods[0];
+			var nestedGenericBoolRemover = type.GetRuntimeInterfaceMap(nestedGenericBoolInterfaceType).TargetMethods[1];
+			Assert.AreEqual("IGenericWithEvent`1[IGenericWithEvent`1[Boolean]].add_SomeEvent", nestedGenericBoolAdder.Name);
+			Assert.AreEqual("IGenericWithEvent`1[IGenericWithEvent`1[Boolean]].remove_SomeEvent", nestedGenericBoolRemover.Name);
+		}
+
+		[Test]
+		public void Should_choose_noncolliding_member_names_when_implementing_same_generic_interface_with_two_type_args_several_times()
+		{
+			var boolIntInterfaceType = typeof(IGenericWithNonGenericMethod<bool, int>);
+			var intBoolInterfaceType = typeof(IGenericWithNonGenericMethod<int, bool>);
+			var intNestedGenericBoolInterfaceType = typeof(IGenericWithNonGenericMethod<int, IGenericWithNonGenericMethod<bool>>);
+
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(
+				boolIntInterfaceType,
+				new[] { intBoolInterfaceType, intNestedGenericBoolInterfaceType });
+
+			var type = proxy.GetType().GetTypeInfo();
+
+			var boolIntMethod = type.GetRuntimeInterfaceMap(boolIntInterfaceType).TargetMethods[0];
+			Assert.AreEqual("SomeMethod", boolIntMethod.Name);
+
+			var intBoolMethod = type.GetRuntimeInterfaceMap(intBoolInterfaceType).TargetMethods[0];
+			Assert.AreEqual("IGenericWithNonGenericMethod`2[Int32,Boolean].SomeMethod", intBoolMethod.Name);
+
+			var intNestedGenericBoolMethod = type.GetRuntimeInterfaceMap(intNestedGenericBoolInterfaceType).TargetMethods[0];
+			Assert.AreEqual("IGenericWithNonGenericMethod`2[Int32,IGenericWithNonGenericMethod`1[Boolean]].SomeMethod", intNestedGenericBoolMethod.Name);
+		}
+
 		private ParameterInfo[] GetMyTestMethodParams(Type type)
 		{
 			MethodInfo methodInfo = type.GetMethod("MyTestMethod", BindingFlags.Instance | BindingFlags.Public);

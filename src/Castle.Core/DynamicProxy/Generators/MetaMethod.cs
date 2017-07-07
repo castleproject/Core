@@ -101,7 +101,7 @@ namespace Castle.DynamicProxy.Generators
 				Attributes |= MethodAttributes.SpecialName;
 			}
 
-			name = string.Format("{0}.{1}", Method.DeclaringType.Name, Method.Name);
+			name = MetaTypeElementUtil.CreateNameForExplicitImplementation(sourceType, Method.Name);
 		}
 
 		private MethodAttributes ObtainAttributes()

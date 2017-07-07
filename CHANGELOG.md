@@ -3,6 +3,7 @@
 ## Unreleased
 
 Bugfixes:
+- Prevent member name collision when proxy implements same generic interface more than twice (@stakx, #88)
 - Fix incorrect replication (reversed order) of custom modifiers (modopts and modreqs) on the CLR, does not work yet on Mono (@stakx, #277)
 - Fix COM interface proxy error case throwing exceptions trying to release null pointer from QueryInterface (@stakx, #281)
 
