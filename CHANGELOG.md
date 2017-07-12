@@ -1,6 +1,6 @@
 # Castle Core Changelog
 
-## Unreleased
+## 4.1.1 (2017-07-12)
 
 Bugfixes:
 - Prevent member name collision when proxy implements same generic interface more than twice (@stakx, #88)
