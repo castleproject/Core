@@ -24,7 +24,6 @@ namespace Castle.DynamicProxy.Generators
 	using System.Xml.Serialization;
 #endif
 
-	using Castle.Core.Internal;
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
@@ -426,7 +425,7 @@ namespace Castle.DynamicProxy.Generators
 			return constructor.IsPublic ||
 				constructor.IsFamily ||
 				constructor.IsFamilyOrAssembly ||
-				(constructor.IsAssembly && InternalsUtil.IsInternalToDynamicProxy(constructor.DeclaringType.GetTypeInfo().Assembly));
+				(constructor.IsAssembly && ProxyUtil.AreInternalsVisibleToDynamicProxy(constructor.DeclaringType.GetTypeInfo().Assembly));
 		}
 
 		private bool OverridesEqualsAndGetHashCode(Type type)

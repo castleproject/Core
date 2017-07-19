@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy
 	using System.Reflection;
 
 	using Castle.Core.Internal;
-	using Castle.DynamicProxy.Internal;
 
 	internal static class ExceptionMessageBuilder
 	{
@@ -42,7 +41,7 @@ namespace Castle.DynamicProxy
 				typeToProxy.GetBestName(),
 				inaccessibleTypeDescription);
 
-			var instructions = InternalsUtil.CreateInstructionsToMakeVisible(targetAssembly);
+			var instructions = ProxyUtil.CreateInstructionsToMakeVisible(targetAssembly);
 
 			return message + instructions;
 		}

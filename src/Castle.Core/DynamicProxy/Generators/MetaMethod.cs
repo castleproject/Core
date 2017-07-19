@@ -18,8 +18,6 @@ namespace Castle.DynamicProxy.Generators
 	using System.Diagnostics;
 	using System.Reflection;
 
-	using Castle.DynamicProxy.Internal;
-
 	[DebuggerDisplay("{Method}")]
 	public class MetaMethod : MetaTypeElement, IEquatable<MetaMethod>
 	{
@@ -123,8 +121,8 @@ namespace Castle.DynamicProxy.Generators
 			{
 				attributes |= MethodAttributes.HideBySig;
 			}
-			if (InternalsUtil.IsInternal(methodInfo) &&
-				InternalsUtil.IsInternalToDynamicProxy(methodInfo.DeclaringType.GetTypeInfo().Assembly))
+			if (ProxyUtil.IsInternal(methodInfo) &&
+			    ProxyUtil.AreInternalsVisibleToDynamicProxy(methodInfo.DeclaringType.GetTypeInfo().Assembly))
 			{
 				attributes |= MethodAttributes.Assembly;
 			}
