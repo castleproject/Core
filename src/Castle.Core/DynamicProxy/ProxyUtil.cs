@@ -161,22 +161,24 @@ namespace Castle.DynamicProxy
 
 		internal static bool IsAccessibleType(Type target)
 		{
-			return IsPublic(target)
-				|| IsInternal(target) && AreInternalsVisibleToDynamicProxy(target.GetTypeInfo().Assembly);
+			var typeInfo = target.GetTypeInfo();
 
-			bool IsPublic(Type t)
+			var isPublic = typeInfo.IsPublic || typeInfo.IsNestedPublic;
+			if (isPublic)
 			{
-				return t.GetTypeInfo().IsPublic || t.GetTypeInfo().IsNestedPublic;
+				return true;
 			}
 
-			bool IsInternal(Type t)
+			var isTargetNested = target.IsNested;
+			var isNestedAndInternal = isTargetNested && (typeInfo.IsNestedAssembly || typeInfo.IsNestedFamORAssem);
+			var isInternalNotNested = typeInfo.IsVisible == false && isTargetNested == false;
+			var isInternal = isInternalNotNested || isNestedAndInternal;
+			if (isInternal && AreInternalsVisibleToDynamicProxy(typeInfo.Assembly))
 			{
-				var isTargetNested = t.IsNested;
-				var isNestedAndInternal = isTargetNested && (t.GetTypeInfo().IsNestedAssembly || t.GetTypeInfo().IsNestedFamORAssem);
-				var isInternalNotNested = t.GetTypeInfo().IsVisible == false && isTargetNested == false;
-
-				return isInternalNotNested || isNestedAndInternal;
+				return true;
 			}
+
+			return false;
 		}
 
 		/// <summary>
