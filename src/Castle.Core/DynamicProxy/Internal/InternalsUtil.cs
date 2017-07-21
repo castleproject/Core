@@ -28,6 +28,7 @@ namespace Castle.DynamicProxy.Internal
 		///   <c>true</c> if the specified method is internal; otherwise, <c>false</c>.
 		/// </returns>
 		[EditorBrowsable(EditorBrowsableState.Never)]
+		[Obsolete]
 		public static bool IsInternal(this MethodBase method)
 		{
 			return ProxyUtil.IsInternal(method);
@@ -38,6 +39,7 @@ namespace Castle.DynamicProxy.Internal
 		/// </summary>
 		/// <param name = "asm">The assembly to inspect.</param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
+		[Obsolete]
 		public static bool IsInternalToDynamicProxy(this Assembly asm)
 		{
 			return ProxyUtil.AreInternalsVisibleToDynamicProxy(asm);
@@ -49,6 +51,8 @@ namespace Castle.DynamicProxy.Internal
 		/// <param name = "method"></param>
 		/// <returns></returns>
 		[EditorBrowsable(EditorBrowsableState.Never)]
+		[Obsolete("Use " + nameof(ProxyUtil) + "." + nameof(ProxyUtil.IsAccessible) + " instead, " +
+		          "which performs a more accurate accessibility check.")]
 		public static bool IsAccessible(this MethodBase method)
 		{
 			return ProxyUtil.IsAccessibleMethod(method);

@@ -25,45 +25,11 @@ namespace Castle.DynamicProxy
 #endif
 
 	using Castle.Core.Internal;
-	using Castle.DynamicProxy.Generators.Emitters;
 
-	public class ProxyUtil
+	public static class ProxyUtil
 	{
 		private static readonly IDictionary<Assembly, bool> internalsVisibleToDynamicProxy = new Dictionary<Assembly, bool>();
 		private static readonly Lock internalsVisibleToDynamicProxyLock = Lock.Create();
-
-		/// <summary>
-		///   Determines whether this assembly has internals visible to dynamic proxy.
-		/// </summary>
-		/// <param name = "asm">The assembly to inspect.</param>
-		internal static bool AreInternalsVisibleToDynamicProxy(Assembly asm)
-		{
-			using (var locker = internalsVisibleToDynamicProxyLock.ForReadingUpgradeable())
-			{
-				if (internalsVisibleToDynamicProxy.ContainsKey(asm))
-				{
-					return internalsVisibleToDynamicProxy[asm];
-				}
-
-				locker.Upgrade();
-
-				if (internalsVisibleToDynamicProxy.ContainsKey(asm))
-				{
-					return internalsVisibleToDynamicProxy[asm];
-				}
-
-				var internalsVisibleTo = asm.GetCustomAttributes<InternalsVisibleToAttribute>();
-				var found = internalsVisibleTo.Any(VisibleToDynamicProxy);
-
-				internalsVisibleToDynamicProxy.Add(asm, found);
-				return found;
-			}
-
-			bool VisibleToDynamicProxy(InternalsVisibleToAttribute attribute)
-			{
-				return attribute.AssemblyName.Contains(ModuleScope.DEFAULT_ASSEMBLY_NAME);
-			}
-		}
 
 		public static object GetUnproxiedInstance(object instance)
 		{
@@ -159,6 +125,34 @@ namespace Castle.DynamicProxy
 			return IsAccessibleType(type);
 		}
 
+		/// <summary>
+		///   Determines whether this assembly has internals visible to DynamicProxy.
+		/// </summary>
+		/// <param name="asm">The assembly to inspect.</param>
+		internal static bool AreInternalsVisibleToDynamicProxy(Assembly asm)
+		{
+			using (var locker = internalsVisibleToDynamicProxyLock.ForReadingUpgradeable())
+			{
+				if (internalsVisibleToDynamicProxy.ContainsKey(asm))
+				{
+					return internalsVisibleToDynamicProxy[asm];
+				}
+
+				locker.Upgrade();
+
+				if (internalsVisibleToDynamicProxy.ContainsKey(asm))
+				{
+					return internalsVisibleToDynamicProxy[asm];
+				}
+
+				var internalsVisibleTo = asm.GetCustomAttributes<InternalsVisibleToAttribute>();
+				var found = internalsVisibleTo.Any(attr => attr.AssemblyName.Contains(ModuleScope.DEFAULT_ASSEMBLY_NAME));
+
+				internalsVisibleToDynamicProxy.Add(asm, found);
+				return found;
+			}
+		}
+
 		internal static bool IsAccessibleType(Type target)
 		{
 			var typeInfo = target.GetTypeInfo();
@@ -189,20 +183,14 @@ namespace Castle.DynamicProxy
 		/// <returns><c>true</c> if the method is accessible to DynamicProxy, <c>false</c> otherwise.</returns>
 		internal static bool IsAccessibleMethod(MethodBase method)
 		{
-			// Accessibility supported by the full framework and CoreCLR
 			if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly)
 			{
 				return true;
 			}
 
-			if (method.IsFamilyAndAssembly)
+			if (method.IsAssembly || method.IsFamilyAndAssembly)
 			{
-				return true;
-			}
-
-			if (AreInternalsVisibleToDynamicProxy(method.DeclaringType.GetTypeInfo().Assembly) && method.IsAssembly)
-			{
-				return true;
+				return AreInternalsVisibleToDynamicProxy(method.DeclaringType.GetTypeInfo().Assembly);
 			}
 
 			return false;
@@ -220,53 +208,6 @@ namespace Castle.DynamicProxy
 			return method.IsAssembly || (method.IsFamilyAndAssembly && !method.IsFamilyOrAssembly);
 		}
 
-		/// <summary>
-		/// Provides instructions that a user could follow to make a type or method in <paramref name="targetAssembly"/>
-		/// visible to DynamicProxyGenAssembly2.</summary>
-		/// <param name="targetAssembly">The assembly containing the type or method.</param>
-		/// <returns>Instructions that a user could follow to make a type or method visible to DynamicProxyGenAssembly2.</returns>
-		internal static string CreateInstructionsToMakeVisible(Assembly targetAssembly)
-		{
-			string strongNamedOrNotIndicator = " not"; // assume not strong-named
-			string assemblyToBeVisibleTo = "\"DynamicProxyGenAssembly2\""; // appropriate for non-strong-named
-
-			if (targetAssembly.IsAssemblySigned())
-			{
-				strongNamedOrNotIndicator = "";
-				assemblyToBeVisibleTo = ReferencesCastleCore(targetAssembly)
-					? "InternalsVisible.ToDynamicProxyGenAssembly2"
-					: '"' + InternalsVisible.ToDynamicProxyGenAssembly2 + '"';
-			}
-
-			var instructionsFormat =
-				"Make it public, or internal and mark your assembly with " +
-				"[assembly: InternalsVisibleTo({0})] attribute, because assembly {1} " +
-				"is{2} strong-named.";
-
-			var instructions = String.Format(instructionsFormat,
-				assemblyToBeVisibleTo,
-				GetAssemblyName(targetAssembly),
-				strongNamedOrNotIndicator);
-			return instructions;
-
-			string GetAssemblyName(Assembly ta)
-			{
-				return ta.GetName().Name;
-			}
-
-			bool ReferencesCastleCore(Assembly ia)
-			{
-#if FEATURE_GET_REFERENCED_ASSEMBLIES
-				return ia.GetReferencedAssemblies()
-					.Any(r => r.FullName == Assembly.GetExecutingAssembly().FullName);
-#else
-			// .NET Core does not provide an API to do this, so we just fall back to the solution that will definitely work.
-			// After all it is just an exception message.
-			return false;
-#endif
-			}
-		}
-
 		private static string CreateMessageForInaccessibleMethod(MethodBase inaccessibleMethod)
 		{
 			var containingType = inaccessibleMethod.DeclaringType;
@@ -277,7 +218,7 @@ namespace Castle.DynamicProxy
 			var message = string.Format(messageFormat,
 				inaccessibleMethod);
 
-			var instructions = CreateInstructionsToMakeVisible(targetAssembly);
+			var instructions = ExceptionMessageBuilder.CreateInstructionsToMakeVisible(targetAssembly);
 			return message + instructions;
 		}
 	}
