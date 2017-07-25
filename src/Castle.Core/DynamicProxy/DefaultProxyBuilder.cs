@@ -22,9 +22,6 @@ namespace Castle.DynamicProxy
 	using Castle.Core.Internal;
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
-	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Internal;
-
 
 	/// <summary>
 	///   Default implementation of <see cref = "IProxyBuilder" /> interface producing in-memory proxy assemblies.
@@ -124,7 +121,7 @@ namespace Castle.DynamicProxy
 				throw new GeneratorException(string.Format("Can not create proxy for type {0} because type {1} is an open generic type.",
 															target.GetBestName(), type.GetBestName()));
 			}
-			if (IsPublic(type) == false && IsAccessible(type) == false)
+			if (ProxyUtil.IsAccessibleType(type) == false)
 			{
 				throw new GeneratorException(ExceptionMessageBuilder.CreateMessageForInaccessibleType(type, target));
 			}
@@ -143,25 +140,6 @@ namespace Castle.DynamicProxy
 					AssertValidType(t);
 				}
 			}
-		}
-
-		private bool IsAccessible(Type target)
-		{
-			return IsInternal(target) && target.GetTypeInfo().Assembly.IsInternalToDynamicProxy();
-		}
-
-		private bool IsPublic(Type target)
-		{
-			return target.GetTypeInfo().IsPublic || target.GetTypeInfo().IsNestedPublic;
-		}
-
-		private static bool IsInternal(Type target)
-		{
-			var isTargetNested = target.IsNested;
-			var isNestedAndInternal = isTargetNested && (target.GetTypeInfo().IsNestedAssembly || target.GetTypeInfo().IsNestedFamORAssem);
-			var isInternalNotNested = target.GetTypeInfo().IsVisible == false && isTargetNested == false;
-
-			return isInternalNotNested || isNestedAndInternal;
 		}
 	}
 }

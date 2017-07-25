@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Bugfixes:
+- Make ProxyUtil.IsAccessible(MethodBase) take into account declaring type's accessibility so it doesn't report false negatives for e.g. public methods in inaccessible classes. (@stakx, #289)
+
 ## 4.1.1 (2017-07-12)
 
 Bugfixes:

@@ -21,7 +21,6 @@ namespace Castle.DynamicProxy.Contributors
 
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
-	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Internal;
 
 	public abstract class MembersCollector
@@ -252,8 +251,8 @@ namespace Castle.DynamicProxy.Contributors
 
 		private static bool IsInternalAndNotVisibleToDynamicProxy(MethodInfo method)
 		{
-			return method.IsInternal() &&
-			       method.DeclaringType.GetTypeInfo().Assembly.IsInternalToDynamicProxy() == false;
+			return ProxyUtil.IsInternal(method) &&
+				   ProxyUtil.AreInternalsVisibleToDynamicProxy(method.DeclaringType.GetTypeInfo().Assembly) == false;
 		}
 	}
 }

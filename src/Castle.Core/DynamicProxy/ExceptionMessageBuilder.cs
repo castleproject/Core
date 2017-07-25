@@ -15,13 +15,56 @@
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Linq;
 	using System.Reflection;
 
 	using Castle.Core.Internal;
-	using Castle.DynamicProxy.Internal;
+	using Castle.DynamicProxy.Generators.Emitters;
 
 	internal static class ExceptionMessageBuilder
 	{
+		/// <summary>
+		/// Provides instructions that a user could follow to make a type or method in <paramref name="targetAssembly"/>
+		/// visible to DynamicProxy.</summary>
+		/// <param name="targetAssembly">The assembly containing the type or method.</param>
+		/// <returns>Instructions that a user could follow to make a type or method visible to DynamicProxy.</returns>
+		internal static string CreateInstructionsToMakeVisible(Assembly targetAssembly)
+		{
+			string strongNamedOrNotIndicator = " not"; // assume not strong-named
+			string assemblyToBeVisibleTo = "\"DynamicProxyGenAssembly2\""; // appropriate for non-strong-named
+
+			if (targetAssembly.IsAssemblySigned())
+			{
+				strongNamedOrNotIndicator = "";
+				assemblyToBeVisibleTo = ReferencesCastleCore(targetAssembly)
+					? "InternalsVisible.ToDynamicProxyGenAssembly2"
+					: '"' + InternalsVisible.ToDynamicProxyGenAssembly2 + '"';
+			}
+
+			var instructionsFormat =
+				"Make it public, or internal and mark your assembly with " +
+				"[assembly: InternalsVisibleTo({0})] attribute, because assembly {1} " +
+				"is{2} strong-named.";
+
+			var instructions = String.Format(instructionsFormat,
+				assemblyToBeVisibleTo,
+				targetAssembly.GetName().Name,
+				strongNamedOrNotIndicator);
+			return instructions;
+
+			bool ReferencesCastleCore(Assembly ia)
+			{
+#if FEATURE_GET_REFERENCED_ASSEMBLIES
+				return ia.GetReferencedAssemblies()
+					.Any(r => r.FullName == Assembly.GetExecutingAssembly().FullName);
+#else
+				// .NET Core does not provide an API to do this, so we just fall back to the solution that will definitely work.
+				// After all it is just an exception message.
+				return false;
+#endif
+			}
+		}
+
 		/// <summary>
 		/// Creates a message to inform clients that a proxy couldn't be created due to reliance on an
 		/// inaccessible type (perhaps itself).
@@ -42,7 +85,7 @@ namespace Castle.DynamicProxy
 				typeToProxy.GetBestName(),
 				inaccessibleTypeDescription);
 
-			var instructions = InternalsUtil.CreateInstructionsToMakeVisible(targetAssembly);
+			var instructions = CreateInstructionsToMakeVisible(targetAssembly);
 
 			return message + instructions;
 		}

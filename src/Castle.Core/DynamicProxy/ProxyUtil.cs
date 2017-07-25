@@ -15,15 +15,22 @@
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using System.Reflection;
+	using System.Runtime.CompilerServices;
 
-	using Castle.DynamicProxy.Internal;
 #if FEATURE_REMOTING
 	using System.Runtime.Remoting;
 #endif
 
-	public class ProxyUtil
+	using Castle.Core.Internal;
+
+	public static class ProxyUtil
 	{
+		private static readonly IDictionary<Assembly, bool> internalsVisibleToDynamicProxy = new Dictionary<Assembly, bool>();
+		private static readonly Lock internalsVisibleToDynamicProxyLock = Lock.Create();
+
 		public static object GetUnproxiedInstance(object instance)
 		{
 #if FEATURE_REMOTING
@@ -84,22 +91,22 @@ namespace Castle.DynamicProxy
 		}
 
 		/// <summary>
-		/// Checks to see if a method is accessible to DynamicProxyGenAssembly2.</summary>
-		/// <param name="method">The method to check</param>
-		/// <returns><c>true</c> if the method is accessible, <c>false</c> otherwise</returns>
+		/// Checks whether the specified method is accessible to DynamicProxy.</summary>
+		/// <param name="method">The method to check.</param>
+		/// <returns><c>true</c> if the method is accessible to DynamicProxy, <c>false</c> otherwise.</returns>
 		public static bool IsAccessible(MethodBase method)
 		{
-			return method.IsAccessible();
+			return IsAccessibleMethod(method) && IsAccessibleType(method.DeclaringType);
 		}
 
 		/// <summary>
-		/// Checks to see if a method is accessible to DynamicProxyGenAssembly2.</summary>
-		/// <param name="method">The method to check</param>
-		/// <param name="message">If the method is accessible, <c>null</c>; otherwise, an explanation of why the method is not accessible</param>
-		/// <returns><c>true</c> if the method is accessible, <c>false</c> otherwise</returns>
+		/// Checks whether the specified method is accessible to DynamicProxy.</summary>
+		/// <param name="method">The method to check.</param>
+		/// <param name="message">If the method is accessible to DynamicProxy, <c>null</c>; otherwise, an explanation of why the method is not accessible.</param>
+		/// <returns><c>true</c> if the method is accessible to DynamicProxy, <c>false</c> otherwise.</returns>
 		public static bool IsAccessible(MethodBase method, out string message)
 		{
-			if (method.IsAccessible())
+			if (IsAccessible(method))
 			{
 				message = null;
 				return true;
@@ -109,17 +116,109 @@ namespace Castle.DynamicProxy
 			return false;
 		}
 
+		/// <summary>
+		/// Checks whether the specified type is accessible to DynamicProxy.</summary>
+		/// <param name="type">The type to check.</param>
+		/// <returns><c>true</c> if the type is accessible to DynamicProxy, <c>false</c> otherwise.</returns>
+		public static bool IsAccessible(Type type)
+		{
+			return IsAccessibleType(type);
+		}
+
+		/// <summary>
+		///   Determines whether this assembly has internals visible to DynamicProxy.
+		/// </summary>
+		/// <param name="asm">The assembly to inspect.</param>
+		internal static bool AreInternalsVisibleToDynamicProxy(Assembly asm)
+		{
+			using (var locker = internalsVisibleToDynamicProxyLock.ForReadingUpgradeable())
+			{
+				if (internalsVisibleToDynamicProxy.ContainsKey(asm))
+				{
+					return internalsVisibleToDynamicProxy[asm];
+				}
+
+				locker.Upgrade();
+
+				if (internalsVisibleToDynamicProxy.ContainsKey(asm))
+				{
+					return internalsVisibleToDynamicProxy[asm];
+				}
+
+				var internalsVisibleTo = asm.GetCustomAttributes<InternalsVisibleToAttribute>();
+				var found = internalsVisibleTo.Any(attr => attr.AssemblyName.Contains(ModuleScope.DEFAULT_ASSEMBLY_NAME));
+
+				internalsVisibleToDynamicProxy.Add(asm, found);
+				return found;
+			}
+		}
+
+		internal static bool IsAccessibleType(Type target)
+		{
+			var typeInfo = target.GetTypeInfo();
+
+			var isPublic = typeInfo.IsPublic || typeInfo.IsNestedPublic;
+			if (isPublic)
+			{
+				return true;
+			}
+
+			var isTargetNested = target.IsNested;
+			var isNestedAndInternal = isTargetNested && (typeInfo.IsNestedAssembly || typeInfo.IsNestedFamORAssem);
+			var isInternalNotNested = typeInfo.IsVisible == false && isTargetNested == false;
+			var isInternal = isInternalNotNested || isNestedAndInternal;
+			if (isInternal && AreInternalsVisibleToDynamicProxy(typeInfo.Assembly))
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		///   Checks whether the specified method is accessible to DynamicProxy.
+		///   Unlike with <see cref="IsAccessible(MethodBase)"/>, the declaring type's accessibility is ignored.
+		/// </summary>
+		/// <param name = "method">The method to check.</param>
+		/// <returns><c>true</c> if the method is accessible to DynamicProxy, <c>false</c> otherwise.</returns>
+		internal static bool IsAccessibleMethod(MethodBase method)
+		{
+			if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly)
+			{
+				return true;
+			}
+
+			if (method.IsAssembly || method.IsFamilyAndAssembly)
+			{
+				return AreInternalsVisibleToDynamicProxy(method.DeclaringType.GetTypeInfo().Assembly);
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		///   Determines whether the specified method is internal.
+		/// </summary>
+		/// <param name = "method">The method.</param>
+		/// <returns>
+		///   <c>true</c> if the specified method is internal; otherwise, <c>false</c>.
+		/// </returns>
+		internal static bool IsInternal(MethodBase method)
+		{
+			return method.IsAssembly || (method.IsFamilyAndAssembly && !method.IsFamilyOrAssembly);
+		}
+
 		private static string CreateMessageForInaccessibleMethod(MethodBase inaccessibleMethod)
 		{
 			var containingType = inaccessibleMethod.DeclaringType;
 			var targetAssembly = containingType.GetTypeInfo().Assembly;
 
-			var messageFormat = "Can not create proxy for method {0} because it is not accessible. ";
+			var messageFormat = "Can not create proxy for method {0} because it or its declaring type is not accessible. ";
 
 			var message = string.Format(messageFormat,
 				inaccessibleMethod);
 
-			var instructions = InternalsUtil.CreateInstructionsToMakeVisible(targetAssembly);
+			var instructions = ExceptionMessageBuilder.CreateInstructionsToMakeVisible(targetAssembly);
 			return message + instructions;
 		}
 	}
