@@ -25,11 +25,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.reference = reference;
 		}
 
-		public Reference Reference
-		{
-			get { return reference; }
-		}
-
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			ArgumentsUtil.EmitLoadOwnerAndReference(reference, gen);

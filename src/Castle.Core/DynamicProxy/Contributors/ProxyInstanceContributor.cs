@@ -43,7 +43,12 @@ namespace Castle.DynamicProxy.Contributors
 			this.interfaces = interfaces ?? Type.EmptyTypes;
 		}
 
-		protected abstract Expression GetTargetReferenceExpression(ClassEmitter emitter);
+		protected abstract Reference GetTargetReference(ClassEmitter emitter);
+
+		private Expression GetTargetReferenceExpression(ClassEmitter emitter)
+		{
+			return GetTargetReference(emitter).ToExpression();
+		}
 
 		public virtual void Generate(ClassEmitter @class, ProxyGenerationOptions options)
 		{
@@ -68,8 +73,7 @@ namespace Castle.DynamicProxy.Contributors
 			var dynProxySetTarget = emitter.CreateMethod("DynProxySetTarget", typeof(void), typeof(object));
 
 			// we can only change the target of the interface proxy
-			var targetReferenceExpression = (ReferenceExpression)GetTargetReferenceExpression(emitter);
-			var targetField = targetReferenceExpression.Reference as FieldReference;
+			var targetField = GetTargetReference(emitter) as FieldReference;
 			if (targetField != null)
 			{
 				dynProxySetTarget.CodeBuilder.AddStatement(
