@@ -65,6 +65,25 @@ namespace Castle.DynamicProxy.Contributors
 			dynProxyGetTarget.CodeBuilder.AddStatement(
 				new ReturnStatement(new ConvertExpression(typeof(object), targetType, GetTargetReferenceExpression(emitter))));
 
+			var dynProxySetTarget = emitter.CreateMethod("DynProxySetTarget", typeof(void), typeof(object));
+
+			// we can only change the target of the interface proxy
+			var targetReferenceExpression = (ReferenceExpression)GetTargetReferenceExpression(emitter);
+			var targetField = targetReferenceExpression.Reference as FieldReference;
+			if (targetField != null)
+			{
+				dynProxySetTarget.CodeBuilder.AddStatement(
+					new AssignStatement(targetField,
+						new ConvertExpression(targetField.Fieldbuilder.FieldType, dynProxySetTarget.Arguments[0].ToExpression())));
+			}
+			else
+			{
+				dynProxySetTarget.CodeBuilder.AddStatement(
+					new ThrowStatement(typeof(InvalidOperationException), "Cannot change the target of the class proxy."));
+			}
+
+			dynProxySetTarget.CodeBuilder.AddStatement(new ReturnStatement());
+
 			var getInterceptors = emitter.CreateMethod("GetInterceptors", typeof(IInterceptor[]));
 
 			getInterceptors.CodeBuilder.AddStatement(
