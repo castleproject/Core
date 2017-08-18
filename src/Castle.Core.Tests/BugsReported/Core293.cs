@@ -71,14 +71,22 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 		}
 	}
 
+	public interface IEventHandler3 : IEventHandler { }
+
+	public class Handler3 : IEventHandler3
+	{
+		public string Handle(EventArgs ea)
+		{
+			return "Handler3";
+		}
+	}
+
 	[TestFixture]
-	public class Core293
+	public class Core293 : BasePEVerifyTestCase
 	{
 		[Test]
 		public void ShouldChangeTargetProxyForGenericInterfaces()
 		{
-			var generator = new ProxyGenerator();
-
 			var lazyTarget1 = new Lazy<IEventHandler<EventArgs1>>(() => new Handler1());
 			var lazyInterceptor1 = new LazyInterceptor<IEventHandler<EventArgs1>>(lazyTarget1);
 			var proxy1 = generator.CreateInterfaceProxyWithTargetInterface<IEventHandler<EventArgs1>>(null, new[] { lazyInterceptor1 });
@@ -92,6 +100,13 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 
 			var result2 = proxy2.Handle(EventArgs.Empty);
 			Assert.AreEqual("Handler2", result2);
+
+			var lazyTarget3 = new Lazy<IEventHandler3>(() => new Handler3());
+			var lazyInterceptor3 = new LazyInterceptor<IEventHandler3>(lazyTarget3);
+			var proxy3 = generator.CreateInterfaceProxyWithTargetInterface<IEventHandler3>(null, new[] { lazyInterceptor3 });
+
+			var result3 = proxy3.Handle(EventArgs.Empty);
+			Assert.AreEqual("Handler3", result3);
 		}
 	}
 }
