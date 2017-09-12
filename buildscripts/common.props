@@ -6,14 +6,16 @@
 		<RepositoryUrl>https://github.com/castleproject/Core</RepositoryUrl>
 		<BuildVersion>0.0.0</BuildVersion>
 		<BuildVersion Condition="'$(APPVEYOR_BUILD_VERSION)'!=''">$(APPVEYOR_BUILD_VERSION)</BuildVersion>
+		<BuildVersionMajor>$(BuildVersion.Split('.')[0])</BuildVersionMajor>
 		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath> 
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<Product>Castle Core</Product>
-		<Version>$(BuildVersion)</Version>
-		<AssemblyVersion>$(BuildVersion)</AssemblyVersion>
 		<Authors>Castle Project Contributors</Authors>
+		<FileVersion>$(BuildVersion)</FileVersion>
+		<VersionPrefix>$(BuildVersion)</VersionPrefix>
+		<AssemblyVersion>$(BuildVersionMajor).0.0</AssemblyVersion>
 		<PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
 		<PackageProjectUrl>http://www.castleproject.org/</PackageProjectUrl>
 		<PackageIconUrl>http://www.castleproject.org/img/castle-logo.png</PackageIconUrl>
