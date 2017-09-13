@@ -4,7 +4,7 @@ Castle Project does not contain its own logging framework, there are already exc
 
 ## Loggers
 
-Castle Core provides the following logger abstractions implementations, however you can create your own:
+Castle Core provides the following logger implementations, however you can create your own:
 
 Logger      | Implementation
 ----------- | --------------
