@@ -4,6 +4,10 @@
 
 Other than the three main projects, Castle consists of a whole range of smaller, but very useful libraries that you can take advantage of in your application.
 
+## Logging
+
+[Logging Services](logging.md) - logging abstractions and implementations for common scenarios and logging frameworks.
+
 ## DynamicProxy
 
 [Castle DynamicProxy](dynamicproxy.md) - a lightweight, lightning fast framework for generating proxies on the fly, used extensively by multiple projects within Castle (Windsor, MonoRail) and outside of it (NHibernate, Rhino Mocks, AutoMapper and many others).
