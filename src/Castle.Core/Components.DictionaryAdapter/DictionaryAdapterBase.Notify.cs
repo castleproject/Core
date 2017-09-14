@@ -67,7 +67,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		protected void NotifyPropertyChanged(PropertyDescriptor property, object oldValue, object newValue)
 		{
-			if (property.SuppressNotifications) || !ShouldNotify)
+			if (property.SuppressNotifications || !ShouldNotify)
 				return;
 
 			var propertyChanged = PropertyChanged;
