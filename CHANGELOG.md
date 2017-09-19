@@ -4,7 +4,7 @@
 
 Bugfixes:
 - Make ProxyUtil.IsAccessible(MethodBase) take into account declaring type's accessibility so it doesn't report false negatives for e.g. public methods in inaccessible classes. (@stakx, #289)
-- Fix System.InvalidCastException during Invocation.ChangeProxyTarget method call (@yallie, #293)
+- Fix System.InvalidCastException during IChangeProxyTarget.ChangeProxyTarget method call (@yallie, #293)
 - Ignore minor/patch level version for AssemblyVersionAttribute as this creates binding errors for downstream libraries (@fir3pho3nixx, #288)
 - Fix DictionaryAdapter firing NotifyPropertyChang(ed/ing) events after CancelEdit (@Lakritzator, #299)
 
