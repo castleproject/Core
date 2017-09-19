@@ -53,7 +53,7 @@ namespace Castle.DynamicProxy
 		///    cref = "InvalidOperationException" /> will be throws.
 		/// </remarks>
 		/// <exception cref = "InvalidCastException">Thrown when <paramref name = "target" /> is not assignable to the proxied type.</exception>
-		[Obsolete("Use (invocation.Proxy as IProxyTargetAccessor).DynProxySetTarget(target) instead.")]
+		[Obsolete("Use ((IProxyTargetAccessor)invocation.Proxy).DynProxySetTarget(target) instead.")]
 		void ChangeProxyTarget(object target);
 	}
 }

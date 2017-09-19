@@ -33,8 +33,8 @@ namespace Castle.DynamicProxy.Tests
 			var target = invocation.InvocationTarget as T;
 			if (target == null)
 			{
-				(invocation as IChangeProxyTarget).ChangeInvocationTarget(LazyTarget.Value);
-				(invocation.Proxy as IProxyTargetAccessor).DynProxySetTarget(LazyTarget.Value);
+				((IChangeProxyTarget)invocation).ChangeInvocationTarget(LazyTarget.Value);
+				((IProxyTargetAccessor)invocation.Proxy).DynProxySetTarget(LazyTarget.Value);
 			}
 
 			invocation.Proceed();
