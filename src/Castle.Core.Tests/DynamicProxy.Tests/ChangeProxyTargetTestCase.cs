@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Tests.BugsReported
+namespace Castle.DynamicProxy.Tests
 {
 	using System;
 
@@ -137,6 +137,7 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 		[Test]
 		public void Should_Change_Target_Proxy_For_Generic_Interfaces_Obsolete_Approach()
 		{
+			// issue #293
 			var lazyTarget1 = new Lazy<IEventHandler<EventArgs1>>(() => new Handler1());
 			var lazyInterceptor1 = new LazyInterceptorV2<IEventHandler<EventArgs1>>(lazyTarget1);
 			var proxy1 = generator.CreateInterfaceProxyWithTargetInterface<IEventHandler<EventArgs1>>(null, new[] { lazyInterceptor1 });
