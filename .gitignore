@@ -15,3 +15,5 @@ buildscripts/**/bin/
 project.lock.json
 /.dnx/
 /.dotnet/
+tools/**/obj/
+tools/**/build/
