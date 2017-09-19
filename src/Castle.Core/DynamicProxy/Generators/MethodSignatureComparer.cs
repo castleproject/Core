@@ -86,10 +86,14 @@ namespace Castle.DynamicProxy.Generators
 
 			if (x.GetTypeInfo().IsGenericParameter)
 			{
-				if (x.GenericParameterPosition != y.GenericParameterPosition)
+				if (x.GetTypeInfo().GenericParameterPosition != y.GetTypeInfo().GenericParameterPosition)
 				{
 					return false;
 				}
+			}
+			else if (x.GetGenericArguments().Length > 0)
+			{
+				return GenericArugmentsEqual(x, y);
 			}
 			else
 			{
@@ -114,9 +118,9 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			return EqualNames(x, y) &&
-			       EqualGenericParameters(x, y) &&
-			       EqualSignatureTypes(x.ReturnType, y.ReturnType) &&
-			       EqualParameters(x, y);
+				   EqualGenericParameters(x, y) &&
+				   EqualSignatureTypes(x.ReturnType, y.ReturnType) &&
+				   EqualParameters(x, y);
 		}
 
 		public int GetHashCode(MethodInfo obj)
@@ -127,6 +131,37 @@ namespace Castle.DynamicProxy.Generators
 		private bool EqualNames(MethodInfo x, MethodInfo y)
 		{
 			return x.Name == y.Name;
+		}
+
+		private bool GenericArugmentsEqual(Type x, Type y)
+		{
+			var xArgs = x.GetGenericArguments();
+			var yArgs = y.GetGenericArguments();
+
+			if (xArgs.Length != yArgs.Length)
+			{
+				return false;
+			}
+
+			for (var i = 0; i < xArgs.Length; ++i)
+			{
+				if (xArgs[i].GetTypeInfo().IsGenericParameter != yArgs[i].GetTypeInfo().IsGenericParameter)
+				{
+					return false;
+				}
+
+				if (xArgs[i].GetGenericArguments().Length > 0)
+				{
+					return GenericArugmentsEqual(xArgs[i], yArgs[i]);
+				}
+
+				if (!xArgs[i].GetTypeInfo().IsGenericParameter && !xArgs[i].Equals(yArgs[i]))
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 	}
 }
