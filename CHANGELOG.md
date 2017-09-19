@@ -12,7 +12,7 @@ Bugfixes:
 - Fix DictionaryAdapter firing NotifyPropertyChang(ed/ing) events after CancelEdit (@Lakritzator, #299)
 
 Deprecations:
-- IChangeProxyTarget.ChangeProxyTarget is deprecated, use IProxyTargetAccessor.DynProxySetTarget instead (@yallie, #293)
+- IChangeProxyTarget.ChangeProxyTarget is deprecated in favor of IProxyTargetAccessor.DynProxySetTarget (@yallie, #293)
 
 ## 4.1.1 (2017-07-12)
 
