@@ -1087,6 +1087,37 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.AreEqual(3, notifications);
 		}
 
+		/// <summary>
+		/// Test that a SuppressNotificationsBlock suppresses notification events which the rollback which CancelEdit does generates.
+		/// </summary>
+		[Test]
+		public void WillNotRaisePropertyChangedEventWhenCancelEditingAndSupressingNotifications()
+		{
+			var notifications = 0;
+			var mutableName = factory.GetAdapter<IMutableName>(dictionary);
+			mutableName.PropertyChanged += (s, e) =>
+			{
+				if (e.PropertyName == nameof(IMutableName.FirstName))
+				{
+					++notifications;
+				}
+			};
+
+			// Suppress notifications
+			using (mutableName.SuppressNotificationsBlock())
+			{
+				// Start edit
+				mutableName.BeginEdit();
+				// Check a property, this should NOT generate notifications due to the suppress block
+				mutableName.FirstName = "Big";
+				// Rollback the changes property, this should NOT generate notifications due to the suppress block
+				mutableName.CancelEdit();
+			}
+
+			// Test if we really didn't get any notifications
+			Assert.AreEqual(0, notifications);
+		}
+
 		[Test]
 		public void CanInitializeTheDictionaryAdapterWithAttributes()
 		{
