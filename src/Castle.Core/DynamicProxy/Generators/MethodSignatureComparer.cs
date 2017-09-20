@@ -91,9 +91,20 @@ namespace Castle.DynamicProxy.Generators
 					return false;
 				}
 			}
-			else if (x.GetGenericArguments().Length > 0)
+			else if (x.GetTypeInfo().IsGenericType)
 			{
-				return GenericArugmentsEqual(x, y);
+				var xArgs = x.GetGenericArguments();
+				var yArgs = y.GetGenericArguments();
+
+				if (xArgs.Length != yArgs.Length)
+				{
+					return false;
+				}
+
+				for (var i = 0; i < xArgs.Length; ++i)
+				{
+					 if(!EqualSignatureTypes(xArgs[i], yArgs[i])) return false;
+				}
 			}
 			else
 			{
@@ -131,37 +142,6 @@ namespace Castle.DynamicProxy.Generators
 		private bool EqualNames(MethodInfo x, MethodInfo y)
 		{
 			return x.Name == y.Name;
-		}
-
-		private bool GenericArugmentsEqual(Type x, Type y)
-		{
-			var xArgs = x.GetGenericArguments();
-			var yArgs = y.GetGenericArguments();
-
-			if (xArgs.Length != yArgs.Length)
-			{
-				return false;
-			}
-
-			for (var i = 0; i < xArgs.Length; ++i)
-			{
-				if (xArgs[i].GetTypeInfo().IsGenericParameter != yArgs[i].GetTypeInfo().IsGenericParameter)
-				{
-					return false;
-				}
-
-				if (xArgs[i].GetGenericArguments().Length > 0)
-				{
-					return GenericArugmentsEqual(xArgs[i], yArgs[i]);
-				}
-
-				if (!xArgs[i].GetTypeInfo().IsGenericParameter && !xArgs[i].Equals(yArgs[i]))
-				{
-					return false;
-				}
-			}
-
-			return true;
 		}
 	}
 }
