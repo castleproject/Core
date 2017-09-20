@@ -23,9 +23,9 @@ namespace Castle.DynamicProxy.Contributors
 
 	public class InterfaceProxyInstanceContributor : ProxyInstanceContributor
 	{
-		protected override Expression GetTargetReferenceExpression(ClassEmitter emitter)
+		protected override Reference GetTargetReference(ClassEmitter emitter)
 		{
-			return emitter.GetField("__target").ToExpression();
+			return emitter.GetField("__target");
 		}
 
 		public InterfaceProxyInstanceContributor(Type targetType, string proxyGeneratorId, Type[] interfaces)

@@ -27,6 +27,12 @@ namespace Castle.DynamicProxy
 		object DynProxyGetTarget();
 
 		/// <summary>
+		///   Set the proxy target.
+		/// </summary>
+		/// <param name="target">New proxy target.</param>
+		void DynProxySetTarget(object target);
+
+		/// <summary>
 		///   Gets the interceptors for the proxy
 		/// </summary>
 		/// <returns></returns>

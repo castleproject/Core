@@ -29,9 +29,9 @@ namespace Castle.DynamicProxy.Contributors
 		{
 		}
 
-		protected override Expression GetTargetReferenceExpression(ClassEmitter emitter)
+		protected override Reference GetTargetReference(ClassEmitter emitter)
 		{
-			return emitter.GetField("__target").ToExpression();
+			return emitter.GetField("__target");
 		}
 	}
 }
