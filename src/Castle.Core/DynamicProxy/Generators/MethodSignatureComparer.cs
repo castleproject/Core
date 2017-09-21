@@ -86,9 +86,24 @@ namespace Castle.DynamicProxy.Generators
 
 			if (x.GetTypeInfo().IsGenericParameter)
 			{
-				if (x.GenericParameterPosition != y.GenericParameterPosition)
+				if (x.GetTypeInfo().GenericParameterPosition != y.GetTypeInfo().GenericParameterPosition)
 				{
 					return false;
+				}
+			}
+			else if (x.GetTypeInfo().IsGenericType)
+			{
+				var xArgs = x.GetGenericArguments();
+				var yArgs = y.GetGenericArguments();
+
+				if (xArgs.Length != yArgs.Length)
+				{
+					return false;
+				}
+
+				for (var i = 0; i < xArgs.Length; ++i)
+				{
+					 if(!EqualSignatureTypes(xArgs[i], yArgs[i])) return false;
 				}
 			}
 			else
@@ -114,9 +129,9 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			return EqualNames(x, y) &&
-			       EqualGenericParameters(x, y) &&
-			       EqualSignatureTypes(x.ReturnType, y.ReturnType) &&
-			       EqualParameters(x, y);
+				   EqualGenericParameters(x, y) &&
+				   EqualSignatureTypes(x.ReturnType, y.ReturnType) &&
+				   EqualParameters(x, y);
 		}
 
 		public int GetHashCode(MethodInfo obj)

@@ -169,6 +169,11 @@ namespace Castle.DynamicProxy.Tests
 			throw new NotImplementedException();
 		}
 
+		public void DynProxySetTarget(object obj)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IInterceptor[] GetInterceptors()
 		{
 			throw new NotImplementedException();
@@ -186,6 +191,11 @@ namespace Castle.DynamicProxy.Tests
 		#region IProxyTargetAccessorDerived Members
 
 		public object DynProxyGetTarget()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void DynProxySetTarget(object obj)
 		{
 			throw new NotImplementedException();
 		}
