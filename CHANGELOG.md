@@ -10,6 +10,7 @@ Bugfixes:
 - Fix InvalidCastException calling IChangeProxyTarget.ChangeProxyTarget proxying generic interfaces (@yallie, #293)
 - Ignore minor/patch level version for AssemblyVersionAttribute as this creates binding errors for downstream libraries (@fir3pho3nixx, #288)
 - Fix DictionaryAdapter firing NotifyPropertyChang(ed/ing) events after CancelEdit (@Lakritzator, #299)
+- Fix ArgumentException when overriding method with nested generics (@BitWizJason, #297)
 
 Deprecations:
 - IChangeProxyTarget.ChangeProxyTarget is deprecated in favor of IProxyTargetAccessor.DynProxySetTarget (@yallie, #293)
