@@ -377,7 +377,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void InitializeStaticFields(Type builtType)
 		{
-			builtType.SetStaticField("proxyGenerationOptions", BindingFlags.Public, ProxyGenerationOptions);
+			builtType.SetStaticField("proxyGenerationOptions", BindingFlags.NonPublic, ProxyGenerationOptions);
 		}
 
 		protected Type ObtainProxyType(CacheKey cacheKey, Func<string, INamingScope, Type> factory)

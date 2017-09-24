@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Collections;
 	using System.IO;
+	using System.Reflection;
 	using System.Runtime.Serialization;
 	using System.Runtime.Serialization.Formatters.Binary;
 
@@ -250,8 +251,8 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(proxy.GetType(), proxy.GetType().GetMethod("get_Current").DeclaringType);
 			Assert.AreNotEqual(proxy.GetType(), proxy.GetType().GetMethod("CalculateSumDistanceNow").DeclaringType);
 			Assert.AreEqual(proxy.GetType().BaseType, proxy.GetType().GetMethod("CalculateSumDistanceNow").DeclaringType);
-			var options2 =
-				(ProxyGenerationOptions)proxy.GetType().GetField("proxyGenerationOptions").GetValue(null);
+			var options2 = (ProxyGenerationOptions)proxy.GetType().
+				GetField("proxyGenerationOptions", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
 			Assert.IsNotNull(Array.Find(options2.MixinsAsArray(), delegate(object o) { return o is SerializableMixin; }));
 			Assert.IsNotNull(options2.Selector);
 
@@ -260,7 +261,8 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreNotEqual(otherProxy.GetType(), otherProxy.GetType().GetMethod("CalculateSumDistanceNow").DeclaringType);
 			Assert.AreEqual(otherProxy.GetType().BaseType,
 			                otherProxy.GetType().GetMethod("CalculateSumDistanceNow").DeclaringType);
-			options2 = (ProxyGenerationOptions)otherProxy.GetType().GetField("proxyGenerationOptions").GetValue(null);
+			options2 = (ProxyGenerationOptions)otherProxy.GetType().
+				GetField("proxyGenerationOptions", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
 			Assert.IsNotNull(Array.Find(options2.MixinsAsArray(), delegate(object o) { return o is SerializableMixin; }));
 			Assert.IsNotNull(options2.Selector);
 		}
@@ -290,8 +292,8 @@ namespace Castle.DynamicProxy.Tests
 			                   holder.Element.GetType().GetMethod("CalculateSumDistanceNow").DeclaringType);
 			Assert.AreEqual(holder.Element.GetType().BaseType,
 			                holder.Element.GetType().GetMethod("CalculateSumDistanceNow").DeclaringType);
-			var options2 =
-				(ProxyGenerationOptions)holder.Element.GetType().GetField("proxyGenerationOptions").GetValue(null);
+			var options2 = (ProxyGenerationOptions)holder.Element.GetType().
+				GetField("proxyGenerationOptions", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
 			Assert.IsNotNull(Array.Find(options2.MixinsAsArray(), delegate(object o) { return o is SerializableMixin; }));
 			Assert.IsNotNull(options2.Selector);
 
@@ -309,7 +311,8 @@ namespace Castle.DynamicProxy.Tests
 			                   otherHolder.Element.GetType().GetMethod("CalculateSumDistanceNow").DeclaringType);
 			Assert.AreEqual(otherHolder.Element.GetType().BaseType,
 			                otherHolder.Element.GetType().GetMethod("CalculateSumDistanceNow").DeclaringType);
-			options2 = (ProxyGenerationOptions)otherHolder.Element.GetType().GetField("proxyGenerationOptions").GetValue(null);
+			options2 = (ProxyGenerationOptions)otherHolder.Element.GetType().
+				GetField("proxyGenerationOptions", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
 			Assert.IsNotNull(Array.Find(options2.MixinsAsArray(), delegate(object o) { return o is SerializableMixin; }));
 			Assert.IsNotNull(options2.Selector);
 		}
@@ -327,28 +330,28 @@ namespace Castle.DynamicProxy.Tests
 				options,
 				new StandardInterceptor());
 
-			var field = proxy.GetType().GetField("proxyGenerationOptions");
+			var field = proxy.GetType().GetField("proxyGenerationOptions", BindingFlags.Static | BindingFlags.NonPublic);
 			Assert.IsNotNull(field);
 			Assert.AreSame(options, field.GetValue(proxy));
 
 			base.Init();
 
 			proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(IService), new StandardInterceptor());
-			field = proxy.GetType().GetField("proxyGenerationOptions");
+			field = proxy.GetType().GetField("proxyGenerationOptions", BindingFlags.Static | BindingFlags.NonPublic);
 			Assert.AreSame(ProxyGenerationOptions.Default, field.GetValue(proxy));
 
 			base.Init();
 
 			proxy = generator.CreateInterfaceProxyWithTarget(typeof(IService), new ServiceImpl(), options,
 			                                                 new StandardInterceptor());
-			field = proxy.GetType().GetField("proxyGenerationOptions");
+			field = proxy.GetType().GetField("proxyGenerationOptions", BindingFlags.Static | BindingFlags.NonPublic);
 			Assert.AreSame(options, field.GetValue(proxy));
 
 			base.Init();
 
 			proxy = generator.CreateInterfaceProxyWithTargetInterface(typeof(IService), new ServiceImpl(),
 			                                                          new StandardInterceptor());
-			field = proxy.GetType().GetField("proxyGenerationOptions");
+			field = proxy.GetType().GetField("proxyGenerationOptions", BindingFlags.Static | BindingFlags.NonPublic);
 			Assert.AreSame(ProxyGenerationOptions.Default, field.GetValue(proxy));
 		}
 

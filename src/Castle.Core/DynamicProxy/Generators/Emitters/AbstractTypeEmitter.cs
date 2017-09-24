@@ -157,7 +157,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public FieldReference CreateField(string name, Type fieldType, bool serializable)
 		{
-			var atts = FieldAttributes.Public;
+			var atts = FieldAttributes.Private;
 
 			if (!serializable)
 			{
@@ -208,7 +208,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public FieldReference CreateStaticField(string name, Type fieldType)
 		{
-			return CreateStaticField(name, fieldType, FieldAttributes.Public);
+			return CreateStaticField(name, fieldType, FieldAttributes.Private);
 		}
 
 		public FieldReference CreateStaticField(string name, Type fieldType, FieldAttributes atts)
