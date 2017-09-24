@@ -4,6 +4,7 @@
 
 Enhancements:
 - Add IProxyTargetAccessor.DynProxySetTarget to set the target of a proxy (@yallie, #293)
+- Internal dynamic proxy fields are now private instead of public (@spencercw, #260)
 
 Bugfixes:
 - Make ProxyUtil.IsAccessible(MethodBase) take into account declaring type's accessibility so it doesn't report false negatives for e.g. public methods in inaccessible classes. (@stakx, #289)
