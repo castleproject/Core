@@ -298,7 +298,7 @@ namespace Castle.DynamicProxy.Serialization
 
 		private void SetTarget(object target)
 		{
-			var targetField = proxy.GetType().GetField("__target");
+			var targetField = proxy.GetType().GetField("__target", BindingFlags.Instance | BindingFlags.NonPublic);
 			if (targetField == null)
 			{
 				throw new SerializationException(
@@ -310,7 +310,7 @@ namespace Castle.DynamicProxy.Serialization
 
 		private void SetInterceptors(IInterceptor[] interceptors)
 		{
-			var interceptorField = proxy.GetType().GetField("__interceptors");
+			var interceptorField = proxy.GetType().GetField("__interceptors", BindingFlags.Instance | BindingFlags.NonPublic);
 			if (interceptorField == null)
 			{
 				throw new SerializationException(
