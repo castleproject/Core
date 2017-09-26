@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using Ionic.Zip;
 
@@ -30,17 +31,26 @@ namespace Explicit.NuGet.Versions
 		    }
 	    }
 
-	    private static void UpdateNuspecManifestContent(Dictionary<string, NuspecContentEntry> packageMetaData, string dependencyNugetId)
-	    {
-		    foreach (var packageFile in packageMetaData.ToList())
-		    {
-			    var nuspecXmlDocument = new XmlDocument();
-			    nuspecXmlDocument.LoadXml(packageFile.Value.Contents);
-			    SetPackageDepencyVersionsToBeExplicitForXmlDocument(nuspecXmlDocument, dependencyNugetId);
-			    var updatedNuspecXml = nuspecXmlDocument.OuterXml;
-			    packageMetaData[packageFile.Key].Contents = updatedNuspecXml;
-		    }
-	    }
+		private static void UpdateNuspecManifestContent(Dictionary<string, NuspecContentEntry> packageMetaData, string dependencyNugetId)
+		{
+			foreach (var packageFile in packageMetaData.ToList())
+			{
+				var nuspecXmlDocument = new XmlDocument();
+				nuspecXmlDocument.LoadXml(packageFile.Value.Contents);
+
+				SetPackageDepencyVersionsToBeExplicitForXmlDocument(nuspecXmlDocument, dependencyNugetId);
+
+				string updatedNuspecXml;
+				using (var writer = new StringWriter(new StringBuilder()))
+				using (var xmlWriter = new XmlTextWriter(writer) { Formatting = Formatting.Indented })
+				{
+					nuspecXmlDocument.Save(xmlWriter);
+					updatedNuspecXml = writer.ToString();
+				}
+
+				packageMetaData[packageFile.Key].Contents = updatedNuspecXml;
+			}
+		}
 
 	    private static void SetPackageDepencyVersionsToBeExplicitForXmlDocument(XmlDocument nuspecXmlDocument, string nugetIdFilter)
 	    {
