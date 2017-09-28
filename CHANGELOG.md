@@ -1,6 +1,6 @@
 # Castle Core Changelog
 
-## Unreleased
+## 4.2.0 (2017-09-28)
 
 Enhancements:
 - Add IProxyTargetAccessor.DynProxySetTarget to set the target of a proxy (@yallie, #293)
