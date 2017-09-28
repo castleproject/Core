@@ -41,7 +41,7 @@ namespace Explicit.NuGet.Versions
 				SetPackageDepencyVersionsToBeExplicitForXmlDocument(nuspecXmlDocument, dependencyNugetId);
 
 				string updatedNuspecXml;
-				using (var writer = new StringWriter(new StringBuilder()))
+				using (var writer = new StringWriterWithEncoding(Encoding.UTF8))
 				using (var xmlWriter = new XmlTextWriter(writer) { Formatting = Formatting.Indented })
 				{
 					nuspecXmlDocument.Save(xmlWriter);
@@ -60,7 +60,9 @@ namespace Explicit.NuGet.Versions
 			    {
 				    var currentVersion = node.Attributes["version"].Value;
 					if (!node.Attributes["version"].Value.StartsWith("[") && !node.Attributes["version"].Value.EndsWith("]"))
+					{
 						node.Attributes["version"].Value = $"[{currentVersion}]";
+					}
 			    }
 		    });
 	    }
@@ -101,5 +103,20 @@ namespace Explicit.NuGet.Versions
 			    WalkDocumentNodes(node.ChildNodes, callback);
 		    }
 	    }
+	}
+
+	public sealed class StringWriterWithEncoding : StringWriter
+	{
+		private readonly Encoding encoding;
+
+		public StringWriterWithEncoding(Encoding encoding)
+		{
+			this.encoding = encoding;
+		}
+
+		public override Encoding Encoding
+		{
+			get { return encoding; }
+		}
 	}
 }
