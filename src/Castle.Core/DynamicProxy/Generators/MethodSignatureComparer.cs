@@ -86,6 +86,10 @@ namespace Castle.DynamicProxy.Generators
 			{
 				return false;
 			}
+			else if (xti.IsGenericType != yti.IsGenericType)
+			{
+				return false;
+			}
 
 			if (xti.IsGenericParameter)
 			{
@@ -96,6 +100,14 @@ namespace Castle.DynamicProxy.Generators
 			}
 			else if (xti.IsGenericType)
 			{
+				var xGenericTypeDef = xti.GetGenericTypeDefinition();
+				var yGenericTypeDef = yti.GetGenericTypeDefinition();
+
+				if (xGenericTypeDef != yGenericTypeDef)
+				{
+					return false;
+				}
+
 				var xArgs = x.GetGenericArguments();
 				var yArgs = y.GetGenericArguments();
 
