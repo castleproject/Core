@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Bugfixes:
+- Add missing equality checks in `MethodSignatureComparer.EqualSignatureTypes` to fix `TypeLoadException`s ("Method does not have an implementation") (@stakx, #310)
+
 ## 4.2.0 (2017-09-28)
 
 Enhancements:
