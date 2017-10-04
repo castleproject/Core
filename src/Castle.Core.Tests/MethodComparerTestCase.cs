@@ -355,5 +355,28 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsTrue(mc.Equals(typeof(Base).GetMethod("GenericMethod7"),
 				typeof(Inherited).GetMethod("GenericMethod7")));
 		}
+
+		[Test]
+		public void Compare_two_method_overloads_with_generic_arg_types()
+		{
+			var mc = MethodSignatureComparer.Instance;
+			var methods = typeof(IHaveOverloadedGenericMethod).GetMethods();
+			var firstOverload = methods[0];
+			var secondOverload = methods[1];
+
+			// The overloads must obviously have different signatures, or we could never even have
+			// compiled this test code successfully. The arguments must have a different type:
+			Assert.IsFalse(mc.Equals(firstOverload, secondOverload));
+		}
+
+		private interface IHaveOverloadedGenericMethod
+		{
+			void GenericMethod<T>(GenericClass1<T> arg);
+			void GenericMethod<T>(GenericClass2<T> arg);
+		}
+
+		private class GenericClass1<T> { }
+
+		private class GenericClass2<T> { }
 	}
 }
