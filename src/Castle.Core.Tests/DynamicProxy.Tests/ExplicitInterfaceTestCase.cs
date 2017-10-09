@@ -176,6 +176,13 @@ namespace Castle.DynamicProxy.Tests
 
 			Assert.AreEqual(5, result);
 		}
+
+		[Test]
+		public void CreateClassProxy_GivenAdditionalInterfaceWithOverloadedGenericMethodsHavingGenericParameter_SuccessfullyCreatesProxyInstance()
+		{
+			var instance = generator.CreateClassProxy(typeof(object), new Type[] { typeof(InterfaceWithOverloadedGenericMethod) }, interceptor);
+			Assert.NotNull(instance);
+		}
 	}
 
 	public class ExplicitInterfaceWithPropertyImplementation : ISimpleInterfaceWithProperty
@@ -184,5 +191,19 @@ namespace Castle.DynamicProxy.Tests
 		{
 			get { throw new NotImplementedException(); }
 		}
+	}
+
+	public interface InterfaceWithOverloadedGenericMethod
+	{
+		void GenericMethod<T>(GenericClass1<T> arg);
+		void GenericMethod<T>(GenericClass2<T> arg);
+	}
+
+	public class GenericClass1<T>
+	{
+	}
+
+	public class GenericClass2<T>
+	{
 	}
 }

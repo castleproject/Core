@@ -79,20 +79,35 @@ namespace Castle.DynamicProxy.Generators
 
 		public bool EqualSignatureTypes(Type x, Type y)
 		{
-			if (x.GetTypeInfo().IsGenericParameter != y.GetTypeInfo().IsGenericParameter)
+			var xti = x.GetTypeInfo();
+			var yti = y.GetTypeInfo();
+
+			if (xti.IsGenericParameter != yti.IsGenericParameter)
+			{
+				return false;
+			}
+			else if (xti.IsGenericType != yti.IsGenericType)
 			{
 				return false;
 			}
 
-			if (x.GetTypeInfo().IsGenericParameter)
+			if (xti.IsGenericParameter)
 			{
-				if (x.GetTypeInfo().GenericParameterPosition != y.GetTypeInfo().GenericParameterPosition)
+				if (xti.GenericParameterPosition != yti.GenericParameterPosition)
 				{
 					return false;
 				}
 			}
-			else if (x.GetTypeInfo().IsGenericType)
+			else if (xti.IsGenericType)
 			{
+				var xGenericTypeDef = xti.GetGenericTypeDefinition();
+				var yGenericTypeDef = yti.GetGenericTypeDefinition();
+
+				if (xGenericTypeDef != yGenericTypeDef)
+				{
+					return false;
+				}
+
 				var xArgs = x.GetGenericArguments();
 				var yArgs = y.GetGenericArguments();
 
