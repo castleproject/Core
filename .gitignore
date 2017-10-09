@@ -17,3 +17,14 @@ project.lock.json
 /.dotnet/
 tools/**/obj/
 tools/**/build/
+
+# Docs artifacts
+docs/obj/
+docs/bin/
+
+# Xml doc/test files
+*.xml
+src/Castle.Core/Castle.Core.xml
+src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration.xml
+src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration.xml
+src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration.xml
