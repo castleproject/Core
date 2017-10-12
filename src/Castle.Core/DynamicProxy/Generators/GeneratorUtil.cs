@@ -40,7 +40,10 @@ namespace Castle.DynamicProxy.Generators
 					continue;
 				}
 
-				emitter.CodeBuilder.AddStatement(AssignArgument(dereferencedArguments, i, arguments));
+				emitter.CodeBuilder.AddStatement(
+					new IfStatement(
+						condition: new MethodInvocationExpression(invocation, InvocationMethods.CouldArgumentValueHaveChanged, new LiteralIntExpression(i)),
+						then: AssignArgument(dereferencedArguments, i, arguments)));
 			}
 		}
 

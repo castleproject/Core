@@ -48,6 +48,9 @@ namespace Castle.DynamicProxy.Tokens
 		public static readonly MethodInfo GetReturnValue =
 			typeof(AbstractInvocation).GetMethod("get_ReturnValue");
 
+		public static readonly MethodInfo CouldArgumentValueHaveChanged =
+			typeof(AbstractInvocation).GetMethod(nameof(AbstractInvocation.CouldArgumentValueHaveChanged));
+
 		public static readonly ConstructorInfo InheritanceInvocationConstructor =
 			typeof(InheritanceInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,
 			                                             new[]
