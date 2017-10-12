@@ -15,13 +15,17 @@
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
+
+	using Castle.DynamicProxy.Generators.Emitters;
 
 	public abstract class AbstractInvocation : IInvocation
 	{
 		private readonly IInterceptor[] interceptors;
 		private readonly object[] arguments;
+		private readonly object[] originalArguments;
 		private int currentInterceptorIndex = -1;
 		private Type[] genericMethodArguments;
 		private readonly MethodInfo proxiedMethod;
@@ -38,6 +42,15 @@ namespace Castle.DynamicProxy
 			this.interceptors = interceptors;
 			this.proxiedMethod = proxiedMethod;
 			this.arguments = arguments;
+
+			var parameters = proxiedMethod.GetParameters();
+			if (ArgumentsUtil.IsAnyByRef(proxiedMethod.GetParameters()))
+			{
+				Debug.Assert(arguments != null, "arguments != null");
+				var argumentCount = arguments.Length;
+				this.originalArguments = new object[argumentCount];
+				Array.Copy(arguments, this.originalArguments, argumentCount);
+			}
 		}
 
 		public void SetGenericMethodArguments(Type[] arguments)
@@ -95,6 +108,11 @@ namespace Castle.DynamicProxy
 		public object GetArgumentValue(int index)
 		{
 			return arguments[index];
+		}
+
+		public bool CouldArgumentValueHaveChanged(int index)
+		{
+			return originalArguments == null || !Equals(originalArguments[index], arguments[index]);
 		}
 
 		public void Proceed()

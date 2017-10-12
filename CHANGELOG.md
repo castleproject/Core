@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Enhancements:
+- Captured variables can be changed during an interception even when they are passed to the intercepted method via a by-ref parameter (@stakx, #316)
+
 ## 4.2.1 (2017-10-11)
 
 Bugfixes:

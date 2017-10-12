@@ -355,5 +355,34 @@ namespace CastleTests
 			Assert.AreEqual(23, param1);
 			Assert.AreEqual("23", param2);
 		}
+
+		[TestCase(false)]
+		[TestCase(true)]
+		public void InterceptorCanModifyCapturedVariable(bool passCapturedVariableByRef)
+		{
+			int capturedVariable = 0;
+			var interceptor = new ActionInterceptor(invocation =>
+			{
+				capturedVariable = 1;
+			});
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHaveMethodWithRefParameter>(interceptor);
+
+			if (passCapturedVariableByRef)
+			{
+				proxy.Method(ref capturedVariable);
+			}
+			else
+			{
+				int otherVariable = 0;
+				proxy.Method(ref otherVariable);
+			}
+
+			Assert.AreEqual(1, capturedVariable);
+		}
+
+		public interface IHaveMethodWithRefParameter
+		{
+			void Method(ref int arg);
+		}
 	}
 }
