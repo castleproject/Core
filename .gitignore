@@ -17,3 +17,10 @@ project.lock.json
 /.dotnet/
 tools/**/obj/
 tools/**/build/
+
+# Docs artifacts
+docs/obj/
+docs/bin/
+
+# Xml doc/test files
+*.xml
