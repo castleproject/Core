@@ -10,8 +10,8 @@
 		<PackageId>Castle.Core-log4net</PackageId>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageOutputPath>../../build/</PackageOutputPath>
-		<AssemblyName>Castle.Services.Logging.log4netIntegration</AssemblyName>
-		<RootNamespace>Castle.Services.Logging.log4netIntegration</RootNamespace>
+		<AssemblyName>Castle.Services.Logging.Log4netIntegration</AssemblyName>
+		<RootNamespace>Castle.Services.Logging.Log4netIntegration</RootNamespace>
 		<AssemblyTitle>Castle log4net integration</AssemblyTitle>
 		<Description>Castle log4net integration, logging services from Apache based on log4j</Description>
 		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
@@ -19,7 +19,7 @@
 		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
 		<FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
 		<PackageTags>castle logging log4net</PackageTags>
-		<DocumentationFile>$(OutputPath)Castle.Services.Logging.log4netIntegration.xml</DocumentationFile>
+		<DocumentationFile>$(OutputPath)Castle.Services.Logging.Log4netIntegration.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)'=='net35'OR'$(TargetFramework)'=='net40'OR'$(TargetFramework)'=='net45'">
