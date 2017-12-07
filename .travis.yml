@@ -4,7 +4,7 @@ solution: Castle.Core.sln
 
 mono: 4.6.1
 
-dotnet: 1.0.1
+dotnet: 1.0.4
 
 sudo: required
 
