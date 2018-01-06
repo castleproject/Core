@@ -7,13 +7,10 @@ _ReSharper*/
 
 # Build output
 build/
-artifacts/
-src/**/obj/
-src/**/bin/
-buildscripts/**/obj/
-buildscripts/**/bin/
-project.lock.json
-/.dnx/
 /.dotnet/
-tools/**/obj/
+**/obj/**
+**/bin/**
 tools/**/build/
+
+# Xml doc/test files
+*.xml

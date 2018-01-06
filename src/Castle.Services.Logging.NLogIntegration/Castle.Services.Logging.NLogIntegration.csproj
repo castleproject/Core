@@ -19,7 +19,6 @@
 		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
 		<FrameworkPathOverride Condition="'$(OS)'=='Unix'">$(NuGetPackageFolders)microsoft.targetingpack.netframework.v4.6.1\1.0.1\lib\net461\</FrameworkPathOverride>
 		<PackageTags>castle logging NLog</PackageTags>
-		<DocumentationFile>$(OutputPath)Castle.Services.Logging.NLogIntegration.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">

@@ -1,10 +1,5 @@
 # Castle Core Changelog
 
-## Unreleased
-
-Bugfixes:
-- Fix Castle.Services.Logging.Log4netIntegration assembly file name casing which breaks on Linux (@beginor, #324)
-
 ## 4.2.1 (2017-10-11)
 
 Bugfixes:
