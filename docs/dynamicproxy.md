@@ -17,6 +17,7 @@ If you're new to DynamicProxy you can read a [quick introduction](dynamicproxy-i
 * [Make your supporting classes serializable](dynamicproxy-serializable-types.md)
 * [Use proxy generation hooks and interceptor selectors for fine grained control](dynamicproxy-fine-grained-control.md)
 * [SRP applies to interceptors](dynamicproxy-srp-applies-to-interceptors.md)
+* [Behavior of by-reference parameters during interception](dynamicproxy-by-ref-parameters.md)
 
 :information_source: **Where is `Castle.DynamicProxy.dll`?:** DynamicProxy used to live in its own assembly. As part of changes in version 2.5 it was merged into `Castle.Core.dll` and that's where you'll find it.
 
