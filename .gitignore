@@ -7,13 +7,10 @@ _ReSharper*/
 
 # Build output
 build/
-artifacts/
-src/**/obj/
-src/**/bin/
-buildscripts/**/obj/
-buildscripts/**/bin/
-project.lock.json
-/.dnx/
-/.dotnet/
-tools/**/obj/
-tools/**/build/
+bin/
+obj/
+
+# Unit test scratch file (for DictionaryAdapter tests) and test runner results
+/out.xml
+/NetCoreClrTestResults.xml
+/DesktopClrTestResults.xml
