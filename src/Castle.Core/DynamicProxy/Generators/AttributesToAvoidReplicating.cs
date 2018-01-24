@@ -41,18 +41,18 @@ namespace Castle.DynamicProxy.Generators
 
 		public static void Add(Type attribute)
 		{
+			// notes:
+			// this class is made thread-safe by replacing the backing list rather than adding to it
+			// this loop runs until the attributes collection contains the new attribute
+			// it is necessary to ensure that if multiple threads concurrently replace the list that they
+			// don't override each others changes
 			IList<Type> originalAttributes;
-			IList<Type> newAttributes;
-			do
+			while (!(originalAttributes = attributes).Contains(attribute))
 			{
-				originalAttributes = attributes;
-				if (originalAttributes.Contains(attribute))
-				{
-					return;
-				}
+				IList<Type> newAttributes = new List<Type>(originalAttributes) { attribute };
 
-				newAttributes = new List<Type>(originalAttributes) { attribute };
-			} while (!ReferenceEquals(Interlocked.CompareExchange(ref attributes, newAttributes, originalAttributes), originalAttributes));
+				Interlocked.CompareExchange(ref attributes, newAttributes, originalAttributes);
+			};
 		}
 
 		public static void Add<T>()
