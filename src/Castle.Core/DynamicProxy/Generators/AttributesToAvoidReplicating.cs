@@ -15,32 +15,44 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
-	using System.Reflection;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Reflection;
+	using System.Threading;
 
 	public static class AttributesToAvoidReplicating
 	{
-		private static readonly IList<Type> attributes = new List<Type>();
+		private static IList<Type> attributes;
 
 		static AttributesToAvoidReplicating()
 		{
-			Add<System.Runtime.InteropServices.ComImportAttribute>();
-			Add<System.Runtime.InteropServices.MarshalAsAttribute>();
+			attributes = new List<Type>()
+			{
+				typeof(System.Runtime.InteropServices.ComImportAttribute),
+				typeof(System.Runtime.InteropServices.MarshalAsAttribute),
 #if !DOTNET35
-			Add<System.Runtime.InteropServices.TypeIdentifierAttribute>();
+				typeof(System.Runtime.InteropServices.TypeIdentifierAttribute),
 #endif
 #if FEATURE_SECURITY_PERMISSIONS
-			Add<System.Security.Permissions.SecurityAttribute>();
+				typeof(System.Security.Permissions.SecurityAttribute),
 #endif
+			};
 		}
 
 		public static void Add(Type attribute)
 		{
-			if (!attributes.Contains(attribute))
+			IList<Type> originalAttributes;
+			IList<Type> newAttributes;
+			do
 			{
-				attributes.Add(attribute);
-			}
+				originalAttributes = attributes;
+				if (originalAttributes.Contains(attribute))
+				{
+					return;
+				}
+
+				newAttributes = new List<Type>(originalAttributes) { attribute };
+			} while (!ReferenceEquals(Interlocked.CompareExchange(ref attributes, newAttributes, originalAttributes), originalAttributes));
 		}
 
 		public static void Add<T>()
