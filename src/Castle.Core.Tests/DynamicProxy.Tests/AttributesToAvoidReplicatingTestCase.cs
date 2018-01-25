@@ -17,6 +17,8 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Linq;
 	using System.Reflection;
+
+	using Castle.DynamicProxy.Generators;
 #if FEATURE_SECURITY_PERMISSIONS
 	using System.Security.Permissions;
 #endif
@@ -28,6 +30,22 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class AttributesToAvoidReplicatingTestCase : BasePEVerifyTestCase
 	{
+		[Test]
+		public void After_adding_attribute_must_be_listed_as_contained()
+		{
+			AttributesToAvoidReplicating.Add<string>();
+			bool contains = AttributesToAvoidReplicating.Contains(typeof(string));
+			Assert.IsTrue(contains);
+		}
+
+		[Test]
+		public void After_adding_attribute_must_still_contain_original_attributes()
+		{
+			AttributesToAvoidReplicating.Add<string>();
+			bool contains = AttributesToAvoidReplicating.Contains(typeof(System.Runtime.InteropServices.ComImportAttribute));
+			Assert.IsTrue(contains);
+		}
+
 		[Test]
 		public void NonInheritableAttribute_should_be_replicated_as_it_is_not_inherited()
 		{

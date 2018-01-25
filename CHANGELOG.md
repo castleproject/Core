@@ -4,6 +4,7 @@
 
 Bugfixes:
 - Fix Castle.Services.Logging.Log4netIntegration assembly file name casing which breaks on Linux (@beginor, #324)
+- Fix Castle.DynamicProxy.Generators.AttributesToAvoidReplicating not being thread safe (InvalidOperationException "Collection was modified; enumeration operation may not execute.") (@BrunoJuchli, #334)
 
 ## 4.2.1 (2017-10-11)
 
