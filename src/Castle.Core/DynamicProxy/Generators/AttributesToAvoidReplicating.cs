@@ -18,10 +18,11 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
-	using System.Threading;
 
 	public static class AttributesToAvoidReplicating
 	{
+		private static readonly object lockObject = new object();
+
 		private static IList<Type> attributes;
 
 		static AttributesToAvoidReplicating()
@@ -41,18 +42,11 @@ namespace Castle.DynamicProxy.Generators
 
 		public static void Add(Type attribute)
 		{
-			// notes:
-			// this class is made thread-safe by replacing the backing list rather than adding to it
-			// this loop runs until the attributes collection contains the new attribute
-			// it is necessary to ensure that if multiple threads concurrently replace the list that they
-			// don't override each others changes
-			IList<Type> originalAttributes;
-			while (!(originalAttributes = attributes).Contains(attribute))
+			// note: this class is made thread-safe by replacing the backing list rather than adding to it
+			lock (lockObject)
 			{
-				IList<Type> newAttributes = new List<Type>(originalAttributes) { attribute };
-
-				Interlocked.CompareExchange(ref attributes, newAttributes, originalAttributes);
-			};
+				attributes = new List<Type>(attributes) { attribute };
+			}
 		}
 
 		public static void Add<T>()
