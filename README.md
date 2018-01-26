@@ -12,11 +12,11 @@ See the [documentation](docs/README.md).
 
 See the [Releases](https://github.com/castleproject/Core/releases).
 
-Note: From version 4.1.0 on the symbols package can be found on: https://ci.appveyor.com/project/castleproject/core/build/4.2.1/artifacts (replace the version number in the URL)
+Debugging symbols are available in symbol packages in the AppVeyor build artifacts since version 4.1.0. For example, [here are the artifacts for 4.1.0](https://ci.appveyor.com/project/castleproject/core/build/4.1.0/artifacts).
 
 ## License
 
-Castle Core is &copy; 2004-2017 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
+Castle Core is &copy; 2004-2018 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
 
 ## Contributing
 
