@@ -23,11 +23,26 @@ namespace Castle.Core.Logging
 	/// </summary>
 	public class TraceLoggerFactory : AbstractLoggerFactory
 	{
+		private readonly LoggerLevel? level;
+
+		public TraceLoggerFactory()
+		{
+		}
+
+		public TraceLoggerFactory(LoggerLevel level)
+		{
+			this.level = level;
+		}
+
 #if FEATURE_SECURITY_PERMISSIONS && DOTNET40
 		[SecuritySafeCritical]
 #endif
 		public override ILogger Create(string name)
 		{
+			if (level.HasValue)
+			{
+				return Create(name, level.Value);
+			}
 			return InternalCreate(name);
 		}
 
