@@ -5,6 +5,7 @@
 Enhancements:
 - Added .NET Standard/.NET Core support for NLog (@snakefoot, #200)
 - Added .NET Standard/.NET Core support for log4net (@snakefoot, #201)
+- Add .NET Standard 1.5 as additional target to NuGet package. This adds support for `in` parameter modifiers on e.g. .NET Core (@stakx, #339)
 
 Bugfixes:
 - Fix Castle.Services.Logging.Log4netIntegration assembly file name casing which breaks on Linux (@beginor, #324)
