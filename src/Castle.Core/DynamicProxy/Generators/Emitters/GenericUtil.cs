@@ -209,7 +209,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 				catch (NotSupportedException)
 				{
-					// Doesnt matter
+					// Doesn't matter
 
 					newGenericParameters[i].SetGenericParameterAttributes(GenericParameterAttributes.None);
 				}

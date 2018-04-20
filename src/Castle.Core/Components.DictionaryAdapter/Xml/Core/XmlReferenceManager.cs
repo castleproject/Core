@@ -268,7 +268,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 			else
 			{
-				// Replaceing primary with no references; reuse entry
+				// Replacing primary with no references; reuse entry
 				PrepareForReuse(entry);
 				return entry;
 			}

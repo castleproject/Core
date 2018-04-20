@@ -122,7 +122,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		internal static Exception CursorNotInCoercibleState()
 		{
-			var message = "The currsor cannot change node types in its current state.";
+			var message = "The cursor cannot change node types in its current state.";
 			return new InvalidOperationException(message);
 		}
 

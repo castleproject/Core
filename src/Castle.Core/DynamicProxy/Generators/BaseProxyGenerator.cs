@@ -368,7 +368,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 			else
 			{
-				// this can technicaly never happen
+				// this can technically never happen
 				message = string.Format("It looks like we have a bug with regards to how we handle {0}. Please report it.",
 				                        interfaceName);
 			}
