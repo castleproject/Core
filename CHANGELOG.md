@@ -3,8 +3,8 @@
 ## Unreleased
 
 Enhancements:
-- Added official .NET Core support for NLog (#200)
-- Added official .NET Core support for log4net (#201)
+- Added .NET Standard/.NET Core support for NLog (@snakefoot, #200)
+- Added .NET Standard/.NET Core support for log4net (@snakefoot, #201)
 
 Bugfixes:
 - Fix Castle.Services.Logging.Log4netIntegration assembly file name casing which breaks on Linux (@beginor, #324)
