@@ -16,6 +16,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 {
 	using System;
 	using System.IO;
+	using System.Reflection;
 
 	using Castle.Core.Logging;
 
@@ -25,6 +26,11 @@ namespace Castle.Services.Logging.Log4netIntegration
 	public class Log4netFactory : AbstractLoggerFactory
 	{
 		internal const string defaultConfigFileName = "log4net.config";
+#if FEATURE_LEGACY_REFLECTION_API
+		static readonly Assembly _callingAssembly = typeof(Log4netFactory).Assembly;
+#else
+		static readonly Assembly _callingAssembly = typeof(Log4netFactory).GetTypeInfo().Assembly;
+#endif
 
 		public Log4netFactory() : this(defaultConfigFileName)
 		{
@@ -33,7 +39,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		public Log4netFactory(String configFile)
 		{
 			var file = GetConfigFile(configFile);
-			XmlConfigurator.ConfigureAndWatch(file);
+			XmlConfigurator.ConfigureAndWatch(LogManager.GetRepository(_callingAssembly), file);
 		}
 
 		/// <summary>
@@ -48,7 +54,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 
 			var file = GetConfigFile(defaultConfigFileName);
-			XmlConfigurator.ConfigureAndWatch(file);
+			XmlConfigurator.ConfigureAndWatch(LogManager.GetRepository(_callingAssembly), file);
 		}
 
 		/// <summary>
@@ -57,12 +63,12 @@ namespace Castle.Services.Logging.Log4netIntegration
 		/// <param name="config"> </param>
 		public Log4netFactory(Stream config)
 		{
-			XmlConfigurator.Configure(config);
+			XmlConfigurator.Configure(LogManager.GetRepository(_callingAssembly), config);
 		}
 
 		public override ILogger Create(String name)
 		{
-			var log = LogManager.GetLogger(name);
+			var log = LogManager.GetLogger(_callingAssembly, name);
 			return new Log4netLogger(log, this);
 		}
 

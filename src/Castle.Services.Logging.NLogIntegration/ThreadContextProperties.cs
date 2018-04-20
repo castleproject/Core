@@ -37,7 +37,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		public object this[string key]
 		{
 			get { return MappedDiagnosticsContext.Get(key); }
-			set { MappedDiagnosticsContext.Set(key, value.ToString()); }
+			set { MappedDiagnosticsContext.Set(key, value); }
 		}
 	}
 }

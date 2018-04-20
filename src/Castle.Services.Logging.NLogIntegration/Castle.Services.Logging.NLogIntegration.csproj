@@ -3,7 +3,7 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks>net35;net40;net45</TargetFrameworks>
+		<TargetFrameworks>net35;net40;net45;netstandard1.3</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -32,15 +32,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NLog" Version="4.4.1" />
+		<PackageReference Include="NLog" Version="4.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Castle.Core\Castle.Core.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="System.Configuration" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -31,7 +31,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <exception cref = "NotImplementedException" />
 		public int Count
 		{
-			get { throw new NotSupportedException("NLog does not implement a Count of it's stack."); }
+			get { return NestedDiagnosticsContext.GetAllObjects().Length; }
 		}
 
 		/// <summary>
