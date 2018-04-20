@@ -15,7 +15,7 @@
 namespace Castle.DynamicProxy.Generators
 {
 	/// <summary>
-	///   Represents the scope of uniquenes of names for types and their members
+	///   Represents the scope of uniqueness of names for types and their members
 	/// </summary>
 	public interface INamingScope
 	{
@@ -36,7 +36,7 @@ namespace Castle.DynamicProxy.Generators
 		string GetUniqueName(string suggestedName);
 
 		/// <summary>
-		///   Returns new, disposable naming scope. It is responsibilty of the caller to make sure that no naming collision
+		///   Returns new, disposable naming scope. It is responsibility of the caller to make sure that no naming collision
 		///   with enclosing scope, or other subscopes is possible.
 		/// </summary>
 		/// <returns>New naming scope.</returns>

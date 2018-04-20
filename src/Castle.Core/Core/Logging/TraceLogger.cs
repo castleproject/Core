@@ -115,7 +115,7 @@ namespace Castle.Core.Logging
 			lock (cache)
 			{
 				// because TraceSource is meant to be used as a static member, and because
-				// building up the configuraion inheritance is non-trivial, the instances
+				// building up the configuration inheritance is non-trivial, the instances
 				// themselves are cached for so multiple TraceLogger instances will reuse
 				// the named TraceSources which have been created
 

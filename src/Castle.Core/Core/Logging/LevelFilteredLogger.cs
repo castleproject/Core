@@ -25,7 +25,7 @@ namespace Castle.Core.Logging
 #endif
 
 	/// <summary>
-	/// The Level Filtered Logger class.  This is a base clase which
+	/// The Level Filtered Logger class.  This is a base class which
 	/// provides a LogLevel attribute and reroutes all functions into
 	/// one Log method.
 	/// </summary>

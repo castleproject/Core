@@ -34,7 +34,7 @@ namespace Castle.Core.Internal
 		}
 
 		/// <summary>
-		///   Checks whether or not collection is null or empty. Assumes colleciton can be safely enumerated multiple times.
+		///   Checks whether or not collection is null or empty. Assumes collection can be safely enumerated multiple times.
 		/// </summary>
 		/// <param name = "this"></param>
 		/// <returns></returns>

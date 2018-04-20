@@ -65,7 +65,7 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		/// <summary>
-		///  Copies an existinginstance of the <see cref="PropertyDescriptor"/> class.
+		///  Copies an existing instance of the <see cref="PropertyDescriptor"/> class.
 		/// </summary>
 		/// <param name="source"></param>
 		/// <param name="copyBehaviors"></param>

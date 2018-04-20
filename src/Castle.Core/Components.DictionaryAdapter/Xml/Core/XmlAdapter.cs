@@ -377,7 +377,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		void IVirtual.Realize()
 		{
-			throw new NotSupportedException("XmlAdapter does not support realization ssvia IVirtual.Realize().");
+			throw new NotSupportedException("XmlAdapter does not support realization via IVirtual.Realize().");
 		}
 
 		public event EventHandler Realized;

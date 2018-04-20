@@ -538,7 +538,7 @@ namespace Castle.DynamicProxy
 		///    cref = "SaveAssembly(bool)" /> or
 		///   <see cref = "SaveAssembly()" />, or it must have the <see cref = "CacheMappingsAttribute" /> manually applied.</param>
 		/// <remarks>
-		///   This method can be used to load previously generated and persisted proxy types from disk into this scope's type cache, eg. in order
+		///   This method can be used to load previously generated and persisted proxy types from disk into this scope's type cache, e.g. in order
 		///   to avoid the performance hit associated with proxy generation.
 		/// </remarks>
 		public void LoadAssemblyIntoCache(Assembly assembly)

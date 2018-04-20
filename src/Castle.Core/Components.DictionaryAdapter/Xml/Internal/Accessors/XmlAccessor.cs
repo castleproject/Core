@@ -206,7 +206,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (hasValue || isNillable)
 			{
 				if (hasCurrent)
-					Coerce(cursor, clrType, !hasValue && cursor.IsAttribute); // TODO: Refactor. (NB: && isNillable is emplied)
+					Coerce(cursor, clrType, !hasValue && cursor.IsAttribute); // TODO: Refactor. (NB: && isNillable is implied)
 				else
 					cursor.Create(clrType);
 			}

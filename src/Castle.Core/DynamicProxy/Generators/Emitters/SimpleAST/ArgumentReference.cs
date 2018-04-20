@@ -44,7 +44,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			if (Position == -1)
 			{
-				throw new ProxyGenerationException("ArgumentReference unitialized");
+				throw new ProxyGenerationException("ArgumentReference uninitialized");
 			}
 			switch (Position)
 			{
@@ -70,7 +70,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			if (Position == -1)
 			{
-				throw new ProxyGenerationException("ArgumentReference unitialized");
+				throw new ProxyGenerationException("ArgumentReference uninitialized");
 			}
 			gen.Emit(OpCodes.Starg, Position);
 		}
