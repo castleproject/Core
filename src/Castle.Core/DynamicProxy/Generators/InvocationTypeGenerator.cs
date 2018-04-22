@@ -278,7 +278,7 @@ namespace Castle.DynamicProxy.Generators
 			var suggestedName = string.Format("Castle.Proxies.Invocations.{0}_{1}", methodInfo.DeclaringType.Name,
 			                                  methodInfo.Name);
 			var uniqueName = namingScope.ParentScope.GetUniqueName(suggestedName);
-			return new ClassEmitter(@class.ModuleScope, uniqueName, GetBaseType(), interfaces);
+			return new ClassEmitter(@class.ModuleScope, uniqueName, GetBaseType(), interfaces, ClassEmitter.DefaultAttributes, forceUnsigned: @class.InStrongNamedModule == false);
 		}
 
 		private void ImplemementInvokeMethodOnTarget(AbstractTypeEmitter invocation, ParameterInfo[] parameters,
