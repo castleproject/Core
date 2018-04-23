@@ -27,7 +27,6 @@ GOTO restore_packages
 
 :restore_packages
 dotnet restore ./tools/Explicit.NuGet.Versions/Explicit.NuGet.Versions.csproj
-dotnet restore ./buildscripts/BuildScripts.csproj
 dotnet restore ./src/Castle.Core/Castle.Core.csproj
 dotnet restore ./src/Castle.Core.Tests/Castle.Core.Tests.csproj
 dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration.csproj
