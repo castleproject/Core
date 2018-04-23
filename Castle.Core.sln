@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Castle.Services.Logging.Ser
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Castle Services", "Castle Services", "{A598EE9B-41CE-4BE8-BF93-2C91F919F97E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Castle.Core.Tests.NonSigned", "src\Castle.Core.Tests.NonSigned\Castle.Core.Tests.NonSigned.csproj", "{14D86762-CF9B-4560-80C9-10C16DBE246C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Castle.Core.Tests.WeakNamed", "src\Castle.Core.Tests.WeakNamed\Castle.Core.Tests.WeakNamed.csproj", "{14D86762-CF9B-4560-80C9-10C16DBE246C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
