@@ -112,11 +112,7 @@ namespace Castle.DynamicProxy.Tests
 			var targetType = innerType.MakeGenericType(typeof(List<>));
 			var ex = Assert.Throws<GeneratorException>(() => generator.CreateClassProxy(targetType, new IInterceptor[0]));
 			StringAssert.StartsWith(
-#if __MonoCS__
-				"Can not create proxy for type System.Collections.Generic.List`1[[System.Collections.Generic.List`1, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]] because type System.Collections.Generic.List`1 is an open generic type.",
-#else
 				"Can not create proxy for type List`1 because type System.Collections.Generic.List`1 is an open generic type.",
-#endif
 				ex.Message);
 		}
 

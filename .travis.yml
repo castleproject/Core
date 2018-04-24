@@ -2,7 +2,10 @@ language: csharp
 
 solution: Castle.Core.sln
 
-mono: 4.6.1
+install:
+    - # Automatic package restore disabled. Packages will be restored by the build script.
+
+mono: 5.10.1
 
 dotnet: 1.0.4
 
