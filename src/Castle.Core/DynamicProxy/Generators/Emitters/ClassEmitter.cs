@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	public class ClassEmitter : AbstractTypeEmitter
 	{
-		private const TypeAttributes DefaultAttributes =
+		internal const TypeAttributes DefaultAttributes =
 			TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable;
 
 		private readonly ModuleScope moduleScope;
@@ -64,6 +64,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public ModuleScope ModuleScope
 		{
 			get { return moduleScope; }
+		}
+
+		internal bool InStrongNamedModule
+		{
+			get { return StrongNameUtil.IsAssemblySigned(TypeBuilder.Assembly); }
 		}
 
 		protected virtual IEnumerable<Type> InitializeGenericArgumentsFromBases(ref Type baseType,

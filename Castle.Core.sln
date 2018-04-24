@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Castle.Services.Logging.Ser
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Castle Services", "Castle Services", "{A598EE9B-41CE-4BE8-BF93-2C91F919F97E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Castle.Core.Tests.WeakNamed", "src\Castle.Core.Tests.WeakNamed\Castle.Core.Tests.WeakNamed.csproj", "{14D86762-CF9B-4560-80C9-10C16DBE246C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{91B2A82F-63F6-46B1-8EDC-5D029BCF6A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91B2A82F-63F6-46B1-8EDC-5D029BCF6A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91B2A82F-63F6-46B1-8EDC-5D029BCF6A2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14D86762-CF9B-4560-80C9-10C16DBE246C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14D86762-CF9B-4560-80C9-10C16DBE246C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14D86762-CF9B-4560-80C9-10C16DBE246C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14D86762-CF9B-4560-80C9-10C16DBE246C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -29,6 +29,7 @@ GOTO restore_packages
 dotnet restore ./tools/Explicit.NuGet.Versions/Explicit.NuGet.Versions.csproj
 dotnet restore ./src/Castle.Core/Castle.Core.csproj
 dotnet restore ./src/Castle.Core.Tests/Castle.Core.Tests.csproj
+dotnet restore ./src/Castle.Core.Tests.WeakNamed/Castle.Core.Tests.WeakNamed.csproj
 dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration.csproj
 dotnet restore ./src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration.csproj
 dotnet restore ./src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration.csproj
@@ -50,9 +51,11 @@ echo Running NET461 Tests
 echo --------------------
 
 %UserProfile%\.nuget\packages\nunit.consolerunner\3.6.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net461/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3 || exit /b 1
+%UserProfile%\.nuget\packages\nunit.consolerunner\3.6.1\tools\nunit3-console.exe src/Castle.Core.Tests.WeakNamed/bin/%Configuration%/net461/Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3 || exit /b 1
 
 echo ---------------------------
 echo Running NETCOREAPP1.1 Tests
 echo ---------------------------
 
 .\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\Castle.Core.Tests.exe --result=NetCoreClrTestResults.xml;format=nunit3 || exit /b 1
+.\src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\netcoreapp1.1\Castle.Core.Tests.WeakNamed.exe --result=NetCoreClrWeakNamedTestResults.xml;format=nunit3 || exit /b 1
