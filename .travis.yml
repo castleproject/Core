@@ -7,7 +7,7 @@ install:
 
 mono: 5.10.1
 
-dotnet: 1.0.4
+dotnet: 2.1.105
 
 sudo: required
 
