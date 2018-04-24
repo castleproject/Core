@@ -51,11 +51,11 @@ echo --------------------
 ./src/Castle.Core.Tests.WeakNamed/bin/Release/net461/Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3
 
 echo ---------------------------
-echo Running NETCOREAPP1.1 Tests
+echo Running NETCOREAPP2.0 Tests
 echo ---------------------------
 
-dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp1.1/Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3
-dotnet ./src/Castle.Core.Tests.WeakNamed/bin/Release/netcoreapp1.1/Castle.Core.Tests.WeakNamed.dll --result=NetCoreClrWeakNamedTestResults.xml;format=nunit3
+dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp2.0/Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3
+dotnet ./src/Castle.Core.Tests.WeakNamed/bin/Release/netcoreapp2.0/Castle.Core.Tests.WeakNamed.dll --result=NetCoreClrWeakNamedTestResults.xml;format=nunit3
 
 # Unit test failure
 NETCORE_FAILCOUNT=$(grep -F "One or more child tests had errors" NetCoreClrTestResults.xml NetCoreClrWeakNamedTestResults.xml | wc -l)

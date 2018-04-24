@@ -3,13 +3,13 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks>net461;netcoreapp1.1</TargetFrameworks>
+		<TargetFrameworks>net461;netcoreapp2.0</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<!--This was the only way at the time of writing to $(OutputType) to honour the 'Exe' setting. This can probably be deleted from netcoreapp2.0(inclusive) onwards. Pathing dependencies: build.sh, build.cmd -->
 		<RuntimeIdentifier Condition="'$(OS)'=='Windows_NT'">win7-x64</RuntimeIdentifier>
-		<RuntimeIdentifier Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='netcoreapp1.1'"></RuntimeIdentifier>
+		<RuntimeIdentifier Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='netcoreapp2.0'"></RuntimeIdentifier>
 		<RuntimeIdentifier Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='net461'"></RuntimeIdentifier>
 	</PropertyGroup>
 
@@ -25,7 +25,7 @@
 		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
+	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.0'">
 		<Compile Remove="Components.DictionaryAdapter.Tests\Xml\**" />
 		<Compile Remove="log4netIntegration\**" />
 		<Compile Remove="NLogIntegration\**" />
@@ -51,21 +51,7 @@
 		<PackageReference Include="NLog" Version="4.5.0" />
 		<PackageReference Include="Serilog" Version="2.0.0" />
 		<PackageReference Include="Serilog.Sinks.TextWriter" Version="2.0.0" />
-		<PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
-		<PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
-		<PackageReference Include="System.Xml.ReaderWriter" Version="4.3.0" />
-		<PackageReference Include="System.Xml.XDocument" Version="4.3.0" />
-		<PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
-		<PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
-		<PackageReference Include="System.Reflection" Version="4.3.0" />
-		<PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
-		<PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
-		<PackageReference Include="System.ComponentModel" Version="4.3.0" />
-		<PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
-		<PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
-		<PackageReference Include="System.Xml.XPath" Version="4.3.0" />
-		<PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
-		<PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
+		<PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
 		<ProjectReference Include="..\Castle.Core\Castle.Core.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration.csproj" />

@@ -86,11 +86,11 @@
 		<DefineConstants>$(NetStandardConstants)</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp1.1|Debug'">
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp2.0|Debug'">
 		<DefineConstants>$(DiagnosticsConstants);$(NetStandardConstants)</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp1.1|Release'">
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp2.0|Release'">
 		<DefineConstants>$(NetStandardConstants)</DefineConstants>
 	</PropertyGroup>
 
