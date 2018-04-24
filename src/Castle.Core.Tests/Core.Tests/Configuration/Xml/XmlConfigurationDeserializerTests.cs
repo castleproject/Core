@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests
+namespace Castle.Core.Configuration.Xml.Tests
 {
 	using System.IO;
 	using System.Xml;
@@ -26,7 +26,7 @@ namespace CastleTests
 		[Bug("CORE-37")]
 		public void Tab_character_is_not_trimmed_from_config_value()
 		{
-			string result = Castle.Core.Configuration.Xml.XmlConfigurationDeserializer.GetConfigValue("\t");
+			string result = XmlConfigurationDeserializer.GetConfigValue("\t");
 			Assert.AreEqual("\t", result);
 		}
 
@@ -35,7 +35,7 @@ namespace CastleTests
 		public void Tab_character_is_not_trimmed_from_config_value_XML()
 		{
 			var node = new XmlDocument().ReadNode(XmlReader.Create(new StringReader("<foo><![CDATA[\t]]></foo>")));
-			var result = Castle.Core.Configuration.Xml.XmlConfigurationDeserializer.GetDeserializedNode(node);
+			var result = XmlConfigurationDeserializer.GetDeserializedNode(node);
 			Assert.AreEqual("\t", result.Value);
 		}
 	}

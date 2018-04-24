@@ -14,7 +14,7 @@
 
 #if FEATURE_SERIALIZATION
 
-namespace CastleTests.BugsReported
+namespace Castle.DynamicProxy.Tests.BugsReported
 {
 	using System;
 	using System.IO;

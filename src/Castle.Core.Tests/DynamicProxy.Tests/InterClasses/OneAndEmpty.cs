@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.InterClasses
+namespace Castle.DynamicProxy.Tests.InterClasses
 {
 	using Castle.DynamicProxy.Tests.Interfaces;
 

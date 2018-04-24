@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.NLogIntegration
+namespace Castle.Services.Logging.NLogIntegration.Tests
 {
 	using System.Runtime.CompilerServices;
-
-	using Castle.Services.Logging.NLogIntegration;
 
 	using NLog;
 	using NLog.Config;

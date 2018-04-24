@@ -14,11 +14,9 @@
 
 #if FEATURE_SECURITY_PERMISSIONS
 
-namespace Castle.Core.Tests.Internal
+namespace Castle.Core.Internal.Tests
 {
 	using System.Security.Permissions;
-
-	using Castle.Core.Internal;
 
 	using NUnit.Framework;
 

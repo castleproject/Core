@@ -18,8 +18,6 @@ namespace Castle.Core.Tests
 	using System.Collections;
 	using System.Reflection;
 
-	using Castle.Core;
-
 	using NUnit.Framework;
 
 	[TestFixture]

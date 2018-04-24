@@ -15,7 +15,7 @@
 #if !DOTNET35
 namespace Castle.DynamicProxy.Tests
 {
-	using CastleTests.DynamicProxy.Tests.Interfaces;
+	using Castle.DynamicProxy.Tests.Interfaces;
 
 	using NUnit.Framework;
 

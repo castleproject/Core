@@ -14,11 +14,11 @@
 
 #if FEATURE_SERIALIZATION
 
-namespace CastleTests
+namespace Castle.DynamicProxy.Tests
 {
 	using System.Reflection;
 
-	using Castle.DynamicProxy;
+	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Interceptors;
 
 	using NUnit.Framework;
@@ -59,10 +59,6 @@ namespace CastleTests
 	}
 
 	public interface IInterface3
-	{
-	}
-
-	public class EmptyClass
 	{
 	}
 

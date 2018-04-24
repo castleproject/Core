@@ -12,12 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Core.Tests.Resources
+namespace Castle.Core.Resource.Tests
 {
 	using System;
 	using System.Reflection;
-
-	using Castle.Core.Resource;
 
 	using NUnit.Framework;
 
@@ -51,7 +49,7 @@ namespace CastleTests.Core.Tests.Resources
 		{
 			IResource resource =
 				new AssemblyBundleResource(
-					new CustomUri("assembly://" + AssemblyName + "/CastleTests.Core.Tests.Resources.MoreRes.TestRes/content1")
+					new CustomUri("assembly://" + AssemblyName + "/Castle.Core.Tests.Resource.MoreRes.TestRes/content1")
 				);
 
 			Assert.IsNotNull(resource);
@@ -62,7 +60,7 @@ namespace CastleTests.Core.Tests.Resources
 		[Test]
 		public void CreateWithAbsolutePath()
 		{
-			var resource = resFactory.Create(new CustomUri("assembly://" + AssemblyName + "/CastleTests.Core.Tests.Resources.file1.txt"));
+			var resource = resFactory.Create(new CustomUri("assembly://" + AssemblyName + "/Castle.Core.Tests.Resource.file1.txt"));
 			Assert.IsNotNull(resource);
 			var line = resource.GetStreamReader().ReadLine();
 			Assert.AreEqual("Something", line);

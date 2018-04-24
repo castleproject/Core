@@ -18,8 +18,8 @@ namespace Castle.DynamicProxy.Tests
 
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Explicit;
+	using Castle.DynamicProxy.Tests.InterClasses;
 	using Castle.DynamicProxy.Tests.Interfaces;
-	using Castle.InterClasses;
 
 	using NUnit.Framework;
 

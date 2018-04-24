@@ -12,10 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Interceptors
+namespace Castle.DynamicProxy.Tests.Interceptors
 {
-	using Castle.DynamicProxy;
-
 	public class ThrowingInterceptor : IInterceptor
 	{
 		public void Intercept(IInvocation invocation)

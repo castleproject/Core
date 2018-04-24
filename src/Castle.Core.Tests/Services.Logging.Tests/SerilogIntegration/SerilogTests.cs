@@ -14,12 +14,10 @@
 
 #if FEATURE_TEST_SERILOGINTEGRATION
 
-namespace CastleTests.SerilogIntegration
+namespace Castle.Services.Logging.SerilogIntegration.Tests
 {
     using System;
     using System.IO;
-
-    using Castle.Services.Logging.SerilogIntegration;
 
     using Serilog;
 

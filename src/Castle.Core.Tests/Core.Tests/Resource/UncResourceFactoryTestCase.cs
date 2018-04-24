@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Tests.Resources
+namespace Castle.Core.Resource.Tests
 {
 	using System;
 
 	using NUnit.Framework;
-
-	using Castle.Core.Resource;
 
 	[TestFixture]
 	public class UncResourceFactoryTestCase

@@ -12,13 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.log4netIntegration
+namespace Castle.Services.Logging.Log4netIntegration.Tests
 {
 	using System.IO;
 	using System.Linq;
 	using System.Text;
-
-	using Castle.Services.Logging.Log4netIntegration;
 
 	using NUnit.Framework;
 
@@ -30,7 +28,7 @@ namespace Castle.log4netIntegration
 	public class Log4netFactoryTestCase
 	{
 		private string log4netXml = null;
-		private const string log4netXmlPath = "./log4netIntegration/log4net.xml";
+		private const string log4netXmlPath = "./Services.Logging.Tests/log4netIntegration/log4net.xml";
 		private const string logMessage = "testing log4net configuration using a stream for configuration";
 		private const string loggerName = "Log4netFactoryTestCase";
 

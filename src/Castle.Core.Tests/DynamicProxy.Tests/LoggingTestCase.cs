@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.Reflection;
 	using Castle.Core.Logging;
 
-	using CastleTests.DynamicProxy.Tests.Classes;
+	using Castle.DynamicProxy.Tests.Classes;
 
 	using NUnit.Framework;
 
@@ -38,7 +38,7 @@ namespace Castle.DynamicProxy.Tests
 
 			// Assert
 			Assert.True(logger.RecordedMessage(LoggerLevel.Debug, "No cached proxy type was found for target type " +
-				"CastleTests.DynamicProxy.Tests.Classes.EmptyClass."));
+				"Castle.DynamicProxy.Tests.Classes.EmptyClass."));
 		}
 
 		[Test]
@@ -54,7 +54,7 @@ namespace Castle.DynamicProxy.Tests
 
 			// Assert
 			Assert.True(logger.RecordedMessage(LoggerLevel.Debug, "Found cached proxy type Castle.Proxies.EmptyClassProxy " +
-				"for target type CastleTests.DynamicProxy.Tests.Classes.EmptyClass."));
+				"for target type Castle.DynamicProxy.Tests.Classes.EmptyClass."));
 		}
 
 		[Test]

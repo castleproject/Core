@@ -13,10 +13,11 @@
 // limitations under the License.
 
 #if !DOTNET35
-namespace CastleTests.DynamicProxy.Tests.Classes
+namespace Castle.DynamicProxy.Tests.Classes
 {
 	using System;
-	using CastleTests.DynamicProxy.Tests.Interfaces;
+
+	using Castle.DynamicProxy.Tests.Interfaces;
 
 	public class ClassWithMethodsWithAllKindsOfOptionalParameters : InterfaceWithMethodsWithAllKindsOfOptionalParameters
 	{

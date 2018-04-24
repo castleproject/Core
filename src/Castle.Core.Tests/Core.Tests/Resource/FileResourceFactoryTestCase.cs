@@ -12,14 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Tests.Resources
+namespace Castle.Core.Resource.Tests
 {
 	using System;
 	using System.IO;
 
 	using NUnit.Framework;
-
-	using Castle.Core.Resource;
 
 	[TestFixture]
 	public class FileResourceFactoryTestCase
@@ -31,7 +29,7 @@ namespace Castle.Core.Tests.Resources
 		public void Init()
 		{
 			var currentDirectory = TestContext.CurrentContext.TestDirectory;
-			basePath = Path.Combine(currentDirectory, "Core.Tests" + Path.DirectorySeparatorChar + "Resources");
+			basePath = Path.Combine(currentDirectory, "Core.Tests" + Path.DirectorySeparatorChar + "Resource");
 		}
 
 		[Test]

@@ -24,8 +24,6 @@ namespace Castle.DynamicProxy.Tests
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Mixins;
 
-	using CastleTests;
-
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -199,9 +197,9 @@ namespace Castle.DynamicProxy.Tests
 		[Bug("DYNPROXY-185")]
 		public void Returns_proxy_target_instead_of_self()
 		{
-			var target = new CastleTests.DynamicProxy.Tests.Classes.EmptyClass();
+			var target = new EmptyClass();
 			var proxy = generator.CreateClassProxyWithTarget(target);
-			var result = (CastleTests.DynamicProxy.Tests.Classes.EmptyClass)((IProxyTargetAccessor)proxy).DynProxyGetTarget();
+			var result = (EmptyClass)((IProxyTargetAccessor)proxy).DynProxyGetTarget();
 			Assert.AreEqual(target, result);
 		}
 

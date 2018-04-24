@@ -20,8 +20,6 @@ namespace Castle.DynamicProxy.Tests
 
 	using Castle.DynamicProxy.Tests.Mixins;
 
-	using CastleTests;
-
 	using NUnit.Framework;
 
 	public class DescriptionAttribute : Attribute

@@ -20,8 +20,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System.Linq;
 	using System.Reflection;
 
-	using CastleTests.Components.DictionaryAdapter.Tests;
-
 	using NUnit.Framework;
 
 	[TestFixture]
