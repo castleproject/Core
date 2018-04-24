@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Tests
 	// that was introduced with C# language version 7.2.
 	[TestFixture]
 	public class ValueTypeReferenceSemanticsTestCase : BasePEVerifyTestCase
-    {
+	{
 		// This test isn't interesting by itself. It only establishes a reference "baseline" for the next test.
 		[Test]
 		public void Can_proxy_method_having_valuetyped_parameter_without_in_modifier()
@@ -86,5 +86,5 @@ namespace Castle.DynamicProxy.Tests
 		{
 			void Method(in ReadOnlyStruct readOnlyStruct);
 		}
-    }
+	}
 }
