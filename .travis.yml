@@ -3,11 +3,11 @@ language: csharp
 solution: Castle.Core.sln
 
 install:
-    - # Automatic package restore disabled. Packages will be restored by the build script.
+    - sudo apt-get install dotnet-sharedframework-microsoft.netcore.app-1.1.6
 
 mono: 5.10.1
 
-dotnet: 1.0.4
+dotnet: 2.1.105
 
 sudo: required
 
