@@ -42,9 +42,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			[Test]
-#if __MonoCS__
-			[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 			public void Set()
 			{
 				XmlMetadataBehavior.Default.AddReservedNamespaceUri("urn:a");

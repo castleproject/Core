@@ -75,9 +75,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 		public void Adapter_OnXml_CanTargetWithXPath()
 		{
 			var line1 = "2922 South Highway 205";
@@ -240,9 +237,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 		public void Adapter_OnXml_CanWriteProperties()
 		{
 			var name = "Soccer Adult Winter II 2010";
@@ -325,9 +319,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 		public void Adapter_OnXml_CanCopySubTree()
 		{
 			var xml = string.Format(
@@ -423,9 +414,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 		public void Adapter_OnXml_CanCreate_Other_Adapter()
 		{
 			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
@@ -828,9 +816,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 
 		[Test]
-#if __MonoCS__
-		[Ignore("System.NullReferenceException : Object reference not set to an instance of an object")]
-#endif
 		public void Can_Reassign_Lists()
 		{
 			var xml = @"<Season xmlns='RISE' xmlns:rise='RISE'>
