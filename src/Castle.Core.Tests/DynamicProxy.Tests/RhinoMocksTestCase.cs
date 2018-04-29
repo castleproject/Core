@@ -184,7 +184,7 @@ namespace Castle.DynamicProxy.Tests
 
 			var iHaveMethodWithModOptsType = typeBuilder.CreateType();
 
-#if FEATURE_ASSEMBLYBUILDER_SAVE && !__MonoCS__ // Mono doesn't have PEVerify
+#if FEATURE_ASSEMBLYBUILDER_SAVE && FEATURE_TEST_PEVERIFY
 			// Let's persist and PE-verify the dynamic assembly before it gets used in tests:
 			var assemblyPath = moduleScope.SaveAssembly();
 			base.RunPEVerifyOnGeneratedAssembly(assemblyPath);

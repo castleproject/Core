@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Tests
 
 	using NUnit.Framework;
 
-#if !__MonoCS__ // mono doesn't have PEVerify
+#if FEATURE_TEST_PEVERIFY
 	public class FindPeVerify
 	{
 		private static readonly string[] PeVerifyProbingPaths =
@@ -108,7 +108,7 @@ namespace Castle.DynamicProxy.Tests
 			get { return verificationDisabled; }
 		}
 
-#if FEATURE_ASSEMBLYBUILDER_SAVE && !__MonoCS__ // mono doesn't have PEVerify
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[TearDown]
 		public virtual void TearDown()
 		{
@@ -116,13 +116,16 @@ namespace Castle.DynamicProxy.Tests
 			{
 				// Note: only supports one generated assembly at the moment
 				var path = ((PersistentProxyBuilder)builder).SaveAssembly();
+#if FEATURE_TEST_PEVERIFY
 				if (path != null)
 				{
 					RunPEVerifyOnGeneratedAssembly(path);
 				}
+#endif
 			}
 		}
 
+#if FEATURE_TEST_PEVERIFY
 		public void RunPEVerifyOnGeneratedAssembly(string assemblyPath)
 		{
 			var process = new Process
@@ -149,11 +152,13 @@ namespace Castle.DynamicProxy.Tests
 				Assert.Fail("PeVerify reported error(s): " + Environment.NewLine + processOutput, result);
 			}
 		}
+#endif // FEATURE_TEST_PEVERIFY
+
 #else
 		[TearDown]
 		public virtual void TearDown()
 		{
 		}
-#endif
+#endif // FEATURE_ASSEMBLYBUILDER_SAVE
 	}
 }

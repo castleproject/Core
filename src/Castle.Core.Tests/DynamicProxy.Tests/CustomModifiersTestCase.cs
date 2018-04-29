@@ -123,7 +123,7 @@ namespace Castle.DynamicProxy.Tests
 				this.AddTypeWithCustomModifiersAsModreqOnReturnType(moduleScope, partialTypeName, customModifiers);
 			}
 
-#if !__MonoCS__ // Mono doesn't have PEVerify
+#if FEATURE_TEST_PEVERIFY
 			// Let's persist and PE-verify the dynamic assembly before it gets used in tests:
 			var assemblyPath = moduleScope.SaveAssembly();
 			base.RunPEVerifyOnGeneratedAssembly(assemblyPath);

@@ -48,7 +48,6 @@ namespace Castle.DynamicProxy.Tests
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
-		[ExcludeOnMono("On Mono, `ModuleBuilder.FullyQualifiedName` does not return a fully qualified name including a path. See https://github.com/mono/mono/issues/8503.")]
 		public void TearDown_SavesAssembly_IfProxyGenerated()
 		{
 			string path = ModuleScope.DEFAULT_FILE_NAME;
