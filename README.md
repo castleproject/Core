@@ -101,6 +101,3 @@ Symbol                              | NET35              | NET40              | 
 * `FEATURE_TEST_COM` - enables COM Interop tests.
 * `FEATURE_TEST_PEVERIFY` - enables verification of dynamic assemblies using PEVerify during tests. (Only defined on Windows builds since Windows is currently the only platform where PEVerify is available.)
 * `FEATURE_TEST_SERILOGINTEGRATION` - enables Serilog intergration tests.
-
-The `__MonoCS__` symbol is used only in unit tests when compiled on Mono to work around Mono defects and limitations,
-however we are moving away from platform specific symbols as much as possible.
