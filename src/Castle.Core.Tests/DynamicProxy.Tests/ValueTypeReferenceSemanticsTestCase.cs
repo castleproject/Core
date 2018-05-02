@@ -65,6 +65,33 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(expectedValue, ((ReadOnlyStruct)receivedArg).Value);
 		}
 
+		[Test]
+		[Ignore("Fails on both the CLR and CoreCLR with a MissingMethodException due to a bug in System.Reflection.Emit. See https://github.com/dotnet/corefx/issues/29254.")]
+		public void Can_proxy_method_in_generic_type_having_valuetyped_parameter_with_in_modifier()
+		{
+			var proxy = this.generator.CreateInterfaceProxyWithoutTarget<IGenericTypeWithInModifier<bool>>(new DoNothingInterceptor());
+			var readOnlyStruct = new ReadOnlyStruct();
+			proxy.Method(in readOnlyStruct);
+		}
+
+		[Test]
+		[Ignore("Fails on both the CLR and CoreCLR with a MissingMethodException due to a bug in System.Reflection.Emit. See https://github.com/dotnet/corefx/issues/29254.")]
+		public void Can_proxy_generic_method_in_nongeneric_type_having_valuetyped_parameter_with_in_modifier()
+		{
+			var proxy = this.generator.CreateInterfaceProxyWithoutTarget<IGenericMethodWithInModifier>(new DoNothingInterceptor());
+			var readOnlyStruct = new ReadOnlyStruct();
+			proxy.Method<bool>(in readOnlyStruct);
+		}
+
+		[Test]
+		[Ignore("Fails on both the CLR and CoreCLR with a MissingMethodException due to a bug in System.Reflection.Emit. See https://github.com/dotnet/corefx/issues/29254.")]
+		public void Can_proxy_generic_method_in_generic_type_having_valuetyped_parameter_with_in_modifier()
+		{
+			var proxy = this.generator.CreateInterfaceProxyWithoutTarget<IGenericTypeAndMethodWithInModifier<bool>>(new DoNothingInterceptor());
+			var readOnlyStruct = new ReadOnlyStruct();
+			proxy.Method<int>(in readOnlyStruct);
+		}
+
 #endif
 
 		public readonly struct ReadOnlyStruct
@@ -85,6 +112,21 @@ namespace Castle.DynamicProxy.Tests
 		public interface IWithInModifier
 		{
 			void Method(in ReadOnlyStruct readOnlyStruct);
+		}
+
+		public interface IGenericMethodWithInModifier
+		{
+			void Method<T>(in ReadOnlyStruct readOnlyStruct);
+		}
+
+		public interface IGenericTypeWithInModifier<T>
+		{
+			void Method(in ReadOnlyStruct readOnlyStruct);
+		}
+
+		public interface IGenericTypeAndMethodWithInModifier<T>
+		{
+			void Method<U>(in ReadOnlyStruct readOnlyStruct);
 		}
 	}
 }
