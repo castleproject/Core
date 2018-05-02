@@ -5,6 +5,7 @@
 Enhancements:
 - Added .NET Standard/.NET Core support for NLog (@snakefoot, #200)
 - Added .NET Standard/.NET Core support for log4net (@snakefoot, #201)
+- DynamicProxy supported C# `in` parameter modifiers only on the .NET Framework up until now. Adding .NET Standard 1.5 as an additional target to the NuGet package makes them work on .NET Core, too (@stakx, #339)
 
 Bugfixes:
 - Fix Castle.Services.Logging.Log4netIntegration assembly file name casing which breaks on Linux (@beginor, #324)

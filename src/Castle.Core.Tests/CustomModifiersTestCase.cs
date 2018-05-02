@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#if FEATURE_EMIT_CUSTOMMODIFIERS
+#if FEATURE_EMIT_CUSTOMMODIFIERS && FEATURE_ASSEMBLYBUILDER_SAVE
 
 namespace Castle.DynamicProxy.Tests
 {

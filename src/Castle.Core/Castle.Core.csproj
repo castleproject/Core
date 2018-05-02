@@ -3,7 +3,7 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks>net35;net40;net45;netstandard1.3</TargetFrameworks>
+		<TargetFrameworks>net35;net40;net45;netstandard1.3;netstandard1.5</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -32,7 +32,7 @@
 		<Reference Include="System.Configuration" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
+	<ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'OR'$(TargetFramework)'=='netstandard1.5'">
 		<PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
 		<PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
 		<PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
