@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components.DictionaryAdapter.Tests
+namespace Castle.Components.DictionaryAdapter.Tests
 {
 	using System;
-	using Castle.Components.DictionaryAdapter;
+
 	using NUnit.Framework;
 
 	[TestFixture]

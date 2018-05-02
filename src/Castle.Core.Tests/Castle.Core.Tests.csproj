@@ -17,7 +17,7 @@
 		<OutputType>Exe</OutputType>
 		<Authors>Castle Contributors</Authors>
 		<AssemblyName>Castle.Core.Tests</AssemblyName>
-		<RootNamespace>CastleTests</RootNamespace>
+		<RootNamespace>Castle</RootNamespace>
 		<Version>0.0.0.0</Version>
 		<AssemblyVersion>0.0.0.0</AssemblyVersion>
 		<SignAssembly>True</SignAssembly>
@@ -28,18 +28,18 @@
 
 	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
 		<Compile Remove="Components.DictionaryAdapter.Tests\Xml\**" />
-		<Compile Remove="log4netIntegration\**" />
-		<Compile Remove="NLogIntegration\**" />
+		<Compile Remove="Services.Logging.Tests\log4netIntegration\**" />
+		<Compile Remove="Services.Logging.Tests\NLogIntegration\**" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="log4netIntegration\log4net.xml">
+		<None Update="Services.Logging.Tests\log4netIntegration\log4net.xml">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<EmbeddedResource Include="Core.Tests\Resources\file1.txt">
+		<EmbeddedResource Include="Core.Tests\Resource\file1.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</EmbeddedResource>
-		<EmbeddedResource Include="Core.Tests\Resources\MoreRes\file2.txt">
+		<EmbeddedResource Include="Core.Tests\Resource\MoreRes\file2.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</EmbeddedResource>
 	</ItemGroup>

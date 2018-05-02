@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Components.DictionaryAdapter.Xml.Tests
+namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
 	using System.Xml;
-	using Castle.Components.DictionaryAdapter.Xml;
-	using NUnit.Framework;
+
 	using Castle.Components.DictionaryAdapter.Tests;
+
+	using NUnit.Framework;
 	using System.Xml.Serialization;
 	using System.Runtime.Serialization;
 
