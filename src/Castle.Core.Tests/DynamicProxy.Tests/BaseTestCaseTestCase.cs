@@ -48,9 +48,6 @@ namespace Castle.DynamicProxy.Tests
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
-#if __MonoCS__
-		[Ignore("Expected: True  But was: False")]
-#endif
 		public void TearDown_SavesAssembly_IfProxyGenerated()
 		{
 			string path = ModuleScope.DEFAULT_FILE_NAME;
@@ -89,7 +86,7 @@ namespace Castle.DynamicProxy.Tests
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
-		[Platform(Exclude = "mono", Reason = "Mono doesn't have peverify, so we can't perform verification.")]
+		[ExcludeOnMono("Mono doesn't have peverify, so we can't perform verification.")]
 		public void TearDown_FindsVerificationErrors()
 		{
 			var ex = Assert.Throws<AssertionException>(() => FindVerificationErrors());

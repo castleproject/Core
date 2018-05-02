@@ -41,7 +41,7 @@ namespace Castle.Core.Logging.Tests
 
 #if FEATURE_SYSTEM_CONFIGURATION
 		[Test]
-		[Platform(Exclude = "mono", Reason = "Mono has a bug that causes the listeners to not fully work.")]
+		[ExcludeOnMono("Mono has a bug that causes the listeners to not fully work.")]
 		public void WritingToLoggerByType()
 		{
 			TraceLoggerFactory factory = new TraceLoggerFactory();
@@ -85,7 +85,7 @@ namespace Castle.Core.Logging.Tests
 		}
 
 		[Test]
-		[Platform(Exclude = "mono", Reason = "Mono has a bug that causes the listeners to not fully work.")]
+		[ExcludeOnMono("Mono has a bug that causes the listeners to not fully work.")]
 		public void FallUpToShorterSourceName()
 		{
 			TraceLoggerFactory factory = new TraceLoggerFactory();
@@ -97,7 +97,7 @@ namespace Castle.Core.Logging.Tests
 		}
 
 		[Test]
-		[Platform(Exclude = "mono", Reason = "Mono has a bug that causes the listeners to not fully work.")]
+		[ExcludeOnMono("Mono has a bug that causes the listeners to not fully work.")]
 		public void FallUpToDefaultSource()
 		{
 			TraceLoggerFactory factory = new TraceLoggerFactory();

@@ -23,11 +23,9 @@ namespace Castle.DynamicProxy.Tests
 	public class InterfaceProxyWithMethodsWithOptionalParametersTestCase
 	{
 		[Test]
-#if __MonoCS__
-		// Seems like mono is too strict, and doesn't handle a nullable default parameter in ParameterBuilder
-		// https://github.com/mono/mono/blob/master/mcs/class/corlib/System.Reflection.Emit/ParameterBuilder.cs#L101
-		[Ignore("System.ArgumentException : Constant does not match the defined type.")]
-#endif
+		// This previously failed on Mono because Mono doesn't handle nullable default parameters in ParameterBuilder.
+		// It appears that in the meantime, DynamicProxy's handling of default values was made more error-tolerant,
+		// so this test now passes even on Mono.
 		public void CanCreateInterfaceProxy()
 		{
 			var proxyGenerator = new ProxyGenerator();

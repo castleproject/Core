@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_TEST_COM && !__MonoCS__ // Avoid loading Rhino.Mocks.CPP.Interfaces.dll
+#if FEATURE_TEST_COM
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -184,9 +184,11 @@ namespace Castle.DynamicProxy.Tests
 
 			var iHaveMethodWithModOptsType = typeBuilder.CreateType();
 
+#if FEATURE_ASSEMBLYBUILDER_SAVE && FEATURE_TEST_PEVERIFY
 			// Let's persist and PE-verify the dynamic assembly before it gets used in tests:
 			var assemblyPath = moduleScope.SaveAssembly();
 			base.RunPEVerifyOnGeneratedAssembly(assemblyPath);
+#endif
 
 			this.iHaveMethodWithModOptsType = iHaveMethodWithModOptsType;
 		}
