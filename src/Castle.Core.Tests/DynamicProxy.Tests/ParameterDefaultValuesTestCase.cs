@@ -252,7 +252,7 @@ namespace Castle.DynamicProxy.Tests
 			//
 			// This method list is intended to be exhaustive, i.e. it should cover *all* possible
 			// kinds of default values. If you find a case that is missing, please add it.
-			
+			//
 			// (Some lines are commented out. These are not valid C#. We've left them here to show
 			// that the cases have at least been considered.)
 
