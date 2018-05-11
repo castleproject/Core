@@ -78,16 +78,13 @@ namespace Castle.DynamicProxy.Generators
 
 		private static object RemoveDuplicates(MethodInfo[] infos)
 		{
-			var uniqueInfos = new Dictionary<MethodInfo, object>(MethodSignatureComparer.Instance);
+			var uniqueInfos = new HashSet<MethodInfo>(MethodSignatureComparer.Instance);
 			foreach (var info in infos)
 			{
-				if (!uniqueInfos.ContainsKey(info))
-				{
-					uniqueInfos.Add(info, null);
-				}
+				uniqueInfos.Add(info);
 			}
 			var result = new MethodInfo[uniqueInfos.Count];
-			uniqueInfos.Keys.CopyTo(result, 0);
+			uniqueInfos.CopyTo(result, 0);
 			return result;
 		}
 	}
