@@ -47,7 +47,7 @@ namespace Castle.DynamicProxy.Internal
 			}
 
 			Debug.Assert(proxiedMethod.DeclaringType.IsAssignableFrom(type),
-			             "proxiedMethod.DeclaringType.IsAssignableFrom(type)");
+						 "proxiedMethod.DeclaringType.IsAssignableFrom(type)");
 			using (var locker = @lock.ForReadingUpgradeable())
 			{
 				var methodOnTarget = GetFromCache(proxiedMethod, type);
@@ -110,7 +110,7 @@ namespace Castle.DynamicProxy.Internal
 			{
 				throw new ArgumentException(
 					string.Format("Could not find method overriding {0} on type {1}. This is most likely a bug. Please report it.",
-					              proxiedMethod, type));
+								  proxiedMethod, type));
 			}
 
 			if (genericArguments == null)
@@ -126,9 +126,9 @@ namespace Castle.DynamicProxy.Internal
 			cache.Add(key, value);
 		}
 
-		private struct CacheKey:IEquatable<CacheKey>
+		private struct CacheKey : IEquatable<CacheKey>
 		{
-			public CacheKey(MethodInfo method,Type type )
+			public CacheKey(MethodInfo method, Type type)
 			{
 				Method = method;
 				Type = type;
