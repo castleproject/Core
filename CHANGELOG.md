@@ -8,6 +8,7 @@ Enhancements:
 - DynamicProxy supported C# `in` parameter modifiers only on the .NET Framework up until now. Adding .NET Standard 1.5 as an additional target to the NuGet package makes them work on .NET Core, too (@stakx, #339)
 - Replicate custom attributes on constructor parameters in the generated proxy type constructors to fulfill introspection of constructors. This does not change the proxying behavior. (@stakx, #341)
 - Improve performance of InvocationHelper cache lookups (@tangdf, #358)
+- Improve fidelity of default value replication of optional parameters to fulfill inspection of the generated proxies. This does not change the proxying behavior. (@stakx, #356)
 
 Bugfixes:
 - Fix Castle.Services.Logging.Log4netIntegration assembly file name casing which breaks on Linux (@beginor, #324)
