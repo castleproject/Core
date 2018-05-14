@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Tests
 	public class WinFormsTestCase : BasePEVerifyTestCase
 	{
 		[Test]
-		[ExcludeOnMono("Disabled on Mono to remove the need to have X installed.")]
+		[ExcludeOnFramework(Framework.Mono, "Disabled on Mono to remove the need to have X installed.")]
 		public void Can_proxy_windows_forms_control()
 		{
 			var proxy = generator.CreateClassProxy<Control>();

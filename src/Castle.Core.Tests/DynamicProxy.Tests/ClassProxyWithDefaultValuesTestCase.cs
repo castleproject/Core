@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Tests
 	{
 #if DOTNET45
 		[Test]
-		[ExcludeOnMono("ParameterBuilder.SetConstant fails with non-null values for Nullable<> parameters. See https://github.com/mono/mono/issues/8597.")]
+		[ExcludeOnFramework(Framework.Mono, "ParameterBuilder.SetConstant fails with non-null values for Nullable<> parameters. See https://github.com/mono/mono/issues/8597.")]
 		public void MethodParameterWithDefaultValue_DefaultValueIsSetOnProxiedMethodAsWell()
 		{
 			var proxiedType = generator.CreateClassProxy<ClassWithMethodWithParameterWithDefaultValue>().GetType();

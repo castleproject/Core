@@ -32,7 +32,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExcludeOnMono("On Mono, `ModuleBuilder.FullyQualifiedName` does not return a fully qualified name including a path. See https://github.com/mono/mono/issues/8503.")]
+		[ExcludeOnFramework(Framework.Mono, "On Mono, `ModuleBuilder.FullyQualifiedName` does not return a fully qualified name including a path. See https://github.com/mono/mono/issues/8503.")]
 		public void PersistentProxyBuilder_SavesSignedFile()
 		{
 			PersistentProxyBuilder builder = new PersistentProxyBuilder();
