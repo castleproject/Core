@@ -6,6 +6,7 @@ Enhancements:
 - Added .NET Standard/.NET Core support for NLog (@snakefoot, #200)
 - Added .NET Standard/.NET Core support for log4net (@snakefoot, #201)
 - DynamicProxy supported C# `in` parameter modifiers only on the .NET Framework up until now. Adding .NET Standard 1.5 as an additional target to the NuGet package makes them work on .NET Core, too (@stakx, #339)
+- Replicate custom attributes on constructor parameters in the generated proxy type constructors to fulfill introspection of constructors. This does not change the proxying behavior. (@stakx, #341)
 - Improve performance of InvocationHelper cache lookups (@tangdf, #358)
 
 Bugfixes:

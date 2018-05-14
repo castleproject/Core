@@ -239,12 +239,14 @@ namespace Castle.DynamicProxy.Generators
 			var constructor = emitter.CreateConstructor(args);
 			if (baseConstructorParams != null && baseConstructorParams.Length != 0)
 			{
-				var last = baseConstructorParams.Last();
-				if (last.ParameterType.GetTypeInfo().IsArray && last.IsDefined(typeof(ParamArrayAttribute)))
+				var offset = 1 + fields.Length;
+				for (int i = 0, n = baseConstructorParams.Length; i < n; ++i)
 				{
-					var parameter = constructor.ConstructorBuilder.DefineParameter(args.Length, ParameterAttributes.None, last.Name);
-					var info = AttributeUtil.CreateInfo<ParamArrayAttribute>();
-					parameter.SetCustomAttribute(info.Builder);
+					var parameterBuilder = constructor.ConstructorBuilder.DefineParameter(offset + i, baseConstructorParams[i].Attributes, baseConstructorParams[i].Name);
+					foreach (var attribute in baseConstructorParams[i].GetNonInheritableAttributes())
+					{
+						parameterBuilder.SetCustomAttribute(attribute.Builder);
+					}
 				}
 			}
 
