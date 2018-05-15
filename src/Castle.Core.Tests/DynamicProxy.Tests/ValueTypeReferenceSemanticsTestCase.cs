@@ -66,7 +66,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Ignore("Fails on both the CLR and CoreCLR with a MissingMethodException due to a bug in System.Reflection.Emit. See https://github.com/dotnet/corefx/issues/29254.")]
+		[ExcludeOnFramework(Framework.NetCore | Framework.NetFramework, "Fails with a MissingMethodException due to a bug in System.Reflection.Emit. See https://github.com/dotnet/corefx/issues/29254.")]
 		public void Can_proxy_method_in_generic_type_having_valuetyped_parameter_with_in_modifier()
 		{
 			var proxy = this.generator.CreateInterfaceProxyWithoutTarget<IGenericTypeWithInModifier<bool>>(new DoNothingInterceptor());
@@ -75,7 +75,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Ignore("Fails on both the CLR and CoreCLR with a MissingMethodException due to a bug in System.Reflection.Emit. See https://github.com/dotnet/corefx/issues/29254.")]
+		[ExcludeOnFramework(Framework.NetCore | Framework.NetFramework, "Fails with a MissingMethodException due to a bug in System.Reflection.Emit. See https://github.com/dotnet/corefx/issues/29254.")]
 		public void Can_proxy_generic_method_in_nongeneric_type_having_valuetyped_parameter_with_in_modifier()
 		{
 			var proxy = this.generator.CreateInterfaceProxyWithoutTarget<IGenericMethodWithInModifier>(new DoNothingInterceptor());
@@ -84,7 +84,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[Ignore("Fails on both the CLR and CoreCLR with a MissingMethodException due to a bug in System.Reflection.Emit. See https://github.com/dotnet/corefx/issues/29254.")]
+		[ExcludeOnFramework(Framework.NetCore | Framework.NetFramework, "Fails with a MissingMethodException due to a bug in System.Reflection.Emit. See https://github.com/dotnet/corefx/issues/29254.")]
 		public void Can_proxy_generic_method_in_generic_type_having_valuetyped_parameter_with_in_modifier()
 		{
 			var proxy = this.generator.CreateInterfaceProxyWithoutTarget<IGenericTypeAndMethodWithInModifier<bool>>(new DoNothingInterceptor());
