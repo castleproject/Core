@@ -32,16 +32,26 @@ namespace Castle.DynamicProxy.Generators
 	{
 		private readonly IInvocationCreationContributor contributor;
 		private readonly GetTargetExpressionDelegate getTargetExpression;
+		private readonly GetTargetExpressionDelegate getTargetTypeExpression;
 		private readonly Reference interceptors;
 		private readonly Type invocation;
 
 		public MethodWithInvocationGenerator(MetaMethod method, Reference interceptors, Type invocation,
 		                                     GetTargetExpressionDelegate getTargetExpression,
 		                                     OverrideMethodDelegate createMethod, IInvocationCreationContributor contributor)
+			: this(method, interceptors, invocation, getTargetExpression, null, createMethod, contributor)
+		{
+		}
+
+		public MethodWithInvocationGenerator(MetaMethod method, Reference interceptors, Type invocation,
+		                                     GetTargetExpressionDelegate getTargetExpression,
+		                                     GetTargetExpressionDelegate getTargetTypeExpression,
+		                                     OverrideMethodDelegate createMethod, IInvocationCreationContributor contributor)
 			: base(method, createMethod)
 		{
 			this.invocation = invocation;
 			this.getTargetExpression = getTargetExpression;
+			this.getTargetTypeExpression = getTargetTypeExpression;
 			this.interceptors = interceptors;
 			this.contributor = contributor;
 		}
@@ -147,11 +157,19 @@ namespace Castle.DynamicProxy.Generators
 
 			var methodInterceptorsField = BuildMethodInterceptorsField(@class, MethodToOverride, namingScope);
 
+			Expression targetTypeExpression;
+			if (getTargetTypeExpression != null)
+			{
+				targetTypeExpression = getTargetTypeExpression(@class, MethodToOverride);
+			}
+			else
+			{
+				targetTypeExpression = new MethodInvocationExpression(null, TypeUtilMethods.GetTypeOrNull, getTargetExpression(@class, MethodToOverride));
+			}
+
 			var emptyInterceptors = new NewArrayExpression(0, typeof(IInterceptor));
 			var selectInterceptors = new MethodInvocationExpression(selector, InterceptorSelectorMethods.SelectInterceptors,
-			                                                        new MethodInvocationExpression(null,
-				                                                        TypeUtilMethods.GetTypeOrNull,
-				                                                        getTargetExpression(@class, MethodToOverride)),
+			                                                        targetTypeExpression,
 			                                                        proxiedMethodTokenExpression, interceptors.ToExpression())
 			{ VirtualCall = true };
 

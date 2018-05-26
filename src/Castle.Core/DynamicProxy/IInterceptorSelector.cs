@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy
 		/// <summary>
 		///   Selects the interceptors that should intercept calls to the given <paramref name = "method" />.
 		/// </summary>
-		/// <param name = "type">The type declaring the method to intercept.</param>
+		/// <param name = "type">The type of the target object.</param>
 		/// <param name = "method">The method that will be intercepted.</param>
 		/// <param name = "interceptors">All interceptors registered with the proxy.</param>
 		/// <returns>An array of interceptors to invoke upon calling the <paramref name = "method" />.</returns>
