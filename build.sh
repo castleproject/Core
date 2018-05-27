@@ -48,7 +48,7 @@ echo Running NET461 Tests
 echo --------------------
 
 mono ./src/Castle.Core.Tests/bin/Release/net461/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3
-mono ./src/Castle.Core.Tests.WeakNamed/bin/Release/net461/Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3
+./src/Castle.Core.Tests.WeakNamed/bin/Release/net461/Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3
 
 echo ---------------------------
 echo Running NETCOREAPP1.1 Tests
