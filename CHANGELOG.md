@@ -15,6 +15,7 @@ Bugfixes:
 - Fix Castle.DynamicProxy.Generators.AttributesToAvoidReplicating not being thread safe (InvalidOperationException "Collection was modified; enumeration operation may not execute.") (@BrunoJuchli, #334)
 - Fix TraceLoggerFactory to allow specifying the default logger level (@acjh, #342)
 - Ensure that DynamicProxy doesn't create invalid dynamic assemblies when proxying types from non-strong-named assemblies (@stakx, #327)
+- Fix interceptor selectors being passed `System.RuntimeType` for class proxies instead of the target type (@stakx, #359)
 
 ## 4.2.1 (2017-10-11)
 
