@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
+	using System;
 	using System.Reflection.Emit;
 
 	public class IfNullExpression : Expression
@@ -21,17 +22,33 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		private readonly IILEmitter ifNotNull;
 		private readonly IILEmitter ifNull;
 		private readonly Reference reference;
+		private readonly Expression expression;
 
 		public IfNullExpression(Reference reference, IILEmitter ifNull, IILEmitter ifNotNull = null)
 		{
-			this.reference = reference;
+			this.reference = reference ?? throw new ArgumentNullException(nameof(reference));
+			this.ifNull = ifNull;
+			this.ifNotNull = ifNotNull;
+		}
+
+		public IfNullExpression(Expression expression, IILEmitter ifNull, IILEmitter ifNotNull = null)
+		{
+			this.expression = expression ?? throw new ArgumentNullException(nameof(expression));
 			this.ifNull = ifNull;
 			this.ifNotNull = ifNotNull;
 		}
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			ArgumentsUtil.EmitLoadOwnerAndReference(reference, gen);
+			if (reference != null)
+			{
+				ArgumentsUtil.EmitLoadOwnerAndReference(reference, gen);
+			}
+			else if (expression != null)
+			{
+				expression.Emit(member, gen);
+			}
+
 			var notNull = gen.DefineLabel();
 			gen.Emit(OpCodes.Brtrue_S, notNull);
 			ifNull.Emit(member, gen);

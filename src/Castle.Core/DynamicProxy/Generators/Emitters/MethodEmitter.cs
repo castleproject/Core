@@ -231,7 +231,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 				if (defaultValue == null)
 				{
-					if (parameterType.GetTypeInfo().IsGenericType && parameterType.GetGenericTypeDefinition() == typeof(Nullable<>))
+					if (parameterType.IsNullableType())
 					{
 						// This guards against a Mono bug that prohibits setting default value `null`
 						// for a `Nullable<T>` parameter. See https://github.com/mono/mono/issues/8504.
@@ -254,7 +254,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 						return;
 					}
 				}
-				else if (parameterType.GetTypeInfo().IsGenericType && parameterType.GetGenericTypeDefinition() == typeof(Nullable<>))
+				else if (parameterType.IsNullableType())
 				{
 					var genericArg = from.ParameterType.GetGenericArguments()[0];
 					if (genericArg.GetTypeInfo().IsEnum || genericArg.IsAssignableFrom(defaultValue.GetType()))

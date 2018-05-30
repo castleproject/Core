@@ -16,6 +16,7 @@ Bugfixes:
 - Fix TraceLoggerFactory to allow specifying the default logger level (@acjh, #342)
 - Ensure that DynamicProxy doesn't create invalid dynamic assemblies when proxying types from non-strong-named assemblies (@stakx, #327)
 - Fix interceptor selectors being passed `System.RuntimeType` for class proxies instead of the target type (@stakx, #359)
+- Replace NullReferenceException with descriptive one thrown when interceptors swallow exceptions and cause a null value type to be returned (@jonorossi, #85)
 
 ## 4.2.1 (2017-10-11)
 
