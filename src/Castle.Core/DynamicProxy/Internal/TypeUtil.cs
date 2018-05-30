@@ -24,6 +24,12 @@ namespace Castle.DynamicProxy.Internal
 
 	public static class TypeUtil
 	{
+		public static bool IsNullableType(this Type type)
+		{
+			return type.GetTypeInfo().IsGenericType &&
+			       type.GetGenericTypeDefinition() == typeof(Nullable<>);
+		}
+
 		public static FieldInfo[] GetAllFields(this Type type)
 		{
 			if (type == null)
