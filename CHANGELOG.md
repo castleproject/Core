@@ -9,6 +9,7 @@ Enhancements:
 - Replicate custom attributes on constructor parameters in the generated proxy type constructors to fulfill introspection of constructors. This does not change the proxying behavior. (@stakx, #341)
 - Improve performance of InvocationHelper cache lookups (@tangdf, #358)
 - Improve fidelity of default value replication of optional parameters to fulfill inspection of the generated proxies. This does not change the proxying behavior. (@stakx, #356)
+- Improve cache performance of MethodFinder.GetAllInstanceMethods (@tangdf, #357)
 
 Bugfixes:
 - Fix Castle.Services.Logging.Log4netIntegration assembly file name casing which breaks on Linux (@beginor, #324)
