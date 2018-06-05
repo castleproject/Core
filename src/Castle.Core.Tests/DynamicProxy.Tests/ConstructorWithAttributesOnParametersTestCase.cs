@@ -46,7 +46,7 @@ namespace Castle.DynamicProxy.Tests
 
 			// There should be exactly one parameter named `stringParam`:
 			var stringParam = constructor.GetParameters().SingleOrDefault(p => p.Name == "stringParam");
-			Assert.NotNull(intParam);
+			Assert.NotNull(stringParam);
 
 			// That parameter should have exactly one `RequiredAttribute` carrying the value "test".
 			var stringParamRequiredAttrs = stringParam.GetCustomAttributes<RequiredAttribute>(inherit: true);
