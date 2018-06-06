@@ -1,6 +1,6 @@
 # Castle Core Changelog
 
-## Unreleased
+## 4.3.0 (2018-06-07)
 
 Enhancements:
 - Added .NET Standard/.NET Core support for NLog (@snakefoot, #200)
