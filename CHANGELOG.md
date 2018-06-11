@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Bugfixes:
+- Prevent interceptors from being able to modify `in` parameters (@stakx, #370)
+
 ## 4.3.0 (2018-06-07)
 
 Enhancements:
