@@ -14,6 +14,8 @@
 
 namespace Castle.DynamicProxy.Generators
 {
+	using System;
+	using System.Linq;
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators.Emitters;
@@ -33,11 +35,53 @@ namespace Castle.DynamicProxy.Generators
 
 			var arguments = StoreInvocationArgumentsInLocal(emitter, invocation);
 
+			// Extracted from the following `for` loop as an optimization.
+			//
+			// The comparison by name is intentional; any assembly could define that attribute.
+			// See explanation in comment below.
+			Func<object, bool> isIsReadOnlyAttribute =
+				attribute => attribute.GetType().FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute";
+
 			for (var i = 0; i < parameters.Length; i++)
 			{
 				if (!parameters[i].ParameterType.GetTypeInfo().IsByRef)
 				{
 					continue;
+				}
+
+				// C# `in` parameters are also by-ref, but meant to be read-only.
+				// The section "Metadata representation of in parameters" on the following page
+				// defines how such parameters are marked:
+				//
+				// https://github.com/dotnet/csharplang/blob/master/proposals/csharp-7.2/readonly-ref.md
+				//
+				// This poses three problems for detecting them:
+				//
+				//  * The C# Roslyn compiler marks `in` parameters with an `[in]` IL modifier,
+				//    but this isn't specified, nor is it used uniquely for `in` params.
+				//
+				//  * `System.Runtime.CompilerServices.IsReadOnlyAttribute` is not defined on all
+				//    .NET platforms, so the compiler sometimes recreates that type in the same
+				//    assembly that contains the method having an `in` parameter. In other words,
+				//    it's an attribute one must check for by name (which is slow, as it implies
+				//    use of a `GetCustomAttributes` enumeration instead of a faster `IsDefined`).
+				//
+				//  * A required custom modifier `System.Runtime.InteropServices.InAttribute`
+				//    is always present in those cases relevant for DynamicProxy (proxyable methods),
+				//    but not all targeted platforms support reading custom modifiers. Also,
+				//    support for cmods is generally flaky (at this time of writing, mid-2018).
+				//
+				// The above points inform the following detection logic: First, we rely on an IL
+				// `[in]` modifier being present. This is a "fast guard" against non-`in` parameters:
+				if ((parameters[i].Attributes & (ParameterAttributes.In | ParameterAttributes.Out)) == ParameterAttributes.In)
+				{
+					// Here we perform the actual check. We don't rely on cmods because support
+					// for them is at current too unreliable in general, and because we wouldn't
+					// be saving much time anyway.
+					if (parameters[i].GetCustomAttributes(false).Any(isIsReadOnlyAttribute))
+					{
+						continue;
+					}
 				}
 
 				emitter.CodeBuilder.AddStatement(AssignArgument(dereferencedArguments, i, arguments));

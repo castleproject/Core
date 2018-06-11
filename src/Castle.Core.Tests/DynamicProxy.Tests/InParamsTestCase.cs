@@ -14,6 +14,12 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
+	using System.Linq;
+	using System.Reflection;
+
+	using Castle.DynamicProxy.Tests.Interceptors;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -26,7 +32,7 @@ namespace Castle.DynamicProxy.Tests
 			var original = new ReadOnlyStruct(x.Value);
 
 			var different = new ReadOnlyStruct(x.Value + 100);
-			var proxy = generator.CreateInterfaceProxyWithoutTarget<IByValue>(new SetArgumentValueInterceptor(different));
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IByValue>(new SetArgumentValueInterceptor(0, different));
 			proxy.Method(x);
 
 			Assert.AreEqual(original.Value, x.Value);
@@ -39,7 +45,7 @@ namespace Castle.DynamicProxy.Tests
 			var original = new ReadOnlyStruct(x.Value);
 
 			var different = new ReadOnlyStruct(x.Value + 100);
-			var proxy = generator.CreateInterfaceProxyWithoutTarget<IByReadOnlyRef>(new SetArgumentValueInterceptor(different));
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IByReadOnlyRef>(new SetArgumentValueInterceptor(0, different));
 			proxy.Method(in x);
 
 			Assert.AreEqual(original.Value, x.Value);
@@ -52,7 +58,7 @@ namespace Castle.DynamicProxy.Tests
 			var original = new ReadOnlyStruct(x.Value);
 
 			var different = new ReadOnlyStruct(x.Value + 100);
-			var proxy = generator.CreateInterfaceProxyWithoutTarget<IByRef>(new SetArgumentValueInterceptor(different));
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IByRef>(new SetArgumentValueInterceptor(0, different));
 			proxy.Method(ref x);
 
 			Assert.AreNotEqual(original.Value, x.Value);
@@ -65,10 +71,54 @@ namespace Castle.DynamicProxy.Tests
 			var original = new ReadOnlyStruct(x.Value);
 
 			var different = new ReadOnlyStruct(x.Value + 100);
-			var proxy = generator.CreateInterfaceProxyWithoutTarget<IOut>(new SetArgumentValueInterceptor(different));
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IOut>(new SetArgumentValueInterceptor(0, different));
 			proxy.Method(out x);
 
 			Assert.AreNotEqual(original.Value, x.Value);
+		}
+
+		// The next four tests verify some of DynamicProxy's assumptions about how the compiler emits code.
+		// If any of them start failing, we need to review the above tests, as well as the implementation of
+		// `Castle.DynamicProxy.Generators.GeneratorUtil.CopyOutAndRefParameters`.
+
+		[Test]
+		[TestCase(typeof(IByReadOnlyRef))]
+		public void By_reference_In_parameter_has_ParameterAttributes_In_set(Type type)
+		{
+			var parameter = type.GetMethod("Method").GetParameters()[0];
+
+			Assert.True(parameter.Attributes.HasFlag(ParameterAttributes.In));
+		}
+
+		[Test]
+		[TestCase(typeof(IByValue))]
+		[TestCase(typeof(IByRef))]
+		[TestCase(typeof(IOut))]
+		public void Parameter_other_than_by_reference_In_does_not_have_ParameterAttributes_In_set(Type type)
+		{
+			var parameter = type.GetMethod("Method").GetParameters()[0];
+
+			Assert.False(parameter.Attributes.HasFlag(ParameterAttributes.In));
+		}
+
+		[Test]
+		[TestCase(typeof(IByReadOnlyRef))]
+		public void By_reference_In_parameter_has_IsReadOnlyAttribute(Type type)
+		{
+			var parameter = type.GetMethod("Method").GetParameters()[0];
+
+			Assert.True(parameter.GetCustomAttributes().Any(a => a.GetType().FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute"));
+		}
+
+		[Test]
+		[TestCase(typeof(IByValue))]
+		[TestCase(typeof(IByRef))]
+		[TestCase(typeof(IOut))]
+		public void Parameter_other_than_by_reference_In_does_not_have_IsReadOnlyAttribute(Type type)
+		{
+			var parameter = type.GetMethod("Method").GetParameters()[0];
+
+			Assert.False(parameter.GetCustomAttributes().Any(a => a.GetType().FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute"));
 		}
 
 		public readonly struct ReadOnlyStruct
@@ -101,21 +151,6 @@ namespace Castle.DynamicProxy.Tests
 		public interface IOut
 		{
 			void Method(out ReadOnlyStruct arg);
-		}
-
-		public sealed class SetArgumentValueInterceptor : IInterceptor
-		{
-			private object value;
-
-			public SetArgumentValueInterceptor(object value)
-			{
-				this.value = value;
-			}
-
-			public void Intercept(IInvocation invocation)
-			{
-				invocation.SetArgumentValue(0, value);
-			}
 		}
 	}
 }
