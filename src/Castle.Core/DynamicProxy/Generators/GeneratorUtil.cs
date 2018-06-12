@@ -28,27 +28,28 @@ namespace Castle.DynamicProxy.Generators
 		                                           MethodInfo method, MethodEmitter emitter)
 		{
 			var parameters = method.GetParameters();
-			if (!ArgumentsUtil.IsAnyByRef(parameters))
+			if (!parameters.Any(IsByRef))
 			{
 				return; //saving the need to create locals if there is no need
 			}
 
 			var arguments = StoreInvocationArgumentsInLocal(emitter, invocation);
 
-			// Extracted from the following `for` loop as an optimization.
-			//
-			// The comparison by name is intentional; any assembly could define that attribute.
-			// See explanation in comment below.
-			Func<object, bool> isIsReadOnlyAttribute =
-				attribute => attribute.GetType().FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute";
-
 			for (var i = 0; i < parameters.Length; i++)
 			{
-				if (!parameters[i].ParameterType.GetTypeInfo().IsByRef)
+				if (IsByRef(parameters[i]) && !IsReadOnly(parameters[i]))
 				{
-					continue;
+					emitter.CodeBuilder.AddStatement(AssignArgument(dereferencedArguments, i, arguments));
 				}
+			}
 
+			bool IsByRef(ParameterInfo parameter)
+			{
+				return parameter.ParameterType.GetTypeInfo().IsByRef;
+			}
+
+			bool IsReadOnly(ParameterInfo parameter)
+			{
 				// C# `in` parameters are also by-ref, but meant to be read-only.
 				// The section "Metadata representation of in parameters" on the following page
 				// defines how such parameters are marked:
@@ -73,18 +74,25 @@ namespace Castle.DynamicProxy.Generators
 				//
 				// The above points inform the following detection logic: First, we rely on an IL
 				// `[in]` modifier being present. This is a "fast guard" against non-`in` parameters:
-				if ((parameters[i].Attributes & (ParameterAttributes.In | ParameterAttributes.Out)) == ParameterAttributes.In)
+				if ((parameter.Attributes & (ParameterAttributes.In | ParameterAttributes.Out)) == ParameterAttributes.In)
 				{
 					// Here we perform the actual check. We don't rely on cmods because support
 					// for them is at current too unreliable in general, and because we wouldn't
 					// be saving much time anyway.
-					if (parameters[i].GetCustomAttributes(false).Any(isIsReadOnlyAttribute))
+					if (parameter.GetCustomAttributes(false).Any(IsIsReadOnlyAttribute))
 					{
-						continue;
+						return true;
 					}
 				}
 
-				emitter.CodeBuilder.AddStatement(AssignArgument(dereferencedArguments, i, arguments));
+				return false;
+
+				bool IsIsReadOnlyAttribute(object attribute)
+				{
+					// The comparison by name is intentional; any assembly could define that attribute.
+					// See explanation in comment above.
+					return attribute.GetType().FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute";
+				}
 			}
 		}
 
