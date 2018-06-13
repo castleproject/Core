@@ -8,6 +8,7 @@ DynamicProxy generates proxies for your objects that you can use to transparentl
 * [FakeItEasy](http://fakeiteasy.github.io/) uses it to provide "the easy mocking library for .NET"
 * [Rhino Mocks](https://www.hibernatingrhinos.com/oss/rhino-mocks) uses it to provide "a dynamic mock object framework for the .NET platform"
 * [NHibernate](http://nhibernate.info/) uses it to provide lazy loading capabilities (pre-v4.0)
+* [Entity Framework Core](https://github.com/aspnet/EntityFrameworkCore) uses it in its package [Microsoft.EntityFrameworkCore.Proxies](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Proxies) to provide lazy-loading proxies
 
 If you're new to DynamicProxy you can read a [quick introduction](dynamicproxy-introduction.md), browse through description of the core types in the library, or go into more advanced, in detail discussion:
 * [Kinds of proxy objects](dynamicproxy-kinds-of-proxy-objects.md)
