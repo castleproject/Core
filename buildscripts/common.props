@@ -95,6 +95,14 @@
 		<DefineConstants>$(NetStandard15Constants)</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard2.0|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(NetStandard15Constants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard2.0|Release'">
+		<DefineConstants>$(NetStandard15Constants)</DefineConstants>
+	</PropertyGroup>
+	
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp1.1|Debug'">
 		<DefineConstants>$(DiagnosticsConstants);$(NetStandard15Constants)</DefineConstants>
 	</PropertyGroup>
