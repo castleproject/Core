@@ -131,6 +131,14 @@ namespace Castle.DynamicProxy
 		/// <param name="asm">The assembly to inspect.</param>
 		internal static bool AreInternalsVisibleToDynamicProxy(Assembly asm)
 		{
+			using (var locker = internalsVisibleToDynamicProxyLock.ForReading())
+			{
+				if (internalsVisibleToDynamicProxy.ContainsKey(asm))
+				{
+					return internalsVisibleToDynamicProxy[asm];
+				}
+			}
+
 			using (var locker = internalsVisibleToDynamicProxyLock.ForReadingUpgradeable())
 			{
 				if (internalsVisibleToDynamicProxy.ContainsKey(asm))
@@ -138,18 +146,14 @@ namespace Castle.DynamicProxy
 					return internalsVisibleToDynamicProxy[asm];
 				}
 
-				locker.Upgrade();
-
-				if (internalsVisibleToDynamicProxy.ContainsKey(asm))
+				// Upgrade the lock to a write lock.
+				using (locker.Upgrade())
 				{
-					return internalsVisibleToDynamicProxy[asm];
+					var internalsVisibleTo = asm.GetCustomAttributes<InternalsVisibleToAttribute>();
+					var found = internalsVisibleTo.Any(attr => attr.AssemblyName.Contains(ModuleScope.DEFAULT_ASSEMBLY_NAME));
+					internalsVisibleToDynamicProxy.Add(asm, found);
+					return found;
 				}
-
-				var internalsVisibleTo = asm.GetCustomAttributes<InternalsVisibleToAttribute>();
-				var found = internalsVisibleTo.Any(attr => attr.AssemblyName.Contains(ModuleScope.DEFAULT_ASSEMBLY_NAME));
-
-				internalsVisibleToDynamicProxy.Add(asm, found);
-				return found;
 			}
 		}
 

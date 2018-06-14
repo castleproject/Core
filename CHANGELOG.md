@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+Enhancements:
+ - Use shared read locking to reduce lock contention in InvocationHelper and ProxyUtil (@TimLovellSmith, #377)
+
 Bugfixes:
 - Prevent interceptors from being able to modify `in` parameters (@stakx, #370)
 
