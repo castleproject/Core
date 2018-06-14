@@ -15,6 +15,10 @@ On Mono (up to and including at least version 5.10.1.47), DynamicProxy may not b
 
    The underlying causes have been documented in [mono/mono#8504](https://github.com/mono/mono/issues/8504) and [mono/mono#8597](https://github.com/mono/mono/issues/8597).
 
+* **Optional parameters of type `object`.** As above, reflection will likely report (via `ParameterInfo.[Raw]DefaultValue`) a default value of `null`, regardless of whether the actual default value in the proxied method was `null` or not.
+
+   This has been documented in [mono/mono#9135](https://github.com/mono/mono/issues/9135).
+
 
 ## When your code runs on the .NET Framework or on .NET Core
 
