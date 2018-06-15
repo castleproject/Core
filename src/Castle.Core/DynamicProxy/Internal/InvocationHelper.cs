@@ -48,6 +48,15 @@ namespace Castle.DynamicProxy.Internal
 
 			Debug.Assert(proxiedMethod.DeclaringType.IsAssignableFrom(type),
 						 "proxiedMethod.DeclaringType.IsAssignableFrom(type)");
+			using (var locker = @lock.ForReading())
+			{
+				var methodOnTarget = GetFromCache(proxiedMethod, type);
+				if (methodOnTarget != null)
+				{
+					return methodOnTarget;
+				}
+			}
+
 			using (var locker = @lock.ForReadingUpgradeable())
 			{
 				var methodOnTarget = GetFromCache(proxiedMethod, type);
@@ -55,15 +64,13 @@ namespace Castle.DynamicProxy.Internal
 				{
 					return methodOnTarget;
 				}
-				locker.Upgrade();
 
-				methodOnTarget = GetFromCache(proxiedMethod, type);
-				if (methodOnTarget != null)
+				// Upgrade the lock to a write lock. 
+				using (locker.Upgrade())
 				{
-					return methodOnTarget;
+					methodOnTarget = ObtainMethod(proxiedMethod, type);
+					PutToCache(proxiedMethod, type, methodOnTarget);
 				}
-				methodOnTarget = ObtainMethod(proxiedMethod, type);
-				PutToCache(proxiedMethod, type, methodOnTarget);
 				return methodOnTarget;
 			}
 		}

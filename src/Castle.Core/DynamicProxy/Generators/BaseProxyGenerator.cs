@@ -415,9 +415,10 @@ namespace Castle.DynamicProxy.Generators
 				var proxyType = factory.Invoke(name, Scope.NamingScope.SafeSubScope());
 
 				// Upgrade the lock to a write lock. 
-				locker.Upgrade();
-
-				AddToCache(cacheKey, proxyType);
+				using (locker.Upgrade())
+				{
+					AddToCache(cacheKey, proxyType);
+				}
 				return proxyType;
 			}
 		}
