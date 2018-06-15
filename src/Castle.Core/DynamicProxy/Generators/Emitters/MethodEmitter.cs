@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Diagnostics;
+	using System.Globalization;
 	using System.Linq;
 	using System.Reflection;
 	using System.Reflection.Emit;
@@ -166,6 +167,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				//
 				// 1. A `[DecimalConstant]` or `[DateTimeConstant]` custom attribute attached to the parameter.
 				//    Attribute-based default values have already been copied above.
+				//    (Note that another attribute type, `[DefaultParameterValue]`, only appears in source
+				//    code. The compiler replaces it with another metadata construct:)
 				//
 				// 2. A `Constant` metadata table entry whose parent is the parameter.
 				//    Constant-based default values need more work. We can detect this case by checking
@@ -173,7 +176,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				//    as querying `ParameterInfo.HasDefault`, which would also return true for case (1)!)
 				if ((parameter.Attributes & ParameterAttributes.HasDefault) != 0)
 				{
-					CopyDefaultValueConstant(from: parameter, to: parameterBuilder);
+					try
+					{
+						CopyDefaultValueConstant(from: parameter, to: parameterBuilder);
+					}
+					catch
+					{
+						// Default value replication is a nice-to-have feature but not essential,
+						// so if it goes wrong for one parameter, just continue.
+					}
 				}
 			}
 		}
@@ -228,6 +239,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			catch (ArgumentException)
 			{
 				var parameterType = from.ParameterType;
+				var parameterNonNullableType = parameterType;
 
 				if (defaultValue == null)
 				{
@@ -256,8 +268,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 				else if (parameterType.IsNullableType())
 				{
-					var genericArg = from.ParameterType.GetGenericArguments()[0];
-					if (genericArg.GetTypeInfo().IsEnum || genericArg.IsAssignableFrom(defaultValue.GetType()))
+					parameterNonNullableType = from.ParameterType.GetGenericArguments()[0];
+					if (parameterNonNullableType.GetTypeInfo().IsEnum || parameterNonNullableType.IsAssignableFrom(defaultValue.GetType()))
 					{
 						// This guards against two bugs:
 						//
@@ -277,6 +289,21 @@ namespace Castle.DynamicProxy.Generators.Emitters
 						//   we cannot actually create a value of type `Nullable<>`.
 						return;
 					}
+				}
+
+				// Finally, we might have got here because the metadata constant simply doesn't match
+				// the parameter type exactly. Some code generators other than the .NET compilers
+				// might produce such metadata. Make a final attempt to coerce it to the required type:
+				try
+				{
+					var coercedDefaultValue = Convert.ChangeType(defaultValue, parameterNonNullableType, CultureInfo.InvariantCulture);
+					to.SetConstant(coercedDefaultValue);
+
+					return;
+				}
+				catch
+				{
+					// We don't care about the error thrown by an unsuccessful type coercion.
 				}
 
 				throw;

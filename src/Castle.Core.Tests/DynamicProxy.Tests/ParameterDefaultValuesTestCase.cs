@@ -93,6 +93,8 @@ namespace Castle.DynamicProxy.Tests
 		[TestCase(nameof(HasDefaultValues.Decimal_nullable_null))]
 		[TestCase(nameof(HasDefaultValues.Double_default))]
 		[TestCase(nameof(HasDefaultValues.Double_non_default))]
+		[TestCase(nameof(HasDefaultValues.Double_non_default_from_attribute))]
+		[TestCase(nameof(HasDefaultValues.Double_non_default_from_attribute_wrong_type))]
 		[TestCase(nameof(HasDefaultValues.Double_nullable_null))]
 		[TestCase(nameof(HasDefaultValues.Float_default))]
 		[TestCase(nameof(HasDefaultValues.Float_non_default))]
@@ -102,6 +104,8 @@ namespace Castle.DynamicProxy.Tests
 		[TestCase(nameof(HasDefaultValues.Int_nullable_null))]
 		[TestCase(nameof(HasDefaultValues.Long_default))]
 		[TestCase(nameof(HasDefaultValues.Long_non_default))]
+		[TestCase(nameof(HasDefaultValues.Long_non_default_from_attribute))]
+		[TestCase(nameof(HasDefaultValues.Long_non_default_from_attribute_wrong_type))]
 		[TestCase(nameof(HasDefaultValues.Long_nullable_null))]
 		[TestCase(nameof(HasDefaultValues.Object_default))]
 		[TestCase(nameof(HasDefaultValues.Object_null))]
@@ -124,6 +128,7 @@ namespace Castle.DynamicProxy.Tests
 		[TestCase(nameof(HasDefaultValues.UserDefinedClass_null))]
 		[TestCase(nameof(HasDefaultValues.UserDefinedEnum_default))]
 		[TestCase(nameof(HasDefaultValues.UserDefinedEnum_non_default))]
+		[TestCase(nameof(HasDefaultValues.UserDefinedEnum_non_default_from_attribute))]
 		[TestCase(nameof(HasDefaultValues.UserDefinedEnum_nullable_null))]
 		[TestCase(nameof(HasDefaultValues.UserDefinedStruct_nullable_null))]
 		[TestCase(nameof(HasDefaultValues.UShort_default))]
@@ -188,12 +193,16 @@ namespace Castle.DynamicProxy.Tests
 		[TestCase(nameof(HasDefaultValues.Decimal_nullable_non_default_from_attribute))]
 		[TestCase(nameof(HasDefaultValues.Double_nullable_default))]
 		[TestCase(nameof(HasDefaultValues.Double_nullable_non_default))]
+		[TestCase(nameof(HasDefaultValues.Double_nullable_non_default_from_attribute))]
+		[TestCase(nameof(HasDefaultValues.Double_nullable_non_default_from_attribute_wrong_type))]
 		[TestCase(nameof(HasDefaultValues.Float_nullable_default))]
 		[TestCase(nameof(HasDefaultValues.Float_nullable_non_default))]
 		[TestCase(nameof(HasDefaultValues.Int_nullable_default))]
 		[TestCase(nameof(HasDefaultValues.Int_nullable_non_default))]
 		[TestCase(nameof(HasDefaultValues.Long_nullable_default))]
 		[TestCase(nameof(HasDefaultValues.Long_nullable_non_default))]
+		[TestCase(nameof(HasDefaultValues.Long_nullable_non_default_from_attribute))]
+		[TestCase(nameof(HasDefaultValues.Long_nullable_non_default_from_attribute_wrong_type))]
 		[TestCase(nameof(HasDefaultValues.SByte_nullable_default))]
 		[TestCase(nameof(HasDefaultValues.SByte_nullable_non_default))]
 		[TestCase(nameof(HasDefaultValues.Short_nullable_default))]
@@ -209,10 +218,19 @@ namespace Castle.DynamicProxy.Tests
 			AssertParameter(typeof(HasDefaultValues), methodName);
 		}
 
+		[ExcludeOnFramework(Framework.Mono, "ParameterBuilder.SetConstant does not accept non-null default values for parameters of type `object`. See https://github.com/mono/mono/issues/9135.")]
+		[TestCase(nameof(HasDefaultValues.Object_non_default_from_attribute))]
+		public void Not_supported_on_Mono_Object_non_null(string methodName)
+		{
+			AssertParameter(typeof(HasDefaultValues), methodName);
+		}
+
 		[ExcludeOnFramework(Framework.NetCore | Framework.NetFramework, "ParameterBuilder.SetConstant does not accept non-null default values for nullable enum parameters. See https://github.com/dotnet/coreclr/issues/17893.")]
 		[ExcludeOnFramework(Framework.Mono, "ParameterBuilder.SetConstant does not accept non-null default values for nullable parameters. See https://github.com/mono/mono/issues/8597.")]
 		[TestCase(nameof(HasDefaultValues.UserDefinedEnum_nullable_default))]
+		[TestCase(nameof(HasDefaultValues.UserDefinedEnum_nullable_default_from_attribute))]
 		[TestCase(nameof(HasDefaultValues.UserDefinedEnum_nullable_non_default))]
+		[TestCase(nameof(HasDefaultValues.UserDefinedEnum_nullable_non_default_from_attribute))]
 		public void Not_supported_UserDefinedEnum_nullable_non_null(string methodName)
 		{
 			AssertParameter(typeof(HasDefaultValues), methodName);
@@ -294,9 +312,13 @@ namespace Castle.DynamicProxy.Tests
 
 			public virtual object Double_default(double arg = default) => default(double);
 			public virtual object Double_non_default(double arg = 1.0) => 1.0;
+			public virtual object Double_non_default_from_attribute([Optional, DefaultParameterValue(1.0)] double arg) => 1.0;
+			public virtual object Double_non_default_from_attribute_wrong_type([Optional, DefaultParameterValue(1.0f)] double arg) => 1.0;
 			public virtual object Double_nullable_null(double? arg = null) => null;
 			public virtual object Double_nullable_default(double? arg = default(double)) => default(double);
 			public virtual object Double_nullable_non_default(double? arg = 1.0) => 1.0;
+			public virtual object Double_nullable_non_default_from_attribute([Optional, DefaultParameterValue(1.0)] double? arg) => 1.0;
+			public virtual object Double_nullable_non_default_from_attribute_wrong_type([Optional, DefaultParameterValue(1.0f)] double? arg) => 1.0;
 
 			public virtual object Float_default(float arg = default) => default(float);
 			public virtual object Float_non_default(float arg = 1.0f) => 1.0f;
@@ -312,13 +334,19 @@ namespace Castle.DynamicProxy.Tests
 
 			public virtual object Long_default(long arg = default) => default(long);
 			public virtual object Long_non_default(long arg = 1L) => 1L;
+			public virtual object Long_non_default_from_attribute([Optional, DefaultParameterValue(1L)] long arg) => 1L;
+			public virtual object Long_non_default_from_attribute_wrong_type([Optional, DefaultParameterValue(1)] long arg) => 1L;
 			public virtual object Long_nullable_null(long? arg = null) => null;
+			//public virtual object Long_nullable_null_from_attribute([Optional, DefaultParameterValue(null)] long? arg) => null;
 			public virtual object Long_nullable_default(long? arg = default(long)) => default(long);
 			public virtual object Long_nullable_non_default(long? arg = 1L) => 1L;
+			public virtual object Long_nullable_non_default_from_attribute([Optional, DefaultParameterValue(1L)] long? arg) => 1L;
+			public virtual object Long_nullable_non_default_from_attribute_wrong_type([Optional, DefaultParameterValue(1)] long? arg) => 1L;
 
 			public virtual object Object_null(object arg = null) => null;
 			public virtual object Object_default(object arg = default) => default(object);
 			//public virtual object Object_non_default(object arg = new object()) => new object();
+			public virtual object Object_non_default_from_attribute([Optional, DefaultParameterValue("1")]object arg) => "1";
 
 			public virtual object SByte_default(sbyte arg = default) => default(sbyte);
 			public virtual object SByte_non_default(sbyte arg = (sbyte)1) => (sbyte)1;
@@ -354,13 +382,22 @@ namespace Castle.DynamicProxy.Tests
 
 			public virtual object UserDefinedEnum_default(UserDefinedEnum arg = default) => default(UserDefinedEnum);
 			public virtual object UserDefinedEnum_non_default(UserDefinedEnum arg = (UserDefinedEnum)1) => (UserDefinedEnum)1;
+			public virtual object UserDefinedEnum_non_default_from_attribute([Optional, DefaultParameterValue((UserDefinedEnum)1)] UserDefinedEnum arg) => (UserDefinedEnum)1;
+			//public virtual object UserDefinedEnum_non_default_from_attribute_wrong_type([Optional, DefaultParameterValue(1)] UserDefinedEnum arg) => (UserDefinedEnum)1;
 			public virtual object UserDefinedEnum_nullable_null(UserDefinedEnum? arg = null) => null;
+			//public virtual object UserDefinedEnum_nullable_null_from_attribute([Optional, DefaultParameterValue(null)] UserDefinedEnum? arg) => null;
 			public virtual object UserDefinedEnum_nullable_default(UserDefinedEnum? arg = default(UserDefinedEnum)) => (int)default(UserDefinedEnum);
+			public virtual object UserDefinedEnum_nullable_default_from_attribute([Optional, DefaultParameterValue(default(UserDefinedEnum))]UserDefinedEnum? arg) => (int)default(UserDefinedEnum);
+			//public virtual object UserDefinedEnum_nullable_default_from_attribute_wrong_type([Optional, DefaultParameterValue(0)]UserDefinedEnum? arg) => (int)default(UserDefinedEnum);
 			public virtual object UserDefinedEnum_nullable_non_default(UserDefinedEnum? arg = (UserDefinedEnum)1) => 1;
+			public virtual object UserDefinedEnum_nullable_non_default_from_attribute([Optional, DefaultParameterValue((UserDefinedEnum)1)] UserDefinedEnum? arg) => 1;
+			//public virtual object UserDefinedEnum_nullable_non_default_from_attribute_wrong_type([Optional, DefaultParameterValue(1)] UserDefinedEnum? arg) => 1;
 
 			public virtual object UserDefinedStruct_default(UserDefinedStruct arg = default) => null;
+			//public virtual object UserDefinedStruct_default_from_attribute([Optional, DefaultParameterValue(default(UserDefinedStruct))] UserDefinedStruct arg) => null;
 			//public virtual object UserDefinedStruct_non_default(UserDefinedStruct arg = new UserDefinedStruct(...)) => new UserDefinedStruct(...);
 			public virtual object UserDefinedStruct_nullable_null(UserDefinedStruct? arg = null) => null;
+			//public virtual object UserDefinedStruct_nullable_null_from_attribute([Optional, DefaultParameterValue(null)] UserDefinedStruct? arg) => null;
 			//public virtual object UserDefinedStruct_nullable_default(UserDefinedStruct? arg = default(UserDefinedStruct)) => default(UserDefinedStruct);
 			//public virtual object UserDefinedStruct_nullable_non_default(UserDefinedStruct? arg = new UserDefinedStruct(...)) => new UserDefinedStruct(...);
 
