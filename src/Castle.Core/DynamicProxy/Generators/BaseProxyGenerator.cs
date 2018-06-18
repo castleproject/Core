@@ -396,9 +396,9 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// This is to avoid generating duplicate types under heavy multithreaded load.
-			using (var locker = Scope.Lock.ForReadingUpgradeable())
+			using (var locker = Scope.Lock.ForWriting())
 			{
-				// Only one thread at a time may enter an upgradable read lock.
+				// Only one thread at a time may enter a write lock.
 				// See if an earlier lock holder populated the cache.
 				cacheType = GetFromCache(cacheKey);
 				if (cacheType != null)
@@ -414,11 +414,8 @@ namespace Castle.DynamicProxy.Generators
 				var name = Scope.NamingScope.GetUniqueName("Castle.Proxies." + targetType.Name + "Proxy");
 				var proxyType = factory.Invoke(name, Scope.NamingScope.SafeSubScope());
 
-				// Upgrade the lock to a write lock. 
-				using (locker.Upgrade())
-				{
-					AddToCache(cacheKey, proxyType);
-				}
+				AddToCache(cacheKey, proxyType);
+
 				return proxyType;
 			}
 		}
