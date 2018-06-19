@@ -175,7 +175,7 @@ namespace Castle.Core.Logging.Tests
 			logger.Level = LoggerLevel.Debug;
 
 			// setting the level to an undefined value so
-			// we dont have to wonder if it changed from Off
+			// we don't have to wonder if it changed from Off
 			// to Off (for instance).
 			level = (LoggerLevel) (-1);
 			name = null;

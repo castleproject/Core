@@ -83,7 +83,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		}
 
 		/// <summary>
-		///   Creates a child logger with the specied <paramref name="name" />.
+		///   Creates a child logger with the specified <paramref name="name" />.
 		/// </summary>
 		/// <param name="name"> The name. </param>
 		/// <returns> </returns>

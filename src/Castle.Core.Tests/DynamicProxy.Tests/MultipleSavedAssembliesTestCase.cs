@@ -141,7 +141,7 @@ namespace Castle.DynamicProxy.Tests
 			//
 			// Step 3 - Load the last proxy assembly and try to create the first generic proxy (created in step 1)
 			// note : Creating proxy from step 2 works.
-			// exception : Missing method exception, it returns the wrong proxy and the constructor used doesnt match the arguments passed.
+			// exception : Missing method exception, it returns the wrong proxy and the constructor used doesn't match the arguments passed.
 			//
 			proxyGeneratorModuleScope = new ModuleScope(true);
 			proxyBuilder = new DefaultProxyBuilder(proxyGeneratorModuleScope);

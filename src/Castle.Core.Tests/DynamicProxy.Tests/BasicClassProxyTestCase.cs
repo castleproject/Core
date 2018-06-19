@@ -145,7 +145,7 @@ namespace Castle.DynamicProxy.Tests
 			}
 			catch (AmbiguousMatchException)
 			{
-				// this exception is acceptible if the current runtime doesn't
+				// this exception is acceptable if the current runtime doesn't
 				// have .NET 2.0 SP1 installed
 				// we'd try to grab a method info that in in .NET 2.0 SP1, and if it's
 				// not present then we'd ignore that exception
