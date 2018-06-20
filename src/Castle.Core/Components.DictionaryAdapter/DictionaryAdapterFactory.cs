@@ -38,7 +38,7 @@ namespace Castle.Components.DictionaryAdapter
 	{
 		private readonly Dictionary<Type, DictionaryAdapterMeta> interfaceToMeta = new Dictionary<Type, DictionaryAdapterMeta>();
 
-		private readonly Lock interfaceToMetaLock = Lock.Create();
+		private readonly ReaderWriterLockSlim interfaceToMetaLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
 		#region IDictionaryAdapterFactory
 
@@ -132,21 +132,32 @@ namespace Castle.Components.DictionaryAdapter
 
 			DictionaryAdapterMeta meta;
 
-			using (interfaceToMetaLock.ForReading())
+			interfaceToMetaLock.EnterReadLock();
+			try
 			{
 				if (interfaceToMeta.TryGetValue(type, out meta))
+				{
 					return meta;
+				}
+			}
+			finally
+			{
+				interfaceToMetaLock.ExitReadLock();
 			}
 
-			using (var heldLock = interfaceToMetaLock.ForReadingUpgradeable())
+			interfaceToMetaLock.EnterWriteLock();
+			try
 			{
 				if (interfaceToMeta.TryGetValue(type, out meta))
+				{
 					return meta;
-
-				using (heldLock.Upgrade())
+				}
+				else
 				{
 					if (descriptor == null && other != null)
+					{
 						descriptor = other.CreateDescriptor();
+					}
 
 #if FEATURE_LEGACY_REFLECTION_API
 					var appDomain = Thread.GetDomain();
@@ -158,6 +169,10 @@ namespace Castle.Components.DictionaryAdapter
 					interfaceToMeta.Add(type, meta);
 					return meta;
 				}
+			}
+			finally
+			{
+				interfaceToMetaLock.ExitWriteLock();
 			}
 		}
 
