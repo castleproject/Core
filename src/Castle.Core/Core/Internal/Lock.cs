@@ -14,6 +14,8 @@
 
 namespace Castle.Core.Internal
 {
+	using System.Threading;
+
 	public abstract class Lock
 	{
 		public abstract IUpgradeableLockHolder ForReadingUpgradeable();
@@ -31,6 +33,11 @@ namespace Castle.Core.Internal
 		public static Lock Create()
 		{
 			return new SlimReadWriteLock();
+		}
+
+		internal static Lock CreateFor(ReaderWriterLockSlim underlyingLock)
+		{
+			return new SlimReadWriteLock(underlyingLock);
 		}
 	}
 }

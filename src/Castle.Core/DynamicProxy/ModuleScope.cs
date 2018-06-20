@@ -16,10 +16,12 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.IO;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Resources;
+	using System.Threading;
 
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
@@ -55,7 +57,8 @@ namespace Castle.DynamicProxy
 		private readonly Dictionary<CacheKey, Type> typeCache = new Dictionary<CacheKey, Type>();
 
 		// Users of ModuleScope should use this lock when accessing the cache
-		private readonly Lock cacheLock = Lock.Create();
+		private readonly Lock cacheLock;
+		private readonly ReaderWriterLockSlim typeCacheLock;
 
 		// Used to lock the module builder creation
 		private readonly object moduleLocker = new object();
@@ -142,6 +145,9 @@ namespace Castle.DynamicProxy
 			this.strongModulePath = strongModulePath;
 			this.weakAssemblyName = weakAssemblyName;
 			this.weakModulePath = weakModulePath;
+
+			this.typeCacheLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+			this.cacheLock = Lock.CreateFor(this.typeCacheLock);
 		}
 
 		public INamingScope NamingScope
@@ -514,7 +520,8 @@ namespace Castle.DynamicProxy
 		{
 			Dictionary<CacheKey, string> mappings;
 
-			using (Lock.ForReading())
+			this.typeCacheLock.EnterReadLock();
+			try
 			{
 				mappings = new Dictionary<CacheKey, string>();
 				foreach (var cacheEntry in typeCache)
@@ -526,6 +533,10 @@ namespace Castle.DynamicProxy
 						mappings.Add(cacheEntry.Key, cacheEntry.Value.FullName);
 					}
 				}
+			}
+			finally
+			{
+				this.typeCacheLock.ExitReadLock();
 			}
 
 			CacheMappingsAttribute.ApplyTo(builder, mappings);

@@ -18,7 +18,17 @@ namespace Castle.Core.Internal
 
 	internal class SlimReadWriteLock : Lock
 	{
-		private readonly ReaderWriterLockSlim locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+		private readonly ReaderWriterLockSlim locker;
+
+		public SlimReadWriteLock()
+		{
+			this.locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+		}
+
+		internal SlimReadWriteLock(ReaderWriterLockSlim underlyingLock)
+		{
+			this.locker = underlyingLock;
+		}
 
 		public override IUpgradeableLockHolder ForReadingUpgradeable()
 		{
