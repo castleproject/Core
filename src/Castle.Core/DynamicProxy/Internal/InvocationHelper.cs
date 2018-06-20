@@ -18,8 +18,8 @@ namespace Castle.DynamicProxy.Internal
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
+	using System.Threading;
 
-	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
 
 	public static class InvocationHelper
@@ -27,7 +27,8 @@ namespace Castle.DynamicProxy.Internal
 		private static readonly Dictionary<CacheKey, MethodInfo> cache =
 			new Dictionary<CacheKey, MethodInfo>();
 
-		private static readonly Lock @lock = Lock.Create();
+		private static readonly ReaderWriterLockSlim cacheLock =
+			new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 
 		public static MethodInfo GetMethodOnObject(object target, MethodInfo proxiedMethod)
 		{
@@ -48,39 +49,42 @@ namespace Castle.DynamicProxy.Internal
 
 			Debug.Assert(proxiedMethod.DeclaringType.IsAssignableFrom(type),
 						 "proxiedMethod.DeclaringType.IsAssignableFrom(type)");
-			using (var locker = @lock.ForReading())
+
+			var cacheKey = new CacheKey(proxiedMethod, type);
+
+			MethodInfo methodOnTarget;
+
+			cacheLock.EnterReadLock();
+			try
 			{
-				var methodOnTarget = GetFromCache(proxiedMethod, type);
-				if (methodOnTarget != null)
+				if (cache.TryGetValue(cacheKey, out methodOnTarget))
 				{
 					return methodOnTarget;
 				}
 			}
-
-			using (var locker = @lock.ForReadingUpgradeable())
+			finally
 			{
-				var methodOnTarget = GetFromCache(proxiedMethod, type);
-				if (methodOnTarget != null)
+				cacheLock.ExitReadLock();
+			}
+
+			cacheLock.EnterWriteLock();
+			try
+			{
+				if (cache.TryGetValue(cacheKey, out methodOnTarget))
 				{
 					return methodOnTarget;
 				}
-
-				// Upgrade the lock to a write lock. 
-				using (locker.Upgrade())
+				else
 				{
 					methodOnTarget = ObtainMethod(proxiedMethod, type);
-					PutToCache(proxiedMethod, type, methodOnTarget);
+					cache.Add(cacheKey, methodOnTarget);
+					return methodOnTarget;
 				}
-				return methodOnTarget;
 			}
-		}
-
-		private static MethodInfo GetFromCache(MethodInfo methodInfo, Type type)
-		{
-			var key = new CacheKey(methodInfo, type);
-			MethodInfo method;
-			cache.TryGetValue(key, out method);
-			return method;
+			finally
+			{
+				cacheLock.ExitWriteLock();
+			}
 		}
 
 		private static MethodInfo ObtainMethod(MethodInfo proxiedMethod, Type type)
@@ -125,12 +129,6 @@ namespace Castle.DynamicProxy.Internal
 				return methodOnTarget;
 			}
 			return methodOnTarget.MakeGenericMethod(genericArguments);
-		}
-
-		private static void PutToCache(MethodInfo methodInfo, Type type, MethodInfo value)
-		{
-			var key = new CacheKey(methodInfo, type);
-			cache.Add(key, value);
 		}
 
 		private struct CacheKey : IEquatable<CacheKey>
