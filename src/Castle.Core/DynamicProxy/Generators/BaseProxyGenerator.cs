@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Reflection;
@@ -111,6 +112,8 @@ namespace Castle.DynamicProxy.Generators
 			mapping.Add(@interface, implementer);
 		}
 
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this method.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		protected void AddToCache(CacheKey key, Type type)
 		{
 			scope.RegisterInCache(key, type);
@@ -335,6 +338,8 @@ namespace Castle.DynamicProxy.Generators
 			return emitter.CreateTypeConstructor();
 		}
 
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this method.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		protected Type GetFromCache(CacheKey key)
 		{
 			return scope.GetFromCache(key);
@@ -382,6 +387,8 @@ namespace Castle.DynamicProxy.Generators
 			builtType.SetStaticField("proxyGenerationOptions", BindingFlags.NonPublic, ProxyGenerationOptions);
 		}
 
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Redeclare this method as `private protected`.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		protected Type ObtainProxyType(CacheKey cacheKey, Func<string, INamingScope, Type> factory)
 		{
 			bool notFoundInTypeCache = false;

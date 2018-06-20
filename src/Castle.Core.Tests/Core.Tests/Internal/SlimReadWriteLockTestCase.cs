@@ -14,11 +14,13 @@
 
 namespace Castle.Core.Internal.Tests
 {
+	using System;
 	using System.Threading;
 
 	using NUnit.Framework;
 
 	[TestFixture]
+	[Obsolete]
 	public class SlimReadWriteLockTestCase
 	{
 		private SlimReadWriteLock @lock;

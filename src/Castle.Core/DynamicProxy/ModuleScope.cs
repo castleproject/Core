@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.IO;
 	using System.Reflection;
@@ -57,7 +58,9 @@ namespace Castle.DynamicProxy
 		private readonly Dictionary<CacheKey, Type> typeCache = new Dictionary<CacheKey, Type>();
 
 		// Users of ModuleScope should use this lock when accessing the cache
+		[Obsolete] // TODO: Remove this field together with the `Lock` property.
 		private readonly Lock cacheLock;
+
 		private readonly ReaderWriterLockSlim typeCacheLock;
 
 		// Used to lock the module builder creation
@@ -158,6 +161,8 @@ namespace Castle.DynamicProxy
 		/// <summary>
 		///   Users of this <see cref = "ModuleScope" /> should use this lock when accessing the cache.
 		/// </summary>
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this property.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		public Lock Lock
 		{
 			get { return cacheLock; }
@@ -168,6 +173,8 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		/// <param name = "key">The key to be looked up in the cache.</param>
 		/// <returns>The type from this scope's type cache matching the key, or null if the key cannot be found</returns>
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this method.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		public Type GetFromCache(CacheKey key)
 		{
 			Type type;
@@ -180,6 +187,8 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		/// <param name = "key">The key to be associated with the type.</param>
 		/// <param name = "type">The type to be stored in the cache.</param>
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this method.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		public void RegisterInCache(CacheKey key, Type type)
 		{
 			typeCache[key] = type;
@@ -648,7 +657,7 @@ namespace Castle.DynamicProxy
 
 				if (loadedType != null)
 				{
-					RegisterInCache(mapping.Key, loadedType);
+					typeCache[mapping.Key] = loadedType;
 				}
 			}
 		}
