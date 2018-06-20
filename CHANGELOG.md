@@ -8,6 +8,7 @@ Enhancements:
 Bugfixes:
 - Prevent interceptors from being able to modify `in` parameters (@stakx, #370)
 - Make default value replication of optional parameters more tolerant of default values that are represented in metadata with a mismatched type (@stakx, #371)
+- Fix a concurrency issue (writing without taking a write lock first) in `BaseProxyGenerator.ObtainProxyType` (@stakx, #383)
 
 Deprecations:
 - `Castle.DynamicProxy.Generators.Emitters.ArgumentsUtil.IsAnyByRef` (@stakx, #370)
