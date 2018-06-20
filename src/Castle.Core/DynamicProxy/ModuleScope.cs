@@ -192,6 +192,36 @@ namespace Castle.DynamicProxy
 		/// <param name="valueFactory">A function producing the type to be added to the cache.</param>
 		/// <returns>The type from this scope's type cache matching the key, or null if the key cannot be found</returns>
 		/// <remarks>
+		///   This method does not synchronize access to this scope's type cache, i.e. no read/write locks are taken.
+		///   Only use this method when you know for sure that a method further up in the call stack already holds
+		///   a write lock. The function must not access this scope's type cache.
+		/// </remarks>
+		internal Type GetOrAddToCacheWithoutTakingLock(CacheKey key, Func<CacheKey, Type> valueFactory)
+		{
+			Type value;
+
+			Debug.Assert(key != null);
+			Debug.Assert(valueFactory != null);
+
+			if (typeCache.TryGetValue(key, out value))
+			{
+				return value;
+			}
+			else
+			{
+				value = valueFactory.Invoke(key);
+				typeCache.Add(key, value);
+				return value;
+			}
+		}
+
+		/// <summary>
+		///   Returns a type from this scope's type cache, or adds it to the cache if the key cannot be found.
+		/// </summary>
+		/// <param name="key">The key to be looked up in the cache.</param>
+		/// <param name="valueFactory">A function producing the type to be added to the cache.</param>
+		/// <returns>The type from this scope's type cache matching the key, or null if the key cannot be found</returns>
+		/// <remarks>
 		///   This method synchronizes accesses to this scope's type cache using read/write locks.
 		///   If the specified key cannot be found, the factory function is invoked while a write lock is held.
 		///   The function must not access this scope's type cache.
@@ -219,16 +249,7 @@ namespace Castle.DynamicProxy
 			typeCacheLock.EnterWriteLock();
 			try
 			{
-				if (typeCache.TryGetValue(key, out value))
-				{
-					return value;
-				}
-				else
-				{
-					value = valueFactory.Invoke(key);
-					typeCache.Add(key, value);
-					return value;
-				}
+				return GetOrAddToCacheWithoutTakingLock(key, valueFactory);
 			}
 			finally
 			{
