@@ -38,6 +38,7 @@ namespace Castle.Core.Internal.Tests
 				{
 					Assert.IsTrue(@lock.IsReadLockHeld);
 				}
+				Assert.IsTrue(@lock.IsReadLockHeld);
 			}
 		}
 
@@ -50,6 +51,7 @@ namespace Castle.Core.Internal.Tests
 				{
 					Assert.IsTrue(@lock.IsWriteLockHeld);
 				}
+				Assert.IsTrue(@lock.IsWriteLockHeld);
 			}
 		}
 
@@ -62,6 +64,7 @@ namespace Castle.Core.Internal.Tests
 				{
 					Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
 				}
+				Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
 			}
 		}
 
@@ -145,6 +148,7 @@ namespace Castle.Core.Internal.Tests
 					Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
 					Assert.IsTrue(holder.LockAcquired);
 				}
+				Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
 			}
 		}
 
@@ -159,6 +163,7 @@ namespace Castle.Core.Internal.Tests
 					Assert.IsTrue(holder.LockAcquired);
 					upg.Upgrade();
 				}
+				Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
 			}
 		}
 
@@ -173,6 +178,7 @@ namespace Castle.Core.Internal.Tests
 					Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
 					Assert.IsTrue(holder.LockAcquired);
 				}
+				Assert.IsTrue(@lock.IsUpgradeableReadLockHeld);
 			}
 		}
 	}
