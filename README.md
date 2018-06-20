@@ -100,4 +100,4 @@ Symbol                              | NET35              | NET40              | 
 * `FEATURE_TARGETEXCEPTION` - enabled catching a `TargetException`. `System.Reflection.TargetException` is implemented by .NET Core but not exposed by corefx.
 * `FEATURE_TEST_COM` - enables COM Interop tests.
 * `FEATURE_TEST_PEVERIFY` - enables verification of dynamic assemblies using PEVerify during tests. (Only defined on Windows builds since Windows is currently the only platform where PEVerify is available.)
-* `FEATURE_TEST_SERILOGINTEGRATION` - enables Serilog intergration tests.
+* `FEATURE_TEST_SERILOGINTEGRATION` - enables Serilog integration tests.
