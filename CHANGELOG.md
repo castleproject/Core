@@ -1,6 +1,6 @@
 # Castle Core Changelog
 
-## Unreleased
+## 4.3.1 (2018-06-21)
 
 Enhancements:
  - Use shared read locking to reduce lock contention in InvocationHelper and ProxyUtil (@TimLovellSmith, #377)
