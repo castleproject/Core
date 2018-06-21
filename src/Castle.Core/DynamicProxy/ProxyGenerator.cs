@@ -338,7 +338,10 @@ namespace Castle.DynamicProxy
 			                                                       options);
 
 			var arguments = GetConstructorArguments(target, interceptors, options);
-			return Activator.CreateInstance(generatedType, arguments.ToArray());
+			using (proxyBuilder.ModuleScope.Lock.ForWriting())
+			{
+				return Activator.CreateInstance(generatedType, arguments.ToArray());
+			}
 		}
 
 		protected List<object> GetConstructorArguments(object target, IInterceptor[] interceptors,
@@ -624,7 +627,10 @@ namespace Castle.DynamicProxy
 				Debug.Assert(constructors.Length == 1, "constructors.Length == 1");
 				return constructors[0].Invoke(arguments.ToArray());
 			}
-			return Activator.CreateInstance(generatedType, arguments.ToArray());
+			using (proxyBuilder.ModuleScope.Lock.ForWriting())
+			{
+				return Activator.CreateInstance(generatedType, arguments.ToArray());
+			}
 		}
 
 		/// <summary>
@@ -866,7 +872,10 @@ namespace Castle.DynamicProxy
 
 			var generatedType = CreateInterfaceProxyTypeWithoutTarget(interfaceToProxy, additionalInterfacesToProxy, options);
 			var arguments = GetConstructorArguments(null, interceptors, options);
-			return Activator.CreateInstance(generatedType, arguments.ToArray());
+			using (proxyBuilder.ModuleScope.Lock.ForWriting())
+			{
+				return Activator.CreateInstance(generatedType, arguments.ToArray());
+			}
 		}
 
 		/// <summary>
@@ -1453,7 +1462,10 @@ namespace Castle.DynamicProxy
 		{
 			try
 			{
-				return Activator.CreateInstance(proxyType, proxyArguments.ToArray());
+				using (proxyBuilder.ModuleScope.Lock.ForWriting())
+				{
+					return Activator.CreateInstance(proxyType, proxyArguments.ToArray());
+				}
 			}
 			catch (MissingMethodException)
 			{
