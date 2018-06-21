@@ -36,7 +36,6 @@ namespace Castle.DynamicProxy
 		public static readonly ProxyGenerationOptions Default = new ProxyGenerationOptions();
 
 		private List<object> mixins;
-		internal readonly IList<Attribute> attributesToAddToGeneratedTypes = new List<Attribute>();
 		private readonly IList<CustomAttributeInfo> additionalAttributes = new List<CustomAttributeInfo>();
 
 #if FEATURE_SERIALIZATION
