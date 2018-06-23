@@ -25,10 +25,11 @@ namespace Castle.DynamicProxy
 	using System.Runtime.Remoting;
 #endif
 
+	using Castle.Core.Internal;
+
 	public static class ProxyUtil
 	{
-		private static readonly IDictionary<Assembly, bool> internalsVisibleToDynamicProxy = new Dictionary<Assembly, bool>();
-		private static readonly ReaderWriterLockSlim internalsVisibleToDynamicProxyLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+		private static readonly SynchronizedDictionary<Assembly, bool> internalsVisibleToDynamicProxy = new SynchronizedDictionary<Assembly, bool>();
 
 		public static object GetUnproxiedInstance(object instance)
 		{
@@ -130,40 +131,11 @@ namespace Castle.DynamicProxy
 		/// <param name="asm">The assembly to inspect.</param>
 		internal static bool AreInternalsVisibleToDynamicProxy(Assembly asm)
 		{
-			bool result;
-
-			internalsVisibleToDynamicProxyLock.EnterReadLock();
-			try
+			return internalsVisibleToDynamicProxy.GetOrAdd(asm, a =>
 			{
-				if (internalsVisibleToDynamicProxy.TryGetValue(asm, out result))
-				{
-					return result;
-				}
-			}
-			finally
-			{
-				internalsVisibleToDynamicProxyLock.ExitReadLock();
-			}
-
-			internalsVisibleToDynamicProxyLock.EnterWriteLock();
-			try
-			{
-				if (internalsVisibleToDynamicProxy.TryGetValue(asm, out result))
-				{
-					return result;
-				}
-				else
-				{
-					var internalsVisibleTo = asm.GetCustomAttributes<InternalsVisibleToAttribute>();
-					result = internalsVisibleTo.Any(attr => attr.AssemblyName.Contains(ModuleScope.DEFAULT_ASSEMBLY_NAME));
-					internalsVisibleToDynamicProxy.Add(asm, result);
-					return result;
-				}
-			}
-			finally
-			{
-				internalsVisibleToDynamicProxyLock.ExitWriteLock();
-			}
+				var internalsVisibleTo = asm.GetCustomAttributes<InternalsVisibleToAttribute>();
+				return internalsVisibleTo.Any(attr => attr.AssemblyName.Contains(ModuleScope.DEFAULT_ASSEMBLY_NAME));
+			});
 		}
 
 		internal static bool IsAccessibleType(Type target)

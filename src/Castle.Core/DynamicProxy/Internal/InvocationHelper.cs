@@ -20,15 +20,13 @@ namespace Castle.DynamicProxy.Internal
 	using System.Reflection;
 	using System.Threading;
 
+	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
 
 	public static class InvocationHelper
 	{
-		private static readonly Dictionary<CacheKey, MethodInfo> cache =
-			new Dictionary<CacheKey, MethodInfo>();
-
-		private static readonly ReaderWriterLockSlim cacheLock =
-			new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+		private static readonly SynchronizedDictionary<CacheKey, MethodInfo> cache =
+			new SynchronizedDictionary<CacheKey, MethodInfo>();
 
 		public static MethodInfo GetMethodOnObject(object target, MethodInfo proxiedMethod)
 		{
@@ -52,39 +50,7 @@ namespace Castle.DynamicProxy.Internal
 
 			var cacheKey = new CacheKey(proxiedMethod, type);
 
-			MethodInfo methodOnTarget;
-
-			cacheLock.EnterReadLock();
-			try
-			{
-				if (cache.TryGetValue(cacheKey, out methodOnTarget))
-				{
-					return methodOnTarget;
-				}
-			}
-			finally
-			{
-				cacheLock.ExitReadLock();
-			}
-
-			cacheLock.EnterWriteLock();
-			try
-			{
-				if (cache.TryGetValue(cacheKey, out methodOnTarget))
-				{
-					return methodOnTarget;
-				}
-				else
-				{
-					methodOnTarget = ObtainMethod(proxiedMethod, type);
-					cache.Add(cacheKey, methodOnTarget);
-					return methodOnTarget;
-				}
-			}
-			finally
-			{
-				cacheLock.ExitWriteLock();
-			}
+			return cache.GetOrAdd(cacheKey, ck => ObtainMethod(proxiedMethod, type));
 		}
 
 		private static MethodInfo ObtainMethod(MethodInfo proxiedMethod, Type type)

@@ -179,7 +179,7 @@ namespace Castle.DynamicProxy.Contributors
 					ToArray(),
 				null);
 
-			return scope.GetOrAddToCacheWithoutTakingLock(key, _ =>
+			return scope.TypeCache.GetOrAddWithoutTakingLock(key, _ =>
 				new DelegateTypeGenerator(method, targetType)
 				.Generate(@class, options, namingScope)
 				.BuildType());

@@ -55,13 +55,11 @@ namespace Castle.DynamicProxy
 		private readonly string weakModulePath;
 
 		// Keeps track of generated types
-		private readonly Dictionary<CacheKey, Type> typeCache = new Dictionary<CacheKey, Type>();
+		private readonly SynchronizedDictionary<CacheKey, Type> typeCache = new SynchronizedDictionary<CacheKey, Type>();
 
 		// Users of ModuleScope should use this lock when accessing the cache
 		[Obsolete] // TODO: Remove this field together with the `Lock` property.
 		private readonly Lock cacheLock;
-
-		private readonly ReaderWriterLockSlim typeCacheLock;
 
 		// Used to lock the module builder creation
 		private readonly object moduleLocker = new object();
@@ -149,8 +147,7 @@ namespace Castle.DynamicProxy
 			this.weakAssemblyName = weakAssemblyName;
 			this.weakModulePath = weakModulePath;
 
-			this.typeCacheLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-			this.cacheLock = Lock.CreateFor(this.typeCacheLock);
+			this.cacheLock = Lock.CreateFor(typeCache.Lock);
 		}
 
 		public INamingScope NamingScope
@@ -168,6 +165,8 @@ namespace Castle.DynamicProxy
 			get { return cacheLock; }
 		}
 
+		internal SynchronizedDictionary<CacheKey, Type> TypeCache => typeCache;
+
 		/// <summary>
 		///   Returns a type from this scope's type cache, or null if the key cannot be found.
 		/// </summary>
@@ -178,7 +177,7 @@ namespace Castle.DynamicProxy
 		public Type GetFromCache(CacheKey key)
 		{
 			Type type;
-			typeCache.TryGetValue(key, out type);
+			typeCache.TryGetValueWithoutTakingLock(key, out type);
 			return type;
 		}
 
@@ -191,79 +190,7 @@ namespace Castle.DynamicProxy
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public void RegisterInCache(CacheKey key, Type type)
 		{
-			typeCache[key] = type;
-		}
-
-		/// <summary>
-		///   Returns a type from this scope's type cache, or adds it to the cache if the key cannot be found.
-		/// </summary>
-		/// <param name="key">The key to be looked up in the cache.</param>
-		/// <param name="valueFactory">A function producing the type to be added to the cache.</param>
-		/// <returns>The type from this scope's type cache matching the key, or null if the key cannot be found</returns>
-		/// <remarks>
-		///   This method does not synchronize access to this scope's type cache, i.e. no read/write locks are taken.
-		///   Only use this method when you know for sure that a method further up in the call stack already holds
-		///   a write lock. The function must not access this scope's type cache.
-		/// </remarks>
-		internal Type GetOrAddToCacheWithoutTakingLock(CacheKey key, Func<CacheKey, Type> valueFactory)
-		{
-			Type value;
-
-			Debug.Assert(key != null);
-			Debug.Assert(valueFactory != null);
-
-			if (typeCache.TryGetValue(key, out value))
-			{
-				return value;
-			}
-			else
-			{
-				value = valueFactory.Invoke(key);
-				typeCache.Add(key, value);
-				return value;
-			}
-		}
-
-		/// <summary>
-		///   Returns a type from this scope's type cache, or adds it to the cache if the key cannot be found.
-		/// </summary>
-		/// <param name="key">The key to be looked up in the cache.</param>
-		/// <param name="valueFactory">A function producing the type to be added to the cache.</param>
-		/// <returns>The type from this scope's type cache matching the key, or null if the key cannot be found</returns>
-		/// <remarks>
-		///   This method synchronizes accesses to this scope's type cache using read/write locks.
-		///   If the specified key cannot be found, the factory function is invoked while a write lock is held.
-		///   The function must not access this scope's type cache.
-		/// </remarks>
-		internal Type GetOrAddToCache(CacheKey key, Func<CacheKey, Type> valueFactory)
-		{
-			Type value;
-
-			Debug.Assert(key != null);
-			Debug.Assert(valueFactory != null);
-
-			typeCacheLock.EnterReadLock();
-			try
-			{
-				if (typeCache.TryGetValue(key, out value))
-				{
-					return value;
-				}
-			}
-			finally
-			{
-				typeCacheLock.ExitReadLock();
-			}
-
-			typeCacheLock.EnterWriteLock();
-			try
-			{
-				return GetOrAddToCacheWithoutTakingLock(key, valueFactory);
-			}
-			finally
-			{
-				typeCacheLock.ExitWriteLock();
-			}
+			typeCache.AddOrUpdateWithoutTakingLock(key, type);
 		}
 
 		/// <summary>
@@ -599,26 +526,17 @@ namespace Castle.DynamicProxy
 #if FEATURE_SERIALIZATION
 		private void AddCacheMappings(AssemblyBuilder builder)
 		{
-			Dictionary<CacheKey, string> mappings;
+			var mappings = new Dictionary<CacheKey, string>();
 
-			this.typeCacheLock.EnterReadLock();
-			try
+			typeCache.ForEach((key, value) =>
 			{
-				mappings = new Dictionary<CacheKey, string>();
-				foreach (var cacheEntry in typeCache)
+				// NOTE: using == returns invalid results.
+				// we need to use Equals here for it to work properly
+				if (builder.Equals(value.Assembly))
 				{
-					// NOTE: using == returns invalid results.
-					// we need to use Equals here for it to work properly
-					if(builder.Equals(cacheEntry.Value.Assembly))
-					{
-						mappings.Add(cacheEntry.Key, cacheEntry.Value.FullName);
-					}
+					mappings.Add(key, value.FullName);
 				}
-			}
-			finally
-			{
-				this.typeCacheLock.ExitReadLock();
-			}
+			});
 
 			CacheMappingsAttribute.ApplyTo(builder, mappings);
 		}
@@ -657,7 +575,7 @@ namespace Castle.DynamicProxy
 
 				if (loadedType != null)
 				{
-					typeCache[mapping.Key] = loadedType;
+					typeCache.AddOrUpdateWithoutTakingLock(mapping.Key, loadedType);
 				}
 			}
 		}

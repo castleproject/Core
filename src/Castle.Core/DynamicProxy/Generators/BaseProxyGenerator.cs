@@ -393,7 +393,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			bool notFoundInTypeCache = false;
 
-			var proxyType = Scope.GetOrAddToCache(cacheKey, _ =>
+			var proxyType = Scope.TypeCache.GetOrAdd(cacheKey, _ =>
 			{
 				notFoundInTypeCache = true;
 				Logger.DebugFormat("No cached proxy type was found for target type {0}.", targetType.FullName);

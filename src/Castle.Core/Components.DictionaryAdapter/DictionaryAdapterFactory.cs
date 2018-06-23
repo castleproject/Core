@@ -36,9 +36,8 @@ namespace Castle.Components.DictionaryAdapter
 	/// </summary>
 	public class DictionaryAdapterFactory : IDictionaryAdapterFactory
 	{
-		private readonly Dictionary<Type, DictionaryAdapterMeta> interfaceToMeta = new Dictionary<Type, DictionaryAdapterMeta>();
-
-		private readonly ReaderWriterLockSlim interfaceToMetaLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+		private readonly SynchronizedDictionary<Type, DictionaryAdapterMeta> interfaceToMeta =
+			new SynchronizedDictionary<Type, DictionaryAdapterMeta>();
 
 		#region IDictionaryAdapterFactory
 
@@ -130,50 +129,21 @@ namespace Castle.Components.DictionaryAdapter
 			if (type.GetTypeInfo().IsInterface == false)
 				throw new ArgumentException("Only interfaces can be adapted to a dictionary", "type");
 
-			DictionaryAdapterMeta meta;
-
-			interfaceToMetaLock.EnterReadLock();
-			try
+			return interfaceToMeta.GetOrAdd(type, t =>
 			{
-				if (interfaceToMeta.TryGetValue(type, out meta))
+				if (descriptor == null && other != null)
 				{
-					return meta;
+					descriptor = other.CreateDescriptor();
 				}
-			}
-			finally
-			{
-				interfaceToMetaLock.ExitReadLock();
-			}
-
-			interfaceToMetaLock.EnterWriteLock();
-			try
-			{
-				if (interfaceToMeta.TryGetValue(type, out meta))
-				{
-					return meta;
-				}
-				else
-				{
-					if (descriptor == null && other != null)
-					{
-						descriptor = other.CreateDescriptor();
-					}
 
 #if FEATURE_LEGACY_REFLECTION_API
-					var appDomain = Thread.GetDomain();
-					var typeBuilder = CreateTypeBuilder(type, appDomain);
+				var appDomain = Thread.GetDomain();
+				var typeBuilder = CreateTypeBuilder(type, appDomain);
 #else
-					var typeBuilder = CreateTypeBuilder(type);
+				var typeBuilder = CreateTypeBuilder(type);
 #endif
-					meta = CreateAdapterMeta(type, typeBuilder, descriptor);
-					interfaceToMeta.Add(type, meta);
-					return meta;
-				}
-			}
-			finally
-			{
-				interfaceToMetaLock.ExitWriteLock();
-			}
+				return CreateAdapterMeta(type, typeBuilder, descriptor);
+			});
 		}
 
 		private object InternalGetAdapter(Type type, IDictionary dictionary, PropertyDescriptor descriptor)
