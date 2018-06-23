@@ -59,14 +59,31 @@ namespace Castle.Core.Internal
 				itemsLock.ExitReadLock();
 			}
 
-			itemsLock.EnterWriteLock();
+			itemsLock.EnterUpgradeableReadLock();
 			try
 			{
-				return GetOrAddWithoutTakingLock(key, valueFactory);
+				if (items.TryGetValue(key, out value))
+				{
+					return value;
+				}
+				else
+				{
+					itemsLock.EnterWriteLock();
+					try
+					{
+						value = valueFactory.Invoke(key);
+						items.Add(key, value);
+						return value;
+					}
+					finally
+					{
+						itemsLock.ExitWriteLock();
+					}
+				}
 			}
 			finally
 			{
-				itemsLock.ExitWriteLock();
+				itemsLock.ExitUpgradeableReadLock();
 			}
 		}
 

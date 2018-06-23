@@ -65,7 +65,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				locker.ExitReadLock();
 			}
 
-			locker.EnterWriteLock();
+			locker.EnterUpgradeableReadLock();
 			try
 			{
 				if (items.TryGetValue(key, out item))
@@ -74,13 +74,21 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				}
 				else
 				{
-					items[key] = item = new ManualResetEvent(false);
-					return false;
+					locker.EnterWriteLock();
+					try
+					{
+						items[key] = item = new ManualResetEvent(false);
+						return false;
+					}
+					finally
+					{
+						locker.ExitWriteLock();
+					}
 				}
 			}
 			finally
 			{
-				locker.ExitWriteLock();
+				locker.ExitUpgradeableReadLock();
 			}
 		}
 
