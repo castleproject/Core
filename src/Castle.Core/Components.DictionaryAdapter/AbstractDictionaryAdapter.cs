@@ -69,7 +69,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets a value indicating whether the <see cref="T:System.Collections.IDictionary"></see> object has a fixed size.
 		/// </summary>
-		/// <value></value>
 		/// <returns>true if the <see cref="T:System.Collections.IDictionary"></see> object has a fixed size; otherwise, false.</returns>
 		public bool IsFixedSize
 		{
@@ -79,14 +78,12 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets a value indicating whether the <see cref="T:System.Collections.IDictionary"></see> object is read-only.
 		/// </summary>
-		/// <value></value>
 		/// <returns>true if the <see cref="T:System.Collections.IDictionary"></see> object is read-only; otherwise, false.</returns>
 		public abstract bool IsReadOnly { get; }
 
 		/// <summary>
 		/// Gets an <see cref="T:System.Collections.ICollection"></see> object containing the keys of the <see cref="T:System.Collections.IDictionary"></see> object.
 		/// </summary>
-		/// <value></value>
 		/// <returns>An <see cref="T:System.Collections.ICollection"></see> object containing the keys of the <see cref="T:System.Collections.IDictionary"></see> object.</returns>
 		public ICollection Keys
 		{
@@ -107,7 +104,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets an <see cref="T:System.Collections.ICollection"></see> object containing the values in the <see cref="T:System.Collections.IDictionary"></see> object.
 		/// </summary>
-		/// <value></value>
 		/// <returns>An <see cref="T:System.Collections.ICollection"></see> object containing the values in the <see cref="T:System.Collections.IDictionary"></see> object.</returns>
 		public ICollection Values
 		{
@@ -117,7 +113,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets or sets the <see cref="Object"/> with the specified key.
 		/// </summary>
-		/// <value></value>
 		public abstract object this[object key] { get; set; }
 
 		/// <summary>
@@ -137,7 +132,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets the number of elements contained in the <see cref="T:System.Collections.ICollection"></see>.
 		/// </summary>
-		/// <value></value>
 		/// <returns>The number of elements contained in the <see cref="T:System.Collections.ICollection"></see>.</returns>
 		public int Count
 		{
@@ -147,7 +141,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets a value indicating whether access to the <see cref="T:System.Collections.ICollection"></see> is synchronized (thread safe).
 		/// </summary>
-		/// <value></value>
 		/// <returns>true if access to the <see cref="T:System.Collections.ICollection"></see> is synchronized (thread safe); otherwise, false.</returns>
 		public virtual bool IsSynchronized
 		{
@@ -157,7 +150,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets an object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"></see>.
 		/// </summary>
-		/// <value></value>
 		/// <returns>An object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"></see>.</returns>
 		public virtual object SyncRoot
 		{

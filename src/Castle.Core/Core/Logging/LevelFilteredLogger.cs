@@ -67,7 +67,6 @@ namespace Castle.Core.Logging
 		/// <summary>
 		/// Keep the instance alive in a remoting scenario
 		/// </summary>
-		/// <returns></returns>
 #if FEATURE_SECURITY_PERMISSIONS
 #if DOTNET40
 		[SecurityCritical]
@@ -690,10 +689,6 @@ namespace Castle.Core.Logging
 		///   Implementors output the log content by implementing this method only.
 		///   Note that exception can be null
 		/// </summary>
-		/// <param name = "loggerLevel"></param>
-		/// <param name = "loggerName"></param>
-		/// <param name = "message"></param>
-		/// <param name = "exception"></param>
 		protected abstract void Log(LoggerLevel loggerLevel, String loggerName, String message, Exception exception);
 
 		protected void ChangeName(String newName)

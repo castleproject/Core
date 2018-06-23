@@ -44,7 +44,6 @@ namespace Castle.Core
 		/// <summary>
 		///   Gets the number of elements contained in the <see cref = "T:System.Collections.ICollection" />.
 		/// </summary>
-		/// <value></value>
 		/// <returns>The number of elements contained in the <see cref = "T:System.Collections.ICollection" />.</returns>
 		public int Count
 		{
@@ -54,7 +53,6 @@ namespace Castle.Core
 		/// <summary>
 		///   Gets a value indicating whether access to the <see cref = "T:System.Collections.ICollection" /> is synchronized (thread safe).
 		/// </summary>
-		/// <value></value>
 		/// <returns>true if access to the <see cref = "T:System.Collections.ICollection" /> is synchronized (thread safe); otherwise, false.</returns>
 		public bool IsSynchronized
 		{
@@ -64,7 +62,6 @@ namespace Castle.Core
 		/// <summary>
 		///   Gets an object that can be used to synchronize access to the <see cref = "T:System.Collections.ICollection" />.
 		/// </summary>
-		/// <value></value>
 		/// <returns>An object that can be used to synchronize access to the <see cref = "T:System.Collections.ICollection" />.</returns>
 		public object SyncRoot
 		{
@@ -74,7 +71,6 @@ namespace Castle.Core
 		/// <summary>
 		///   Gets a value indicating whether the <see cref = "T:System.Collections.IDictionary" /> object is read-only.
 		/// </summary>
-		/// <value></value>
 		/// <returns>true if the <see cref = "T:System.Collections.IDictionary" /> object is read-only; otherwise, false.</returns>
 		public bool IsReadOnly
 		{
@@ -84,7 +80,6 @@ namespace Castle.Core
 		/// <summary>
 		///   Gets or sets the <see cref = "Object" /> with the specified key.
 		/// </summary>
-		/// <value></value>
 		public object this[object key]
 		{
 			get
@@ -100,7 +95,6 @@ namespace Castle.Core
 		///   Gets an <see cref = "T:System.Collections.ICollection" /> object containing the keys of the <see
 		///    cref = "T:System.Collections.IDictionary" /> object.
 		/// </summary>
-		/// <value></value>
 		/// <returns>An <see cref = "T:System.Collections.ICollection" /> object containing the keys of the <see
 		///    cref = "T:System.Collections.IDictionary" /> object.</returns>
 		public ICollection Keys
@@ -112,7 +106,6 @@ namespace Castle.Core
 		///   Gets an <see cref = "T:System.Collections.ICollection" /> object containing the values in the <see
 		///    cref = "T:System.Collections.IDictionary" /> object.
 		/// </summary>
-		/// <value></value>
 		/// <returns>An <see cref = "T:System.Collections.ICollection" /> object containing the values in the <see
 		///    cref = "T:System.Collections.IDictionary" /> object.</returns>
 		public ICollection Values
@@ -123,7 +116,6 @@ namespace Castle.Core
 		/// <summary>
 		///   Gets a value indicating whether the <see cref = "T:System.Collections.IDictionary" /> object has a fixed size.
 		/// </summary>
-		/// <value></value>
 		/// <returns>true if the <see cref = "T:System.Collections.IDictionary" /> object has a fixed size; otherwise, false.</returns>
 		bool IDictionary.IsFixedSize
 		{
@@ -231,8 +223,6 @@ namespace Castle.Core
 		///   Reads values of properties from <paramref name = "valuesAsAnonymousObject" /> and inserts them into <paramref
 		///    name = "targetDictionary" /> using property names as keys.
 		/// </summary>
-		/// <param name = "targetDictionary"></param>
-		/// <param name = "valuesAsAnonymousObject"></param>
 		public static void Read(IDictionary targetDictionary, object valuesAsAnonymousObject)
 		{
 			var targetType = valuesAsAnonymousObject.GetType();

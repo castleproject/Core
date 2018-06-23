@@ -16,9 +16,6 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for IMyInterface.
-	/// </summary>
 	public interface IMyInterface2
 	{
 		String Name { get; set; }
@@ -30,9 +27,6 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 		int Calc(int x, int y, int z, Single k);
 	}
 
-	/// <summary>
-	/// Summary description for MyInterfaceImpl.
-	/// </summary>
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif

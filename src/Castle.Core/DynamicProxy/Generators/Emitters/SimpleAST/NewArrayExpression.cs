@@ -17,9 +17,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System;
 	using System.Reflection.Emit;
 
-	/// <summary>
-	///   Summary description for NewArrayExpression.
-	/// </summary>
 	public class NewArrayExpression : Expression
 	{
 		private readonly Type arrayType;

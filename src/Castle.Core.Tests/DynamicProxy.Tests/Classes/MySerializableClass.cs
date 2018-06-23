@@ -18,9 +18,6 @@ namespace Castle.DynamicProxy.Tests.Classes
 #if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
 #endif
-	/// <summary>
-	/// Summary description for MySerializableClass.
-	/// </summary>
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif

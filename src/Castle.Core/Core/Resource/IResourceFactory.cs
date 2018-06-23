@@ -31,25 +31,18 @@ namespace Castle.Core.Resource
 		/// only if the given identifier is supported
 		/// by the resource factory
 		/// </remarks>
-		/// <param name="uri"></param>
-		/// <returns></returns>
 		bool Accept(CustomUri uri);
 
 		/// <summary>
 		/// Creates an <see cref="IResource"/> instance
 		/// for the given resource identifier
 		/// </summary>
-		/// <param name="uri"></param>
-		/// <returns></returns>
 		IResource Create(CustomUri uri);
 
 		/// <summary>
 		/// Creates an <see cref="IResource"/> instance
 		/// for the given resource identifier
 		/// </summary>
-		/// <param name="uri"></param>
-		/// <param name="basePath"></param>
-		/// <returns></returns>
 		IResource Create(CustomUri uri, String basePath);
 	}
 }

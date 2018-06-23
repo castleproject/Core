@@ -61,7 +61,6 @@ namespace Castle.Services.Logging.Log4netIntegration
 		/// <summary>
 		///   Configures log4net with a stream containing XML.
 		/// </summary>
-		/// <param name="config"> </param>
 		public ExtendedLog4netFactory(Stream config)
 		{
 			XmlConfigurator.Configure(LogManager.GetRepository(_callingAssembly), config);

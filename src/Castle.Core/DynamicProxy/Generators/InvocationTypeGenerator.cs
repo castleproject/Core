@@ -46,9 +46,6 @@ namespace Castle.DynamicProxy.Generators
 		///   Generates the constructor for the class that extends
 		///   <see cref = "AbstractInvocation" />
 		/// </summary>
-		/// <param name = "targetFieldType"></param>
-		/// <param name = "proxyGenerationOptions"></param>
-		/// <param name = "baseConstructor"></param>
 		protected abstract ArgumentReference[] GetBaseCtorArguments(Type targetFieldType,
 		                                                            ProxyGenerationOptions proxyGenerationOptions,
 		                                                            out ConstructorInfo baseConstructor);

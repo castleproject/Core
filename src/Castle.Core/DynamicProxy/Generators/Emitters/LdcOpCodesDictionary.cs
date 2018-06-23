@@ -19,7 +19,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection.Emit;
 
 	/// <summary>
-	///   s
 	///   Provides appropriate Ldc.X opcode for the type of primitive value to be loaded.
 	/// </summary>
 	public sealed class LdcOpCodesDictionary : Dictionary<Type, OpCode>

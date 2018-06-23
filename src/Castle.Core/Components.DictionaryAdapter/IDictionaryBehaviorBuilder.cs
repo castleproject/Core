@@ -24,7 +24,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Builds the dictionary behaviors.
 		/// </summary>
-		/// <returns></returns>
 		object[] BuildBehaviors();
 	}
 }

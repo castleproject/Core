@@ -25,8 +25,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		///   Pops a pointer off the evaluation stack, dereferences it and loads
 		///   a value of the specified type.
 		/// </summary>
-		/// <param name = "gen"></param>
-		/// <param name = "type"></param>
 		public static void EmitLoadIndirectOpCodeForType(ILGenerator gen, Type type)
 		{
 			if (type.GetTypeInfo().IsEnum)
@@ -68,8 +66,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		///   Emits a load opcode of the appropriate kind for a constant string or
 		///   primitive value.
 		/// </summary>
-		/// <param name = "gen"></param>
-		/// <param name = "value"></param>
 		public static void EmitLoadOpCodeForConstantValue(ILGenerator gen, object value)
 		{
 			if (value is String)
@@ -135,8 +131,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		///   Pops a value of the specified type and a pointer off the evaluation stack, and
 		///   stores the value.
 		/// </summary>
-		/// <param name = "gen"></param>
-		/// <param name = "type"></param>
 		public static void EmitStoreIndirectOpCodeForType(ILGenerator gen, Type type)
 		{
 			if (type.GetTypeInfo().IsEnum)
