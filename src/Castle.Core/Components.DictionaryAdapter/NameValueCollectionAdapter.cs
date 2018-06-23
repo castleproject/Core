@@ -37,7 +37,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets a value indicating whether the <see cref="T:System.Collections.IDictionary"></see> object is read-only.
 		/// </summary>
-		/// <value></value>
 		/// <returns>true if the <see cref="T:System.Collections.IDictionary"></see> object is read-only; otherwise, false.</returns>
 		public override bool IsReadOnly
 		{
@@ -72,7 +71,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets or sets the <see cref="Object"/> with the specified key.
 		/// </summary>
-		/// <value></value>
 		public override object this[object key]
 		{
 			get { return nameValues[key.ToString()]; }
@@ -87,7 +85,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// Adapts the specified name values.
 		/// </summary>
 		/// <param name="nameValues">The name values.</param>
-		/// <returns></returns>
 		public static NameValueCollectionAdapter Adapt(NameValueCollection nameValues)
 		{
 			return new NameValueCollectionAdapter(nameValues);

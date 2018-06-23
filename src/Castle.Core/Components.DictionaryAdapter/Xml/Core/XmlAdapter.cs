@@ -58,8 +58,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		/// Initializes a new instance of the <see cref="XmlAdapter"/> class
 		/// that represents a child object in a larger object graph.
 		/// </summary>
-		/// <param name="node"></param>
-		/// <param name="references"></param>
 		public XmlAdapter(IXmlNode node, XmlReferenceManager references)
 		{
 		    if (node == null)

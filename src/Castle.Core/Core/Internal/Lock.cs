@@ -33,7 +33,6 @@ namespace Castle.Core.Internal
 		/// <summary>
 		/// Creates a new lock.
 		/// </summary>
-		/// <returns></returns>
 		public static Lock Create()
 		{
 			return new SlimReadWriteLock();

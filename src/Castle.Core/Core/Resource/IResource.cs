@@ -24,9 +24,6 @@ namespace Castle.Core.Resource
 	/// </summary>
 	public interface IResource : IDisposable
 	{
-		/// <summary>
-		/// 
-		/// </summary>
 		/// <remarks>
 		/// Only valid for resources that
 		/// can be obtained through relative paths
@@ -39,7 +36,6 @@ namespace Castle.Core.Resource
 		/// <remarks>
 		/// It's up to the caller to dispose the reader.
 		/// </remarks>
-		/// <returns></returns>
 		TextReader GetStreamReader();
 
 		/// <summary>
@@ -48,8 +44,6 @@ namespace Castle.Core.Resource
 		/// <remarks>
 		/// It's up to the caller to dispose the reader.
 		/// </remarks>
-		/// <param name="encoding"></param>
-		/// <returns></returns>
 		TextReader GetStreamReader(Encoding encoding);
 
 		/// <summary>
@@ -57,8 +51,6 @@ namespace Castle.Core.Resource
 		/// created according to the <c>relativePath</c>
 		/// using itself as the root.
 		/// </summary>
-		/// <param name="relativePath"></param>
-		/// <returns></returns>
 		IResource CreateRelative(String relativePath);
 	}
 }

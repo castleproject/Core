@@ -95,7 +95,6 @@ namespace Castle.Core.Logging
 		///   Gets the configuration file.
 		/// </summary>
 		/// <param name = "fileName">i.e. log4net.config</param>
-		/// <returns></returns>
 		protected static FileInfo GetConfigFile(string fileName)
 		{
 			FileInfo result;

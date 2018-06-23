@@ -103,9 +103,6 @@ namespace Castle.DynamicProxy.Generators
 		/// <summary>
 		///   It is safe to add mapping (no mapping for the interface exists)
 		/// </summary>
-		/// <param name = "implementer"></param>
-		/// <param name = "interface"></param>
-		/// <param name = "mapping"></param>
 		protected void AddMappingNoCheck(Type @interface, ITypeContributor implementer,
 		                                 IDictionary<Type, ITypeContributor> mapping)
 		{

@@ -74,8 +74,6 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <summary>
 		///   Creates a new extended logger with the specified <paramref name="name" />.
 		/// </summary>
-		/// <param name="name"> </param>
-		/// <returns> </returns>
 		public override IExtendedLogger Create(string name)
 		{
 			var log = LogManager.GetLogger(name);
@@ -87,7 +85,6 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// </summary>
 		/// <param name="name"> The name. </param>
 		/// <param name="level"> The level. </param>
-		/// <returns> </returns>
 		/// <exception cref="NotImplementedException" />
 		public override IExtendedLogger Create(string name, LoggerLevel level)
 		{

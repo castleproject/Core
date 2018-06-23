@@ -23,7 +23,6 @@ namespace Castle.Core.Configuration.Xml
 		///   Deserializes the specified node into an abstract representation of configuration.
 		/// </summary>
 		/// <param name = "node">The node.</param>
-		/// <returns></returns>
 		public IConfiguration Deserialize(XmlNode node)
 		{
 			return GetDeserializedNode(node);

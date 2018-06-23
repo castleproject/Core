@@ -193,10 +193,6 @@ namespace Castle.DynamicProxy.Contributors
 		///   Performs some basic screening and invokes the <see cref = "IProxyGenerationHook" />
 		///   to select methods.
 		/// </summary>
-		/// <param name = "method"></param>
-		/// <param name = "onlyVirtuals"></param>
-		/// <param name = "hook"></param>
-		/// <returns></returns>
 		protected bool AcceptMethod(MethodInfo method, bool onlyVirtuals, IProxyGenerationHook hook)
 		{
 			if (IsInternalAndNotVisibleToDynamicProxy(method))

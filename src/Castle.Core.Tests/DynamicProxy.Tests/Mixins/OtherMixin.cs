@@ -17,9 +17,6 @@ namespace Castle.DynamicProxy.Tests.Mixins
 		int Sum(int x, int y);
 	}
 
-	/// <summary>
-	/// Summary description for OtherMixin.
-	/// </summary>
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif

@@ -131,7 +131,6 @@ namespace Castle.Core.Internal
 		/// Gets the type converter.
 		/// </summary>
 		/// <param name="member">The member.</param>
-		/// <returns></returns>
 		public static Type GetTypeConverter(MemberInfo member)
 		{
 			var attrib = GetAttribute<TypeConverterAttribute>(member);

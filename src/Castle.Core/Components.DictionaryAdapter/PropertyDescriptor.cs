@@ -67,8 +67,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		///  Copies an existing instance of the <see cref="PropertyDescriptor"/> class.
 		/// </summary>
-		/// <param name="source"></param>
-		/// <param name="copyBehaviors"></param>
 		public PropertyDescriptor(PropertyDescriptor source, bool copyBehaviors)
 		{
 			Property = source.Property;
@@ -257,7 +255,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="dictionaryAdapter">The dictionary adapter.</param>
 		/// <param name="key">The key.</param>
 		/// <param name="descriptor">The descriptor.</param>
-		/// <returns></returns>
 		public string GetKey(IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor descriptor)
 		{
 			var behaviors = dictionaryBehaviors;
@@ -282,7 +279,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="storedValue">The stored value.</param>
 		/// <param name="descriptor">The descriptor.</param>
 		/// <param name="ifExists">true if return only existing.</param>
-		/// <returns></returns>
 		public object GetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key, object storedValue, PropertyDescriptor descriptor, bool ifExists)
 		{
 			key = GetKey(dictionaryAdapter, key, descriptor);
@@ -310,7 +306,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="key">The key.</param>
 		/// <param name="value">The value.</param>
 		/// <param name="descriptor">The descriptor.</param>
-		/// <returns></returns>
 		public bool SetPropertyValue(IDictionaryAdapter dictionaryAdapter, string key, ref object value, PropertyDescriptor descriptor)
 		{
 			key = GetKey(dictionaryAdapter, key, descriptor);
@@ -440,8 +435,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Copies the behaviors to the other <see cref="PropertyDescriptor"/>
 		/// </summary>
-		/// <param name="other"></param>
-		/// <returns></returns>
 		public PropertyDescriptor CopyBehaviors(PropertyDescriptor other)
 		{
 			var behaviors = dictionaryBehaviors;
@@ -461,7 +454,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Copies the <see cref="PropertyDescriptor"/>
 		/// </summary>
-		/// <returns></returns>
 		public IDictionaryBehavior Copy()
 		{
 			return new PropertyDescriptor(this, true);

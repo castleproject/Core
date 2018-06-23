@@ -58,8 +58,6 @@ namespace Castle.DynamicProxy.Internal
 		/// <summary>
 		///   Returns list of all unique interfaces implemented given types, including their base interfaces.
 		/// </summary>
-		/// <param name="types"> </param>
-		/// <returns> </returns>
 		public static Type[] GetAllInterfaces(params Type[] types)
 		{
 			if (types == null)
