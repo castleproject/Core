@@ -114,11 +114,6 @@ namespace Castle.DynamicProxy.Generators
 				return;
 			}
 
-			if (canChangeTarget)
-			{
-				EmitCallEnsureValidTarget(invokeMethodOnTarget);
-			}
-
 			var args = new Expression[parameters.Length];
 
 			// Idea: instead of grab parameters one by one
@@ -232,13 +227,6 @@ namespace Castle.DynamicProxy.Generators
 				return invocation.CreateConstructor(baseCtorArguments);
 			}
 			return contributor.CreateConstructor(baseCtorArguments, invocation);
-		}
-
-		private AbstractCodeBuilder EmitCallEnsureValidTarget(MethodEmitter invokeMethodOnTarget)
-		{
-			return invokeMethodOnTarget.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(SelfReference.Self, InvocationMethods.EnsureValidTarget)));
 		}
 
 		private void EmitCallThrowOnNoTarget(MethodEmitter invokeMethodOnTarget)

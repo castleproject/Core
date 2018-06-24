@@ -36,7 +36,7 @@ namespace Castle.DynamicProxy.Tokens
 			                                             },
 			                                             null);
 
-		public static readonly MethodInfo EnsureValidTarget =
+		public static readonly MethodInfo CompositionInvocationEnsureValidTarget =
 			typeof(CompositionInvocation).GetMethod("EnsureValidTarget", BindingFlags.Instance | BindingFlags.NonPublic);
 
 		public static readonly MethodInfo GetArgumentValue =
@@ -89,10 +89,15 @@ namespace Castle.DynamicProxy.Tokens
 		public static readonly MethodInfo SetReturnValue =
 			typeof(AbstractInvocation).GetMethod("set_ReturnValue");
 
-		public static readonly FieldInfo Target =
+		public static readonly FieldInfo CompositionInvocationTarget =
 			typeof(CompositionInvocation).GetField("target", BindingFlags.Instance | BindingFlags.NonPublic);
 
 		public static readonly MethodInfo ThrowOnNoTarget =
 			typeof(AbstractInvocation).GetMethod("ThrowOnNoTarget", BindingFlags.Instance | BindingFlags.NonPublic);
+
+		// The following two fields are not used internally, but kept for back-compatibility
+		// because we renamed the public fields `EnsureValidTarget` and `Target`:
+		public static readonly MethodInfo EnsureValidTarget = CompositionInvocationEnsureValidTarget;
+		public static readonly FieldInfo Target = CompositionInvocationTarget;
 	}
 }
