@@ -16,10 +16,13 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.Diagnostics;
 	using System.IO;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Resources;
+	using System.Threading;
 
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
@@ -52,10 +55,11 @@ namespace Castle.DynamicProxy
 		private readonly string weakModulePath;
 
 		// Keeps track of generated types
-		private readonly Dictionary<CacheKey, Type> typeCache = new Dictionary<CacheKey, Type>();
+		private readonly SynchronizedDictionary<CacheKey, Type> typeCache = new SynchronizedDictionary<CacheKey, Type>();
 
 		// Users of ModuleScope should use this lock when accessing the cache
-		private readonly Lock cacheLock = Lock.Create();
+		[Obsolete] // TODO: Remove this field together with the `Lock` property.
+		private readonly Lock cacheLock;
 
 		// Used to lock the module builder creation
 		private readonly object moduleLocker = new object();
@@ -142,6 +146,8 @@ namespace Castle.DynamicProxy
 			this.strongModulePath = strongModulePath;
 			this.weakAssemblyName = weakAssemblyName;
 			this.weakModulePath = weakModulePath;
+
+			this.cacheLock = Lock.CreateFor(typeCache.Lock);
 		}
 
 		public INamingScope NamingScope
@@ -152,20 +158,26 @@ namespace Castle.DynamicProxy
 		/// <summary>
 		///   Users of this <see cref = "ModuleScope" /> should use this lock when accessing the cache.
 		/// </summary>
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this property.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		public Lock Lock
 		{
 			get { return cacheLock; }
 		}
+
+		internal SynchronizedDictionary<CacheKey, Type> TypeCache => typeCache;
 
 		/// <summary>
 		///   Returns a type from this scope's type cache, or null if the key cannot be found.
 		/// </summary>
 		/// <param name = "key">The key to be looked up in the cache.</param>
 		/// <returns>The type from this scope's type cache matching the key, or null if the key cannot be found</returns>
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this method.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		public Type GetFromCache(CacheKey key)
 		{
 			Type type;
-			typeCache.TryGetValue(key, out type);
+			typeCache.TryGetValueWithoutTakingLock(key, out type);
 			return type;
 		}
 
@@ -174,9 +186,11 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		/// <param name = "key">The key to be associated with the type.</param>
 		/// <param name = "type">The type to be stored in the cache.</param>
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this method.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		public void RegisterInCache(CacheKey key, Type type)
 		{
-			typeCache[key] = type;
+			typeCache.AddOrUpdateWithoutTakingLock(key, type);
 		}
 
 		/// <summary>
@@ -512,21 +526,17 @@ namespace Castle.DynamicProxy
 #if FEATURE_SERIALIZATION
 		private void AddCacheMappings(AssemblyBuilder builder)
 		{
-			Dictionary<CacheKey, string> mappings;
+			var mappings = new Dictionary<CacheKey, string>();
 
-			using (Lock.ForReading())
+			typeCache.ForEach((key, value) =>
 			{
-				mappings = new Dictionary<CacheKey, string>();
-				foreach (var cacheEntry in typeCache)
+				// NOTE: using == returns invalid results.
+				// we need to use Equals here for it to work properly
+				if (builder.Equals(value.Assembly))
 				{
-					// NOTE: using == returns invalid results.
-					// we need to use Equals here for it to work properly
-					if(builder.Equals(cacheEntry.Value.Assembly))
-					{
-						mappings.Add(cacheEntry.Key, cacheEntry.Value.FullName);
-					}
+					mappings.Add(key, value.FullName);
 				}
-			}
+			});
 
 			CacheMappingsAttribute.ApplyTo(builder, mappings);
 		}
@@ -565,7 +575,7 @@ namespace Castle.DynamicProxy
 
 				if (loadedType != null)
 				{
-					RegisterInCache(mapping.Key, loadedType);
+					typeCache.AddOrUpdateWithoutTakingLock(mapping.Key, loadedType);
 				}
 			}
 		}

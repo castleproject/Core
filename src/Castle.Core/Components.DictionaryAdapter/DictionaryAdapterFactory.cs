@@ -36,9 +36,8 @@ namespace Castle.Components.DictionaryAdapter
 	/// </summary>
 	public class DictionaryAdapterFactory : IDictionaryAdapterFactory
 	{
-		private readonly Dictionary<Type, DictionaryAdapterMeta> interfaceToMeta = new Dictionary<Type, DictionaryAdapterMeta>();
-
-		private readonly Lock interfaceToMetaLock = Lock.Create();
+		private readonly SynchronizedDictionary<Type, DictionaryAdapterMeta> interfaceToMeta =
+			new SynchronizedDictionary<Type, DictionaryAdapterMeta>();
 
 		#region IDictionaryAdapterFactory
 
@@ -130,35 +129,21 @@ namespace Castle.Components.DictionaryAdapter
 			if (type.GetTypeInfo().IsInterface == false)
 				throw new ArgumentException("Only interfaces can be adapted to a dictionary", "type");
 
-			DictionaryAdapterMeta meta;
-
-			using (interfaceToMetaLock.ForReading())
+			return interfaceToMeta.GetOrAdd(type, t =>
 			{
-				if (interfaceToMeta.TryGetValue(type, out meta))
-					return meta;
-			}
-
-			using (var heldLock = interfaceToMetaLock.ForReadingUpgradeable())
-			{
-				if (interfaceToMeta.TryGetValue(type, out meta))
-					return meta;
-
-				using (heldLock.Upgrade())
+				if (descriptor == null && other != null)
 				{
-					if (descriptor == null && other != null)
-						descriptor = other.CreateDescriptor();
+					descriptor = other.CreateDescriptor();
+				}
 
 #if FEATURE_LEGACY_REFLECTION_API
-					var appDomain = Thread.GetDomain();
-					var typeBuilder = CreateTypeBuilder(type, appDomain);
+				var appDomain = Thread.GetDomain();
+				var typeBuilder = CreateTypeBuilder(type, appDomain);
 #else
-					var typeBuilder = CreateTypeBuilder(type);
+				var typeBuilder = CreateTypeBuilder(type);
 #endif
-					meta = CreateAdapterMeta(type, typeBuilder, descriptor);
-					interfaceToMeta.Add(type, meta);
-					return meta;
-				}
-			}
+				return CreateAdapterMeta(type, typeBuilder, descriptor);
+			});
 		}
 
 		private object InternalGetAdapter(Type type, IDictionary dictionary, PropertyDescriptor descriptor)

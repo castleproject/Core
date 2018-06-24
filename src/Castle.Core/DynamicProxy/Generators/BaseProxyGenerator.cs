@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Reflection;
@@ -111,6 +112,8 @@ namespace Castle.DynamicProxy.Generators
 			mapping.Add(@interface, implementer);
 		}
 
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this method.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		protected void AddToCache(CacheKey key, Type type)
 		{
 			scope.RegisterInCache(key, type);
@@ -335,6 +338,8 @@ namespace Castle.DynamicProxy.Generators
 			return emitter.CreateTypeConstructor();
 		}
 
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this method.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		protected Type GetFromCache(CacheKey key)
 		{
 			return scope.GetFromCache(key);
@@ -382,42 +387,29 @@ namespace Castle.DynamicProxy.Generators
 			builtType.SetStaticField("proxyGenerationOptions", BindingFlags.NonPublic, ProxyGenerationOptions);
 		}
 
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Redeclare this method as `private protected`.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		protected Type ObtainProxyType(CacheKey cacheKey, Func<string, INamingScope, Type> factory)
 		{
-			Type cacheType;
-			using (var locker = Scope.Lock.ForReading())
-			{
-				cacheType = GetFromCache(cacheKey);
-				if (cacheType != null)
-				{
-					Logger.DebugFormat("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
-					return cacheType;
-				}
-			}
+			bool notFoundInTypeCache = false;
 
-			// This is to avoid generating duplicate types under heavy multithreaded load.
-			using (var locker = Scope.Lock.ForWriting())
+			var proxyType = Scope.TypeCache.GetOrAdd(cacheKey, _ =>
 			{
-				// Only one thread at a time may enter a write lock.
-				// See if an earlier lock holder populated the cache.
-				cacheType = GetFromCache(cacheKey);
-				if (cacheType != null)
-				{
-					Logger.DebugFormat("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
-					return cacheType;
-				}
-
-				// Log details about the cache miss
+				notFoundInTypeCache = true;
 				Logger.DebugFormat("No cached proxy type was found for target type {0}.", targetType.FullName);
+
 				EnsureOptionsOverrideEqualsAndGetHashCode(ProxyGenerationOptions);
 
 				var name = Scope.NamingScope.GetUniqueName("Castle.Proxies." + targetType.Name + "Proxy");
-				var proxyType = factory.Invoke(name, Scope.NamingScope.SafeSubScope());
+				return factory.Invoke(name, Scope.NamingScope.SafeSubScope());
+			});
 
-				AddToCache(cacheKey, proxyType);
-
-				return proxyType;
+			if (!notFoundInTypeCache)
+			{
+				Logger.DebugFormat("Found cached proxy type {0} for target type {1}.", proxyType.FullName, targetType.FullName);
 			}
+
+			return proxyType;
 		}
 
 		private bool IsConstructorVisible(ConstructorInfo constructor)

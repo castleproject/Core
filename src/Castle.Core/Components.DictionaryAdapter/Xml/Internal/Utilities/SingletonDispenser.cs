@@ -18,12 +18,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Collections.Generic;
 	using System.Threading;
-	using Castle.Core.Internal;
 
 	public class SingletonDispenser<TKey, TItem>
 		where TItem : class
 	{
-		private readonly Lock locker;
+		private readonly ReaderWriterLockSlim locker;
 		private readonly Dictionary<TKey, object> items;
 		private readonly Func<TKey, TItem> factory;
 
@@ -32,7 +31,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (factory == null)
 				throw Error.ArgumentNull("factory");
 
-			this.locker  = new SlimReadWriteLock();
+			this.locker  = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 			this.items   = new Dictionary<TKey, object>();
 			this.factory = factory;
 		}
@@ -53,22 +52,44 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private bool TryGetExistingItem(TKey key, out object item)
 		{
-			using (locker.ForReading())
+			locker.EnterReadLock();
+			try
 			{
 				if (items.TryGetValue(key, out item))
+				{
 					return true;
+				}
+			}
+			finally
+			{
+				locker.ExitReadLock();
 			}
 
-			using (var hold = locker.ForReadingUpgradeable())
+			locker.EnterUpgradeableReadLock();
+			try
 			{
 				if (items.TryGetValue(key, out item))
+				{
 					return true;
-
-				using (hold.Upgrade())
-					items[key] = item = new ManualResetEvent(false);
+				}
+				else
+				{
+					locker.EnterWriteLock();
+					try
+					{
+						items[key] = item = new ManualResetEvent(false);
+						return false;
+					}
+					finally
+					{
+						locker.ExitWriteLock();
+					}
+				}
 			}
-
-			return false;
+			finally
+			{
+				locker.ExitUpgradeableReadLock();
+			}
 		}
 
 		private TItem WaitForCreate(TKey key, object item)
@@ -77,8 +98,15 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			handle.WaitOne();
 
-			using (locker.ForReading())
-				return (TItem) items[key];
+			locker.EnterReadLock();
+			try
+			{
+				return (TItem)items[key];
+			}
+			finally
+			{
+				locker.ExitReadLock();
+			}
 		}
 
 		private TItem Create(TKey key, object item)
@@ -87,8 +115,15 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			var result = factory(key);
 
-			using (locker.ForWriting())
+			locker.EnterWriteLock();
+			try
+			{
 				items[key] = result;
+			}
+			finally
+			{
+				locker.ExitWriteLock();
+			}
 
 			handle.Set();
 			return result;

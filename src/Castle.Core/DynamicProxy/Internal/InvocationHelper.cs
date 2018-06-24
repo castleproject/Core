@@ -18,16 +18,15 @@ namespace Castle.DynamicProxy.Internal
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
+	using System.Threading;
 
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
 
 	public static class InvocationHelper
 	{
-		private static readonly Dictionary<CacheKey, MethodInfo> cache =
-			new Dictionary<CacheKey, MethodInfo>();
-
-		private static readonly Lock @lock = Lock.Create();
+		private static readonly SynchronizedDictionary<CacheKey, MethodInfo> cache =
+			new SynchronizedDictionary<CacheKey, MethodInfo>();
 
 		public static MethodInfo GetMethodOnObject(object target, MethodInfo proxiedMethod)
 		{
@@ -48,39 +47,10 @@ namespace Castle.DynamicProxy.Internal
 
 			Debug.Assert(proxiedMethod.DeclaringType.IsAssignableFrom(type),
 						 "proxiedMethod.DeclaringType.IsAssignableFrom(type)");
-			using (var locker = @lock.ForReading())
-			{
-				var methodOnTarget = GetFromCache(proxiedMethod, type);
-				if (methodOnTarget != null)
-				{
-					return methodOnTarget;
-				}
-			}
 
-			using (var locker = @lock.ForReadingUpgradeable())
-			{
-				var methodOnTarget = GetFromCache(proxiedMethod, type);
-				if (methodOnTarget != null)
-				{
-					return methodOnTarget;
-				}
+			var cacheKey = new CacheKey(proxiedMethod, type);
 
-				// Upgrade the lock to a write lock. 
-				using (locker.Upgrade())
-				{
-					methodOnTarget = ObtainMethod(proxiedMethod, type);
-					PutToCache(proxiedMethod, type, methodOnTarget);
-				}
-				return methodOnTarget;
-			}
-		}
-
-		private static MethodInfo GetFromCache(MethodInfo methodInfo, Type type)
-		{
-			var key = new CacheKey(methodInfo, type);
-			MethodInfo method;
-			cache.TryGetValue(key, out method);
-			return method;
+			return cache.GetOrAdd(cacheKey, ck => ObtainMethod(proxiedMethod, type));
 		}
 
 		private static MethodInfo ObtainMethod(MethodInfo proxiedMethod, Type type)
@@ -125,12 +95,6 @@ namespace Castle.DynamicProxy.Internal
 				return methodOnTarget;
 			}
 			return methodOnTarget.MakeGenericMethod(genericArguments);
-		}
-
-		private static void PutToCache(MethodInfo methodInfo, Type type, MethodInfo value)
-		{
-			var key = new CacheKey(methodInfo, type);
-			cache.Add(key, value);
 		}
 
 		private struct CacheKey : IEquatable<CacheKey>

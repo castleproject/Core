@@ -15,8 +15,11 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
+	using System.ComponentModel;
 	using System.Reflection;
 
+	[Obsolete("Intended for internal use only.")] // TODO: Redeclare this type as `internal`.
+	[EditorBrowsable(EditorBrowsableState.Never)]
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif

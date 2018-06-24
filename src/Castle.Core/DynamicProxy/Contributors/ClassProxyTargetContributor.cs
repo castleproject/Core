@@ -179,19 +179,10 @@ namespace Castle.DynamicProxy.Contributors
 					ToArray(),
 				null);
 
-			var type = scope.GetFromCache(key);
-			if (type != null)
-			{
-				return type;
-			}
-
-			type = new DelegateTypeGenerator(method, targetType)
+			return scope.TypeCache.GetOrAddWithoutTakingLock(key, _ =>
+				new DelegateTypeGenerator(method, targetType)
 				.Generate(@class, options, namingScope)
-				.BuildType();
-
-			scope.RegisterInCache(key, type);
-
-			return type;
+				.BuildType());
 		}
 
 		private Type GetInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
