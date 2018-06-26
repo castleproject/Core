@@ -34,7 +34,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (emitter.ReturnType == typeof(void))
 			{
-				emitter.CodeBuilder.AddStatement(new ReturnStatement());
+				emitter.CodeBuilder.AddStatement(ReturnStatement.Instance);
 			}
 			else
 			{

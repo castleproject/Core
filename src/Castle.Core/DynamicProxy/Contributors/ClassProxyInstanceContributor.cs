@@ -176,7 +176,7 @@ namespace Castle.DynamicProxy.Contributors
 				                              	                      typeof(object),
 				                              	                      getValue)));
 			}
-			ctor.CodeBuilder.AddStatement(new ReturnStatement());
+			ctor.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		private bool VerifyIfBaseImplementsGetObjectData(Type baseType, IList<MethodInfo> methodsToSkip)

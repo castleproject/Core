@@ -86,7 +86,7 @@ namespace Castle.DynamicProxy.Contributors
 					new ThrowStatement(typeof(InvalidOperationException), "Cannot change the target of the class proxy."));
 			}
 
-			dynProxySetTarget.CodeBuilder.AddStatement(new ReturnStatement());
+			dynProxySetTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
 
 			var getInterceptors = emitter.CreateMethod("GetInterceptors", typeof(IInterceptor[]));
 
@@ -182,7 +182,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			CustomizeGetObjectData(getObjectData.CodeBuilder, info, getObjectData.Arguments[1], emitter);
 
-			getObjectData.CodeBuilder.AddStatement(new ReturnStatement());
+			getObjectData.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		protected virtual void AddAddValueInvocation(ArgumentReference serializationInfo, MethodEmitter getObjectData,

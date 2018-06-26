@@ -180,7 +180,7 @@ namespace Castle.DynamicProxy.Generators
 				invokeMethodOnTarget.CodeBuilder.AddStatement(new ExpressionStatement(setRetVal));
 			}
 
-			invokeMethodOnTarget.CodeBuilder.AddStatement(new ReturnStatement());
+			invokeMethodOnTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		private void AssignBackByRefArguments(MethodEmitter invokeMethodOnTarget, Dictionary<int, LocalReference> byRefArguments)
@@ -217,7 +217,7 @@ namespace Castle.DynamicProxy.Generators
 
 			var constructor = CreateConstructor(invocation, baseCtorArguments);
 			constructor.CodeBuilder.InvokeBaseConstructor(baseConstructor, baseCtorArguments);
-			constructor.CodeBuilder.AddStatement(new ReturnStatement());
+			constructor.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		private ConstructorEmitter CreateConstructor(AbstractTypeEmitter invocation, ArgumentReference[] baseCtorArguments)
@@ -234,7 +234,7 @@ namespace Castle.DynamicProxy.Generators
 			var throwOnNoTarget = new ExpressionStatement(new MethodInvocationExpression(InvocationMethods.ThrowOnNoTarget));
 
 			invokeMethodOnTarget.CodeBuilder.AddStatement(throwOnNoTarget);
-			invokeMethodOnTarget.CodeBuilder.AddStatement(new ReturnStatement());
+			invokeMethodOnTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		private MethodInfo GetCallbackMethod(AbstractTypeEmitter invocation)
@@ -279,7 +279,7 @@ namespace Castle.DynamicProxy.Generators
 			changeInvocationTarget.CodeBuilder.AddStatement(
 				new AssignStatement(targetField,
 				                    new ConvertExpression(targetType, changeInvocationTarget.Arguments[0].ToExpression())));
-			changeInvocationTarget.CodeBuilder.AddStatement(new ReturnStatement());
+			changeInvocationTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		private void ImplementChangeProxyTarget(AbstractTypeEmitter invocation, ClassEmitter @class)
@@ -301,7 +301,7 @@ namespace Castle.DynamicProxy.Generators
 						VirtualCall = true
 					}));
 
-			changeProxyTarget.CodeBuilder.AddStatement(new ReturnStatement());
+			changeProxyTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		private void ImplementChangeProxyTargetInterface(ClassEmitter @class, AbstractTypeEmitter invocation,

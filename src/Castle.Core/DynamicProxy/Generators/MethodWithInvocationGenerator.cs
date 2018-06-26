@@ -153,7 +153,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 			else
 			{
-				emitter.CodeBuilder.AddStatement(new ReturnStatement());
+				emitter.CodeBuilder.AddStatement(ReturnStatement.Instance);
 			}
 
 			return emitter;

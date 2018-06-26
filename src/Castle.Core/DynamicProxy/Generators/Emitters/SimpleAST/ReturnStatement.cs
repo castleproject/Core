@@ -18,6 +18,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	public class ReturnStatement : Statement
 	{
+		public static readonly ReturnStatement Instance = new ReturnStatement();
+
 		private readonly Expression expression;
 		private readonly Reference reference;
 

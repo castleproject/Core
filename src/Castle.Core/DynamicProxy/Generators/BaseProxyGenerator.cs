@@ -146,7 +146,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void CompleteInitCacheMethod(ConstructorCodeBuilder constCodeBuilder)
 		{
-			constCodeBuilder.AddStatement(new ReturnStatement());
+			constCodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		protected virtual void CreateFields(ClassEmitter emitter)
@@ -271,7 +271,7 @@ namespace Castle.DynamicProxy.Generators
 				constructor.CodeBuilder.InvokeBaseConstructor();
 			}
 
-			constructor.CodeBuilder.AddStatement(new ReturnStatement());
+			constructor.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		protected void GenerateConstructors(ClassEmitter emitter, Type baseType, params FieldReference[] fields)
@@ -327,7 +327,7 @@ namespace Castle.DynamicProxy.Generators
 
 			constructor.CodeBuilder.InvokeBaseConstructor(defaultConstructor);
 
-			constructor.CodeBuilder.AddStatement(new ReturnStatement());
+			constructor.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		protected ConstructorEmitter GenerateStaticConstructor(ClassEmitter emitter)
