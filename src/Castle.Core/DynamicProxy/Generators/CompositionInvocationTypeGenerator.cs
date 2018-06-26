@@ -60,7 +60,7 @@ namespace Castle.DynamicProxy.Generators
 		protected override void ImplementInvokeMethodOnTarget(AbstractTypeEmitter invocation, ParameterInfo[] parameters,
 		                                                      MethodEmitter invokeMethodOnTarget, Reference targetField)
 		{
-			invokeMethodOnTarget.CodeBuilder.AddExpression(
+			invokeMethodOnTarget.CodeBuilder.Add(
 				new MethodInvocationExpression(SelfReference.Self, InvocationMethods.CompositionInvocationEnsureValidTarget));
 			base.ImplementInvokeMethodOnTarget(invocation, parameters, invokeMethodOnTarget, targetField);
 		}

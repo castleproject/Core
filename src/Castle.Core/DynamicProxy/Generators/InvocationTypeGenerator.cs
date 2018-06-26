@@ -128,13 +128,12 @@ namespace Castle.DynamicProxy.Generators
 				if (paramType.IsByRef)
 				{
 					var localReference = invokeMethodOnTarget.CodeBuilder.DeclareLocal(paramType.GetElementType());
-					invokeMethodOnTarget.CodeBuilder
-						.AddStatement(
-							new AssignStatement(localReference,
-							                    new ConvertExpression(paramType.GetElementType(),
-							                                          new MethodInvocationExpression(SelfReference.Self,
-							                                                                         InvocationMethods.GetArgumentValue,
-							                                                                         new LiteralIntExpression(i)))));
+					invokeMethodOnTarget.CodeBuilder.Add(
+						new AssignStatement(localReference,
+						                    new ConvertExpression(paramType.GetElementType(),
+						                                          new MethodInvocationExpression(SelfReference.Self,
+						                                                                         InvocationMethods.GetArgumentValue,
+						                                                                         new LiteralIntExpression(i)))));
 					var byRefReference = new ByRefReference(localReference);
 					args[i] = new ReferenceExpression(byRefReference);
 					byRefArguments[i] = localReference;
@@ -151,7 +150,7 @@ namespace Castle.DynamicProxy.Generators
 
 			if (byRefArguments.Count > 0)
 			{
-				invokeMethodOnTarget.CodeBuilder.AddStatement(new TryStatement());
+				invokeMethodOnTarget.CodeBuilder.Add(new TryStatement());
 			}
 
 			var methodOnTargetInvocationExpression = GetCallbackMethodInvocation(invocation, args, callbackMethod, targetField, invokeMethodOnTarget);
@@ -161,11 +160,11 @@ namespace Castle.DynamicProxy.Generators
 			{
 				var returnType = invocation.GetClosedParameterType(callbackMethod.ReturnType);
 				returnValue = invokeMethodOnTarget.CodeBuilder.DeclareLocal(returnType);
-				invokeMethodOnTarget.CodeBuilder.AddStatement(new AssignStatement(returnValue, methodOnTargetInvocationExpression));
+				invokeMethodOnTarget.CodeBuilder.Add(new AssignStatement(returnValue, methodOnTargetInvocationExpression));
 			}
 			else
 			{
-				invokeMethodOnTarget.CodeBuilder.AddExpression(methodOnTargetInvocationExpression);
+				invokeMethodOnTarget.CodeBuilder.Add(methodOnTargetInvocationExpression);
 			}
 
 			AssignBackByRefArguments(invokeMethodOnTarget, byRefArguments);
@@ -177,10 +176,10 @@ namespace Castle.DynamicProxy.Generators
 					                               InvocationMethods.SetReturnValue,
 					                               new ConvertExpression(typeof(object), returnValue.Type, returnValue.ToExpression()));
 
-				invokeMethodOnTarget.CodeBuilder.AddExpression(setRetVal);
+				invokeMethodOnTarget.CodeBuilder.Add(setRetVal);
 			}
 
-			invokeMethodOnTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
+			invokeMethodOnTarget.CodeBuilder.Add(ReturnStatement.Instance);
 		}
 
 		private void AssignBackByRefArguments(MethodEmitter invokeMethodOnTarget, Dictionary<int, LocalReference> byRefArguments)
@@ -190,12 +189,12 @@ namespace Castle.DynamicProxy.Generators
 				return;
 			}
 
-			invokeMethodOnTarget.CodeBuilder.AddStatement(new FinallyStatement());
+			invokeMethodOnTarget.CodeBuilder.Add(new FinallyStatement());
 			foreach (var byRefArgument in byRefArguments)
 			{
 				var index = byRefArgument.Key;
 				var localReference = byRefArgument.Value;
-				invokeMethodOnTarget.CodeBuilder.AddExpression(
+				invokeMethodOnTarget.CodeBuilder.Add(
 					new MethodInvocationExpression(
 						SelfReference.Self,
 						InvocationMethods.SetArgumentValue,
@@ -205,7 +204,7 @@ namespace Castle.DynamicProxy.Generators
 							localReference.Type,
 							new ReferenceExpression(localReference))));
 			}
-			invokeMethodOnTarget.CodeBuilder.AddStatement(new EndExceptionBlockStatement());
+			invokeMethodOnTarget.CodeBuilder.Add(new EndExceptionBlockStatement());
 		}
 
 		private void CreateConstructor(AbstractTypeEmitter invocation, ProxyGenerationOptions options)
@@ -215,7 +214,7 @@ namespace Castle.DynamicProxy.Generators
 
 			var constructor = CreateConstructor(invocation, baseCtorArguments);
 			constructor.CodeBuilder.InvokeBaseConstructor(baseConstructor, baseCtorArguments);
-			constructor.CodeBuilder.AddStatement(ReturnStatement.Instance);
+			constructor.CodeBuilder.Add(ReturnStatement.Instance);
 		}
 
 		private ConstructorEmitter CreateConstructor(AbstractTypeEmitter invocation, ArgumentReference[] baseCtorArguments)
@@ -231,8 +230,8 @@ namespace Castle.DynamicProxy.Generators
 		{
 			var throwOnNoTarget = new MethodInvocationExpression(InvocationMethods.ThrowOnNoTarget);
 
-			invokeMethodOnTarget.CodeBuilder.AddExpression(throwOnNoTarget);
-			invokeMethodOnTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
+			invokeMethodOnTarget.CodeBuilder.Add(throwOnNoTarget);
+			invokeMethodOnTarget.CodeBuilder.Add(ReturnStatement.Instance);
 		}
 
 		private MethodInfo GetCallbackMethod(AbstractTypeEmitter invocation)
@@ -274,10 +273,10 @@ namespace Castle.DynamicProxy.Generators
 		private void ImplementChangeInvocationTarget(AbstractTypeEmitter invocation, FieldReference targetField)
 		{
 			var changeInvocationTarget = invocation.CreateMethod("ChangeInvocationTarget", typeof(void), new[] { typeof(object) });
-			changeInvocationTarget.CodeBuilder.AddStatement(
+			changeInvocationTarget.CodeBuilder.Add(
 				new AssignStatement(targetField,
 				                    new ConvertExpression(targetType, changeInvocationTarget.Arguments[0].ToExpression())));
-			changeInvocationTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
+			changeInvocationTarget.CodeBuilder.Add(ReturnStatement.Instance);
 		}
 
 		private void ImplementChangeProxyTarget(AbstractTypeEmitter invocation, ClassEmitter @class)
@@ -286,19 +285,19 @@ namespace Castle.DynamicProxy.Generators
 
 			var proxyObject = new FieldReference(InvocationMethods.ProxyObject);
 			var localProxy = changeProxyTarget.CodeBuilder.DeclareLocal(typeof(IProxyTargetAccessor));
-			changeProxyTarget.CodeBuilder.AddStatement(
+			changeProxyTarget.CodeBuilder.Add(
 				new AssignStatement(localProxy,
 					new ConvertExpression(localProxy.Type, proxyObject.ToExpression())));
 
 			var dynSetProxy = typeof(IProxyTargetAccessor).GetMethod(nameof(IProxyTargetAccessor.DynProxySetTarget));
 
-			changeProxyTarget.CodeBuilder.AddExpression(
+			changeProxyTarget.CodeBuilder.Add(
 				new MethodInvocationExpression(localProxy, dynSetProxy, changeProxyTarget.Arguments[0].ToExpression())
 				{
 					VirtualCall = true
 				});
 
-			changeProxyTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
+			changeProxyTarget.CodeBuilder.Add(ReturnStatement.Instance);
 		}
 
 		private void ImplementChangeProxyTargetInterface(ClassEmitter @class, AbstractTypeEmitter invocation,

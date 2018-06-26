@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			if (CodeBuilder.IsEmpty)
 			{
-				CodeBuilder.AddStatement(ReturnStatement.Instance);
+				CodeBuilder.Add(ReturnStatement.Instance);
 			}
 		}
 	}

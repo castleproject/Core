@@ -38,7 +38,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			var targetReference = getTargetReference(@class, MethodToOverride);
 
-			emitter.CodeBuilder.AddExpression(
+			emitter.CodeBuilder.Add(
 				new IfNullExpression(targetReference, IfNull(emitter.ReturnType), IfNotNull(targetReference)));
 			return emitter;
 		}
@@ -48,11 +48,11 @@ namespace Castle.DynamicProxy.Contributors
 			var expression = new MultiStatementExpression();
 			var arguments = ArgumentsUtil.ConvertToArgumentReferenceExpression(MethodToOverride.GetParameters());
 
-			expression.AddStatement(new ReturnStatement(
-			                        	new MethodInvocationExpression(
-			                        		targetReference,
-			                        		MethodToOverride,
-			                        		arguments) { VirtualCall = true }));
+			expression.Add(new ReturnStatement(
+			               	new MethodInvocationExpression(
+			               		targetReference,
+			               		MethodToOverride,
+			               		arguments) { VirtualCall = true }));
 			return expression;
 		}
 
@@ -63,11 +63,11 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (returnType == typeof(void))
 			{
-				expression.AddStatement(ReturnStatement.Instance);
+				expression.Add(ReturnStatement.Instance);
 			}
 			else
 			{
-				expression.AddStatement(new ReturnStatement(new DefaultValueExpression(returnType)));
+				expression.Add(new ReturnStatement(new DefaultValueExpression(returnType)));
 			}
 			return expression;
 		}
@@ -79,7 +79,7 @@ namespace Castle.DynamicProxy.Contributors
 				var parameter = parameters[index];
 				if (parameter.IsOut)
 				{
-					expression.AddStatement(
+					expression.Add(
 						new AssignArgumentStatement(new ArgumentReference(parameter.ParameterType, index + 1),
 						                            new DefaultValueExpression(parameter.ParameterType)));
 				}

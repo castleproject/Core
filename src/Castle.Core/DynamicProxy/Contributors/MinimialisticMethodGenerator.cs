@@ -34,11 +34,11 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (emitter.ReturnType == typeof(void))
 			{
-				emitter.CodeBuilder.AddStatement(ReturnStatement.Instance);
+				emitter.CodeBuilder.Add(ReturnStatement.Instance);
 			}
 			else
 			{
-				emitter.CodeBuilder.AddStatement(new ReturnStatement(new DefaultValueExpression(emitter.ReturnType)));
+				emitter.CodeBuilder.Add(new ReturnStatement(new DefaultValueExpression(emitter.ReturnType)));
 			}
 
 			return emitter;
@@ -51,7 +51,7 @@ namespace Castle.DynamicProxy.Contributors
 				var parameter = parameters[index];
 				if (parameter.IsOut)
 				{
-					emitter.CodeBuilder.AddStatement(
+					emitter.CodeBuilder.Add(
 						new AssignArgumentStatement(new ArgumentReference(parameter.ParameterType, index + 1),
 						                            new DefaultValueExpression(parameter.ParameterType)));
 				}

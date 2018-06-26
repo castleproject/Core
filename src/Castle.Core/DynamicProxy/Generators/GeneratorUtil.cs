@@ -39,7 +39,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				if (IsByRef(parameters[i]) && !IsReadOnly(parameters[i]))
 				{
-					emitter.CodeBuilder.AddStatement(AssignArgument(dereferencedArguments, i, arguments));
+					emitter.CodeBuilder.Add(AssignArgument(dereferencedArguments, i, arguments));
 				}
 			}
 
@@ -115,7 +115,7 @@ namespace Castle.DynamicProxy.Generators
 		private static LocalReference StoreInvocationArgumentsInLocal(MethodEmitter emitter, LocalReference invocation)
 		{
 			var invocationArgs = emitter.CodeBuilder.DeclareLocal(typeof(object[]));
-			emitter.CodeBuilder.AddStatement(GetArguments(invocationArgs, invocation));
+			emitter.CodeBuilder.Add(GetArguments(invocationArgs, invocation));
 			return invocationArgs;
 		}
 	}

@@ -48,7 +48,7 @@ namespace Castle.DynamicProxy.Tests
 			                                        Type.EmptyTypes);
 			MethodEmitter methodEmitter = emitter.CreateMethod("StaticMethod", MethodAttributes.Public | MethodAttributes.Static,
 			                                                   typeof (string), typeof (string));
-			methodEmitter.CodeBuilder.AddStatement(new ReturnStatement(methodEmitter.Arguments[0]));
+			methodEmitter.CodeBuilder.Add(new ReturnStatement(methodEmitter.Arguments[0]));
 			Type t = emitter.BuildType();
 			Assert.AreEqual("five", t.GetMethod("StaticMethod").Invoke(null, new object[] {"five"}));
 		}
@@ -60,7 +60,7 @@ namespace Castle.DynamicProxy.Tests
 			                                        Type.EmptyTypes);
 			MethodEmitter methodEmitter = emitter.CreateMethod("InstanceMethod", MethodAttributes.Public,
 			                                                   typeof (string), typeof (string));
-			methodEmitter.CodeBuilder.AddStatement(new ReturnStatement(methodEmitter.Arguments[0]));
+			methodEmitter.CodeBuilder.Add(new ReturnStatement(methodEmitter.Arguments[0]));
 			Type t = emitter.BuildType();
 			object instance = Activator.CreateInstance(t);
 			Assert.AreEqual("six", t.GetMethod("InstanceMethod").Invoke(instance, new object[] {"six"}));

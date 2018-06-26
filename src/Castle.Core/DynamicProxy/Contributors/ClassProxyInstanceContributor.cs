@@ -82,11 +82,11 @@ namespace Castle.DynamicProxy.Contributors
 		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo,
 		                                               ArgumentReference streamingContext, ClassEmitter emitter)
 		{
-			codebuilder.AddExpression(new MethodInvocationExpression(
-			                          	serializationInfo,
-			                          	SerializationInfoMethods.AddValue_Bool,
-			                          	new LiteralStringExpression("__delegateToBase"),
-			                          	new LiteralBoolExpression(delegateToBaseGetObjectData)));
+			codebuilder.Add(new MethodInvocationExpression(
+			                serializationInfo,
+			                SerializationInfoMethods.AddValue_Bool,
+			                new LiteralStringExpression("__delegateToBase"),
+			                new LiteralBoolExpression(delegateToBaseGetObjectData)));
 
 			if (delegateToBaseGetObjectData == false)
 			{
@@ -106,28 +106,28 @@ namespace Castle.DynamicProxy.Contributors
 				null,
 				FormatterServicesMethods.GetSerializableMembers,
 				new TypeTokenExpression(targetType));
-			codebuilder.AddStatement(new AssignStatement(members, getSerializableMembers));
+			codebuilder.Add(new AssignStatement(members, getSerializableMembers));
 
 			// Sort to keep order on both serialize and deserialize side the same, c.f DYNPROXY-ISSUE-127
 			var callSort = new MethodInvocationExpression(
 				null,
 				TypeUtilMethods.Sort,
 				members.ToExpression());
-			codebuilder.AddStatement(new AssignStatement(members, callSort));
+			codebuilder.Add(new AssignStatement(members, callSort));
 
 			var getObjectData = new MethodInvocationExpression(
 				null,
 				FormatterServicesMethods.GetObjectData,
 				SelfReference.Self.ToExpression(),
 				members.ToExpression());
-			codebuilder.AddStatement(new AssignStatement(data, getObjectData));
+			codebuilder.Add(new AssignStatement(data, getObjectData));
 
 			var addValue = new MethodInvocationExpression(
 				serializationInfo,
 				SerializationInfoMethods.AddValue_Object,
 				new LiteralStringExpression("__data"),
 				data.ToExpression());
-			codebuilder.AddExpression(addValue);
+			codebuilder.Add(addValue);
 		}
 
 		private void EmitCallToBaseGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo,
@@ -136,9 +136,9 @@ namespace Castle.DynamicProxy.Contributors
 			var baseGetObjectData = targetType.GetMethod("GetObjectData",
 			                                             new[] { typeof(SerializationInfo), typeof(StreamingContext) });
 
-			codebuilder.AddExpression(new MethodInvocationExpression(baseGetObjectData,
-			                                                         serializationInfo.ToExpression(),
-			                                                         streamingContext.ToExpression()));
+			codebuilder.Add(new MethodInvocationExpression(baseGetObjectData,
+			                                               serializationInfo.ToExpression(),
+			                                               streamingContext.ToExpression()));
 		}
 
 		private void Constructor(ClassEmitter emitter)
@@ -157,7 +157,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			var ctor = emitter.CreateConstructor(serializationInfo, streamingContext);
 
-			ctor.CodeBuilder.AddStatement(
+			ctor.CodeBuilder.Add(
 				new ConstructorInvocationStatement(serializationConstructor,
 				                                   serializationInfo.ToExpression(),
 				                                   streamingContext.ToExpression()));
@@ -168,13 +168,12 @@ namespace Castle.DynamicProxy.Contributors
 				                                              SerializationInfoMethods.GetValue,
 				                                              new LiteralStringExpression(field.Reference.Name),
 				                                              new TypeTokenExpression(field.Reference.FieldType));
-				ctor.CodeBuilder.AddStatement(new AssignStatement(
-				                              	field,
-				                              	new ConvertExpression(field.Reference.FieldType,
-				                              	                      typeof(object),
-				                              	                      getValue)));
+				ctor.CodeBuilder.Add(new AssignStatement(field,
+				                                         new ConvertExpression(field.Reference.FieldType,
+				                                                               typeof(object),
+				                                                               getValue)));
 			}
-			ctor.CodeBuilder.AddStatement(ReturnStatement.Instance);
+			ctor.CodeBuilder.Add(ReturnStatement.Instance);
 		}
 
 		private bool VerifyIfBaseImplementsGetObjectData(Type baseType, IList<MethodInfo> methodsToSkip)

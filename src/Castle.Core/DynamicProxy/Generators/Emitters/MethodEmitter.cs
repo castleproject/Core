@@ -137,8 +137,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			if (ImplementedByRuntime == false && CodeBuilder.IsEmpty)
 			{
-				CodeBuilder.AddStatement(new NopStatement());
-				CodeBuilder.AddStatement(ReturnStatement.Instance);
+				CodeBuilder.Add(new NopStatement());
+				CodeBuilder.Add(ReturnStatement.Instance);
 			}
 		}
 
