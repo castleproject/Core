@@ -113,12 +113,11 @@ namespace Castle.DynamicProxy.Contributors
 						new LiteralBoolExpression(true),
 						new LiteralBoolExpression(false))));
 
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						info,
-						SerializationInfoMethods.SetType,
-						typeLocal.ToExpression())));
+			getObjectData.CodeBuilder.AddExpression(
+				new MethodInvocationExpression(
+					info,
+					SerializationInfoMethods.SetType,
+					typeLocal.ToExpression()));
 
 			foreach (var field in emitter.GetAllFields())
 			{
@@ -149,36 +148,32 @@ namespace Castle.DynamicProxy.Contributors
 						new LiteralStringExpression(interfaces[i].AssemblyQualifiedName)));
 			}
 
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						info,
-						SerializationInfoMethods.AddValue_Object,
-						new LiteralStringExpression("__interfaces"),
-						interfacesLocal.ToExpression())));
+			getObjectData.CodeBuilder.AddExpression(
+				new MethodInvocationExpression(
+					info,
+					SerializationInfoMethods.AddValue_Object,
+					new LiteralStringExpression("__interfaces"),
+					interfacesLocal.ToExpression()));
 
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						info,
-						SerializationInfoMethods.AddValue_Object,
-						new LiteralStringExpression("__baseType"),
-						new LiteralStringExpression(emitter.BaseType.AssemblyQualifiedName))));
+			getObjectData.CodeBuilder.AddExpression(
+				new MethodInvocationExpression(
+					info,
+					SerializationInfoMethods.AddValue_Object,
+					new LiteralStringExpression("__baseType"),
+					new LiteralStringExpression(emitter.BaseType.AssemblyQualifiedName)));
 
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						info,
-						SerializationInfoMethods.AddValue_Object,
-						new LiteralStringExpression("__proxyGenerationOptions"),
-						emitter.GetField("proxyGenerationOptions").ToExpression())));
+			getObjectData.CodeBuilder.AddExpression(
+				new MethodInvocationExpression(
+					info,
+					SerializationInfoMethods.AddValue_Object,
+					new LiteralStringExpression("__proxyGenerationOptions"),
+					emitter.GetField("proxyGenerationOptions").ToExpression()));
 
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(info,
-					                               SerializationInfoMethods.AddValue_Object,
-					                               new LiteralStringExpression("__proxyTypeId"),
-					                               new LiteralStringExpression(proxyTypeId))));
+			getObjectData.CodeBuilder.AddExpression(
+				new MethodInvocationExpression(info,
+					                            SerializationInfoMethods.AddValue_Object,
+					                            new LiteralStringExpression("__proxyTypeId"),
+					                            new LiteralStringExpression(proxyTypeId)));
 
 			CustomizeGetObjectData(getObjectData.CodeBuilder, info, getObjectData.Arguments[1], emitter);
 
@@ -188,13 +183,12 @@ namespace Castle.DynamicProxy.Contributors
 		protected virtual void AddAddValueInvocation(ArgumentReference serializationInfo, MethodEmitter getObjectData,
 		                                             FieldReference field)
 		{
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						serializationInfo,
-						SerializationInfoMethods.AddValue_Object,
-						new LiteralStringExpression(field.Reference.Name),
-						field.ToExpression())));
+			getObjectData.CodeBuilder.AddExpression(
+				new MethodInvocationExpression(
+					serializationInfo,
+					SerializationInfoMethods.AddValue_Object,
+					new LiteralStringExpression(field.Reference.Name),
+					field.ToExpression()));
 			return;
 		}
 

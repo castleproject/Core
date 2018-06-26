@@ -119,8 +119,8 @@ namespace Castle.DynamicProxy.Generators
 				emitter.CodeBuilder.AddStatement(new TryStatement());
 			}
 
-			var proceed = new ExpressionStatement(new MethodInvocationExpression(invocationLocal, InvocationMethods.Proceed));
-			emitter.CodeBuilder.AddStatement(proceed);
+			var proceed = new MethodInvocationExpression(invocationLocal, InvocationMethods.Proceed);
+			emitter.CodeBuilder.AddExpression(proceed);
 
 			if (hasByRefArguments)
 			{

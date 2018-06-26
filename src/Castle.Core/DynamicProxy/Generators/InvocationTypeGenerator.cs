@@ -165,7 +165,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 			else
 			{
-				invokeMethodOnTarget.CodeBuilder.AddStatement(new ExpressionStatement(methodOnTargetInvocationExpression));
+				invokeMethodOnTarget.CodeBuilder.AddExpression(methodOnTargetInvocationExpression);
 			}
 
 			AssignBackByRefArguments(invokeMethodOnTarget, byRefArguments);
@@ -177,7 +177,7 @@ namespace Castle.DynamicProxy.Generators
 					                               InvocationMethods.SetReturnValue,
 					                               new ConvertExpression(typeof(object), returnValue.Type, returnValue.ToExpression()));
 
-				invokeMethodOnTarget.CodeBuilder.AddStatement(new ExpressionStatement(setRetVal));
+				invokeMethodOnTarget.CodeBuilder.AddExpression(setRetVal);
 			}
 
 			invokeMethodOnTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
@@ -195,17 +195,15 @@ namespace Castle.DynamicProxy.Generators
 			{
 				var index = byRefArgument.Key;
 				var localReference = byRefArgument.Value;
-				invokeMethodOnTarget.CodeBuilder.AddStatement(
-					new ExpressionStatement(
-						new MethodInvocationExpression(
-							SelfReference.Self,
-							InvocationMethods.SetArgumentValue,
-							new LiteralIntExpression(index),
-							new ConvertExpression(
-								typeof(object),
-								localReference.Type,
-								new ReferenceExpression(localReference)))
-						));
+				invokeMethodOnTarget.CodeBuilder.AddExpression(
+					new MethodInvocationExpression(
+						SelfReference.Self,
+						InvocationMethods.SetArgumentValue,
+						new LiteralIntExpression(index),
+						new ConvertExpression(
+							typeof(object),
+							localReference.Type,
+							new ReferenceExpression(localReference))));
 			}
 			invokeMethodOnTarget.CodeBuilder.AddStatement(new EndExceptionBlockStatement());
 		}
@@ -231,9 +229,9 @@ namespace Castle.DynamicProxy.Generators
 
 		private void EmitCallThrowOnNoTarget(MethodEmitter invokeMethodOnTarget)
 		{
-			var throwOnNoTarget = new ExpressionStatement(new MethodInvocationExpression(InvocationMethods.ThrowOnNoTarget));
+			var throwOnNoTarget = new MethodInvocationExpression(InvocationMethods.ThrowOnNoTarget);
 
-			invokeMethodOnTarget.CodeBuilder.AddStatement(throwOnNoTarget);
+			invokeMethodOnTarget.CodeBuilder.AddExpression(throwOnNoTarget);
 			invokeMethodOnTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
@@ -294,12 +292,11 @@ namespace Castle.DynamicProxy.Generators
 
 			var dynSetProxy = typeof(IProxyTargetAccessor).GetMethod(nameof(IProxyTargetAccessor.DynProxySetTarget));
 
-			changeProxyTarget.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(localProxy, dynSetProxy, changeProxyTarget.Arguments[0].ToExpression())
-					{
-						VirtualCall = true
-					}));
+			changeProxyTarget.CodeBuilder.AddExpression(
+				new MethodInvocationExpression(localProxy, dynSetProxy, changeProxyTarget.Arguments[0].ToExpression())
+				{
+					VirtualCall = true
+				});
 
 			changeProxyTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}

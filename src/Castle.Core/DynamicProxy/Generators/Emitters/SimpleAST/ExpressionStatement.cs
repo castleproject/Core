@@ -14,8 +14,12 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
+	using System;
+	using System.ComponentModel;
 	using System.Reflection.Emit;
 
+	[Obsolete] // TODO: Remove this class.
+	[EditorBrowsable(EditorBrowsableState.Never)]
 	public class ExpressionStatement : Statement
 	{
 		private readonly Expression expression;
