@@ -46,7 +46,7 @@ namespace Castle.DynamicProxy.Contributors
 			var constructor = invocation.CreateConstructor(arguments);
 
 			var delegateField = invocation.CreateField("delegate", delegateType);
-			constructor.CodeBuilder.AddStatement(new AssignStatement(delegateField, new ReferenceExpression(arguments[0])));
+			constructor.CodeBuilder.Add(new AssignStatement(delegateField, new ReferenceExpression(arguments[0])));
 			return constructor;
 		}
 
@@ -84,7 +84,7 @@ namespace Castle.DynamicProxy.Contributors
 				new MethodTokenExpression(method.MethodOnTarget));
 			var bindDelegate = new AssignStatement(callback, new ConvertExpression(delegateType, createDelegate));
 
-			proxy.ClassConstructor.CodeBuilder.AddStatement(bindDelegate);
+			proxy.ClassConstructor.CodeBuilder.Add(bindDelegate);
 			return callback;
 		}
 

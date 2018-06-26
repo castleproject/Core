@@ -15,14 +15,15 @@
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
-	using System.Diagnostics;
+	using System.ComponentModel;
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	[DebuggerDisplay("{value}")]
+	[Obsolete] // TODO: Remove this class.
+	[EditorBrowsable(EditorBrowsableState.Never)]
 	public class ConstReference : TypeReference
 	{
-		private readonly object value;
+		internal readonly object value;
 
 		public ConstReference(object value)
 			: base(value.GetType())
@@ -51,7 +52,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void StoreReference(ILGenerator gen)
 		{
-			throw new NotImplementedException("ConstReference.StoreReference");
+			throw new NotSupportedException();
 		}
 	}
 }

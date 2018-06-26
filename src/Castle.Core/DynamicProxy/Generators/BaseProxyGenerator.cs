@@ -146,7 +146,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void CompleteInitCacheMethod(ConstructorCodeBuilder constCodeBuilder)
 		{
-			constCodeBuilder.AddStatement(new ReturnStatement());
+			constCodeBuilder.Add(ReturnStatement.Instance);
 		}
 
 		protected virtual void CreateFields(ClassEmitter emitter)
@@ -252,7 +252,7 @@ namespace Castle.DynamicProxy.Generators
 
 			for (var i = 0; i < fields.Length; i++)
 			{
-				constructor.CodeBuilder.AddStatement(new AssignStatement(fields[i], args[i].ToExpression()));
+				constructor.CodeBuilder.Add(new AssignStatement(fields[i], args[i].ToExpression()));
 			}
 
 			// Invoke base constructor
@@ -271,7 +271,7 @@ namespace Castle.DynamicProxy.Generators
 				constructor.CodeBuilder.InvokeBaseConstructor();
 			}
 
-			constructor.CodeBuilder.AddStatement(new ReturnStatement());
+			constructor.CodeBuilder.Add(ReturnStatement.Instance);
 		}
 
 		protected void GenerateConstructors(ClassEmitter emitter, Type baseType, params FieldReference[] fields)
@@ -318,16 +318,16 @@ namespace Castle.DynamicProxy.Generators
 
 			// initialize fields with an empty interceptor
 
-			constructor.CodeBuilder.AddStatement(new AssignStatement(interceptorField,
-			                                                         new NewArrayExpression(1, typeof(IInterceptor))));
-			constructor.CodeBuilder.AddStatement(
+			constructor.CodeBuilder.Add(new AssignStatement(interceptorField,
+			                                                new NewArrayExpression(1, typeof(IInterceptor))));
+			constructor.CodeBuilder.Add(
 				new AssignArrayStatement(interceptorField, 0, new NewInstanceExpression(typeof(StandardInterceptor), new Type[0])));
 
 			// Invoke base constructor
 
 			constructor.CodeBuilder.InvokeBaseConstructor(defaultConstructor);
 
-			constructor.CodeBuilder.AddStatement(new ReturnStatement());
+			constructor.CodeBuilder.Add(ReturnStatement.Instance);
 		}
 
 		protected ConstructorEmitter GenerateStaticConstructor(ClassEmitter emitter)

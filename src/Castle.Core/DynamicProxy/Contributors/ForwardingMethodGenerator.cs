@@ -35,11 +35,11 @@ namespace Castle.DynamicProxy.Contributors
 			var targetReference = getTargetReference(@class, MethodToOverride);
 			var arguments = ArgumentsUtil.ConvertToArgumentReferenceExpression(MethodToOverride.GetParameters());
 
-			emitter.CodeBuilder.AddStatement(new ReturnStatement(
-			                                 	new MethodInvocationExpression(
-			                                 		targetReference,
-			                                 		MethodToOverride,
-			                                 		arguments) { VirtualCall = true }));
+			emitter.CodeBuilder.Add(new ReturnStatement(
+			                        	new MethodInvocationExpression(
+			                        		targetReference,
+			                        		MethodToOverride,
+			                        		arguments) { VirtualCall = true }));
 			return emitter;
 		}
 	}

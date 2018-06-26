@@ -24,13 +24,13 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 	{
 		private readonly ILGenerator generator;
 		private readonly List<Reference> ilmarkers;
-		private readonly List<Statement> stmts;
+		private readonly List<IILEmitter> emitters;
 		private bool isEmpty;
 
 		protected AbstractCodeBuilder(ILGenerator generator)
 		{
 			this.generator = generator;
-			stmts = new List<Statement>();
+			emitters = new List<IILEmitter>();
 			ilmarkers = new List<Reference>();
 			isEmpty = true;
 		}
@@ -48,14 +48,20 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 
 		public AbstractCodeBuilder AddExpression(Expression expression)
 		{
-			return AddStatement(new ExpressionStatement(expression));
+			Add(expression);
+			return this;
 		}
 
 		public AbstractCodeBuilder AddStatement(Statement stmt)
 		{
-			SetNonEmpty();
-			stmts.Add(stmt);
+			Add(stmt);
 			return this;
+		}
+
+		internal void Add(IILEmitter emitter)
+		{
+			SetNonEmpty();
+			emitters.Add(emitter);
 		}
 
 		public LocalReference DeclareLocal(Type type)
@@ -77,9 +83,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 				local.Generate(il);
 			}
 
-			foreach (var stmt in stmts)
+			foreach (var emitter in emitters)
 			{
-				stmt.Emit(member, il);
+				emitter.Emit(member, il);
 			}
 		}
 	}

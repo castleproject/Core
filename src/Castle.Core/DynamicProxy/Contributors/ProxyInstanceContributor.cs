@@ -67,7 +67,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			var dynProxyGetTarget = emitter.CreateMethod("DynProxyGetTarget", typeof(object));
 
-			dynProxyGetTarget.CodeBuilder.AddStatement(
+			dynProxyGetTarget.CodeBuilder.Add(
 				new ReturnStatement(new ConvertExpression(typeof(object), targetType, GetTargetReferenceExpression(emitter))));
 
 			var dynProxySetTarget = emitter.CreateMethod("DynProxySetTarget", typeof(void), typeof(object));
@@ -76,21 +76,21 @@ namespace Castle.DynamicProxy.Contributors
 			var targetField = GetTargetReference(emitter) as FieldReference;
 			if (targetField != null)
 			{
-				dynProxySetTarget.CodeBuilder.AddStatement(
+				dynProxySetTarget.CodeBuilder.Add(
 					new AssignStatement(targetField,
 						new ConvertExpression(targetField.Fieldbuilder.FieldType, dynProxySetTarget.Arguments[0].ToExpression())));
 			}
 			else
 			{
-				dynProxySetTarget.CodeBuilder.AddStatement(
+				dynProxySetTarget.CodeBuilder.Add(
 					new ThrowStatement(typeof(InvalidOperationException), "Cannot change the target of the class proxy."));
 			}
 
-			dynProxySetTarget.CodeBuilder.AddStatement(new ReturnStatement());
+			dynProxySetTarget.CodeBuilder.Add(ReturnStatement.Instance);
 
 			var getInterceptors = emitter.CreateMethod("GetInterceptors", typeof(IInterceptor[]));
 
-			getInterceptors.CodeBuilder.AddStatement(
+			getInterceptors.CodeBuilder.Add(
 				new ReturnStatement(interceptorsField));
 		}
 
@@ -103,22 +103,21 @@ namespace Castle.DynamicProxy.Contributors
 
 			var typeLocal = getObjectData.CodeBuilder.DeclareLocal(typeof(Type));
 
-			getObjectData.CodeBuilder.AddStatement(
+			getObjectData.CodeBuilder.Add(
 				new AssignStatement(
 					typeLocal,
 					new MethodInvocationExpression(
 						null,
 						TypeMethods.StaticGetType,
-						new ConstReference(typeof(ProxyObjectReference).AssemblyQualifiedName).ToExpression(),
-						new ConstReference(1).ToExpression(),
-						new ConstReference(0).ToExpression())));
+						new LiteralStringExpression(typeof(ProxyObjectReference).AssemblyQualifiedName),
+						new LiteralBoolExpression(true),
+						new LiteralBoolExpression(false))));
 
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						info,
-						SerializationInfoMethods.SetType,
-						typeLocal.ToExpression())));
+			getObjectData.CodeBuilder.Add(
+				new MethodInvocationExpression(
+					info,
+					SerializationInfoMethods.SetType,
+					typeLocal.ToExpression()));
 
 			foreach (var field in emitter.GetAllFields())
 			{
@@ -135,66 +134,61 @@ namespace Castle.DynamicProxy.Contributors
 
 			var interfacesLocal = getObjectData.CodeBuilder.DeclareLocal(typeof(string[]));
 
-			getObjectData.CodeBuilder.AddStatement(
+			getObjectData.CodeBuilder.Add(
 				new AssignStatement(
 					interfacesLocal,
 					new NewArrayExpression(interfaces.Length, typeof(string))));
 
 			for (var i = 0; i < interfaces.Length; i++)
 			{
-				getObjectData.CodeBuilder.AddStatement(
+				getObjectData.CodeBuilder.Add(
 					new AssignArrayStatement(
 						interfacesLocal,
 						i,
-						new ConstReference(interfaces[i].AssemblyQualifiedName).ToExpression()));
+						new LiteralStringExpression(interfaces[i].AssemblyQualifiedName)));
 			}
 
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						info,
-						SerializationInfoMethods.AddValue_Object,
-						new ConstReference("__interfaces").ToExpression(),
-						interfacesLocal.ToExpression())));
+			getObjectData.CodeBuilder.Add(
+				new MethodInvocationExpression(
+					info,
+					SerializationInfoMethods.AddValue_Object,
+					new LiteralStringExpression("__interfaces"),
+					interfacesLocal.ToExpression()));
 
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						info,
-						SerializationInfoMethods.AddValue_Object,
-						new ConstReference("__baseType").ToExpression(),
-						new ConstReference(emitter.BaseType.AssemblyQualifiedName).ToExpression())));
+			getObjectData.CodeBuilder.Add(
+				new MethodInvocationExpression(
+					info,
+					SerializationInfoMethods.AddValue_Object,
+					new LiteralStringExpression("__baseType"),
+					new LiteralStringExpression(emitter.BaseType.AssemblyQualifiedName)));
 
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						info,
-						SerializationInfoMethods.AddValue_Object,
-						new ConstReference("__proxyGenerationOptions").ToExpression(),
-						emitter.GetField("proxyGenerationOptions").ToExpression())));
+			getObjectData.CodeBuilder.Add(
+				new MethodInvocationExpression(
+					info,
+					SerializationInfoMethods.AddValue_Object,
+					new LiteralStringExpression("__proxyGenerationOptions"),
+					emitter.GetField("proxyGenerationOptions").ToExpression()));
 
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(info,
-					                               SerializationInfoMethods.AddValue_Object,
-					                               new ConstReference("__proxyTypeId").ToExpression(),
-					                               new ConstReference(proxyTypeId).ToExpression())));
+			getObjectData.CodeBuilder.Add(
+				new MethodInvocationExpression(info,
+					                            SerializationInfoMethods.AddValue_Object,
+					                            new LiteralStringExpression("__proxyTypeId"),
+					                            new LiteralStringExpression(proxyTypeId)));
 
 			CustomizeGetObjectData(getObjectData.CodeBuilder, info, getObjectData.Arguments[1], emitter);
 
-			getObjectData.CodeBuilder.AddStatement(new ReturnStatement());
+			getObjectData.CodeBuilder.Add(ReturnStatement.Instance);
 		}
 
 		protected virtual void AddAddValueInvocation(ArgumentReference serializationInfo, MethodEmitter getObjectData,
 		                                             FieldReference field)
 		{
-			getObjectData.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(
-						serializationInfo,
-						SerializationInfoMethods.AddValue_Object,
-						new ConstReference(field.Reference.Name).ToExpression(),
-						field.ToExpression())));
+			getObjectData.CodeBuilder.Add(
+				new MethodInvocationExpression(
+					serializationInfo,
+					SerializationInfoMethods.AddValue_Object,
+					new LiteralStringExpression(field.Reference.Name),
+					field.ToExpression()));
 			return;
 		}
 

@@ -14,28 +14,32 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
+	using System;
+	using System.ComponentModel;
 	using System.Reflection.Emit;
 
 	public class LoadRefArrayElementExpression : Expression
 	{
 		private readonly Reference arrayReference;
-		private readonly ConstReference index;
+		private readonly int index;
 
 		public LoadRefArrayElementExpression(int index, Reference arrayReference)
-			: this(new ConstReference(index), arrayReference)
-		{
-		}
-
-		public LoadRefArrayElementExpression(ConstReference index, Reference arrayReference)
 		{
 			this.index = index;
 			this.arrayReference = arrayReference;
 		}
 
+		[Obsolete] // TODO: Remove this method.
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public LoadRefArrayElementExpression(ConstReference index, Reference arrayReference)
+			: this(Convert.ToInt32(index.value), arrayReference)
+		{
+		}
+
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			ArgumentsUtil.EmitLoadOwnerAndReference(arrayReference, gen);
-			ArgumentsUtil.EmitLoadOwnerAndReference(index, gen);
+			OpCodeUtil.EmitLoadOpCodeForConstantValue(gen, index);
 			gen.Emit(OpCodes.Ldelem_Ref);
 		}
 	}

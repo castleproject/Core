@@ -16,6 +16,9 @@ Deprecations:
    - `Castle.DynamicProxy.Generators.CacheKey` (class)
    - `Castle.DynamicProxy.Serialization.CacheMappingsAttribute.ApplyTo` (method)
    - `Castle.DynamicProxy.Serialization.CacheMappingsAttribute.GetDeserializedMappings` (method)
+- The following AST node types have been deprecated:
+   - `Castle.DynamicProxy.Generators.Emitters.SimpleAST.ConstReference` (class)
+   - `Castle.DynamicProxy.Generators.Emitters.SimpleAST.ExpressionStatement` (class)
 
 ## 4.3.1 (2018-06-21)
 

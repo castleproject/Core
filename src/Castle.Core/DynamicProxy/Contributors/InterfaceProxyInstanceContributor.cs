@@ -39,18 +39,13 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			var targetField = emitter.GetField("__target");
 
-			codebuilder.AddStatement(new ExpressionStatement(
-			                         	new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
-			                         	                               new ConstReference("__targetFieldType").ToExpression(),
-			                         	                               new ConstReference(
-			                         	                               	targetField.Reference.FieldType.AssemblyQualifiedName).
-			                         	                               	ToExpression())));
+			codebuilder.Add(new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
+			                                               new LiteralStringExpression("__targetFieldType"),
+			                                               new LiteralStringExpression(targetField.Reference.FieldType.AssemblyQualifiedName)));
 
-			codebuilder.AddStatement(new ExpressionStatement(
-			                         	new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
-			                         	                               new ConstReference("__theInterface").ToExpression(),
-			                         	                               new ConstReference(targetType.AssemblyQualifiedName).
-			                         	                               	ToExpression())));
+			codebuilder.Add(new MethodInvocationExpression(serializationInfo, SerializationInfoMethods.AddValue_Object,
+			                                               new LiteralStringExpression("__theInterface"),
+			                                               new LiteralStringExpression(targetType.AssemblyQualifiedName)));
 		}
 #endif
 	}

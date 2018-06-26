@@ -126,7 +126,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			// invocation on base class
 
-			callBackMethod.CodeBuilder.AddStatement(
+			callBackMethod.CodeBuilder.Add(
 				new ReturnStatement(
 					new MethodInvocationExpression(SelfReference.Self,
 					                               targetMethod,
