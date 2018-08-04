@@ -78,6 +78,14 @@ namespace Castle.DynamicProxy
 			return generator.GetGeneratedType();
 		}
 
+		public Type CreateDelegateProxyType(Type delegateToProxy)
+		{
+			AssertValidType(delegateToProxy);
+
+			var generator = new DelegateProxyGenerator(ModuleScope, delegateToProxy);
+			return generator.GetProxyType();
+		}
+
 		public Type CreateInterfaceProxyTypeWithTarget(Type interfaceToProxy, Type[] additionalInterfacesToProxy,
 		                                               Type targetType,
 		                                               ProxyGenerationOptions options)

@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.InteropServices;
 #if FEATURE_REMOTING
@@ -1594,6 +1595,78 @@ namespace Castle.DynamicProxy
 		{
 			// create proxy
 			return ProxyBuilder.CreateClassProxyTypeWithTarget(classToProxy, additionalInterfacesToProxy, options);
+		}
+
+
+		/// <summary>
+		///   Creates a delegate that, when invoked, calls the specified <paramref name="interceptors"/>.
+		/// </summary>
+		/// <typeparam name="TDelegate">Type of delegate which will be proxied.</typeparam>
+		/// <param name="interceptors">The interceptors called during the invocation of the delegate.</param>
+		/// <returns>
+		///   New delegate of type <typeparamref name="TDelegate"/> that, when invoked, calls the specified <paramref name="interceptors"/>.
+		/// </returns>
+		/// <exception cref="ArgumentException">Thrown when the given <typeparamref name="TDelegate"/> is a generic type definition, or not a delegate type.</exception>
+		/// <exception cref="ArgumentNullException">Thrown when <paramref name="interceptors"/> is a null reference (Nothing in Visual Basic).</exception>
+		/// <remarks>
+		///   This method uses <see cref="IProxyBuilder.CreateDelegateProxyType(Type)"/> to generate a delegate.
+		///   As such, the caller should additionally expect any type of exception that the given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
+		public TDelegate CreateDelegateProxy<TDelegate>(params IInterceptor[] interceptors)
+		{
+			return (TDelegate)(object)CreateDelegateProxy(typeof(TDelegate), interceptors);
+		}
+
+		/// <summary>
+		///   Creates a delegate that, when invoked, calls the specified <paramref name="interceptors"/>.
+		/// </summary>
+		/// <param name="delegateToProxy">Type of delegate which will be proxied.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of the delegate.</param>
+		/// <returns>
+		///   New delegate of type <paramref name="delegateToProxy"/> that, when invoked, calls the specified <paramref name="interceptors"/>.
+		/// </returns>
+		/// <exception cref="ArgumentException">Thrown when the given <paramref name="delegateToProxy"/> is a generic type definition, or not a delegate type.</exception>
+		/// <exception cref="ArgumentNullException">Thrown when <paramref name="delegateToProxy"/> or <paramref name="interceptors"/> is a null reference (Nothing in Visual Basic).</exception>
+		/// <remarks>
+		///   This method uses <see cref="IProxyBuilder.CreateDelegateProxyType(Type)"/> to generate a delegate.
+		///   As such, the caller should additionally expect any type of exception that the given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
+		public Delegate CreateDelegateProxy(Type delegateToProxy, params IInterceptor[] interceptors)
+		{
+			if (delegateToProxy == null)
+			{
+				throw new ArgumentNullException(nameof(delegateToProxy));
+			}
+
+			if (typeof(Delegate).IsAssignableFrom(delegateToProxy) == false)
+			{
+				throw new ArgumentException("Must be a delegate type.", nameof(delegateToProxy));
+			}
+
+			if (delegateToProxy.GetTypeInfo().IsGenericTypeDefinition)
+			{
+				throw new ArgumentException("Must be a closed generic or non-generic delegate type.", nameof(delegateToProxy));
+			}
+
+			if (interceptors == null)
+			{
+				throw new ArgumentNullException(nameof(interceptors));
+			}
+
+			if (interceptors.Contains(null))
+			{
+				throw new ArgumentException("At least one null reference found. Must contain only valid interceptor instances.", nameof(interceptors));
+			}
+
+			var delegateProxyType = ProxyBuilder.CreateDelegateProxyType(delegateToProxy);
+			var delegateProxy = Activator.CreateInstance(delegateProxyType, args: new object[] { null, interceptors });
+			var invokeMethod = delegateProxyType.GetMethod("Invoke");
+#if FEATURE_NETCORE_REFLECTION_API
+			var @delegate = invokeMethod.CreateDelegate(delegateToProxy, target: delegateProxy);
+#else
+			var @delegate = Delegate.CreateDelegate(delegateToProxy, firstArgument: delegateProxy, method: invokeMethod);
+#endif
+			return @delegate;
 		}
 	}
 }

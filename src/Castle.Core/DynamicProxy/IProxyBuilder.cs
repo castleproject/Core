@@ -133,5 +133,22 @@ namespace Castle.DynamicProxy
 		/// <seealso cref = "InterfaceProxyWithoutTargetGenerator" />
 		Type CreateInterfaceProxyTypeWithoutTarget(Type interfaceToProxy, Type[] additionalInterfacesToProxy,
 		                                           ProxyGenerationOptions options);
+
+		/// <summary>
+		///   Creates a proxy type for the given <paramref name="delegateToProxy"/> that delegates all calls to provided interceptors.
+		/// </summary>
+		/// <param name="delegateToProxy">The delegate type to proxy.</param>
+		/// <returns>The generated proxy type.</returns>
+		/// <exception cref="GeneratorException">
+		///   Thrown when <paramref name="delegateToProxy"/> is a generic type definition or not public /
+		///   inaccessible to DynamicProxy. In the latter case, you can mark the offending type internal and
+		///   define <see cref="InternalsVisibleToAttribute"/> for Castle DynamicProxy's assembly, if appropriate.
+		/// </exception>
+		/// <remarks>
+		///   Implementers should return a proxy type that contains an <c>Invoke</c> method with the same signature as
+		///   the <c>Invoke</c> method of the given delegate type <paramref name="delegateToProxy"/>.
+		///   This <c>Invoke</c> method should delegate all executions to the target and interceptors passed to the proxy type's constructor.
+		/// </remarks>
+		Type CreateDelegateProxyType(Type delegateToProxy);
 	}
 }
