@@ -157,7 +157,8 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void CreateDelegateProxy_creates_delegate_that_can_get_in_parameter()
+		[ExcludeOnFramework(Framework.NetCore | Framework.NetFramework, "Fails with a MissingMethodException due to a bug in System.Reflection.Emit. See https://github.com/dotnet/corefx/issues/29254.")]
+		public void CreateDelegateProxy_creates_delegate_that_can_get_in_parameter_generic_delegate_type()
 		{
 			int expectedArgAtStartOfInvocation = 13;
 			object actualArgAtStartOfInvocation = null;
@@ -173,7 +174,24 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void CreateDelegateProxy_creates_delegate_that_cannot_set_in_parameter()
+		public void CreateDelegateProxy_creates_delegate_that_can_get_in_parameter_nongeneric_delegate_type()
+		{
+			int expectedArgAtStartOfInvocation = 13;
+			object actualArgAtStartOfInvocation = null;
+			var interceptor = new WithCallbackInterceptor(invocation =>
+			{
+				actualArgAtStartOfInvocation = invocation.Arguments[0];
+			});
+			var proxy = generator.CreateDelegateProxy<ActionWithInIntParameter>(interceptor);
+
+			proxy(in expectedArgAtStartOfInvocation);
+
+			Assert.AreEqual(expectedArgAtStartOfInvocation, actualArgAtStartOfInvocation);
+		}
+
+		[Test]
+		[ExcludeOnFramework(Framework.NetCore | Framework.NetFramework, "Fails with a MissingMethodException due to a bug in System.Reflection.Emit. See https://github.com/dotnet/corefx/issues/29254.")]
+		public void CreateDelegateProxy_creates_delegate_that_cannot_set_in_parameter_generic_delegate_type()
 		{
 			const int argBeforeInvocation = 0;
 			const int expectedArgAfterInvocation = argBeforeInvocation;
@@ -183,6 +201,23 @@ namespace Castle.DynamicProxy.Tests
 				invocation.SetArgumentValue(0, argBeforeInvocation + 42);
 			});
 			var proxy = generator.CreateDelegateProxy<ActionWithInParameter<int>>(interceptor);
+
+			proxy(in arg);
+
+			Assert.AreEqual(expectedArgAfterInvocation, arg);
+		}
+
+		[Test]
+		public void CreateDelegateProxy_creates_delegate_that_cannot_set_in_parameter_nongeneric_delegate_type()
+		{
+			const int argBeforeInvocation = 0;
+			const int expectedArgAfterInvocation = argBeforeInvocation;
+			int arg = argBeforeInvocation;
+			var interceptor = new WithCallbackInterceptor(invocation =>
+			{
+				invocation.SetArgumentValue(0, argBeforeInvocation + 42);
+			});
+			var proxy = generator.CreateDelegateProxy<ActionWithInIntParameter>(interceptor);
 
 			proxy(in arg);
 
@@ -237,6 +272,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		public delegate void ActionWithInParameter<T>(in T arg);
+		public delegate void ActionWithInIntParameter(in int arg);
 		public delegate void ActionWithOutParameter<T>(out T arg);
 		public delegate void ActionWithRefParameter<T>(ref T arg);
 	}
