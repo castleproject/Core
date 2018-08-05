@@ -1614,7 +1614,32 @@ namespace Castle.DynamicProxy
 		/// </remarks>
 		public TDelegate CreateDelegateProxy<TDelegate>(params IInterceptor[] interceptors)
 		{
-			return (TDelegate)(object)CreateDelegateProxy(typeof(TDelegate), interceptors);
+			return (TDelegate)(object)CreateDelegateProxyImpl(typeof(TDelegate), null, interceptors);
+		}
+
+		/// <summary>
+		///   Creates a delegate that, when invoked, calls the specified <paramref name="interceptors"/>.
+		/// </summary>
+		/// <typeparam name="TDelegate">Type of delegate which will be proxied.</typeparam>
+		/// <param name="target">The target. Must have type <typeparamref name="TDelegate"/>.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of the delegate.</param>
+		/// <returns>
+		///   New delegate of type <typeparamref name="TDelegate"/> that, when invoked, calls the specified <paramref name="interceptors"/>.
+		/// </returns>
+		/// <exception cref="ArgumentException">Thrown when the given <typeparamref name="TDelegate"/> is a generic type definition, or not a delegate type.</exception>
+		/// <exception cref="ArgumentNullException">Thrown when <paramref name="target"/> or <paramref name="interceptors"/> is a null reference (Nothing in Visual Basic).</exception>
+		/// <remarks>
+		///   This method uses <see cref="IProxyBuilder.CreateDelegateProxyType(Type)"/> to generate a delegate.
+		///   As such, the caller should additionally expect any type of exception that the given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
+		public TDelegate CreateDelegateProxyWithTarget<TDelegate>(TDelegate target, params IInterceptor[] interceptors)
+		{
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			return (TDelegate)(object)CreateDelegateProxyImpl(typeof(TDelegate), (Delegate)(object)target, interceptors);
 		}
 
 		/// <summary>
@@ -1632,6 +1657,41 @@ namespace Castle.DynamicProxy
 		///   As such, the caller should additionally expect any type of exception that the given <see cref="IProxyBuilder"/> implementation may throw.
 		/// </remarks>
 		public Delegate CreateDelegateProxy(Type delegateToProxy, params IInterceptor[] interceptors)
+		{
+			return CreateDelegateProxyImpl(delegateToProxy, null, interceptors);
+		}
+
+		/// <summary>
+		///   Creates a delegate that, when invoked, calls the specified <paramref name="interceptors"/>.
+		/// </summary>
+		/// <param name="delegateToProxy">Type of delegate which will be proxied.</param>
+		/// <param name="target">The target. Must have the type specified by <paramref name="delegateToProxy"/>.</param>
+		/// <param name="interceptors">The interceptors called during the invocation of the delegate.</param>
+		/// <returns>
+		///   New delegate of type <paramref name="delegateToProxy"/> that, when invoked, calls the specified <paramref name="interceptors"/>.
+		/// </returns>
+		/// <exception cref="ArgumentException">Thrown when the given <paramref name="delegateToProxy"/> is a generic type definition, or not a delegate type.</exception>
+		/// <exception cref="ArgumentNullException">Thrown when <paramref name="delegateToProxy"/>, <paramref name="target"/>, or <paramref name="interceptors"/> is a null reference (Nothing in Visual Basic).</exception>
+		/// <remarks>
+		///   This method uses <see cref="IProxyBuilder.CreateDelegateProxyType(Type)"/> to generate a delegate.
+		///   As such, the caller should additionally expect any type of exception that the given <see cref="IProxyBuilder"/> implementation may throw.
+		/// </remarks>
+		public Delegate CreateDelegateProxyWithTarget(Type delegateToProxy, Delegate target, params IInterceptor[] interceptors)
+		{
+			if (target == null)
+			{
+				throw new ArgumentNullException(nameof(target));
+			}
+
+			if (delegateToProxy.IsAssignableFrom(target.GetType()) == false)
+			{
+				throw new ArgumentException("The target's type is not compatible with the given delegate type to proxy.", nameof(target));
+			}
+
+			return CreateDelegateProxyImpl(delegateToProxy, target, interceptors);
+		}
+
+		private Delegate CreateDelegateProxyImpl(Type delegateToProxy, Delegate target, params IInterceptor[] interceptors)
 		{
 			if (delegateToProxy == null)
 			{
@@ -1659,7 +1719,7 @@ namespace Castle.DynamicProxy
 			}
 
 			var delegateProxyType = ProxyBuilder.CreateDelegateProxyType(delegateToProxy);
-			var delegateProxy = Activator.CreateInstance(delegateProxyType, args: new object[] { null, interceptors });
+			var delegateProxy = Activator.CreateInstance(delegateProxyType, args: new object[] { target, interceptors });
 			var invokeMethod = delegateProxyType.GetMethod("Invoke");
 #if FEATURE_NETCORE_REFLECTION_API
 			var @delegate = invokeMethod.CreateDelegate(delegateToProxy, target: delegateProxy);

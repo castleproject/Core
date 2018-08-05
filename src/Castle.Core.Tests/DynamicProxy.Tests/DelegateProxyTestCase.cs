@@ -33,6 +33,11 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("delegateToProxy", ex.ParamName);
 		}
 
+		// Note: We will not repeat the above test for `CreateDelegateProxyWithTarget`,
+		// since both methods mostly delegate to the same private implementation method.
+		// We will only target `CreateDelegateProxyWithTarget` in tests where its logic
+		// differs from `CreateDelegateProxy`, and where the target matters.
+
 		[Test]
 		public void CreateDelegateProxy_throws_when_given_null_for_parameter_interceptors()
 		{
@@ -89,6 +94,29 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void CreateDelegateProxyWithTarget_throws_when_given_null_for_target()
+		{
+			var _ = typeof(Action);
+
+			TestDelegate call = () => generator.CreateDelegateProxyWithTarget(_, (Action)null);
+
+			var ex = Assert.Throws<ArgumentNullException>(call);
+			Assert.AreEqual("target", ex.ParamName);
+		}
+
+		[Test]
+		public void CreateDelegateProxyWithTarget_throws_when_target_type_does_not_match_delegate_type_to_proxy()
+		{
+			var delegateType = typeof(Action);
+			Func<bool> targetWithDifferentType = () => true;
+
+			TestDelegate call = () => generator.CreateDelegateProxyWithTarget(delegateType, targetWithDifferentType);
+
+			var ex = Assert.Throws<ArgumentException>(call);
+			Assert.AreEqual("target", ex.ParamName);
+		}
+
+		[Test]
 		public void CreateDelegateProxy_creates_delegate_that_calls_interceptor()
 		{
 			var interceptorInvoked = false;
@@ -101,6 +129,55 @@ namespace Castle.DynamicProxy.Tests
 			proxy();
 
 			Assert.True(interceptorInvoked);
+		}
+
+		[Test]
+		public void CreateDelegateProxyWithTarget_creates_delegate_that_calls_target()
+		{
+			var targetInvoked = false;
+			Action target = () => targetInvoked = true;
+			var proxy = generator.CreateDelegateProxyWithTarget<Action>(target);
+
+			proxy();
+
+			Assert.True(targetInvoked);
+		}
+
+		[Test]
+		public void CreateDelegateProxyWithTarget_creates_delegate_that_calls_interceptor_but_not_target_if_not_Proceed()
+		{
+			var interceptorInvoked = false;
+			var interceptor = new WithCallbackInterceptor(invocation =>
+			{
+				interceptorInvoked = true;
+			});
+			var targetInvoked = false;
+			Action target = () => targetInvoked = true;
+			var proxy = generator.CreateDelegateProxyWithTarget<Action>(target, interceptor);
+
+			proxy();
+
+			Assert.True(interceptorInvoked);
+			Assert.False(targetInvoked);
+		}
+
+		[Test]
+		public void CreateDelegateProxyWithTarget_creates_delegate_that_calls_interceptor_and_target_if_Proceed()
+		{
+			var interceptorInvoked = false;
+			var interceptor = new WithCallbackInterceptor(invocation =>
+			{
+				interceptorInvoked = true;
+				invocation.Proceed();
+			});
+			var targetInvoked = false;
+			Action target = () => targetInvoked = true;
+			var proxy = generator.CreateDelegateProxyWithTarget<Action>(target, interceptor);
+
+			proxy();
+
+			Assert.True(interceptorInvoked);
+			Assert.True(targetInvoked);
 		}
 
 		[Test]
@@ -141,6 +218,19 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void CreateDelegateProxyWithTarget_passes_argument_to_target()
+		{
+			const int expectedArg = 42;
+			object actualArg = null;
+			Action<int> target = a => actualArg = a;
+			var proxy = generator.CreateDelegateProxyWithTarget<Action<int>>(target);
+
+			proxy(expectedArg);
+
+			Assert.AreEqual(expectedArg, actualArg);
+		}
+
+		[Test]
 		public void CreateDelegateProxy_creates_delegate_that_can_return_value()
 		{
 			const int expectedReturnValue = 42;
@@ -150,6 +240,19 @@ namespace Castle.DynamicProxy.Tests
 				invocation.ReturnValue = expectedReturnValue;
 			});
 			var proxy = generator.CreateDelegateProxy<Func<int>>(interceptor);
+
+			actualReturnValue = proxy();
+
+			Assert.AreEqual(expectedReturnValue, actualReturnValue);
+		}
+
+		[Test]
+		public void CreateDelegateProxyWithTarget_creates_delegate_that_can_return_value()
+		{
+			const int expectedReturnValue = 42;
+			object actualReturnValue;
+			Func<int> target = () => expectedReturnValue;
+			var proxy = generator.CreateDelegateProxyWithTarget<Func<int>>(target);
 
 			actualReturnValue = proxy();
 
@@ -183,6 +286,19 @@ namespace Castle.DynamicProxy.Tests
 				actualArgAtStartOfInvocation = invocation.Arguments[0];
 			});
 			var proxy = generator.CreateDelegateProxy<ActionWithInIntParameter>(interceptor);
+
+			proxy(in expectedArgAtStartOfInvocation);
+
+			Assert.AreEqual(expectedArgAtStartOfInvocation, actualArgAtStartOfInvocation);
+		}
+
+		[Test]
+		public void CreateDelegateProxyWithTarget_creates_delegate_that_can_get_in_parameter_nongeneric_delegate_type()
+		{
+			int expectedArgAtStartOfInvocation = 13;
+			object actualArgAtStartOfInvocation = null;
+			ActionWithInIntParameter target = (in int a) => actualArgAtStartOfInvocation = a;
+			var proxy = generator.CreateDelegateProxyWithTarget<ActionWithInIntParameter>(target);
 
 			proxy(in expectedArgAtStartOfInvocation);
 
@@ -240,6 +356,18 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void CreateDelegateProxyWithTarget_creates_delegate_that_can_set_out_parameter()
+		{
+			const int expectedArgAfterInvocation = 42;
+			ActionWithOutParameter<int> target = (out int a) => a = expectedArgAfterInvocation;
+			var proxy = generator.CreateDelegateProxyWithTarget<ActionWithOutParameter<int>>(target);
+
+			proxy(out int actualArgAfterInvocation);
+
+			Assert.AreEqual(expectedArgAfterInvocation, actualArgAfterInvocation);
+		}
+
+		[Test]
 		public void CreateDelegateProxy_creates_delegate_that_can_get_ref_parameter()
 		{
 			int expectedArgAtStartOfInvocation = 13;
@@ -256,6 +384,19 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void CreateDelegateProxyWithTarget_creates_delegate_that_can_get_ref_parameter()
+		{
+			int expectedArgAtStartOfInvocation = 13;
+			object actualArgAtStartOfInvocation = null;
+			ActionWithRefParameter<int> target = (ref int a) => actualArgAtStartOfInvocation = a;
+			var proxy = generator.CreateDelegateProxyWithTarget<ActionWithRefParameter<int>>(target);
+
+			proxy(ref expectedArgAtStartOfInvocation);
+
+			Assert.AreEqual(expectedArgAtStartOfInvocation, actualArgAtStartOfInvocation);
+		}
+
+		[Test]
 		public void CreateDelegateProxy_creates_delegate_that_can_set_ref_parameter()
 		{
 			const int expectedArgAfterInvocation = 42;
@@ -265,6 +406,19 @@ namespace Castle.DynamicProxy.Tests
 				invocation.SetArgumentValue(0, expectedArgAfterInvocation);
 			});
 			var proxy = generator.CreateDelegateProxy<ActionWithRefParameter<int>>(interceptor);
+
+			proxy(ref actualArgAfterInvocation);
+
+			Assert.AreEqual(expectedArgAfterInvocation, actualArgAfterInvocation);
+		}
+
+		[Test]
+		public void CreateDelegateProxyWithTarget_creates_delegate_that_can_set_ref_parameter()
+		{
+			const int expectedArgAfterInvocation = 42;
+			int actualArgAfterInvocation = 0;
+			ActionWithRefParameter<int> target = (ref int a) => a = expectedArgAfterInvocation;
+			var proxy = generator.CreateDelegateProxyWithTarget<ActionWithRefParameter<int>>(target);
 
 			proxy(ref actualArgAfterInvocation);
 
