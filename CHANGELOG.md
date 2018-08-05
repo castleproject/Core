@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+Enhancements:
+- New methods `ProxyGenerator.CreateDelegateProxy[WithTarget]` for creating delegate proxies. (@stakx, #403)
+
 Deprecations:
 - The API surrounding `Lock` has been deprecated. This consists of the members listed below. Consider using the Base Class Library's `System.Threading.ReaderWriterLockSlim` instead. (@stakx, #391)
    - `Castle.Core.Internal.Lock` (class)
