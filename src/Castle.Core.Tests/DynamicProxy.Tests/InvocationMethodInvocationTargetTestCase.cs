@@ -70,7 +70,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void InterfaceProxyWithTarget_MethodInvocationTarget_should_be_null()
+		public void InterfaceProxyWithoutTarget_MethodInvocationTarget_should_be_null()
 		{
 			var interceptor = new KeepDataInterceptor();
 			var proxy = generator.CreateInterfaceProxyWithoutTarget<IService>(interceptor);
@@ -127,6 +127,30 @@ namespace Castle.DynamicProxy.Tests
 			var proxy = (IChangeTracking)generator.CreateClassProxy<GenClassWithExplicitImpl<int>>(interceptor);
 			Assert.IsTrue(proxy.IsChanged);
 			Assert.IsNotNull(interceptor.Invocation.MethodInvocationTarget);
+		}
+
+		[Test]
+		public void DelegateProxy_MethodInvocationTarget_should_be_null()
+		{
+			var interceptor = new KeepDataInterceptor();
+
+			var proxy = generator.CreateDelegateProxy<Action>(interceptor);
+			proxy();
+
+			Assert.Null(interceptor.Invocation.MethodInvocationTarget);
+		}
+
+		[Test]
+		public void DelegateProxyWithTarget_MethodInvocationTarget_should_be_Invoke_method_on_target_delegate_type()
+		{
+			var interceptor = new KeepDataInterceptor();
+			Action target = delegate { };
+
+			var proxy = generator.CreateDelegateProxyWithTarget<Action>(target, interceptor);
+			proxy();
+
+			var methodOnTarget = target.GetType().GetMethod("Invoke");
+			Assert.AreSame(methodOnTarget, interceptor.Invocation.MethodInvocationTarget);
 		}
 	}
 }
