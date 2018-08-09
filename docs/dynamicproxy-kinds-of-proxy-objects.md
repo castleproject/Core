@@ -20,6 +20,8 @@ Composition-based proxy is a new object that inherits from proxied class/impleme
 
 * Interface proxy with target interface - this kind of proxy is kind of a hybrid of two other interface proxy kinds. It allows, but not requires target object to be supplied. It also allows the target to be swapped during the lifetime of the proxy. It is not tied to one type of the proxy target so one proxy type can be reused for different target types as long as they implement the target interface.
 
+* Delegate proxy with and without target - this proxy kind targets delegates, as the name implies. DynamicProxy builds a delegate that, when invoked, in turn invokes all configured interceptors and/or the target delegate. At least one interceptor or a target must be specified in order for the generated delegate to have an implementation.
+
 ## External resources
 
 * [Tutorial on DynamicProxy discussing with examples all kinds of proxies](http://kozmic.pl/dynamic-proxy-tutorial/)
