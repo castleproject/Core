@@ -75,5 +75,29 @@ namespace Castle.DynamicProxy.Tests
 			var second = Proxy(kind, typeof(ITwo), typeof(IOne));
 			Assert.AreSame(first.GetType(), second.GetType());
 		}
+
+		[Test]
+		public void Delegate_proxy_types_are_cached()
+		{
+			var first  = generator.CreateDelegateProxy(typeof(Action));
+			var second = generator.CreateDelegateProxy(typeof(Action));
+			Assert.AreSame(first.Target.GetType(), second.Target.GetType());
+		}
+
+		[Test]
+		public void Delegate_proxy_types_are_cached_when_using_generic_syntax()
+		{
+			var first = generator.CreateDelegateProxy<Action>();
+			var second = generator.CreateDelegateProxy<Action>();
+			Assert.AreSame(first.Target.GetType(), second.Target.GetType());
+		}
+
+		[Test]
+		public void Delegate_proxy_types_are_cached_regardless_of_presence_of_target()
+		{
+			var first = generator.CreateDelegateProxy<Action>();
+			var second = generator.CreateDelegateProxyWithTarget<Action>(() => Console.Clear());
+			Assert.AreSame(first.Target.GetType(), second.Target.GetType());
+		}
 	}
 }
