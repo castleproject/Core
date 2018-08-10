@@ -39,7 +39,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void By_referece_In_parameter_cannot_modify_argument_var()
+		public void By_reference_In_parameter_cannot_modify_argument_var()
 		{
 			var x = new ReadOnlyStruct(1);
 			var original = new ReadOnlyStruct(x.Value);
@@ -47,6 +47,19 @@ namespace Castle.DynamicProxy.Tests
 			var different = new ReadOnlyStruct(x.Value + 100);
 			var proxy = generator.CreateInterfaceProxyWithoutTarget<IByReadOnlyRef>(new SetArgumentValueInterceptor(0, different));
 			proxy.Method(in x);
+
+			Assert.AreEqual(original.Value, x.Value);
+		}
+
+		[Test]
+		public void By_reference_In_parameter_cannot_modify_argument_var_when_using_delegate_proxy()
+		{
+			var x = new ReadOnlyStruct(1);
+			var original = new ReadOnlyStruct(x.Value);
+
+			var different = new ReadOnlyStruct(x.Value + 100);
+			var proxy = generator.CreateDelegateProxy<ByReadOnlyRefDelegate>(new SetArgumentValueInterceptor(0, different));
+			proxy(in x);
 
 			Assert.AreEqual(original.Value, x.Value);
 		}
@@ -142,6 +155,8 @@ namespace Castle.DynamicProxy.Tests
 		{
 			void Method(in ReadOnlyStruct arg);
 		}
+
+		public delegate void ByReadOnlyRefDelegate(in ReadOnlyStruct arg);
 
 		public interface IByRef
 		{
