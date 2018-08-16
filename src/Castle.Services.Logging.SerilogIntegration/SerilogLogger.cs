@@ -40,7 +40,12 @@ namespace Castle.Services.Logging.SerilogIntegration
 
         protected internal SerilogFactory Factory { get; set; }
 
-        public bool IsDebugEnabled
+		public bool IsTraceEnabled
+		{
+			get { return Logger.IsEnabled(LogEventLevel.Debug); }
+		}
+
+		public bool IsDebugEnabled
         {
             get { return Logger.IsEnabled(LogEventLevel.Debug); }
         }
@@ -76,7 +81,65 @@ namespace Castle.Services.Logging.SerilogIntegration
             throw new NotImplementedException("Creating child loggers for Serilog is not supported");
         }
 
-        public void Debug(string message, Exception exception)
+		public void Trace(string message, Exception exception)
+		{
+			if (IsTraceEnabled)
+			{
+				Logger.Debug(exception, message);
+			}
+		}
+
+		public void Trace(Func<string> messageFactory)
+		{
+			if (IsTraceEnabled)
+			{
+				Logger.Debug(messageFactory.Invoke());
+			}
+		}
+
+		public void Trace(string message)
+		{
+			if (IsTraceEnabled)
+			{
+				Logger.Debug(message);
+			}
+		}
+
+		public void TraceFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
+		{
+			if (IsTraceEnabled)
+			{
+				//TODO: This honours the formatProvider rather than passing through args for structured logging
+				Logger.Debug(exception, string.Format(formatProvider, format, args));
+			}
+		}
+
+		public void TraceFormat(IFormatProvider formatProvider, string format, params object[] args)
+		{
+			if (IsTraceEnabled)
+			{
+				//TODO: This honours the formatProvider rather than passing through args for structured logging
+				Logger.Debug(string.Format(formatProvider, format, args));
+			}
+		}
+
+		public void TraceFormat(Exception exception, string format, params object[] args)
+		{
+			if (IsTraceEnabled)
+			{
+				Logger.Debug(exception, format, args);
+			}
+		}
+
+		public void TraceFormat(string format, params object[] args)
+		{
+			if (IsTraceEnabled)
+			{
+				Logger.Debug(format, args);
+			}
+		}
+
+		public void Debug(string message, Exception exception)
         {
             if (IsDebugEnabled)
             {

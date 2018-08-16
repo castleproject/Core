@@ -32,7 +32,7 @@ namespace Castle.Core.Logging
 		///   set to <c>LoggerLevel.Debug</c> and the <c>Name</c>
 		///   set to <c>String.Empty</c>.
 		/// </summary>
-		public ConsoleLogger() : this(String.Empty, LoggerLevel.Debug)
+		public ConsoleLogger() : this(String.Empty, LoggerLevel.Trace)
 		{
 		}
 
@@ -50,7 +50,7 @@ namespace Castle.Core.Logging
 		///   set to <c>LoggerLevel.Debug</c>.
 		/// </summary>
 		/// <param name = "name">The logs Name.</param>
-		public ConsoleLogger(String name) : this(name, LoggerLevel.Debug)
+		public ConsoleLogger(String name) : this(name, LoggerLevel.Trace)
 		{
 		}
 

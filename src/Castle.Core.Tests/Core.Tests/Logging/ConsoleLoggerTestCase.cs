@@ -53,6 +53,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			ConsoleLogger log = new ConsoleLogger("Logger", LoggerLevel.Info);
 
+			log.Trace("Some trace message");
 			log.Debug("Some debug message");
 			log.Info("Some info message");
 			log.Error("Some error message");
@@ -75,6 +76,7 @@ namespace Castle.Core.Logging.Tests
 		{
 			ConsoleLogger log = new ConsoleLogger("Logger", LoggerLevel.Debug);
 
+			log.Trace("Some trace message");
 			log.Debug("Some debug message");
 			log.Info("Some info message");
 			log.Error("Some error message");
@@ -94,10 +96,36 @@ namespace Castle.Core.Logging.Tests
 		}
 
 		[Test]
+		public void TraceLogger()
+		{
+			ConsoleLogger log = new ConsoleLogger("Logger", LoggerLevel.Trace);
+
+			log.Trace("Some trace message");
+			log.Debug("Some debug message");
+			log.Info("Some info message");
+			log.Error("Some error message");
+			log.Fatal("Some fatal error message");
+			log.Warn("Some warn message");
+
+			String logcontents = outWriter.GetStringBuilder().ToString();
+
+			StringWriter expected = new StringWriter();
+			expected.WriteLine("[Trace] 'Logger' Some trace message");
+			expected.WriteLine("[Debug] 'Logger' Some debug message");
+			expected.WriteLine("[Info] 'Logger' Some info message");
+			expected.WriteLine("[Error] 'Logger' Some error message");
+			expected.WriteLine("[Fatal] 'Logger' Some fatal error message");
+			expected.WriteLine("[Warn] 'Logger' Some warn message");
+
+			Assert.AreEqual(expected.GetStringBuilder().ToString(), logcontents, "logcontents don't match");
+		}
+
+		[Test]
 		public void WarnLogger()
 		{
 			ConsoleLogger log = new ConsoleLogger("Logger", LoggerLevel.Warn);
 
+			log.Trace("Some trace message");
 			log.Debug("Some debug message");
 			log.Info("Some info message");
 			log.Error("Some error message");

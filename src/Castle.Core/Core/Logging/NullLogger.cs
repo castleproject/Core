@@ -53,6 +53,15 @@ namespace Castle.Core.Logging
 		///   No-op.
 		/// </summary>
 		/// <value>false</value>
+		public bool IsTraceEnabled
+		{
+			get { return false; }
+		}
+
+		/// <summary>
+		///   No-op.
+		/// </summary>
+		/// <value>false</value>
 		public bool IsDebugEnabled
 		{
 			get { return false; }
@@ -102,6 +111,67 @@ namespace Castle.Core.Logging
 		public ILogger CreateChildLogger(string loggerName)
 		{
 			return this;
+		}
+
+		/// <summary>
+		///   No-op.
+		/// </summary>
+		/// <param name = "message">Ignored</param>
+		public void Trace(string message)
+		{
+		}
+
+		public void Trace(Func<string> messageFactory)
+		{
+		}
+
+		/// <summary>
+		///   No-op.
+		/// </summary>
+		/// <param name = "exception">Ignored</param>
+		/// <param name = "message">Ignored</param>
+		public void Trace(string message, Exception exception)
+		{
+		}
+
+		/// <summary>
+		///   No-op.
+		/// </summary>
+		/// <param name = "format">Ignored</param>
+		/// <param name = "args">Ignored</param>
+		public void TraceFormat(string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		///   No-op.
+		/// </summary>
+		/// <param name = "exception">Ignored</param>
+		/// <param name = "format">Ignored</param>
+		/// <param name = "args">Ignored</param>
+		public void TraceFormat(Exception exception, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		///   No-op.
+		/// </summary>
+		/// <param name = "formatProvider">Ignored</param>
+		/// <param name = "format">Ignored</param>
+		/// <param name = "args">Ignored</param>
+		public void TraceFormat(IFormatProvider formatProvider, string format, params object[] args)
+		{
+		}
+
+		/// <summary>
+		///   No-op.
+		/// </summary>
+		/// <param name = "exception">Ignored</param>
+		/// <param name = "formatProvider">Ignored</param>
+		/// <param name = "format">Ignored</param>
+		/// <param name = "args">Ignored</param>
+		public void TraceFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
+		{
 		}
 
 		/// <summary>
