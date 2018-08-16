@@ -204,22 +204,18 @@ namespace Castle.Core.Logging
 		/// <param name = "message">The message to log</param>
 		public void Debug(string message)
 		{
-			if (!IsDebugEnabled)
+			if (IsDebugEnabled)
 			{
-				return;
+				Log(LoggerLevel.Debug, message, null);
 			}
-
-			Log(LoggerLevel.Debug, message, null);
 		}
 
 		public void Debug(Func<string> messageFactory)
 		{
-			if (!IsDebugEnabled)
+			if (IsDebugEnabled)
 			{
-				return;
+				Log(LoggerLevel.Debug, messageFactory.Invoke(), null);
 			}
-
-			Log(LoggerLevel.Debug, messageFactory.Invoke(), null);
 		}
 
 		/// <summary>
@@ -229,12 +225,10 @@ namespace Castle.Core.Logging
 		/// <param name = "message">The message to log</param>
 		public void Debug(string message, Exception exception)
 		{
-			if (!IsDebugEnabled)
+			if (IsDebugEnabled)
 			{
-				return;
+				Log(LoggerLevel.Debug, message, exception);
 			}
-
-			Log(LoggerLevel.Debug, message, exception);
 		}
 
 		/// <summary>
@@ -244,12 +238,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void DebugFormat(string format, params object[] args)
 		{
-			if (!IsDebugEnabled)
+			if (IsDebugEnabled)
 			{
-				return;
+				Log(LoggerLevel.Debug, String.Format(CultureInfo.CurrentCulture, format, args), null);
 			}
-
-			Log(LoggerLevel.Debug, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -260,12 +252,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void DebugFormat(Exception exception, string format, params object[] args)
 		{
-			if (!IsDebugEnabled)
+			if (IsDebugEnabled)
 			{
-				return;
+				Log(LoggerLevel.Debug, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 			}
-
-			Log(LoggerLevel.Debug, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -276,12 +266,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void DebugFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (!IsDebugEnabled)
+			if (IsDebugEnabled)
 			{
-				return;
+				Log(LoggerLevel.Debug, String.Format(formatProvider, format, args), null);
 			}
-
-			Log(LoggerLevel.Debug, String.Format(formatProvider, format, args), null);
 		}
 
 		/// <summary>
@@ -293,12 +281,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void DebugFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (!IsDebugEnabled)
+			if (IsDebugEnabled)
 			{
-				return;
+				Log(LoggerLevel.Debug, String.Format(formatProvider, format, args), exception);
 			}
-
-			Log(LoggerLevel.Debug, String.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
@@ -311,22 +297,18 @@ namespace Castle.Core.Logging
 		/// <param name = "message">The message to log</param>
 		public void Info(string message)
 		{
-			if (!IsInfoEnabled)
+			if (IsInfoEnabled)
 			{
-				return;
+				Log(LoggerLevel.Info, message, null);
 			}
-
-			Log(LoggerLevel.Info, message, null);
 		}
 
 		public void Info(Func<string> messageFactory)
 		{
-			if (!IsInfoEnabled)
+			if (IsInfoEnabled)
 			{
-				return;
+				Log(LoggerLevel.Info, messageFactory.Invoke(), null);
 			}
-
-			Log(LoggerLevel.Info, messageFactory.Invoke(), null);
 		}
 
 		/// <summary>
@@ -336,12 +318,10 @@ namespace Castle.Core.Logging
 		/// <param name = "message">The message to log</param>
 		public void Info(string message, Exception exception)
 		{
-			if (!IsInfoEnabled)
+			if (IsInfoEnabled)
 			{
-				return;
+				Log(LoggerLevel.Info, message, exception);
 			}
-
-			Log(LoggerLevel.Info, message, exception);
 		}
 
 		/// <summary>
@@ -351,12 +331,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void InfoFormat(string format, params object[] args)
 		{
-			if (!IsInfoEnabled)
+			if (IsInfoEnabled)
 			{
-				return;
+				Log(LoggerLevel.Info, String.Format(CultureInfo.CurrentCulture, format, args), null);
 			}
-
-			Log(LoggerLevel.Info, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -367,12 +345,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void InfoFormat(Exception exception, string format, params object[] args)
 		{
-			if (!IsInfoEnabled)
+			if (IsInfoEnabled)
 			{
-				return;
+				Log(LoggerLevel.Info, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 			}
-
-			Log(LoggerLevel.Info, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -383,12 +359,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void InfoFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (!IsInfoEnabled)
+			if (IsInfoEnabled)
 			{
-				return;
+				Log(LoggerLevel.Info, String.Format(formatProvider, format, args), null);
 			}
-
-			Log(LoggerLevel.Info, String.Format(formatProvider, format, args), null);
 		}
 
 		/// <summary>
@@ -400,12 +374,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void InfoFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (!IsInfoEnabled)
+			if (IsInfoEnabled)
 			{
-				return;
+				Log(LoggerLevel.Info, String.Format(formatProvider, format, args), exception);
 			}
-
-			Log(LoggerLevel.Info, String.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
@@ -418,22 +390,18 @@ namespace Castle.Core.Logging
 		/// <param name = "message">The message to log</param>
 		public void Warn(string message)
 		{
-			if (!IsWarnEnabled)
+			if (IsWarnEnabled)
 			{
-				return;
+				Log(LoggerLevel.Warn, message, null);
 			}
-
-			Log(LoggerLevel.Warn, message, null);
 		}
 
 		public void Warn(Func<string> messageFactory)
 		{
-			if (!IsWarnEnabled)
+			if (IsWarnEnabled)
 			{
-				return;
+				Log(LoggerLevel.Warn, messageFactory.Invoke(), null);
 			}
-
-			Log(LoggerLevel.Warn, messageFactory.Invoke(), null);
 		}
 
 		/// <summary>
@@ -443,12 +411,10 @@ namespace Castle.Core.Logging
 		/// <param name = "message">The message to log</param>
 		public void Warn(string message, Exception exception)
 		{
-			if (!IsWarnEnabled)
+			if (IsWarnEnabled)
 			{
-				return;
+				Log(LoggerLevel.Warn, message, exception);
 			}
-
-			Log(LoggerLevel.Warn, message, exception);
 		}
 
 		/// <summary>
@@ -458,12 +424,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void WarnFormat(string format, params object[] args)
 		{
-			if (!IsWarnEnabled)
+			if (IsWarnEnabled)
 			{
-				return;
+				Log(LoggerLevel.Warn, String.Format(CultureInfo.CurrentCulture, format, args), null);
 			}
-
-			Log(LoggerLevel.Warn, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -474,12 +438,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void WarnFormat(Exception exception, string format, params object[] args)
 		{
-			if (!IsWarnEnabled)
+			if (IsWarnEnabled)
 			{
-				return;
+				Log(LoggerLevel.Warn, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 			}
-
-			Log(LoggerLevel.Warn, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -490,12 +452,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void WarnFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (!IsWarnEnabled)
+			if (IsWarnEnabled)
 			{
-				return;
+				Log(LoggerLevel.Warn, String.Format(formatProvider, format, args), null);
 			}
-
-			Log(LoggerLevel.Warn, String.Format(formatProvider, format, args), null);
 		}
 
 		/// <summary>
@@ -507,12 +467,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void WarnFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (!IsWarnEnabled)
+			if (IsWarnEnabled)
 			{
-				return;
+				Log(LoggerLevel.Warn, String.Format(formatProvider, format, args), exception);
 			}
-
-			Log(LoggerLevel.Warn, String.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
@@ -525,22 +483,18 @@ namespace Castle.Core.Logging
 		/// <param name = "message">The message to log</param>
 		public void Error(string message)
 		{
-			if (!IsErrorEnabled)
+			if (IsErrorEnabled)
 			{
-				return;
+				Log(LoggerLevel.Error, message, null);
 			}
-
-			Log(LoggerLevel.Error, message, null);
 		}
 
 		public void Error(Func<string> messageFactory)
 		{
-			if (!IsErrorEnabled)
+			if (IsErrorEnabled)
 			{
-				return;
+				Log(LoggerLevel.Error, messageFactory.Invoke(), null);
 			}
-
-			Log(LoggerLevel.Error, messageFactory.Invoke(), null);
 		}
 
 		/// <summary>
@@ -550,12 +504,10 @@ namespace Castle.Core.Logging
 		/// <param name = "message">The message to log</param>
 		public void Error(string message, Exception exception)
 		{
-			if (!IsErrorEnabled)
+			if (IsErrorEnabled)
 			{
-				return;
+				Log(LoggerLevel.Error, message, exception);
 			}
-
-			Log(LoggerLevel.Error, message, exception);
 		}
 
 		/// <summary>
@@ -565,12 +517,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void ErrorFormat(string format, params object[] args)
 		{
-			if (!IsErrorEnabled)
+			if (IsErrorEnabled)
 			{
-				return;
+				Log(LoggerLevel.Error, String.Format(CultureInfo.CurrentCulture, format, args), null);
 			}
-
-			Log(LoggerLevel.Error, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -581,12 +531,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void ErrorFormat(Exception exception, string format, params object[] args)
 		{
-			if (!IsErrorEnabled)
+			if (IsErrorEnabled)
 			{
-				return;
+				Log(LoggerLevel.Error, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 			}
-
-			Log(LoggerLevel.Error, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -597,12 +545,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void ErrorFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (!IsErrorEnabled)
+			if (IsErrorEnabled)
 			{
-				return;
+				Log(LoggerLevel.Error, String.Format(formatProvider, format, args), null);
 			}
-
-			Log(LoggerLevel.Error, String.Format(formatProvider, format, args), null);
 		}
 
 		/// <summary>
@@ -614,12 +560,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void ErrorFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (!IsErrorEnabled)
+			if (IsErrorEnabled)
 			{
-				return;
+				Log(LoggerLevel.Error, String.Format(formatProvider, format, args), exception);
 			}
-
-			Log(LoggerLevel.Error, String.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
@@ -632,22 +576,18 @@ namespace Castle.Core.Logging
 		/// <param name = "message">The message to log</param>
 		public void Fatal(string message)
 		{
-			if (!IsFatalEnabled)
+			if (IsFatalEnabled)
 			{
-				return;
+				Log(LoggerLevel.Fatal, message, null);
 			}
-
-			Log(LoggerLevel.Fatal, message, null);
 		}
 
 		public void Fatal(Func<string> messageFactory)
 		{
-			if (!IsFatalEnabled)
+			if (IsFatalEnabled)
 			{
-				return;
+				Log(LoggerLevel.Fatal, messageFactory.Invoke(), null);
 			}
-
-			Log(LoggerLevel.Fatal, messageFactory.Invoke(), null);
 		}
 
 		/// <summary>
@@ -657,12 +597,10 @@ namespace Castle.Core.Logging
 		/// <param name = "message">The message to log</param>
 		public void Fatal(string message, Exception exception)
 		{
-			if (!IsFatalEnabled)
+			if (IsFatalEnabled)
 			{
-				return;
+				Log(LoggerLevel.Fatal, message, exception);
 			}
-
-			Log(LoggerLevel.Fatal, message, exception);
 		}
 
 		/// <summary>
@@ -672,12 +610,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void FatalFormat(string format, params object[] args)
 		{
-			if (!IsFatalEnabled)
+			if (IsFatalEnabled)
 			{
-				return;
+				Log(LoggerLevel.Fatal, String.Format(CultureInfo.CurrentCulture, format, args), null);
 			}
-
-			Log(LoggerLevel.Fatal, String.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -688,12 +624,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void FatalFormat(Exception exception, string format, params object[] args)
 		{
-			if (!IsFatalEnabled)
+			if (IsFatalEnabled)
 			{
-				return;
+				Log(LoggerLevel.Fatal, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 			}
-
-			Log(LoggerLevel.Fatal, String.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -704,12 +638,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void FatalFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (!IsFatalEnabled)
+			if (IsFatalEnabled)
 			{
-				return;
+				Log(LoggerLevel.Fatal, String.Format(formatProvider, format, args), null);
 			}
-
-			Log(LoggerLevel.Fatal, String.Format(formatProvider, format, args), null);
 		}
 
 		/// <summary>
@@ -721,12 +653,10 @@ namespace Castle.Core.Logging
 		/// <param name = "args">Format arguments for the message to log</param>
 		public void FatalFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			if (!IsFatalEnabled)
+			if (IsFatalEnabled)
 			{
-				return;
+				Log(LoggerLevel.Fatal, String.Format(formatProvider, format, args), exception);
 			}
-
-			Log(LoggerLevel.Fatal, String.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
