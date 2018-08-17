@@ -42,7 +42,7 @@ namespace Castle.Services.Logging.SerilogIntegration
 
 		public bool IsTraceEnabled
 		{
-			get { return Logger.IsEnabled(LogEventLevel.Debug); }
+			get { return Logger.IsEnabled(LogEventLevel.Verbose); }
 		}
 
 		public bool IsDebugEnabled
@@ -85,7 +85,7 @@ namespace Castle.Services.Logging.SerilogIntegration
 		{
 			if (IsTraceEnabled)
 			{
-				Logger.Debug(exception, message);
+				Logger.Verbose(exception, message);
 			}
 		}
 
@@ -93,7 +93,7 @@ namespace Castle.Services.Logging.SerilogIntegration
 		{
 			if (IsTraceEnabled)
 			{
-				Logger.Debug(messageFactory.Invoke());
+				Logger.Verbose(messageFactory.Invoke());
 			}
 		}
 
@@ -101,7 +101,7 @@ namespace Castle.Services.Logging.SerilogIntegration
 		{
 			if (IsTraceEnabled)
 			{
-				Logger.Debug(message);
+				Logger.Verbose(message);
 			}
 		}
 
@@ -110,7 +110,7 @@ namespace Castle.Services.Logging.SerilogIntegration
 			if (IsTraceEnabled)
 			{
 				//TODO: This honours the formatProvider rather than passing through args for structured logging
-				Logger.Debug(exception, string.Format(formatProvider, format, args));
+				Logger.Verbose(exception, string.Format(formatProvider, format, args));
 			}
 		}
 
@@ -119,7 +119,7 @@ namespace Castle.Services.Logging.SerilogIntegration
 			if (IsTraceEnabled)
 			{
 				//TODO: This honours the formatProvider rather than passing through args for structured logging
-				Logger.Debug(string.Format(formatProvider, format, args));
+				Logger.Verbose(string.Format(formatProvider, format, args));
 			}
 		}
 
@@ -127,7 +127,7 @@ namespace Castle.Services.Logging.SerilogIntegration
 		{
 			if (IsTraceEnabled)
 			{
-				Logger.Debug(exception, format, args);
+				Logger.Verbose(exception, format, args);
 			}
 		}
 
@@ -135,7 +135,7 @@ namespace Castle.Services.Logging.SerilogIntegration
 		{
 			if (IsTraceEnabled)
 			{
-				Logger.Debug(format, args);
+				Logger.Verbose(format, args);
 			}
 		}
 
