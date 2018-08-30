@@ -28,17 +28,19 @@ namespace Castle.DynamicProxy.Generators
 		                                           MethodInfo method, MethodEmitter emitter)
 		{
 			var parameters = method.GetParameters();
-			if (!parameters.Any(IsByRef))
-			{
-				return; //saving the need to create locals if there is no need
-			}
 
-			var arguments = StoreInvocationArgumentsInLocal(emitter, invocation);
+			// Create it only if there are byref writable arguments.
+			LocalReference arguments = null;
 
 			for (var i = 0; i < parameters.Length; i++)
 			{
 				if (IsByRef(parameters[i]) && !IsReadOnly(parameters[i]))
 				{
+					if (arguments == null)
+					{
+						arguments = StoreInvocationArgumentsInLocal(emitter, invocation);
+					}
+
 					emitter.CodeBuilder.AddStatement(AssignArgument(dereferencedArguments, i, arguments));
 				}
 			}
