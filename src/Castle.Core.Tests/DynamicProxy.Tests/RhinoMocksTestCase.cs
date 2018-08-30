@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.Data;
 	using System.Runtime.InteropServices;
 
-#if FEATURE_EMIT_CUSTOMMODIFIERS
+#if FEATURE_CUSTOMMODIFIERS
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
 #endif
@@ -115,7 +115,7 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateClassProxy(typeof (DataSet), new Type[0], new StandardInterceptor());
 		}
 
-#if FEATURE_EMIT_CUSTOMMODIFIERS
+#if FEATURE_CUSTOMMODIFIERS
 		private Type iHaveMethodWithModOptsType;
 
 		[OneTimeSetUp]

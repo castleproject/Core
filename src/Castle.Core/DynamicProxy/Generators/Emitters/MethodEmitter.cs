@@ -323,7 +323,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			Type[][] parametersRequiredCustomModifiers;
 			Type[][] parametersOptionalCustomModifiers;
 
-#if FEATURE_EMIT_CUSTOMMODIFIERS
+#if FEATURE_CUSTOMMODIFIERS
 			returnRequiredCustomModifiers = returnParameter.GetRequiredCustomModifiers();
 			Array.Reverse(returnRequiredCustomModifiers);
 
