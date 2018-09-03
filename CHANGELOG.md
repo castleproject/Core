@@ -17,6 +17,11 @@ Deprecations:
    - `Castle.DynamicProxy.Serialization.CacheMappingsAttribute.ApplyTo` (method)
    - `Castle.DynamicProxy.Serialization.CacheMappingsAttribute.GetDeserializedMappings` (method)
 
+## 4.3.2 (2018-09-03)
+
+Enhancements:
+ - Added Trace level to logging (maps to Verbose in Serilog)
+
 ## 4.3.1 (2018-06-21)
 
 Enhancements:
