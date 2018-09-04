@@ -17,6 +17,9 @@ Deprecations:
    - `Castle.DynamicProxy.Serialization.CacheMappingsAttribute.ApplyTo` (method)
    - `Castle.DynamicProxy.Serialization.CacheMappingsAttribute.GetDeserializedMappings` (method)
 
+Enhancements:
+ - Recognize read-only parameters by the `In` modreq (@zvirja, #406)
+
 ## 4.3.1 (2018-06-21)
 
 Enhancements:

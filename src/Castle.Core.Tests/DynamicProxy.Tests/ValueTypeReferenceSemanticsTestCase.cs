@@ -32,7 +32,7 @@ namespace Castle.DynamicProxy.Tests
 			proxy.Method(readOnlyStruct);
 		}
 
-#if FEATURE_EMIT_CUSTOMMODIFIERS
+#if FEATURE_CUSTOMMODIFIERS
 
 		// ^^^
 		// Because the `in` parameter modifier gets encoded as a modreq,
