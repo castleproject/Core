@@ -170,17 +170,17 @@ namespace Castle.DynamicProxy.Tests
 
 		public void Trace(string message)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public void Trace(Func<string> messageFactory)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public void Trace(string message, Exception exception)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public void TraceFormat(string format, params object[] args)
@@ -190,17 +190,17 @@ namespace Castle.DynamicProxy.Tests
 
 		public void TraceFormat(Exception exception, string format, params object[] args)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public void TraceFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public void TraceFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public void Debug(string message)
