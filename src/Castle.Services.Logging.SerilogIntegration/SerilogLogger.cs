@@ -96,44 +96,44 @@ namespace Castle.Services.Logging.SerilogIntegration
 
         public void Trace(string message)
         {
-			if (IsTraceEnabled)
-			{
-				Logger.Verbose(message);
-			}
+            if (IsTraceEnabled)
+            {
+                Logger.Verbose(message);
+            }
         }
 
         public void TraceFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
         {
-			if (IsTraceEnabled)
-			{
-				//TODO: This honours the formatProvider rather than passing through args for structured logging
-				Logger.Verbose(exception, string.Format(formatProvider, format, args));
-			}
+            if (IsTraceEnabled)
+            {
+                //TODO: This honours the formatProvider rather than passing through args for structured logging
+                Logger.Verbose(exception, string.Format(formatProvider, format, args));
+            }
         }
 
         public void TraceFormat(IFormatProvider formatProvider, string format, params object[] args)
         {
-			if (IsTraceEnabled)
-			{
-				//TODO: This honours the formatProvider rather than passing through args for structured logging
-				Logger.Verbose(string.Format(formatProvider, format, args));
-			}
+            if (IsTraceEnabled)
+            {
+                //TODO: This honours the formatProvider rather than passing through args for structured logging
+                Logger.Verbose(string.Format(formatProvider, format, args));
+            }
         }
 
         public void TraceFormat(Exception exception, string format, params object[] args)
         {
-			if (IsTraceEnabled)
-			{
-				Logger.Verbose(exception, format, args);
-			}
+            if (IsTraceEnabled)
+            {
+                Logger.Verbose(exception, format, args);
+            }
         }
 
         public void TraceFormat(string format, params object[] args)
         {
-			if (IsTraceEnabled)
-			{
-				Logger.Verbose(format, args);
-			}
+            if (IsTraceEnabled)
+            {
+                Logger.Verbose(format, args);
+            }
         }
 
         public void Debug(string message, Exception exception)
