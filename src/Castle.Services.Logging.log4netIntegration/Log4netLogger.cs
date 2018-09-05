@@ -92,7 +92,10 @@ namespace Castle.Services.Logging.Log4netIntegration
 
 		public void Trace(String message)
 		{
-			Logger.Log(declaringType, Level.Trace, message, null);
+			if (IsTraceEnabled)
+			{
+				Logger.Log(declaringType, Level.Trace, message, null);
+			}
 		}
 
 		public void Trace(Func<string> messageFactory)
@@ -105,27 +108,42 @@ namespace Castle.Services.Logging.Log4netIntegration
 
 		public void Trace(String message, Exception exception)
 		{
-			Logger.Log(declaringType, Level.Trace, message, exception);
+			if (IsTraceEnabled)
+			{
+				Logger.Log(declaringType, Level.Trace, message, exception);
+			}
 		}
 
 		public void TraceFormat(String format, params Object[] args)
 		{
-			Logger.Log(declaringType, Level.Trace, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
+			if (IsTraceEnabled)
+			{
+				Logger.Log(declaringType, Level.Trace, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), null);
+			}
 		}
 
 		public void TraceFormat(Exception exception, String format, params Object[] args)
 		{
-			Logger.Log(declaringType, Level.Trace, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), exception);
+			if (IsTraceEnabled)
+			{
+				Logger.Log(declaringType, Level.Trace, new SystemStringFormat(CultureInfo.InvariantCulture, format, args), exception);
+			}
 		}
 
 		public void TraceFormat(IFormatProvider formatProvider, String format, params Object[] args)
 		{
-			Logger.Log(declaringType, Level.Trace, new SystemStringFormat(formatProvider, format, args), null);
+			if (IsTraceEnabled)
+			{
+				Logger.Log(declaringType, Level.Trace, new SystemStringFormat(formatProvider, format, args), null);
+			}
 		}
 
 		public void TraceFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args)
 		{
-			Logger.Log(declaringType, Level.Trace, new SystemStringFormat(formatProvider, format, args), exception);
+			if (IsTraceEnabled)
+			{
+				Logger.Log(declaringType, Level.Trace, new SystemStringFormat(formatProvider, format, args), exception);
+			}
 		}
 
 		public void Debug(String message)

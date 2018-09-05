@@ -139,7 +139,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		{
 			if (IsTraceEnabled)
 			{
-				Log(LogLevel.Debug, messageFactory());
+				Log(LogLevel.Trace, messageFactory());
 			}
 		}
 
@@ -171,10 +171,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="args"> Format arguments for the message to log </param>
 		public void TraceFormat(Exception exception, string format, params object[] args)
 		{
-			if (IsTraceEnabled)
-			{
-				Log(LogLevel.Trace, exception, format, args);
-			}
+			Log(LogLevel.Trace, exception, format, args);
 		}
 
 		/// <summary>
