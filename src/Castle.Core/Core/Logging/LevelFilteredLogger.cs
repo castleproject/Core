@@ -117,6 +117,10 @@ namespace Castle.Core.Logging
 			}
 		}
 
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name="messageFactory">A functor to create the message</param>
 		public void Trace(Func<string> messageFactory)
 		{
 			if (IsTraceEnabled)
