@@ -246,8 +246,27 @@ namespace Castle.DynamicProxy.Internal
 			var array = new Type[types.Count];
 			types.CopyTo(array, 0);
 			//NOTE: is there a better, stable way to sort Types. We will need to revise this once we allow open generics
-			Array.Sort(array, (l, r) => string.Compare(l.AssemblyQualifiedName, r.AssemblyQualifiedName, StringComparison.OrdinalIgnoreCase));
+			Array.Sort(array, TypeNameComparer.Instance);
+			//                ^^^^^^^^^^^^^^^^^^^^^^^^^
+			// Using a `IComparer<T>` object instead of a `Comparison<T>` delegate prevents
+			// an unnecessary level of indirection inside the framework (as the latter get
+			// wrapped as `IComparer<T>` objects).
 			return array;
+		}
+
+		private sealed class TypeNameComparer : IComparer<Type>
+		{
+			public static readonly TypeNameComparer Instance = new TypeNameComparer();
+
+			public int Compare(Type x, Type y)
+			{
+				// Comparing by `type.AssemblyQualifiedName` would give the same result,
+				// but it performs a hidden concatenation (and therefore string allocation)
+				// of `type.FullName` and `type.Assembly.FullName`. We can avoid this
+				// overhead by comparing the two properties separately.
+				int result = string.CompareOrdinal(x.FullName, y.FullName);
+				return result != 0 ? result : string.CompareOrdinal(x.GetTypeInfo().Assembly.FullName, y.GetTypeInfo().Assembly.FullName);
+			}
 		}
 	}
 }
