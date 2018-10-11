@@ -5,7 +5,7 @@ solution: Castle.Core.sln
 install:
     - sudo apt-get install dotnet-sharedframework-microsoft.netcore.app-1.1.6
 
-mono: 5.10.1
+mono: 5.16.0
 
 dotnet: 2.1.105
 
