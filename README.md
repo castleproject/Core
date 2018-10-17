@@ -27,7 +27,7 @@ Browse the [contributing section](https://github.com/castleproject/Home#its-comm
 | Platform | Build Status |
 |----------|-------------:|
 | Windows  | [![Build status](https://ci.appveyor.com/api/projects/status/49a6i0ydiku56r5b/branch/master?svg=true)](https://ci.appveyor.com/project/castleproject/core/branch/master) |
-| Linux    | [![Build Status](https://travis-ci.org/castleproject/Core.svg?branch=master)](https://travis-ci.org/castleproject/Core/branches) |
+| Linux    | [![Build Status](https://api.travis-ci.com/castleproject/Core.svg?branch=master)](https://travis-ci.com/castleproject/Core/branches) |
 
 ### .NET Framework and .NET Core
 
