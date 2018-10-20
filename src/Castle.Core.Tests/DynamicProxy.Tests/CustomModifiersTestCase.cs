@@ -135,6 +135,7 @@ namespace Castle.DynamicProxy.Tests
 		/// the parameter type in the generated types.
 		/// </summary>
 		[TestCaseSource(nameof(AsModoptOnParamTypeNames))]
+		[ExcludeOnFramework(Framework.Mono, "Mono reports custom modifiers in the opposite order than the CLR does. See https://github.com/castleproject/Core/issues/414 and https://github.com/mono/mono/issues/11302.")]
 		public void ReflectionReturnsCorrectModoptOnParamTypeForGeneratedType(string typeName)
 		{
 			Assume.That(this.generatedTypes.ContainsKey(typeName));
@@ -146,13 +147,19 @@ namespace Castle.DynamicProxy.Tests
 			Assume.That(CustomModifiersTestCase.customModifiers.ContainsKey(typeNameWithoutSuffix));
 
 			var modopts = this.generatedTypes[typeName].GetMethod("Foo").GetParameters()[0].GetOptionalCustomModifiers();
-			Assume.That(modopts.Length > 0); // If this fails on mono/linux we have to revisit the commits and issues for IL method custom modifiers. https://github.com/castleproject/Core/issues/277
 
 			CollectionAssert.AreEqual(expected: CustomModifiersTestCase.customModifiers[typeNameWithoutSuffix].Reverse(), actual: modopts);
-			// ^ The `.Reverse()` is needed because the CLR reports custom modifiers in reverse order.
-			//   Note to future maintainers: Mono either does not report custom modifiers at all,
-			//   or it reports them in the correct order. This needs further investigation, but
-			//   in either case, the above assertion would make the test fail on Mono!
+			// ^ The emission of custom modifiers performed by DynamicProxy is currently geared towards
+			//   the CLR, which reports custom modifiers in reverse order. On Mono, before version 5.16,
+			//   Reflection would not report custom modifiers at all; this has now changed. But unlike the
+			//   CLR, Reflection on Mono reports custom modifiers in non-reversed order, which makes the
+			//   above assertion fail. What probably needs to be done is either of the following:
+			//
+			//   1. Wait for Mono to become more compatible with CLR and reverse cmod order too;
+			//      see https://github.com/mono/mono/issues/11302. Or,
+			//
+			//   2. Adjust DynamicProxy so it automatically detects whether it needs to reverse cmod order
+			//      after reading them, either by checking the current framework or running a pretest.
 		}
 
 		/// <summary>
@@ -160,6 +167,7 @@ namespace Castle.DynamicProxy.Tests
 		/// the parameter type in the generated types.
 		/// </summary>
 		[TestCaseSource(nameof(AsModreqOnParamTypeNames))]
+		[ExcludeOnFramework(Framework.Mono, "Mono reports custom modifiers in the opposite order than the CLR does. See https://github.com/castleproject/Core/issues/414 and https://github.com/mono/mono/issues/11302.")]
 		public void ReflectionReturnsCorrectModreqsOnParamTypeForGeneratedType(string typeName)
 		{
 			Assume.That(this.generatedTypes.ContainsKey(typeName));
