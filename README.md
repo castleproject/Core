@@ -29,22 +29,33 @@ Browse the [contributing section](https://github.com/castleproject/Home#its-comm
 | Windows  | [![Build status](https://ci.appveyor.com/api/projects/status/49a6i0ydiku56r5b/branch/master?svg=true)](https://ci.appveyor.com/project/castleproject/core/branch/master) |
 | Linux    | [![Build Status](https://api.travis-ci.com/castleproject/Core.svg?branch=master)](https://travis-ci.com/castleproject/Core/branches) |
 
-### .NET Framework and .NET Core
+### On Windows
 
 ```
 build.cmd
 ```
 
-### Mono
+Compilation requires an up-to-date .NET Core SDK, MSBuild 15+ (which should be included in the former), and reference assemblies for the .NET Framework versions 3.5, 4.0, and 4.5.
 
-Castle Core works with some limitations and defects on Mono 4.0.2+, however Mono 4.6.1+ is highly
-recommended, Mono 4.0.0 and 4.0.1 have serious runtime bugs that cause runtime crashes. Mono 3.x
-releases used to work well, but are not supported.
-Check [our issue tracker](https://github.com/castleproject/Core/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20mono) for known Mono defects.
+Running the unit tests additionally requires the .NET Framework 4.6.1+ as well as the .NET Core 1.1 runtime to be installed.
+
+Most of these requirements should be covered by Visual Studio 2017.
+
+### On Linux
 
 ```
 ./build.sh
 ```
+
+Compilation requires an up-to-date .NET Core SDK, as well as Mono for the .NET Framework reference assemblies. We recommend Mono 5.10+, though older versions (4.6.1+) might still work as well.
+
+Running the unit tests additionally requires the .NET Core 1.1 runtime to be installed.
+
+:information_source: **Mono runtime support:** Castle Core runs with minor limitations and defects on Mono 4.0.2+ (however 4.6.1+ is highly recommended, or 5.10+ if your code uses new C# 7.x language features such as `in` parameters).
+
+We test against up-to-date Mono versions in order to fix known defects as soon as possible. Because of this, if you are using an older Mono version than our Continuous Integration (CI) build, you might see some unit tests fail.
+
+For known Mono defects, check [our issue tracker](https://github.com/castleproject/Core/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20mono), as well as unit tests marked with `[ExcludeOnFramework(Framework.Mono, ...)]` in the source code.
 
 ### Conditional Compilation Symbols
 
