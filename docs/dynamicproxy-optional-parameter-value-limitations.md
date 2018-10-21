@@ -7,17 +7,13 @@ This usually doesn't matter much in practice, but it may become a problem for fr
 
 ## When your code runs on Mono
 
-On Mono (up to and including at least version 5.10.1.47), DynamicProxy may not be able to correctly reproduce default parameter values in the proxy type for...
+On Mono (up to and including at least version 5.16), DynamicProxy may not be able to correctly reproduce default parameter values in the proxy type for...
 
-* **Optional parameters of any nullable type `Nullable<T>`.** Reflection will likely report (via `ParameterInfo.[Raw]DefaultValue`) a default value of `null` for such parameters, regardless of whether the actual default value in the proxied method was `null` or not.
+* **Optional parameters of type `DateTime?` or `decimal?`.** Reflection will likely report (via `ParameterInfo.[Raw]DefaultValue`) a default value of `null` (up until Mono 5.10) or `Missing.Value` (on 5.16) for such parameters, regardless of the actual default parameter value.
 
-   Therefore, you cannot trust the reported default value, *unless* you know you're running on a version of Mono where the underlying issues have been resolved, or when you've double-checked the default value in the original method of the proxied type.
+   You can only find out the correct default value by double-checking the default value in the original method of the proxied type.
 
-   The underlying causes have been documented in [mono/mono#8504](https://github.com/mono/mono/issues/8504) and [mono/mono#8597](https://github.com/mono/mono/issues/8597).
-
-* **Optional parameters of type `object`.** As above, reflection will likely report (via `ParameterInfo.[Raw]DefaultValue`) a default value of `null`, regardless of whether the actual default value in the proxied method was `null` or not.
-
-   This has been documented in [mono/mono#9135](https://github.com/mono/mono/issues/9135).
+   The underlying causes have been documented (for Mono 5.10) in [mono/mono#8504](https://github.com/mono/mono/issues/8504) and [mono/mono#8597](https://github.com/mono/mono/issues/8597), and (for Mono 5.16) in [mono/mono#11303](https://github.com/mono/mono/issues/11303).
 
 
 ## When your code runs on the .NET Framework or on .NET Core
