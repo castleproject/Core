@@ -63,6 +63,7 @@
 		<PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
 		<PackageReference Include="System.ComponentModel" Version="4.3.0" />
 		<PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+		<PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
 		<PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
 		<PackageReference Include="System.Xml.XPath" Version="4.3.0" />
 		<PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
