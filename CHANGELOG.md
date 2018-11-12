@@ -19,6 +19,7 @@ Deprecations:
 
 Enhancements:
  - Recognize read-only parameters by the `In` modreq (@zvirja, #406)
+ - NLogFactory will no longer load NLog.config by default, since NLog does it automatically (@snakefoot, #419)
 
 ## 4.3.1 (2018-06-21)
 
