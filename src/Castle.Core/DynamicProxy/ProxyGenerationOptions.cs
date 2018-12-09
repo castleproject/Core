@@ -187,7 +187,7 @@ namespace Castle.DynamicProxy
 			{
 				return false;
 			}
-			if (!CollectionExtensions.AreEquivalent(AdditionalAttributes, proxyGenerationOptions.AdditionalAttributes))
+			if (!Castle.Core.Internal.CollectionExtensions.AreEquivalent(AdditionalAttributes, proxyGenerationOptions.AdditionalAttributes))
 			{
 				return false;
 			}
@@ -203,7 +203,7 @@ namespace Castle.DynamicProxy
 			result = 29*result + (Selector != null ? 1 : 0);
 			result = 29*result + MixinData.GetHashCode();
 			result = 29*result + (BaseTypeForInterfaceProxy != null ? BaseTypeForInterfaceProxy.GetHashCode() : 0);
-			result = 29*result + CollectionExtensions.GetContentsHashCode(AdditionalAttributes);
+			result = 29*result + Castle.Core.Internal.CollectionExtensions.GetContentsHashCode(AdditionalAttributes);
 			return result;
 		}
 	}
