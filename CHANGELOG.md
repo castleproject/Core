@@ -18,7 +18,8 @@ Deprecations:
    - `Castle.DynamicProxy.Serialization.CacheMappingsAttribute.GetDeserializedMappings` (method)
 
 Enhancements:
- - Recognize read-only parameters by the `In` modreq (@zvirja, #406)
+- Recognize read-only parameters by the `In` modreq (@zvirja, #406)
+- DictionaryAdapter: Exposed GetAdapter overloads with NameValueCollection parameter in .NET Standard (@rzontar, #423)
 
 ## 4.3.1 (2018-06-21)
 
