@@ -103,6 +103,103 @@ namespace Castle.Core.Logging
 
 		#region ILogger implementation
 
+		#region Trace
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name = "message">The message to log</param>
+		public void Trace(string message)
+		{
+			if (IsTraceEnabled)
+			{
+				Log(LoggerLevel.Trace, message, null);
+			}
+		}
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name="messageFactory">A functor to create the message</param>
+		public void Trace(Func<string> messageFactory)
+		{
+			if (IsTraceEnabled)
+			{
+				Log(LoggerLevel.Trace, messageFactory.Invoke(), null);
+			}
+		}
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "message">The message to log</param>
+		public void Trace(string message, Exception exception)
+		{
+			if (IsTraceEnabled)
+			{
+				Log(LoggerLevel.Trace, message, exception);
+			}
+		}
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		public void TraceFormat(string format, params object[] args)
+		{
+			if (IsTraceEnabled)
+			{
+				Log(LoggerLevel.Trace, String.Format(CultureInfo.CurrentCulture, format, args), null);
+			}
+		}
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		public void TraceFormat(Exception exception, string format, params object[] args)
+		{
+			if (IsTraceEnabled)
+			{
+				Log(LoggerLevel.Trace, String.Format(CultureInfo.CurrentCulture, format, args), exception);
+			}
+		}
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name = "formatProvider">The format provider to use</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		public void TraceFormat(IFormatProvider formatProvider, string format, params object[] args)
+		{
+			if (IsTraceEnabled)
+			{
+				Log(LoggerLevel.Trace, String.Format(formatProvider, format, args), null);
+			}
+		}
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "formatProvider">The format provider to use</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		public void TraceFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
+		{
+			if (IsTraceEnabled)
+			{
+				Log(LoggerLevel.Trace, String.Format(formatProvider, format, args), exception);
+			}
+		}
+
+		#endregion
+
 		#region Debug
 
 		/// <summary>
@@ -637,6 +734,15 @@ namespace Castle.Core.Logging
 		}
 
 		#endregion
+
+		/// <summary>
+		///   Determines if messages of priority "trace" will be logged.
+		/// </summary>
+		/// <value><c>true</c> if log level flags include the <see cref = "LoggerLevel.Trace" /> bit</value>
+		public bool IsTraceEnabled
+		{
+			get { return (Level >= LoggerLevel.Trace); }
+		}
 
 		/// <summary>
 		///   Determines if messages of priority "debug" will be logged.

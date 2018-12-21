@@ -43,5 +43,9 @@ namespace Castle.Core.Logging
 		///   Debug logging level
 		/// </summary>
 		Debug = 5,
+		/// <summary>
+		///   Trace logging level
+		/// </summary>
+		Trace = 6
 	}
 }

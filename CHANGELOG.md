@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+Enhancements:
+ - Added Trace level to logging, maps to Verbose in Serilog. (@pi3k14, #404)
+
 Deprecations:
 - The API surrounding `Lock` has been deprecated. This consists of the members listed below. Consider using the Base Class Library's `System.Threading.ReaderWriterLockSlim` instead. (@stakx, #391)
    - `Castle.Core.Internal.Lock` (class)

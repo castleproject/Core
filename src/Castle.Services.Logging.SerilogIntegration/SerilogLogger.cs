@@ -40,6 +40,11 @@ namespace Castle.Services.Logging.SerilogIntegration
 
         protected internal SerilogFactory Factory { get; set; }
 
+        public bool IsTraceEnabled
+        {
+            get { return Logger.IsEnabled(LogEventLevel.Verbose); }
+        }
+
         public bool IsDebugEnabled
         {
             get { return Logger.IsEnabled(LogEventLevel.Debug); }
@@ -74,6 +79,61 @@ namespace Castle.Services.Logging.SerilogIntegration
         {
             // Serilog calls these sub loggers. We might be able to do something here but for now I'm going leave it like this.
             throw new NotImplementedException("Creating child loggers for Serilog is not supported");
+        }
+
+        public void Trace(string message, Exception exception)
+        {
+            Logger.Verbose(exception, message);
+        }
+
+        public void Trace(Func<string> messageFactory)
+        {
+            if (IsTraceEnabled)
+            {
+                Logger.Verbose(messageFactory.Invoke());
+            }
+        }
+
+        public void Trace(string message)
+        {
+            if (IsTraceEnabled)
+            {
+                Logger.Verbose(message);
+            }
+        }
+
+        public void TraceFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
+        {
+            if (IsTraceEnabled)
+            {
+                //TODO: This honours the formatProvider rather than passing through args for structured logging
+                Logger.Verbose(exception, string.Format(formatProvider, format, args));
+            }
+        }
+
+        public void TraceFormat(IFormatProvider formatProvider, string format, params object[] args)
+        {
+            if (IsTraceEnabled)
+            {
+                //TODO: This honours the formatProvider rather than passing through args for structured logging
+                Logger.Verbose(string.Format(formatProvider, format, args));
+            }
+        }
+
+        public void TraceFormat(Exception exception, string format, params object[] args)
+        {
+            if (IsTraceEnabled)
+            {
+                Logger.Verbose(exception, format, args);
+            }
+        }
+
+        public void TraceFormat(string format, params object[] args)
+        {
+            if (IsTraceEnabled)
+            {
+                Logger.Verbose(format, args);
+            }
         }
 
         public void Debug(string message, Exception exception)

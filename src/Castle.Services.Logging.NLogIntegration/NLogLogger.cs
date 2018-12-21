@@ -39,6 +39,15 @@ namespace Castle.Services.Logging.NLogIntegration
 		}
 
 		/// <summary>
+		///   Determines if messages of priority "trace" will be logged.
+		/// </summary>
+		/// <value> True if "trace" messages will be logged. </value>
+		public bool IsTraceEnabled
+		{
+			get { return Logger.IsTraceEnabled; }
+		}
+
+		/// <summary>
 		///   Determines if messages of priority "debug" will be logged.
 		/// </summary>
 		/// <value> True if "debug" messages will be logged. </value>
@@ -111,6 +120,81 @@ namespace Castle.Services.Logging.NLogIntegration
 		public virtual Core.Logging.ILogger CreateChildLogger(String name)
 		{
 			return Factory.Create(Logger.Name + "." + name);
+		}
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name="message"> The message to log </param>
+		public void Trace(string message)
+		{
+			Log(LogLevel.Trace, message);
+		}
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name="messageFactory"> Factory constructing lazily the message to log if the level is enabled </param>
+		public void Trace(Func<string> messageFactory)
+		{
+			if (IsTraceEnabled)
+			{
+				Log(LogLevel.Trace, messageFactory());
+			}
+		}
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name="exception"> The exception to log </param>
+		/// <param name="message"> The message to log </param>
+		public void Trace(string message, Exception exception)
+		{
+			Log(LogLevel.Trace, message, exception);
+		}
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name="format"> Format string for the message to log </param>
+		/// <param name="args"> Format arguments for the message to log </param>
+		public void TraceFormat(string format, params object[] args)
+		{
+			Log(LogLevel.Trace, format, args);
+		}
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name="exception"> The exception to log </param>
+		/// <param name="format"> Format string for the message to log </param>
+		/// <param name="args"> Format arguments for the message to log </param>
+		public void TraceFormat(Exception exception, string format, params object[] args)
+		{
+			Log(LogLevel.Trace, exception, format, args);
+		}
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name="formatProvider"> The format provider to use </param>
+		/// <param name="format"> Format string for the message to log </param>
+		/// <param name="args"> Format arguments for the message to log </param>
+		public void TraceFormat(IFormatProvider formatProvider, string format, params object[] args)
+		{
+			Log(LogLevel.Trace, formatProvider, format, args);
+		}
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name="exception"> The exception to log </param>
+		/// <param name="formatProvider"> The format provider to use </param>
+		/// <param name="format"> Format string for the message to log </param>
+		/// <param name="args"> Format arguments for the message to log </param>
+		public void TraceFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
+		{
+			Log(LogLevel.Trace, exception, formatProvider, format, args);
 		}
 
 		/// <summary>
