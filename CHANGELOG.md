@@ -3,7 +3,9 @@
 ## Unreleased
 
 Enhancements:
- - Added Trace level to logging, maps to Verbose in Serilog. (@pi3k14, #404)
+- Added trace logging level below Debug; maps to Trace in log4net/NLog, and Verbose in Serilog (@pi3k14, #404)
+- Recognize read-only parameters by the `In` modreq (@zvirja, #406)
+- DictionaryAdapter: Exposed GetAdapter overloads with NameValueCollection parameter in .NET Standard (@rzontar, #423)
 
 Deprecations:
 - The API surrounding `Lock` has been deprecated. This consists of the members listed below. Consider using the Base Class Library's `System.Threading.ReaderWriterLockSlim` instead. (@stakx, #391)
@@ -19,10 +21,6 @@ Deprecations:
    - `Castle.DynamicProxy.Generators.CacheKey` (class)
    - `Castle.DynamicProxy.Serialization.CacheMappingsAttribute.ApplyTo` (method)
    - `Castle.DynamicProxy.Serialization.CacheMappingsAttribute.GetDeserializedMappings` (method)
-
-Enhancements:
-- Recognize read-only parameters by the `In` modreq (@zvirja, #406)
-- DictionaryAdapter: Exposed GetAdapter overloads with NameValueCollection parameter in .NET Standard (@rzontar, #423)
 
 ## 4.3.1 (2018-06-21)
 
