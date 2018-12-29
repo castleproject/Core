@@ -3,16 +3,16 @@
 ## Unreleased
 
 Enhancements:
-- Added trace logging level below Debug; maps to Trace in log4net/NLog, and Verbose in Serilog (@pi3k14, #404)
-- Recognize read-only parameters by the `In` modreq (@zvirja, #406)
-- DictionaryAdapter: Exposed GetAdapter overloads with NameValueCollection parameter in .NET Standard (@rzontar, #423)
+- Added trace logging level below Debug; maps to Trace in log4net/NLog, and Verbose in Serilog (@pi3k14, [#404](https://github.com/castleproject/Core/issues/404))
+- Recognize read-only parameters by the `In` modreq (@zvirja, [#406](https://github.com/castleproject/Core/issues/406))
+- DictionaryAdapter: Exposed GetAdapter overloads with NameValueCollection parameter in .NET Standard (@rzontar, [#423](https://github.com/castleproject/Core/issues/423))
 
 Deprecations:
-- The API surrounding `Lock` has been deprecated. This consists of the members listed below. Consider using the Base Class Library's `System.Threading.ReaderWriterLockSlim` instead. (@stakx, #391)
+- The API surrounding `Lock` has been deprecated. This consists of the members listed below. Consider using the Base Class Library's `System.Threading.ReaderWriterLockSlim` instead. (@stakx, [#391](https://github.com/castleproject/Core/issues/391))
    - `Castle.Core.Internal.Lock` (class)
    - `Castle.Core.Internal.ILockHolder` (interface)
    - `Castle.Core.Internal.IUpgradeableLockHolder` (interface)
-- The proxy type cache in `ModuleScope` should no longer be accessed directly. For this reason, the members listed below have been deprecated. (@stakx, #391)
+- The proxy type cache in `ModuleScope` should no longer be accessed directly. For this reason, the members listed below have been deprecated. (@stakx, [#391](https://github.com/castleproject/Core/issues/391))
    - `Castle.DynamicProxy.ModuleScope.Lock` (property)
    - `Castle.DynamicProxy.ModuleScope.GetFromCache` (method)
    - `Castle.DynamicProxy.ModuleScope.RegisterInCache` (method)
@@ -25,135 +25,135 @@ Deprecations:
 ## 4.3.1 (2018-06-21)
 
 Enhancements:
- - Use shared read locking to reduce lock contention in InvocationHelper and ProxyUtil (@TimLovellSmith, #377)
+ - Use shared read locking to reduce lock contention in InvocationHelper and ProxyUtil (@TimLovellSmith, [#377](https://github.com/castleproject/Core/issues/377))
 
 Bugfixes:
-- Prevent interceptors from being able to modify `in` parameters (@stakx, #370)
-- Make default value replication of optional parameters more tolerant of default values that are represented in metadata with a mismatched type (@stakx, #371)
-- Fix a concurrency issue (writing without taking a write lock first) in `BaseProxyGenerator.ObtainProxyType` (@stakx, #383)
+- Prevent interceptors from being able to modify `in` parameters (@stakx, [#370](https://github.com/castleproject/Core/issues/370))
+- Make default value replication of optional parameters more tolerant of default values that are represented in metadata with a mismatched type (@stakx, [#371](https://github.com/castleproject/Core/issues/371))
+- Fix a concurrency issue (writing without taking a write lock first) in `BaseProxyGenerator.ObtainProxyType` (@stakx, [#383](https://github.com/castleproject/Core/issues/383))
 
 Deprecations:
-- `Castle.DynamicProxy.Generators.Emitters.ArgumentsUtil.IsAnyByRef` (@stakx, #370)
+- `Castle.DynamicProxy.Generators.Emitters.ArgumentsUtil.IsAnyByRef` (@stakx, [#370](https://github.com/castleproject/Core/issues/370))
 
 ## 4.3.0 (2018-06-07)
 
 Enhancements:
-- Added .NET Standard/.NET Core support for NLog (@snakefoot, #200)
-- Added .NET Standard/.NET Core support for log4net (@snakefoot, #201)
-- DynamicProxy supported C# `in` parameter modifiers only on the .NET Framework up until now. Adding .NET Standard 1.5 as an additional target to the NuGet package makes them work on .NET Core, too (@stakx, #339)
-- Replicate custom attributes on constructor parameters in the generated proxy type constructors to fulfill introspection of constructors. This does not change the proxying behavior. (@stakx, #341)
-- Improve performance of InvocationHelper cache lookups (@tangdf, #358)
-- Improve fidelity of default value replication of optional parameters to fulfill inspection of the generated proxies. This does not change the proxying behavior. (@stakx, #356)
-- Improve cache performance of MethodFinder.GetAllInstanceMethods (@tangdf, #357)
+- Added .NET Standard/.NET Core support for NLog (@snakefoot, [#200](https://github.com/castleproject/Core/issues/200))
+- Added .NET Standard/.NET Core support for log4net (@snakefoot, [#201](https://github.com/castleproject/Core/issues/201))
+- DynamicProxy supported C# `in` parameter modifiers only on the .NET Framework up until now. Adding .NET Standard 1.5 as an additional target to the NuGet package makes them work on .NET Core, too (@stakx, [#339](https://github.com/castleproject/Core/issues/339))
+- Replicate custom attributes on constructor parameters in the generated proxy type constructors to fulfill introspection of constructors. This does not change the proxying behavior. (@stakx, [#341](https://github.com/castleproject/Core/issues/341))
+- Improve performance of InvocationHelper cache lookups (@tangdf, [#358](https://github.com/castleproject/Core/issues/358))
+- Improve fidelity of default value replication of optional parameters to fulfill inspection of the generated proxies. This does not change the proxying behavior. (@stakx, [#356](https://github.com/castleproject/Core/issues/356))
+- Improve cache performance of MethodFinder.GetAllInstanceMethods (@tangdf, [#357](https://github.com/castleproject/Core/issues/357))
 
 Bugfixes:
-- Fix Castle.Services.Logging.Log4netIntegration assembly file name casing which breaks on Linux (@beginor, #324)
-- Fix Castle.DynamicProxy.Generators.AttributesToAvoidReplicating not being thread safe (InvalidOperationException "Collection was modified; enumeration operation may not execute.") (@BrunoJuchli, #334)
-- Fix TraceLoggerFactory to allow specifying the default logger level (@acjh, #342)
-- Ensure that DynamicProxy doesn't create invalid dynamic assemblies when proxying types from non-strong-named assemblies (@stakx, #327)
-- Fix interceptor selectors being passed `System.RuntimeType` for class proxies instead of the target type (@stakx, #359)
+- Fix Castle.Services.Logging.Log4netIntegration assembly file name casing which breaks on Linux (@beginor, [#324](https://github.com/castleproject/Core/issues/324))
+- Fix Castle.DynamicProxy.Generators.AttributesToAvoidReplicating not being thread safe (InvalidOperationException "Collection was modified; enumeration operation may not execute.") (@BrunoJuchli, [#334](https://github.com/castleproject/Core/issues/334))
+- Fix TraceLoggerFactory to allow specifying the default logger level (@acjh, [#342](https://github.com/castleproject/Core/issues/342))
+- Ensure that DynamicProxy doesn't create invalid dynamic assemblies when proxying types from non-strong-named assemblies (@stakx, [#327](https://github.com/castleproject/Core/issues/327))
+- Fix interceptor selectors being passed `System.RuntimeType` for class proxies instead of the target type (@stakx, [#359](https://github.com/castleproject/Core/issues/359))
 - Replace NullReferenceException with descriptive one thrown when interceptors swallow exceptions and cause a null value type to be returned (@jonorossi, #85)
 
 ## 4.2.1 (2017-10-11)
 
 Bugfixes:
-- Add missing equality checks in `MethodSignatureComparer.EqualSignatureTypes` to fix `TypeLoadException`s ("Method does not have an implementation") (@stakx, #310)
-- Add missing XML documentation files to NuGet packages (@fir3pho3nixx, #312)
+- Add missing equality checks in `MethodSignatureComparer.EqualSignatureTypes` to fix `TypeLoadException`s ("Method does not have an implementation") (@stakx, [#310](https://github.com/castleproject/Core/issues/310))
+- Add missing XML documentation files to NuGet packages (@fir3pho3nixx, [#312](https://github.com/castleproject/Core/issues/312))
 
 ## 4.2.0 (2017-09-28)
 
 Enhancements:
-- Add IProxyTargetAccessor.DynProxySetTarget to set the target of a proxy (@yallie, #293)
-- Internal dynamic proxy fields are now private instead of public (@spencercw, #260)
+- Add IProxyTargetAccessor.DynProxySetTarget to set the target of a proxy (@yallie, [#293](https://github.com/castleproject/Core/issues/293))
+- Internal dynamic proxy fields are now private instead of public (@spencercw, [#260](https://github.com/castleproject/Core/issues/260))
 
 Bugfixes:
-- Make ProxyUtil.IsAccessible(MethodBase) take into account declaring type's accessibility so it doesn't report false negatives for e.g. public methods in inaccessible classes. (@stakx, #289)
-- Fix InvalidCastException calling IChangeProxyTarget.ChangeProxyTarget proxying generic interfaces (@yallie, #293)
-- Ignore minor/patch level version for AssemblyVersionAttribute as this creates binding errors for downstream libraries (@fir3pho3nixx, #288)
-- Fix DictionaryAdapter firing NotifyPropertyChang(ed/ing) events after CancelEdit (@Lakritzator, #299)
-- Fix ArgumentException when overriding method with nested generics (@BitWizJason, #297)
-- Explicit package versioning applied within solution to avoid maligned NuGet upgrades for lock step versioned packages. (@fir3pho3nixx, #292)
+- Make ProxyUtil.IsAccessible(MethodBase) take into account declaring type's accessibility so it doesn't report false negatives for e.g. public methods in inaccessible classes. (@stakx, [#289](https://github.com/castleproject/Core/issues/289))
+- Fix InvalidCastException calling IChangeProxyTarget.ChangeProxyTarget proxying generic interfaces (@yallie, [#293](https://github.com/castleproject/Core/issues/293))
+- Ignore minor/patch level version for AssemblyVersionAttribute as this creates binding errors for downstream libraries (@fir3pho3nixx, [#288](https://github.com/castleproject/Core/issues/288))
+- Fix DictionaryAdapter firing NotifyPropertyChang(ed/ing) events after CancelEdit (@Lakritzator, [#299](https://github.com/castleproject/Core/issues/299))
+- Fix ArgumentException when overriding method with nested generics (@BitWizJason, [#297](https://github.com/castleproject/Core/issues/297))
+- Explicit package versioning applied within solution to avoid maligned NuGet upgrades for lock step versioned packages. (@fir3pho3nixx, [#292](https://github.com/castleproject/Core/issues/292))
 
 Deprecations:
-- IChangeProxyTarget.ChangeProxyTarget is deprecated in favor of IProxyTargetAccessor.DynProxySetTarget (@yallie, #293)
+- IChangeProxyTarget.ChangeProxyTarget is deprecated in favor of IProxyTargetAccessor.DynProxySetTarget (@yallie, [#293](https://github.com/castleproject/Core/issues/293))
 
 ## 4.1.1 (2017-07-12)
 
 Bugfixes:
 - Prevent member name collision when proxy implements same generic interface more than twice (@stakx, #88)
-- Fix incorrect replication (reversed order) of custom modifiers (modopts and modreqs) on the CLR, does not work yet on Mono (@stakx, #277)
-- Fix COM interface proxy error case throwing exceptions trying to release null pointer from QueryInterface (@stakx, #281)
+- Fix incorrect replication (reversed order) of custom modifiers (modopts and modreqs) on the CLR, does not work yet on Mono (@stakx, [#277](https://github.com/castleproject/Core/issues/277))
+- Fix COM interface proxy error case throwing exceptions trying to release null pointer from QueryInterface (@stakx, [#281](https://github.com/castleproject/Core/issues/281))
 
 ## 4.1.0 (2017-06-11)
 
 Breaking Changes:
-- Remove AllowPartiallyTrustedCallersAttribute, which wasn't defined by default (@fir3pho3nixx, #241)
-- Upgrade log4net to v2.0.8 (@fir3pho3nixx, #241)
+- Remove AllowPartiallyTrustedCallersAttribute, which wasn't defined by default (@fir3pho3nixx, [#241](https://github.com/castleproject/Core/issues/241))
+- Upgrade log4net to v2.0.8 (@fir3pho3nixx, [#241](https://github.com/castleproject/Core/issues/241))
 
 Enhancements:
-- Add ProxyUtil.IsAccessible to check if a method is accessible to DynamicProxyGenAssembly2 (Blair Conrad, #235)
-- Refactor build engineering to support AppVeyor and TravisCI (@fir3pho3nixx, #241)
+- Add ProxyUtil.IsAccessible to check if a method is accessible to DynamicProxyGenAssembly2 (Blair Conrad, [#235](https://github.com/castleproject/Core/issues/235))
+- Refactor build engineering to support AppVeyor and TravisCI (@fir3pho3nixx, [#241](https://github.com/castleproject/Core/issues/241))
 
 Bugfixes:
-- Fix order of class proxy constructor arguments when using multiple mixins (@sebastienros, #230)
-- Fix dependency on "System.ComponentModel.TypeConverter" NuGet package version that does not exist (#239)
-- Fix ParamArrayAttribute not being replicated in proxy (@stakx, #121)
-- Fix System.Net.Mail.SmtpClient is obsolete on Mono warning (#254)
+- Fix order of class proxy constructor arguments when using multiple mixins (@sebastienros, [#230](https://github.com/castleproject/Core/issues/230))
+- Fix dependency on "System.ComponentModel.TypeConverter" NuGet package version that does not exist ([#239](https://github.com/castleproject/Core/issues/239))
+- Fix ParamArrayAttribute not being replicated in proxy (@stakx, [#121](https://github.com/castleproject/Core/issues/121))
+- Fix System.Net.Mail.SmtpClient is obsolete on Mono warning ([#254](https://github.com/castleproject/Core/issues/254))
 
 ## 4.0.0 (2017-01-25)
 
 Breaking Changes:
-- Update to NLog 4.4.1 and remove beta .NET Core support for NLog (#228)
-- Update to log4net 2.0.7 (#229)
+- Update to NLog 4.4.1 and remove beta .NET Core support for NLog ([#228](https://github.com/castleproject/Core/issues/228))
+- Update to log4net 2.0.7 ([#229](https://github.com/castleproject/Core/issues/229))
 
 Bugfixes:
-- Fix CustomAttributeInfo.FromExpression for VB.NET (@thomaslevesque, #223)
+- Fix CustomAttributeInfo.FromExpression for VB.NET (@thomaslevesque, [#223](https://github.com/castleproject/Core/issues/223))
 
 ## 4.0.0-beta002 (2016-10-28)
 
 Breaking Changes:
-- Rework Serilog integration to accept an ILogger rather than a LoggerConfiguration  to work correctly with Serilog (#142, #211)
-- Remove obsolete property `AttributesToAddToGeneratedTypes` from `ProxyGenerationOptions` (#219)
-- Change type of `ProxyGenerationOptions.AdditionalAttributes` to `IList<CustomAttributeInfo>` (#219)
-- Remove `IAttributeDisassembler` which is no longer necessary (#219)
+- Rework Serilog integration to accept an ILogger rather than a LoggerConfiguration  to work correctly with Serilog ([#142](https://github.com/castleproject/Core/issues/142), [#211](https://github.com/castleproject/Core/issues/211))
+- Remove obsolete property `AttributesToAddToGeneratedTypes` from `ProxyGenerationOptions` ([#219](https://github.com/castleproject/Core/issues/219))
+- Change type of `ProxyGenerationOptions.AdditionalAttributes` to `IList<CustomAttributeInfo>` ([#219](https://github.com/castleproject/Core/issues/219))
+- Remove `IAttributeDisassembler` which is no longer necessary ([#219](https://github.com/castleproject/Core/issues/219))
 
 Enhancements:
-- Add IProxyGenerator interface for the ProxyGenerator class (#215)
-- Improve default list of attributes to avoid replicating. Code Access Security attributes and MarshalAsAttribute will no longer be replicated (#221)
+- Add IProxyGenerator interface for the ProxyGenerator class ([#215](https://github.com/castleproject/Core/issues/215))
+- Improve default list of attributes to avoid replicating. Code Access Security attributes and MarshalAsAttribute will no longer be replicated ([#221](https://github.com/castleproject/Core/issues/221))
 
 Bugfixes:
 - Fix building on Mono 4.6.1
-- Different attributes in `ProxyGenerationOptions.AdditionalAttributes` now generates different proxy types (#219)
+- Different attributes in `ProxyGenerationOptions.AdditionalAttributes` now generates different proxy types ([#219](https://github.com/castleproject/Core/issues/219))
 
 ## 4.0.0-beta001 (2016-07-17)
 
 Breaking Changes:
-- Update to log4net 1.2.15/2.0.5 (#199)
-- Update to NLog 4.4.0-beta13 (#199)
-- Update to Serilog 2.0.0 (#199)
+- Update to log4net 1.2.15/2.0.5 ([#199](https://github.com/castleproject/Core/issues/199))
+- Update to NLog 4.4.0-beta13 ([#199](https://github.com/castleproject/Core/issues/199))
+- Update to Serilog 2.0.0 ([#199](https://github.com/castleproject/Core/issues/199))
 
 Enhancements:
 - .NET Core 1.0 and .NET Standard 1.3 support (Jonathon Rossi, Jeremy Meng)
 - Restore DynamicDictionary class
 
 Bugfixes:
-- Fix target framework moniker in NuGet package for .NET Core (#174)
+- Fix target framework moniker in NuGet package for .NET Core ([#174](https://github.com/castleproject/Core/issues/174))
 
 ## 4.0.0-alpha001 (2016-04-07)
 
 Breaking Changes:
-- Remove all Silverlight support (#100, #150)
-- Remove DynamicProxy's RemotableInvocation and remoting support for invocations (#110, #65)
+- Remove all Silverlight support ([#100](https://github.com/castleproject/Core/issues/100), [#150](https://github.com/castleproject/Core/issues/150))
+- Remove DynamicProxy's RemotableInvocation and remoting support for invocations ([#110](https://github.com/castleproject/Core/issues/110), #65)
 
 Enhancements:
 - .NET Core DNX and dotnet5.4 support via feature conditional compilation (Jonathon Rossi, Jeremy Meng)
-- Build script improvements and consolidate version numbers (Blair Conrad, #75, #152, #153)
+- Build script improvements and consolidate version numbers (Blair Conrad, #75, [#152](https://github.com/castleproject/Core/issues/152), [#153](https://github.com/castleproject/Core/issues/153))
 
 Bugfixes:
-- Fix 'System.ArgumentException: Constant does not match the defined type' with optional, nullable enum method parameters (Daniel Yankowsky, #141, #149)
-- Fix proxy generation hook notification for virtual but final methods (Axel Heer, #148)
-- Fix InvalidCastException with custom attribute having an enum array parameter with non-int enum (@csharper2010, #104, #105)
-- Update to Mono 4.0.2 and improve Mono support (#79, #95, #102)
+- Fix 'System.ArgumentException: Constant does not match the defined type' with optional, nullable enum method parameters (Daniel Yankowsky, [#141](https://github.com/castleproject/Core/issues/141), [#149](https://github.com/castleproject/Core/issues/149))
+- Fix proxy generation hook notification for virtual but final methods (Axel Heer, [#148](https://github.com/castleproject/Core/issues/148))
+- Fix InvalidCastException with custom attribute having an enum array parameter with non-int enum (@csharper2010, [#104](https://github.com/castleproject/Core/issues/104), [#105](https://github.com/castleproject/Core/issues/105))
+- Update to Mono 4.0.2 and improve Mono support (#79, #95, [#102](https://github.com/castleproject/Core/issues/102))
 - Fix 'System.ArrayTypeMismatchException: Source array type cannot be assigned to destination array type' on Mono (#81)
 - Fix 'System.ArgumentException: System.Decimal is not a supported constant type' with optional method parameters (@fknx, #87, #91)
 - Fix ProxyGenerator cache does not take into account AdditionalAttributes (@cmerat, #77, #78)
