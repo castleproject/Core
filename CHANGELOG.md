@@ -52,7 +52,7 @@ Bugfixes:
 - Fix TraceLoggerFactory to allow specifying the default logger level (@acjh, [#342](https://github.com/castleproject/Core/issues/342))
 - Ensure that DynamicProxy doesn't create invalid dynamic assemblies when proxying types from non-strong-named assemblies (@stakx, [#327](https://github.com/castleproject/Core/issues/327))
 - Fix interceptor selectors being passed `System.RuntimeType` for class proxies instead of the target type (@stakx, [#359](https://github.com/castleproject/Core/issues/359))
-- Replace NullReferenceException with descriptive one thrown when interceptors swallow exceptions and cause a null value type to be returned (@jonorossi, #85)
+- Replace NullReferenceException with descriptive one thrown when interceptors swallow exceptions and cause a null value type to be returned (@jonorossi, [#85](https://github.com/castleproject/Core/issues/85))
 
 ## 4.2.1 (2017-10-11)
 
@@ -80,7 +80,7 @@ Deprecations:
 ## 4.1.1 (2017-07-12)
 
 Bugfixes:
-- Prevent member name collision when proxy implements same generic interface more than twice (@stakx, #88)
+- Prevent member name collision when proxy implements same generic interface more than twice (@stakx, [#88](https://github.com/castleproject/Core/issues/88))
 - Fix incorrect replication (reversed order) of custom modifiers (modopts and modreqs) on the CLR, does not work yet on Mono (@stakx, [#277](https://github.com/castleproject/Core/issues/277))
 - Fix COM interface proxy error case throwing exceptions trying to release null pointer from QueryInterface (@stakx, [#281](https://github.com/castleproject/Core/issues/281))
 
@@ -143,49 +143,49 @@ Bugfixes:
 
 Breaking Changes:
 - Remove all Silverlight support ([#100](https://github.com/castleproject/Core/issues/100), [#150](https://github.com/castleproject/Core/issues/150))
-- Remove DynamicProxy's RemotableInvocation and remoting support for invocations ([#110](https://github.com/castleproject/Core/issues/110), #65)
+- Remove DynamicProxy's RemotableInvocation and remoting support for invocations ([#110](https://github.com/castleproject/Core/issues/110), [#65](https://github.com/castleproject/Core/issues/65))
 
 Enhancements:
 - .NET Core DNX and dotnet5.4 support via feature conditional compilation (Jonathon Rossi, Jeremy Meng)
-- Build script improvements and consolidate version numbers (Blair Conrad, #75, [#152](https://github.com/castleproject/Core/issues/152), [#153](https://github.com/castleproject/Core/issues/153))
+- Build script improvements and consolidate version numbers (Blair Conrad, [#75](https://github.com/castleproject/Core/issues/75), [#152](https://github.com/castleproject/Core/issues/152), [#153](https://github.com/castleproject/Core/issues/153))
 
 Bugfixes:
 - Fix 'System.ArgumentException: Constant does not match the defined type' with optional, nullable enum method parameters (Daniel Yankowsky, [#141](https://github.com/castleproject/Core/issues/141), [#149](https://github.com/castleproject/Core/issues/149))
 - Fix proxy generation hook notification for virtual but final methods (Axel Heer, [#148](https://github.com/castleproject/Core/issues/148))
 - Fix InvalidCastException with custom attribute having an enum array parameter with non-int enum (@csharper2010, [#104](https://github.com/castleproject/Core/issues/104), [#105](https://github.com/castleproject/Core/issues/105))
-- Update to Mono 4.0.2 and improve Mono support (#79, #95, [#102](https://github.com/castleproject/Core/issues/102))
-- Fix 'System.ArrayTypeMismatchException: Source array type cannot be assigned to destination array type' on Mono (#81)
-- Fix 'System.ArgumentException: System.Decimal is not a supported constant type' with optional method parameters (@fknx, #87, #91)
-- Fix ProxyGenerator cache does not take into account AdditionalAttributes (@cmerat, #77, #78)
-- Fix Castle.Services.Logging.SerilogIntegration.dll missing some assembly info attributes (@imzshh, #20, #82)
+- Update to Mono 4.0.2 and improve Mono support ([#79](https://github.com/castleproject/Core/issues/79), [#95](https://github.com/castleproject/Core/issues/95), [#102](https://github.com/castleproject/Core/issues/102))
+- Fix 'System.ArrayTypeMismatchException: Source array type cannot be assigned to destination array type' on Mono ([#81](https://github.com/castleproject/Core/issues/81))
+- Fix 'System.ArgumentException: System.Decimal is not a supported constant type' with optional method parameters (@fknx, [#87](https://github.com/castleproject/Core/issues/87), [#91](https://github.com/castleproject/Core/issues/91))
+- Fix ProxyGenerator cache does not take into account AdditionalAttributes (@cmerat, [#77](https://github.com/castleproject/Core/issues/77), [#78](https://github.com/castleproject/Core/issues/78))
+- Fix Castle.Services.Logging.SerilogIntegration.dll missing some assembly info attributes (@imzshh, [#20](https://github.com/castleproject/Core/issues/20), [#82](https://github.com/castleproject/Core/issues/82))
 
 ## 3.3.3 (2014-11-06)
-- Fix Serilog integration modifies LoggerConfiguration.MinimumLevel (#70)
-- Add SourceContext to the Serilog logger (@KevivL, #69)
+- Fix Serilog integration modifies LoggerConfiguration.MinimumLevel ([#70](https://github.com/castleproject/Core/issues/70))
+- Add SourceContext to the Serilog logger (@KevivL, [#69](https://github.com/castleproject/Core/issues/69))
 
 ## 3.3.2 (2014-11-03)
-- fixed #66 - SerilogLogger implementation bug where exceptions were passed through incorrectly
+- fixed [#66](https://github.com/castleproject/Core/issues/66) - SerilogLogger implementation bug where exceptions were passed through incorrectly
 
 ## 3.3.1 (2014-09-10)
-- implemented #61 - Added support for Serilog - contributed by Russell J Baker (@ruba1987)
+- implemented [#61](https://github.com/castleproject/Core/issues/61) - Added support for Serilog - contributed by Russell J Baker (@ruba1987)
 
 ## 3.3.0 (2014-04-27)
-- implemented #51 - removed abandoned projects: Binder, Pagination, Validator
-- implemented #49 - build NuGet and Zip packages from TeamCity - contributed by Blair Conrad (@blairconrad)
-- implemented #42 - move complicated BuildInternalsVisibleMessageForType method out of DynamicProxyBuilder - contributed by Blair Conrad (@blairconrad)
-- fixed #47 - Calling DynamicProxy proxy methods with multidimensional array parameters - contributed by  Ed Parcell (@edparcell)
-- fixed #44 - DictionaryAdapter FetchAttribute on type has no effect
-- fixed #34 and #39 - inaccessible type parameters should give better error messages - contributed by Blair Conrad (@blairconrad)
+- implemented [#51](https://github.com/castleproject/Core/issues/51) - removed abandoned projects: Binder, Pagination, Validator
+- implemented [#49](https://github.com/castleproject/Core/issues/49) - build NuGet and Zip packages from TeamCity - contributed by Blair Conrad (@blairconrad)
+- implemented [#42](https://github.com/castleproject/Core/issues/42) - move complicated BuildInternalsVisibleMessageForType method out of DynamicProxyBuilder - contributed by Blair Conrad (@blairconrad)
+- fixed [#47](https://github.com/castleproject/Core/issues/47) - Calling DynamicProxy proxy methods with multidimensional array parameters - contributed by  Ed Parcell (@edparcell)
+- fixed [#44](https://github.com/castleproject/Core/issues/44) - DictionaryAdapter FetchAttribute on type has no effect
+- fixed [#34](https://github.com/castleproject/Core/issues/34) and [#39](https://github.com/castleproject/Core/issues/39) - inaccessible type parameters should give better error messages - contributed by Blair Conrad (@blairconrad)
 
 ## 3.2.2 (2013-11-30)
-- fixed #35 - ParameterBuilder.SetConstant fails when using a default value of null - contributed by (@jonasro)
+- fixed [#35](https://github.com/castleproject/Core/issues/35) - ParameterBuilder.SetConstant fails when using a default value of null - contributed by (@jonasro)
 
 ## 3.2.1 (2013-10-05)
-- fixed #32 - Improve configuration of SmtpClient in sync sending - contributed by Artur Dorochowicz (@ArturDorochowicz)
-- fixed #31 - [DynamicProxy] Preserve DefaultValues of proxied method's parameters (in .NET 4.5)
-- fixed #30 - tailoring InternalsVisibleTo message based on assembly of inaccessible type - contributed by Blair Conrad (@blairconrad)
-- fixed #27 - Allow dynamic proxy of generic interfaces which have generic methods, under Mono 2.10.8 and Mono 3.0.6 - contributed by Iain Ballard (@i-e-b)
-- fixed #26 - Proxy of COM class issue, reference count incremented - contributed by Jean-Claude Viau (@jcviau)
+- fixed [#32](https://github.com/castleproject/Core/issues/32) - Improve configuration of SmtpClient in sync sending - contributed by Artur Dorochowicz (@ArturDorochowicz)
+- fixed [#31](https://github.com/castleproject/Core/issues/31) - [DynamicProxy] Preserve DefaultValues of proxied method's parameters (in .NET 4.5)
+- fixed [#30](https://github.com/castleproject/Core/issues/30) - tailoring InternalsVisibleTo message based on assembly of inaccessible type - contributed by Blair Conrad (@blairconrad)
+- fixed [#27](https://github.com/castleproject/Core/issues/27) - Allow dynamic proxy of generic interfaces which have generic methods, under Mono 2.10.8 and Mono 3.0.6 - contributed by Iain Ballard (@i-e-b)
+- fixed [#26](https://github.com/castleproject/Core/issues/26) - Proxy of COM class issue, reference count incremented - contributed by Jean-Claude Viau (@jcviau)
 - fixed DYNPROXY-188 - CreateInterfaceProxyWithoutTarget fails with interface containing member with 'ref UIntPtr' - contributed by Pier Janssen (@Pjanssen)
 - fixed DYNPROXY-186 - .Net remoting (transparent proxy) cannot be proxied - contributed by Jean-Claude Viau (@jcviau)
 - fixed DYNPROXY-185 - ProxyUtil.GetUnproxiedInstance returns proxy object for ClassProxyWithTarget instead of its target - contributed by Dmitry Xlestkov (@d-s-x)
