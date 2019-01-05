@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy
 	using System.Linq.Expressions;
 	using System.Reflection;
 	using System.Reflection.Emit;
+	using System.Runtime.CompilerServices;
 
 	/// <summary>
 	/// Encapsulates the information needed to build an attribute.
@@ -169,14 +170,26 @@ namespace Castle.DynamicProxy
 
 		private static object GetAttributeArgumentValue(Expression arg, bool allowArray)
 		{
-			var constant = arg as ConstantExpression;
-			if (constant == null)
+			switch (arg.NodeType)
 			{
-				if (allowArray)
-				{
-					var newArrayExpr = arg as NewArrayExpression;
-					if (newArrayExpr != null)
+				case ExpressionType.Constant:
+					return ((ConstantExpression)arg).Value;
+				case ExpressionType.MemberAccess:
+					var memberExpr = (MemberExpression) arg;
+					if (memberExpr.Member is FieldInfo field)
 					{
+						if (memberExpr.Expression is ConstantExpression constant &&
+						    IsCompilerGenerated(constant.Type) &&
+						    constant.Value != null)
+						{
+							return field.GetValue(constant.Value);
+						}
+					}
+					break;
+				case ExpressionType.NewArrayInit:
+					if (allowArray)
+					{
+						var newArrayExpr = (NewArrayExpression) arg;
 						var array = Array.CreateInstance(newArrayExpr.Type.GetElementType(), newArrayExpr.Expressions.Count);
 						int index = 0;
 						foreach (var expr in newArrayExpr.Expressions)
@@ -187,10 +200,15 @@ namespace Castle.DynamicProxy
 						}
 						return array;
 					}
-				}
-				throw new ArgumentException("Only constant and single-dimensional array expressions are supported");
+					break;
 			}
-			return constant.Value;
+			
+			throw new ArgumentException("Only constant, local variables, method parameters and single-dimensional array expressions are supported");
+		}
+
+		private static bool IsCompilerGenerated(Type type)
+		{
+			return type.GetTypeInfo().IsDefined(typeof(CompilerGeneratedAttribute));
 		}
 
 		internal CustomAttributeBuilder Builder
