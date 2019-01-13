@@ -39,7 +39,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Same_Interface_on_proxy_withouth_target_and_mixin_should_forward_to_null_target()
 		{
-			var interceptor = new WithCallbackInterceptor(i =>
+			var interceptor = new WithCallbackInterceptor((i, p) =>
 			                                              	{
 			                                              		Assert.IsNull(i.InvocationTarget);
 			                                              		i.ReturnValue = 0;
@@ -63,7 +63,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var target = new ServiceImpl();
 			var mixin = new ServiceImpl();
-			IInterceptor interceptor = new WithCallbackInterceptor(i=>
+			IInterceptor interceptor = new WithCallbackInterceptor((i, p)=>
 			                                                       	{
 			                                                       		Assert.AreSame(target,i.InvocationTarget);
 			                                                       		i.ReturnValue = 0;

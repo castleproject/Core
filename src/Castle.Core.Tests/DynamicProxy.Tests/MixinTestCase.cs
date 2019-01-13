@@ -32,12 +32,12 @@ namespace Castle.DynamicProxy.Tests
 			public object proxy;
 			public object mixin;
 
-			protected override void PreProceed(IInvocation invocation)
+			protected override void PreProceed(IInvocation invocation, InvocationDelegate proceed)
 			{
 				Invoked = true;
 				mixin = invocation.InvocationTarget;
 				proxy = invocation.Proxy;
-				base.PreProceed(invocation);
+				base.PreProceed(invocation, proceed);
 			}
 		}
 

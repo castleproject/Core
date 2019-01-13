@@ -23,9 +23,9 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 	{
 		#region IInterceptor Members
 
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
-			invocation.Proceed();
+			proceed(invocation);
 			var ret = (int) invocation.ReturnValue;
 			ret += 2;
 			invocation.ReturnValue = ret;

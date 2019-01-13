@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 
 	public class RequiredParamInterceptor : IInterceptor
 	{
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
 			ParameterInfo[] parameters = invocation.Method.GetParameters();
 
@@ -42,7 +42,7 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 				}
 			}
 
-			invocation.Proceed();
+			proceed(invocation);
 		}
 	}
 }

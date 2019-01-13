@@ -25,12 +25,12 @@ namespace Castle.DynamicProxy.Tests
 			this.target = target;
 		}
 
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
 			var targetAccessor = invocation.Proxy as IProxyTargetAccessor;
 			Assert.IsNotNull(targetAccessor);
 			targetAccessor.DynProxySetTarget(target);
-			invocation.Proceed();
+			proceed(invocation);
 		}
 	}
 }

@@ -30,10 +30,10 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 
 		#region IInterceptor Members
 
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
 			count++;
-			invocation.Proceed();
+			proceed(invocation);
 		}
 
 		#endregion

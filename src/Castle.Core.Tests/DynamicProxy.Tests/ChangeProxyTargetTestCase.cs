@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Tests
 
 		private Lazy<T> LazyTarget { get; }
 
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
 			var target = invocation.InvocationTarget as T;
 			if (target == null)
@@ -37,7 +37,7 @@ namespace Castle.DynamicProxy.Tests
 				((IProxyTargetAccessor)invocation.Proxy).DynProxySetTarget(LazyTarget.Value);
 			}
 
-			invocation.Proceed();
+			proceed(invocation);
 		}
 	}
 
@@ -51,7 +51,7 @@ namespace Castle.DynamicProxy.Tests
 
 		private Lazy<T> LazyTarget { get; }
 
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
 			var target = invocation.InvocationTarget as T;
 			if (target == null)
@@ -62,7 +62,7 @@ namespace Castle.DynamicProxy.Tests
 #pragma warning restore CS0618 // obsolete
 			}
 
-			invocation.Proceed();
+			proceed(invocation);
 		}
 	}
 

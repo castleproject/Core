@@ -27,18 +27,18 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 
 		public bool Proceed = true;
 
-		protected override void PreProceed(IInvocation invocation)
+		protected override void PreProceed(IInvocation invocation, InvocationDelegate proceed)
 		{
 			invocations.Add(invocation.Method.Name);
 
 			sb.Append(String.Format("{0} ", invocation.Method.Name));
 		}
 
-		protected override void PerformProceed (IInvocation invocation)
+		protected override void PerformProceed (IInvocation invocation, InvocationDelegate proceed)
 		{
 			if (Proceed)
 			{
-				base.PerformProceed (invocation);
+				base.PerformProceed (invocation, proceed);
 			}
 			else if (invocation.Method.ReturnType.GetTypeInfo().IsValueType && invocation.Method.ReturnType != typeof (void))
 			{

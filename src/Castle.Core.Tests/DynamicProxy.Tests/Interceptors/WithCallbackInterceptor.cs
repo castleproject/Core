@@ -23,11 +23,11 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 			callback = interceptorCallback;
 		}
 
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
-			callback(invocation);
+			callback(invocation, proceed);
 		}
 
-		public delegate void InterceptorCallback(IInvocation invocation);
+		public delegate void InterceptorCallback(IInvocation invocation, InvocationDelegate proceed);
 	}
 }

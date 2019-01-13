@@ -27,12 +27,12 @@ namespace Castle.DynamicProxy.Tests.Interceptors
             this.type = type;
         }
 
-        public void Intercept(IInvocation invocation)
+        public void Intercept(IInvocation invocation, InvocationDelegate proceed)
         {
             type = typeof(IBarFoo);
             if (invocation.Method.DeclaringType != type)
             {
-                invocation.Proceed();
+                proceed(invocation);
             }
         }
 

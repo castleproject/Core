@@ -92,11 +92,11 @@ namespace Castle.DynamicProxy.Tests
 
 		public class SwallowExceptionInterceptor : IInterceptor
 		{
-			public void Intercept(IInvocation invocation)
+			public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 			{
 				try
 				{
-					invocation.Proceed();
+					proceed(invocation);
 				}
 				catch (Exception)
 				{
@@ -107,9 +107,9 @@ namespace Castle.DynamicProxy.Tests
 
 		public class ReturnNullValueInterceptor : IInterceptor
 		{
-			public void Intercept(IInvocation invocation)
+			public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 			{
-				invocation.Proceed(); // If this throws, ReturnValue will remain null
+				proceed(invocation); // If this throws, ReturnValue will remain null
 				invocation.ReturnValue = null;
 			}
 		}

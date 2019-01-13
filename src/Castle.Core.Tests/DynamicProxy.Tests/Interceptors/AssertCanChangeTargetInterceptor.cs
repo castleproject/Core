@@ -20,10 +20,10 @@ namespace Castle.DynamicProxy.Tests.Interceptors
     {
         #region IInterceptor Members
 
-        public void Intercept(IInvocation invocation)
+        public void Intercept(IInvocation invocation, InvocationDelegate proceed)
         {
             Assert.IsInstanceOf(typeof (IChangeProxyTarget), invocation);
-            invocation.Proceed();
+            proceed(invocation);
         }
 
         #endregion
