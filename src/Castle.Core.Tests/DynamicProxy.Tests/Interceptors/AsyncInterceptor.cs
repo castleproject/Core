@@ -18,17 +18,17 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 
 	public class AsyncInterceptor : IInterceptor
 	{
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
-			invocation.ReturnValue = InterceptAsyncMethod(invocation);
+			invocation.ReturnValue = InterceptAsyncMethod(invocation, proceed);
 		}
 
-		private static async Task InterceptAsyncMethod(IInvocation invocation)
+		private static async Task InterceptAsyncMethod(IInvocation invocation, InvocationDelegate proceed)
 		{
 			// It all falls down when executing async before calling Proceed().
 			await Task.Delay(10).ConfigureAwait(false);
 
-			invocation.Proceed();
+			proceed(invocation);
 
 			// Hmmmmm, now with it simplified down to this, I see the glaring hole that is the return value being set
 			// in two situations.
