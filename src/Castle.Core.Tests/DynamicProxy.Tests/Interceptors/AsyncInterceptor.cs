@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.Interceptors
+namespace Castle.DynamicProxy.Tests.Interceptors
 {
 	using System.Threading.Tasks;
-	using Castle.DynamicProxy;
 
 	public class AsyncInterceptor : IInterceptor
 	{

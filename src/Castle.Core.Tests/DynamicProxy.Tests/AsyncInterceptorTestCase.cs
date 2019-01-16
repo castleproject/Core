@@ -12,37 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.DynamicProxy.Tests
+namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Linq;
-	using System.Reflection;
 	using System.Threading.Tasks;
 
-	using Castle.DynamicProxy;
-	using Castle.DynamicProxy.Tests;
-
-	using CastleTests.DynamicProxy.Tests.Classes;
-	using CastleTests.DynamicProxy.Tests.Interfaces;
-	using CastleTests.Interceptors;
+	using Castle.DynamicProxy.Tests.Classes;
+	using Castle.DynamicProxy.Tests.Interfaces;
+	using Castle.DynamicProxy.Tests.Interceptors;
 
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class AsyncInterceptorTestCase : BasePEVerifyTestCase
 	{
-	    [Test]
-	    public async Task Should_Intercept_Asynchronous_Methods_With_An_Async_Operations_Prior_To_Calling_Proceed()
-	    {
+		[Test]
+		public async Task Should_Intercept_Asynchronous_Methods_With_An_Async_Operations_Prior_To_Calling_Proceed()
+		{
 			// Arrange
-		    IInterfaceWithAsynchronousMethod target = new ClassWithAsynchronousMethod();
+			IInterfaceWithAsynchronousMethod target = new ClassWithAsynchronousMethod();
 			IInterceptor interceptor = new AsyncInterceptor();
 
-		    IInterfaceWithAsynchronousMethod proxy =
-			    generator.CreateInterfaceProxyWithTargetInterface(target, interceptor);
+			IInterfaceWithAsynchronousMethod proxy =
+				generator.CreateInterfaceProxyWithTargetInterface(target, interceptor);
 
 			// Act
-		    await proxy.Method().ConfigureAwait(false);
-	    }
+			await proxy.Method().ConfigureAwait(false);
+		}
 	}
 }

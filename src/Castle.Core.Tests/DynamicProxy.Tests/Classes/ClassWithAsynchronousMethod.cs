@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace CastleTests.DynamicProxy.Tests.Classes
+namespace Castle.DynamicProxy.Tests.Classes
 {
 	using System;
 	using System.Threading;
 	using System.Threading.Tasks;
 
-	using CastleTests.DynamicProxy.Tests.Interfaces;
+	using Castle.DynamicProxy.Tests.Interfaces;
 
 	public class ClassWithAsynchronousMethod : IInterfaceWithAsynchronousMethod
 	{
