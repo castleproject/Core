@@ -53,7 +53,7 @@ namespace Castle.DynamicProxy.Tests
 
 			object receivedArg = null;
 			var proxy = this.generator.CreateInterfaceProxyWithoutTarget<IWithInModifier>(
-				new WithCallbackInterceptor(invocation =>
+				new WithCallbackInterceptor((invocation, proceed) =>
 				{
 					receivedArg = invocation.Arguments[0];
 				}));

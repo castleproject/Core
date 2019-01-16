@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 			this.value = value;
 		}
 
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
 			invocation.SetArgumentValue(index, value);
 		}

@@ -101,16 +101,16 @@ namespace Castle.DynamicProxy.Tests
 			var proxy = generator.CreateInterfaceProxyWithTargetInterface(
 			            	typeof(IService),
 			            	target1,
-			            	new WithCallbackInterceptor(i =>
+			            	new WithCallbackInterceptor((i, p) =>
 			            	{
 			            		invocationTarget1 = i.MethodInvocationTarget;
-			            		i.Proceed();
+			            		p(i);
 			            	}),
 			            	new ChangeTargetInterceptor(target2),
-			            	new WithCallbackInterceptor(i =>
+			            	new WithCallbackInterceptor((i, p) =>
 			            	{
 			            		invocationTarget2 = i.MethodInvocationTarget;
-			            		i.Proceed();
+			            		p(i);
 			            	})) as IService;
 
 			proxy.Sum(2, 2);

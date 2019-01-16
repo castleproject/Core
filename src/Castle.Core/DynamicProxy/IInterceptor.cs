@@ -19,6 +19,8 @@ namespace Castle.DynamicProxy
 	/// </summary>
 	public interface IInterceptor
 	{
-		void Intercept(IInvocation invocation);
+		/// <param name="invocation">Invocation information.</param>
+		/// <param name="proceed">Proceeds the call to the next interceptor in line, and ultimately to the target method.</param>
+		void Intercept(IInvocation invocation, InvocationDelegate proceed);
 	}
 }

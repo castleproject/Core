@@ -18,10 +18,10 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 
 	public class AssertCannotChangeTargetInterceptor : IInterceptor
 	{
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
 			Assert.IsNotInstanceOf<IChangeProxyTarget>(invocation);
-			invocation.Proceed();
+			proceed(invocation);
 		}
 	}
 }

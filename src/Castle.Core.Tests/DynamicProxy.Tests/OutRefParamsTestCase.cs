@@ -52,11 +52,11 @@ namespace Castle.DynamicProxy.Tests
 		{
 			public Exception Exception { get; set; }
 
-			protected override void PerformProceed(IInvocation invocation)
+			protected override void PerformProceed(IInvocation invocation, InvocationDelegate proceed)
 			{
 				try
 				{
-					base.PerformProceed(invocation);
+					base.PerformProceed(invocation, proceed);
 				}
 				catch (Exception e)
 				{
@@ -97,7 +97,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			int i;
 			var interceptor =
-				new WithCallbackInterceptor(delegate(IInvocation invocation) { invocation.Arguments[0] = 5; });
+				new WithCallbackInterceptor(delegate(IInvocation invocation, InvocationDelegate proceed) { invocation.Arguments[0] = 5; });
 			var proxy = (IWithRefOut)generator.CreateInterfaceProxyWithoutTarget(typeof(IWithRefOut), interceptor);
 			proxy.Do(out i);
 			Assert.AreEqual(5, i);
@@ -118,7 +118,7 @@ namespace Castle.DynamicProxy.Tests
 			var i = 3;
 			var s1 = "2";
 			string s2;
-			var interceptor = new WithCallbackInterceptor(delegate(IInvocation invocation)
+			var interceptor = new WithCallbackInterceptor(delegate(IInvocation invocation, InvocationDelegate proceed)
 			{
 				invocation.Arguments[0] = 5;
 				invocation.Arguments[1] = "aaa";
@@ -144,7 +144,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var i = 3;
 			var interceptor =
-				new WithCallbackInterceptor(delegate(IInvocation invocation) { invocation.Arguments[0] = 5; });
+				new WithCallbackInterceptor(delegate(IInvocation invocation, InvocationDelegate proceed) { invocation.Arguments[0] = 5; });
 			var proxy = (IWithRefOut)generator.CreateInterfaceProxyWithoutTarget(typeof(IWithRefOut), interceptor);
 			proxy.Did(ref i);
 			Assert.AreEqual(5, i);

@@ -448,7 +448,7 @@ namespace Castle.DynamicProxy.Tests
 
 		public class ResultModifierInterceptor : StandardInterceptor
 		{
-			protected override void PostProceed(IInvocation invocation)
+			protected override void PostProceed(IInvocation invocation, InvocationDelegate proceed)
 			{
 				object returnValue = invocation.ReturnValue;
 

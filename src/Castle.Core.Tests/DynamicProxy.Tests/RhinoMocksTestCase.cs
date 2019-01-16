@@ -37,7 +37,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			#region IInterceptor Members
 
-			public void Intercept(IInvocation invocation)
+			public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 			{
 				invocation.Arguments[0] = IntPtr.Zero;
 				invocation.ReturnValue = 5;
@@ -392,7 +392,7 @@ namespace Castle.DynamicProxy.Tests
 
 		#region IInterceptor Members
 
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
 			invocation.Arguments[0] = x;
 		}

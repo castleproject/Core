@@ -23,11 +23,11 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 			this.target = target;
 		}
 
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
 			IChangeProxyTarget changeTarget = (IChangeProxyTarget) invocation;
 			changeTarget.ChangeInvocationTarget(target);
-			invocation.Proceed();
+			proceed(invocation);
 		}
 	}
 }

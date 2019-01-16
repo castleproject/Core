@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 {
 	public class ThrowingInterceptor : IInterceptor
 	{
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
 			throw new ThrowingInterceptorException("Because I feel like it");
 		}

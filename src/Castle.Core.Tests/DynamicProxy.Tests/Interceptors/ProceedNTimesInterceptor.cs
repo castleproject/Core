@@ -23,13 +23,13 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 			this.retries = retries;
 		}
 
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
 			for (var i = 0; i < retries; i++)
 			{
 				try
 				{
-					invocation.Proceed();
+					proceed(invocation);
 				}
 				catch
 				{

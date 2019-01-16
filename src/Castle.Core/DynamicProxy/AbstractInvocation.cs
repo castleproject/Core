@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Diagnostics;
+	using System.Linq;
 	using System.Reflection;
 
 	public abstract class AbstractInvocation : IInvocation
@@ -106,40 +107,14 @@ namespace Castle.DynamicProxy
 				return;
 			}
 
-			currentInterceptorIndex++;
-			try
-			{
-				if (currentInterceptorIndex == interceptors.Length)
-				{
-					InvokeMethodOnTarget();
-				}
-				else if (currentInterceptorIndex > interceptors.Length)
-				{
-					string interceptorsCount;
-					if (interceptors.Length > 1)
-					{
-						interceptorsCount = " each one of " + interceptors.Length + " interceptors";
-					}
-					else
-					{
-						interceptorsCount = " interceptor";
-					}
+			InvocationDelegate app = invocation => InvokeMethodOnTarget();
 
-					var message = "This is a DynamicProxy2 error: invocation.Proceed() has been called more times than expected." +
-					              "This usually signifies a bug in the calling code. Make sure that" + interceptorsCount +
-					              " selected for the method '" + Method + "'" +
-					              "calls invocation.Proceed() at most once.";
-					throw new InvalidOperationException(message);
-				}
-				else
-				{
-					interceptors[currentInterceptorIndex].Intercept(this);
-				}
-			}
-			finally
+			foreach (var interceptor in interceptors.AsEnumerable().Reverse())
 			{
-				currentInterceptorIndex--;
+				app = ((Func<InvocationDelegate, InvocationDelegate>) (proceed => invocation => interceptor.Intercept(invocation, proceed)))(app);
 			}
+
+			app(this);
 		}
 
 		protected abstract void InvokeMethodOnTarget();

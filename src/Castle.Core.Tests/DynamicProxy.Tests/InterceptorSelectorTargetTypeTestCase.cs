@@ -173,7 +173,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			public Type ReceivedTargetType { get; private set; }
 
-			public void Intercept(IInvocation invocation)
+			public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 			{
 				ReceivedTargetType = invocation.TargetType;
 			}

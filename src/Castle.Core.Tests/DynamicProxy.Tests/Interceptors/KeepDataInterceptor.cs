@@ -26,14 +26,14 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 			get { return invocation; }
 		}
 
-		public void Intercept(IInvocation invocation)
+		public void Intercept(IInvocation invocation, InvocationDelegate proceed)
 		{
 			this.invocation = invocation;
 			var concreteMethod = invocation.GetConcreteMethod();
 
 			if (invocation.MethodInvocationTarget != null)
 			{
-				invocation.Proceed();
+				proceed(invocation);
 			}
 			else if (concreteMethod.ReturnType.GetTypeInfo().IsValueType && !concreteMethod.ReturnType.Equals(typeof(void)))
 				// ensure valid return value

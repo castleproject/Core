@@ -105,16 +105,6 @@ namespace Castle.DynamicProxy
 		MethodInfo GetConcreteMethodInvocationTarget();
 
 		/// <summary>
-		///   Proceeds the call to the next interceptor in line, and ultimately to the target method.
-		/// </summary>
-		/// <remarks>
-		///   Since interface proxies without a target don't have the target implementation to proceed to,
-		///   it is important, that the last interceptor does not call this method, otherwise a
-		///   <see cref = "NotImplementedException" /> will be thrown.
-		/// </remarks>
-		void Proceed();
-
-		/// <summary>
 		///   Overrides the value of an argument at the given <paramref name = "index" /> with the
 		///   new <paramref name = "value" /> provided.
 		/// </summary>
