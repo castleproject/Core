@@ -53,12 +53,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			lock (lockObject)
 			{
-				if (signedAssemblyCache.ContainsKey(assembly) == false)
+				bool isSigned;
+				if (signedAssemblyCache.TryGetValue(assembly, out isSigned) == false)
 				{
-					var isSigned = assembly.ContainsPublicKey();
+					isSigned = assembly.ContainsPublicKey();
 					signedAssemblyCache.Add(assembly, isSigned);
 				}
-				return signedAssemblyCache[assembly];
+				return isSigned;
 			}
 		}
 
