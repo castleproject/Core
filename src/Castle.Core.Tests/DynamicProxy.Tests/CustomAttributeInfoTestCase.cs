@@ -214,6 +214,15 @@ namespace Castle.DynamicProxy.Tests
 					new object[0],
 					new[] { intField, stringField, arrayField },
 					new object[] { 42, "foo", new[] { 1, 2, 3 } }));
+
+			// Use local variables instead of constants in the expression
+			int arg1 = 42;
+			string arg2 = "foo";
+			int[] arg3 = { 1, 2, 3 };
+			yield return CreateFromExpressionTestCase(
+				() => new MyAttribute1(arg1, arg2, arg3),
+				new CustomAttributeInfo(ctorWithArgs, new object[] { arg1, arg2, arg3 }));
+
 		}
 
 		private static object[] CreateFromExpressionTestCase(Expression<Func<Attribute>> expr, CustomAttributeInfo expected)
