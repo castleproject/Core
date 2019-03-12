@@ -273,8 +273,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public Type GetGenericArgument(String genericArgumentName)
 		{
-			GenericTypeParameterBuilder genericTypeParameterBuilder;
-			if (name2GenericType.TryGetValue(genericArgumentName, out genericTypeParameterBuilder))
+			if (name2GenericType.TryGetValue(genericArgumentName, out var genericTypeParameterBuilder))
 				return genericTypeParameterBuilder.AsType();
 
 			return null;

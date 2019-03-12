@@ -48,9 +48,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			get
 			{
-				if (ContainsKey(type))
+				if (TryGetValue(type, out var opCode))
 				{
-					return base[type];
+					return opCode;
 				}
 				return EmptyOpCode;
 			}
