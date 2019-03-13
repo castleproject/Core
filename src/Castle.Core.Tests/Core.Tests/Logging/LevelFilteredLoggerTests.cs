@@ -1018,7 +1018,7 @@ namespace Castle.Core.Logging.Tests
 			Exception exception = new Exception();
 
 			logger.Error("Test", exception);
-			
+
 			ValidateCall(LoggerLevel.Error, "Test", exception);
 		}
 
