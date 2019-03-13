@@ -25,12 +25,8 @@ namespace Castle.DynamicProxy.Tests.GenClasses
 			get { return map[key]; }
 			set
 			{
-				if (map.ContainsKey(key))
-					map[key] = value;
-				else
-					map.Add(key, value);
+				map[key] = value;
 			}
 		}
-
 	}
 }

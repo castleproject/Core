@@ -47,12 +47,12 @@ namespace Castle.DynamicProxy
 					{
 						sortedMixedInterfaceTypes.Add(inter);
 
-						if (interface2Mixin.ContainsKey(inter))
+						if (interface2Mixin.TryGetValue(inter, out var interMixin))
 						{
 							var message = string.Format(
 								"The list of mixins contains two mixins implementing the same interface '{0}': {1} and {2}. An interface cannot be added by more than one mixin.",
 								inter.FullName,
-								interface2Mixin[inter].GetType().Name,
+								interMixin.GetType().Name,
 								mixin.GetType().Name);
 							throw new ArgumentException(message, "mixinInstances");
 						}
