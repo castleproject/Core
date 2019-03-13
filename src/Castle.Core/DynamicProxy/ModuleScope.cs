@@ -399,7 +399,7 @@ namespace Castle.DynamicProxy
 #if FEATURE_ASSEMBLYBUILDER_SAVE
 				assemblyName.KeyPair = new StrongNameKeyPair(GetKeyPair());
 #else
-                assemblyName.SetPublicKey(InternalsVisible.DynamicProxyGenAssembly2PublicKey);
+				assemblyName.SetPublicKey(InternalsVisible.DynamicProxyGenAssembly2PublicKey);
 #endif
 			}
 
