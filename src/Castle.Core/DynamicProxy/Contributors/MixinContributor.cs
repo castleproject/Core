@@ -72,7 +72,16 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			foreach (var @interface in interfaces)
 			{
-				var item = new InterfaceMembersCollector(@interface);
+				MembersCollector item;
+				if (@interface.GetTypeInfo().IsInterface)
+				{
+					item = new InterfaceMembersCollector(@interface);
+				}
+				else
+				{
+					Debug.Assert(@interface.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)));
+					item = new DelegateTypeMembersCollector(@interface);
+				}
 				item.CollectMembersToProxy(hook);
 				yield return item;
 			}

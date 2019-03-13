@@ -15,8 +15,12 @@
 namespace Castle.DynamicProxy
 {
 	using System;
-	using System.Reflection;
 	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.Linq;
+	using System.Reflection;
+
+	using Castle.DynamicProxy.Generators;
 
 	public class MixinData
 	{
@@ -38,10 +42,29 @@ namespace Castle.DynamicProxy
 			{
 				var sortedMixedInterfaceTypes = new List<Type>();
 				var interface2Mixin = new Dictionary<Type, object>();
+				var hasDelegateType = false;
 
 				foreach (var mixin in mixinInstances)
 				{
-					var mixinInterfaces = mixin.GetType().GetInterfaces();
+					Type[] mixinInterfaces;
+					object target;
+					if (mixin is MulticastDelegate @delegate)
+					{
+						hasDelegateType = true;
+						mixinInterfaces = new[] { mixin.GetType() };
+						target = mixin;
+					}
+					else if (mixin is Type delegateType && delegateType.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)))
+					{
+						hasDelegateType = true;
+						mixinInterfaces = new[] { delegateType };
+						target = null;
+					}
+					else
+					{
+						mixinInterfaces = mixin.GetType().GetInterfaces();
+						target = mixin;
+					}
 
 					foreach (var inter in mixinInterfaces)
 					{
@@ -49,17 +72,42 @@ namespace Castle.DynamicProxy
 
 						if (interface2Mixin.TryGetValue(inter, out var interMixin))
 						{
-							var message = string.Format(
-								"The list of mixins contains two mixins implementing the same interface '{0}': {1} and {2}. An interface cannot be added by more than one mixin.",
-								inter.FullName,
-								interMixin.GetType().Name,
-								mixin.GetType().Name);
+							string message;
+							if (interMixin != null)
+							{
+								message = string.Format(
+									"The list of mixins contains two mixins implementing the same interface '{0}': {1} and {2}. An interface cannot be added by more than one mixin.",
+									inter.FullName,
+									interMixin.GetType().Name,
+									mixin.GetType().Name);
+							}
+							else
+							{
+								Debug.Assert(inter.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)));
+								message = string.Format(
+									"The list of mixins already contains a mixin for delegate type '{0}'.",
+									inter.FullName);
+							}
 							throw new ArgumentException(message, "mixinInstances");
 						}
-
-						interface2Mixin[inter] = mixin;
+						interface2Mixin[inter] = target;
 					}
 				}
+
+				if (hasDelegateType)
+				{
+					var count = interface2Mixin.Count;
+					var distinctCount =
+						interface2Mixin.Where(i2m => i2m.Key.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)))
+						               .Select(i2m => i2m.Key.GetMethod("Invoke"))
+						               .Distinct(MethodSignatureComparer.Instance)
+						               .Count();
+					if (distinctCount < count)
+					{
+						throw new ArgumentException("The list of mixins contains at least two delegate mixins for the same delegate signature.", nameof(mixinInstances));
+					}
+				}
+
 				sortedMixedInterfaceTypes.Sort((x, y) => x.FullName.CompareTo(y.FullName));
 
 				for (var i = 0; i < sortedMixedInterfaceTypes.Count; i++)
@@ -124,7 +172,7 @@ namespace Castle.DynamicProxy
 			var hashCode = 0;
 			foreach (var mixinImplementation in mixinsImpl)
 			{
-				hashCode = 29*hashCode + mixinImplementation.GetType().GetHashCode();
+				hashCode = unchecked(29 * hashCode + mixinImplementation?.GetType().GetHashCode() ?? 307);
 			}
 
 			return hashCode;

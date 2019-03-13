@@ -6,6 +6,7 @@ Enhancements:
 - Added trace logging level below Debug; maps to Trace in log4net/NLog, and Verbose in Serilog (@pi3k14, #404)
 - Recognize read-only parameters by the `In` modreq (@zvirja, #406)
 - DictionaryAdapter: Exposed GetAdapter overloads with NameValueCollection parameter in .NET Standard (@rzontar, #423)
+- Ability to add delegate mixins to proxies using `ProxyGenerationOptions.AddDelegate[Type]Mixin`. You can bind to the mixed-in `Invoke` methods on the proxy using `ProxyUtil.TryCreateDelegateToMixin`. (@stakx, #436)
 - New `IInvocation.CaptureProceedInfo()` method to enable better implementations of asynchronous interceptors (@stakx, #439)
 
 Deprecations:

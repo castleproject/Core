@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
 
@@ -48,7 +49,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				foreach (var inter in interfaces)
 				{
-					TypeBuilder.AddInterfaceImplementation(inter);
+					if (inter.GetTypeInfo().IsInterface)
+					{
+						TypeBuilder.AddInterfaceImplementation(inter);
+					}
+					else
+					{
+						Debug.Assert(inter.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)));
+					}
 				}
 			}
 

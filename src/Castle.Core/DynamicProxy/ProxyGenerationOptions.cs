@@ -16,14 +16,16 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Reflection;
 	using System.Reflection.Emit;
 #if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
 #endif
-	using Castle.Core.Internal;
 #if DOTNET40
 	using System.Security;
 #endif
+
+	using Castle.Core.Internal;
 
 #if FEATURE_SERIALIZATION
 	[Serializable]
@@ -123,6 +125,46 @@ namespace Castle.DynamicProxy
 			}
 		}
 
+		/// <summary>
+		///   Adds a delegate type to the list of mixins that will be added to generated proxies.
+		///   That is, generated proxies will have a `Invoke` method with a signature matching that
+		///   of the specified <paramref name="delegateType"/>.
+		/// </summary>
+		/// <param name="delegateType">The delegate type whose `Invoke` method should be reproduced in generated proxies.</param>
+		/// <exception cref="ArgumentNullException"><paramref name="delegateType"/> is <see langword="null"/>.</exception>
+		/// <exception cref="ArgumentException"><paramref name="delegateType"/> is not a delegate type.</exception>
+		public void AddDelegateTypeMixin(Type delegateType)
+		{
+			if (delegateType == null)
+			{
+				throw new ArgumentNullException(nameof(delegateType));
+			}
+
+			if (delegateType.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)) == false)
+			{
+				throw new ArgumentException("Type must be a delegate type.", nameof(delegateType));
+			}
+
+			AddMixinImpl(delegateType);
+		}
+
+		/// <summary>
+		///   Adds a delegate to be mixed into generated proxies. The <paramref name="delegate"/>
+		///   will act as the target for calls to a `Invoke` method with a signature matching that
+		///   of the delegate.
+		/// </summary>
+		/// <param name="delegate">The delegate that should act as the target for calls to `Invoke` methods with a matching signature.</param>
+		/// <exception cref="ArgumentNullException"><paramref name="delegate"/> is <see langword="null"/>.</exception>
+		public void AddDelegateMixin(MulticastDelegate @delegate)
+		{
+			if (@delegate == null)
+			{
+				throw new ArgumentNullException(nameof(@delegate));
+			}
+
+			AddMixinImpl(@delegate);
+		}
+
 		public void AddMixinInstance(object instance)
 		{
 			if (instance == null)
@@ -130,12 +172,22 @@ namespace Castle.DynamicProxy
 				throw new ArgumentNullException("instance");
 			}
 
+			if (instance is Type)
+			{
+				throw new ArgumentException("You may not mix in types using this method.", nameof(instance));
+			}
+
+			AddMixinImpl(instance);
+		}
+
+		private void AddMixinImpl(object instanceOrType)
+		{
 			if (mixins == null)
 			{
 				mixins = new List<object>();
 			}
 
-			mixins.Add(instance);
+			mixins.Add(instanceOrType);
 			mixinData = null;
 		}
 
