@@ -1014,7 +1014,7 @@ namespace Castle.Core.Logging.Tests
 		[Test]
 		public void ErrorLevelWarnWithException()
 		{
-			logger.Level = LoggerLevel.Error;
+			logger.Level = LoggerLevel.Warn;
 			Exception exception = new Exception();
 
 			logger.Error("Test", exception);
@@ -1078,7 +1078,7 @@ namespace Castle.Core.Logging.Tests
 		[Test]
 		public void ErrorLevelWarnWithArgs()
 		{
-			logger.Level = LoggerLevel.Error;
+			logger.Level = LoggerLevel.Warn;
 
 			logger.ErrorFormat("{0}st", "Te");
 
@@ -1189,7 +1189,7 @@ namespace Castle.Core.Logging.Tests
 		[Test]
 		public void FatalErrorLevelError()
 		{
-			logger.Level = LoggerLevel.Fatal;
+			logger.Level = LoggerLevel.Error;
 
 			logger.Fatal("Test");
 

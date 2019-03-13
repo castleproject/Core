@@ -108,7 +108,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Target_method_out_ref_parameters_WithTargetInterface()
 		{
-			var proxy = generator.CreateInterfaceProxyWithTarget<IWithRefOut>(new WithRefOut(),
+			var proxy = generator.CreateInterfaceProxyWithTargetInterface<IWithRefOut>(new WithRefOut(),
 			                                                                  new ProxyGenerationOptions(
 			                                                                  	new ProxyNothingHook()));
 			var result = -1;
