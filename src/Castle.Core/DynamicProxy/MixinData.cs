@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy
 	{
 		private readonly Dictionary<Type, int> mixinPositions = new Dictionary<Type, int>();
 		private readonly List<object> mixinsImpl = new List<object>();
-		private bool hasDelegateMixin = true;
+		private int delegateMixinCount = 0;
 
 		/// <summary>
 		///   Because we need to cache the types based on the mixed in mixins, we do the following here:
@@ -43,7 +43,7 @@ namespace Castle.DynamicProxy
 			{
 				var sortedMixedInterfaceTypes = new List<Type>();
 				var interface2Mixin = new Dictionary<Type, object>();
-				hasDelegateMixin = false;
+				delegateMixinCount = 0;
 
 				foreach (var mixin in mixinInstances)
 				{
@@ -51,13 +51,13 @@ namespace Castle.DynamicProxy
 					object target;
 					if (mixin is MulticastDelegate @delegate)
 					{
-						hasDelegateMixin = true;
+						++delegateMixinCount;
 						mixinInterfaces = new[] { mixin.GetType() };
 						target = mixin;
 					}
 					else if (mixin is Type delegateType && delegateType.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)))
 					{
-						hasDelegateMixin = true;
+						++delegateMixinCount;
 						mixinInterfaces = new[] { delegateType };
 						target = null;
 					}
@@ -95,17 +95,22 @@ namespace Castle.DynamicProxy
 					}
 				}
 
-				if (hasDelegateMixin)
+				if (delegateMixinCount > 1)
 				{
-					var count = interface2Mixin.Count;
-					var distinctCount =
-						interface2Mixin.Where(i2m => i2m.Key.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)))
-						               .Select(i2m => i2m.Key.GetMethod("Invoke"))
-						               .Distinct(MethodSignatureComparer.Instance)
-						               .Count();
-					if (distinctCount < count)
+					// If at least two delegate mixins have been added, we need to ensure that
+					// the `Invoke` methods contributed by them don't have identical signatures:
+					var invokeMethods = new HashSet<MethodInfo>();
+					foreach (var mixedInType in interface2Mixin.Keys)
 					{
-						throw new ArgumentException("The list of mixins contains at least two delegate mixins for the same delegate signature.", nameof(mixinInstances));
+						if (mixedInType.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)))
+						{
+							var invokeMethod = mixedInType.GetMethod("Invoke");
+							if (invokeMethods.Contains(invokeMethod, MethodSignatureComparer.Instance))
+							{
+								throw new ArgumentException("The list of mixins contains at least two delegate mixins for the same delegate signature.", nameof(mixinInstances));
+							}
+							invokeMethods.Add(invokeMethod);
+						}
 					}
 				}
 
@@ -156,7 +161,7 @@ namespace Castle.DynamicProxy
 				return false;
 			}
 
-			if (hasDelegateMixin != other.hasDelegateMixin)
+			if (delegateMixinCount != other.delegateMixinCount)
 			{
 				return false;
 			}
@@ -169,7 +174,7 @@ namespace Castle.DynamicProxy
 				}
 			}
 
-			if (hasDelegateMixin)
+			if (delegateMixinCount > 0)
 			{
 				var delegateMixinTypes = mixinPositions.Select(m => m.Key).Where(t => t.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)));
 				var otherDelegateMixinTypes = other.mixinPositions.Select(m => m.Key).Where(t => t.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)));
