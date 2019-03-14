@@ -193,5 +193,51 @@ namespace Castle.DynamicProxy.Tests
 				new MixinData(new object[] { mixin1, mixin2 })
 			);
 		}
+
+		[Test]
+		public void Equals_false_for_two_instances_having_different_delegate_type_mixins()
+		{
+			MixinData mixinData1 = new MixinData(new object[] { typeof(Action) });
+			MixinData mixinData2 = new MixinData(new object[] { typeof(Action<int>) });
+			Assert.AreNotEqual(mixinData1, mixinData2);
+		}
+
+		[Test]
+		public void Equals_true_for_two_instances_having_same_delegate_type_mixins()
+		{
+			MixinData mixinData1 = new MixinData(new object[] { typeof(Action) });
+			MixinData mixinData2 = new MixinData(new object[] { typeof(Action) });
+			Assert.AreEqual(mixinData1, mixinData2);
+		}
+
+		[Test]
+		public void GetHashCode_equal_for_two_instances_having_same_delegate_type_mixins()
+		{
+			MixinData mixinData1 = new MixinData(new object[] { typeof(Action) });
+			MixinData mixinData2 = new MixinData(new object[] { typeof(Action) });
+			Assert.AreEqual(mixinData1.GetHashCode(), mixinData2.GetHashCode());
+		}
+
+		// This test appears to be incorrect. However, remember that GetHashCode is allowed to
+		// sacrifice accuracy for speed. It's not a full replacement for the more expensive
+		// Equals check; the only requirement is that equal object have equal hashcodes.
+		[Test]
+		public void GetHashCode_equal_for_two_instances_having_different_delegate_type_mixins()
+		{
+			MixinData mixinData1 = new MixinData(new object[] { typeof(Action) });
+			MixinData mixinData2 = new MixinData(new object[] { typeof(Action<int>) });
+			Assert.AreEqual(mixinData1.GetHashCode(), mixinData2.GetHashCode());
+		}
+
+		// This is a current limitation that means DynamicProxy will might not recognize
+		// suitable cached proxy types for such compatible delegate scenarios, and regenerate
+		// an identical type. This might not even matter that much in practice.
+		[Test]
+		public void Equals_false_for_two_instances_having_compatible_delegate_type_mixins()
+		{
+			MixinData mixinData1 = new MixinData(new object[] { typeof(Func<object, bool>) });
+			MixinData mixinData2 = new MixinData(new object[] { typeof(Predicate<object>) });
+			Assert.AreNotEqual(mixinData1, mixinData2);
+		}
 	}
 }

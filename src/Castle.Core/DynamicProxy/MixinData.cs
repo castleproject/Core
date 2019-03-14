@@ -26,6 +26,7 @@ namespace Castle.DynamicProxy
 	{
 		private readonly Dictionary<Type, int> mixinPositions = new Dictionary<Type, int>();
 		private readonly List<object> mixinsImpl = new List<object>();
+		private bool hasDelegateMixin = true;
 
 		/// <summary>
 		///   Because we need to cache the types based on the mixed in mixins, we do the following here:
@@ -42,7 +43,7 @@ namespace Castle.DynamicProxy
 			{
 				var sortedMixedInterfaceTypes = new List<Type>();
 				var interface2Mixin = new Dictionary<Type, object>();
-				var hasDelegateType = false;
+				hasDelegateMixin = false;
 
 				foreach (var mixin in mixinInstances)
 				{
@@ -50,13 +51,13 @@ namespace Castle.DynamicProxy
 					object target;
 					if (mixin is MulticastDelegate @delegate)
 					{
-						hasDelegateType = true;
+						hasDelegateMixin = true;
 						mixinInterfaces = new[] { mixin.GetType() };
 						target = mixin;
 					}
 					else if (mixin is Type delegateType && delegateType.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)))
 					{
-						hasDelegateType = true;
+						hasDelegateMixin = true;
 						mixinInterfaces = new[] { delegateType };
 						target = null;
 					}
@@ -94,7 +95,7 @@ namespace Castle.DynamicProxy
 					}
 				}
 
-				if (hasDelegateType)
+				if (hasDelegateMixin)
 				{
 					var count = interface2Mixin.Count;
 					var distinctCount =
@@ -155,12 +156,24 @@ namespace Castle.DynamicProxy
 				return false;
 			}
 
+			if (hasDelegateMixin != other.hasDelegateMixin)
+			{
+				return false;
+			}
+
 			for (var i = 0; i < mixinsImpl.Count; ++i)
 			{
-				if (mixinsImpl[i].GetType() != other.mixinsImpl[i].GetType())
+				if (mixinsImpl[i]?.GetType() != other.mixinsImpl[i]?.GetType())
 				{
 					return false;
 				}
+			}
+
+			if (hasDelegateMixin)
+			{
+				var delegateMixinTypes = mixinPositions.Select(m => m.Key).Where(t => t.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)));
+				var otherDelegateMixinTypes = other.mixinPositions.Select(m => m.Key).Where(t => t.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)));
+				return Enumerable.SequenceEqual(delegateMixinTypes, otherDelegateMixinTypes);
 			}
 
 			return true;
