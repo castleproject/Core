@@ -10,3 +10,10 @@ indent_size = 2
 [*.cs]
 indent_style = tab
 indent_size = 4
+csharp_prefer_braces = true:suggestion
+dotnet_separate_import_directive_groups = true
+dotnet_sort_system_directives_first = true
+dotnet_style_qualification_for_event = false
+dotnet_style_qualification_for_field = false
+dotnet_style_qualification_for_method = false
+dotnet_style_qualification_for_property = false
