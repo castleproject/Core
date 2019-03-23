@@ -142,6 +142,11 @@ namespace Castle.DynamicProxy
 			}
 		}
 
+		public IInvocationMemento GetMemento(InvocationMementoOptions options)
+		{
+			return new Memento(this, options);
+		}
+
 		protected abstract void InvokeMethodOnTarget();
 
 		protected void ThrowOnNoTarget()
@@ -187,6 +192,57 @@ namespace Castle.DynamicProxy
 				return method.GetGenericMethodDefinition().MakeGenericMethod(genericMethodArguments);
 			}
 			return method;
+		}
+
+		private sealed class Memento : IInvocationMemento
+		{
+			private readonly AbstractInvocation invocation;
+			private readonly InvocationMementoOptions options;
+
+			private readonly object[] arguments;
+			private readonly object returnValue;
+			private readonly int interceptorIndex;
+
+			public Memento(AbstractInvocation invocation, InvocationMementoOptions options)
+			{
+				this.invocation = invocation;
+				this.options = options;
+
+				if ((options & InvocationMementoOptions.Arguments) != 0)
+				{
+					var argumentCount = invocation.arguments.Length;
+					this.arguments = new object[argumentCount];
+					Array.Copy(invocation.arguments, this.arguments, argumentCount);
+				}
+
+				if ((options & InvocationMementoOptions.ReturnValue) != 0)
+				{
+					this.returnValue = invocation.ReturnValue;
+				}
+
+				if ((options & InvocationMementoOptions.InterceptionProgress) != 0)
+				{
+					this.interceptorIndex = invocation.currentInterceptorIndex;
+				}
+			}
+
+			public void Restore()
+			{
+				if ((options & InvocationMementoOptions.Arguments) != 0)
+				{
+					Array.Copy(arguments, invocation.arguments, arguments.Length);
+				}
+
+				if ((options & InvocationMementoOptions.ReturnValue) != 0)
+				{
+					invocation.ReturnValue = returnValue;
+				}
+
+				if ((options & InvocationMementoOptions.InterceptionProgress) != 0)
+				{
+					invocation.currentInterceptorIndex = interceptorIndex;
+				}
+			}
 		}
 	}
 }

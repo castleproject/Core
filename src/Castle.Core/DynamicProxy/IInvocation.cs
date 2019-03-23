@@ -125,5 +125,11 @@ namespace Castle.DynamicProxy
 		/// <param name = "index">The index of the argument to override.</param>
 		/// <param name = "value">The new value for the argument.</param>
 		void SetArgumentValue(int index, object value);
+
+		/// <summary>
+		///   Gets an object that captures the specified parts of this invocation's state for later restoration.
+		/// </summary>
+		/// <param name="options">Specifies which parts of this invocation's state should be captured.</param>
+		IInvocationMemento GetMemento(InvocationMementoOptions options);
 	}
 }
