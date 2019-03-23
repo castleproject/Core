@@ -26,8 +26,12 @@ namespace CastleTests.Interceptors
 
 		private static async Task InterceptAsyncMethod(IInvocation invocation)
 		{
+			var interceptionProgress = invocation.GetMemento(InvocationMementoOptions.InterceptionProgress);
+
 			// It all falls down when executing async before calling Proceed().
 			await Task.Delay(10).ConfigureAwait(false);
+
+			interceptionProgress.Restore();
 
 			invocation.Proceed();
 
