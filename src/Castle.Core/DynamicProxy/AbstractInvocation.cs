@@ -142,6 +142,11 @@ namespace Castle.DynamicProxy
 			}
 		}
 
+		public IInvocationProceedInfo GetProceedInfo()
+		{
+			return new ProceedInfo(this);
+		}
+
 		protected abstract void InvokeMethodOnTarget();
 
 		protected void ThrowOnNoTarget()
@@ -187,6 +192,32 @@ namespace Castle.DynamicProxy
 				return method.GetGenericMethodDefinition().MakeGenericMethod(genericMethodArguments);
 			}
 			return method;
+		}
+
+		private sealed class ProceedInfo : IInvocationProceedInfo
+		{
+			private readonly AbstractInvocation invocation;
+			private readonly int interceptorIndex;
+
+			public ProceedInfo(AbstractInvocation invocation)
+			{
+				this.invocation = invocation;
+				this.interceptorIndex = invocation.currentInterceptorIndex;
+			}
+
+			public void Invoke()
+			{
+				var previousInterceptorIndex = invocation.currentInterceptorIndex;
+				try
+				{
+					invocation.currentInterceptorIndex = interceptorIndex;
+					invocation.Proceed();
+				}
+				finally
+				{
+					invocation.currentInterceptorIndex = previousInterceptorIndex;
+				}
+			}
 		}
 	}
 }
