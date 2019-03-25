@@ -21,6 +21,7 @@ namespace Castle.DynamicProxy
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Internal;
 
 	public class MixinData
 	{
@@ -49,13 +50,13 @@ namespace Castle.DynamicProxy
 				{
 					Type[] mixinInterfaces;
 					object target;
-					if (mixin is MulticastDelegate @delegate)
+					if (mixin is Delegate)
 					{
 						++delegateMixinCount;
 						mixinInterfaces = new[] { mixin.GetType() };
 						target = mixin;
 					}
-					else if (mixin is Type delegateType && delegateType.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)))
+					else if (mixin is Type delegateType && delegateType.IsDelegateType())
 					{
 						++delegateMixinCount;
 						mixinInterfaces = new[] { delegateType };
@@ -84,7 +85,7 @@ namespace Castle.DynamicProxy
 							}
 							else
 							{
-								Debug.Assert(inter.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)));
+								Debug.Assert(inter.IsDelegateType());
 								message = string.Format(
 									"The list of mixins already contains a mixin for delegate type '{0}'.",
 									inter.FullName);
@@ -102,7 +103,7 @@ namespace Castle.DynamicProxy
 					var invokeMethods = new HashSet<MethodInfo>();
 					foreach (var mixedInType in interface2Mixin.Keys)
 					{
-						if (mixedInType.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)))
+						if (mixedInType.IsDelegateType())
 						{
 							var invokeMethod = mixedInType.GetMethod("Invoke");
 							if (invokeMethods.Contains(invokeMethod, MethodSignatureComparer.Instance))
@@ -176,8 +177,8 @@ namespace Castle.DynamicProxy
 
 			if (delegateMixinCount > 0)
 			{
-				var delegateMixinTypes = mixinPositions.Select(m => m.Key).Where(t => t.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)));
-				var otherDelegateMixinTypes = other.mixinPositions.Select(m => m.Key).Where(t => t.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)));
+				var delegateMixinTypes = mixinPositions.Select(m => m.Key).Where(TypeUtil.IsDelegateType);
+				var otherDelegateMixinTypes = other.mixinPositions.Select(m => m.Key).Where(TypeUtil.IsDelegateType);
 				return Enumerable.SequenceEqual(delegateMixinTypes, otherDelegateMixinTypes);
 			}
 

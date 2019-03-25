@@ -27,6 +27,7 @@ namespace Castle.DynamicProxy
 
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Internal;
 
 	public static class ProxyUtil
 	{
@@ -74,7 +75,7 @@ namespace Castle.DynamicProxy
 				throw new ArgumentNullException(nameof(delegateType));
 			}
 
-			if (delegateType.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)) == false)
+			if (!delegateType.IsDelegateType())
 			{
 				throw new ArgumentException("Type is not a delegate type.", nameof(delegateType));
 			}

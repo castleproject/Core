@@ -20,6 +20,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
+	using Castle.DynamicProxy.Internal;
+
 	public class ClassEmitter : AbstractTypeEmitter
 	{
 		internal const TypeAttributes DefaultAttributes =
@@ -55,7 +57,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					}
 					else
 					{
-						Debug.Assert(inter.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)));
+						Debug.Assert(inter.IsDelegateType());
 					}
 				}
 			}

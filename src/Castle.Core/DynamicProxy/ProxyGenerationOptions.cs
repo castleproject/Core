@@ -26,6 +26,7 @@ namespace Castle.DynamicProxy
 #endif
 
 	using Castle.Core.Internal;
+	using Castle.DynamicProxy.Internal;
 
 #if FEATURE_SERIALIZATION
 	[Serializable]
@@ -140,7 +141,7 @@ namespace Castle.DynamicProxy
 				throw new ArgumentNullException(nameof(delegateType));
 			}
 
-			if (delegateType.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)) == false)
+			if (!delegateType.IsDelegateType())
 			{
 				throw new ArgumentException("Type must be a delegate type.", nameof(delegateType));
 			}
@@ -155,7 +156,7 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		/// <param name="delegate">The delegate that should act as the target for calls to `Invoke` methods with a matching signature.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="delegate"/> is <see langword="null"/>.</exception>
-		public void AddDelegateMixin(MulticastDelegate @delegate)
+		public void AddDelegateMixin(Delegate @delegate)
 		{
 			if (@delegate == null)
 			{

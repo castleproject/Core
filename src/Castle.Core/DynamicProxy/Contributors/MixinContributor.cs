@@ -22,6 +22,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Internal;
 
 	public class MixinContributor : CompositeTypeContributor
 	{
@@ -79,7 +80,7 @@ namespace Castle.DynamicProxy.Contributors
 				}
 				else
 				{
-					Debug.Assert(@interface.GetTypeInfo().IsSubclassOf(typeof(MulticastDelegate)));
+					Debug.Assert(@interface.IsDelegateType());
 					item = new DelegateTypeMembersCollector(@interface);
 				}
 				item.CollectMembersToProxy(hook);
