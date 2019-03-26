@@ -47,10 +47,11 @@ namespace Castle.DynamicProxy.Tests
 
 			private static async Task InterceptAsyncMethod(IInvocation invocation)
 			{
-				// It all falls down when executing async before calling Proceed().
+				var proceed = invocation.GetProceedInfo();
+
 				await Task.Delay(10).ConfigureAwait(false);
 
-				invocation.Proceed();
+				proceed.Invoke();
 
 				// Return value is being set in two situations, but this doesn't matter
 				// for the above test.
