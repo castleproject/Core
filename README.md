@@ -16,7 +16,7 @@ Debugging symbols are available in symbol packages in the AppVeyor build artifac
 
 ## License
 
-Castle Core is &copy; 2004-2018 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
+Castle Core is &copy; 2004-2019 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
 
 ## Contributing
 
@@ -24,10 +24,10 @@ Browse the [contributing section](https://github.com/castleproject/Home#its-comm
 
 ## Building
 
-| Platform | Build Status |
-|----------|-------------:|
-| Windows  | [![Build status](https://ci.appveyor.com/api/projects/status/49a6i0ydiku56r5b/branch/master?svg=true)](https://ci.appveyor.com/project/castleproject/core/branch/master) |
-| Linux    | [![Build Status](https://api.travis-ci.com/castleproject/Core.svg?branch=master)](https://travis-ci.com/castleproject/Core/branches) |
+| Platform | Build Status | NuGet Feed |
+|----------|-------------:|------------|
+| Windows  | [![Build status](https://ci.appveyor.com/api/projects/status/49a6i0ydiku56r5b/branch/master?svg=true)](https://ci.appveyor.com/project/castleproject/core/branch/master) | [Preview Feed](https://ci.appveyor.com/nuget/core-0mhe40ifodk8)
+| Linux    | [![Build Status](https://api.travis-ci.com/castleproject/Core.svg?branch=master)](https://travis-ci.com/castleproject/Core/branches) |  |
 
 ### On Windows
 
