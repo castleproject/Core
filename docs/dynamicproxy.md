@@ -20,6 +20,7 @@ If you're new to DynamicProxy you can read a [quick introduction](dynamicproxy-i
 * [SRP applies to interceptors](dynamicproxy-srp-applies-to-interceptors.md)
 * [Behavior of by-reference parameters during interception](dynamicproxy-by-ref-parameters.md)
 * [Optional parameter value limitations](dynamicproxy-optional-parameter-value-limitations.md)
+* [Asynchronous interception](dynamicproxy-async-interception.md)
 
 :information_source: **Where is `Castle.DynamicProxy.dll`?:** DynamicProxy used to live in its own assembly. As part of changes in version 2.5 it was merged into `Castle.Core.dll` and that's where you'll find it.
 
