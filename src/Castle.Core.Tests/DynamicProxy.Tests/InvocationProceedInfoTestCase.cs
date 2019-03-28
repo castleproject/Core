@@ -30,33 +30,29 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Proxy_without_target_and_last_interceptor_ProceedInfo_succeeds()
 		{
-			var interceptors = new IInterceptor[]
-			{
-				new SetReturnValueInterceptor(0),
-				new WithCallbackInterceptor(invocation =>
+			var interceptor = new WithCallbackInterceptor(invocation =>
 				{
+					invocation.ReturnValue = 0;  // not relevant to this test, but prevents DP
+					                             // from complaining about missing return value.
 					var proceed = invocation.CaptureProceedInfo();
-				}),
-			};
+				});
 
-			var proxy = generator.CreateInterfaceProxyWithoutTarget<IOne>(interceptors);
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IOne>(interceptor);
 			proxy.OneMethod();
 		}
 
 		[Test]
 		public void Proxy_without_target_and_last_interceptor_ProceedInfo_Invoke_throws_NotImplementedException()
 		{
-			var interceptors = new IInterceptor[]
-			{
-				new SetReturnValueInterceptor(0),
-				new WithCallbackInterceptor(invocation =>
+			var interceptor = new WithCallbackInterceptor(invocation =>
 				{
+					invocation.ReturnValue = 0;  // not relevant for this test, but prevents DP
+					                             // from complaining about missing return value.
 					var proceed = invocation.CaptureProceedInfo();
 					Assert.Throws<NotImplementedException>(() => proceed.Invoke());
-				}),
-			};
+				});
 
-			var proxy = generator.CreateInterfaceProxyWithoutTarget<IOne>(interceptors);
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IOne>(interceptor);
 			proxy.OneMethod();
 		}
 
