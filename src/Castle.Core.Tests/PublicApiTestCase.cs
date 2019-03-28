@@ -80,7 +80,9 @@ namespace Castle
 					if (compare)
 					{
 						Assert.IsTrue(File.Exists(assemblyRefPath), $"ref/{assemblyName}-{framework}.cs does not exist");
-						Assert.AreEqual(publicApi, File.ReadAllText(assemblyRefPath), $"ref/{assemblyName}-{framework}.cs does not match {assemblyName}.dll");
+
+						string expectedPublicApi = string.Join(Environment.NewLine, File.ReadAllLines(assemblyRefPath));
+						Assert.AreEqual(expectedPublicApi, publicApi, $"ref/{assemblyName}-{framework}.cs does not match {assemblyName}.dll");
 					}
 					else
 					{
