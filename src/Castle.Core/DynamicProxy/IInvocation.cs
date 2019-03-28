@@ -118,7 +118,7 @@ namespace Castle.DynamicProxy
 		///   Returns an object describing the <see cref="Proceed"/> operation for this <see cref="IInvocation"/>
 		///   at this specific point during interception.
 		/// </summary>
-		IInvocationProceedInfo GetProceedInfo();
+		IInvocationProceedInfo CaptureProceedInfo();
 
 		/// <summary>
 		///   Overrides the value of an argument at the given <paramref name = "index" /> with the

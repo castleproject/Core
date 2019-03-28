@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Tests
 				new SetReturnValueInterceptor(0),
 				new WithCallbackInterceptor(invocation =>
 				{
-					var proceed = invocation.GetProceedInfo();
+					var proceed = invocation.CaptureProceedInfo();
 				}),
 			};
 
@@ -51,7 +51,7 @@ namespace Castle.DynamicProxy.Tests
 				new SetReturnValueInterceptor(0),
 				new WithCallbackInterceptor(invocation =>
 				{
-					var proceed = invocation.GetProceedInfo();
+					var proceed = invocation.CaptureProceedInfo();
 					Assert.Throws<NotImplementedException>(() => proceed.Invoke());
 				}),
 			};
@@ -67,7 +67,7 @@ namespace Castle.DynamicProxy.Tests
 			{
 				new WithCallbackInterceptor(invocation =>
 				{
-					var proceed = invocation.GetProceedInfo();
+					var proceed = invocation.CaptureProceedInfo();
 					proceed.Invoke();
 				}),
 				new SetReturnValueInterceptor(1),
@@ -85,7 +85,7 @@ namespace Castle.DynamicProxy.Tests
 
 			var interceptor = new WithCallbackInterceptor(invocation =>
 				{
-					var proceed = invocation.GetProceedInfo();
+					var proceed = invocation.CaptureProceedInfo();
 					proceed.Invoke();
 				});
 

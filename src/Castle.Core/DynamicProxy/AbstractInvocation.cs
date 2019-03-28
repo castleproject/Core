@@ -142,7 +142,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		public IInvocationProceedInfo GetProceedInfo()
+		public IInvocationProceedInfo CaptureProceedInfo()
 		{
 			return new ProceedInfo(this);
 		}

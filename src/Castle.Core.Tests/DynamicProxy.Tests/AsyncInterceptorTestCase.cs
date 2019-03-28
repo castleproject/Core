@@ -47,7 +47,7 @@ namespace Castle.DynamicProxy.Tests
 
 			private static async Task InterceptAsyncMethod(IInvocation invocation)
 			{
-				var proceed = invocation.GetProceedInfo();
+				var proceed = invocation.CaptureProceedInfo();
 
 				await Task.Delay(10).ConfigureAwait(false);
 
