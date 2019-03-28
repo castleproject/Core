@@ -15,6 +15,8 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.InterClasses;
@@ -88,6 +90,137 @@ namespace Castle.DynamicProxy.Tests
 			var proxy = generator.CreateInterfaceProxyWithTarget<IOne>(new One(), interceptor);
 			var returnValue = proxy.OneMethod();
 			Assert.AreEqual(1, returnValue);
+		}
+
+		[Test]
+		public void CaptureProceedInfo_returns_a_new_object_every_time()
+		{
+			var interceptor = new WithCallbackInterceptor(invocation =>
+			{
+				invocation.ReturnValue = 0;  // not relevant to this test, but prevents DP
+				                             // from complaining about missing return value.
+				var proceed1 = invocation.CaptureProceedInfo();
+				var proceed2 = invocation.CaptureProceedInfo();
+				Assert.AreNotSame(proceed2, proceed1);
+			});
+
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IOne>(interceptor);
+			_ = proxy.OneMethod();
+		}
+
+		[Test]
+		public void ProceedInfo_Invoke_proceeds_to_same_interceptor_on_repeated_calls()
+		{
+			var secondInterceptorInvokeCount = 0;
+			var thirdInterceptorInvokeCount = 0;
+
+			var interceptors = new IInterceptor[]
+			{
+				new WithCallbackInterceptor(invocation =>
+				{
+					invocation.ReturnValue = 0;  // not relevant to this test, but prevents DP
+					                             // from complaining about missing return value.
+
+					var proceed = invocation.CaptureProceedInfo();
+					proceed.Invoke();
+					proceed.Invoke();
+				}),
+				new WithCallbackInterceptor(invocation =>
+				{
+					secondInterceptorInvokeCount++;
+				}),
+				new WithCallbackInterceptor(invocation =>
+				{
+					thirdInterceptorInvokeCount++;
+				}),
+			};
+
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IOne>(interceptors);
+			_ = proxy.OneMethod();
+			Assert.AreEqual(2, secondInterceptorInvokeCount);
+			Assert.AreEqual(0, thirdInterceptorInvokeCount);
+		}
+
+		[Test]
+		public void ProceedInfo_Invoke_of_different_instances_captured_at_same_time_proceed_to_same_interceptor()
+		{
+			// The second-to-last test above established that `CaptureProceedInfo`
+			// returns a different object every time. The following test established
+			// that `proceed.Invoke` proceeds to the same place every time. Let's now
+			// combine these and see whether two different `proceedN.Invoke` *still*
+			// reach the same place. (Conceptually, this is sort of a value equality
+			// test for `ProceedInfo` objects.)
+
+			var secondInterceptorInvokeCount = 0;
+			var thirdInterceptorInvokeCount = 0;
+
+			var interceptors = new IInterceptor[]
+			{
+				new WithCallbackInterceptor(invocation =>
+				{
+					invocation.ReturnValue = 0;  // not relevant to this test, but prevents DP
+					                             // from complaining about missing return value.
+
+					var proceed1 = invocation.CaptureProceedInfo();
+					var proceed2 = invocation.CaptureProceedInfo();
+					Assume.That(proceed1 != proceed2);
+
+					proceed1.Invoke();
+					proceed2.Invoke();
+				}),
+				new WithCallbackInterceptor(invocation =>
+				{
+					secondInterceptorInvokeCount++;
+				}),
+				new WithCallbackInterceptor(invocation =>
+				{
+					thirdInterceptorInvokeCount++;
+				}),
+			};
+
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IOne>(interceptors);
+			_ = proxy.OneMethod();
+			Assert.AreEqual(2, secondInterceptorInvokeCount);
+			Assert.AreEqual(0, thirdInterceptorInvokeCount);
+		}
+
+		[Test]
+		public void Proxy_with_several_interceptors_ProceedInfo_Invoke_proceeds_in_correct_order()
+		{
+			// At various points during interception, we will record a number in this list.
+			// These numbers represent the expected order in which the statements should be hit.
+			// See the documented examples below.
+			var breadcrumbs = new List<int>();
+
+			var interceptors = new IInterceptor[]
+			{
+				new WithCallbackInterceptor(invocation =>
+				{
+					breadcrumbs.Add(1); // (This statement is expected to be the first one
+					                    //  recorded, because it has the smallest number.)
+					var proceed = invocation.CaptureProceedInfo();
+					proceed.Invoke();
+					breadcrumbs.Add(5); // (This statement is expected to be the last one
+					                    //  recorded, because it has the largest number.)
+				}),
+				new WithCallbackInterceptor(invocation =>
+				{
+					breadcrumbs.Add(2);
+					var proceed = invocation.CaptureProceedInfo();
+					proceed.Invoke();
+					breadcrumbs.Add(4);
+				}),
+				new WithCallbackInterceptor(invocation =>
+				{
+					breadcrumbs.Add(3);
+					invocation.ReturnValue = 42;
+				}),
+			};
+
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IOne>(interceptors);
+			var returnValue = proxy.OneMethod();
+			Assert.AreEqual(42, returnValue);
+			CollectionAssert.AreEqual(Enumerable.Range(1, 5), breadcrumbs);
 		}
 	}
 }
