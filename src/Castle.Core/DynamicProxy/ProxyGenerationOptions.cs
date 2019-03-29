@@ -136,15 +136,8 @@ namespace Castle.DynamicProxy
 		/// <exception cref="ArgumentException"><paramref name="delegateType"/> is not a delegate type.</exception>
 		public void AddDelegateTypeMixin(Type delegateType)
 		{
-			if (delegateType == null)
-			{
-				throw new ArgumentNullException(nameof(delegateType));
-			}
-
-			if (!delegateType.IsDelegateType())
-			{
-				throw new ArgumentException("Type must be a delegate type.", nameof(delegateType));
-			}
+			if (delegateType == null) throw new ArgumentNullException(nameof(delegateType));
+			if (!delegateType.IsDelegateType()) throw new ArgumentException("Type must be a delegate type.", nameof(delegateType));
 
 			AddMixinImpl(delegateType);
 		}
@@ -158,25 +151,15 @@ namespace Castle.DynamicProxy
 		/// <exception cref="ArgumentNullException"><paramref name="delegate"/> is <see langword="null"/>.</exception>
 		public void AddDelegateMixin(Delegate @delegate)
 		{
-			if (@delegate == null)
-			{
-				throw new ArgumentNullException(nameof(@delegate));
-			}
+			if (@delegate == null) throw new ArgumentNullException(nameof(@delegate));
 
 			AddMixinImpl(@delegate);
 		}
 
 		public void AddMixinInstance(object instance)
 		{
-			if (instance == null)
-			{
-				throw new ArgumentNullException("instance");
-			}
-
-			if (instance is Type)
-			{
-				throw new ArgumentException("You may not mix in types using this method.", nameof(instance));
-			}
+			if (instance == null) throw new ArgumentNullException(nameof(instance));
+			if (instance is Type) throw new ArgumentException("You may not mix in types using this method.", nameof(instance));
 
 			AddMixinImpl(instance);
 		}

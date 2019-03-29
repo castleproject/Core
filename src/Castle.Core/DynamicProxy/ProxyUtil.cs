@@ -65,20 +65,9 @@ namespace Castle.DynamicProxy
 		/// <returns><see langword="true"/> if the method succeeds; otherwise <see langword="false"/>.</returns>
 		public static bool TryCreateDelegateToMixin(object proxy, Type delegateType, out Delegate @delegate)
 		{
-			if (proxy == null)
-			{
-				throw new ArgumentNullException(nameof(proxy));
-			}
-
-			if (delegateType == null)
-			{
-				throw new ArgumentNullException(nameof(delegateType));
-			}
-
-			if (!delegateType.IsDelegateType())
-			{
-				throw new ArgumentException("Type is not a delegate type.", nameof(delegateType));
-			}
+			if (proxy == null) throw new ArgumentNullException(nameof(proxy));
+			if (delegateType == null) throw new ArgumentNullException(nameof(delegateType));
+			if (!delegateType.IsDelegateType()) throw new ArgumentException("Type is not a delegate type.", nameof(delegateType));
 
 			var invokeMethod = delegateType.GetMethod("Invoke");
 			var proxiedInvokeMethod =
