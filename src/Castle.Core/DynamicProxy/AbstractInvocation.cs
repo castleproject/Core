@@ -115,21 +115,9 @@ namespace Castle.DynamicProxy
 				}
 				else if (currentInterceptorIndex > interceptors.Length)
 				{
-					string interceptorsCount;
-					if (interceptors.Length > 1)
-					{
-						interceptorsCount = " each one of " + interceptors.Length + " interceptors";
-					}
-					else
-					{
-						interceptorsCount = " interceptor";
-					}
-
-					var message = "This is a DynamicProxy2 error: invocation.Proceed() has been called more times than expected." +
-					              "This usually signifies a bug in the calling code. Make sure that" + interceptorsCount +
-					              " selected for the method '" + Method + "'" +
-					              "calls invocation.Proceed() at most once.";
-					throw new InvalidOperationException(message);
+					throw new InvalidOperationException(
+						"Cannot proceed past the end of the interception pipeline. " +
+						"This likely signifies a bug in the calling code.");
 				}
 				else
 				{

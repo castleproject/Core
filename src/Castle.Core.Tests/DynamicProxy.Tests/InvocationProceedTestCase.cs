@@ -25,9 +25,33 @@ namespace Castle.DynamicProxy.Tests
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class InvocationProceedInfoTestCase
+	public class InvocationProceedTestCase
 	{
 		private readonly ProxyGenerator generator = new ProxyGenerator();
+
+		[Test]
+		public void Proceed_when_called_in_proxy_target_method_throws_InvalidOperationException()
+		{
+			IInvocation cachedInvocation = null;
+			InvalidOperationException ex = null;
+
+			var proxy = generator.CreateInterfaceProxyWithTarget<ISimple>(
+				interceptors: new[]
+				{
+					new WithCallbackInterceptor(invocation =>
+					{
+						cachedInvocation = invocation;
+						invocation.Proceed();
+					})
+				},
+				target: new WithCallbackSimple(method: () =>
+				{
+					ex = Assert.Throws<InvalidOperationException>(() => cachedInvocation.Proceed());
+				}));
+
+			proxy.Method();
+			Assert.NotNull(ex); // ensure that interception actually made it to the target
+		}
 
 		[Test]
 		public void Proxy_without_target_and_last_interceptor_ProceedInfo_succeeds()
