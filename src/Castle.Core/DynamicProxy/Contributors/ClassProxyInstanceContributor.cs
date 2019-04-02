@@ -187,7 +187,7 @@ namespace Castle.DynamicProxy.Contributors
 				return false;
 			}
 
-			if (IsDelegate(baseType))
+			if (baseType.IsDelegateType())
 			{
 				//working around bug in CLR which returns true for "does this type implement ISerializable" for delegates
 				return false;
@@ -228,11 +228,6 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			return true;
-		}
-
-		private bool IsDelegate(Type baseType)
-		{
-			return baseType.BaseType == typeof(MulticastDelegate);
 		}
 #endif
 	}

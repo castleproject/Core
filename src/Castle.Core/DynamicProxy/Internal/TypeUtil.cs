@@ -226,6 +226,14 @@ namespace Castle.DynamicProxy.Internal
 			return sortedMembers;
 		}
 
+		/// <summary>
+		///   Checks whether the specified <paramref name="type"/> is a delegate type (i.e. a direct subclass of <see cref="MulticastDelegate"/>).
+		/// </summary>
+		internal static bool IsDelegateType(this Type type)
+		{
+			return type.GetTypeInfo().BaseType == typeof(MulticastDelegate);
+		}
+
 		private static bool CloseGenericParametersIfAny(AbstractTypeEmitter emitter, Type[] arguments)
 		{
 			var hasAnyGenericParameters = false;
