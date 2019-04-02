@@ -96,7 +96,8 @@ namespace Castle.DynamicProxy.Tests
 			var interceptor = new Interceptor();
 
 			var proxy = generator.CreateClassProxy(typeof(object), options, interceptor);
-			Assert.True(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action action));
+			var action = ProxyUtil.CreateDelegateToMixin<Action>(proxy);
+			Assert.NotNull(action);
 
 			action.Invoke();
 			Assert.AreSame(typeof(Action).GetTypeInfo().GetMethod("Invoke"), interceptor.LastInvocation.Method);
@@ -111,7 +112,8 @@ namespace Castle.DynamicProxy.Tests
 			var interceptor = new Interceptor();
 
 			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(IComparable), options, interceptor);
-			Assert.True(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action action));
+			var action = ProxyUtil.CreateDelegateToMixin<Action>(proxy);
+			Assert.NotNull(action);
 
 			action.Invoke();
 			Assert.AreSame(typeof(Action).GetTypeInfo().GetMethod("Invoke"), interceptor.LastInvocation.Method);
@@ -128,7 +130,8 @@ namespace Castle.DynamicProxy.Tests
 			var interceptor = new Interceptor();
 
 			var proxy = generator.CreateInterfaceProxyWithTarget(typeof(IComparable), target, options, interceptor);
-			Assert.True(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action action));
+			var action = ProxyUtil.CreateDelegateToMixin<Action>(proxy);
+			Assert.NotNull(action);
 
 			action.Invoke();
 			Assert.AreSame(typeof(Action).GetTypeInfo().GetMethod("Invoke"), interceptor.LastInvocation.Method);
@@ -143,7 +146,8 @@ namespace Castle.DynamicProxy.Tests
 			var interceptor = new Interceptor(shouldProceed: true);
 
 			var proxy = generator.CreateClassProxy(typeof(object), options, interceptor);
-			Assert.True(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action action));
+			var action = ProxyUtil.CreateDelegateToMixin<Action>(proxy);
+			Assert.NotNull(action);
 
 			Assert.Throws<NotImplementedException>(() => action.Invoke());
 		}
@@ -157,7 +161,8 @@ namespace Castle.DynamicProxy.Tests
 			var interceptor = new Interceptor(shouldProceed: true);
 
 			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(IComparable), options, interceptor);
-			Assert.True(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action action));
+			var action = ProxyUtil.CreateDelegateToMixin<Action>(proxy);
+			Assert.NotNull(action);
 
 			Assert.Throws<NotImplementedException>(() => action.Invoke());
 		}
@@ -173,7 +178,8 @@ namespace Castle.DynamicProxy.Tests
 			var interceptor = new Interceptor(shouldProceed: true);
 
 			var proxy = generator.CreateInterfaceProxyWithTarget(typeof(IComparable), target, options, interceptor);
-			Assert.True(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action action));
+			var action = ProxyUtil.CreateDelegateToMixin<Action>(proxy);
+			Assert.NotNull(action);
 
 			Assert.Throws<NotImplementedException>(() => action.Invoke());
 		}
@@ -189,7 +195,8 @@ namespace Castle.DynamicProxy.Tests
 			var interceptor = new Interceptor(shouldProceed: true);
 
 			var proxy = generator.CreateClassProxy(typeof(object), options, interceptor);
-			Assert.True(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action action));
+			var action = ProxyUtil.CreateDelegateToMixin<Action>(proxy);
+			Assert.NotNull(action);
 
 			action.Invoke();
 			Assert.True(target.MethodInvoked);
@@ -206,7 +213,8 @@ namespace Castle.DynamicProxy.Tests
 			var interceptor = new Interceptor(shouldProceed: true);
 
 			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(IComparable), options, interceptor);
-			Assert.True(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action action));
+			var action = ProxyUtil.CreateDelegateToMixin<Action>(proxy);
+			Assert.NotNull(action);
 
 			action.Invoke();
 			Assert.True(target.MethodInvoked);
@@ -223,7 +231,8 @@ namespace Castle.DynamicProxy.Tests
 			var interceptor = new Interceptor(shouldProceed: true);
 
 			var proxy = generator.CreateInterfaceProxyWithTarget(typeof(IComparable), target, options, interceptor);
-			Assert.True(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action action));
+			var action = ProxyUtil.CreateDelegateToMixin<Action>(proxy);
+			Assert.NotNull(action);
 
 			action.Invoke();
 			Assert.True(target.MethodInvoked);
@@ -240,10 +249,12 @@ namespace Castle.DynamicProxy.Tests
 
 			var proxy = generator.CreateClassProxy(typeof(object), options, interceptor);
 
-			Assert.True(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action action));
+			var action = ProxyUtil.CreateDelegateToMixin<Action>(proxy);
+			Assert.NotNull(action);
 			action.Invoke();
 
-			Assert.True(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action<int> intAction));
+			var intAction = ProxyUtil.CreateDelegateToMixin<Action<int>>(proxy);
+			Assert.NotNull(action);
 			intAction.Invoke(42);
 		}
 

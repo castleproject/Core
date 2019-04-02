@@ -34,36 +34,31 @@ namespace Castle.DynamicProxy
 		private static readonly SynchronizedDictionary<Assembly, bool> internalsVisibleToDynamicProxy = new SynchronizedDictionary<Assembly, bool>();
 
 		/// <summary>
-		///   Attempts to create a delegate of the specified type to a suitable `Invoke` method
+		///   Creates a delegate of the specified type to a suitable `Invoke` method
 		///   on the given <paramref name="proxy"/> instance.
 		/// </summary>
 		/// <param name="proxy">The proxy instance to which the delegate should be bound.</param>
 		/// <typeparam name="TDelegate">The type of delegate that should be created.</typeparam>
-		/// <param name="delegate">The produced delegate if the method succeeds; otherwise <see langword="null"/>.</param>
-		/// <returns><see langword="true"/> if the method succeeds; otherwise <see langword="false"/>.</returns>
-		public static bool TryCreateDelegateToMixin<TDelegate>(object proxy, out TDelegate @delegate)
+		/// <exception cref="MissingMethodException">
+		///   The <paramref name="proxy"/> does not have an `Invoke` method that is compatible with
+		///   the requested <typeparamref name="TDelegate"/> type.
+		/// </exception>
+		public static TDelegate CreateDelegateToMixin<TDelegate>(object proxy)
 		{
-			if (TryCreateDelegateToMixin(proxy, typeof(TDelegate), out var d))
-			{
-				@delegate = (TDelegate)(object)d;
-				return true;
-			}
-			else
-			{
-				@delegate = default(TDelegate);
-				return false;
-			}
+			return (TDelegate)(object)CreateDelegateToMixin(proxy, typeof(TDelegate));
 		}
 
 		/// <summary>
-		///   Attempts to create a delegate of the specified type to a suitable `Invoke` method
+		///   Creates a delegate of the specified type to a suitable `Invoke` method
 		///   on the given <paramref name="proxy"/> instance.
 		/// </summary>
 		/// <param name="proxy">The proxy instance to which the delegate should be bound.</param>
 		/// <param name="delegateType">The type of delegate that should be created.</param>
-		/// <param name="delegate">The produced delegate if the method succeeds; otherwise <see langword="null"/>.</param>
-		/// <returns><see langword="true"/> if the method succeeds; otherwise <see langword="false"/>.</returns>
-		public static bool TryCreateDelegateToMixin(object proxy, Type delegateType, out Delegate @delegate)
+		/// <exception cref="MissingMethodException">
+		///   The <paramref name="proxy"/> does not have an `Invoke` method that is compatible with
+		///   the requested <paramref name="delegateType"/>.
+		/// </exception>
+		public static Delegate CreateDelegateToMixin(object proxy, Type delegateType)
 		{
 			if (proxy == null) throw new ArgumentNullException(nameof(proxy));
 			if (delegateType == null) throw new ArgumentNullException(nameof(delegateType));
@@ -79,17 +74,16 @@ namespace Castle.DynamicProxy
 
 			if (proxiedInvokeMethod == null)
 			{
-				@delegate = null;
-				return false;
+				throw new MissingMethodException("The proxy does not have an Invoke method " +
+				                                 "that is compatible with the requested delegate type.");
 			}
 			else
 			{
 #if FEATURE_NETCORE_REFLECTION_API
-				@delegate = proxiedInvokeMethod.CreateDelegate(delegateType, proxy);
+				return proxiedInvokeMethod.CreateDelegate(delegateType, proxy);
 #else
-				@delegate = Delegate.CreateDelegate(delegateType, proxy, proxiedInvokeMethod);
+				return Delegate.CreateDelegate(delegateType, proxy, proxiedInvokeMethod);
 #endif
-				return true;
 			}
 		}
 

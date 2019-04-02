@@ -25,58 +25,58 @@ namespace Castle.DynamicProxy.Tests
 	public class ProxyUtilTestCase
 	{
 		[Test]
-		public void TryCreateDelegateToMixin_when_given_null_for_proxy_throws_ArgumentNullException()
+		public void CreateDelegateToMixin_when_given_null_for_proxy_throws_ArgumentNullException()
 		{
 			var _ = typeof(Action);
-			Assert.Throws<ArgumentNullException>(() => ProxyUtil.TryCreateDelegateToMixin(null, _, out var __));
+			Assert.Throws<ArgumentNullException>(() => ProxyUtil.CreateDelegateToMixin(null, _));
 		}
 
 		[Test]
-		public void TryCreateDelegateToMixin_when_given_null_for_delegateType_throws_ArgumentNullException()
+		public void CreateDelegateToMixin_when_given_null_for_delegateType_throws_ArgumentNullException()
 		{
 			var _ = new object();
-			Assert.Throws<ArgumentNullException>(() => ProxyUtil.TryCreateDelegateToMixin(_, null, out var __));
+			Assert.Throws<ArgumentNullException>(() => ProxyUtil.CreateDelegateToMixin(_, null));
 		}
 
 		[Test]
-		public void TryCreateDelegateToMixin_when_given_non_delegate_type_throws_ArgumentException()
+		public void CreateDelegateToMixin_when_given_non_delegate_type_throws_ArgumentException()
 		{
 			var _ = new object();
-			Assert.Throws<ArgumentException>(() => ProxyUtil.TryCreateDelegateToMixin(_, typeof(Exception), out var __));
+			Assert.Throws<ArgumentException>(() => ProxyUtil.CreateDelegateToMixin(_, typeof(Exception)));
 		}
 
 		[Test]
-		public void TryCreateDelegateToMixin_when_given_valid_arguments_succeeds()
+		public void CreateDelegateToMixin_when_given_valid_arguments_succeeds()
 		{
 			var proxy = new FakeProxyWithInvokeMethods();
-			Assert.True(ProxyUtil.TryCreateDelegateToMixin(proxy, typeof(Action), out _));
+			Assert.NotNull(ProxyUtil.CreateDelegateToMixin(proxy, typeof(Action)));
 		}
 
 		[Test]
-		public void TryCreateDelegateToMixin_returns_false_if_no_suitable_Invoke_method_found()
+		public void CreateDelegateToMixin_throws_MissingMethodException_if_no_suitable_Invoke_method_found()
 		{
 			var proxy = new FakeProxyWithInvokeMethods();
-			Assert.False(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action<bool> boolAction));
+			Assert.Throws<MissingMethodException>(() => ProxyUtil.CreateDelegateToMixin<Action<bool>>(proxy));
 		}
 
 		[Test]
-		public void TryCreateDelegateToMixin_returns_invokable_delegate()
+		public void CreateDelegateToMixin_returns_invokable_delegate()
 		{
 			var proxy = new FakeProxyWithInvokeMethods();
-			Assume.That(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action action));
+			var action = ProxyUtil.CreateDelegateToMixin<Action>(proxy);
 			action.Invoke();
 		}
 
 		[Test]
-		public void TryCreateDelegateToMixin_can_deal_with_multiple_Invoke_overloads()
+		public void CreateDelegateToMixin_can_deal_with_multiple_Invoke_overloads()
 		{
 			var proxy = new FakeProxyWithInvokeMethods();
 
-			Assume.That(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action action));
+			var action = ProxyUtil.CreateDelegateToMixin<Action>(proxy);
 			action.Invoke();
 			Assert.AreEqual("Invoke()", proxy.LastInvocation);
 
-			Assume.That(ProxyUtil.TryCreateDelegateToMixin(proxy, out Action<int> intAction));
+			var intAction = ProxyUtil.CreateDelegateToMixin<Action<int>>(proxy);
 			intAction.Invoke(42);
 			Assert.AreEqual("Invoke(42)", proxy.LastInvocation);
 		}
