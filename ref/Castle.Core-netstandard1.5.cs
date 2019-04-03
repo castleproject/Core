@@ -1350,6 +1350,7 @@ namespace Castle.DynamicProxy
         public object Proxy { get; }
         public object ReturnValue { get; set; }
         public abstract System.Type TargetType { get; }
+        public Castle.DynamicProxy.IInvocationProceedInfo CaptureProceedInfo() { }
         public object GetArgumentValue(int index) { }
         public System.Reflection.MethodInfo GetConcreteMethod() { }
         public System.Reflection.MethodInfo GetConcreteMethodInvocationTarget() { }
@@ -1416,11 +1417,16 @@ namespace Castle.DynamicProxy
         object Proxy { get; }
         object ReturnValue { get; set; }
         System.Type TargetType { get; }
+        Castle.DynamicProxy.IInvocationProceedInfo CaptureProceedInfo();
         object GetArgumentValue(int index);
         System.Reflection.MethodInfo GetConcreteMethod();
         System.Reflection.MethodInfo GetConcreteMethodInvocationTarget();
         void Proceed();
         void SetArgumentValue(int index, object value);
+    }
+    public interface IInvocationProceedInfo
+    {
+        void Invoke();
     }
     public class InvalidMixinConfigurationException : System.Exception
     {
@@ -1563,6 +1569,8 @@ namespace Castle.DynamicProxy
         public Castle.DynamicProxy.IProxyGenerationHook Hook { get; set; }
         public Castle.DynamicProxy.MixinData MixinData { get; }
         public Castle.DynamicProxy.IInterceptorSelector Selector { get; set; }
+        public void AddDelegateMixin(System.Delegate @delegate) { }
+        public void AddDelegateTypeMixin(System.Type delegateType) { }
         public void AddMixinInstance(object instance) { }
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
@@ -1640,6 +1648,8 @@ namespace Castle.DynamicProxy
     }
     public class static ProxyUtil
     {
+        public static TDelegate CreateDelegateToMixin<TDelegate>(object proxy) { }
+        public static System.Delegate CreateDelegateToMixin(object proxy, System.Type delegateType) { }
         public static object GetUnproxiedInstance(object instance) { }
         public static System.Type GetUnproxiedType(object instance) { }
         public static bool IsAccessible(System.Reflection.MethodBase method) { }
