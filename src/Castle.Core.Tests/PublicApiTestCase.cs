@@ -24,6 +24,12 @@ namespace Castle
 
 	using PublicApiGenerator;
 
+	/// <summary>
+	/// Development workflow:
+	/// - As a developer you run the unit tests and this test will overwrite all the .cs files in the /ref directory for you
+	/// - The build server (CI=true env var) will compare the public API of the built assemblies to the /ref files on disk,
+	///   the assertion will obviously fail if someone changes the public API without also including the change to the ref/*.cs files
+	/// </summary>
 	[TestFixture]
 	public class PublicApiTestCase
 	{
