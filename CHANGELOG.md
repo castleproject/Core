@@ -14,6 +14,8 @@ Deprecations:
    - `Castle.Core.Internal.Lock` (class)
    - `Castle.Core.Internal.ILockHolder` (interface)
    - `Castle.Core.Internal.IUpgradeableLockHolder` (interface)
+- You should no longer manually emit types into DynamicProxy's dynamic assembly. For this reason, the following member has been deprecated. (@stakx, #445)
+   - `Castle.DynamicProxy.ModuleScope.DefineType` (method)
 - The proxy type cache in `ModuleScope` should no longer be accessed directly. For this reason, the members listed below have been deprecated. (@stakx, #391)
    - `Castle.DynamicProxy.ModuleScope.Lock` (property)
    - `Castle.DynamicProxy.ModuleScope.GetFromCache` (method)

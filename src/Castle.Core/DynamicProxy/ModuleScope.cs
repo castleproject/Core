@@ -573,6 +573,8 @@ namespace Castle.DynamicProxy
 		}
 #endif
 
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Redeclare this method as `internal`.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		public TypeBuilder DefineType(bool inSignedModulePreferably, string name, TypeAttributes flags)
 		{
 			var module = ObtainDynamicModule(disableSignedModule == false && inSignedModulePreferably);

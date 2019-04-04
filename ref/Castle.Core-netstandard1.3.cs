@@ -1543,6 +1543,7 @@ namespace Castle.DynamicProxy
         public string StrongNamedModuleName { get; }
         public System.Reflection.Emit.ModuleBuilder WeakNamedModule { get; }
         public string WeakNamedModuleName { get; }
+        [System.ObsoleteAttribute("Exposes a component that is intended for internal use only.")]
         public System.Reflection.Emit.TypeBuilder DefineType(bool inSignedModulePreferably, string name, System.Reflection.TypeAttributes flags) { }
         [System.ObsoleteAttribute("Exposes a component that is intended for internal use only.")]
         public System.Type GetFromCache(Castle.DynamicProxy.Generators.CacheKey key) { }
