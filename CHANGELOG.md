@@ -1,6 +1,6 @@
 # Castle Core Changelog
 
-## Unreleased
+## 4.4.0 (2019-04-05)
 
 Enhancements:
 - Added trace logging level below Debug; maps to Trace in log4net/NLog, and Verbose in Serilog (@pi3k14, #404)
