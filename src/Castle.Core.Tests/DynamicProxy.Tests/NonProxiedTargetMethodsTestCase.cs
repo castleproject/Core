@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Tests
 {
 	using Castle.DynamicProxy.Tests.Classes;
 	using Castle.DynamicProxy.Tests.Explicit;
+	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.InterClasses;
 	using Castle.DynamicProxy.Tests.Interfaces;
 
@@ -118,6 +119,31 @@ namespace Castle.DynamicProxy.Tests
 			result = -1;
 			Assert.DoesNotThrow(() => proxy.Did(ref result));
 			Assert.AreEqual(5, result);
+		}
+
+		[Test]
+		public void Unproxied_methods_should_pass_through_to_target()
+		{
+			var target = new HasVirtualStringAutoProperty();
+
+			var options = new ProxyGenerationOptions(
+				hook: new ProxySomeMethodsHook(
+					shouldInterceptMethod: (_, method) => method.Name == "set_" + nameof(HasVirtualStringAutoProperty.Property)));
+
+			var convertToLowerThenProceed = new WithCallbackInterceptor(invocation =>
+			{
+				string value = (string)invocation.GetArgumentValue(0);
+				string lowerCase = value?.ToLowerInvariant();
+				invocation.SetArgumentValue(0, lowerCase);
+				invocation.Proceed();
+			});
+
+			var proxy = generator.CreateClassProxyWithTarget(target, options, convertToLowerThenProceed);
+
+			proxy.Property = "HELLO WORLD";
+
+			Assert.AreEqual("hello world", target.Property);
+			Assert.AreEqual("hello world", proxy.Property);
 		}
 	}
 }
