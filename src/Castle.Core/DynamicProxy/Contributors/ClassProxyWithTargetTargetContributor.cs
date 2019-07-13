@@ -66,8 +66,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (!method.Proxyable)
 			{
-				return new MinimialisticMethodGenerator(method,
-				                                        overrideMethod);
+				return new ForwardingMethodGenerator(method, overrideMethod, (c, m) => c.GetField("__target"));
 			}
 
 			if (IsDirectlyAccessible(method) == false)
