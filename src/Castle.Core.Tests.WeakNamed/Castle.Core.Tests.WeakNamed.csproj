@@ -7,13 +7,6 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<!--This was the only way at the time of writing to $(OutputType) to honour the 'Exe' setting. This can probably be deleted from netcoreapp2.0(inclusive) onwards. Pathing dependencies: build.sh, build.cmd -->
-		<RuntimeIdentifier Condition="'$(OS)'=='Windows_NT'">win7-x64</RuntimeIdentifier>
-		<RuntimeIdentifier Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='netcoreapp1.1'"></RuntimeIdentifier>
-		<RuntimeIdentifier Condition="'$(OS)'=='Unix'AND'$(TargetFramework)'=='net461'"></RuntimeIdentifier>
-	</PropertyGroup>
-
-	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<Authors>Castle Contributors</Authors>
 		<AssemblyName>Castle.Core.Tests.WeakNamed</AssemblyName>

@@ -10,7 +10,6 @@
 		<BuildVersionMajor>$(BuildVersion.Split('.')[0])</BuildVersionMajor>
 		<BuildVersionNoSuffix>$(BuildVersion.Split('-')[0])</BuildVersionNoSuffix>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 	</PropertyGroup>
 
 	<PropertyGroup>

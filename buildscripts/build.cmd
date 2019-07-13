@@ -57,5 +57,5 @@ echo ---------------------------
 echo Running NETCOREAPP1.1 Tests
 echo ---------------------------
 
-.\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\Castle.Core.Tests.exe --result=NetCoreClrTestResults.xml;format=nunit3 || exit /b 1
-.\src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\netcoreapp1.1\Castle.Core.Tests.WeakNamed.exe --result=NetCoreClrWeakNamedTestResults.xml;format=nunit3 || exit /b 1
+dotnet .\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3 || exit /b 1
+dotnet .\src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\netcoreapp1.1/Castle.Core.Tests.WeakNamed.dll --result=NetCoreClrWeakNamedTestResults.xml;format=nunit3 || exit /b 1
