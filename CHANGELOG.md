@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Bugfixes:
+- Forward non-intercepted methods on class proxies to target (@stakx, #450)
+
 ## 4.4.0 (2019-04-05)
 
 Enhancements:
