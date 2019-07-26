@@ -17,6 +17,7 @@
 		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
 		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
 		<LangVersion>7.2</LangVersion>
+		<StartupObject>Program</StartupObject>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
@@ -38,8 +39,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
 		<PackageReference Include="NUnit" Version="3.6.1" />
 		<PackageReference Include="NUnit.Console" Version="3.6.1" />
+		<PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
 		<PackageReference Include="NUnitLite" Version="3.6.1" />
 		<PackageReference Include="log4net" Version="2.0.8" />
 		<PackageReference Include="NLog" Version="4.5.0" />
