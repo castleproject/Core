@@ -108,11 +108,13 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(IntPtr.Zero, buffer);
 		}
 
+#if FEATURE_TEST_DATASET
 		[Test]
 		public void CanProxyDataSet()
 		{
 			generator.CreateClassProxy(typeof (DataSet), new Type[0], new StandardInterceptor());
 		}
+#endif
 
 #if FEATURE_CUSTOMMODIFIERS
 		private Type iHaveMethodWithModOptsType;
