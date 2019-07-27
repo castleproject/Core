@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_TEST_COM
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -295,6 +294,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("Foo ", logging.LogContents);
 		}
 
+#if FEATURE_TEST_COM
 		[Test]
 		public void ProxyingComInteraces()
 		{
@@ -302,6 +302,7 @@ namespace Castle.DynamicProxy.Tests
 				.CreateInterfaceProxyWithoutTarget(typeof (IComServiceProvider), new StandardInterceptor());
 			Assert.IsNotNull(o);
 		}
+#endif
 
 		[Test]
 		public void ProxyingGenericClassWithGenericClassConstraint()
@@ -494,4 +495,3 @@ namespace Castle.DynamicProxy.Tests
 		R[] TestMethod<R>();
 	}
 }
-#endif
