@@ -29,7 +29,10 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Marshal_Release_throws_when_called_with_IntPtr_Zero()
 		{
-			Assert.Throws<ArgumentNullException>(() => Marshal.Release(IntPtr.Zero));
+			Assert.Catch<ArgumentException>(() => Marshal.Release(IntPtr.Zero));
+			//           ^^^^^^^^^^^^^^^^^
+			// We're not going to be more precise because Mono and the CLR don't throw the same exception type.
+			// See https://github.com/mono/mono/issues/15853.
 		}
 
 		[Test]
