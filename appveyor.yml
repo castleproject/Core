@@ -14,6 +14,7 @@ for:
 
   build_script:
   - uname -a
+  - mono --version
   - ./build.sh
 
   deploy: off
