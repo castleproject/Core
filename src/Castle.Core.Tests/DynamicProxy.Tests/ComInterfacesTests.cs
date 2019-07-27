@@ -35,26 +35,47 @@ namespace Castle.DynamicProxy.Tests
 			// See https://github.com/mono/mono/issues/15853.
 		}
 
+		// NOTE: You may wonder why the following tests delegate their implementation to static methods
+		// in a private static class. This is because the method bodies contain references to ADODB.dll,
+		// which fails to load under Mono/Linux, causing test discovery to abort early. By moving these
+		// method bodies somewhere else, test discovery will succeed and we get a chance at specifying
+		// how the tests should run, e.g. using the `[Platform]` attributes.
+
 		[Test]
+		[Platform(Include = "Win", Reason = "Depends on ADODB.dll, which can fail to load under Mono/Linux.")]
 		public void Can_proxy_ADO_RecorsSet()
 		{
-			generator.CreateInterfaceProxyWithoutTarget<Recordset>();
+			Implementation.Can_proxy_ADO_RecorsSet(generator);
 		}
 
 		[Test]
+		[Platform(Include = "Win", Reason = "Depends on OLE32.dll due to co-class instantiation, which is likely only available on Windows.")]
 		public void Can_proxy_existing_com_object()
 		{
-			var command = new Command();
-			var parameter = ExtractActualComParameterObject(command.CreateParameter("foo"));
-			generator.CreateInterfaceProxyWithTargetInterface(parameter);
+			Implementation.Can_proxy_existing_com_object(generator);
 		}
 
-		private Parameter ExtractActualComParameterObject(Parameter parameter)
+		private static class Implementation
 		{
-			var type = parameter.GetType();
-			var method = type.GetMethod("GetParm", BindingFlags.Instance | BindingFlags.NonPublic);
-			var actualParameter = method.Invoke(parameter, null);
-			return (Parameter) actualParameter;
+			public static void Can_proxy_ADO_RecorsSet(ProxyGenerator generator)
+			{
+				generator.CreateInterfaceProxyWithoutTarget<Recordset>();
+			}
+
+			public static void Can_proxy_existing_com_object(ProxyGenerator generator)
+			{
+				var command = new Command();
+				var parameter = ExtractActualComParameterObject(command.CreateParameter("foo"));
+				generator.CreateInterfaceProxyWithTargetInterface(parameter);
+			}
+
+			private static Parameter ExtractActualComParameterObject(Parameter parameter)
+			{
+				var type = parameter.GetType();
+				var method = type.GetMethod("GetParm", BindingFlags.Instance | BindingFlags.NonPublic);
+				var actualParameter = method.Invoke(parameter, null);
+				return (Parameter)actualParameter;
+			}
 		}
 	}
 }
