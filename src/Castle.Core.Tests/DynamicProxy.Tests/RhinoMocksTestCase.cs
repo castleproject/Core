@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_TEST_COM
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -109,11 +108,13 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(IntPtr.Zero, buffer);
 		}
 
+#if FEATURE_TEST_DATASET
 		[Test]
 		public void CanProxyDataSet()
 		{
 			generator.CreateClassProxy(typeof (DataSet), new Type[0], new StandardInterceptor());
 		}
+#endif
 
 #if FEATURE_CUSTOMMODIFIERS
 		private Type iHaveMethodWithModOptsType;
@@ -182,7 +183,11 @@ namespace Castle.DynamicProxy.Tests
 				},
 				callingConvention: CallingConventions.Standard);
 
+#if FEATURE_LEGACY_REFLECTION_API
 			var iHaveMethodWithModOptsType = typeBuilder.CreateType();
+#else
+			var iHaveMethodWithModOptsType = typeBuilder.CreateTypeInfo().AsType();
+#endif
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE && FEATURE_TEST_PEVERIFY
 			// Let's persist and PE-verify the dynamic assembly before it gets used in tests:
@@ -295,6 +300,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("Foo ", logging.LogContents);
 		}
 
+#if FEATURE_TEST_COM
 		[Test]
 		public void ProxyingComInteraces()
 		{
@@ -302,6 +308,7 @@ namespace Castle.DynamicProxy.Tests
 				.CreateInterfaceProxyWithoutTarget(typeof (IComServiceProvider), new StandardInterceptor());
 			Assert.IsNotNull(o);
 		}
+#endif
 
 		[Test]
 		public void ProxyingGenericClassWithGenericClassConstraint()
@@ -494,4 +501,3 @@ namespace Castle.DynamicProxy.Tests
 		R[] TestMethod<R>();
 	}
 }
-#endif
