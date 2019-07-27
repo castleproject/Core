@@ -39,6 +39,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		[ExcludeOnOSPlatformsOtherThanWindows("Co-class instantiation requires a fully working COM subsystem which is likely only available on Windows.")]
 		public void Can_proxy_existing_com_object()
 		{
 			var command = new Command();
