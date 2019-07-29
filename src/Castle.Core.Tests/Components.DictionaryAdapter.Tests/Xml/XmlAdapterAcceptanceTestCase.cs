@@ -1017,47 +1017,49 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				ExtraInfo = new object[] { 43, "Extra", manager }
 			};
 
-			using (var stream = new FileStream("out.xml", FileMode.Create))
+			using (var stream = new MemoryStream())
 			{
 				var serializer = new XmlSerializer(typeof(Group));
 				serializer.Serialize(stream, group);
+
 				stream.Flush();
+				stream.Position = 0;
+
+				var document = new XmlDocument();
+				document.Load(stream);
+
+				var groupRead = CreateXmlAdapter<IGroup>(null, ref document);
+				Assert.AreEqual(2, groupRead.Id);
+				Assert.IsInstanceOf<IManager>(groupRead.Owner);
+				var managerRead = (IManager)groupRead.Owner;
+				Assert.AreEqual(manager.Name, managerRead.Name);
+				Assert.AreEqual(manager.Level, managerRead.Level);
+				var employeesRead = groupRead.Employees;
+				Assert.AreEqual(2, employeesRead.Length);
+				Assert.AreEqual(employee.Name, employeesRead[0].Name);
+				Assert.AreEqual(employee.Job.Title, employeesRead[0].Job.Title);
+				Assert.AreEqual(employee.Job.Salary, employeesRead[0].Job.Salary);
+				Assert.AreEqual(employee.Metadata.Tag, employeesRead[0].Metadata.Tag);
+				CollectionAssert.AreEqual(employee.Key, employeesRead[0].Key);
+				Assert.AreEqual(manager.Name, employeesRead[1].Name);
+				Assert.IsInstanceOf<IManager>(employeesRead[1]);
+				var managerEmplRead = (IManager)employeesRead[1];
+				Assert.AreEqual(manager.Level, managerEmplRead.Level);
+				CollectionAssert.AreEqual(group.Tags, groupRead.Tags);
+				var extraInfoRead = groupRead.ExtraInfo;
+				Assert.AreEqual(3, extraInfoRead.Length);
+				Assert.AreEqual(group.ExtraInfo[0], extraInfoRead[0]);
+				Assert.AreEqual(group.ExtraInfo[1], extraInfoRead[1]);
+				Assert.IsInstanceOf<IManager>(extraInfoRead[2]);
+				var managerExtra = (IManager)extraInfoRead[2];
+				Assert.AreEqual(manager.Name, managerExtra.Name);
+				Assert.AreEqual(manager.Level, managerExtra.Level);
+
+				groupRead.Comment = "Hello World";
+				Assert.AreEqual("Hello World", groupRead.Comment);
+				var commentRead = document["Comment", "Yum"];
+				Assert.IsNull(commentRead);
 			}
-
-			var document = new XmlDocument();
-			document.Load("out.xml");
-
-			var groupRead = CreateXmlAdapter<IGroup>(null, ref document);
-			Assert.AreEqual(2, groupRead.Id);
-			Assert.IsInstanceOf<IManager>(groupRead.Owner);
-			var managerRead = (IManager)groupRead.Owner;
-			Assert.AreEqual(manager.Name, managerRead.Name);
-			Assert.AreEqual(manager.Level, managerRead.Level);
-			var employeesRead = groupRead.Employees;
-			Assert.AreEqual(2, employeesRead.Length);
-			Assert.AreEqual(employee.Name, employeesRead[0].Name);
-			Assert.AreEqual(employee.Job.Title, employeesRead[0].Job.Title);
-			Assert.AreEqual(employee.Job.Salary, employeesRead[0].Job.Salary);
-			Assert.AreEqual(employee.Metadata.Tag, employeesRead[0].Metadata.Tag);
-			CollectionAssert.AreEqual(employee.Key, employeesRead[0].Key);
-			Assert.AreEqual(manager.Name, employeesRead[1].Name);
-			Assert.IsInstanceOf<IManager>(employeesRead[1]);
-			var managerEmplRead = (IManager)employeesRead[1];
-			Assert.AreEqual(manager.Level, managerEmplRead.Level);
-			CollectionAssert.AreEqual(group.Tags, groupRead.Tags);
-			var extraInfoRead = groupRead.ExtraInfo;
-			Assert.AreEqual(3, extraInfoRead.Length);
-			Assert.AreEqual(group.ExtraInfo[0], extraInfoRead[0]);
-			Assert.AreEqual(group.ExtraInfo[1], extraInfoRead[1]);
-			Assert.IsInstanceOf<IManager>(extraInfoRead[2]);
-			var managerExtra = (IManager)extraInfoRead[2];
-			Assert.AreEqual(manager.Name, managerExtra.Name);
-			Assert.AreEqual(manager.Level, managerExtra.Level);
-
-			groupRead.Comment = "Hello World";
-			Assert.AreEqual("Hello World", groupRead.Comment);
-			var commentRead = document["Comment", "Yum"];
-			Assert.IsNull(commentRead);
 		}
 
 		[Test]
@@ -1070,20 +1072,22 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				Employees = new Employee[] { null, manager }
 			};
 
-			using (var stream = new FileStream("out.xml", FileMode.Create))
+			using (var stream = new MemoryStream())
 			{
 				var serializer = new XmlSerializer(typeof(Group));
 				serializer.Serialize(stream, group);
+
 				stream.Flush();
+				stream.Position = 0;
+
+				var document = new XmlDocument();
+				document.Load(stream);
+
+				var groupRead = CreateXmlAdapter<IGroup>(null, ref document);
+				Assert.IsNull(groupRead.Owner);
+				Assert.IsNull(groupRead.ExtraInfo);
+				Assert.AreEqual(1, groupRead.Employees.Length);
 			}
-
-			var document = new XmlDocument();
-			document.Load("out.xml");
-
-			var groupRead = CreateXmlAdapter<IGroup>(null, ref document);
-			Assert.IsNull(groupRead.Owner);
-			Assert.IsNull(groupRead.ExtraInfo);
-			Assert.AreEqual(1, groupRead.Employees.Length);
 		}
 
 		[Test, Ignore("Need to opt in or out of reference tracking for this to work.")]
@@ -1114,10 +1118,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			group.Comment = "Nothing important";
 			group.ExtraInfo = new object[] { 43, "Extra", manager };
 
-			document.Save("out.xml");
-
-			using (var stream = new FileStream("out.xml", FileMode.Open))
+			using (var stream = new MemoryStream())
 			{
+				document.Save(stream);
+
+				stream.Flush();
+				stream.Position = 0;
+
 				var serializer = new XmlSerializer(typeof(Group));
 				var groupRead = (Group)serializer.Deserialize(stream);
 
@@ -1161,10 +1168,13 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			group.Owner = null;
 			group.Employees = new IEmployee[] { null, manager };
 
-			document.Save("out.xml");
-
-			using (var stream = new FileStream("out.xml", FileMode.Open))
+			using (var stream = new MemoryStream())
 			{
+				document.Save(stream);
+
+				stream.Flush();
+				stream.Position = 0;
+
 				var serializer = new XmlSerializer(typeof(Group));
 				var groupRead = (Group)serializer.Deserialize(stream);
 				Assert.IsNull(groupRead.Owner);
