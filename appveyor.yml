@@ -1,32 +1,45 @@
 image:
-- Ubuntu
 - Visual Studio 2017
+- Ubuntu
 
+
+# ----------------
+#  ALL BUILD JOBS
+# ----------------
 skip_tags: false
-
 test: off
 
+
 for:
--
+- # -----------------
+  #  LINUX BUILD JOB
+  # -----------------
   matrix:
     only:
     - image: Ubuntu
 
+  # build and run tests
   build_script:
   - uname -a
   - mono --version
   - ./build.sh
 
+  # upload test results
   after_build:
   - find "$APPVEYOR_BUILD_FOLDER" -type f -name '*TestResults.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/nunit3/$APPVEYOR_JOB_ID"
 
+  # deployment is handled exclusively by the Windows build job (below)
   deploy: off
 
--
+
+- # -------------------
+  #  WINDOWS BUILD JOB
+  # -------------------
   matrix:
     only:
     - image: Visual Studio 2017
 
+  # update AppVeyor build version; this matters for deployments
   init:
   - ps: |
       if ($env:APPVEYOR_REPO_TAG -eq "true")
@@ -34,9 +47,11 @@ for:
           Update-AppveyorBuild -Version ($env:APPVEYOR_REPO_TAG_NAME).TrimStart("v")
       }
 
+  # build and run tests
   build_script:
   - cmd: build.cmd
 
+  # upload test results
   after_build:
   - ps: |
       $wc = New-Object System.Net.WebClient
@@ -45,6 +60,7 @@ for:
       $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "DesktopClrTestResults.xml"))
       $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "DesktopClrWeakNamedTestResults.xml"))
 
+  # push packages to NuGet on tag builds
   on_success:
   - ps: |
       if ($env:APPVEYOR_REPO_TAG -eq "true")
@@ -55,6 +71,7 @@ for:
           nuget push ".\build\Castle.Core-Serilog.${env:APPVEYOR_BUILD_VERSION}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
       }
 
+  # upload packages to AppVeyor
   artifacts:
   - path: build\*.nupkg
     name: core
