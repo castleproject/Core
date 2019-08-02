@@ -144,7 +144,7 @@ namespace Castle.Components.DictionaryAdapter
         public virtual object GetProperty(string propertyName, bool ifExists) { }
         public T GetPropertyOfType<T>(string propertyName) { }
         protected void Initialize() { }
-        protected internal void Invalidate() { }
+        protected void Invalidate() { }
         protected void NotifyPropertyChanged(Castle.Components.DictionaryAdapter.PropertyDescriptor property, object oldValue, object newValue) { }
         protected void NotifyPropertyChanged(string propertyName) { }
         protected bool NotifyPropertyChanging(Castle.Components.DictionaryAdapter.PropertyDescriptor property, object oldValue, object newValue) { }
@@ -429,7 +429,7 @@ namespace Castle.Components.DictionaryAdapter
     }
     public interface IDictionaryCopyStrategy
     {
-        bool Copy(Castle.Components.DictionaryAdapter.IDictionaryAdapter source, Castle.Components.DictionaryAdapter.IDictionaryAdapter target, ref System.Func<, > selector);
+        bool Copy(Castle.Components.DictionaryAdapter.IDictionaryAdapter source, Castle.Components.DictionaryAdapter.IDictionaryAdapter target, ref System.Func<Castle.Components.DictionaryAdapter.PropertyDescriptor, bool> selector);
     }
     public interface IDictionaryCreate
     {
@@ -569,7 +569,7 @@ namespace Castle.Components.DictionaryAdapter
         public KeySubstitutionAttribute(string oldValue, string newValue) { }
     }
     [System.Diagnostics.DebuggerDisplayAttribute("Count = {Count}, Adapter = {Adapter}")]
-    [System.Diagnostics.DebuggerTypeProxyAttribute(typeof(Castle.Components.DictionaryAdapter.ListProjectionDebugView<>))]
+    [System.Diagnostics.DebuggerTypeProxyAttribute(typeof(Castle.Components.DictionaryAdapter.ListProjectionDebugView<T>))]
     public class ListProjection<T> : Castle.Components.DictionaryAdapter.IBindingListSource, Castle.Components.DictionaryAdapter.IBindingList<T>, Castle.Components.DictionaryAdapter.ICollectionAdapterObserver<T>, Castle.Components.DictionaryAdapter.ICollectionProjection, System.Collections.Generic.ICollection<T>, System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IList<T>, System.Collections.ICollection, System.Collections.IEnumerable, System.Collections.IList, System.ComponentModel.IBindingList, System.ComponentModel.ICancelAddNew, System.ComponentModel.IChangeTracking, System.ComponentModel.IEditableObject, System.ComponentModel.IRaiseItemChangedEvents, System.ComponentModel.IRevertibleChangeTracking
     {
         public ListProjection(Castle.Components.DictionaryAdapter.ICollectionAdapter<T> adapter) { }
@@ -695,7 +695,7 @@ namespace Castle.Components.DictionaryAdapter
         public Castle.Components.DictionaryAdapter.PropertyDescriptor CopyBehaviors(Castle.Components.DictionaryAdapter.PropertyDescriptor other) { }
         public string GetKey(Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter, string key, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor) { }
         public object GetPropertyValue(Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter, string key, object storedValue, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor, bool ifExists) { }
-        public static void MergeBehavior<T>(ref System.Collections.Generic.List<> dictionaryBehaviors, T behavior)
+        public static void MergeBehavior<T>(ref System.Collections.Generic.List<T> dictionaryBehaviors, T behavior)
             where T :  class, Castle.Components.DictionaryAdapter.IDictionaryBehavior { }
         public bool SetPropertyValue(Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter, string key, ref object value, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor) { }
     }
@@ -3060,13 +3060,13 @@ namespace Castle.DynamicProxy.Generators
         public ClassProxyGenerator(Castle.DynamicProxy.ModuleScope scope, System.Type targetType) { }
         public System.Type GenerateCode(System.Type[] interfaces, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         protected virtual System.Type GenerateType(string name, System.Type[] interfaces, Castle.DynamicProxy.Generators.INamingScope namingScope) { }
-        protected virtual System.Collections.Generic.IEnumerable<System.Type> GetTypeImplementerMapping(System.Type[] interfaces, out System.Collections.Generic.IEnumerable<> contributors, Castle.DynamicProxy.Generators.INamingScope namingScope) { }
+        protected virtual System.Collections.Generic.IEnumerable<System.Type> GetTypeImplementerMapping(System.Type[] interfaces, out System.Collections.Generic.IEnumerable<Castle.DynamicProxy.Contributors.ITypeContributor> contributors, Castle.DynamicProxy.Generators.INamingScope namingScope) { }
     }
     public class ClassProxyWithTargetGenerator : Castle.DynamicProxy.Generators.BaseProxyGenerator
     {
         public ClassProxyWithTargetGenerator(Castle.DynamicProxy.ModuleScope scope, System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         public System.Type GetGeneratedType() { }
-        protected virtual System.Collections.Generic.IEnumerable<System.Type> GetTypeImplementerMapping(out System.Collections.Generic.IEnumerable<> contributors, Castle.DynamicProxy.Generators.INamingScope namingScope) { }
+        protected virtual System.Collections.Generic.IEnumerable<System.Type> GetTypeImplementerMapping(out System.Collections.Generic.IEnumerable<Castle.DynamicProxy.Contributors.ITypeContributor> contributors, Castle.DynamicProxy.Generators.INamingScope namingScope) { }
     }
     public class CompositionInvocationTypeGenerator : Castle.DynamicProxy.Generators.InvocationTypeGenerator
     {
@@ -3095,7 +3095,7 @@ namespace Castle.DynamicProxy.Generators
     {
         public DelegateProxyGenerator(Castle.DynamicProxy.ModuleScope scope, System.Type delegateType) { }
         public System.Type GetProxyType() { }
-        protected virtual System.Collections.Generic.IEnumerable<System.Type> GetTypeImplementerMapping(out System.Collections.Generic.IEnumerable<> contributors, Castle.DynamicProxy.Generators.INamingScope namingScope) { }
+        protected virtual System.Collections.Generic.IEnumerable<System.Type> GetTypeImplementerMapping(out System.Collections.Generic.IEnumerable<Castle.DynamicProxy.Contributors.ITypeContributor> contributors, Castle.DynamicProxy.Generators.INamingScope namingScope) { }
     }
     public class GeneratorException : System.Exception
     {
@@ -3143,7 +3143,7 @@ namespace Castle.DynamicProxy.Generators
         public System.Type GenerateCode(System.Type proxyTargetType, System.Type[] interfaces, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         protected virtual System.Type GenerateType(string typeName, System.Type proxyTargetType, System.Type[] interfaces, Castle.DynamicProxy.Generators.INamingScope namingScope) { }
         protected virtual Castle.DynamicProxy.Contributors.InterfaceProxyWithoutTargetContributor GetContributorForAdditionalInterfaces(Castle.DynamicProxy.Generators.INamingScope namingScope) { }
-        protected virtual System.Collections.Generic.IEnumerable<System.Type> GetTypeImplementerMapping(System.Type[] interfaces, System.Type proxyTargetType, out System.Collections.Generic.IEnumerable<> contributors, Castle.DynamicProxy.Generators.INamingScope namingScope) { }
+        protected virtual System.Collections.Generic.IEnumerable<System.Type> GetTypeImplementerMapping(System.Type[] interfaces, System.Type proxyTargetType, out System.Collections.Generic.IEnumerable<Castle.DynamicProxy.Contributors.ITypeContributor> contributors, Castle.DynamicProxy.Generators.INamingScope namingScope) { }
         protected virtual System.Type Init(string typeName, out Castle.DynamicProxy.Generators.Emitters.ClassEmitter emitter, System.Type proxyTargetType, out Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference interceptorsField, System.Collections.Generic.IEnumerable<System.Type> interfaces) { }
     }
     public class InterfaceProxyWithTargetInterfaceGenerator : Castle.DynamicProxy.Generators.InterfaceProxyWithTargetGenerator
@@ -3267,7 +3267,7 @@ namespace Castle.DynamicProxy.Generators
         public Castle.DynamicProxy.Generators.INamingScope SafeSubScope() { }
     }
     public class TypeElementCollection<TElement> : System.Collections.Generic.ICollection<TElement>, System.Collections.Generic.IEnumerable<TElement>, System.Collections.IEnumerable
-        where TElement : Castle.DynamicProxy.Generators.MetaTypeElement, System.IEquatable<>
+        where TElement : Castle.DynamicProxy.Generators.MetaTypeElement, System.IEquatable<TElement>
     {
         public TypeElementCollection() { }
         public int Count { get; }
@@ -3349,7 +3349,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
     }
     public class ConstructorEmitter : Castle.DynamicProxy.Generators.Emitters.IMemberEmitter
     {
-        protected internal ConstructorEmitter(Castle.DynamicProxy.Generators.Emitters.AbstractTypeEmitter maintype, System.Reflection.Emit.ConstructorBuilder builder) { }
+        protected ConstructorEmitter(Castle.DynamicProxy.Generators.Emitters.AbstractTypeEmitter maintype, System.Reflection.Emit.ConstructorBuilder builder) { }
         public virtual Castle.DynamicProxy.Generators.Emitters.CodeBuilders.ConstructorCodeBuilder CodeBuilder { get; }
         public System.Reflection.Emit.ConstructorBuilder ConstructorBuilder { get; }
         public System.Reflection.MemberInfo Member { get; }
@@ -3397,7 +3397,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
     [System.Diagnostics.DebuggerDisplayAttribute("{builder.Name}")]
     public class MethodEmitter : Castle.DynamicProxy.Generators.Emitters.IMemberEmitter
     {
-        protected internal MethodEmitter(System.Reflection.Emit.MethodBuilder builder) { }
+        protected MethodEmitter(System.Reflection.Emit.MethodBuilder builder) { }
         public Castle.DynamicProxy.Generators.Emitters.SimpleAST.ArgumentReference[] Arguments { get; }
         public virtual Castle.DynamicProxy.Generators.Emitters.CodeBuilders.MethodCodeBuilder CodeBuilder { get; }
         public System.Reflection.Emit.GenericTypeParameterBuilder[] GenericTypeParams { get; }

@@ -17,7 +17,7 @@ namespace Castle.Services.Logging.Log4netIntegration
     {
         public ExtendedLog4netLogger(log4net.ILog log, Castle.Services.Logging.Log4netIntegration.ExtendedLog4netFactory factory) { }
         public ExtendedLog4netLogger(log4net.Core.ILogger logger, Castle.Services.Logging.Log4netIntegration.ExtendedLog4netFactory factory) { }
-        protected internal Castle.Services.Logging.Log4netIntegration.ExtendedLog4netFactory Factory { get; set; }
+        protected Castle.Services.Logging.Log4netIntegration.ExtendedLog4netFactory Factory { get; set; }
         public Castle.Core.Logging.IContextProperties GlobalProperties { get; }
         public Castle.Core.Logging.IContextProperties ThreadProperties { get; }
         public Castle.Core.Logging.IContextStacks ThreadStacks { get; }
@@ -41,14 +41,14 @@ namespace Castle.Services.Logging.Log4netIntegration
     public class Log4netLogger : System.MarshalByRefObject, Castle.Core.Logging.ILogger
     {
         public Log4netLogger(log4net.Core.ILogger logger, Castle.Services.Logging.Log4netIntegration.Log4netFactory factory) { }
-        protected internal Castle.Services.Logging.Log4netIntegration.Log4netFactory Factory { get; set; }
+        protected Castle.Services.Logging.Log4netIntegration.Log4netFactory Factory { get; set; }
         public bool IsDebugEnabled { get; }
         public bool IsErrorEnabled { get; }
         public bool IsFatalEnabled { get; }
         public bool IsInfoEnabled { get; }
         public bool IsTraceEnabled { get; }
         public bool IsWarnEnabled { get; }
-        protected internal log4net.Core.ILogger Logger { get; set; }
+        protected log4net.Core.ILogger Logger { get; set; }
         public virtual Castle.Core.Logging.ILogger CreateChildLogger(string name) { }
         public void Debug(string message) { }
         public void Debug(System.Func<string> messageFactory) { }
