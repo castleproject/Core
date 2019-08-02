@@ -11,14 +11,14 @@ namespace Castle.Services.Logging.SerilogIntegration
     public class SerilogLogger : Castle.Core.Logging.ILogger
     {
         public SerilogLogger(Serilog.ILogger logger, Castle.Services.Logging.SerilogIntegration.SerilogFactory factory) { }
-        protected internal Castle.Services.Logging.SerilogIntegration.SerilogFactory Factory { get; set; }
+        protected Castle.Services.Logging.SerilogIntegration.SerilogFactory Factory { get; set; }
         public bool IsDebugEnabled { get; }
         public bool IsErrorEnabled { get; }
         public bool IsFatalEnabled { get; }
         public bool IsInfoEnabled { get; }
         public bool IsTraceEnabled { get; }
         public bool IsWarnEnabled { get; }
-        protected internal Serilog.ILogger Logger { get; set; }
+        protected Serilog.ILogger Logger { get; set; }
         public Castle.Core.Logging.ILogger CreateChildLogger(string loggerName) { }
         public void Debug(string message, System.Exception exception) { }
         public void Debug(System.Func<string> messageFactory) { }

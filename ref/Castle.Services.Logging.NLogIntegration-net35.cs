@@ -14,7 +14,7 @@ namespace Castle.Services.Logging.NLogIntegration
     public class ExtendedNLogLogger : Castle.Services.Logging.NLogIntegration.NLogLogger, Castle.Core.Logging.IExtendedLogger, Castle.Core.Logging.ILogger
     {
         public ExtendedNLogLogger(NLog.Logger logger, Castle.Services.Logging.NLogIntegration.ExtendedNLogFactory factory) { }
-        protected internal Castle.Services.Logging.NLogIntegration.ExtendedNLogFactory Factory { get; set; }
+        protected Castle.Services.Logging.NLogIntegration.ExtendedNLogFactory Factory { get; set; }
         public Castle.Core.Logging.IContextProperties GlobalProperties { get; }
         public Castle.Core.Logging.IContextProperties ThreadProperties { get; }
         public Castle.Core.Logging.IContextStacks ThreadStacks { get; }
@@ -38,14 +38,14 @@ namespace Castle.Services.Logging.NLogIntegration
     public class NLogLogger : Castle.Core.Logging.ILogger
     {
         public NLogLogger(NLog.Logger logger, Castle.Services.Logging.NLogIntegration.NLogFactory factory) { }
-        protected internal Castle.Services.Logging.NLogIntegration.NLogFactory Factory { get; set; }
+        protected Castle.Services.Logging.NLogIntegration.NLogFactory Factory { get; set; }
         public bool IsDebugEnabled { get; }
         public bool IsErrorEnabled { get; }
         public bool IsFatalEnabled { get; }
         public bool IsInfoEnabled { get; }
         public bool IsTraceEnabled { get; }
         public bool IsWarnEnabled { get; }
-        protected internal NLog.Logger Logger { get; set; }
+        protected NLog.Logger Logger { get; set; }
         public virtual Castle.Core.Logging.ILogger CreateChildLogger(string name) { }
         public void Debug(string message) { }
         public void Debug(System.Func<string> messageFactory) { }
