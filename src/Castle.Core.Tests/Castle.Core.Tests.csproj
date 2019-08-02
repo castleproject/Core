@@ -76,10 +76,5 @@
 		<Reference Include="WindowsBase" />
 		<PackageReference Include="PublicApiGenerator" Version="9.3.0" />
 	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="ADODB">
-			<HintPath>..\..\lib\net35\adodb.dll</HintPath>
-		</Reference>
-	</ItemGroup>
 
 </Project>
