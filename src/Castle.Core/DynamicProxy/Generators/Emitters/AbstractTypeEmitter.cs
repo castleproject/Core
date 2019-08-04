@@ -17,6 +17,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Linq;
 	using System.Reflection;
 	using System.Reflection.Emit;
 
@@ -303,7 +304,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			var types = new List<Type>();
 			foreach (var genType in genericMethod.GetGenericArguments())
 			{
-				types.Add(name2GenericType[genType.Name].AsType());
+				var matchingGenType = name2GenericType.Values.Single(t => t.GenericParameterPosition == genType.GenericParameterPosition);
+				types.Add(matchingGenType.AsType());
 			}
 
 			return types.ToArray();
