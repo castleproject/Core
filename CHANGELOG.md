@@ -1,5 +1,13 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Bugfixes:
+- Generic method with differently named generic arguments to parent throws `KeyNotFoundException` (@stakx, #106)
+
+Deprecations:
+- `Castle.DynamicProxy.Generators.Emitters.AbstractTypeEmitter.GetGenericArgumentsFor(Type)` (method)
+
 ## 4.4.0 (2019-04-05)
 
 Enhancements:
