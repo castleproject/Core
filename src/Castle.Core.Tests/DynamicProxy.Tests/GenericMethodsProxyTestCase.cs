@@ -92,5 +92,32 @@ namespace Castle.DynamicProxy.Tests
 		{
 			generator.CreateInterfaceProxyWithoutTarget<GenericMethodWhereOneGenParamInheritsTheOther>();
 		}
+
+		[Test]
+		[TestCase(typeof(Test))]
+		[TestCase(typeof(TestVirtual))]
+		public void GenericMethodDifferentlyNamedGenericArguments(Type classType)
+		{
+			generator.CreateClassProxy(classType, new[] { typeof(ITest) });
+		}
+
+		public interface ITest
+		{
+			void Hi<T>();
+		}
+
+		public class Test : ITest
+		{
+			public void Hi<U>()
+			{
+			}
+		}
+
+		public class TestVirtual : ITest
+		{
+			public virtual void Hi<U>()
+			{
+			}
+		}
 	}
 }
