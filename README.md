@@ -24,10 +24,9 @@ Browse the [contributing section](https://github.com/castleproject/Home#its-comm
 
 ## Building
 
-| Platform | Build Status | NuGet Feed |
-|----------|-------------:|------------|
-| Windows  | [![Build status](https://ci.appveyor.com/api/projects/status/49a6i0ydiku56r5b/branch/master?svg=true)](https://ci.appveyor.com/project/castleproject/core/branch/master) | [Preview Feed](https://ci.appveyor.com/nuget/core-0mhe40ifodk8)
-| Linux    | [![Build Status](https://api.travis-ci.com/castleproject/Core.svg?branch=master)](https://travis-ci.com/castleproject/Core/branches) |  |
+| Platforms       | Build Status | NuGet Feed |
+|-----------------|-------------:|------------|
+| Windows & Linux | [![Build status](https://ci.appveyor.com/api/projects/status/49a6i0ydiku56r5b/branch/master?svg=true)](https://ci.appveyor.com/project/castleproject/core/branch/master) | [Preview Feed](https://ci.appveyor.com/nuget/core-0mhe40ifodk8)
 
 ### On Windows
 
