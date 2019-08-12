@@ -42,7 +42,6 @@ namespace Castle.Core.Internal.Tests
 		}
 
 		[Test]
-		[ExcludeOnFramework(Framework.Mono, "Fails on Mono version 5.20.1.19. Try unskipping this test once the CI server uses a more recent version of Mono.")]
 		public void AfterExplicitTrim_DeadObject()
 		{
 			CreateDictionary(); AddItem(); ResetItem();
