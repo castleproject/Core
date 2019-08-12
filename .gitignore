@@ -10,8 +10,7 @@ build/
 bin/
 obj/
 
-# Unit test scratch file (for DictionaryAdapter tests) and test runner results
-/out.xml
+# Test runner results
 /NetCoreClrTestResults.xml
 /DesktopClrTestResults.xml
 /DesktopClrWeakNamedTestResults.xml

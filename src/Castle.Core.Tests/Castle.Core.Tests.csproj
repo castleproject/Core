@@ -21,7 +21,6 @@
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
-		<Compile Remove="Components.DictionaryAdapter.Tests\Xml\**" />
 		<Compile Remove="Services.Logging.Tests\log4netIntegration\**" />
 		<Compile Remove="Services.Logging.Tests\NLogIntegration\**" />
 	</ItemGroup>

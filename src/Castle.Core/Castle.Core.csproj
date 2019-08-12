@@ -13,11 +13,11 @@
 		<AssemblyName>Castle.Core</AssemblyName>
 		<RootNamespace>Castle</RootNamespace>
 		<AssemblyTitle>Castle Core</AssemblyTitle>
-		<Description>Castle Core, including DynamicProxy, Logging Abstractions and DictionaryAdapter</Description>
+		<Description>Castle Core, including DynamicProxy and Logging Abstractions</Description>
 		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
 		<SignAssembly>True</SignAssembly>
 		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
-		<PackageTags>castle dynamicproxy dynamic proxy dynamicproxy2 dictionaryadapter emailsender</PackageTags>
+		<PackageTags>castle dynamicproxy dynamic proxy dynamicproxy2 emailsender</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -33,15 +33,14 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'OR'$(TargetFramework)'=='netstandard1.5'">
+		<PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
 		<PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
-		<PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
-		<PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
-		<PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
 		<PackageReference Include="System.Reflection" Version="4.3.0" />
 		<PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
-		<PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
+		<PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
 		<PackageReference Include="System.ComponentModel" Version="4.3.0" />
-		<PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+		<PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" /> <!-- TODO: Remove this dependency along with `AttributesUtil.GetTypeConverter()` -->
+		<PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Breaking Changes:
+- DictionaryAdapter has been extracted from `Castle.Core` and is now available as a separate package `Castle.DictionaryAdapter`. (@stakx, #468)
+
 ## 4.4.0 (2019-04-05)
 
 Enhancements:
