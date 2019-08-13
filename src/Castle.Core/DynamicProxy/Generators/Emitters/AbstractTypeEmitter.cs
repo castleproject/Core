@@ -279,6 +279,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return null;
 		}
 
+		[Obsolete("Intended for internal use only.")] // TODO: Remove this method.
 		public Type[] GetGenericArgumentsFor(Type genericType)
 		{
 			var types = new List<Type>();

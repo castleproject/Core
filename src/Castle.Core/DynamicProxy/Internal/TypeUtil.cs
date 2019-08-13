@@ -102,7 +102,13 @@ namespace Castle.DynamicProxy.Internal
 		{
 			if (parameter.GetTypeInfo().IsGenericTypeDefinition)
 			{
-				return parameter.GetGenericTypeDefinition().MakeGenericType(type.GetGenericArgumentsFor(parameter));
+				// If my understanding of `.IsGenericTypeDefinition` is correct, we arrive here
+				// only if `parameter` is not a fully constructed (closed) generic type... which
+				// according to ECMA-335, section II.9.4, shouldn't be possible:
+				//
+				// "The CLI does not support partial instantiation of generic types. And generic
+				// types shall not appear uninstantiated anywhere in metadata signature blobs."
+				throw new NotSupportedException();
 			}
 
 			if (parameter.GetTypeInfo().IsGenericType)
