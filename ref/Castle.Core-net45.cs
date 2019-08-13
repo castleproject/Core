@@ -3316,6 +3316,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
         public System.Collections.Generic.IEnumerable<Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference> GetAllFields() { }
         public Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference GetField(string name) { }
         public System.Type GetGenericArgument(string genericArgumentName) { }
+        [System.ObsoleteAttribute("Intended for internal use only.")]
         public System.Type[] GetGenericArgumentsFor(System.Type genericType) { }
         public System.Type[] GetGenericArgumentsFor(System.Reflection.MethodInfo genericMethod) { }
         public void SetGenericTypeParameters(System.Reflection.Emit.GenericTypeParameterBuilder[] genericTypeParameterBuilders) { }
