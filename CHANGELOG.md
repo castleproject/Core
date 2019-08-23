@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Bugfixes:
+- Prevent method name collisions when a proxy type implements more than two identically named interfaces having one or more identically named methods each. Name collisions are avoided by including the declaring types' namespaces in the proxy type's method names. (@stakx, #469)
+
 ## 4.4.0 (2019-04-05)
 
 Enhancements:
