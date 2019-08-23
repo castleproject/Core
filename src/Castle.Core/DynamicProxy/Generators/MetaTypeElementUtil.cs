@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Text;
 
@@ -22,13 +23,25 @@ namespace Castle.DynamicProxy.Generators
 	{
 		public static string CreateNameForExplicitImplementation(Type sourceType, string name)
 		{
+			var ns = sourceType.Namespace;
+			Debug.Assert(ns == null || ns != "");
+
 			if (sourceType.GetTypeInfo().IsGenericType)
 			{
 				var nameBuilder = new StringBuilder();
+				if (ns != null)
+				{
+					nameBuilder.Append(ns);
+					nameBuilder.Append('.');
+				}
 				nameBuilder.AppendNameOf(sourceType);
 				nameBuilder.Append('.');
 				nameBuilder.Append(name);
 				return nameBuilder.ToString();
+			}
+			else if (ns != null)
+			{
+				return string.Concat(ns, ".", sourceType.Name, ".", name);
 			}
 			else
 			{

@@ -82,6 +82,14 @@ namespace Castle.DynamicProxy.Tests
 			Assert.NotNull(implementingType.GetMethod($"{c.Namespace}.{c.Name}.M", bindingFlags));
 		}
 
+		// Verification of the BCL's representation of "no namespace" supports our implementation
+		// of the above naming scheme:
+		[Test]
+		public void Namespace_of_types_without_namespace_equals_null()
+		{
+			Assert.Null(typeof(global::IHaveNoNamespace).Namespace);
+		}
+
 		private sealed class TripleSharedName : ISharedNameFromA, ISharedNameFromB, ISharedNameFromC
 		{
 			void ISharedNameFromA.M() { }
@@ -90,3 +98,5 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 }
+
+internal interface IHaveNoNamespace { }
