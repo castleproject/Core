@@ -321,6 +321,19 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("IGenericWithNonGenericMethod`2[Int32,IGenericWithNonGenericMethod`1[Boolean]].SomeMethod", intNestedGenericBoolMethod.Name);
 		}
 
+		[Test]
+		public void Should_choose_noncolliding_member_names_when_implementing_identically_named_methods_and_types_from_different_namespaces_several_times()
+		{
+			generator.CreateInterfaceProxyWithoutTarget(
+				interfaceToProxy: typeof(Interfaces.A.ISharedName),
+				additionalInterfacesToProxy: new[]
+				{
+					typeof(Interfaces.B.ISharedName),
+					typeof(Interfaces.C.ISharedName),
+				},
+				interceptors: new StandardInterceptor());
+		}
+
 		private ParameterInfo[] GetMyTestMethodParams(Type type)
 		{
 			MethodInfo methodInfo = type.GetMethod("MyTestMethod", BindingFlags.Instance | BindingFlags.Public);
