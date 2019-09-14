@@ -115,7 +115,7 @@ namespace Castle.DynamicProxy
 					}
 				}
 
-				sortedMixedInterfaceTypes.Sort((x, y) => x.FullName.CompareTo(y.FullName));
+				sortedMixedInterfaceTypes.Sort((x, y) => String.CompareOrdinal(x.FullName, y.FullName));
 
 				for (var i = 0; i < sortedMixedInterfaceTypes.Count; i++)
 				{
