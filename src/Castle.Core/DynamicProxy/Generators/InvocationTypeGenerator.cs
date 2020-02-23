@@ -46,9 +46,6 @@ namespace Castle.DynamicProxy.Generators
 		///   Generates the constructor for the class that extends
 		///   <see cref = "AbstractInvocation" />
 		/// </summary>
-		/// <param name = "targetFieldType"></param>
-		/// <param name = "proxyGenerationOptions"></param>
-		/// <param name = "baseConstructor"></param>
 		protected abstract ArgumentReference[] GetBaseCtorArguments(Type targetFieldType,
 		                                                            ProxyGenerationOptions proxyGenerationOptions,
 		                                                            out ConstructorInfo baseConstructor);
@@ -115,11 +112,6 @@ namespace Castle.DynamicProxy.Generators
 			{
 				EmitCallThrowOnNoTarget(invokeMethodOnTarget);
 				return;
-			}
-
-			if (canChangeTarget)
-			{
-				EmitCallEnsureValidTarget(invokeMethodOnTarget);
 			}
 
 			var args = new Expression[parameters.Length];
@@ -235,13 +227,6 @@ namespace Castle.DynamicProxy.Generators
 				return invocation.CreateConstructor(baseCtorArguments);
 			}
 			return contributor.CreateConstructor(baseCtorArguments, invocation);
-		}
-
-		private AbstractCodeBuilder EmitCallEnsureValidTarget(MethodEmitter invokeMethodOnTarget)
-		{
-			return invokeMethodOnTarget.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(SelfReference.Self, InvocationMethods.EnsureValidTarget)));
 		}
 
 		private void EmitCallThrowOnNoTarget(MethodEmitter invokeMethodOnTarget)

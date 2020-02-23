@@ -29,8 +29,6 @@ namespace Castle.Core
 		/// <summary>
 		/// Constructs a pair with its values
 		/// </summary>
-		/// <param name="first"></param>
-		/// <param name="second"></param>
 		public Pair(TFirst first, TSecond second)
 		{
 			this.first = first;

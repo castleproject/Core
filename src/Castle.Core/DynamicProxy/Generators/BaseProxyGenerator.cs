@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
+	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Reflection;
@@ -102,15 +103,14 @@ namespace Castle.DynamicProxy.Generators
 		/// <summary>
 		///   It is safe to add mapping (no mapping for the interface exists)
 		/// </summary>
-		/// <param name = "implementer"></param>
-		/// <param name = "interface"></param>
-		/// <param name = "mapping"></param>
 		protected void AddMappingNoCheck(Type @interface, ITypeContributor implementer,
 		                                 IDictionary<Type, ITypeContributor> mapping)
 		{
 			mapping.Add(@interface, implementer);
 		}
 
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this method.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		protected void AddToCache(CacheKey key, Type type)
 		{
 			scope.RegisterInCache(key, type);
@@ -239,12 +239,14 @@ namespace Castle.DynamicProxy.Generators
 			var constructor = emitter.CreateConstructor(args);
 			if (baseConstructorParams != null && baseConstructorParams.Length != 0)
 			{
-				var last = baseConstructorParams.Last();
-				if (last.ParameterType.GetTypeInfo().IsArray && last.IsDefined(typeof(ParamArrayAttribute)))
+				var offset = 1 + fields.Length;
+				for (int i = 0, n = baseConstructorParams.Length; i < n; ++i)
 				{
-					var parameter = constructor.ConstructorBuilder.DefineParameter(args.Length, ParameterAttributes.None, last.Name);
-					var info = AttributeUtil.CreateInfo<ParamArrayAttribute>();
-					parameter.SetCustomAttribute(info.Builder);
+					var parameterBuilder = constructor.ConstructorBuilder.DefineParameter(offset + i, baseConstructorParams[i].Attributes, baseConstructorParams[i].Name);
+					foreach (var attribute in baseConstructorParams[i].GetNonInheritableAttributes())
+					{
+						parameterBuilder.SetCustomAttribute(attribute.Builder);
+					}
 				}
 			}
 
@@ -333,6 +335,8 @@ namespace Castle.DynamicProxy.Generators
 			return emitter.CreateTypeConstructor();
 		}
 
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this method.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		protected Type GetFromCache(CacheKey key)
 		{
 			return scope.GetFromCache(key);
@@ -380,44 +384,29 @@ namespace Castle.DynamicProxy.Generators
 			builtType.SetStaticField("proxyGenerationOptions", BindingFlags.NonPublic, ProxyGenerationOptions);
 		}
 
+		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Redeclare this method as `private protected`.
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		protected Type ObtainProxyType(CacheKey cacheKey, Func<string, INamingScope, Type> factory)
 		{
-			Type cacheType;
-			using (var locker = Scope.Lock.ForReading())
-			{
-				cacheType = GetFromCache(cacheKey);
-				if (cacheType != null)
-				{
-					Logger.DebugFormat("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
-					return cacheType;
-				}
-			}
+			bool notFoundInTypeCache = false;
 
-			// This is to avoid generating duplicate types under heavy multithreaded load.
-			using (var locker = Scope.Lock.ForReadingUpgradeable())
+			var proxyType = Scope.TypeCache.GetOrAdd(cacheKey, _ =>
 			{
-				// Only one thread at a time may enter an upgradable read lock.
-				// See if an earlier lock holder populated the cache.
-				cacheType = GetFromCache(cacheKey);
-				if (cacheType != null)
-				{
-					Logger.DebugFormat("Found cached proxy type {0} for target type {1}.", cacheType.FullName, targetType.FullName);
-					return cacheType;
-				}
-
-				// Log details about the cache miss
+				notFoundInTypeCache = true;
 				Logger.DebugFormat("No cached proxy type was found for target type {0}.", targetType.FullName);
+
 				EnsureOptionsOverrideEqualsAndGetHashCode(ProxyGenerationOptions);
 
 				var name = Scope.NamingScope.GetUniqueName("Castle.Proxies." + targetType.Name + "Proxy");
-				var proxyType = factory.Invoke(name, Scope.NamingScope.SafeSubScope());
+				return factory.Invoke(name, Scope.NamingScope.SafeSubScope());
+			});
 
-				// Upgrade the lock to a write lock. 
-				locker.Upgrade();
-
-				AddToCache(cacheKey, proxyType);
-				return proxyType;
+			if (!notFoundInTypeCache)
+			{
+				Logger.DebugFormat("Found cached proxy type {0} for target type {1}.", proxyType.FullName, targetType.FullName);
 			}
+
+			return proxyType;
 		}
 
 		private bool IsConstructorVisible(ConstructorInfo constructor)

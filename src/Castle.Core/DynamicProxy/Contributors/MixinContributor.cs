@@ -22,6 +22,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Internal;
 
 	public class MixinContributor : CompositeTypeContributor
 	{
@@ -72,7 +73,16 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			foreach (var @interface in interfaces)
 			{
-				var item = new InterfaceMembersCollector(@interface);
+				MembersCollector item;
+				if (@interface.GetTypeInfo().IsInterface)
+				{
+					item = new InterfaceMembersCollector(@interface);
+				}
+				else
+				{
+					Debug.Assert(@interface.IsDelegateType());
+					item = new DelegateTypeMembersCollector(@interface);
+				}
 				item.CollectMembersToProxy(hook);
 				yield return item;
 			}
@@ -132,23 +142,14 @@ namespace Castle.DynamicProxy.Contributors
 
 			// no locking required as we're already within a lock
 
-			var invocation = scope.GetFromCache(key);
-			if (invocation != null)
-			{
-				return invocation;
-			}
-
-			invocation = new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
-			                                                    method,
-			                                                    method.Method,
-			                                                    canChangeTarget,
-			                                                    null)
+			return scope.TypeCache.GetOrAddWithoutTakingLock(key, _ =>
+				new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
+				                                       method,
+				                                       method.Method,
+				                                       canChangeTarget,
+				                                       null)
 				.Generate(emitter, options, namingScope)
-				.BuildType();
-
-			scope.RegisterInCache(key, invocation);
-
-			return invocation;
+				.BuildType());
 		}
 	}
 }

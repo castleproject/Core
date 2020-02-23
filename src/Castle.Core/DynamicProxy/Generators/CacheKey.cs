@@ -15,8 +15,11 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
+	using System.ComponentModel;
 	using System.Reflection;
 
+	[Obsolete("Intended for internal use only.")] // TODO: Redeclare this type as `internal`.
+	[EditorBrowsable(EditorBrowsableState.Never)]
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
@@ -58,7 +61,7 @@ namespace Castle.DynamicProxy.Generators
 			var result = target.GetHashCode();
 			foreach (var inter in interfaces)
 			{
-				result += 29 + inter.GetHashCode();
+				result = 29*result + inter.GetHashCode();
 			}
 			if (options != null)
 			{

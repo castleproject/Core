@@ -2,17 +2,66 @@
 
 ## Unreleased
 
+Bugfixes:
+- Prevent method name collisions when a proxy type implements more than two identically named interfaces having one or more identically named methods each. Name collisions are avoided by including the declaring types' namespaces in the proxy type's method names. (@stakx, #469)
+
+## 4.4.0 (2019-04-05)
+
+Enhancements:
+- Added trace logging level below Debug; maps to Trace in log4net/NLog, and Verbose in Serilog (@pi3k14, #404)
+- Recognize read-only parameters by the `In` modreq (@zvirja, #406)
+- DictionaryAdapter: Exposed GetAdapter overloads with NameValueCollection parameter in .NET Standard (@rzontar, #423)
+- Ability to add delegate mixins to proxies using `ProxyGenerationOptions.AddDelegate[Type]Mixin`. You can bind to the mixed-in `Invoke` methods on the proxy using `ProxyUtil.CreateDelegateToMixin`. (@stakx, #436)
+- New `IInvocation.CaptureProceedInfo()` method to enable better implementations of asynchronous interceptors (@stakx, #439)
+
+Deprecations:
+- The API surrounding `Lock` has been deprecated. This consists of the members listed below. Consider using the Base Class Library's `System.Threading.ReaderWriterLockSlim` instead. (@stakx, #391)
+   - `Castle.Core.Internal.Lock` (class)
+   - `Castle.Core.Internal.ILockHolder` (interface)
+   - `Castle.Core.Internal.IUpgradeableLockHolder` (interface)
+- You should no longer manually emit types into DynamicProxy's dynamic assembly. For this reason, the following member has been deprecated. (@stakx, #445)
+   - `Castle.DynamicProxy.ModuleScope.DefineType` (method)
+- The proxy type cache in `ModuleScope` should no longer be accessed directly. For this reason, the members listed below have been deprecated. (@stakx, #391)
+   - `Castle.DynamicProxy.ModuleScope.Lock` (property)
+   - `Castle.DynamicProxy.ModuleScope.GetFromCache` (method)
+   - `Castle.DynamicProxy.ModuleScope.RegisterInCache` (method)
+   - `Castle.DynamicProxy.Generators.BaseProxyGenerator.AddToCache` (method)
+   - `Castle.DynamicProxy.Generators.BaseProxyGenerator.GetFromCache` (method)
+   - `Castle.DynamicProxy.Generators.CacheKey` (class)
+   - `Castle.DynamicProxy.Serialization.CacheMappingsAttribute.ApplyTo` (method)
+   - `Castle.DynamicProxy.Serialization.CacheMappingsAttribute.GetDeserializedMappings` (method)
+
+## 4.3.1 (2018-06-21)
+
+Enhancements:
+ - Use shared read locking to reduce lock contention in InvocationHelper and ProxyUtil (@TimLovellSmith, #377)
+
+Bugfixes:
+- Prevent interceptors from being able to modify `in` parameters (@stakx, #370)
+- Make default value replication of optional parameters more tolerant of default values that are represented in metadata with a mismatched type (@stakx, #371)
+- Fix a concurrency issue (writing without taking a write lock first) in `BaseProxyGenerator.ObtainProxyType` (@stakx, #383)
+
+Deprecations:
+- `Castle.DynamicProxy.Generators.Emitters.ArgumentsUtil.IsAnyByRef` (@stakx, #370)
+
+## 4.3.0 (2018-06-07)
+
 Enhancements:
 - Added .NET Standard/.NET Core support for NLog (@snakefoot, #200)
 - Added .NET Standard/.NET Core support for log4net (@snakefoot, #201)
 - DynamicProxy supported C# `in` parameter modifiers only on the .NET Framework up until now. Adding .NET Standard 1.5 as an additional target to the NuGet package makes them work on .NET Core, too (@stakx, #339)
+- Replicate custom attributes on constructor parameters in the generated proxy type constructors to fulfill introspection of constructors. This does not change the proxying behavior. (@stakx, #341)
 - Improve performance of InvocationHelper cache lookups (@tangdf, #358)
+- Improve fidelity of default value replication of optional parameters to fulfill inspection of the generated proxies. This does not change the proxying behavior. (@stakx, #356)
+- Improve cache performance of MethodFinder.GetAllInstanceMethods (@tangdf, #357)
 
 Bugfixes:
 - Fix Castle.Services.Logging.Log4netIntegration assembly file name casing which breaks on Linux (@beginor, #324)
 - Fix Castle.DynamicProxy.Generators.AttributesToAvoidReplicating not being thread safe (InvalidOperationException "Collection was modified; enumeration operation may not execute.") (@BrunoJuchli, #334)
 - Fix TraceLoggerFactory to allow specifying the default logger level (@acjh, #342)
 - Ensure that DynamicProxy doesn't create invalid dynamic assemblies when proxying types from non-strong-named assemblies (@stakx, #327)
+- Fix interceptor selectors being passed `System.RuntimeType` for class proxies instead of the target type (@stakx, #359)
+- Replace NullReferenceException with descriptive one thrown when interceptors swallow exceptions and cause a null value type to be returned (@jonorossi, #85)
 
 ## 4.2.1 (2017-10-11)
 

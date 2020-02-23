@@ -14,6 +14,12 @@
 
 namespace Castle.Core.Internal
 {
+	using System;
+	using System.ComponentModel;
+	using System.Threading;
+
+	[Obsolete("Consider using `System.Threading.ReaderWriterLockSlim` instead of `Lock` and related types.")] // TODO: Remove this type.
+	[EditorBrowsable(EditorBrowsableState.Never)]
 	public abstract class Lock
 	{
 		public abstract IUpgradeableLockHolder ForReadingUpgradeable();
@@ -27,10 +33,14 @@ namespace Castle.Core.Internal
 		/// <summary>
 		/// Creates a new lock.
 		/// </summary>
-		/// <returns></returns>
 		public static Lock Create()
 		{
 			return new SlimReadWriteLock();
+		}
+
+		internal static Lock CreateFor(ReaderWriterLockSlim underlyingLock)
+		{
+			return new SlimReadWriteLock(underlyingLock);
 		}
 	}
 }

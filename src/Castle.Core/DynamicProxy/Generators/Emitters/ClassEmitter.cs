@@ -16,8 +16,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
+
+	using Castle.DynamicProxy.Internal;
 
 	public class ClassEmitter : AbstractTypeEmitter
 	{
@@ -48,7 +51,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				foreach (var inter in interfaces)
 				{
-					TypeBuilder.AddInterfaceImplementation(inter);
+					if (inter.GetTypeInfo().IsInterface)
+					{
+						TypeBuilder.AddInterfaceImplementation(inter);
+					}
+					else
+					{
+						Debug.Assert(inter.IsDelegateType());
+					}
 				}
 			}
 

@@ -191,7 +191,7 @@ namespace Castle.Core.Logging
 			switch (level)
 			{
 				case SourceLevels.All:
-					return LoggerLevel.Debug;
+					return LoggerLevel.Trace;
 				case SourceLevels.Verbose:
 					return LoggerLevel.Debug;
 				case SourceLevels.Information:
@@ -210,6 +210,8 @@ namespace Castle.Core.Logging
 		{
 			switch (level)
 			{
+				case LoggerLevel.Trace:
+					return SourceLevels.All;
 				case LoggerLevel.Debug:
 					return SourceLevels.Verbose;
 				case LoggerLevel.Info:
@@ -228,6 +230,7 @@ namespace Castle.Core.Logging
 		{
 			switch (level)
 			{
+				case LoggerLevel.Trace:
 				case LoggerLevel.Debug:
 					return TraceEventType.Verbose;
 				case LoggerLevel.Info:

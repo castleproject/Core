@@ -34,7 +34,31 @@ namespace Castle.Core.Logging.Tests
 			stream = new MemoryStream();
 
 			logger = new StreamLogger(Name, stream);
-			logger.Level = LoggerLevel.Debug;
+			logger.Level = LoggerLevel.Trace;
+		}
+
+		[Test]
+		public void Trace()
+		{
+			string message = "Trace message";
+			LoggerLevel level = LoggerLevel.Trace;
+			Exception exception = null;
+
+			logger.Trace(message);
+
+			ValidateCall(level, message, exception);
+		}
+
+		[Test]
+		public void TraceWithException()
+		{
+			string message = "Trace message 2";
+			LoggerLevel level = LoggerLevel.Trace;
+			Exception exception = new Exception();
+
+			logger.Trace(message, exception);
+
+			ValidateCall(level, message, exception);
 		}
 
 		[Test]

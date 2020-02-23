@@ -17,6 +17,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using System.Reflection;
 
@@ -436,25 +437,28 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapter_WithDefaultConversions_WorksFine()
 		{
-			var today = DateTime.Today;
-			var guid = Guid.NewGuid();
+			UsingCulture(CultureInfo.InvariantCulture, () =>
+			{
+				var today = DateTime.Today;
+				var guid = Guid.NewGuid();
 
-			var conversions = factory.GetAdapter<IConversionsToString>(dictionary);
-			conversions.Int = 22;
-			conversions.Float = 98.6F;
-			conversions.Double = 3.14;
-			conversions.Decimal = 100;
-			conversions.DateTime = today;
-			conversions.Guid = guid;
-			conversions.Phone = new Phone("2124751012", "22");
+				var conversions = factory.GetAdapter<IConversionsToString>(dictionary);
+				conversions.Int = 22;
+				conversions.Float = 98.6F;
+				conversions.Double = 3.14;
+				conversions.Decimal = 100;
+				conversions.DateTime = today;
+				conversions.Guid = guid;
+				conversions.Phone = new Phone("2124751012", "22");
 
-			Assert.AreEqual(string.Format("{0}", 22), dictionary["Int"]);
-			Assert.AreEqual(string.Format("{0}", 98.6), dictionary["Float"]);
-			Assert.AreEqual(string.Format("{0}", 3.14D), dictionary["Double"]);
-			Assert.AreEqual(string.Format("{0}", 100M), dictionary["Decimal"]);
-			Assert.AreEqual(today.ToString("d"), dictionary["DateTime"]);
-			Assert.AreEqual(guid.ToString(), dictionary["Guid"]);
-			Assert.AreEqual("2124751012,22", dictionary["Phone"]);
+				Assert.AreEqual(string.Format("{0}", 22), dictionary["Int"]);
+				Assert.AreEqual(string.Format("{0}", 98.6), dictionary["Float"]);
+				Assert.AreEqual(string.Format("{0}", 3.14D), dictionary["Double"]);
+				Assert.AreEqual(string.Format("{0}", 100M), dictionary["Decimal"]);
+				Assert.AreEqual(today.ToString("yyyy-MM-dd"), dictionary["DateTime"]);
+				Assert.AreEqual(guid.ToString(), dictionary["Guid"]);
+				Assert.AreEqual("2124751012,22", dictionary["Phone"]);
+			});
 		}
 
 		[Test]
@@ -482,23 +486,26 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		[Test]
 		public void UpdateAdapter_WithDefaultNullableConversions_WorksFine()
 		{
-			DateTime? today = DateTime.Today;
-			Guid? guid = Guid.NewGuid();
+			UsingCulture(CultureInfo.InvariantCulture, () =>
+			{
+				DateTime? today = DateTime.Today;
+				Guid? guid = Guid.NewGuid();
 
-			var conversions = factory.GetAdapter<IConversionsToString>(dictionary);
-			conversions.NullInt = 22;
-			conversions.NullFloat = 98.6F;
-			conversions.NullDouble = 3.14;
-			conversions.NullDecimal = 100;
-			conversions.NullDateTime = today;
-			conversions.NullGuid = guid;
+				var conversions = factory.GetAdapter<IConversionsToString>(dictionary);
+				conversions.NullInt = 22;
+				conversions.NullFloat = 98.6F;
+				conversions.NullDouble = 3.14;
+				conversions.NullDecimal = 100;
+				conversions.NullDateTime = today;
+				conversions.NullGuid = guid;
 
-			Assert.AreEqual(string.Format("{0}", 22), dictionary["NullInt"]);
-			Assert.AreEqual(string.Format("{0}", 98.6), dictionary["NullFloat"]);
-			Assert.AreEqual(string.Format("{0}", 3.14D), dictionary["NullDouble"]);
-			Assert.AreEqual(string.Format("{0}", 100M), dictionary["NullDecimal"]);
-			Assert.AreEqual(today.Value.ToString("d"), dictionary["NullDateTime"]);
-			Assert.AreEqual(guid.ToString(), dictionary["NullGuid"]);
+				Assert.AreEqual(string.Format("{0}", 22), dictionary["NullInt"]);
+				Assert.AreEqual(string.Format("{0}", 98.6), dictionary["NullFloat"]);
+				Assert.AreEqual(string.Format("{0}", 3.14D), dictionary["NullDouble"]);
+				Assert.AreEqual(string.Format("{0}", 100M), dictionary["NullDecimal"]);
+				Assert.AreEqual(today.Value.ToString("yyyy-MM-dd"), dictionary["NullDateTime"]);
+				Assert.AreEqual(guid.ToString(), dictionary["NullGuid"]);
+			});
 		}
 
 		[Test]
@@ -1509,6 +1516,20 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsTrue(dictionary.Contains("NullableValue"));
 			empty.NullableValue = null;
 			Assert.IsFalse(dictionary.Contains("NullableValue"));
+		}
+
+		private void UsingCulture(CultureInfo culture, Action action)
+		{
+			CultureInfo originalCulture = CultureInfo.CurrentCulture;
+			CultureInfo.CurrentCulture = culture;
+			try
+			{
+				action.Invoke();
+			}
+			finally
+			{
+				CultureInfo.CurrentCulture = originalCulture;
+			}
 		}
 	}
 }

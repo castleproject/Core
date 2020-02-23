@@ -1,41 +1,77 @@
-image: Visual Studio 2017
+image:
+- Visual Studio 2017
+- Ubuntu
 
+
+# ----------------
+#  ALL BUILD JOBS
+# ----------------
 skip_tags: false
-
 test: off
 
-init:
-- ps: >-
-    if ($env:APPVEYOR_REPO_TAG -eq "true")
-    {
-        Update-AppveyorBuild -Version ($env:APPVEYOR_REPO_TAG_NAME).TrimStart("v")
-    }
 
-after_build:
-- ps: >-
-    $wc = New-Object System.Net.WebClient
+for:
+- # -----------------
+  #  LINUX BUILD JOB
+  # -----------------
+  matrix:
+    only:
+    - image: Ubuntu
 
-    $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "NetCoreClrTestResults.xml"))
+  # build and run tests
+  build_script:
+  - uname -a
+  - mono --version
+  - ./build.sh
 
-    $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "NetCoreClrWeakNamedTestResults.xml"))
+  # upload test results
+  after_build:
+  - find "$APPVEYOR_BUILD_FOLDER" -type f -name '*TestResults.xml' -print0 | xargs -0 -I '{}' curl -F 'file=@{}' "https://ci.appveyor.com/api/testresults/nunit3/$APPVEYOR_JOB_ID"
 
-    $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "DesktopClrTestResults.xml"))
+  # deployment is handled exclusively by the Windows build job (below)
+  deploy: off
 
-    $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "DesktopClrWeakNamedTestResults.xml"))
 
-on_success:
-- ps: >-
-    if ($env:APPVEYOR_REPO_TAG -eq "true")
-    {
-        nuget push ".\build\Castle.Core.${env:APPVEYOR_BUILD_VERSION}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
-        nuget push ".\build\Castle.Core-log4net.${env:APPVEYOR_BUILD_VERSION}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
-        nuget push ".\build\Castle.Core-NLog.${env:APPVEYOR_BUILD_VERSION}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
-        nuget push ".\build\Castle.Core-Serilog.${env:APPVEYOR_BUILD_VERSION}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
-    }
+- # -------------------
+  #  WINDOWS BUILD JOB
+  # -------------------
+  matrix:
+    only:
+    - image: Visual Studio 2017
 
-build_script:
-- cmd: build.cmd
+  # update AppVeyor build version; this matters for deployments
+  init:
+  - ps: |
+      if ($env:APPVEYOR_REPO_TAG -eq "true")
+      {
+          Update-AppveyorBuild -Version ($env:APPVEYOR_REPO_TAG_NAME).TrimStart("v")
+      }
 
-artifacts:
-- path: build\*.nupkg
-  name: core
+  # build and run tests
+  build_script:
+  - cmd: build.cmd
+
+  # upload test results
+  after_build:
+  - ps: |
+      $wc = New-Object System.Net.WebClient
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "NetCoreClrTestResults.xml"))
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "NetCoreClrWeakNamedTestResults.xml"))
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "DesktopClrTestResults.xml"))
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "DesktopClrWeakNamedTestResults.xml"))
+
+  # push packages to NuGet on tag builds
+  on_success:
+  - ps: |
+      if ($env:APPVEYOR_REPO_TAG -eq "true")
+      {
+          nuget push ".\build\Castle.Core.${env:APPVEYOR_BUILD_VERSION}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
+          nuget push ".\build\Castle.Core-log4net.${env:APPVEYOR_BUILD_VERSION}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
+          nuget push ".\build\Castle.Core-NLog.${env:APPVEYOR_BUILD_VERSION}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
+          nuget push ".\build\Castle.Core-Serilog.${env:APPVEYOR_BUILD_VERSION}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
+      }
+
+  # upload packages to AppVeyor
+  artifacts:
+  - path: build\*.nupkg
+    name: core

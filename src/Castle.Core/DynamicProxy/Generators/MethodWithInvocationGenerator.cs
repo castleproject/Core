@@ -26,22 +26,33 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
 	public class MethodWithInvocationGenerator : MethodGenerator
 	{
 		private readonly IInvocationCreationContributor contributor;
 		private readonly GetTargetExpressionDelegate getTargetExpression;
+		private readonly GetTargetExpressionDelegate getTargetTypeExpression;
 		private readonly Reference interceptors;
 		private readonly Type invocation;
 
 		public MethodWithInvocationGenerator(MetaMethod method, Reference interceptors, Type invocation,
 		                                     GetTargetExpressionDelegate getTargetExpression,
 		                                     OverrideMethodDelegate createMethod, IInvocationCreationContributor contributor)
+			: this(method, interceptors, invocation, getTargetExpression, null, createMethod, contributor)
+		{
+		}
+
+		public MethodWithInvocationGenerator(MetaMethod method, Reference interceptors, Type invocation,
+		                                     GetTargetExpressionDelegate getTargetExpression,
+		                                     GetTargetExpressionDelegate getTargetTypeExpression,
+		                                     OverrideMethodDelegate createMethod, IInvocationCreationContributor contributor)
 			: base(method, createMethod)
 		{
 			this.invocation = invocation;
 			this.getTargetExpression = getTargetExpression;
+			this.getTargetTypeExpression = getTargetTypeExpression;
 			this.interceptors = interceptors;
 			this.contributor = contributor;
 		}
@@ -125,8 +136,19 @@ namespace Castle.DynamicProxy.Generators
 
 			if (MethodToOverride.ReturnType != typeof(void))
 			{
-				// Emit code to return with cast from ReturnValue
 				var getRetVal = new MethodInvocationExpression(invocationLocal, InvocationMethods.GetReturnValue);
+
+				// Emit code to ensure a value type return type is not null, otherwise the cast will cause a null-deref
+				if (emitter.ReturnType.GetTypeInfo().IsValueType && !emitter.ReturnType.IsNullableType())
+				{
+					LocalReference returnValue = emitter.CodeBuilder.DeclareLocal(typeof(object));
+					emitter.CodeBuilder.AddStatement(new AssignStatement(returnValue, getRetVal));
+
+					emitter.CodeBuilder.AddExpression(new IfNullExpression(returnValue, new ThrowStatement(typeof(InvalidOperationException),
+						"Interceptors failed to set a return value, or swallowed the exception thrown by the target")));
+				}
+
+				// Emit code to return with cast from ReturnValue
 				emitter.CodeBuilder.AddStatement(new ReturnStatement(new ConvertExpression(emitter.ReturnType, getRetVal)));
 			}
 			else
@@ -147,11 +169,19 @@ namespace Castle.DynamicProxy.Generators
 
 			var methodInterceptorsField = BuildMethodInterceptorsField(@class, MethodToOverride, namingScope);
 
+			Expression targetTypeExpression;
+			if (getTargetTypeExpression != null)
+			{
+				targetTypeExpression = getTargetTypeExpression(@class, MethodToOverride);
+			}
+			else
+			{
+				targetTypeExpression = new MethodInvocationExpression(null, TypeUtilMethods.GetTypeOrNull, getTargetExpression(@class, MethodToOverride));
+			}
+
 			var emptyInterceptors = new NewArrayExpression(0, typeof(IInterceptor));
 			var selectInterceptors = new MethodInvocationExpression(selector, InterceptorSelectorMethods.SelectInterceptors,
-			                                                        new MethodInvocationExpression(null,
-				                                                        TypeUtilMethods.GetTypeOrNull,
-				                                                        getTargetExpression(@class, MethodToOverride)),
+			                                                        targetTypeExpression,
 			                                                        proxiedMethodTokenExpression, interceptors.ToExpression())
 			{ VirtualCall = true };
 

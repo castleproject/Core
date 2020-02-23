@@ -57,6 +57,15 @@ echo ---------------------------
 dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp1.1/Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3
 dotnet ./src/Castle.Core.Tests.WeakNamed/bin/Release/netcoreapp1.1/Castle.Core.Tests.WeakNamed.dll --result=NetCoreClrWeakNamedTestResults.xml;format=nunit3
 
+# Ensure that all test runs produced a protocol file:
+if [[ !( -f NetCoreClrTestResults.xml &&
+         -f NetCoreClrWeakNamedTestResults.xml &&
+         -f DesktopClrTestResults.xml &&
+         -f DesktopClrWeakNamedTestResults.xml ) ]]; then
+    echo "Incomplete test results. Some test runs might not have terminated properly. Failing the build."
+    exit 1
+fi
+
 # Unit test failure
 NETCORE_FAILCOUNT=$(grep -F "One or more child tests had errors" NetCoreClrTestResults.xml NetCoreClrWeakNamedTestResults.xml | wc -l)
 if [ $NETCORE_FAILCOUNT -ne 0 ]

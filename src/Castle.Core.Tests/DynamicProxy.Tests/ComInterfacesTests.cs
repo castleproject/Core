@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.Reflection;
 	using System.Runtime.InteropServices;
 
-	using ADODB;
+	using ComInteropTypes.ADODB;
 
 	using NUnit.Framework;
 
@@ -29,7 +29,10 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Marshal_Release_throws_when_called_with_IntPtr_Zero()
 		{
-			Assert.Throws<ArgumentNullException>(() => Marshal.Release(IntPtr.Zero));
+			Assert.Catch<ArgumentException>(() => Marshal.Release(IntPtr.Zero));
+			//           ^^^^^^^^^^^^^^^^^
+			// We're not going to be more precise because Mono and the CLR don't throw the same exception type.
+			// See https://github.com/mono/mono/issues/15853.
 		}
 
 		[Test]
@@ -39,19 +42,12 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		[Platform(Include = "Win", Reason = "Depends on OLE32.dll due to co-class instantiation, which is likely only available on Windows.")]
 		public void Can_proxy_existing_com_object()
 		{
 			var command = new Command();
-			var parameter = ExtractActualComParameterObject(command.CreateParameter("foo"));
+			var parameter = command.CreateParameter("foo");
 			generator.CreateInterfaceProxyWithTargetInterface(parameter);
-		}
-
-		private Parameter ExtractActualComParameterObject(Parameter parameter)
-		{
-			var type = parameter.GetType();
-			var method = type.GetMethod("GetParm", BindingFlags.Instance | BindingFlags.NonPublic);
-			var actualParameter = method.Invoke(parameter, null);
-			return (Parameter) actualParameter;
 		}
 	}
 }

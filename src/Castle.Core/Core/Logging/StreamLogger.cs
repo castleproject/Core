@@ -124,7 +124,7 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name = "name">The name of the log.</param>
 		/// <param name = "writer">The <c>StreamWriter</c> the log will write to.</param>
-		protected StreamLogger(String name, StreamWriter writer) : base(name, LoggerLevel.Debug)
+		protected StreamLogger(String name, StreamWriter writer) : base(name, LoggerLevel.Trace)
 		{
 			this.writer = writer;
 			writer.AutoFlush = true;

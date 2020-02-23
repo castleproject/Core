@@ -19,17 +19,73 @@ namespace Castle.DynamicProxy
 	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
+	using System.Threading;
 
 #if FEATURE_REMOTING
 	using System.Runtime.Remoting;
 #endif
 
 	using Castle.Core.Internal;
+	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Internal;
 
 	public static class ProxyUtil
 	{
-		private static readonly IDictionary<Assembly, bool> internalsVisibleToDynamicProxy = new Dictionary<Assembly, bool>();
-		private static readonly Lock internalsVisibleToDynamicProxyLock = Lock.Create();
+		private static readonly SynchronizedDictionary<Assembly, bool> internalsVisibleToDynamicProxy = new SynchronizedDictionary<Assembly, bool>();
+
+		/// <summary>
+		///   Creates a delegate of the specified type to a suitable `Invoke` method
+		///   on the given <paramref name="proxy"/> instance.
+		/// </summary>
+		/// <param name="proxy">The proxy instance to which the delegate should be bound.</param>
+		/// <typeparam name="TDelegate">The type of delegate that should be created.</typeparam>
+		/// <exception cref="MissingMethodException">
+		///   The <paramref name="proxy"/> does not have an `Invoke` method that is compatible with
+		///   the requested <typeparamref name="TDelegate"/> type.
+		/// </exception>
+		public static TDelegate CreateDelegateToMixin<TDelegate>(object proxy)
+		{
+			return (TDelegate)(object)CreateDelegateToMixin(proxy, typeof(TDelegate));
+		}
+
+		/// <summary>
+		///   Creates a delegate of the specified type to a suitable `Invoke` method
+		///   on the given <paramref name="proxy"/> instance.
+		/// </summary>
+		/// <param name="proxy">The proxy instance to which the delegate should be bound.</param>
+		/// <param name="delegateType">The type of delegate that should be created.</param>
+		/// <exception cref="MissingMethodException">
+		///   The <paramref name="proxy"/> does not have an `Invoke` method that is compatible with
+		///   the requested <paramref name="delegateType"/>.
+		/// </exception>
+		public static Delegate CreateDelegateToMixin(object proxy, Type delegateType)
+		{
+			if (proxy == null) throw new ArgumentNullException(nameof(proxy));
+			if (delegateType == null) throw new ArgumentNullException(nameof(delegateType));
+			if (!delegateType.IsDelegateType()) throw new ArgumentException("Type is not a delegate type.", nameof(delegateType));
+
+			var invokeMethod = delegateType.GetMethod("Invoke");
+			var proxiedInvokeMethod =
+				proxy
+				.GetType()
+				.GetMember("Invoke", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+				.Cast<MethodInfo>()
+				.FirstOrDefault(m => MethodSignatureComparer.Instance.EqualParameters(m, invokeMethod));
+
+			if (proxiedInvokeMethod == null)
+			{
+				throw new MissingMethodException("The proxy does not have an Invoke method " +
+				                                 "that is compatible with the requested delegate type.");
+			}
+			else
+			{
+#if FEATURE_NETCORE_REFLECTION_API
+				return proxiedInvokeMethod.CreateDelegate(delegateType, proxy);
+#else
+				return Delegate.CreateDelegate(delegateType, proxy, proxiedInvokeMethod);
+#endif
+			}
+		}
 
 		public static object GetUnproxiedInstance(object instance)
 		{
@@ -131,26 +187,11 @@ namespace Castle.DynamicProxy
 		/// <param name="asm">The assembly to inspect.</param>
 		internal static bool AreInternalsVisibleToDynamicProxy(Assembly asm)
 		{
-			using (var locker = internalsVisibleToDynamicProxyLock.ForReadingUpgradeable())
+			return internalsVisibleToDynamicProxy.GetOrAdd(asm, a =>
 			{
-				if (internalsVisibleToDynamicProxy.ContainsKey(asm))
-				{
-					return internalsVisibleToDynamicProxy[asm];
-				}
-
-				locker.Upgrade();
-
-				if (internalsVisibleToDynamicProxy.ContainsKey(asm))
-				{
-					return internalsVisibleToDynamicProxy[asm];
-				}
-
 				var internalsVisibleTo = asm.GetCustomAttributes<InternalsVisibleToAttribute>();
-				var found = internalsVisibleTo.Any(attr => attr.AssemblyName.Contains(ModuleScope.DEFAULT_ASSEMBLY_NAME));
-
-				internalsVisibleToDynamicProxy.Add(asm, found);
-				return found;
-			}
+				return internalsVisibleTo.Any(attr => attr.AssemblyName.Contains(ModuleScope.DEFAULT_ASSEMBLY_NAME));
+			});
 		}
 
 		internal static bool IsAccessibleType(Type target)

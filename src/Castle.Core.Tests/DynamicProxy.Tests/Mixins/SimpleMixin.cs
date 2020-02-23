@@ -21,9 +21,6 @@ namespace Castle.DynamicProxy.Tests.Mixins
 		int DoSomething();
 	}
 
-	/// <summary>
-	/// Summary description for SimpleMixin.
-	/// </summary>
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif

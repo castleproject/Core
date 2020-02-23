@@ -78,10 +78,13 @@ namespace Castle.DynamicProxy.Contributors
 
 			var invocation = GetInvocationType(method, @class, options);
 
+			GetTargetExpressionDelegate getTargetTypeExpression = (c, m) => new TypeTokenExpression(targetType);
+
 			return new MethodWithInvocationGenerator(method,
 			                                         @class.GetField("__interceptors"),
 			                                         invocation,
-			                                         (c, m) => new TypeTokenExpression(targetType),
+			                                         getTargetTypeExpression,
+			                                         getTargetTypeExpression,
 			                                         overrideMethod,
 			                                         null);
 		}
@@ -176,19 +179,10 @@ namespace Castle.DynamicProxy.Contributors
 					ToArray(),
 				null);
 
-			var type = scope.GetFromCache(key);
-			if (type != null)
-			{
-				return type;
-			}
-
-			type = new DelegateTypeGenerator(method, targetType)
+			return scope.TypeCache.GetOrAddWithoutTakingLock(key, _ =>
+				new DelegateTypeGenerator(method, targetType)
 				.Generate(@class, options, namingScope)
-				.BuildType();
-
-			scope.RegisterInCache(key, type);
-
-			return type;
+				.BuildType());
 		}
 
 		private Type GetInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)

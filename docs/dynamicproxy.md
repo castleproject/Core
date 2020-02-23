@@ -8,6 +8,7 @@ DynamicProxy generates proxies for your objects that you can use to transparentl
 * [FakeItEasy](http://fakeiteasy.github.io/) uses it to provide "the easy mocking library for .NET"
 * [Rhino Mocks](https://www.hibernatingrhinos.com/oss/rhino-mocks) uses it to provide "a dynamic mock object framework for the .NET platform"
 * [NHibernate](http://nhibernate.info/) uses it to provide lazy loading capabilities (pre-v4.0)
+* [Entity Framework Core](https://github.com/aspnet/EntityFrameworkCore) uses it in its package [Microsoft.EntityFrameworkCore.Proxies](https://www.nuget.org/packages/Microsoft.EntityFrameworkCore.Proxies) to provide lazy-loading proxies
 
 If you're new to DynamicProxy you can read a [quick introduction](dynamicproxy-introduction.md), browse through description of the core types in the library, or go into more advanced, in detail discussion:
 * [Kinds of proxy objects](dynamicproxy-kinds-of-proxy-objects.md)
@@ -18,6 +19,8 @@ If you're new to DynamicProxy you can read a [quick introduction](dynamicproxy-i
 * [Use proxy generation hooks and interceptor selectors for fine grained control](dynamicproxy-fine-grained-control.md)
 * [SRP applies to interceptors](dynamicproxy-srp-applies-to-interceptors.md)
 * [Behavior of by-reference parameters during interception](dynamicproxy-by-ref-parameters.md)
+* [Optional parameter value limitations](dynamicproxy-optional-parameter-value-limitations.md)
+* [Asynchronous interception](dynamicproxy-async-interception.md)
 
 :information_source: **Where is `Castle.DynamicProxy.dll`?:** DynamicProxy used to live in its own assembly. As part of changes in version 2.5 it was merged into `Castle.Core.dll` and that's where you'll find it.
 

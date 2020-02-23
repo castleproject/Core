@@ -174,9 +174,9 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		[TestCaseSource("FromExpressionTestCases")]
 		public void FromExpression_Creates_Same_CustomAttributeInfo_As_Calling_The_Constructor(
-			Expression<Func<Attribute>> expr, CustomAttributeInfo expected)
+			Opaque<Expression<Func<Attribute>>> expr, CustomAttributeInfo expected)
 		{
-			var actual = CustomAttributeInfo.FromExpression(expr);
+			var actual = CustomAttributeInfo.FromExpression(expr.Value);
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -214,11 +214,42 @@ namespace Castle.DynamicProxy.Tests
 					new object[0],
 					new[] { intField, stringField, arrayField },
 					new object[] { 42, "foo", new[] { 1, 2, 3 } }));
+
+			// Use local variables instead of constants in the expression
+			int arg1 = 42;
+			string arg2 = "foo";
+			int[] arg3 = { 1, 2, 3 };
+			yield return CreateFromExpressionTestCase(
+				() => new MyAttribute1(arg1, arg2, arg3),
+				new CustomAttributeInfo(ctorWithArgs, new object[] { arg1, arg2, arg3 }));
+
 		}
 
 		private static object[] CreateFromExpressionTestCase(Expression<Func<Attribute>> expr, CustomAttributeInfo expected)
 		{
-			return new object[] { expr, expected };
+			return new object[] { new Opaque<Expression<Func<Attribute>>>(expr), expected };
+		}
+
+		// NOTE: The following type is needed as a workaround for an issue with either NUnit 3's test adapter,
+		// or Visual Studio's test executor: One of them appears to be unable to parse formatted LINQ expression
+		// trees. Therefore, we need to wrap those in a dummy type to prevent formatting. This will change how
+		// the individual test cases are displayed/identified in Test Explorer.
+		//
+		// See https://developercommunity.visualstudio.com/content/problem/663145/test-explorer-in-vs-1620-can-no-longer-run-certain.html.
+
+		public struct Opaque<T>
+		{
+			public readonly T Value;
+
+			public Opaque(T value)
+			{
+				Value = value;
+			}
+
+			public override string ToString()
+			{
+				return Value.GetType().ToString();
+			}
 		}
 	}
 }

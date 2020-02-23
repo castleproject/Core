@@ -168,6 +168,41 @@ namespace Castle.DynamicProxy.Tests
 			return messages.Contains(level.ToString().ToUpper() + ": " + message);
 		}
 
+		public void Trace(string message)
+		{
+			throw new NotSupportedException();
+		}
+
+		public void Trace(Func<string> messageFactory)
+		{
+			throw new NotSupportedException();
+		}
+
+		public void Trace(string message, Exception exception)
+		{
+			throw new NotSupportedException();
+		}
+
+		public void TraceFormat(string format, params object[] args)
+		{
+			messages.Add("TRACE: " + string.Format(format, args));
+		}
+
+		public void TraceFormat(Exception exception, string format, params object[] args)
+		{
+			throw new NotSupportedException();
+		}
+
+		public void TraceFormat(IFormatProvider formatProvider, string format, params object[] args)
+		{
+			throw new NotSupportedException();
+		}
+
+		public void TraceFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
+		{
+			throw new NotSupportedException();
+		}
+
 		public void Debug(string message)
 		{
 			throw new NotImplementedException();
@@ -346,6 +381,11 @@ namespace Castle.DynamicProxy.Tests
 		public ILogger CreateChildLogger(string loggerName)
 		{
 			throw new NotImplementedException();
+		}
+
+		public bool IsTraceEnabled
+		{
+			get { return true; }
 		}
 
 		public bool IsDebugEnabled

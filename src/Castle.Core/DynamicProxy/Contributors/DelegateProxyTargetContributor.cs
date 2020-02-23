@@ -57,23 +57,15 @@ namespace Castle.DynamicProxy.Contributors
 			var key = new CacheKey(method.Method, CompositionInvocationTypeGenerator.BaseType, null, null);
 
 			// no locking required as we're already within a lock
-			var invocation = scope.GetFromCache(key);
-			if (invocation != null)
-			{
-				return invocation;
-			}
 
-			invocation = new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
-			                                                    method,
-			                                                    method.Method,
-			                                                    false,
-			                                                    null)
+			return scope.TypeCache.GetOrAddWithoutTakingLock(key, _ =>
+				new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
+				                                       method,
+				                                       method.Method,
+				                                       false,
+				                                       null)
 				.Generate(emitter, options, namingScope)
-				.BuildType();
-
-			scope.RegisterInCache(key, invocation);
-
-			return invocation;
+				.BuildType());
 		}
 	}
 }

@@ -74,7 +74,6 @@ namespace Castle.Services.Logging.NLogIntegration
 		///   Creates a logger with specified <paramref name="name" />.
 		/// </summary>
 		/// <param name="name"> The name. </param>
-		/// <returns> </returns>
 		public override Core.Logging.ILogger Create(String name)
 		{
 			var log = LogManager.GetLogger(name);
@@ -86,7 +85,6 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// </summary>
 		/// <param name="name"> The name. </param>
 		/// <param name="level"> The level. </param>
-		/// <returns> </returns>
 		/// <exception cref="NotImplementedException" />
 		public override Core.Logging.ILogger Create(String name, LoggerLevel level)
 		{

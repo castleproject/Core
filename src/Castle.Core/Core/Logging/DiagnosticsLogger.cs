@@ -46,7 +46,7 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name = "logName"><see cref = "EventLog.Log" /></param>
 		/// <param name = "source"><see cref = "EventLog.Source" /></param>
-		public DiagnosticsLogger(string logName, string source) : base(LoggerLevel.Debug)
+		public DiagnosticsLogger(string logName, string source) : base(LoggerLevel.Trace)
 		{
 			// Create the source, if it does not already exist.
 			if (!EventLog.SourceExists(source))

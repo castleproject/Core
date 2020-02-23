@@ -145,7 +145,7 @@ namespace Castle.DynamicProxy.Tests
 			}
 			catch (AmbiguousMatchException)
 			{
-				// this exception is acceptible if the current runtime doesn't
+				// this exception is acceptable if the current runtime doesn't
 				// have .NET 2.0 SP1 installed
 				// we'd try to grab a method info that in in .NET 2.0 SP1, and if it's
 				// not present then we'd ignore that exception
@@ -325,69 +325,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t2.GetTypeInfo().Assembly));
 			object proxy = generator.CreateClassProxy(t1, new Type[] { t2 }, new StandardInterceptor());
 			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
-		}
-
-		[Test]
-		public void ProxyForBaseTypeFromUnsignedAssembly()
-		{
-			if(TestAssemblySigned())
-			{
-				Assert.Ignore("To get this running, the Tests project must not be signed.");
-			}
-			Type t = typeof (MyClass);
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t.GetTypeInfo().Assembly));
-			object proxy = generator.CreateClassProxy(t, new StandardInterceptor());
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
-		}
-
-		private bool TestAssemblySigned()
-		{
-			return StrongNameUtil.IsAssemblySigned(GetType().GetTypeInfo().Assembly);
-		}
-
-		[Test]
-		public void ProxyForBaseTypeAndInterfaceFromUnsignedAssembly()
-		{
-			if(TestAssemblySigned())
-			{
-				Assert.Ignore("To get this running, the Tests project must not be signed.");
-			}
-			Type t1 = typeof (MyClass);
-			Type t2 = typeof (IService);
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t1.GetTypeInfo().Assembly));
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t2.GetTypeInfo().Assembly));
-			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
-		}
-
-		[Test]
-		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies1()
-		{
-			if(TestAssemblySigned())
-			{
-				Assert.Ignore("To get this running, the Tests project must not be signed.");
-			}
-			Type t1 = typeof (MyClass);
-			Type t2 = typeof (IServiceProvider);
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t1.GetTypeInfo().Assembly));
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t2.GetTypeInfo().Assembly));
-			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
-		}
-
-		[Test]
-		public void ProxyForBaseTypeAndInterfaceFromSignedAndUnsignedAssemblies2()
-		{
-			if (TestAssemblySigned())
-			{
-				Assert.Ignore("To get this running, the Tests project must not be signed.");
-			}
-			Type t1 = typeof (List<int>);
-			Type t2 = typeof (IService);
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t1.GetTypeInfo().Assembly));
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t2.GetTypeInfo().Assembly));
-			object proxy = generator.CreateClassProxy(t1, new Type[] {t2}, new StandardInterceptor());
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
 		}
 
 		[Test]

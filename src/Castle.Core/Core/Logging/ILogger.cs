@@ -27,6 +27,12 @@ namespace Castle.Core.Logging
 	public interface ILogger
 	{
 		/// <summary>
+		///   Determines if messages of priority "trace" will be logged.
+		/// </summary>
+		/// <value>True if "trace" messages will be logged.</value>
+		bool IsTraceEnabled { get; }
+
+		/// <summary>
 		///   Determines if messages of priority "debug" will be logged.
 		/// </summary>
 		/// <value>True if "debug" messages will be logged.</value>
@@ -66,6 +72,56 @@ namespace Castle.Core.Logging
 		ILogger CreateChildLogger(String loggerName);
 
 		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name = "message">The message to log</param>
+		void Trace(String message);
+
+		/// <summary>
+		///   Logs a trace message with lazily constructed message. The message will be constructed only if the <see cref = "IsTraceEnabled" /> is true.
+		/// </summary>
+		void Trace(Func<string> messageFactory);
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "message">The message to log</param>
+		void Trace(String message, Exception exception);
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		void TraceFormat(String format, params Object[] args);
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		void TraceFormat(Exception exception, String format, params Object[] args);
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name = "formatProvider">The format provider to use</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		void TraceFormat(IFormatProvider formatProvider, String format, params Object[] args);
+
+		/// <summary>
+		///   Logs a trace message.
+		/// </summary>
+		/// <param name = "exception">The exception to log</param>
+		/// <param name = "formatProvider">The format provider to use</param>
+		/// <param name = "format">Format string for the message to log</param>
+		/// <param name = "args">Format arguments for the message to log</param>
+		void TraceFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args);
+
+		/// <summary>
 		///   Logs a debug message.
 		/// </summary>
 		/// <param name = "message">The message to log</param>
@@ -74,7 +130,6 @@ namespace Castle.Core.Logging
 		/// <summary>
 		///   Logs a debug message with lazily constructed message. The message will be constructed only if the <see cref = "IsDebugEnabled" /> is true.
 		/// </summary>
-		/// <param name = "messageFactory"></param>
 		void Debug(Func<string> messageFactory);
 
 		/// <summary>
@@ -125,7 +180,6 @@ namespace Castle.Core.Logging
 		/// <summary>
 		///   Logs an error message with lazily constructed message. The message will be constructed only if the <see cref = "IsErrorEnabled" /> is true.
 		/// </summary>
-		/// <param name = "messageFactory"></param>
 		void Error(Func<string> messageFactory);
 
 		/// <summary>
@@ -176,7 +230,6 @@ namespace Castle.Core.Logging
 		/// <summary>
 		///   Logs a fatal message with lazily constructed message. The message will be constructed only if the <see cref = "IsFatalEnabled" /> is true.
 		/// </summary>
-		/// <param name = "messageFactory"></param>
 		void Fatal(Func<string> messageFactory);
 
 		/// <summary>
@@ -227,7 +280,6 @@ namespace Castle.Core.Logging
 		/// <summary>
 		///   Logs a info message with lazily constructed message. The message will be constructed only if the <see cref = "IsInfoEnabled" /> is true.
 		/// </summary>
-		/// <param name = "messageFactory"></param>
 		void Info(Func<string> messageFactory);
 
 		/// <summary>
@@ -278,7 +330,6 @@ namespace Castle.Core.Logging
 		/// <summary>
 		///   Logs a warn message with lazily constructed message. The message will be constructed only if the <see cref = "IsWarnEnabled" /> is true.
 		/// </summary>
-		/// <param name = "messageFactory"></param>
 		void Warn(Func<string> messageFactory);
 
 		/// <summary>

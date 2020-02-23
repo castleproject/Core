@@ -14,6 +14,11 @@
 
 namespace Castle.Core.Internal
 {
+	using System;
+	using System.ComponentModel;
+
+	[Obsolete("Consider using `System.Threading.ReaderWriterLockSlim` instead of `Lock` and related types.")] // TODO: Remove this type.
+	[EditorBrowsable(EditorBrowsableState.Never)]
 	public interface IUpgradeableLockHolder : ILockHolder
 	{
 		ILockHolder Upgrade();

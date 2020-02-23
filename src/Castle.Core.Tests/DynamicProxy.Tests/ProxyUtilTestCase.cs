@@ -24,6 +24,63 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class ProxyUtilTestCase
 	{
+		[Test]
+		public void CreateDelegateToMixin_when_given_null_for_proxy_throws_ArgumentNullException()
+		{
+			var _ = typeof(Action);
+			Assert.Throws<ArgumentNullException>(() => ProxyUtil.CreateDelegateToMixin(null, _));
+		}
+
+		[Test]
+		public void CreateDelegateToMixin_when_given_null_for_delegateType_throws_ArgumentNullException()
+		{
+			var _ = new object();
+			Assert.Throws<ArgumentNullException>(() => ProxyUtil.CreateDelegateToMixin(_, null));
+		}
+
+		[Test]
+		public void CreateDelegateToMixin_when_given_non_delegate_type_throws_ArgumentException()
+		{
+			var _ = new object();
+			Assert.Throws<ArgumentException>(() => ProxyUtil.CreateDelegateToMixin(_, typeof(Exception)));
+		}
+
+		[Test]
+		public void CreateDelegateToMixin_when_given_valid_arguments_succeeds()
+		{
+			var proxy = new FakeProxyWithInvokeMethods();
+			Assert.NotNull(ProxyUtil.CreateDelegateToMixin(proxy, typeof(Action)));
+		}
+
+		[Test]
+		public void CreateDelegateToMixin_throws_MissingMethodException_if_no_suitable_Invoke_method_found()
+		{
+			var proxy = new FakeProxyWithInvokeMethods();
+			Assert.Throws<MissingMethodException>(() => ProxyUtil.CreateDelegateToMixin<Action<bool>>(proxy));
+		}
+
+		[Test]
+		public void CreateDelegateToMixin_returns_invokable_delegate()
+		{
+			var proxy = new FakeProxyWithInvokeMethods();
+			var action = ProxyUtil.CreateDelegateToMixin<Action>(proxy);
+			action.Invoke();
+		}
+
+		[Test]
+		public void CreateDelegateToMixin_can_deal_with_multiple_Invoke_overloads()
+		{
+			var proxy = new FakeProxyWithInvokeMethods();
+
+			var action = ProxyUtil.CreateDelegateToMixin<Action>(proxy);
+			action.Invoke();
+			Assert.AreEqual("Invoke()", proxy.LastInvocation);
+
+			var intAction = ProxyUtil.CreateDelegateToMixin<Action<int>>(proxy);
+			intAction.Invoke(42);
+			Assert.AreEqual("Invoke(42)", proxy.LastInvocation);
+		}
+
 		[TestCaseSource(nameof(AccessibleMethods))]
 		public void IsAccessible_Accessible_Method_Returns_True(MethodBase method)
 		{
@@ -121,6 +178,21 @@ namespace Castle.DynamicProxy.Tests
 		{
 			public void APublicMethod()
 			{
+			}
+		}
+
+		private sealed class FakeProxyWithInvokeMethods
+		{
+			public string LastInvocation { get; set; }
+
+			public void Invoke()
+			{
+				LastInvocation = "Invoke()";
+			}
+
+			public void Invoke(int arg)
+			{
+				LastInvocation = $"Invoke({arg})";
 			}
 		}
 	}

@@ -32,7 +32,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Instructs fetching according to <paramref name="fetch"/>
 		/// </summary>
-		/// <param name="fetch"></param>
 		public FetchAttribute(bool fetch)
 		{
 			Fetch = fetch;

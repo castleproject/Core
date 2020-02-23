@@ -48,8 +48,6 @@ namespace Castle.DynamicProxy.Internal
 		/// <summary>
 		///   Checks if the method is public or protected.
 		/// </summary>
-		/// <param name = "method"></param>
-		/// <returns></returns>
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		[Obsolete("Use " + nameof(ProxyUtil) + "." + nameof(ProxyUtil.IsAccessible) + " instead, " +
 		          "which performs a more accurate accessibility check.")]

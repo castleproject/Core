@@ -16,9 +16,6 @@ namespace Castle.Core.Configuration
 {
 	using System;
 
-	/// <summary>
-	/// Summary description for MutableConfiguration.
-	/// </summary>
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif

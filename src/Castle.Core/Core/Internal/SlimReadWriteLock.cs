@@ -14,11 +14,25 @@
 
 namespace Castle.Core.Internal
 {
+	using System;
+	using System.ComponentModel;
 	using System.Threading;
 
+	[Obsolete("Consider using `System.Threading.ReaderWriterLockSlim` instead of `Lock` and related types.")] // TODO: Remove this type.
+	[EditorBrowsable(EditorBrowsableState.Never)]
 	internal class SlimReadWriteLock : Lock
 	{
-		private readonly ReaderWriterLockSlim locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+		private readonly ReaderWriterLockSlim locker;
+
+		public SlimReadWriteLock()
+		{
+			this.locker = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+		}
+
+		internal SlimReadWriteLock(ReaderWriterLockSlim underlyingLock)
+		{
+			this.locker = underlyingLock;
+		}
 
 		public override IUpgradeableLockHolder ForReadingUpgradeable()
 		{

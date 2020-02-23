@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
+	using System.ComponentModel;
 	using System.Reflection;
 	using System.Reflection.Emit;
 
@@ -114,6 +115,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
+		[Obsolete]
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		public static bool IsAnyByRef(ParameterInfo[] parameters)
 		{
 			for (var i = 0; i < parameters.Length; i++)
