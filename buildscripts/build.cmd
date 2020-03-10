@@ -57,5 +57,12 @@ echo ---------------------------
 echo Running NETCOREAPP1.1 Tests
 echo ---------------------------
 
-dotnet .\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3 || exit /b 1
-dotnet .\src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\netcoreapp1.1/Castle.Core.Tests.WeakNamed.dll --result=NetCoreClrWeakNamedTestResults.xml;format=nunit3 || exit /b 1
+dotnet .\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp1.1\Castle.Core.Tests.dll --result=NetCore11ClrTestResults.xml;format=nunit3 || exit /b 1
+dotnet .\src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\netcoreapp1.1/Castle.Core.Tests.WeakNamed.dll --result=NetCore11ClrWeakNamedTestResults.xml;format=nunit3 || exit /b 1
+
+echo ---------------------------
+echo Running NETCOREAPP3.0 Tests
+echo ---------------------------
+
+dotnet .\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp3.0\Castle.Core.Tests.dll --result=NetCore30ClrTestResults.xml;format=nunit3 || exit /b 1
+dotnet .\src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\netcoreapp3.0/Castle.Core.Tests.WeakNamed.dll --result=NetCore30ClrWeakNamedTestResults.xml;format=nunit3 || exit /b 1

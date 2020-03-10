@@ -3,7 +3,7 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks>net461;netcoreapp1.1</TargetFrameworks>
+		<TargetFrameworks>net461;netcoreapp1.1;netcoreapp3.0</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -20,7 +20,7 @@
 		<StartupObject>Program</StartupObject>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
+	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp1.1' or '$(TargetFramework)'=='netcoreapp3.0'">
 		<Compile Remove="Components.DictionaryAdapter.Tests\Xml\**" />
 		<Compile Remove="Services.Logging.Tests\log4netIntegration\**" />
 		<Compile Remove="Services.Logging.Tests\NLogIntegration\**" />
@@ -55,7 +55,6 @@
 		<PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
 		<PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
 		<PackageReference Include="System.Reflection" Version="4.3.0" />
-		<PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
 		<PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
 		<PackageReference Include="System.ComponentModel" Version="4.3.0" />
 		<PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
