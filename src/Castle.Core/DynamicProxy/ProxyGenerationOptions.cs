@@ -1,11 +1,11 @@
 // Copyright 2004-2011 Castle Project - http://www.castleproject.org/
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,6 +27,9 @@ namespace Castle.DynamicProxy
 
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Internal;
+
+	// prevent collision with new class in netstandard 2.1
+	using CollectionExtensions = Castle.Core.Internal.CollectionExtensions;
 
 	/// <summary>
 	///   <see cref="ProxyGenerationOptions"/> allows customization of the behavior of proxies created by
