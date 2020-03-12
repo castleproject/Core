@@ -16,7 +16,7 @@ for:
   # -----------------
   matrix:
     only:
-    - image: Ubuntu
+    - image: Previous Ubuntu
 
   # build and run tests
   build_script:
