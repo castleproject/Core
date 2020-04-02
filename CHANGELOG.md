@@ -4,6 +4,7 @@
 
 Bugfixes:
 - Prevent method name collisions when a proxy type implements more than two identically named interfaces having one or more identically named methods each. Name collisions are avoided by including the declaring types' namespaces in the proxy type's method names. (@stakx, #469)
+- Reduce lock contention while generating new proxy types which previously blocked new proxy instances (@tangdf, #484)
 
 ## 4.4.0 (2019-04-05)
 
