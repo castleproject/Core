@@ -68,10 +68,11 @@ namespace Castle.Core.Internal
 				}
 				else
 				{
+					value = valueFactory.Invoke(key);
+
 					itemsLock.EnterWriteLock();
 					try
 					{
-						value = valueFactory.Invoke(key);
 						items.Add(key, value);
 						return value;
 					}
