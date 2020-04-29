@@ -381,6 +381,21 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void ClassProxyShouldHaveDefaultConstructorWhenBaseClassHasPrivateProtected()
+		{
+			object proxy = generator.CreateClassProxy<ClassWithPrivateProtectedConstructor>();
+			Assert.IsNotNull(Activator.CreateInstance(proxy.GetType()));
+		}
+
+		[Test]
+		public void ClassProxyShouldCallPrivateProtectedDefaultConstructor()
+		{
+			object proxy = generator.CreateClassProxy<ClassWithPrivateProtectedConstructor>();
+			object proxy2 = Activator.CreateInstance(proxy.GetType());
+			Assert.AreEqual("Something", ((ClassWithPrivateProtectedConstructor)proxy2).SomeString);
+		}
+
+		[Test]
 		public void ClassImplementingInterfaceVitrually()
 		{
 			var @class = typeof (ClassWithVirtualInterface);
