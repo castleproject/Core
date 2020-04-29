@@ -1,7 +1,3 @@
-//----------------------------------------------------
-// Copyright 2020 Epic Systems Corporation
-//----------------------------------------------------
-
 // Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
