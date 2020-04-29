@@ -1,3 +1,7 @@
+//----------------------------------------------------
+// Copyright 2020 Epic Systems Corporation
+//----------------------------------------------------
+
 // Copyright 2004-2016 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -378,6 +382,21 @@ namespace Castle.DynamicProxy.Tests
 			object proxy = generator.CreateClassProxy<ClassWithProtectedDefaultConstructor>();
 			object proxy2 = Activator.CreateInstance(proxy.GetType());
 			Assert.AreEqual("Something", ((ClassWithProtectedDefaultConstructor)proxy2).SomeString);
+		}
+
+		[Test]
+		public void ClassProxyShouldHaveDefaultConstructorWhenBaseClassHasPrivateProtected()
+		{
+			object proxy = generator.CreateClassProxy<ClassWithPrivateProtectedConstructor>();
+			Assert.IsNotNull(Activator.CreateInstance(proxy.GetType()));
+		}
+
+		[Test]
+		public void ClassProxyShouldCallPrivateProtectedDefaultConstructor()
+		{
+			object proxy = generator.CreateClassProxy<ClassWithPrivateProtectedConstructor>();
+			object proxy2 = Activator.CreateInstance(proxy.GetType());
+			Assert.AreEqual("Something", ((ClassWithPrivateProtectedConstructor)proxy2).SomeString);
 		}
 
 		[Test]

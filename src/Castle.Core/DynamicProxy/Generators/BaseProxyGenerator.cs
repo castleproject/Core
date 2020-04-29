@@ -1,3 +1,7 @@
+//----------------------------------------------------
+// Copyright 2020 Epic Systems Corporation
+//----------------------------------------------------
+
 // Copyright 2004-2011 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -281,7 +285,7 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach (var constructor in constructors)
 			{
-				if (!IsConstructorVisible(constructor))
+				if (!ProxyUtil.IsAccessibleMethod(constructor))
 				{
 					continue;
 				}
@@ -407,14 +411,6 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			return proxyType;
-		}
-
-		private bool IsConstructorVisible(ConstructorInfo constructor)
-		{
-			return constructor.IsPublic ||
-				constructor.IsFamily ||
-				constructor.IsFamilyOrAssembly ||
-				(constructor.IsAssembly && ProxyUtil.AreInternalsVisibleToDynamicProxy(constructor.DeclaringType.GetTypeInfo().Assembly));
 		}
 
 		private bool OverridesEqualsAndGetHashCode(Type type)
