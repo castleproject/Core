@@ -1,6 +1,6 @@
 [assembly: System.CLSCompliantAttribute(true)]
 [assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETStandard,Version=v1.3", FrameworkDisplayName="")]
+[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETStandard,Version=v1.5", FrameworkDisplayName="")]
 namespace Castle.Services.Logging.Log4netIntegration
 {
     public class ExtendedLog4netFactory : Castle.Core.Logging.AbstractExtendedLoggerFactory
