@@ -281,6 +281,8 @@ private async Task InterceptAsync(IInvocation invocation)
 
    * [Castle.Core.AsyncInterceptor](https://www.nuget.org/packages/Castle.Core.AsyncInterceptor) (third-party, despite the Castle Project's package namespace)
 
+   * [stakx.DynamicProxy.AsyncInterceptor](https://www.nuget.org/packages/stakx.DynamicProxy.AsyncInterceptor)
+
    If you are the author of a generally useful async interception helper library, and would like to add your library to the above list, feel free to submit a PR.
 
  * The above examples have shown cases where a "stale" invocation object has its `ReturnValue` repeatedly set, even though only the first value might be observed by calling code. It is however possible that invocation objects are recorded somewhere, and could be inspected later on. Other parties might then observe a `ReturnValue` that does not reflect what the original caller got.
