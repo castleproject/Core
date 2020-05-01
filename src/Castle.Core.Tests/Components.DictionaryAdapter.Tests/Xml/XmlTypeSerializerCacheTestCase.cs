@@ -14,8 +14,9 @@
 
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
-	using NUnit.Framework;
     using System.Threading.Tasks;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class XmlTypeSerializerCacheTestCase

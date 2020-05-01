@@ -550,7 +550,7 @@ namespace Castle.DynamicProxy
 		///   This method uses <see cref = "IProxyBuilder" /> implementation to generate a proxy type.
 		///   As such caller should expect any type of exception that given <see cref = "IProxyBuilder" /> implementation may throw.
 		/// </remarks>
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecuritySafeCritical]
 #endif
 		public virtual object CreateInterfaceProxyWithTargetInterface(Type interfaceToProxy,

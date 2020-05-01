@@ -17,11 +17,7 @@ namespace Castle.Core.Logging
 	using System;
 	using System.Globalization;
 #if FEATURE_SECURITY_PERMISSIONS
-#if DOTNET40
 	using System.Security;
-#else
-	using System.Security.Permissions;
-#endif
 #endif
 
 	/// <summary>
@@ -68,11 +64,7 @@ namespace Castle.Core.Logging
 		/// Keep the instance alive in a remoting scenario
 		/// </summary>
 #if FEATURE_SECURITY_PERMISSIONS
-#if DOTNET40
 		[SecurityCritical]
-#else
-		[SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.Infrastructure)]
-#endif
 #endif
 		public override object InitializeLifetimeService()
 		{

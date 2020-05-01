@@ -19,6 +19,6 @@ using System.Security;
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 [assembly: SecurityRules(SecurityRuleSet.Level2)]
 #endif
