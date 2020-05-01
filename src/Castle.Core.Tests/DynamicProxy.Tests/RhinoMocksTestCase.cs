@@ -17,12 +17,9 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
-	using System.Runtime.InteropServices;
-
-#if FEATURE_CUSTOMMODIFIERS
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
-#endif
+	using System.Runtime.InteropServices;
 
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.Interfaces;
@@ -116,7 +113,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 #endif
 
-#if FEATURE_CUSTOMMODIFIERS
 		private Type iHaveMethodWithModOptsType;
 
 		[OneTimeSetUp]
@@ -203,7 +199,6 @@ namespace Castle.DynamicProxy.Tests
 			var startLiveOnSlotMethod = iHaveMethodWithModOptsType.GetMethod("StartLiveOnSlot");
 			startLiveOnSlotMethod.Invoke(proxy, new object[] { 4 });
 		}
-#endif
 
 		[Test]
 		public void CanProxyMethodWithOutIntPtrParameter()

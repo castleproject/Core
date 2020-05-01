@@ -319,7 +319,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			Type[][] parametersRequiredCustomModifiers;
 			Type[][] parametersOptionalCustomModifiers;
 
-#if FEATURE_CUSTOMMODIFIERS
 			returnRequiredCustomModifiers = returnParameter.GetRequiredCustomModifiers();
 			Array.Reverse(returnRequiredCustomModifiers);
 
@@ -337,12 +336,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				parametersOptionalCustomModifiers[i] = baseMethodParameters[i].GetOptionalCustomModifiers();
 				Array.Reverse(parametersOptionalCustomModifiers[i]);
 			}
-#else
-			returnRequiredCustomModifiers = null;
-			returnOptionalCustomModifiers = null;
-			parametersRequiredCustomModifiers = null;
-			parametersOptionalCustomModifiers = null;
-#endif
 
 			builder.SetSignature(
 				returnType,
