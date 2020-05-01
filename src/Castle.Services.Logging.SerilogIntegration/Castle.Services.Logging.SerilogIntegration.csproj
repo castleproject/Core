@@ -3,7 +3,7 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
+		<TargetFrameworks>net45;netstandard1.5</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -20,7 +20,7 @@
 		<PackageTags>castle logging serilog</PackageTags>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'">
+	<ItemGroup Condition="'$(TargetFramework)'=='netstandard1.5'">
 		<PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
 		<PackageReference Include="System.ComponentModel" Version="4.3.0" />
 		<PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
