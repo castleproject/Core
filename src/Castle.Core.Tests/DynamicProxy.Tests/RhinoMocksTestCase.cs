@@ -183,11 +183,7 @@ namespace Castle.DynamicProxy.Tests
 				},
 				callingConvention: CallingConventions.Standard);
 
-#if FEATURE_LEGACY_REFLECTION_API
-			var iHaveMethodWithModOptsType = typeBuilder.CreateType();
-#else
 			var iHaveMethodWithModOptsType = typeBuilder.CreateTypeInfo().AsType();
-#endif
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE && FEATURE_TEST_PEVERIFY
 			// Let's persist and PE-verify the dynamic assembly before it gets used in tests:

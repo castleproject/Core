@@ -136,12 +136,7 @@ namespace Castle.Components.DictionaryAdapter
 					descriptor = other.CreateDescriptor();
 				}
 
-#if FEATURE_LEGACY_REFLECTION_API
-				var appDomain = Thread.GetDomain();
-				var typeBuilder = CreateTypeBuilder(type, appDomain);
-#else
 				var typeBuilder = CreateTypeBuilder(type);
-#endif
 				return CreateAdapterMeta(type, typeBuilder, descriptor);
 			});
 		}
@@ -154,15 +149,6 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region Type Builders
 
-#if FEATURE_LEGACY_REFLECTION_API
-		private static TypeBuilder CreateTypeBuilder(Type type, AppDomain appDomain)
-		{
-			var assemblyName = new AssemblyName("CastleDictionaryAdapterAssembly");
-			var assemblyBuilder = appDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
-			var moduleBuilder = assemblyBuilder.DefineDynamicModule("CastleDictionaryAdapterModule");
-			return CreateAdapterType(type, moduleBuilder);
-		}
-#else
 		private static TypeBuilder CreateTypeBuilder(Type type)
 		{
 			var assemblyName = new AssemblyName("CastleDictionaryAdapterAssembly");
@@ -170,8 +156,6 @@ namespace Castle.Components.DictionaryAdapter
 			var moduleBuilder = assemblyBuilder.DefineDynamicModule("CastleDictionaryAdapterModule");
 			return CreateAdapterType(type, moduleBuilder);
 		}
-
-#endif
 
 		private static TypeBuilder CreateAdapterType(Type type, ModuleBuilder moduleBuilder)
 		{
@@ -216,33 +200,18 @@ namespace Castle.Components.DictionaryAdapter
 				CreateAdapterProperty(typeBuilder, property.Value);
 			}
 
-#if FEATURE_LEGACY_REFLECTION_API
-			var implementation = typeBuilder.CreateType();
-			var creator = (Func<DictionaryAdapterInstance, IDictionaryAdapter>)Delegate.CreateDelegate
-			(
-				typeof(Func<DictionaryAdapterInstance, IDictionaryAdapter>),
-				implementation,
-				"__Create"
-			);
-#else
 			var implementation = typeBuilder.CreateTypeInfo().AsType();
 			var creator = (Func<DictionaryAdapterInstance, IDictionaryAdapter>)implementation
 				.GetTypeInfo().GetDeclaredMethod("__Create")
 				.CreateDelegate(typeof(Func<DictionaryAdapterInstance, IDictionaryAdapter>));
-#endif
 
 			var meta = new DictionaryAdapterMeta(type, implementation, typeBehaviors,
 				initializers.MetaInitializers.ToArray(), initializers.Initializers.ToArray(),
 				propertyMap, this, creator);
 
-#if FEATURE_LEGACY_REFLECTION_API
-			const BindingFlags metaBindings = BindingFlags.Public | BindingFlags.Static | BindingFlags.SetField;
-			implementation.InvokeMember("__meta", metaBindings, null, null, new[] { meta });
-#else
 			const BindingFlags metaBindings = BindingFlags.Public | BindingFlags.Static;
 			var field = implementation.GetField("__meta", metaBindings);
 			field.SetValue(implementation, meta);
-#endif
 			return meta;
 		}
 

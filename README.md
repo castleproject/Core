@@ -60,34 +60,32 @@ For known Mono defects, check [our issue tracker](https://github.com/castleproje
 
 The following conditional compilation symbols (vertical) are currently defined for each of the build configurations (horizontal):
 
-Symbol                              | NET40              | NET45              | .NET Core
------------------------------------ | ------------------ | ------------------ | ------------------
-`FEATURE_APPDOMAIN`                 | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_BINDINGLIST`               | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_DICTIONARYADAPTER_XML`     | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_CUSTOMMODIFIERS`           | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_EVENTLOG`                  | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_GAC`                       | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_GET_REFERENCED_ASSEMBLIES` | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_IDATAERRORINFO`            | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_ISUPPORTINITIALIZE`        | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_LEGACY_REFLECTION_API`     | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:
-`FEATURE_LISTSORT`                  | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_NETCORE_REFLECTION_API`    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
-`FEATURE_REMOTING`                  | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_SECURITY_PERMISSIONS`      | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_SERIALIZATION`             | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_SMTP`                      | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_TARGETEXCEPTION`           | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_TEST_COM`                  | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_TEST_DATASET`              | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_TEST_PEVERIFY`             | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_TEST_SERILOGINTEGRATION`   | :no_entry_sign:    | :white_check_mark: | :white_check_mark:
----                                 |                    |                    |
-`DOTNET40`                          | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`DOTNET45`                          | :no_entry_sign:    | :white_check_mark: | :no_entry_sign:
+Symbol                              | NET45              | .NET Core
+----------------------------------- | ------------------ | ------------------
+`FEATURE_APPDOMAIN`                 | :white_check_mark: | :no_entry_sign:
+`FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :no_entry_sign:
+`FEATURE_BINDINGLIST`               | :white_check_mark: | :no_entry_sign:
+`FEATURE_DICTIONARYADAPTER_XML`     | :white_check_mark: | :no_entry_sign:
+`FEATURE_CUSTOMMODIFIERS`           | :white_check_mark: | :no_entry_sign:
+`FEATURE_EVENTLOG`                  | :white_check_mark: | :no_entry_sign:
+`FEATURE_GAC`                       | :white_check_mark: | :no_entry_sign:
+`FEATURE_GET_REFERENCED_ASSEMBLIES` | :white_check_mark: | :no_entry_sign:
+`FEATURE_IDATAERRORINFO`            | :white_check_mark: | :no_entry_sign:
+`FEATURE_ISUPPORTINITIALIZE`        | :white_check_mark: | :no_entry_sign:
+`FEATURE_LISTSORT`                  | :white_check_mark: | :no_entry_sign:
+`FEATURE_NETCORE_REFLECTION_API`    | :no_entry_sign:    | :white_check_mark:
+`FEATURE_REMOTING`                  | :white_check_mark: | :no_entry_sign:
+`FEATURE_SECURITY_PERMISSIONS`      | :white_check_mark: | :no_entry_sign:
+`FEATURE_SERIALIZATION`             | :white_check_mark: | :no_entry_sign:
+`FEATURE_SMTP`                      | :white_check_mark: | :no_entry_sign:
+`FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :no_entry_sign:
+`FEATURE_TARGETEXCEPTION`           | :white_check_mark: | :no_entry_sign:
+`FEATURE_TEST_COM`                  | :white_check_mark: | :no_entry_sign:
+`FEATURE_TEST_DATASET`              | :white_check_mark: | :no_entry_sign:
+`FEATURE_TEST_PEVERIFY`             | :white_check_mark: | :no_entry_sign:
+`FEATURE_TEST_SERILOGINTEGRATION`   | :white_check_mark: | :white_check_mark:
+---                                 |                    |
+`DOTNET45`                          | :white_check_mark: | :no_entry_sign:
 
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.
@@ -99,7 +97,6 @@ Symbol                              | NET40              | NET45              | 
 * `FEATURE_GET_REFERENCED_ASSEMBLIES` - enables code that takes advantage of System.Reflection.Assembly.GetReferencedAssemblies().
 * `FEATURE_IDATAERRORINFO` - enables code that depends on System.ComponentModel.IDataErrorInfo.
 * `FEATURE_ISUPPORTINITIALIZE` - enables support for features that make use of System.ComponentModel.ISupportInitialize.
-* `FEATURE_LEGACY_REFLECTION_API` - provides a shim for .NET 4.0 that emulates the `TypeInfo` API available in .NET 4.5+ and .NET Core.
 * `FEATURE_LISTSORT` - enables support for features that make use of System.ComponentModel.ListSortDescription.
 * `FEATURE_NETCORE_REFLECTION_API` - provides shims to implement missing functionality in .NET Core that has no alternatives.
 * `FEATURE_REMOTING` - supports remoting on various types including inheriting from MarshalByRefObject.

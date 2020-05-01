@@ -37,12 +37,8 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var type = GenerateProxyType<T>();
 			var instance = Activator.CreateInstance(type, func, interceptors);
-#if FEATURE_LEGACY_REFLECTION_API
-			return (T) (object) Delegate.CreateDelegate(typeof (T), instance, "Invoke");
-#else
 			var methodInfo = instance.GetType().GetMethod("Invoke");
 			return (T)(object)methodInfo.CreateDelegate(typeof(T), instance);
-#endif
 		}
 
 		[Test]

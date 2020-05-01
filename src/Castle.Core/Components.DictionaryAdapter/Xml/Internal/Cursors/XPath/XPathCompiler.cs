@@ -427,7 +427,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			private static bool IsWhitespace(char c)
 			{
-#if DOTNET40
+#if DOTNET45
 				return XmlConvert.IsWhitespaceChar(c);
 #else
 				// Source: http://www.w3.org/TR/REC-xml/#NT-S
@@ -441,7 +441,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			private static bool IsNameStartChar(char c)
 			{
-#if DOTNET40
+#if DOTNET45
 			    return XmlConvert.IsStartNCNameChar(c);
 #else
 				// Source: http://www.w3.org/TR/REC-xml/#NT-NameStartChar
@@ -466,7 +466,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			private static bool IsNameChar(char c)
 			{
-#if DOTNET40
+#if DOTNET45
 			    return XmlConvert.IsNCNameChar(c);
 #else
 				// Source: http://www.w3.org/TR/REC-xml/#NT-NameChar

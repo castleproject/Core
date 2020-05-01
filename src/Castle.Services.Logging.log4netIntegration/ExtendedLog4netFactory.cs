@@ -26,11 +26,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 
 	public class ExtendedLog4netFactory : AbstractExtendedLoggerFactory
 	{
-#if FEATURE_LEGACY_REFLECTION_API
-		static readonly Assembly _callingAssembly = typeof(Log4netFactory).Assembly;
-#else
 		static readonly Assembly _callingAssembly = typeof(Log4netFactory).GetTypeInfo().Assembly;
-#endif
 
 		public ExtendedLog4netFactory()
 			: this(Log4netFactory.defaultConfigFileName)
