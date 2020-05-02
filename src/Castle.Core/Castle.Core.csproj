@@ -3,7 +3,7 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks>net35;net40;net45;netstandard1.3;netstandard1.5;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net35;net40;net45;netstandard1.3;netstandard1.5;netstandard2.0;netstandard2.1</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -44,7 +44,12 @@
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
+		<PackageReference Include="System.Diagnostics.EventLog" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
 		<PackageReference Include="System.Diagnostics.EventLog" Version="4.7.0" />
 	</ItemGroup>

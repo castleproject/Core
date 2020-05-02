@@ -3,7 +3,7 @@
 ## Unreleased
 
 Enhancements:
-- .NET Standard 1.3 support (@lg2de, #485)
+- .NET Standard 2.0 and 2.1 support (@lg2de, #485)
 
 Bugfixes:
 - Prevent method name collisions when a proxy type implements more than two identically named interfaces having one or more identically named methods each. Name collisions are avoided by including the declaring types' namespaces in the proxy type's method names. (@stakx, #469)
