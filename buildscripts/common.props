@@ -48,14 +48,6 @@
 		<DesktopClrConstants Condition="'$(OS)'=='Windows_NT'">$(CommonDesktopClrConstants);FEATURE_TEST_PEVERIFY</DesktopClrConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net35|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);FEATURE_LEGACY_REFLECTION_API;DOTNET35</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net35|Release'">
-		<DefineConstants>$(DesktopClrConstants);FEATURE_LEGACY_REFLECTION_API;DOTNET35</DefineConstants>
-	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net40|Debug'">
 		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);FEATURE_LEGACY_REFLECTION_API;DOTNET40</DefineConstants>
 	</PropertyGroup>

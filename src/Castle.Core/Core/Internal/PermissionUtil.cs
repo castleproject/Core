@@ -27,14 +27,10 @@ namespace Castle.Core.Internal
 #endif
 		public static bool IsGranted(this IPermission permission)
 		{
-#if DOTNET35
-			return SecurityManager.IsGranted(permission);
-#else
 			var permissionSet = new PermissionSet(PermissionState.None);
 			permissionSet.AddPermission(permission);
 
 			return permissionSet.IsSubsetOf(AppDomain.CurrentDomain.PermissionSet);
-#endif
 		}
 	}
 }

@@ -16,10 +16,10 @@
 
 namespace System.Reflection
 {
-	// This allows us to use the new reflection API while still supporting .NET 3.5 and 4.0.
+	// This allows us to use the new reflection API while still supporting .NET 4.0.
 	//
 	// Methods like Type.GetInterfaceMap no longer exist in .NET Core so this provides a shim
-	// for .NET 3.5 and 4.0.
+	// for .NET 4.0.
 	internal static class RuntimeReflectionExtensions
 	{
 		// Delegate to the old name for this method.

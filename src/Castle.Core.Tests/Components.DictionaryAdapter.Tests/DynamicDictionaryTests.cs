@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !DOTNET35
-
 namespace Castle.Components.DictionaryAdapter.Tests
 {
 	using System.Collections.Generic;
@@ -63,5 +61,3 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 	}
 }
-
-#endif

@@ -18,10 +18,10 @@ namespace System.Reflection
 {
 	using System.Collections.Generic;
 
-	// This allows us to use the new reflection API while still supporting .NET 3.5 and 4.0.
+	// This allows us to use the new reflection API while still supporting .NET 4.0.
 	//
 	// Methods like Attribute.IsDefined no longer exist in .NET Core so this provides a shim
-	// for .NET 3.5 and 4.0.
+	// for .NET 4.0.
 	//
 	// This class only implemented the required extensions so add more if needed in the order
 	// from https://github.com/dotnet/corefx/blob/master/src/System.Reflection.Extensions/ref/System.Reflection.Extensions.cs

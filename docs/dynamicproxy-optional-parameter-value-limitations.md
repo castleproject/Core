@@ -20,10 +20,6 @@ On Mono (up to and including at least version 5.16), DynamicProxy may not be abl
 
 The .NET Framework (up to and including at least version 4.7.1) and .NET Core (up to and including at least version 2.1) are affected by several bugs or limitations regarding default parameter values. DynamicProxy may not be able to correctly reproduce default parameter values in the proxy type for...
 
-* **Optional parameters of any nullable type `Nullable<T>`.** On the .NET Framework 3.5 only, reflection will likely report (via `ParameterInfo.[Raw]DefaultValue`) a default value of `Missing.Value` for such parameters.
-
-   There is no easy way to quickly guess what the correct default value might be. Consider upgrading to the .NET Framework 4 or later, or double-check the default value in the original method of the proxied type.
-
 * **Optional parameters of some `struct` type `SomeStruct` having a default value of `default(SomeStruct)`.** If reflection reports (via `ParameterInfo.[Raw]DefaultValue`) a default value of `Missing.Value` for such parameters, you may safely assume that the *correct* default value is `default(SomeStruct)`.
 
    Note that if reflection reports a default value of `null` in such cases, this is not an error, but normal `System.Reflection` behavior that is to be expected. In this case, you may also safely assume `default(SomeStruct)` to be the correct default value.
