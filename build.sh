@@ -26,19 +26,11 @@ if [ ! -f "$MONOPATH" ]; then
 	exit 1
 fi
 
-dotnet restore ./src/Castle.Core/Castle.Core.csproj
-dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration.csproj
-dotnet restore ./src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration.csproj
-dotnet restore ./src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration.csproj
-dotnet restore ./src/Castle.Core.Tests/Castle.Core.Tests.csproj
-dotnet restore ./src/Castle.Core.Tests.WeakNamed/Castle.Core.Tests.WeakNamed.csproj
-
 # Linux/Darwin
 OSNAME=$(uname -s)
 echo "OSNAME: $OSNAME"
 
-dotnet build ./src/Castle.Core.Tests/Castle.Core.Tests.csproj /p:Configuration=Release || exit 1
-dotnet build ./src/Castle.Core.Tests.WeakNamed/Castle.Core.Tests.WeakNamed.csproj /p:Configuration=Release || exit 1
+dotnet build --configuration Release || exit 1
 
 echo --------------------
 echo Running NET461 Tests
