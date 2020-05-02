@@ -26,9 +26,6 @@ if [ ! -f "$MONOPATH" ]; then
 	exit 1
 fi
 
-# This lets `dotnet` know where to find Mono's reference assemblies when compiling for the `net461` platform:
-export FrameworkPathOverride=$(dirname $MONOPATH)/../lib/mono/4.6.1-api/
-
 dotnet restore ./src/Castle.Core/Castle.Core.csproj
 dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration.csproj
 dotnet restore ./src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration.csproj
