@@ -13,18 +13,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ****************************************************************************
+shopt -s expand_aliases
 
 DOTNETPATH=$(which dotnet)
 if [ ! -f "$DOTNETPATH" ]; then
 	echo "Please install Microsoft/netcore from: https://www.microsoft.com/net/core"
 	exit 1
 fi
-MONOPATH=$(which mono)
 
-if [ ! -f "$MONOPATH" ]; then
-	echo "Please install Xamarin/mono from: http://www.mono-project.com/docs/getting-started/install/"
-	exit 1
+DOCKERPATH=$(which docker)
+if [ -f "$DOCKERPATH" ]; then
+	alias mono="$PWD/buildscripts/docker-run-mono.sh"
+else
+	MONOPATH=$(which mono)
+	if [ ! -f "$MONOPATH" ]; then
+		echo "Please install either Docker, or Xamarin/Mono from http://www.mono-project.com/docs/getting-started/install/"
+		exit 1
+	fi
 fi
+
+mono --version
 
 # Linux/Darwin
 OSNAME=$(uname -s)
