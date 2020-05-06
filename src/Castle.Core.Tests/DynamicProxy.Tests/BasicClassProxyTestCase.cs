@@ -280,9 +280,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-#if DOTNET35
-		[Ignore("https://support.microsoft.com/en-us/kb/960240")]
-#endif
 		public void ProxyTypeWithMultiDimentionalArrayAsParameters()
 		{
 			LogInvocationInterceptor log = new LogInvocationInterceptor();

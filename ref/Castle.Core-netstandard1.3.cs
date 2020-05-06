@@ -660,6 +660,28 @@ namespace Castle.Components.DictionaryAdapter
     {
         public RemoveIfEmptyAttribute() { }
     }
+    public class SetProjection<T> : Castle.Components.DictionaryAdapter.ListProjection<T>, System.Collections.Generic.ICollection<T>, System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.ISet<T>, System.Collections.IEnumerable
+    {
+        public SetProjection(Castle.Components.DictionaryAdapter.ICollectionAdapter<T> adapter) { }
+        public override bool Add(T item) { }
+        public override void Clear() { }
+        public override bool Contains(T item) { }
+        public override void EndNew(int index) { }
+        public void ExceptWith(System.Collections.Generic.IEnumerable<T> other) { }
+        public void IntersectWith(System.Collections.Generic.IEnumerable<T> other) { }
+        public bool IsProperSubsetOf(System.Collections.Generic.IEnumerable<T> other) { }
+        public bool IsProperSupersetOf(System.Collections.Generic.IEnumerable<T> other) { }
+        public bool IsSubsetOf(System.Collections.Generic.IEnumerable<T> other) { }
+        public bool IsSupersetOf(System.Collections.Generic.IEnumerable<T> other) { }
+        protected override bool OnInserting(T value) { }
+        protected override bool OnReplacing(T oldValue, T newValue) { }
+        public bool Overlaps(System.Collections.Generic.IEnumerable<T> other) { }
+        public override bool Remove(T item) { }
+        public override void RemoveAt(int index) { }
+        public bool SetEquals(System.Collections.Generic.IEnumerable<T> other) { }
+        public void SymmetricExceptWith(System.Collections.Generic.IEnumerable<T> other) { }
+        public void UnionWith(System.Collections.Generic.IEnumerable<T> other) { }
+    }
     [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false, Inherited=false)]
     public class StringFormatAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryPropertyGetter
     {

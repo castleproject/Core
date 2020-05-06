@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Deprecations:
+ - Removed support for the .NET Framework 3.5.
+
 ## 4.4.1 (2020-05-06)
 
 Bugfixes:

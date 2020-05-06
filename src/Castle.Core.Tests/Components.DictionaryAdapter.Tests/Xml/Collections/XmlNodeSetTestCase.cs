@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if DOTNET40
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
 	using System;
@@ -370,4 +369,3 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		}
 	}
 }
-#endif

@@ -1,5 +1,5 @@
 image:
-- Visual Studio 2017
+- Visual Studio 2019
 - Ubuntu
 
 
@@ -21,7 +21,6 @@ for:
   # build and run tests
   build_script:
   - uname -a
-  - mono --version
   - ./build.sh
 
   # upload test results
@@ -37,7 +36,7 @@ for:
   # -------------------
   matrix:
     only:
-    - image: Visual Studio 2017
+    - image: Visual Studio 2019
 
   # update AppVeyor build version; this matters for deployments
   init:

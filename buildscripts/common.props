@@ -39,6 +39,10 @@
 		<Content Include="..\..\buildscripts\readme.txt" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
+	</ItemGroup>
+
 	<PropertyGroup>
 		<DiagnosticsConstants>DEBUG</DiagnosticsConstants>
 		<NetStandard13Constants>TRACE;FEATURE_NETCORE_REFLECTION_API;FEATURE_TEST_SERILOGINTEGRATION</NetStandard13Constants>
@@ -46,14 +50,6 @@
 		<CommonDesktopClrConstants>TRACE;FEATURE_APPDOMAIN;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_BINDINGLIST;FEATURE_DICTIONARYADAPTER_XML;FEATURE_CUSTOMMODIFIERS;FEATURE_EVENTLOG;FEATURE_GAC;FEATURE_GET_REFERENCED_ASSEMBLIES;FEATURE_IDATAERRORINFO;FEATURE_ISUPPORTINITIALIZE;FEATURE_LISTSORT;FEATURE_REMOTING;FEATURE_SECURITY_PERMISSIONS;FEATURE_SERIALIZATION;FEATURE_SMTP;FEATURE_SYSTEM_CONFIGURATION;FEATURE_TARGETEXCEPTION;FEATURE_TEST_COM;FEATURE_TEST_DATASET;FEATURE_TEST_SERILOGINTEGRATION</CommonDesktopClrConstants>
 		<DesktopClrConstants Condition="'$(OS)'=='Unix'">$(CommonDesktopClrConstants)</DesktopClrConstants>
 		<DesktopClrConstants Condition="'$(OS)'=='Windows_NT'">$(CommonDesktopClrConstants);FEATURE_TEST_PEVERIFY</DesktopClrConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net35|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);FEATURE_LEGACY_REFLECTION_API;DOTNET35</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net35|Release'">
-		<DefineConstants>$(DesktopClrConstants);FEATURE_LEGACY_REFLECTION_API;DOTNET35</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net40|Debug'">

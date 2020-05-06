@@ -13,35 +13,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ****************************************************************************
+shopt -s expand_aliases
 
 DOTNETPATH=$(which dotnet)
 if [ ! -f "$DOTNETPATH" ]; then
 	echo "Please install Microsoft/netcore from: https://www.microsoft.com/net/core"
 	exit 1
 fi
-MONOPATH=$(which mono)
 
-if [ ! -f "$MONOPATH" ]; then
-	echo "Please install Xamarin/mono from: http://www.mono-project.com/docs/getting-started/install/"
-	exit 1
+DOCKERPATH=$(which docker)
+if [ -f "$DOCKERPATH" ]; then
+	alias mono="$PWD/buildscripts/docker-run-mono.sh"
+else
+	MONOPATH=$(which mono)
+	if [ ! -f "$MONOPATH" ]; then
+		echo "Please install either Docker, or Xamarin/Mono from http://www.mono-project.com/docs/getting-started/install/"
+		exit 1
+	fi
 fi
 
-# This lets `dotnet` know where to find Mono's reference assemblies when compiling for the `net461` platform:
-export FrameworkPathOverride=$(dirname $MONOPATH)/../lib/mono/4.6.1-api/
-
-dotnet restore ./src/Castle.Core/Castle.Core.csproj
-dotnet restore ./src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration.csproj
-dotnet restore ./src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration.csproj
-dotnet restore ./src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration.csproj
-dotnet restore ./src/Castle.Core.Tests/Castle.Core.Tests.csproj
-dotnet restore ./src/Castle.Core.Tests.WeakNamed/Castle.Core.Tests.WeakNamed.csproj
+mono --version
 
 # Linux/Darwin
 OSNAME=$(uname -s)
 echo "OSNAME: $OSNAME"
 
-dotnet build ./src/Castle.Core.Tests/Castle.Core.Tests.csproj /p:Configuration=Release || exit 1
-dotnet build ./src/Castle.Core.Tests.WeakNamed/Castle.Core.Tests.WeakNamed.csproj /p:Configuration=Release || exit 1
+dotnet build --configuration Release || exit 1
 
 echo --------------------
 echo Running NET461 Tests

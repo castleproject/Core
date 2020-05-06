@@ -81,11 +81,7 @@ namespace Castle.Components.DictionaryAdapter
 			descriptor.AddBehaviors(metaInitializers);
 
 			if (sharedInitializers != null)
-#if DOTNET40
 				descriptor.AddBehaviors(sharedInitializers);
-#else
-				descriptor.AddBehaviors(sharedInitializers.Cast<IDictionaryBehavior>());
-#endif
 
 			return descriptor;
 		}

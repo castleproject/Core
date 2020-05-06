@@ -18,7 +18,7 @@ namespace System.Reflection
 {
 	using System.Reflection.Emit;
 
-	// This allows us to use the new reflection API while still supporting .NET 3.5 and 4.0.
+	// This allows us to use the new reflection API while still supporting .NET 4.0.
 	internal static class TypeBuilderExtensions
 	{
 		// TypeBuilder and GenericTypeParameterBuilder no longer inherit from Type but TypeInfo,
