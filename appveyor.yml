@@ -21,7 +21,6 @@ for:
   # build and run tests
   build_script:
   - uname -a
-  - mono --version
   - ./build.sh
 
   # upload test results

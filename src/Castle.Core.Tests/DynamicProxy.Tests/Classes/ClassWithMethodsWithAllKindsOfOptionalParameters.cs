@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !DOTNET35
 namespace Castle.DynamicProxy.Tests.Classes
 {
 	using System;
@@ -248,4 +247,3 @@ namespace Castle.DynamicProxy.Tests.Classes
 		}
 	}
 }
-#endif

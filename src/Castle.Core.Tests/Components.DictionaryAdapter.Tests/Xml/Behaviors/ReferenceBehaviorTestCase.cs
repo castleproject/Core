@@ -32,9 +32,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				IFoo        Two   { get; set; }
 				IFoo[]      Array { get; set; }
 				IList<IFoo> List  { get; set; }
-#if DOTNET40
 				ISet <IFoo> Set   { get; set; }
-#endif
 			}
 
 			public interface IBar : IDictionaryAdapter
@@ -299,7 +297,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			}
 
 			#region SetItemReference
-#if DOTNET40
 			[Test]
 			public void SetItemReference_Get()
 			{
@@ -447,10 +444,8 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 					"</Foo>"
 				), xml);
 			}
-#endif
 			#endregion
 
-#if DOTNET40
 			[Test]
 			public void Complex_Collection_Assign_InternalReferences()
 			{
@@ -497,7 +492,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				CollectionAssert.Contains(foo.List[0].Set, foo.List[2]);
 				CollectionAssert.DoesNotContain(foo.List[0].Set, foo);
 			}
-#endif
 
 			[Test]
 			public void NestedReference_NonNestedPrimary()

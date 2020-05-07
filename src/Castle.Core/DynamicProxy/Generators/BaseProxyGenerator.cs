@@ -281,7 +281,7 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach (var constructor in constructors)
 			{
-				if (!IsConstructorVisible(constructor))
+				if (!ProxyUtil.IsAccessibleMethod(constructor))
 				{
 					continue;
 				}
@@ -407,14 +407,6 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			return proxyType;
-		}
-
-		private bool IsConstructorVisible(ConstructorInfo constructor)
-		{
-			return constructor.IsPublic ||
-				constructor.IsFamily ||
-				constructor.IsFamilyOrAssembly ||
-				(constructor.IsAssembly && ProxyUtil.AreInternalsVisibleToDynamicProxy(constructor.DeclaringType.GetTypeInfo().Assembly));
 		}
 
 		private bool OverridesEqualsAndGetHashCode(Type type)

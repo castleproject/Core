@@ -34,7 +34,7 @@ Browse the [contributing section](https://github.com/castleproject/Home#its-comm
 build.cmd
 ```
 
-Compilation requires an up-to-date .NET Core SDK, MSBuild 15+ (which should be included in the former), and reference assemblies for the .NET Framework versions 3.5, 4.0, and 4.5.
+Compilation requires an up-to-date .NET Core SDK and MSBuild 15+ (which should be included in the former).
 
 Running the unit tests additionally requires the .NET Framework 4.6.1+ as well as the .NET Core 1.1 runtime to be installed.
 
@@ -46,9 +46,9 @@ Most of these requirements should be covered by Visual Studio 2017.
 ./build.sh
 ```
 
-Compilation requires an up-to-date .NET Core SDK, as well as Mono for the .NET Framework reference assemblies. We recommend Mono 5.10+, though older versions (4.6.1+) might still work as well.
+Compilation requires an up-to-date .NET Core SDK.
 
-Running the unit tests additionally requires the .NET Core 1.1 runtime to be installed.
+Running the unit tests additionally requires the .NET Core 1.1 runtime to be installed, as well as either Docker or Mono. For the latter, we recommend Mono 5.10+, though older versions (4.6.1+) might still work as well.
 
 :information_source: **Mono runtime support:** Castle Core runs with minor limitations and defects on Mono 4.0.2+ (however 4.6.1+ is highly recommended, or 5.10+ if your code uses new C# 7.x language features such as `in` parameters).
 
@@ -60,35 +60,34 @@ For known Mono defects, check [our issue tracker](https://github.com/castleproje
 
 The following conditional compilation symbols (vertical) are currently defined for each of the build configurations (horizontal):
 
-Symbol                              | NET35              | NET40              | NET45              | .NET Core
------------------------------------ | ------------------ | ------------------ | ------------------ | ------------------
-`FEATURE_APPDOMAIN`                 | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_BINDINGLIST`               | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_DICTIONARYADAPTER_XML`     | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_CUSTOMMODIFIERS`           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_EVENTLOG`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_GAC`                       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_GET_REFERENCED_ASSEMBLIES` | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_IDATAERRORINFO`            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_ISUPPORTINITIALIZE`        | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_LEGACY_REFLECTION_API`     | :white_check_mark: | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:
-`FEATURE_LISTSORT`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_NETCORE_REFLECTION_API`    | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
-`FEATURE_REMOTING`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_SECURITY_PERMISSIONS`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_SERIALIZATION`             | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_SMTP`                      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_TARGETEXCEPTION`           | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_TEST_COM`                  | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_TEST_DATASET`              | :white_check_mark: | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`FEATURE_TEST_PEVERIFY`                  | :white_check_mark:    | :white_check_mark:    | :white_check_mark:    | :no_entry_sign:
-`FEATURE_TEST_SERILOGINTEGRATION`   | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark: | :white_check_mark:
----                                 |                    |                    |                    | 
-`DOTNET35`                          | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:    | :no_entry_sign:
-`DOTNET40`                          | :no_entry_sign:    | :white_check_mark: | :white_check_mark: | :no_entry_sign:
-`DOTNET45`                          | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark: | :no_entry_sign:
+Symbol                              | NET40              | NET45              | .NET Core
+----------------------------------- | ------------------ | ------------------ | ------------------
+`FEATURE_APPDOMAIN`                 | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_BINDINGLIST`               | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_DICTIONARYADAPTER_XML`     | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_CUSTOMMODIFIERS`           | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_EVENTLOG`                  | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_GAC`                       | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_GET_REFERENCED_ASSEMBLIES` | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_IDATAERRORINFO`            | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_ISUPPORTINITIALIZE`        | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_LEGACY_REFLECTION_API`     | :white_check_mark: | :no_entry_sign:    | :no_entry_sign:
+`FEATURE_LISTSORT`                  | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_NETCORE_REFLECTION_API`    | :no_entry_sign:    | :no_entry_sign:    | :white_check_mark:
+`FEATURE_REMOTING`                  | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_SECURITY_PERMISSIONS`      | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_SERIALIZATION`             | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_SMTP`                      | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_TARGETEXCEPTION`           | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_TEST_COM`                  | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_TEST_DATASET`              | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_TEST_PEVERIFY`             | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`FEATURE_TEST_SERILOGINTEGRATION`   | :no_entry_sign:    | :white_check_mark: | :white_check_mark:
+---                                 |                    |                    |
+`DOTNET40`                          | :white_check_mark: | :white_check_mark: | :no_entry_sign:
+`DOTNET45`                          | :no_entry_sign:    | :white_check_mark: | :no_entry_sign:
 
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.
@@ -100,7 +99,7 @@ Symbol                              | NET35              | NET40              | 
 * `FEATURE_GET_REFERENCED_ASSEMBLIES` - enables code that takes advantage of System.Reflection.Assembly.GetReferencedAssemblies().
 * `FEATURE_IDATAERRORINFO` - enables code that depends on System.ComponentModel.IDataErrorInfo.
 * `FEATURE_ISUPPORTINITIALIZE` - enables support for features that make use of System.ComponentModel.ISupportInitialize.
-* `FEATURE_LEGACY_REFLECTION_API` - provides a shim for .NET 3.5/4.0 that emulates the `TypeInfo` API available in .NET 4.5+ and .NET Core.
+* `FEATURE_LEGACY_REFLECTION_API` - provides a shim for .NET 4.0 that emulates the `TypeInfo` API available in .NET 4.5+ and .NET Core.
 * `FEATURE_LISTSORT` - enables support for features that make use of System.ComponentModel.ListSortDescription.
 * `FEATURE_NETCORE_REFLECTION_API` - provides shims to implement missing functionality in .NET Core that has no alternatives.
 * `FEATURE_REMOTING` - supports remoting on various types including inheriting from MarshalByRefObject.

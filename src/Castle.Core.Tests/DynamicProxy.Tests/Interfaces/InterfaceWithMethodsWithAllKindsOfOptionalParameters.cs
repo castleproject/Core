@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !DOTNET35
 namespace Castle.DynamicProxy.Tests.Interfaces
 {
 	using System;
@@ -131,4 +130,3 @@ namespace Castle.DynamicProxy.Tests.Interfaces
 		void MethodWithOptionalNonDefaultNullableEnumParameter(ConsoleColor? c = ConsoleColor.Cyan);
 	}
 }
-#endif

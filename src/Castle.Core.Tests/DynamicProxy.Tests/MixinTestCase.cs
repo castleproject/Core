@@ -399,5 +399,17 @@ namespace Castle.DynamicProxy.Tests
 			var proxy = generator.CreateInterfaceProxyWithTarget(typeof(IService), new Type[] { typeof(IDerivedSimpleMixin) }, new ServiceImpl(), options, interceptor);
 			Assert.AreEqual(1, (proxy as ISimpleMixin).DoSomething());
 		}
+
+		[Test]
+		public void CanCreateMixinWithCaseSensitiveImplementationOrder()
+		{
+			ProxyGenerationOptions options = new ProxyGenerationOptions();
+			options.AddMixinInstance(new DomainWithMixin());
+			options.AddMixinInstance(new DomainsAs());
+
+			var proxy = generator.CreateClassProxy(typeof(MixinDomainObject), options, new object[] { "argument" });
+			Assert.IsInstanceOf(typeof(MixinDomainObject), proxy);
+			Assert.AreEqual("argument", ((MixinDomainObject)proxy).Name);
+		}
 	}
 }

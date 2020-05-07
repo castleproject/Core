@@ -1,4 +1,4 @@
-// Copyright 2004-2015 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2020 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,22 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_LEGACY_REFLECTION_API
-
-namespace System.Reflection
+namespace Castle.DynamicProxy.Tests.Classes
 {
-	// This allows us to use the new reflection API while still supporting .NET 4.0.
-	//
-	// Methods like Type.GetInterfaceMap no longer exist in .NET Core so this provides a shim
-	// for .NET 4.0.
-	internal static class RuntimeReflectionExtensions
+	public class ClassWithPrivateProtectedConstructor
 	{
-		// Delegate to the old name for this method.
-		public static InterfaceMapping GetRuntimeInterfaceMap(this Type type, Type interfaceType)
+		private protected ClassWithPrivateProtectedConstructor()
 		{
-			return type.GetInterfaceMap(interfaceType);
+			_someString = "Something";
+		}
+
+		private string _someString = string.Empty;
+
+		public string SomeString
+		{
+			get { return _someString; }
+			set { _someString = value; }
 		}
 	}
 }
-
-#endif

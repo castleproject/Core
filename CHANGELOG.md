@@ -5,8 +5,16 @@
 Enhancements:
 - .NET Standard 2.0 and 2.1 support (@lg2de, #485)
 
+Deprecations:
+ - Removed support for the .NET Framework 3.5.
+
+## 4.4.1 (2020-05-06)
+
 Bugfixes:
 - Prevent method name collisions when a proxy type implements more than two identically named interfaces having one or more identically named methods each. Name collisions are avoided by including the declaring types' namespaces in the proxy type's method names. (@stakx, #469)
+- Reduce lock contention while generating new proxy types which previously blocked new proxy instances (@tangdf, #484)
+- Fix mixins where proxy constructor fields were ordered differently to interfaces because of different case comparisons (@zapov, #475)
+- Fix proxy generation for types having only a `private protected` constructor (@mriehm, #491)
 
 ## 4.4.0 (2019-04-05)
 

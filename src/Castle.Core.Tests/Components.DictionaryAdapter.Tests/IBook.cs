@@ -16,7 +16,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 {
 	using System.Collections.Generic;
 
-#if !DOTNET35
 	public interface IBook
 	{
 		IDeweyDecimalNumber DDC { get; set; }
@@ -27,7 +26,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		ISet<IBook> RelatedBooks { get; set; }
 	}
-#endif
 
 	public interface IDeweyDecimalNumber
 	{
