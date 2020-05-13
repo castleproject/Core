@@ -716,6 +716,28 @@ namespace Castle.Components.DictionaryAdapter
     {
         public RemoveIfEmptyAttribute() { }
     }
+    public class SetProjection<T> : Castle.Components.DictionaryAdapter.ListProjection<T>, System.Collections.Generic.ICollection<T>, System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.ISet<T>, System.Collections.IEnumerable
+    {
+        public SetProjection(Castle.Components.DictionaryAdapter.ICollectionAdapter<T> adapter) { }
+        public override bool Add(T item) { }
+        public override void Clear() { }
+        public override bool Contains(T item) { }
+        public override void EndNew(int index) { }
+        public void ExceptWith(System.Collections.Generic.IEnumerable<T> other) { }
+        public void IntersectWith(System.Collections.Generic.IEnumerable<T> other) { }
+        public bool IsProperSubsetOf(System.Collections.Generic.IEnumerable<T> other) { }
+        public bool IsProperSupersetOf(System.Collections.Generic.IEnumerable<T> other) { }
+        public bool IsSubsetOf(System.Collections.Generic.IEnumerable<T> other) { }
+        public bool IsSupersetOf(System.Collections.Generic.IEnumerable<T> other) { }
+        protected override bool OnInserting(T value) { }
+        protected override bool OnReplacing(T oldValue, T newValue) { }
+        public bool Overlaps(System.Collections.Generic.IEnumerable<T> other) { }
+        public override bool Remove(T item) { }
+        public override void RemoveAt(int index) { }
+        public bool SetEquals(System.Collections.Generic.IEnumerable<T> other) { }
+        public void SymmetricExceptWith(System.Collections.Generic.IEnumerable<T> other) { }
+        public void UnionWith(System.Collections.Generic.IEnumerable<T> other) { }
+    }
     [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false, Inherited=false)]
     public class StringFormatAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryPropertyGetter
     {
@@ -1633,6 +1655,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public System.Xml.XmlWriter WriteAttributes() { }
         public System.Xml.XmlWriter WriteChildren() { }
     }
+    public class XmlSetSerializer : Castle.Components.DictionaryAdapter.Xml.XmlCollectionSerializer
+    {
+        public static readonly Castle.Components.DictionaryAdapter.Xml.XmlSetSerializer Instance;
+        protected XmlSetSerializer() { }
+        public override System.Type ListTypeConstructor { get; }
+    }
     public class static XmlSimpleSerializer
     {
         public static readonly Castle.Components.DictionaryAdapter.Xml.XmlTypeSerializer ForBoolean;
@@ -1678,7 +1706,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public override string BaseURI { get; }
         public override int Depth { get; }
         public override bool EOF { get; }
-        public override bool HasValue { get; }
         public bool IsAtRootElement { get; }
         public bool IsDisposed { get; }
         public override bool IsEmptyElement { get; }
@@ -1999,23 +2026,6 @@ namespace Castle.Core.Logging
         public ConsoleLogger(string name, Castle.Core.Logging.LoggerLevel logLevel) { }
         public override Castle.Core.Logging.ILogger CreateChildLogger(string loggerName) { }
         protected override void Log(Castle.Core.Logging.LoggerLevel loggerLevel, string loggerName, string message, System.Exception exception) { }
-    }
-    public class DiagnosticsLogger : Castle.Core.Logging.LevelFilteredLogger, System.IDisposable
-    {
-        public DiagnosticsLogger(string logName) { }
-        public DiagnosticsLogger(string logName, string source) { }
-        public DiagnosticsLogger(string logName, string machineName, string source) { }
-        public override Castle.Core.Logging.ILogger CreateChildLogger(string loggerName) { }
-        public void Dispose() { }
-        protected virtual void Dispose(bool disposing) { }
-        protected override void Finalize() { }
-        protected override void Log(Castle.Core.Logging.LoggerLevel loggerLevel, string loggerName, string message, System.Exception exception) { }
-    }
-    public class DiagnosticsLoggerFactory : Castle.Core.Logging.AbstractLoggerFactory
-    {
-        public DiagnosticsLoggerFactory() { }
-        public override Castle.Core.Logging.ILogger Create(string name) { }
-        public override Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level) { }
     }
     public interface IContextProperties
     {

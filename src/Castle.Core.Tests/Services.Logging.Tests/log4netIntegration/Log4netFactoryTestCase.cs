@@ -16,6 +16,7 @@ namespace Castle.Services.Logging.Log4netIntegration.Tests
 {
 	using System.IO;
 	using System.Linq;
+	using System.Reflection;
 	using System.Text;
 
 	using NUnit.Framework;
@@ -41,7 +42,7 @@ namespace Castle.Services.Logging.Log4netIntegration.Tests
 
 		private string GetLogContent()
 		{
-			var repository = (Hierarchy)LogManager.GetRepository();
+			var repository = (Hierarchy)LogManager.GetRepository(Assembly.GetCallingAssembly());
 			var memoryAppender = (from appender in repository.GetAppenders().OfType<MemoryAppender>() select appender).Single();
 
 			return memoryAppender.GetEvents()[0].RenderedMessage;
