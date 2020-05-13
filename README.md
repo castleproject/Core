@@ -36,9 +36,9 @@ build.cmd
 
 Compilation requires an up-to-date .NET Core SDK and MSBuild 15+ (which should be included in the former).
 
-Running the unit tests additionally requires the .NET Framework 4.6.1+ as well as the .NET Core 1.1 runtime to be installed.
+Running the unit tests additionally requires the .NET Framework 4.6.1+ as well as the .NET Core 3.1 runtime to be installed.
 
-Most of these requirements should be covered by Visual Studio 2017.
+Most of these requirements should be covered by Visual Studio 2019.
 
 ### On Linux
 
@@ -48,7 +48,7 @@ Most of these requirements should be covered by Visual Studio 2017.
 
 Compilation requires an up-to-date .NET Core SDK.
 
-Running the unit tests additionally requires the .NET Core 1.1 runtime to be installed, as well as either Docker or Mono. For the latter, we recommend Mono 5.10+, though older versions (4.6.1+) might still work as well.
+Running the unit tests additionally requires the .NET Core 3.1 runtime to be installed, as well as either Docker or Mono. For the latter, we recommend Mono 5.10+, though older versions (4.6.1+) might still work as well.
 
 :information_source: **Mono runtime support:** Castle Core runs with minor limitations and defects on Mono 4.0.2+ (however 4.6.1+ is highly recommended, or 5.10+ if your code uses new C# 7.x language features such as `in` parameters).
 

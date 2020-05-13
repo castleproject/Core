@@ -10,7 +10,8 @@ To use Castle DynamicProxy you need the following environment:
 
 * one of the following runtimes installed
   * .NET Framework 4.5+
-  * .NET Core 1.0+ (Castle Core 4.0+)
+  * .NET Core 2.1+
+  * any another .NET platform that supports .NET Standard 2.0+ and runtime type generation using System.Reflection.Emit
 * `Castle.Core.dll` (assembly where DynamicProxy lives)
 
 :information_source: **DynamicProxy assembly:** In previous versions (up to v2.2) DynamicProxy used to live in its own assembly `Castle.DynamicProxy.dll`. It was later moved to `Castle.Core.dll` and now no other assembly is required to use it.
