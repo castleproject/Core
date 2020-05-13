@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_SMTP
-
 #pragma warning disable 618 // Mono marked SmtpClient obsolete
 
 namespace Castle.Core.Smtp
@@ -292,5 +290,3 @@ namespace Castle.Core.Smtp
 }
 
 #pragma warning restore 618 // Mono marked SmtpClient obsolete
-
-#endif

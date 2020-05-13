@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_DICTIONARYADAPTER_XML
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -427,58 +426,17 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 			private static bool IsWhitespace(char c)
 			{
-#if DOTNET45
 				return XmlConvert.IsWhitespaceChar(c);
-#else
-				// Source: http://www.w3.org/TR/REC-xml/#NT-S
-				return ' '  == c
-					|| '\t' == c
-					|| '\r' == c
-					|| '\n' == c
-					;
-#endif
 			}
 
 			private static bool IsNameStartChar(char c)
 			{
-#if DOTNET45
 			    return XmlConvert.IsStartNCNameChar(c);
-#else
-				// Source: http://www.w3.org/TR/REC-xml/#NT-NameStartChar
-				return ('A' <= c && c <= 'Z')
-					|| ('a' <= c && c <= 'z')
-					|| ('_' == c)
-					|| ('\u00C0' <= c && c <= '\u00D6')
-					|| ('\u00D8' <= c && c <= '\u00F6')
-					|| ('\u00F8' <= c && c <= '\u02FF')
-					|| ('\u0370' <= c && c <= '\u037D')
-					|| ('\u037F' <= c && c <= '\u1FFF')
-					|| ('\u200C' <= c && c <= '\u200D')
-					|| ('\u2070' <= c && c <= '\u218F')
-					|| ('\u2C00' <= c && c <= '\u2FEF')
-					|| ('\u3001' <= c && c <= '\uD7FF')
-					|| ('\uF900' <= c && c <= '\uFDCF')
-					|| ('\uFDF0' <= c && c <= '\uFFFD')
-					// [10000-EFFFF] not supported by C#
-					;
-#endif
 			}
 
 			private static bool IsNameChar(char c)
 			{
-#if DOTNET45
 			    return XmlConvert.IsNCNameChar(c);
-#else
-				// Source: http://www.w3.org/TR/REC-xml/#NT-NameChar
-				return IsNameStartChar(c)
-					|| ('-' == c)
-					|| ('.' == c)
-					|| ('0' <= c && c <='9')
-					|| ('\u00B7' == c)
-					|| ('\u0300' <= c && c <= '\u036F')
-					|| ('\u203F' <= c && c <= '\u2040')
-					;
-#endif
 			}
 
 			private enum State
@@ -492,4 +450,3 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 	}
 }
-#endif

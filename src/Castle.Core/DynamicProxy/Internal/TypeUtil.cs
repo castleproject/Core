@@ -151,7 +151,7 @@ namespace Castle.DynamicProxy.Internal
 			Type[] types = new Type[typeInfos.Length];
 			for (int i = 0; i < types.Length; i++)
 			{
-				types[i] = typeInfos[i].AsType();
+				types[i] = typeInfos[i];
 			}
 			return types;
 		}
@@ -195,7 +195,6 @@ namespace Castle.DynamicProxy.Internal
 						fieldName,
 						type), e);
 			}
-#if FEATURE_TARGETEXCEPTION
 			catch (TargetException e)
 			{
 				throw new ProxyGenerationException(
@@ -204,7 +203,6 @@ namespace Castle.DynamicProxy.Internal
 						fieldName,
 						type), e);
 			}
-#endif
 			catch (TargetInvocationException e) // yes, this is not documented in MSDN. Yay for documentation
 			{
 				if ((e.InnerException is TypeInitializationException) == false)

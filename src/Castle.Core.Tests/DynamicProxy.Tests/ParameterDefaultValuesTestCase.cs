@@ -235,9 +235,7 @@ namespace Castle.DynamicProxy.Tests
 			var expectedDefaultValue = method.Invoke(Activator.CreateInstance(type), new object[1]);
 
 			var proxiedParameter = GetProxiedParameter(type, methodName);
-#if DOTNET45
 			Assert.True(proxiedParameter.HasDefaultValue);
-#endif
 			Assert.AreEqual(expectedDefaultValue, proxiedParameter.DefaultValue);
 		}
 

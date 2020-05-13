@@ -118,13 +118,11 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					using (dictionaryAdapter.SuppressNotificationsBlock())
 					{
-#if FEATURE_ISUPPORTINITIALIZE
 						if (storedValue is ISupportInitialize)
 						{
 							((ISupportInitialize)storedValue).BeginInit();
 							((ISupportInitialize)storedValue).EndInit();
 						}
-#endif
 						if (initializer != null)
 						{
 							initializer.Initialize(dictionaryAdapter, storedValue);
@@ -162,24 +160,15 @@ namespace Castle.Components.DictionaryAdapter
 				var genericDef = type.GetGenericTypeDefinition();
 				var genericArg = type.GetGenericArguments()[0];
 				bool isBindingList =
-#if !FEATURE_BINDINGLIST
-					false;
-#else
 					genericDef == typeof(System.ComponentModel.BindingList<>);
-#endif
 
 				if (isBindingList || genericDef == typeof(List<>))
 				{
 					if (dictionaryAdapter.CanEdit)
 					{
-#if !FEATURE_BINDINGLIST
-						collectionType =  typeof(EditableList<>);
-#else
 						collectionType = isBindingList ? typeof(EditableBindingList<>) : typeof(EditableList<>);
-#endif
 					}
 
-#if FEATURE_BINDINGLIST
 					if (isBindingList && genericArg.GetTypeInfo().IsInterface)
 					{
 						Func<object> addNew = () => dictionaryAdapter.Create(genericArg);
@@ -187,7 +176,6 @@ namespace Castle.Components.DictionaryAdapter
 							typeof(BindingListInitializer<>).MakeGenericType(genericArg),
 							null, addNew, null, null, null);
 					}
-#endif
 				}
 				else if (genericDef == typeof(IList<>) || genericDef == typeof(ICollection<>))
 				{

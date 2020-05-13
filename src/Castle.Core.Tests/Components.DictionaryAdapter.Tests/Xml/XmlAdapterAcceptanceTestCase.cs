@@ -815,7 +815,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			CollectionAssert.AreEqual(new[] { "Alpha", "Beta" }, season.Tags);
 		}
 
-#if FEATURE_BINDINGLIST
 		[Test]
 		public void Can_Reassign_Lists()
 		{
@@ -839,7 +838,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			season.Teams = newTeams;
 			Assert.AreEqual(1, season.Teams.Count);
 		}
-#endif
 
 		[Test]
 		public void Can_Remove_Properties()

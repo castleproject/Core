@@ -54,14 +54,8 @@ namespace Castle.DynamicProxy
 
 			bool ReferencesCastleCore(Assembly ia)
 			{
-#if FEATURE_GET_REFERENCED_ASSEMBLIES
 				return ia.GetReferencedAssemblies()
 					.Any(r => r.FullName == Assembly.GetExecutingAssembly().FullName);
-#else
-				// .NET Core does not provide an API to do this, so we just fall back to the solution that will definitely work.
-				// After all it is just an exception message.
-				return false;
-#endif
 			}
 		}
 

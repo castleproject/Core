@@ -743,8 +743,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			container.Item.Name = "Craig";
 		}
 
-#if FEATURE_BINDINGLIST
-
 		[Test]
 		public void WillPropagatePropertyChangedEventWhenBindingListPropertyChanged()
 		{
@@ -752,7 +750,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var person = container.Bindingtems.AddNew();
 			person.Name = "Fred Flinstone";
 		}
-#endif
 
 		[Test]
 		public void CanSuppressAllPropertyChangedEvents()
@@ -1130,7 +1127,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsTrue(((IDictionaryAdapter)name).Validators.OfType<TestDictionaryValidator>().Any());
 		}
 
-#if FEATURE_IDATAERRORINFO
 		[Test]
 		public void CanValidateAndObtainDataErrorInformation()
 		{
@@ -1196,7 +1192,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			name.LastName = "Monster";
 			Assert.IsTrue(notifyCalled);
 		}
-#endif
 
 		[Test]
 		public void CanCreateDictionaryAdapterFromExistingAdapter()
@@ -1266,8 +1261,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			Assert.IsNotNull(container.Phone);
 		}
 
-#if FEATURE_BINDINGLIST
-
 		[Test]
 		public void CanAddBindingListItemsOnDemand()
 		{
@@ -1275,7 +1268,6 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			var person = container.Bindingtems.AddNew();
 			Assert.IsNotNull(person);
 		}
-#endif
 
 		[Test]
 		public void WillNotCreateObjectOnDemandWithoutDefaultConstructor()

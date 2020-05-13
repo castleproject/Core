@@ -60,11 +60,7 @@ namespace Castle.Core.Resource
 		{
 			try
 			{
-#if FEATURE_GAC
 				return Assembly.Load(assemblyName);
-#else
-				return Assembly.Load(new AssemblyName(assemblyName));
-#endif
 			}
 			catch (Exception ex)
 			{

@@ -81,7 +81,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				GenericTypeParameterBuilder value;
 				if (name2GenericType.TryGetValue(paramType.Name, out value))
 				{
-					return value.AsType();
+					return value;
 				}
 			}
 
@@ -145,7 +145,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					var index = Array.IndexOf(originalGenericParameters, constraint);
 					Trace.Assert(index != -1,
 					             "When a generic method parameter has a constraint on another method parameter, both parameters must be declared on the same method.");
-					return newGenericParameters[index].AsType();
+					return newGenericParameters[index];
 				}
 				else // parameter from surrounding type
 				{

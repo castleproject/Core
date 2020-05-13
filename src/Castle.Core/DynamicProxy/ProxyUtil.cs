@@ -79,11 +79,7 @@ namespace Castle.DynamicProxy
 			}
 			else
 			{
-#if FEATURE_NETCORE_REFLECTION_API
-				return proxiedInvokeMethod.CreateDelegate(delegateType, proxy);
-#else
 				return Delegate.CreateDelegate(delegateType, proxy, proxiedInvokeMethod);
-#endif
 			}
 		}
 

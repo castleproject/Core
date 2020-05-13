@@ -25,9 +25,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Threading;
 	using System.Diagnostics;
 
-#if FEATURE_DICTIONARYADAPTER_XML
 	using Castle.Components.DictionaryAdapter.Xml;
-#endif
 	using Castle.Core.Internal;
 
 	/// <summary>
@@ -84,7 +82,6 @@ namespace Castle.Components.DictionaryAdapter
 			return GetAdapter(type, new NameValueCollectionAdapter(nameValues));
 		}
 
-#if FEATURE_DICTIONARYADAPTER_XML
 		/// <inheritdoc />
 		public T GetAdapter<T>(System.Xml.XmlNode xmlNode)
 		{
@@ -99,7 +96,6 @@ namespace Castle.Components.DictionaryAdapter
 				.AddBehavior(XmlMetadataBehavior.Default)
 				.AddBehavior(xml));
 		}
-#endif
 
 		/// <inheritdoc />
 		public DictionaryAdapterMeta GetAdapterMeta(Type type)
@@ -200,7 +196,7 @@ namespace Castle.Components.DictionaryAdapter
 				CreateAdapterProperty(typeBuilder, property.Value);
 			}
 
-			var implementation = typeBuilder.CreateTypeInfo().AsType();
+			var implementation = typeBuilder.CreateTypeInfo();
 			var creator = (Func<DictionaryAdapterInstance, IDictionaryAdapter>)implementation
 				.GetTypeInfo().GetDeclaredMethod("__Create")
 				.CreateDelegate(typeof(Func<DictionaryAdapterInstance, IDictionaryAdapter>));
@@ -490,9 +486,7 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				typeof (IEditableObject), typeof (IDictionaryEdit), typeof (IChangeTracking),
 				typeof (IRevertibleChangeTracking), typeof (IDictionaryNotify),
-#if FEATURE_IDATAERRORINFO
 				typeof (IDataErrorInfo),
-#endif
 				typeof (IDictionaryValidate), typeof (IDictionaryAdapter)
 			};
 

@@ -105,13 +105,11 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(IntPtr.Zero, buffer);
 		}
 
-#if FEATURE_TEST_DATASET
 		[Test]
 		public void CanProxyDataSet()
 		{
 			generator.CreateClassProxy(typeof (DataSet), new Type[0], new StandardInterceptor());
 		}
-#endif
 
 		private Type iHaveMethodWithModOptsType;
 
@@ -179,7 +177,7 @@ namespace Castle.DynamicProxy.Tests
 				},
 				callingConvention: CallingConventions.Standard);
 
-			var iHaveMethodWithModOptsType = typeBuilder.CreateTypeInfo().AsType();
+			var iHaveMethodWithModOptsType = typeBuilder.CreateTypeInfo();
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE && FEATURE_TEST_PEVERIFY
 			// Let's persist and PE-verify the dynamic assembly before it gets used in tests:
