@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+Enhancements:
+- .NET Standard 2.0 and 2.1 support (@lg2de, #485)
+
 Deprecations:
  - Removed support for the .NET Framework 3.5.
 

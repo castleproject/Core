@@ -4,9 +4,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,11 +48,11 @@ mono ./src/Castle.Core.Tests/bin/Release/net461/Castle.Core.Tests.exe --result=D
 mono ./src/Castle.Core.Tests.WeakNamed/bin/Release/net461/Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3
 
 echo ---------------------------
-echo Running NETCOREAPP1.1 Tests
+echo Running NETCOREAPP3.1 Tests
 echo ---------------------------
 
-dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp1.1/Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3
-dotnet ./src/Castle.Core.Tests.WeakNamed/bin/Release/netcoreapp1.1/Castle.Core.Tests.WeakNamed.dll --result=NetCoreClrWeakNamedTestResults.xml;format=nunit3
+dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp3.1/Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3
+dotnet ./src/Castle.Core.Tests.WeakNamed/bin/Release/netcoreapp3.1/Castle.Core.Tests.WeakNamed.dll --result=NetCoreClrWeakNamedTestResults.xml;format=nunit3
 
 # Ensure that all test runs produced a protocol file:
 if [[ !( -f NetCoreClrTestResults.xml &&

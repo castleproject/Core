@@ -46,7 +46,7 @@ namespace Castle.Core.Smtp
 		/// </summary>
 		/// <remarks>
 		/// This constructor is based on the default <see cref="SmtpClient"/> configuration in the application configuration file.
-		/// </remarks> 
+		/// </remarks>
 		public DefaultSmtpSender() { }
 
 		/// <summary>
@@ -60,7 +60,7 @@ namespace Castle.Core.Smtp
 		}
 
 		/// <summary>
-		/// Gets or sets the port used to 
+		/// Gets or sets the port used to
 		/// access the SMTP server
 		/// </summary>
 		public int Port
@@ -79,7 +79,7 @@ namespace Castle.Core.Smtp
 		}
 
 		/// <summary>
-		/// Gets or sets a value which is used to 
+		/// Gets or sets a value which is used to
 		/// configure if emails are going to be sent asynchronously or not.
 		/// </summary>
 		public bool AsyncSend
@@ -89,7 +89,7 @@ namespace Castle.Core.Smtp
 		}
 
 		/// <summary>
-		/// Gets or sets a value that specifies 
+		/// Gets or sets a value that specifies
 		/// the amount of time after which a synchronous Send call times out.
 		/// </summary>
 		public int Timeout
@@ -99,7 +99,7 @@ namespace Castle.Core.Smtp
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the email should be sent using 
+		/// Gets or sets a value indicating whether the email should be sent using
 		/// a secure communication channel.
 		/// </summary>
 		/// <value><c>true</c> if should use SSL; otherwise, <c>false</c>.</value>
@@ -110,7 +110,7 @@ namespace Castle.Core.Smtp
 		}
 
 		/// <summary>
-		/// Sends a message. 
+		/// Sends a message.
 		/// </summary>
 		/// <exception cref="ArgumentNullException">If any of the parameters is null</exception>
 		/// <param name="from">From field</param>
@@ -131,7 +131,7 @@ namespace Castle.Core.Smtp
 		}
 
 		/// <summary>
-		/// Sends a message. 
+		/// Sends a message.
 		/// </summary>
 		/// <exception cref="ArgumentNullException">If the message is null</exception>
 		/// <param name="message">Message instance</param>
@@ -282,7 +282,11 @@ namespace Castle.Core.Smtp
 
 		private static bool CanAccessCredentials()
 		{
+#if FEATURE_SECURITY_PERMISSIONS
 			return new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).IsGranted();
+#else
+			return false;
+#endif
 		}
 	}
 }
