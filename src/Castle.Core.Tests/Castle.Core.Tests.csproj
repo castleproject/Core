@@ -20,12 +20,6 @@
 		<StartupObject>Program</StartupObject>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1' or '$(TargetFramework)'=='netcoreapp3.1'">
-		<Compile Remove="Components.DictionaryAdapter.Tests\Xml\**" />
-		<Compile Remove="Services.Logging.Tests\log4netIntegration\**" />
-		<Compile Remove="Services.Logging.Tests\NLogIntegration\**" />
-	</ItemGroup>
-
 	<ItemGroup>
 		<None Update="Services.Logging.Tests\log4netIntegration\log4net.xml">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
