@@ -58,6 +58,7 @@
 		<PackageReference Include="System.Net.Primitives" Version="4.3.0" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
+		<PackageReference Include="System.Net.Primitives" Version="4.3.0" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='net461'">
 		<Reference Include="Microsoft.CSharp" />
