@@ -52,7 +52,7 @@ namespace Castle.DynamicProxy.Generators
 		/// <param name = "interfaces">The interfaces.</param>
 		/// <param name = "options">The options.</param>
 		public CacheKey(Type target, Type[] interfaces, ProxyGenerationOptions options)
-			: this(target.GetTypeInfo(), null, interfaces, options)
+			: this(target, null, interfaces, options)
 		{
 		}
 

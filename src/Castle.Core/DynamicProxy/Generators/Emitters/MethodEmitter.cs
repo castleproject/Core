@@ -205,7 +205,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				// If this bug is present, it is caused by a `null` default value:
 				defaultValue = null;
 			}
-			catch (FormatException) when (from.ParameterType.GetTypeInfo().IsEnum)
+			catch (FormatException) when (from.ParameterType.IsEnum)
 			{
 				// This catch clause guards against a CLR bug that makes it impossible to query
 				// the default value of a (closed generic) enum parameter. For the CoreCLR, see
@@ -249,7 +249,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 						// would "produce" a default value of `Missing.Value` in this situation).
 						return;
 					}
-					else if (parameterType.GetTypeInfo().IsValueType)
+					else if (parameterType.IsValueType)
 					{
 						// This guards against a CLR bug that prohibits replicating `null` default
 						// values for non-nullable value types (which, despite the apparent type
@@ -265,7 +265,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				else if (parameterType.IsNullableType())
 				{
 					parameterNonNullableType = from.ParameterType.GetGenericArguments()[0];
-					if (parameterNonNullableType.GetTypeInfo().IsEnum || parameterNonNullableType.IsAssignableFrom(defaultValue.GetType()))
+					if (parameterNonNullableType.IsEnum || parameterNonNullableType.IsAssignableFrom(defaultValue.GetType()))
 					{
 						// This guards against two bugs:
 						//

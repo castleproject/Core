@@ -44,16 +44,16 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 				ArgumentsUtil.EmitLoadOwnerAndReference(reference, gen);
 
-				if (reference.Type.GetTypeInfo().IsByRef)
+				if (reference.Type.IsByRef)
 				{
 					throw new NotSupportedException();
 				}
 
-				if (reference.Type.GetTypeInfo().IsValueType)
+				if (reference.Type.IsValueType)
 				{
 					gen.Emit(OpCodes.Box, reference.Type);
 				}
-				else if (reference.Type.GetTypeInfo().IsGenericParameter)
+				else if (reference.Type.IsGenericParameter)
 				{
 					gen.Emit(OpCodes.Box, reference.Type);
 				}

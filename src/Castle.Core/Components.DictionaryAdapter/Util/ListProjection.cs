@@ -415,7 +415,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void AttachPropertyChanged(T value)
 		{
-			if (typeof(T).GetTypeInfo().IsValueType)
+			if (typeof(T).IsValueType)
 				return;
 
 			var notifier = value as INotifyPropertyChanged;
@@ -430,7 +430,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void DetachPropertyChanged(T value)
 		{
-			if (typeof(T).GetTypeInfo().IsValueType)
+			if (typeof(T).IsValueType)
 				return;
 
 			var notifier = value as INotifyPropertyChanged;

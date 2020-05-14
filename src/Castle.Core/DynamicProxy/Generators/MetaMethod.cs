@@ -107,7 +107,7 @@ namespace Castle.DynamicProxy.Generators
 			var methodInfo = Method;
 			var attributes = MethodAttributes.Virtual;
 
-			if (methodInfo.IsFinal || Method.DeclaringType.GetTypeInfo().IsInterface)
+			if (methodInfo.IsFinal || Method.DeclaringType.IsInterface)
 			{
 				attributes |= MethodAttributes.NewSlot;
 			}
@@ -122,7 +122,7 @@ namespace Castle.DynamicProxy.Generators
 				attributes |= MethodAttributes.HideBySig;
 			}
 			if (ProxyUtil.IsInternal(methodInfo) &&
-			    ProxyUtil.AreInternalsVisibleToDynamicProxy(methodInfo.DeclaringType.GetTypeInfo().Assembly))
+			    ProxyUtil.AreInternalsVisibleToDynamicProxy(methodInfo.DeclaringType.Assembly))
 			{
 				attributes |= MethodAttributes.Assembly;
 			}

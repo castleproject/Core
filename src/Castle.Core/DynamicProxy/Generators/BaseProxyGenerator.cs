@@ -84,7 +84,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			Debug.Assert(implementer != null, "implementer != null");
 			Debug.Assert(@interface != null, "@interface != null");
-			Debug.Assert(@interface.GetTypeInfo().IsInterface, "@interface.IsInterface");
+			Debug.Assert(@interface.IsInterface, "@interface.IsInterface");
 
 			if (!mapping.ContainsKey(@interface))
 			{
@@ -126,7 +126,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void CheckNotGenericTypeDefinition(Type type, string argumentName)
 		{
-			if (type != null && type.GetTypeInfo().IsGenericTypeDefinition)
+			if (type != null && type.IsGenericTypeDefinition)
 			{
 				throw new ArgumentException("Type cannot be a generic type definition. Type: " + type.FullName, argumentName);
 			}

@@ -1322,7 +1322,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		public void CanDetermineTheAdaptedInterface()
 		{
 			var person = factory.GetAdapter<IPerson>(dictionary);
-			var type = person.GetType().GetTypeInfo().GetCustomAttributes(
+			var type = person.GetType().GetCustomAttributes(
 				typeof(DictionaryAdapterAttribute), false).Cast<DictionaryAdapterAttribute>()
 				.FirstOrDefault();
 			Assert.IsNotNull(type);

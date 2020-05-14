@@ -80,7 +80,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			// We need to use a type that is not from our assembly, because we are marked as internals visible to DynamicProxy2
 			var type = Type.GetType("System.Text.Latin1Encoding");
-			Assert.True(type.GetTypeInfo().IsNotPublic); // Just ensure it is internal as a good use case for this test
+			Assert.True(type.IsNotPublic); // Just ensure it is internal as a good use case for this test
 
 			var ex = Assert.Throws<GeneratorException>(() => generator.CreateClassProxy(type, new StandardInterceptor()));
 			StringAssert.StartsWith(
@@ -307,9 +307,9 @@ namespace Castle.DynamicProxy.Tests
 		{
 			const bool shouldBeSigned = true;
 			Type t = typeof(List<object>);
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t.GetTypeInfo().Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t.Assembly));
 			object proxy = generator.CreateClassProxy(t, new StandardInterceptor());
-			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
+			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
 		[Test]
@@ -318,10 +318,10 @@ namespace Castle.DynamicProxy.Tests
 			const bool shouldBeSigned = true;
 			Type t1 = typeof(List<object>);
 			Type t2 = typeof(IServiceProvider);
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t1.GetTypeInfo().Assembly));
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t2.GetTypeInfo().Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t1.Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t2.Assembly));
 			object proxy = generator.CreateClassProxy(t1, new Type[] { t2 }, new StandardInterceptor());
-			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
+			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
 		[Test]
@@ -400,7 +400,7 @@ namespace Castle.DynamicProxy.Tests
 			var baseMethod = @class.GetMethod("Do");
 			var interceptor = new SetReturnValueInterceptor(123);
 			var proxy = generator.CreateClassProxy(@class, new[] {@interface}, interceptor);
-			var mapping = proxy.GetType().GetTypeInfo().GetRuntimeInterfaceMap(@interface);
+			var mapping = proxy.GetType().GetInterfaceMap(@interface);
 
 			Assert.AreEqual(mapping.TargetMethods[0].GetBaseDefinition(), baseMethod);
 

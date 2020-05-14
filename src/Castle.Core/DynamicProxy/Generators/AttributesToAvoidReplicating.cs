@@ -59,7 +59,7 @@ namespace Castle.DynamicProxy.Generators
 
 		internal static bool ShouldAvoid(Type attribute)
 		{
-			return attributes.Any(attr => attr.GetTypeInfo().IsAssignableFrom(attribute.GetTypeInfo()));
+			return attributes.Any(attr => attr.IsAssignableFrom(attribute));
 		}
 	}
 }

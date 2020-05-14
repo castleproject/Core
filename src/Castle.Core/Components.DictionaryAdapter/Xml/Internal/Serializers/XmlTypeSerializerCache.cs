@@ -53,10 +53,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private static XmlTypeSerializer CreateSerializer(Type type)
 		{
-			if (type.GetTypeInfo().IsArray)
+			if (type.IsArray)
 				return XmlArraySerializer.Instance;
 
-			if (type.GetTypeInfo().IsGenericType)
+			if (type.IsGenericType)
 			{
 				var genericType = type.GetGenericTypeDefinition();
 				if (genericType == typeof(IList<>) ||
@@ -84,9 +84,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					throw Error.UnsupportedCollectionType(type);
 			}
 
-			if (type.GetTypeInfo().IsInterface)
+			if (type.IsInterface)
 				return XmlComponentSerializer.Instance;
-			if (type.GetTypeInfo().IsEnum)
+			if (type.IsEnum)
 				return XmlEnumerationSerializer.Instance;
 			if (type.IsCustomSerializable())
 				return XmlCustomSerializer.Instance;

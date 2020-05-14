@@ -70,12 +70,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static bool IsAnyTypeFromUnsignedAssembly(IEnumerable<Type> types)
 		{
-			return types.Any(t => t.GetTypeInfo().Assembly.IsAssemblySigned() == false);
+			return types.Any(t => t.Assembly.IsAssemblySigned() == false);
 		}
 
 		public static bool IsAnyTypeFromUnsignedAssembly(Type baseType, IEnumerable<Type> interfaces)
 		{
-			if (baseType != null && baseType.GetTypeInfo().Assembly.IsAssemblySigned() == false)
+			if (baseType != null && baseType.Assembly.IsAssemblySigned() == false)
 			{
 				return true;
 			}

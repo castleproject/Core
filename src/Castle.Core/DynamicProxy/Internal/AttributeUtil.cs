@@ -77,7 +77,7 @@ namespace Castle.DynamicProxy.Internal
 		private static object ReadAttributeValue(CustomAttributeTypedArgument argument)
 		{
 			var value = argument.Value;
-			if (argument.ArgumentType.GetTypeInfo().IsArray == false)
+			if (argument.ArgumentType.IsArray == false)
 			{
 				return value;
 			}
@@ -185,7 +185,7 @@ namespace Castle.DynamicProxy.Internal
 		/// </summary>
 		private static bool ShouldSkipAttributeReplication(Type attribute, bool ignoreInheritance)
 		{
-			if (attribute.GetTypeInfo().IsPublic == false)
+			if (attribute.IsPublic == false)
 			{
 				return true;
 			}
@@ -206,7 +206,7 @@ namespace Castle.DynamicProxy.Internal
 
 			if (!ignoreInheritance)
 			{
-				var attrs = attribute.GetTypeInfo().GetCustomAttributes<AttributeUsageAttribute>(true).ToArray();
+				var attrs = attribute.GetCustomAttributes<AttributeUsageAttribute>(true).ToArray();
 				if (attrs.Length != 0)
 				{
 					return attrs[0].Inherited;

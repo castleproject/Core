@@ -49,13 +49,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static Type ExtractCorrectType(Type paramType, Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
 		{
-			if (paramType.GetTypeInfo().IsArray)
+			if (paramType.IsArray)
 			{
 				var rank = paramType.GetArrayRank();
 
 				var underlyingType = paramType.GetElementType();
 
-				if (underlyingType.GetTypeInfo().IsGenericParameter)
+				if (underlyingType.IsGenericParameter)
 				{
 					GenericTypeParameterBuilder genericType;
 					if (name2GenericType.TryGetValue(underlyingType.Name, out genericType) == false)
@@ -76,7 +76,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				return underlyingType.MakeArrayType(rank);
 			}
 
-			if (paramType.GetTypeInfo().IsGenericParameter)
+			if (paramType.IsGenericParameter)
 			{
 				GenericTypeParameterBuilder value;
 				if (name2GenericType.TryGetValue(paramType.Name, out value))
@@ -124,7 +124,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			Type constraint, MethodInfo methodToCopyGenericsFrom, Type[] originalGenericParameters,
 			GenericTypeParameterBuilder[] newGenericParameters)
 		{
-			if (constraint.GetTypeInfo().IsGenericType)
+			if (constraint.IsGenericType)
 			{
 				var genericArgumentsOfConstraint = constraint.GetGenericArguments();
 
@@ -136,10 +136,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 				return constraint.GetGenericTypeDefinition().MakeGenericType(genericArgumentsOfConstraint);
 			}
-			else if (constraint.GetTypeInfo().IsGenericParameter)
+			else if (constraint.IsGenericParameter)
 			{
 				// Determine the source of the parameter
-				if (constraint.GetTypeInfo().DeclaringMethod != null)
+				if (constraint.DeclaringMethod != null)
 				{
 					// constraint comes from the method
 					var index = Array.IndexOf(originalGenericParameters, constraint);
@@ -149,8 +149,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				}
 				else // parameter from surrounding type
 				{
-					Trace.Assert(constraint.DeclaringType.GetTypeInfo().IsGenericTypeDefinition);
-					Trace.Assert(methodToCopyGenericsFrom.DeclaringType.GetTypeInfo().IsGenericType
+					Trace.Assert(constraint.DeclaringType.IsGenericTypeDefinition);
+					Trace.Assert(methodToCopyGenericsFrom.DeclaringType.IsGenericType
 					             && constraint.DeclaringType == methodToCopyGenericsFrom.DeclaringType.GetGenericTypeDefinition(),
 					             "When a generic method parameter has a constraint on a generic type parameter, the generic type must be the declaring typer of the method.");
 
@@ -200,9 +200,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				try
 				{
-					var attributes = originalGenericArguments[i].GetTypeInfo().GenericParameterAttributes;
+					var attributes = originalGenericArguments[i].GenericParameterAttributes;
 					newGenericParameters[i].SetGenericParameterAttributes(attributes);
-					var constraints = AdjustGenericConstraints(methodToCopyGenericsFrom, newGenericParameters, originalGenericArguments, originalGenericArguments[i].GetTypeInfo().GetGenericParameterConstraints());
+					var constraints = AdjustGenericConstraints(methodToCopyGenericsFrom, newGenericParameters, originalGenericArguments, originalGenericArguments[i].GetGenericParameterConstraints());
 
 					newGenericParameters[i].SetInterfaceConstraints(constraints);
 					CopyNonInheritableAttributes(newGenericParameters[i], originalGenericArguments[i]);
@@ -223,7 +223,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private static void CopyNonInheritableAttributes(GenericTypeParameterBuilder newGenericParameter,
 		                                                 Type originalGenericArgument)
 		{
-			foreach (var attribute in originalGenericArgument.GetTypeInfo().GetNonInheritableAttributes())
+			foreach (var attribute in originalGenericArgument.GetNonInheritableAttributes())
 			{
 				newGenericParameter.SetCustomAttribute(attribute.Builder);
 			}

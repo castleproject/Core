@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Contributors
 			foreach (var @interface in interfaces)
 			{
 				var item = new InterfaceMembersOnClassCollector(@interface, true,
-					targetType.GetTypeInfo().GetRuntimeInterfaceMap(@interface)) { Logger = Logger };
+					targetType.GetInterfaceMap(@interface)) { Logger = Logger };
 				item.CollectMembersToProxy(hook);
 				yield return item;
 			}
@@ -159,7 +159,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		private IInvocationCreationContributor GetContributor(Type @delegate, MetaMethod method)
 		{
-			if (@delegate.GetTypeInfo().IsGenericType == false)
+			if (@delegate.IsGenericType == false)
 			{
 				return new InvocationWithDelegateContributor(@delegate, targetType, method, namingScope);
 			}
@@ -172,7 +172,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			var scope = @class.ModuleScope;
 			var key = new CacheKey(
-				typeof(Delegate).GetTypeInfo(),
+				typeof(Delegate),
 				targetType,
 				new[] { method.MethodOnTarget.ReturnType }
 					.Concat(ArgumentsUtil.GetTypes(method.MethodOnTarget.GetParameters())).

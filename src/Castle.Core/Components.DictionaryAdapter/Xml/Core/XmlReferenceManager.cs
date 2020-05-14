@@ -421,7 +421,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		private static bool ShouldExclude(Type type)
 		{
-			return type.GetTypeInfo().IsValueType
+			return type.IsValueType
 				|| type == StringType;
 		}
 

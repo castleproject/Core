@@ -195,7 +195,7 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		public static byte[] GetKeyPair()
 		{
-			using (var stream = typeof(ModuleScope).GetTypeInfo().Assembly.GetManifestResourceStream("Castle.DynamicProxy.DynProxy.snk"))
+			using (var stream = typeof(ModuleScope).Assembly.GetManifestResourceStream("Castle.DynamicProxy.DynProxy.snk"))
 			{
 				if (stream == null)
 				{

@@ -47,7 +47,7 @@ namespace Castle.DynamicProxy.Generators
 
 			bool IsByRef(ParameterInfo parameter)
 			{
-				return parameter.ParameterType.GetTypeInfo().IsByRef;
+				return parameter.ParameterType.IsByRef;
 			}
 
 			bool IsReadOnly(ParameterInfo parameter)

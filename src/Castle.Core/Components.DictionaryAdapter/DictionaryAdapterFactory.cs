@@ -122,7 +122,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
-			if (type.GetTypeInfo().IsInterface == false)
+			if (type.IsInterface == false)
 				throw new ArgumentException("Only interfaces can be adapted to a dictionary", "type");
 
 			return interfaceToMeta.GetOrAdd(type, t =>
@@ -198,7 +198,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			var implementation = typeBuilder.CreateTypeInfo();
 			var creator = (Func<DictionaryAdapterInstance, IDictionaryAdapter>)implementation
-				.GetTypeInfo().GetDeclaredMethod("__Create")
+				.GetDeclaredMethod("__Create")
 				.CreateDelegate(typeof(Func<DictionaryAdapterInstance, IDictionaryAdapter>));
 
 			var meta = new DictionaryAdapterMeta(type, implementation, typeBehaviors,
@@ -370,7 +370,7 @@ namespace Castle.Components.DictionaryAdapter
 			PreparePropertyMethod(descriptor, setILGenerator);
 
 			setILGenerator.Emit(OpCodes.Ldarg_1);
-			if (descriptor.PropertyType.GetTypeInfo().IsValueType)
+			if (descriptor.PropertyType.IsValueType)
 			{
 				setILGenerator.Emit(OpCodes.Box, descriptor.PropertyType);
 			}

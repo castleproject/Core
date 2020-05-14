@@ -41,12 +41,12 @@ namespace Castle.DynamicProxy.Generators
 
 				for (var i = 0; i < xArgs.Length; ++i)
 				{
-					if (xArgs[i].GetTypeInfo().IsGenericParameter != yArgs[i].GetTypeInfo().IsGenericParameter)
+					if (xArgs[i].IsGenericParameter != yArgs[i].IsGenericParameter)
 					{
 						return false;
 					}
 
-					if (!xArgs[i].GetTypeInfo().IsGenericParameter && !xArgs[i].Equals(yArgs[i]))
+					if (!xArgs[i].IsGenericParameter && !xArgs[i].Equals(yArgs[i]))
 					{
 						return false;
 					}
@@ -79,29 +79,26 @@ namespace Castle.DynamicProxy.Generators
 
 		public bool EqualSignatureTypes(Type x, Type y)
 		{
-			var xti = x.GetTypeInfo();
-			var yti = y.GetTypeInfo();
-
-			if (xti.IsGenericParameter != yti.IsGenericParameter)
+			if (x.IsGenericParameter != y.IsGenericParameter)
 			{
 				return false;
 			}
-			else if (xti.IsGenericType != yti.IsGenericType)
+			else if (x.IsGenericType != y.IsGenericType)
 			{
 				return false;
 			}
 
-			if (xti.IsGenericParameter)
+			if (x.IsGenericParameter)
 			{
-				if (xti.GenericParameterPosition != yti.GenericParameterPosition)
+				if (x.GenericParameterPosition != y.GenericParameterPosition)
 				{
 					return false;
 				}
 			}
-			else if (xti.IsGenericType)
+			else if (x.IsGenericType)
 			{
-				var xGenericTypeDef = xti.GetGenericTypeDefinition();
-				var yGenericTypeDef = yti.GetGenericTypeDefinition();
+				var xGenericTypeDef = x.GetGenericTypeDefinition();
+				var yGenericTypeDef = y.GetGenericTypeDefinition();
 
 				if (xGenericTypeDef != yGenericTypeDef)
 				{

@@ -285,7 +285,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			foreach (var genType in genericType.GetGenericArguments())
 			{
-				if (genType.GetTypeInfo().IsGenericParameter)
+				if (genType.IsGenericParameter)
 				{
 					types.Add(name2GenericType[genType.Name]);
 				}

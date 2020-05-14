@@ -67,7 +67,7 @@ namespace Castle.DynamicProxy
 		/// <param name="typeToProxy">the type that couldn't be proxied</param>
 		public static string CreateMessageForInaccessibleType(Type inaccessibleType, Type typeToProxy)
 		{
-			var targetAssembly = typeToProxy.GetTypeInfo().Assembly;
+			var targetAssembly = typeToProxy.Assembly;
 
 			string inaccessibleTypeDescription = inaccessibleType == typeToProxy
 				? "it"

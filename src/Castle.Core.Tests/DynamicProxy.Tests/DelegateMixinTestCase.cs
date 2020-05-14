@@ -100,7 +100,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.NotNull(action);
 
 			action.Invoke();
-			Assert.AreSame(typeof(Action).GetTypeInfo().GetMethod("Invoke"), interceptor.LastInvocation.Method);
+			Assert.AreSame(typeof(Action).GetMethod("Invoke"), interceptor.LastInvocation.Method);
 		}
 
 		[Test]
@@ -116,7 +116,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.NotNull(action);
 
 			action.Invoke();
-			Assert.AreSame(typeof(Action).GetTypeInfo().GetMethod("Invoke"), interceptor.LastInvocation.Method);
+			Assert.AreSame(typeof(Action).GetMethod("Invoke"), interceptor.LastInvocation.Method);
 		}
 
 		[Test]
@@ -134,7 +134,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.NotNull(action);
 
 			action.Invoke();
-			Assert.AreSame(typeof(Action).GetTypeInfo().GetMethod("Invoke"), interceptor.LastInvocation.Method);
+			Assert.AreSame(typeof(Action).GetMethod("Invoke"), interceptor.LastInvocation.Method);
 		}
 
 		[Test]
