@@ -22,9 +22,6 @@ namespace Castle.DynamicProxy
 #if FEATURE_REMOTING
 	using System.Runtime.Remoting;
 #endif
-#if FEATURE_SECURITY_PERMISSIONS
-	using System.Security.Permissions;
-#endif
 	using System.Text;
 
 	using Castle.Core.Internal;
@@ -48,21 +45,8 @@ namespace Castle.DynamicProxy
 		{
 			proxyBuilder = builder;
 
-#if FEATURE_SECURITY_PERMISSIONS
-			if (HasSecurityPermission())
-#endif
-			{
-				Logger = new TraceLogger("Castle.DynamicProxy", LoggerLevel.Warn);
-			}
+			Logger = new TraceLogger("Castle.DynamicProxy", LoggerLevel.Warn);
 		}
-
-#if FEATURE_SECURITY_PERMISSIONS
-		private bool HasSecurityPermission()
-		{
-			const SecurityPermissionFlag flag = SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy;
-			return new SecurityPermission(flag).IsGranted();
-		}
-#endif
 
 		/// <summary>
 		///   Initializes a new instance of the <see cref = "ProxyGenerator" /> class.
