@@ -7,6 +7,10 @@ Enhancements:
 
 Deprecations:
  - Removed support for the .NET Framework < 4.5 and .NET Standard 1.x. (@stakx, #495, #496)
+ - Removed support for Code Access Security (CAS). (@stakx, #502)
+ - The following public members have been removed:
+    - `Castle.Core.Internal.PermissionUtil.IsGranted` (method)
+    - `Castle.DynamicProxy.Generators.Emitters.StrongNameUtil.CanStrongNameAssembly` (property)
 
 ## 4.4.1 (2020-05-06)
 
