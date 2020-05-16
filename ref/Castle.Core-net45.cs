@@ -2,7 +2,6 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute(@"Castle.Core.Tests, PublicKey=002400000480000094000000060200000024000052534131000400000100010077f5e87030dadccce6902c6adab7a987bd69cb5819991531f560785eacfc89b6fcddf6bb2a00743a7194e454c0273447fc6eec36474ba8e5a3823147d214298e4f9a631b1afee1a51ffeae4672d498f14b000e3d321453cdd8ac064de7e1cf4d222b7e81f54d4fd46725370d702a05b48738cc29d09228f1aa722ae1a9ca02fb")]
 [assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName=".NET Framework 4.5")]
-[assembly: System.Security.SecurityRulesAttribute(System.Security.SecurityRuleSet.Level2)]
 namespace Castle.Components.DictionaryAdapter
 {
     public abstract class AbstractDictionaryAdapter : System.Collections.ICollection, System.Collections.IDictionary, System.Collections.IEnumerable
@@ -1990,11 +1989,6 @@ namespace Castle.Core.Internal
         public abstract Castle.Core.Internal.ILockHolder ForWriting();
         public abstract Castle.Core.Internal.ILockHolder ForWriting(bool waitForLock);
     }
-    public class static PermissionUtil
-    {
-        [System.Security.SecuritySafeCriticalAttribute()]
-        public static bool IsGranted(this System.Security.IPermission permission) { }
-    }
 }
 namespace Castle.Core.Logging
 {
@@ -2182,7 +2176,6 @@ namespace Castle.Core.Logging
         public void InfoFormat(System.Exception exception, string format, params object[] args) { }
         public void InfoFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void InfoFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        [System.Security.SecurityCriticalAttribute()]
         public override object InitializeLifetimeService() { }
         protected abstract void Log(Castle.Core.Logging.LoggerLevel loggerLevel, string loggerName, string message, System.Exception exception);
         public void Trace(string message) { }
@@ -2300,11 +2293,8 @@ namespace Castle.Core.Logging
     }
     public class TraceLogger : Castle.Core.Logging.LevelFilteredLogger
     {
-        [System.Security.SecuritySafeCriticalAttribute()]
         public TraceLogger(string name) { }
-        [System.Security.SecuritySafeCriticalAttribute()]
         public TraceLogger(string name, Castle.Core.Logging.LoggerLevel level) { }
-        [System.Security.SecuritySafeCriticalAttribute()]
         public override Castle.Core.Logging.ILogger CreateChildLogger(string loggerName) { }
         protected override void Log(Castle.Core.Logging.LoggerLevel loggerLevel, string loggerName, string message, System.Exception exception) { }
     }
@@ -2312,9 +2302,7 @@ namespace Castle.Core.Logging
     {
         public TraceLoggerFactory() { }
         public TraceLoggerFactory(Castle.Core.Logging.LoggerLevel level) { }
-        [System.Security.SecuritySafeCriticalAttribute()]
         public override Castle.Core.Logging.ILogger Create(string name) { }
-        [System.Security.SecuritySafeCriticalAttribute()]
         public override Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level) { }
     }
 }
@@ -2468,13 +2456,9 @@ namespace Castle.Core.Smtp
         public int Timeout { get; set; }
         public bool UseSsl { get; set; }
         public string UserName { get; set; }
-        [System.Security.SecurityCriticalAttribute()]
         protected virtual void Configure(System.Net.Mail.SmtpClient smtpClient) { }
-        [System.Security.SecuritySafeCriticalAttribute()]
         public void Send(string from, string to, string subject, string messageText) { }
-        [System.Security.SecuritySafeCriticalAttribute()]
         public void Send(System.Net.Mail.MailMessage message) { }
-        [System.Security.SecuritySafeCriticalAttribute()]
         public void Send(System.Collections.Generic.IEnumerable<System.Net.Mail.MailMessage> messages) { }
     }
     public interface IEmailSender
@@ -2734,7 +2718,6 @@ namespace Castle.DynamicProxy
         public void AddMixinInstance(object instance) { }
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
-        [System.Security.SecurityCriticalAttribute()]
         public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public void Initialize() { }
         public object[] MixinsAsArray() { }
@@ -2794,7 +2777,6 @@ namespace Castle.DynamicProxy
             where TInterface :  class { }
         public object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        [System.Security.SecuritySafeCriticalAttribute()]
         public virtual object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public TInterface CreateInterfaceProxyWithoutTarget<TInterface>(Castle.DynamicProxy.IInterceptor interceptor)
             where TInterface :  class { }
@@ -3444,7 +3426,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
     }
     public class static StrongNameUtil
     {
-        public static bool CanStrongNameAssembly { get; set; }
         public static bool IsAnyTypeFromUnsignedAssembly(System.Collections.Generic.IEnumerable<System.Type> types) { }
         public static bool IsAnyTypeFromUnsignedAssembly(System.Type baseType, System.Collections.Generic.IEnumerable<System.Type> interfaces) { }
         public static bool IsAssemblySigned(this System.Reflection.Assembly assembly) { }
@@ -3823,21 +3804,14 @@ namespace Castle.DynamicProxy.Serialization
     }
     public class ProxyObjectReference : System.Runtime.Serialization.IDeserializationCallback, System.Runtime.Serialization.IObjectReference, System.Runtime.Serialization.ISerializable
     {
-        [System.Security.SecurityCriticalAttribute()]
         protected ProxyObjectReference(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public static Castle.DynamicProxy.ModuleScope ModuleScope { get; }
-        [System.Security.SecurityCriticalAttribute()]
         public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
-        [System.Security.SecurityCriticalAttribute()]
         public object GetRealObject(System.Runtime.Serialization.StreamingContext context) { }
         protected void InvokeCallback(object target) { }
-        [System.Security.SecuritySafeCriticalAttribute()]
         public void OnDeserialization(object sender) { }
-        [System.Security.SecurityCriticalAttribute()]
         public object RecreateClassProxy() { }
-        [System.Security.SecurityCriticalAttribute()]
         public object RecreateInterfaceProxy(string generatorType) { }
-        [System.Security.SecurityCriticalAttribute()]
         protected virtual object RecreateProxy() { }
         public static void ResetScope() { }
         public static void SetScope(Castle.DynamicProxy.ModuleScope scope) { }

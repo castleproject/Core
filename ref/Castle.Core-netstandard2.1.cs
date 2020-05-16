@@ -3367,7 +3367,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
     }
     public class static StrongNameUtil
     {
-        public static bool CanStrongNameAssembly { get; set; }
         public static bool IsAnyTypeFromUnsignedAssembly(System.Collections.Generic.IEnumerable<System.Type> types) { }
         public static bool IsAnyTypeFromUnsignedAssembly(System.Type baseType, System.Collections.Generic.IEnumerable<System.Type> interfaces) { }
         public static bool IsAssemblySigned(this System.Reflection.Assembly assembly) { }
