@@ -71,6 +71,7 @@ Symbol                              | .NET 4.5           | .NET Standard 2.x
 `FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :no_entry_sign:
 `FEATURE_TEST_COM`                  | :white_check_mark: | :no_entry_sign:
 `FEATURE_TEST_PEVERIFY`             | :white_check_mark: | :no_entry_sign:
+`FEATURE_TEST_WINFORMS`             | :white_check_mark: | :no_entry_sign:
 ---                                 |                    |
 `DOTNET45`                          | :white_check_mark: | :no_entry_sign:
 
@@ -83,3 +84,4 @@ Symbol                              | .NET 4.5           | .NET Standard 2.x
 * `FEATURE_SYSTEM_CONFIGURATION` - enables features that use System.Configuration and the ConfigurationManager.
 * `FEATURE_TEST_COM` - enables COM Interop tests.
 * `FEATURE_TEST_PEVERIFY` - enables verification of dynamic assemblies using PEVerify during tests. (Only defined on Windows builds since Windows is currently the only platform where PEVerify is available.)
+* `FEATURE_TEST_WINFORMS` - enables Windows Forms tests.
