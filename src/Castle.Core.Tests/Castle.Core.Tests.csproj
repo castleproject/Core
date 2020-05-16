@@ -47,6 +47,9 @@
 		<ProjectReference Include="..\Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.SerilogIntegration\Castle.Services.Logging.SerilogIntegration.csproj" />
 	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'OR'$(TargetFramework)'=='netcoreapp3.1'">
+		<PackageReference Include="System.Security.Permissions" Version="4.7.0" />
+	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
 		<PackageReference Include="System.Net.Primitives" Version="4.3.0" />
 	</ItemGroup>

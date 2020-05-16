@@ -17,12 +17,9 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Linq;
 	using System.Reflection;
+	using System.Security.Permissions;
 
 	using Castle.DynamicProxy.Generators;
-#if FEATURE_SECURITY_PERMISSIONS
-	using System.Security.Permissions;
-#endif
-
 	using Castle.DynamicProxy.Tests.Classes;
 
 	using NUnit.Framework;
@@ -70,7 +67,6 @@ namespace Castle.DynamicProxy.Tests
 		{
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS
 		[Test]
 		public void SecurityPermissionAttribute_should_not_be_replicated_as_it_is_part_of_cas()
 		{
@@ -94,7 +90,6 @@ namespace Castle.DynamicProxy.Tests
 		public class AttributedClass_ReflectionPermission
 		{
 		}
-#endif
 
 		private int AttributeCount<TAttribute>(object proxy)
 			where TAttribute : Attribute
