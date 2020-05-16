@@ -21,9 +21,7 @@ namespace Castle.Core.Smtp
 	using System.ComponentModel;
 	using System.Net;
 	using System.Net.Mail;
-#if FEATURE_SECURITY_PERMISSIONS
-	using System.Security.Permissions;
-#endif
+
 	using Castle.Core.Internal;
 
 	/// <summary>
@@ -36,7 +34,6 @@ namespace Castle.Core.Smtp
 		private int port = 25;
 		private int? timeout;
 		private bool useSsl;
-		private readonly NetworkCredential credentials = new NetworkCredential();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultSmtpSender"/> class based on the <see cref="SmtpClient"/> configuration provided in the application configuration file.
@@ -182,31 +179,19 @@ namespace Castle.Core.Smtp
 		/// Gets or sets the domain.
 		/// </summary>
 		/// <value>The domain.</value>
-		public String Domain
-		{
-			get { return credentials.Domain; }
-			set { credentials.Domain = value; }
-		}
+		public string Domain { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the user.
 		/// </summary>
 		/// <value>The name of the user.</value>
-		public String UserName
-		{
-			get { return credentials.UserName; }
-			set { credentials.UserName = value; }
-		}
+		public string UserName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the password.
 		/// </summary>
 		/// <value>The password.</value>
-		public String Password
-		{
-			get { return credentials.Password; }
-			set { credentials.Password = value; }
-		}
+		public string Password { get; set; }
 
 		/// <summary>
 		/// Configures the sender
@@ -218,8 +203,9 @@ namespace Castle.Core.Smtp
 		{
 			smtpClient.Credentials = null;
 
-			if (CanAccessCredentials() && HasCredentials)
+			if (HasCredentials)
 			{
+				var credentials = new NetworkCredential(UserName, Password, Domain);
 				smtpClient.Credentials = credentials;
 			}
 
@@ -242,7 +228,7 @@ namespace Castle.Core.Smtp
 		/// </value>
 		private bool HasCredentials
 		{
-			get { return !string.IsNullOrEmpty(credentials.UserName); }
+			get { return !string.IsNullOrEmpty(UserName); }
 		}
 
 		private SmtpClient CreateSmtpClient()
@@ -257,15 +243,6 @@ namespace Castle.Core.Smtp
 			var smtpClient = new SmtpClient(hostname, port);
 			Configure(smtpClient);
 			return smtpClient;
-		}
-
-		private static bool CanAccessCredentials()
-		{
-#if FEATURE_SECURITY_PERMISSIONS
-			return new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).IsGranted();
-#else
-			return false;
-#endif
 		}
 	}
 }
