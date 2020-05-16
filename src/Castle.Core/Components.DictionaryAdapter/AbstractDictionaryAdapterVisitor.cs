@@ -69,7 +69,7 @@ namespace Castle.Components.DictionaryAdapter
 					{
 						VisitCollection(dictionaryAdapter, property, collectionItemType, state);
 					}
-					else if (property.PropertyType.GetTypeInfo().IsInterface)
+					else if (property.PropertyType.IsInterface)
 					{
 						VisitInterface(dictionaryAdapter, property, state);
 					}
@@ -138,11 +138,11 @@ namespace Castle.Components.DictionaryAdapter
 			var propertyType = property.PropertyType;
 			if (propertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(propertyType))
 			{
-				if (propertyType.GetTypeInfo().IsArray)
+				if (propertyType.IsArray)
 				{
 					collectionItemType = propertyType.GetElementType();
 				}
-				else if (propertyType.GetTypeInfo().IsGenericType)
+				else if (propertyType.IsGenericType)
 				{
 					var arguments = propertyType.GetGenericArguments();
 					collectionItemType = arguments[0];

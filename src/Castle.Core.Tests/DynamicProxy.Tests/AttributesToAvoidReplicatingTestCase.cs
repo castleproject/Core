@@ -99,7 +99,7 @@ namespace Castle.DynamicProxy.Tests
 		private int AttributeCount<TAttribute>(object proxy)
 			where TAttribute : Attribute
 		{
-			return proxy.GetType().GetTypeInfo().GetCustomAttributes(typeof(TAttribute), false).Count();
+			return proxy.GetType().GetCustomAttributes(typeof(TAttribute), false).Count();
 		}
 	}
 }

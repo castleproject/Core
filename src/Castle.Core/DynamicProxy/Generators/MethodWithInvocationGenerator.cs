@@ -73,7 +73,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			var invocationType = invocation;
 
-			Trace.Assert(MethodToOverride.IsGenericMethod == invocationType.GetTypeInfo().IsGenericTypeDefinition);
+			Trace.Assert(MethodToOverride.IsGenericMethod == invocationType.IsGenericTypeDefinition);
 			var genericArguments = Type.EmptyTypes;
 
 			var constructor = invocation.GetConstructors()[0];
@@ -139,7 +139,7 @@ namespace Castle.DynamicProxy.Generators
 				var getRetVal = new MethodInvocationExpression(invocationLocal, InvocationMethods.GetReturnValue);
 
 				// Emit code to ensure a value type return type is not null, otherwise the cast will cause a null-deref
-				if (emitter.ReturnType.GetTypeInfo().IsValueType && !emitter.ReturnType.IsNullableType())
+				if (emitter.ReturnType.IsValueType && !emitter.ReturnType.IsNullableType())
 				{
 					LocalReference returnValue = emitter.CodeBuilder.DeclareLocal(typeof(object));
 					emitter.CodeBuilder.AddStatement(new AssignStatement(returnValue, getRetVal));
@@ -195,7 +195,7 @@ namespace Castle.DynamicProxy.Generators
 
 		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Reference invocationLocal)
 		{
-			var genericParameters = method.GetGenericArguments().FindAll(t => t.GetTypeInfo().IsGenericParameter);
+			var genericParameters = method.GetGenericArguments().FindAll(t => t.IsGenericParameter);
 			var genericParamsArrayLocal = methodEmitter.CodeBuilder.DeclareLocal(typeof(Type[]));
 			methodEmitter.CodeBuilder.AddStatement(
 				new AssignStatement(genericParamsArrayLocal, new NewArrayExpression(genericParameters.Length, typeof(Type))));
@@ -238,7 +238,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			for (int i = 0; i < arguments.Length; i++ )
 			{
-				if (arguments[i].Type.GetTypeInfo().IsByRef)
+				if (arguments[i].Type.IsByRef)
 				{
 					return true;
 				}

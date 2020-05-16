@@ -20,12 +20,6 @@
 		<StartupObject>Program</StartupObject>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1' or '$(TargetFramework)'=='netcoreapp3.1'">
-		<Compile Remove="Components.DictionaryAdapter.Tests\Xml\**" />
-		<Compile Remove="Services.Logging.Tests\log4netIntegration\**" />
-		<Compile Remove="Services.Logging.Tests\NLogIntegration\**" />
-	</ItemGroup>
-
 	<ItemGroup>
 		<None Update="Services.Logging.Tests\log4netIntegration\log4net.xml">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -53,33 +47,12 @@
 		<ProjectReference Include="..\Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.SerilogIntegration\Castle.Services.Logging.SerilogIntegration.csproj" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
-		<PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
+	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
 		<PackageReference Include="System.Net.Primitives" Version="4.3.0" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
-	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='net461'">
-		<Reference Include="Microsoft.CSharp" />
 		<Reference Include="System.Windows.Forms" />
-		<Reference Include="WindowsBase" />
 		<PackageReference Include="PublicApiGenerator" Version="9.3.0" />
-		<PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
-		<PackageReference Include="System.ComponentModel" Version="4.3.0" />
-		<PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
-		<PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
-		<PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
-		<PackageReference Include="System.Reflection" Version="4.3.0" />
-		<PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
-		<PackageReference Include="System.Runtime.CompilerServices.VisualC" Version="4.3.0" />
-		<PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
-		<PackageReference Include="System.Xml.ReaderWriter" Version="4.3.1" />
-		<PackageReference Include="System.Xml.XDocument" Version="4.3.0" />
-		<PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
-		<PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
-		<PackageReference Include="System.Xml.XPath" Version="4.3.0" />
-		<PackageReference Include="System.Xml.XPath.XDocument" Version="4.3.0" />
-		<PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
 	</ItemGroup>
 
 </Project>

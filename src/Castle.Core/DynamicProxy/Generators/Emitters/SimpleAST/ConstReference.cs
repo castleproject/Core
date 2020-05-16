@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		public ConstReference(object value)
 			: base(value.GetType())
 		{
-			if (!value.GetType().GetTypeInfo().IsPrimitive && !(value is String))
+			if (!value.GetType().IsPrimitive && !(value is String))
 			{
 				throw new ProxyGenerationException("Invalid type to ConstReference");
 			}

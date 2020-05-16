@@ -112,11 +112,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			get
 			{
-#if FEATURE_LEGACY_REFLECTION_API
-				var attributes = builder.GetMethodImplementationFlags();
-#else
 				var attributes = builder.MethodImplementationFlags;
-#endif
 				return (attributes & MethodImplAttributes.Runtime) != 0;
 			}
 		}
@@ -209,7 +205,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				// If this bug is present, it is caused by a `null` default value:
 				defaultValue = null;
 			}
-			catch (FormatException) when (from.ParameterType.GetTypeInfo().IsEnum)
+			catch (FormatException) when (from.ParameterType.IsEnum)
 			{
 				// This catch clause guards against a CLR bug that makes it impossible to query
 				// the default value of a (closed generic) enum parameter. For the CoreCLR, see
@@ -253,7 +249,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 						// would "produce" a default value of `Missing.Value` in this situation).
 						return;
 					}
-					else if (parameterType.GetTypeInfo().IsValueType)
+					else if (parameterType.IsValueType)
 					{
 						// This guards against a CLR bug that prohibits replicating `null` default
 						// values for non-nullable value types (which, despite the apparent type
@@ -269,7 +265,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				else if (parameterType.IsNullableType())
 				{
 					parameterNonNullableType = from.ParameterType.GetGenericArguments()[0];
-					if (parameterNonNullableType.GetTypeInfo().IsEnum || parameterNonNullableType.IsAssignableFrom(defaultValue.GetType()))
+					if (parameterNonNullableType.IsEnum || parameterNonNullableType.IsAssignableFrom(defaultValue.GetType()))
 					{
 						// This guards against two bugs:
 						//
@@ -323,7 +319,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			Type[][] parametersRequiredCustomModifiers;
 			Type[][] parametersOptionalCustomModifiers;
 
-#if FEATURE_CUSTOMMODIFIERS
 			returnRequiredCustomModifiers = returnParameter.GetRequiredCustomModifiers();
 			Array.Reverse(returnRequiredCustomModifiers);
 
@@ -341,12 +336,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				parametersOptionalCustomModifiers[i] = baseMethodParameters[i].GetOptionalCustomModifiers();
 				Array.Reverse(parametersOptionalCustomModifiers[i]);
 			}
-#else
-			returnRequiredCustomModifiers = null;
-			returnOptionalCustomModifiers = null;
-			parametersRequiredCustomModifiers = null;
-			parametersOptionalCustomModifiers = null;
-#endif
 
 			builder.SetSignature(
 				returnType,

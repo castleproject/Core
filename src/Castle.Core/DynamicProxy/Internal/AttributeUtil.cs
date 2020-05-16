@@ -33,22 +33,14 @@ namespace Castle.DynamicProxy.Internal
 			Type[] constructorArgTypes;
 			object[] constructorArgs;
 			GetArguments(attribute.ConstructorArguments, out constructorArgTypes, out constructorArgs);
-#if FEATURE_LEGACY_REFLECTION_API
-			var constructor = attribute.Constructor;
-#else
 			var constructor = attribute.AttributeType.GetConstructor(constructorArgTypes);
-#endif
 
 			PropertyInfo[] properties;
 			object[] propertyValues;
 			FieldInfo[] fields;
 			object[] fieldValues;
 			GetSettersAndFields(
-#if FEATURE_LEGACY_REFLECTION_API
-				null,
-#else
 				attribute.AttributeType,
-#endif
 				attribute.NamedArguments, out properties, out propertyValues, out fields, out fieldValues);
 
 			return new CustomAttributeInfo(constructor,
@@ -85,7 +77,7 @@ namespace Castle.DynamicProxy.Internal
 		private static object ReadAttributeValue(CustomAttributeTypedArgument argument)
 		{
 			var value = argument.Value;
-			if (argument.ArgumentType.GetTypeInfo().IsArray == false)
+			if (argument.ArgumentType.IsArray == false)
 			{
 				return value;
 			}
@@ -106,18 +98,6 @@ namespace Castle.DynamicProxy.Internal
 			var fieldValuesList = new List<object>();
 			foreach (var argument in namedArguments)
 			{
-#if FEATURE_LEGACY_REFLECTION_API
-				if (argument.MemberInfo.MemberType == MemberTypes.Field)
-				{
-					fieldList.Add(argument.MemberInfo as FieldInfo);
-					fieldValuesList.Add(ReadAttributeValue(argument.TypedValue));
-				}
-				else
-				{
-					propertyList.Add(argument.MemberInfo as PropertyInfo);
-					propertyValuesList.Add(ReadAttributeValue(argument.TypedValue));
-				}
-#else
 				if (argument.IsField)
 				{
 					fieldList.Add(attributeType.GetField(argument.MemberName));
@@ -128,7 +108,6 @@ namespace Castle.DynamicProxy.Internal
 					propertyList.Add(attributeType.GetProperty(argument.MemberName));
 					propertyValuesList.Add(ReadAttributeValue(argument.TypedValue));
 				}
-#endif
 			}
 
 			properties = propertyList.ToArray();
@@ -140,19 +119,11 @@ namespace Castle.DynamicProxy.Internal
 		public static IEnumerable<CustomAttributeInfo> GetNonInheritableAttributes(this MemberInfo member)
 		{
 			Debug.Assert(member != null, "member != null");
-#if FEATURE_LEGACY_REFLECTION_API
-			var attributes = CustomAttributeData.GetCustomAttributes(member);
-#else
 			var attributes = member.CustomAttributes;
-#endif
 
 			foreach (var attribute in attributes)
 			{
-#if FEATURE_LEGACY_REFLECTION_API
-				var attributeType = attribute.Constructor.DeclaringType;
-#else
 				var attributeType = attribute.AttributeType;
-#endif
 				if (ShouldSkipAttributeReplication(attributeType, ignoreInheritance: false))
 				{
 					continue;
@@ -171,11 +142,7 @@ namespace Castle.DynamicProxy.Internal
 							"To avoid this error you can chose not to replicate this attribute type by calling '{3}.Add(typeof({0}))'.",
 							attributeType.FullName,
 							member.DeclaringType.FullName,
-#if FEATURE_LEGACY_REFLECTION_API
-							(member is Type) ? "" : ("." + member.Name),
-#else
 							(member is TypeInfo) ? "" : ("." + member.Name),
-#endif
 							typeof(AttributesToAvoidReplicating).FullName);
 					throw new ProxyGenerationException(message, e);
 				}
@@ -190,21 +157,13 @@ namespace Castle.DynamicProxy.Internal
 		{
 			Debug.Assert(parameter != null, "parameter != null");
 
-#if FEATURE_LEGACY_REFLECTION_API
-			var attributes = CustomAttributeData.GetCustomAttributes(parameter);
-#else
 			var attributes = parameter.CustomAttributes;
-#endif
 
 			var ignoreInheritance = parameter.Member is ConstructorInfo;
 
 			foreach (var attribute in attributes)
 			{
-#if FEATURE_LEGACY_REFLECTION_API
-				var attributeType = attribute.Constructor.DeclaringType;
-#else
 				var attributeType = attribute.AttributeType;
-#endif
 
 				if (ShouldSkipAttributeReplication(attributeType, ignoreInheritance))
 				{
@@ -226,7 +185,7 @@ namespace Castle.DynamicProxy.Internal
 		/// </summary>
 		private static bool ShouldSkipAttributeReplication(Type attribute, bool ignoreInheritance)
 		{
-			if (attribute.GetTypeInfo().IsPublic == false)
+			if (attribute.IsPublic == false)
 			{
 				return true;
 			}
@@ -247,7 +206,7 @@ namespace Castle.DynamicProxy.Internal
 
 			if (!ignoreInheritance)
 			{
-				var attrs = attribute.GetTypeInfo().GetCustomAttributes<AttributeUsageAttribute>(true).ToArray();
+				var attrs = attribute.GetCustomAttributes<AttributeUsageAttribute>(true).ToArray();
 				if (attrs.Length != 0)
 				{
 					return attrs[0].Inherited;

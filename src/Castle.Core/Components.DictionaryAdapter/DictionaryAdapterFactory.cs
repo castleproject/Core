@@ -25,9 +25,7 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Threading;
 	using System.Diagnostics;
 
-#if FEATURE_DICTIONARYADAPTER_XML
 	using Castle.Components.DictionaryAdapter.Xml;
-#endif
 	using Castle.Core.Internal;
 
 	/// <summary>
@@ -84,7 +82,6 @@ namespace Castle.Components.DictionaryAdapter
 			return GetAdapter(type, new NameValueCollectionAdapter(nameValues));
 		}
 
-#if FEATURE_DICTIONARYADAPTER_XML
 		/// <inheritdoc />
 		public T GetAdapter<T>(System.Xml.XmlNode xmlNode)
 		{
@@ -99,7 +96,6 @@ namespace Castle.Components.DictionaryAdapter
 				.AddBehavior(XmlMetadataBehavior.Default)
 				.AddBehavior(xml));
 		}
-#endif
 
 		/// <inheritdoc />
 		public DictionaryAdapterMeta GetAdapterMeta(Type type)
@@ -126,7 +122,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
-			if (type.GetTypeInfo().IsInterface == false)
+			if (type.IsInterface == false)
 				throw new ArgumentException("Only interfaces can be adapted to a dictionary", "type");
 
 			return interfaceToMeta.GetOrAdd(type, t =>
@@ -136,12 +132,7 @@ namespace Castle.Components.DictionaryAdapter
 					descriptor = other.CreateDescriptor();
 				}
 
-#if FEATURE_LEGACY_REFLECTION_API
-				var appDomain = Thread.GetDomain();
-				var typeBuilder = CreateTypeBuilder(type, appDomain);
-#else
 				var typeBuilder = CreateTypeBuilder(type);
-#endif
 				return CreateAdapterMeta(type, typeBuilder, descriptor);
 			});
 		}
@@ -154,15 +145,6 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region Type Builders
 
-#if FEATURE_LEGACY_REFLECTION_API
-		private static TypeBuilder CreateTypeBuilder(Type type, AppDomain appDomain)
-		{
-			var assemblyName = new AssemblyName("CastleDictionaryAdapterAssembly");
-			var assemblyBuilder = appDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
-			var moduleBuilder = assemblyBuilder.DefineDynamicModule("CastleDictionaryAdapterModule");
-			return CreateAdapterType(type, moduleBuilder);
-		}
-#else
 		private static TypeBuilder CreateTypeBuilder(Type type)
 		{
 			var assemblyName = new AssemblyName("CastleDictionaryAdapterAssembly");
@@ -170,8 +152,6 @@ namespace Castle.Components.DictionaryAdapter
 			var moduleBuilder = assemblyBuilder.DefineDynamicModule("CastleDictionaryAdapterModule");
 			return CreateAdapterType(type, moduleBuilder);
 		}
-
-#endif
 
 		private static TypeBuilder CreateAdapterType(Type type, ModuleBuilder moduleBuilder)
 		{
@@ -216,33 +196,18 @@ namespace Castle.Components.DictionaryAdapter
 				CreateAdapterProperty(typeBuilder, property.Value);
 			}
 
-#if FEATURE_LEGACY_REFLECTION_API
-			var implementation = typeBuilder.CreateType();
-			var creator = (Func<DictionaryAdapterInstance, IDictionaryAdapter>)Delegate.CreateDelegate
-			(
-				typeof(Func<DictionaryAdapterInstance, IDictionaryAdapter>),
-				implementation,
-				"__Create"
-			);
-#else
-			var implementation = typeBuilder.CreateTypeInfo().AsType();
+			var implementation = typeBuilder.CreateTypeInfo();
 			var creator = (Func<DictionaryAdapterInstance, IDictionaryAdapter>)implementation
-				.GetTypeInfo().GetDeclaredMethod("__Create")
+				.GetDeclaredMethod("__Create")
 				.CreateDelegate(typeof(Func<DictionaryAdapterInstance, IDictionaryAdapter>));
-#endif
 
 			var meta = new DictionaryAdapterMeta(type, implementation, typeBehaviors,
 				initializers.MetaInitializers.ToArray(), initializers.Initializers.ToArray(),
 				propertyMap, this, creator);
 
-#if FEATURE_LEGACY_REFLECTION_API
-			const BindingFlags metaBindings = BindingFlags.Public | BindingFlags.Static | BindingFlags.SetField;
-			implementation.InvokeMember("__meta", metaBindings, null, null, new[] { meta });
-#else
 			const BindingFlags metaBindings = BindingFlags.Public | BindingFlags.Static;
 			var field = implementation.GetField("__meta", metaBindings);
 			field.SetValue(implementation, meta);
-#endif
 			return meta;
 		}
 
@@ -405,7 +370,7 @@ namespace Castle.Components.DictionaryAdapter
 			PreparePropertyMethod(descriptor, setILGenerator);
 
 			setILGenerator.Emit(OpCodes.Ldarg_1);
-			if (descriptor.PropertyType.GetTypeInfo().IsValueType)
+			if (descriptor.PropertyType.IsValueType)
 			{
 				setILGenerator.Emit(OpCodes.Box, descriptor.PropertyType);
 			}
@@ -521,9 +486,7 @@ namespace Castle.Components.DictionaryAdapter
 			{
 				typeof (IEditableObject), typeof (IDictionaryEdit), typeof (IChangeTracking),
 				typeof (IRevertibleChangeTracking), typeof (IDictionaryNotify),
-#if FEATURE_IDATAERRORINFO
 				typeof (IDataErrorInfo),
-#endif
 				typeof (IDictionaryValidate), typeof (IDictionaryAdapter)
 			};
 

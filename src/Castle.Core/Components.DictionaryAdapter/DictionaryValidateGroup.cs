@@ -57,14 +57,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		public bool IsValid
 		{
-#if FEATURE_IDATAERRORINFO
 			get { return string.IsNullOrEmpty(Error); }
-#else
-			get { throw new NotSupportedException("IDataErrorInfo is not supported on this runtime."); }
-#endif
 		}
 
-#if FEATURE_IDATAERRORINFO
 		public string Error
 		{
 			get
@@ -86,7 +81,6 @@ namespace Castle.Components.DictionaryAdapter
 				return string.Empty;
 			}
 		}
-#endif
 
 		public DictionaryValidateGroup ValidateGroups(params object[] groups)
 		{

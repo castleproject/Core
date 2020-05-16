@@ -65,8 +65,8 @@ namespace Castle.DynamicProxy.Tests
 			// are met. We verify those using NUnit assumptions:
 
 			// We require two interface types that have the same name and a method named `M` each:
-			Assume.That(b.GetTypeInfo().IsInterface);
-			Assume.That(c.GetTypeInfo().IsInterface);
+			Assume.That(b.IsInterface);
+			Assume.That(c.IsInterface);
 			Assume.That(b.Name == c.Name);
 			Assume.That(b.GetMethod("M") != null);
 			Assume.That(c.GetMethod("M") != null);

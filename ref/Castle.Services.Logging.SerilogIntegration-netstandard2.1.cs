@@ -1,4 +1,4 @@
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETStandard,Version=v1.3", FrameworkDisplayName="")]
+[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETStandard,Version=v2.1", FrameworkDisplayName="")]
 namespace Castle.Services.Logging.SerilogIntegration
 {
     public class SerilogFactory : Castle.Core.Logging.AbstractLoggerFactory

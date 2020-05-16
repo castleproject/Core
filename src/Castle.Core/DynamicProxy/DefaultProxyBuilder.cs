@@ -116,7 +116,7 @@ namespace Castle.DynamicProxy
 
 		private void AssertValidTypeForTarget(Type type, Type target)
 		{
-			if (type.GetTypeInfo().IsGenericTypeDefinition)
+			if (type.IsGenericTypeDefinition)
 			{
 				throw new GeneratorException(string.Format("Can not create proxy for type {0} because type {1} is an open generic type.",
 															target.GetBestName(), type.GetBestName()));

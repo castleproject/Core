@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Serialization
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
-#if DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 	using System.Security;
 #endif
 
@@ -86,7 +86,7 @@ namespace Castle.DynamicProxy.Serialization
 			get { return scope; }
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecurityCritical]
 #endif
 		protected ProxyObjectReference(SerializationInfo info, StreamingContext context)
@@ -118,7 +118,7 @@ namespace Castle.DynamicProxy.Serialization
 			return Type.GetType(info.GetString(key), true, false);
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecurityCritical]
 #endif
 		protected virtual object RecreateProxy()
@@ -138,7 +138,7 @@ namespace Castle.DynamicProxy.Serialization
 			return RecreateInterfaceProxy(generatorType);
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecurityCritical]
 #endif
 		private object RecreateClassProxyWithTarget()
@@ -148,7 +148,7 @@ namespace Castle.DynamicProxy.Serialization
 			return InstantiateClassProxy(proxyType);
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecurityCritical]
 #endif
 		public object RecreateInterfaceProxy(string generatorType)
@@ -181,7 +181,7 @@ namespace Castle.DynamicProxy.Serialization
 			return FormatterServices.GetSafeUninitializedObject(proxyType);
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecurityCritical]
 #endif
 		public object RecreateClassProxy()
@@ -191,7 +191,7 @@ namespace Castle.DynamicProxy.Serialization
 			return InstantiateClassProxy(proxyType);
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecurityCritical]
 #endif
 		private object InstantiateClassProxy(Type proxy_type)
@@ -215,7 +215,7 @@ namespace Castle.DynamicProxy.Serialization
 			}
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecurityCritical]
 #endif
 		public object GetRealObject(StreamingContext context)
@@ -223,7 +223,7 @@ namespace Castle.DynamicProxy.Serialization
 			return proxy;
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecurityCritical]
 #endif
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -232,7 +232,7 @@ namespace Castle.DynamicProxy.Serialization
 			// this class would never be serialized.
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecuritySafeCritical]
 #endif
 		public void OnDeserialization(object sender)
@@ -247,7 +247,7 @@ namespace Castle.DynamicProxy.Serialization
 			InvokeCallback(proxy);
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecurityCritical]
 #endif
 		private void DeserializeProxyMembers()
@@ -274,7 +274,7 @@ namespace Castle.DynamicProxy.Serialization
 			FormatterServices.PopulateObjectMembers(proxy, deserializedMembers.ToArray(), deserializedValues.ToArray());
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecurityCritical]
 #endif
 		private void DeserializeProxyState()

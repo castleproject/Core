@@ -208,7 +208,7 @@ namespace Castle.DynamicProxy
 
 		private static bool IsCompilerGenerated(Type type)
 		{
-			return type.GetTypeInfo().IsDefined(typeof(CompilerGeneratedAttribute));
+			return type.IsDefined(typeof(CompilerGeneratedAttribute));
 		}
 
 		internal CustomAttributeBuilder Builder
@@ -337,7 +337,7 @@ namespace Castle.DynamicProxy
 			private static IEnumerable<object> AsObjectEnumerable(object array)
 			{
 				// Covariance doesn't work for value types
-				if (array.GetType().GetElementType().GetTypeInfo().IsValueType)
+				if (array.GetType().GetElementType().IsValueType)
 					return ((Array)array).Cast<object>();
 
 				return (IEnumerable<object>)array;

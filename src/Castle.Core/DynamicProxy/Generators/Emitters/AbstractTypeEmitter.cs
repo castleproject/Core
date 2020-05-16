@@ -274,7 +274,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public Type GetGenericArgument(String genericArgumentName)
 		{
 			if (name2GenericType.TryGetValue(genericArgumentName, out var genericTypeParameterBuilder))
-				return genericTypeParameterBuilder.AsType();
+				return genericTypeParameterBuilder;
 
 			return null;
 		}
@@ -285,9 +285,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			foreach (var genType in genericType.GetGenericArguments())
 			{
-				if (genType.GetTypeInfo().IsGenericParameter)
+				if (genType.IsGenericParameter)
 				{
-					types.Add(name2GenericType[genType.Name].AsType());
+					types.Add(name2GenericType[genType.Name]);
 				}
 				else
 				{
@@ -303,7 +303,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			var types = new List<Type>();
 			foreach (var genType in genericMethod.GetGenericArguments())
 			{
-				types.Add(name2GenericType[genType.Name].AsType());
+				types.Add(name2GenericType[genType.Name]);
 			}
 
 			return types.ToArray();
@@ -318,11 +318,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			try
 			{
-#if FEATURE_LEGACY_REFLECTION_API
-				return type.CreateType();
-#else
-				return type.CreateTypeInfo().AsType();
-#endif
+				return type.CreateTypeInfo();
 			}
 			catch (BadImageFormatException ex)
 			{

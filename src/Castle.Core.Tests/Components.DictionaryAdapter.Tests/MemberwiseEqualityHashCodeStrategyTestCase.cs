@@ -14,7 +14,6 @@
 
 namespace Castle.Components.DictionaryAdapter.Tests
 {
-#if FEATURE_DICTIONARYADAPTER_XML
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
@@ -144,5 +143,4 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				.AddBehaviors(XmlMetadataBehavior.Default, xpath, new MemberwiseEqualityHashCodeStrategy()));
 		}
 	}
-#endif
 }

@@ -22,7 +22,7 @@ namespace Castle.Core.Internal
 
 	public static class PermissionUtil
 	{
-#if DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecuritySafeCritical]
 #endif
 		public static bool IsGranted(this IPermission permission)

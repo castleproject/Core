@@ -320,7 +320,7 @@ namespace Castle.DynamicProxy
 				throw new ArgumentNullException("interceptors");
 			}
 
-			if (!interfaceToProxy.GetTypeInfo().IsInterface)
+			if (!interfaceToProxy.IsInterface)
 			{
 				throw new ArgumentException("Specified type is not an interface", "interfaceToProxy");
 			}
@@ -550,7 +550,7 @@ namespace Castle.DynamicProxy
 		///   This method uses <see cref = "IProxyBuilder" /> implementation to generate a proxy type.
 		///   As such caller should expect any type of exception that given <see cref = "IProxyBuilder" /> implementation may throw.
 		/// </remarks>
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecuritySafeCritical]
 #endif
 		public virtual object CreateInterfaceProxyWithTargetInterface(Type interfaceToProxy,
@@ -574,7 +574,7 @@ namespace Castle.DynamicProxy
 				throw new ArgumentNullException("interceptors");
 			}
 
-			if (!interfaceToProxy.GetTypeInfo().IsInterface)
+			if (!interfaceToProxy.IsInterface)
 			{
 				throw new ArgumentException("Specified type is not an interface", "interfaceToProxy");
 			}
@@ -856,7 +856,7 @@ namespace Castle.DynamicProxy
 				throw new ArgumentNullException("interceptors");
 			}
 
-			if (!interfaceToProxy.GetTypeInfo().IsInterface)
+			if (!interfaceToProxy.IsInterface)
 			{
 				throw new ArgumentException("Specified type is not an interface", "interfaceToProxy");
 			}
@@ -1165,7 +1165,7 @@ namespace Castle.DynamicProxy
 			{
 				throw new ArgumentNullException("options");
 			}
-			if (!classToProxy.GetTypeInfo().IsClass)
+			if (!classToProxy.IsClass)
 			{
 				throw new ArgumentException("'classToProxy' must be a class", "classToProxy");
 			}
@@ -1429,7 +1429,7 @@ namespace Castle.DynamicProxy
 			{
 				throw new ArgumentNullException("options");
 			}
-			if (!classToProxy.GetTypeInfo().IsClass)
+			if (!classToProxy.IsClass)
 			{
 				throw new ArgumentException("'classToProxy' must be a class", "classToProxy");
 			}
@@ -1480,7 +1480,7 @@ namespace Castle.DynamicProxy
 
 		protected void CheckNotGenericTypeDefinition(Type type, string argumentName)
 		{
-			if (type != null && type.GetTypeInfo().IsGenericTypeDefinition)
+			if (type != null && type.IsGenericTypeDefinition)
 			{
 				throw new GeneratorException(string.Format("Can not create proxy for type {0} because it is an open generic type.",
 														   type.GetBestName()));

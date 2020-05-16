@@ -96,7 +96,22 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Double_Roundtrip()
 		{
-			TestSimpleSerializer(3.1337E+16D, "3.1337E+16");
+			TestSimpleSerializer(3.1337E+16D, "3.1337E+16", "31337000000000000");
+			// NOTE: This test will allow 2 different roundtrip results due to
+			// some roundtripping changes introduced in .NET Core 3.0. See:
+			//
+			// https://devblogs.microsoft.com/dotnet/floating-point-parsing-and-formatting-improvements-in-net-core-3-0/
+			//
+			// This test will cause a `double.ToString("R")` to be executed
+			// inside `XmlConvert`; the above article says the following:
+			//
+			//   "For ToString("R"), there is no mechanism to fallback
+			//    to the old behavior. The previous behavior would first try
+			//    'G15' and then using the internal buffer would see if it
+			//    roundtrips; if that failed, it would instead return 'G17'."
+			//
+			// So there is no straightforward way to get roundtripping to work
+			// the same way on .NET Framework / .NET Core 2.x, and .NET Core 3.x.
 		}
 
 		[Test]
@@ -152,21 +167,21 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 		[Test]
 		public void Dynamic_Roundtrip()
 		{
-			TestSimpleSerializer(42, "42", typeof(object));
+			TestSimpleSerializer(42, new[] { "42" }, typeof(object));
 		}
 
-		private void TestSimpleSerializer(object value, string text)
+		private void TestSimpleSerializer(object value, params string[] texts)
 		{
-			TestSimpleSerializer(value, text, value.GetType());
+			TestSimpleSerializer(value, texts, value.GetType());
 		}
 
-		private void TestSimpleSerializer(object value, string text, Type serializerType)
+		private void TestSimpleSerializer(object value, string[] texts, Type serializerType)
 		{
 			var serializer = XmlTypeSerializerCache.Instance[serializerType];
 			var node = new DummyXmlNode(value.GetType());
 
 			serializer.SetValue(node, null, null, null, ref value);
-			Assert.AreEqual(text, node.Value);
+			Assert.Contains(node.Value, texts);
 
 			var actual = serializer.GetValue(node, null, null);
 			Assert.AreEqual(value, actual);

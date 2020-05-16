@@ -79,11 +79,7 @@ namespace Castle.DynamicProxy
 			}
 			else
 			{
-#if FEATURE_NETCORE_REFLECTION_API
-				return proxiedInvokeMethod.CreateDelegate(delegateType, proxy);
-#else
 				return Delegate.CreateDelegate(delegateType, proxy, proxiedInvokeMethod);
-#endif
 			}
 		}
 
@@ -119,7 +115,7 @@ namespace Castle.DynamicProxy
 					{
 						if (ReferenceEquals(target, instance))
 						{
-							return instance.GetType().GetTypeInfo().BaseType;
+							return instance.GetType().BaseType;
 						}
 
 						instance = target;
@@ -196,19 +192,17 @@ namespace Castle.DynamicProxy
 
 		internal static bool IsAccessibleType(Type target)
 		{
-			var typeInfo = target.GetTypeInfo();
-
-			var isPublic = typeInfo.IsPublic || typeInfo.IsNestedPublic;
+			var isPublic = target.IsPublic || target.IsNestedPublic;
 			if (isPublic)
 			{
 				return true;
 			}
 
 			var isTargetNested = target.IsNested;
-			var isNestedAndInternal = isTargetNested && (typeInfo.IsNestedAssembly || typeInfo.IsNestedFamORAssem);
-			var isInternalNotNested = typeInfo.IsVisible == false && isTargetNested == false;
+			var isNestedAndInternal = isTargetNested && (target.IsNestedAssembly || target.IsNestedFamORAssem);
+			var isInternalNotNested = target.IsVisible == false && isTargetNested == false;
 			var isInternal = isInternalNotNested || isNestedAndInternal;
-			if (isInternal && AreInternalsVisibleToDynamicProxy(typeInfo.Assembly))
+			if (isInternal && AreInternalsVisibleToDynamicProxy(target.Assembly))
 			{
 				return true;
 			}
@@ -231,7 +225,7 @@ namespace Castle.DynamicProxy
 
 			if (method.IsAssembly || method.IsFamilyAndAssembly)
 			{
-				return AreInternalsVisibleToDynamicProxy(method.DeclaringType.GetTypeInfo().Assembly);
+				return AreInternalsVisibleToDynamicProxy(method.DeclaringType.Assembly);
 			}
 
 			return false;
@@ -252,7 +246,7 @@ namespace Castle.DynamicProxy
 		private static string CreateMessageForInaccessibleMethod(MethodBase inaccessibleMethod)
 		{
 			var containingType = inaccessibleMethod.DeclaringType;
-			var targetAssembly = containingType.GetTypeInfo().Assembly;
+			var targetAssembly = containingType.Assembly;
 
 			var messageFormat = "Can not create proxy for method {0} because it or its declaring type is not accessible. ";
 

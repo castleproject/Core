@@ -32,12 +32,6 @@ namespace Castle.DynamicProxy.Tests
 			proxy.Method(readOnlyStruct);
 		}
 
-#if FEATURE_CUSTOMMODIFIERS
-
-		// ^^^
-		// Because the `in` parameter modifier gets encoded as a modreq,
-		// tests involving it can only ever succeed on platforms supporting them.
-
 		[Test]
 		public void Can_proxy_method_having_valuetyped_parameter_with_in_modifier()
 		{
@@ -91,8 +85,6 @@ namespace Castle.DynamicProxy.Tests
 			var readOnlyStruct = new ReadOnlyStruct();
 			proxy.Method<int>(in readOnlyStruct);
 		}
-
-#endif
 
 		public readonly struct ReadOnlyStruct
 		{

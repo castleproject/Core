@@ -45,7 +45,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				return;
 			}
 
-			if (fromType.GetTypeInfo().IsByRef)
+			if (fromType.IsByRef)
 			{
 				fromType = fromType.GetElementType();
 			}
@@ -55,9 +55,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				target = target.GetElementType();
 			}
 
-			if (target.GetTypeInfo().IsValueType)
+			if (target.IsValueType)
 			{
-				if (fromType.GetTypeInfo().IsValueType)
+				if (fromType.IsValueType)
 				{
 					throw new NotImplementedException("Cannot convert between distinct value types");
 				}
@@ -79,7 +79,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else
 			{
-				if (fromType.GetTypeInfo().IsValueType)
+				if (fromType.IsValueType)
 				{
 					// Box conversion
 					gen.Emit(OpCodes.Box, fromType);
@@ -99,15 +99,15 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			{
 				gen.Emit(OpCodes.Unbox_Any, target);
 			}
-			else if (from.GetTypeInfo().IsGenericParameter)
+			else if (from.IsGenericParameter)
 			{
 				gen.Emit(OpCodes.Box, from);
 			}
-			else if (target.GetTypeInfo().IsGenericType && target != from)
+			else if (target.IsGenericType && target != from)
 			{
 				gen.Emit(OpCodes.Castclass, target);
 			}
-			else if (target.GetTypeInfo().IsSubclassOf(from))
+			else if (target.IsSubclassOf(from))
 			{
 				gen.Emit(OpCodes.Castclass, target);
 			}

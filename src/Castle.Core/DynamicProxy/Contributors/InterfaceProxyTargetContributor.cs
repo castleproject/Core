@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Contributors
 		protected virtual MembersCollector GetCollectorForInterface(Type @interface)
 		{
 			return new InterfaceMembersOnClassCollector(@interface, false,
-				proxyTargetType.GetTypeInfo().GetRuntimeInterfaceMap(@interface));
+				proxyTargetType.GetInterfaceMap(@interface));
 		}
 
 		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,

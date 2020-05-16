@@ -78,7 +78,7 @@ namespace Castle.Components.DictionaryAdapter
 				throw new ArgumentNullException(paramName);
 			}
 
-			if (type.GetTypeInfo().IsAbstract == false && typeof(TBase).IsAssignableFrom(type))
+			if (type.IsAbstract == false && typeof(TBase).IsAssignableFrom(type))
 			{
 				var constructor = type.GetConstructor(Type.EmptyTypes);
 				if (constructor != null)

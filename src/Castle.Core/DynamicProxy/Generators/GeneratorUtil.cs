@@ -47,7 +47,7 @@ namespace Castle.DynamicProxy.Generators
 
 			bool IsByRef(ParameterInfo parameter)
 			{
-				return parameter.ParameterType.GetTypeInfo().IsByRef;
+				return parameter.ParameterType.IsByRef;
 			}
 
 			bool IsReadOnly(ParameterInfo parameter)
@@ -81,7 +81,6 @@ namespace Castle.DynamicProxy.Generators
 					return false;
 				}
 
-#if FEATURE_CUSTOMMODIFIERS
 				// This check allows to make the detection logic more robust on the platforms which support custom modifiers.
 				// The robustness is achieved by the fact, that usually the `IsReadOnlyAttribute` emitted by the compiler is internal to the assembly.
 				// Therefore, if clients use Reflection.Emit to create "a copy" of the methods with read-only members, they cannot re-use the existing attribute.
@@ -94,7 +93,6 @@ namespace Castle.DynamicProxy.Generators
 				{
 					return true;
 				}
-#endif
 
 				// The comparison by name is intentional; any assembly could define that attribute.
 				// See explanation in comment above.

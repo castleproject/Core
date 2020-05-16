@@ -42,7 +42,7 @@ namespace Castle.Core.Internal
 		/// <returns>The type attributes.</returns>
 		public static IEnumerable<T> GetAttributes<T>(this Type type) where T : Attribute
 		{
-			foreach (T a in type.GetTypeInfo().GetCustomAttributes(typeof(T), false))
+			foreach (T a in type.GetCustomAttributes(typeof(T), false))
 			{
 				yield return a;
 			}
@@ -121,7 +121,7 @@ namespace Castle.Core.Internal
 
 		public static AttributeUsageAttribute GetAttributeUsage(this Type attributeType)
 		{
-			var attributes = attributeType.GetTypeInfo().GetCustomAttributes<AttributeUsageAttribute>(true).ToArray();
+			var attributes = attributeType.GetCustomAttributes<AttributeUsageAttribute>(true).ToArray();
 			return attributes.Length != 0 ? attributes[0] : DefaultAttributeUsage;
 		}
 

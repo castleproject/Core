@@ -6,7 +6,7 @@ Enhancements:
 - .NET Standard 2.0 and 2.1 support (@lg2de, #485)
 
 Deprecations:
- - Removed support for the .NET Framework 3.5.
+ - Removed support for the .NET Framework < 4.5 and .NET Standard 1.x. (@stakx, #495, #496)
 
 ## 4.4.1 (2020-05-06)
 

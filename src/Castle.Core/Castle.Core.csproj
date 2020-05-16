@@ -3,7 +3,7 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks>net40;net45;netstandard1.3;netstandard1.5;netstandard2.0;netstandard2.1</TargetFrameworks>
+		<TargetFrameworks>net45;netstandard2.0;netstandard2.1</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -28,28 +28,12 @@
 		<EmbeddedResource Include="DynamicProxy\DynProxy.snk" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)'=='net40'OR'$(TargetFramework)'=='net45'">
+	<ItemGroup Condition="'$(TargetFramework)'=='net45'">
 		<Reference Include="System.Configuration" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)'=='netstandard1.3'OR'$(TargetFramework)'=='netstandard1.5'">
-		<PackageReference Include="System.Diagnostics.TraceSource" Version="4.3.0" />
-		<PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
-		<PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
-		<PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
-		<PackageReference Include="System.Reflection" Version="4.3.0" />
-		<PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
-		<PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
-		<PackageReference Include="System.ComponentModel" Version="4.3.0" />
-		<PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
 		<PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
-		<PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy
 #if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
 #endif
-#if DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 	using System.Security;
 #endif
 
@@ -102,7 +102,7 @@ namespace Castle.DynamicProxy
 		}
 
 #if FEATURE_SERIALIZATION
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecurityCritical]
 #endif
 		public void GetObjectData(SerializationInfo info, StreamingContext context)

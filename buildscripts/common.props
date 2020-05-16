@@ -43,53 +43,27 @@
 
 	<PropertyGroup>
 		<DiagnosticsConstants>DEBUG</DiagnosticsConstants>
-		<NetStandard13Constants>TRACE;FEATURE_NETCORE_REFLECTION_API;FEATURE_TEST_SERILOGINTEGRATION</NetStandard13Constants>
-		<NetStandard15Constants>$(NetStandard13Constants);FEATURE_CUSTOMMODIFIERS</NetStandard15Constants>
-		<NetStandard20Constants>TRACE;FEATURE_BINDINGLIST;FEATURE_DICTIONARYADAPTER_XML;FEATURE_CUSTOMMODIFIERS;FEATURE_GAC;FEATURE_IDATAERRORINFO;FEATURE_ISUPPORTINITIALIZE;FEATURE_LISTSORT;FEATURE_SMTP;FEATURE_TARGETEXCEPTION;FEATURE_TEST_DATASET;FEATURE_TEST_SERILOGINTEGRATION;FEATURE_NETSTANDARD2_COMPATIBILITY</NetStandard20Constants>
-		<NetStandard21Constants>TRACE;FEATURE_BINDINGLIST;FEATURE_DICTIONARYADAPTER_XML;FEATURE_CUSTOMMODIFIERS;FEATURE_GAC;FEATURE_IDATAERRORINFO;FEATURE_ISUPPORTINITIALIZE;FEATURE_LISTSORT;FEATURE_SMTP;FEATURE_TARGETEXCEPTION;FEATURE_TEST_DATASET;FEATURE_TEST_SERILOGINTEGRATION;FEATURE_NETSTANDARD2_COMPATIBILITY</NetStandard21Constants>
-		<CommonDesktopClrConstants>TRACE;FEATURE_APPDOMAIN;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_BINDINGLIST;FEATURE_DICTIONARYADAPTER_XML;FEATURE_CUSTOMMODIFIERS;FEATURE_EVENTLOG;FEATURE_GAC;FEATURE_GET_REFERENCED_ASSEMBLIES;FEATURE_IDATAERRORINFO;FEATURE_ISUPPORTINITIALIZE;FEATURE_LISTSORT;FEATURE_REMOTING;FEATURE_SECURITY_PERMISSIONS;FEATURE_SERIALIZATION;FEATURE_SMTP;FEATURE_SYSTEM_CONFIGURATION;FEATURE_TARGETEXCEPTION;FEATURE_TEST_COM;FEATURE_TEST_DATASET;FEATURE_TEST_SERILOGINTEGRATION</CommonDesktopClrConstants>
+		<NetStandard20Constants>TRACE</NetStandard20Constants>
+		<NetStandard21Constants>TRACE</NetStandard21Constants>
+		<CommonDesktopClrConstants>TRACE;FEATURE_APPDOMAIN;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_EVENTLOG;FEATURE_REMOTING;FEATURE_SECURITY_PERMISSIONS;FEATURE_SERIALIZATION;FEATURE_SYSTEM_CONFIGURATION;FEATURE_TEST_COM</CommonDesktopClrConstants>
 		<DesktopClrConstants Condition="'$(OS)'=='Unix'">$(CommonDesktopClrConstants)</DesktopClrConstants>
 		<DesktopClrConstants Condition="'$(OS)'=='Windows_NT'">$(CommonDesktopClrConstants);FEATURE_TEST_PEVERIFY</DesktopClrConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net40|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);FEATURE_LEGACY_REFLECTION_API;DOTNET40</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net40|Release'">
-		<DefineConstants>$(DesktopClrConstants);FEATURE_LEGACY_REFLECTION_API;DOTNET40</DefineConstants>
-	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net45|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);DOTNET45;DOTNET40</DefineConstants>
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);DOTNET45</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net45|Release'">
-		<DefineConstants>$(DesktopClrConstants);DOTNET45;DOTNET40;</DefineConstants>
+		<DefineConstants>$(DesktopClrConstants);DOTNET45;</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net461|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);DOTNET45;DOTNET40</DefineConstants>
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);DOTNET45</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net461|Release'">
-		<DefineConstants>$(DesktopClrConstants);DOTNET45;DOTNET40</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard1.3|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(NetStandard13Constants)</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard1.3|Release'">
-		<DefineConstants>$(NetStandard13Constants)</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard1.5|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(NetStandard15Constants)</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard1.5|Release'">
-		<DefineConstants>$(NetStandard15Constants)</DefineConstants>
+		<DefineConstants>$(DesktopClrConstants);DOTNET45</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard2.0|Debug'">
@@ -106,14 +80,6 @@
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard2.1|Release'">
 		<DefineConstants>$(NetStandard21Constants)</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp1.1|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(NetStandard15Constants)</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp1.1|Release'">
-		<DefineConstants>$(NetStandard15Constants)</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp2.1|Debug'">

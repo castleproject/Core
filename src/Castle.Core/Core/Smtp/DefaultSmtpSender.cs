@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_SMTP
-
 #pragma warning disable 618 // Mono marked SmtpClient obsolete
 
 namespace Castle.Core.Smtp
@@ -23,10 +21,10 @@ namespace Castle.Core.Smtp
 	using System.ComponentModel;
 	using System.Net;
 	using System.Net.Mail;
-#if DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 	using System.Security;
-#endif
 	using System.Security.Permissions;
+#endif
 	using Castle.Core.Internal;
 
 	/// <summary>
@@ -117,7 +115,7 @@ namespace Castle.Core.Smtp
 		/// <param name="to">To field</param>
 		/// <param name="subject">e-mail's subject</param>
 		/// <param name="messageText">message's body</param>
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecuritySafeCritical]
 #endif
 		public void Send(String from, String to, String subject, String messageText)
@@ -135,7 +133,7 @@ namespace Castle.Core.Smtp
 		/// </summary>
 		/// <exception cref="ArgumentNullException">If the message is null</exception>
 		/// <param name="message">Message instance</param>
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecuritySafeCritical]
 #endif
 		public void Send(MailMessage message)
@@ -143,7 +141,7 @@ namespace Castle.Core.Smtp
 			InternalSend(message);
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecurityCritical]
 #endif
 		private void InternalSend(MailMessage message)
@@ -182,7 +180,7 @@ namespace Castle.Core.Smtp
 			}
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecuritySafeCritical]
 #endif
 		public void Send(IEnumerable<MailMessage> messages)
@@ -229,7 +227,7 @@ namespace Castle.Core.Smtp
 		/// informed
 		/// </summary>
 		/// <param name="smtpClient">Message instance</param>
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecurityCritical]
 #endif
 		protected virtual void Configure(SmtpClient smtpClient)
@@ -263,7 +261,7 @@ namespace Castle.Core.Smtp
 			get { return !string.IsNullOrEmpty(credentials.UserName); }
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
+#if FEATURE_SECURITY_PERMISSIONS
 		[SecuritySafeCritical]
 #endif
 		private SmtpClient CreateSmtpClient()
@@ -292,5 +290,3 @@ namespace Castle.Core.Smtp
 }
 
 #pragma warning restore 618 // Mono marked SmtpClient obsolete
-
-#endif

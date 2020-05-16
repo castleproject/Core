@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Tests
 			HasNonInheritableAttribute instance = (HasNonInheritableAttribute)
 										generator.CreateClassProxy(typeof (HasNonInheritableAttribute), new StandardInterceptor());
 
-			object[] attributes = instance.GetType().GetTypeInfo().GetCustomAttributes(typeof (NonInheritableAttribute), false).ToArray();
+			object[] attributes = instance.GetType().GetCustomAttributes(typeof (NonInheritableAttribute), false).ToArray();
 			Assert.AreEqual(1, attributes.Length);
 			Assert.IsInstanceOf(typeof (NonInheritableAttribute), attributes[0]);
 
@@ -46,7 +46,7 @@ namespace Castle.DynamicProxy.Tests
 			AttributedClass2 instance = (AttributedClass2)
 										generator.CreateClassProxy(typeof (AttributedClass2), new StandardInterceptor());
 
-			object[] attributes = instance.GetType().GetTypeInfo().GetCustomAttributes(typeof (ComplexNonInheritableAttribute), false).ToArray();
+			object[] attributes = instance.GetType().GetCustomAttributes(typeof (ComplexNonInheritableAttribute), false).ToArray();
 			Assert.AreEqual(1, attributes.Length);
 			Assert.IsInstanceOf(typeof (ComplexNonInheritableAttribute), attributes[0]);
 			ComplexNonInheritableAttribute att = (ComplexNonInheritableAttribute) attributes[0];
@@ -109,14 +109,14 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var proxy = generator.CreateClassProxy<HasNonInheritableAttribute>();
 			var nameProperty = proxy.GetType().GetMethod("OnGenericArgument").GetGenericArguments().Single();
-			Assert.IsTrue(nameProperty.GetTypeInfo().IsDefined(typeof(NonInheritableAttribute), false));
+			Assert.IsTrue(nameProperty.IsDefined(typeof(NonInheritableAttribute), false));
 		}
 
 		[Test]
 		public void Can_proxy_type_with_non_inheritable_attribute_depending_on_array_of_something_via_property()
 		{
 			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHasNonInheritableAttributeWithArray>();
-			var attribute = proxy.GetType().GetTypeInfo()
+			var attribute = proxy.GetType()
 				.GetCustomAttributes(typeof(NonInheritableWithArrayAttribute), false)
 				.Cast<NonInheritableWithArrayAttribute>().Single();
 			CollectionAssert.AreEqual(attribute.Values, new[] {"1", "2", "3"});
@@ -126,7 +126,7 @@ namespace Castle.DynamicProxy.Tests
 		public void Can_proxy_type_with_non_inheritable_attribute_depending_on_array_of_something_via_field()
 		{
 			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHasNonInheritableAttributeWithArray2>();
-			var attribute = proxy.GetType().GetTypeInfo()
+			var attribute = proxy.GetType()
 				.GetCustomAttributes(typeof(NonInheritableWithArray2Attribute), false)
 				.Cast<NonInheritableWithArray2Attribute>().Single();
 			CollectionAssert.AreEqual(attribute.Values, new[] { "1", "2", "3" });

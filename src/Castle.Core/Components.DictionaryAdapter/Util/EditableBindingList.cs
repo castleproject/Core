@@ -14,7 +14,6 @@
 
 namespace Castle.Components.DictionaryAdapter
 {
-#if FEATURE_BINDINGLIST
 	using System.Collections.Generic;
 	using System.ComponentModel;
 
@@ -92,5 +91,4 @@ namespace Castle.Components.DictionaryAdapter
 			CancelEdit();
 		}
 	}
-#endif
 }

@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Generators
 
 		internal bool CanBeImplementedExplicitly
 		{
-			get { return sourceType != null && sourceType.GetTypeInfo().IsInterface; }
+			get { return sourceType != null && sourceType.IsInterface; }
 		}
 
 		internal abstract void SwitchToExplicitImplementation();

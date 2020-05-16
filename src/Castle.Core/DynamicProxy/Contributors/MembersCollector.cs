@@ -248,7 +248,7 @@ namespace Castle.DynamicProxy.Contributors
 		private static bool IsInternalAndNotVisibleToDynamicProxy(MethodInfo method)
 		{
 			return ProxyUtil.IsInternal(method) &&
-				   ProxyUtil.AreInternalsVisibleToDynamicProxy(method.DeclaringType.GetTypeInfo().Assembly) == false;
+				   ProxyUtil.AreInternalsVisibleToDynamicProxy(method.DeclaringType.Assembly) == false;
 		}
 	}
 }

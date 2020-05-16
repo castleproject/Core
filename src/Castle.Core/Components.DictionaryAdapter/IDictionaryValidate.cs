@@ -20,10 +20,7 @@ namespace Castle.Components.DictionaryAdapter
 	/// <summary>
 	/// Contract for validating Dictionary adapter.
 	/// </summary>
-	public interface IDictionaryValidate
-#if FEATURE_IDATAERRORINFO
-		: IDataErrorInfo
-#endif
+	public interface IDictionaryValidate : IDataErrorInfo
 	{
 		bool CanValidate { get; set; }
 
