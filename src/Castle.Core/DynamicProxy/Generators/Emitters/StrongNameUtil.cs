@@ -28,24 +28,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private static readonly IDictionary<Assembly, bool> signedAssemblyCache = new Dictionary<Assembly, bool>();
 		private static readonly object lockObject = new object();
 
-		static StrongNameUtil()
-		{
-#if FEATURE_SECURITY_PERMISSIONS
-			//idea after http://blogs.msdn.com/dmitryr/archive/2007/01/23/finding-out-the-current-trust-level-in-asp-net.aspx
-			try
-			{
-				new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Demand();
-				CanStrongNameAssembly = true;
-			}
-			catch (SecurityException)
-			{
-				CanStrongNameAssembly = false;
-			}
-#else
-			CanStrongNameAssembly = true;
-#endif
-		}
-
 		public static bool IsAssemblySigned(this Assembly assembly)
 		{
 			lock (lockObject)
@@ -79,7 +61,5 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			return IsAnyTypeFromUnsignedAssembly(interfaces);
 		}
-
-		public static bool CanStrongNameAssembly { get; set; }
 	}
 }
