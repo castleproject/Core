@@ -78,7 +78,7 @@ Symbol                              | .NET 4.5           | .NET Standard 2.x
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.
 * `FEATURE_EVENTLOG` - provides a diagnostics logger using the Windows Event Log.
 * `FEATURE_REMOTING` - supports remoting on various types including inheriting from MarshalByRefObject.
-* `FEATURE_SECURITY_PERMISSIONS` - enables the use of CAS and Security[Critical|SafeCritical|Transparent].
+* `FEATURE_SECURITY_PERMISSIONS` - enables the use of CAS.
 * `FEATURE_SERIALIZATION` - enables support for serialization of dynamic proxies and other types.
 * `FEATURE_SYSTEM_CONFIGURATION` - enables features that use System.Configuration and the ConfigurationManager.
 * `FEATURE_TEST_COM` - enables COM Interop tests.

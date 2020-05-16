@@ -23,7 +23,6 @@ namespace Castle.DynamicProxy
 	using System.Runtime.Remoting;
 #endif
 #if FEATURE_SECURITY_PERMISSIONS
-	using System.Security;
 	using System.Security.Permissions;
 #endif
 	using System.Text;
@@ -550,9 +549,6 @@ namespace Castle.DynamicProxy
 		///   This method uses <see cref = "IProxyBuilder" /> implementation to generate a proxy type.
 		///   As such caller should expect any type of exception that given <see cref = "IProxyBuilder" /> implementation may throw.
 		/// </remarks>
-#if FEATURE_SECURITY_PERMISSIONS
-		[SecuritySafeCritical]
-#endif
 		public virtual object CreateInterfaceProxyWithTargetInterface(Type interfaceToProxy,
 		                                                              Type[] additionalInterfacesToProxy,
 		                                                              object target, ProxyGenerationOptions options,

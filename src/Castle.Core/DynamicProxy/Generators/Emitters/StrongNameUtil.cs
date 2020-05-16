@@ -28,9 +28,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private static readonly IDictionary<Assembly, bool> signedAssemblyCache = new Dictionary<Assembly, bool>();
 		private static readonly object lockObject = new object();
 
-#if FEATURE_SECURITY_PERMISSIONS
-		[SecuritySafeCritical]
-#endif
 		static StrongNameUtil()
 		{
 #if FEATURE_SECURITY_PERMISSIONS
