@@ -1,7 +1,7 @@
-[assembly: System.CLSCompliantAttribute(true)]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute(@"Castle.Core.Tests, PublicKey=002400000480000094000000060200000024000052534131000400000100010077f5e87030dadccce6902c6adab7a987bd69cb5819991531f560785eacfc89b6fcddf6bb2a00743a7194e454c0273447fc6eec36474ba8e5a3823147d214298e4f9a631b1afee1a51ffeae4672d498f14b000e3d321453cdd8ac064de7e1cf4d222b7e81f54d4fd46725370d702a05b48738cc29d09228f1aa722ae1a9ca02fb")]
-[assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName=".NET Framework 4.5")]
+[assembly: System.CLSCompliant(true)]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo(@"Castle.Core.Tests, PublicKey=002400000480000094000000060200000024000052534131000400000100010077f5e87030dadccce6902c6adab7a987bd69cb5819991531f560785eacfc89b6fcddf6bb2a00743a7194e454c0273447fc6eec36474ba8e5a3823147d214298e4f9a631b1afee1a51ffeae4672d498f14b000e3d321453cdd8ac064de7e1cf4d222b7e81f54d4fd46725370d702a05b48738cc29d09228f1aa722ae1a9ca02fb")]
+[assembly: System.Runtime.InteropServices.ComVisible(false)]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.5", FrameworkDisplayName=".NET Framework 4.5")]
 namespace Castle.Components.DictionaryAdapter
 {
     public abstract class AbstractDictionaryAdapter : System.Collections.ICollection, System.Collections.IDictionary, System.Collections.IEnumerable
@@ -77,7 +77,7 @@ namespace Castle.Components.DictionaryAdapter
         public System.Collections.IDictionary Secondary { get; }
         public override bool Contains(object key) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false, Inherited=true)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false, Inherited=true)]
     public class ComponentAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryKeyBuilder, Castle.Components.DictionaryAdapter.IDictionaryPropertyGetter, Castle.Components.DictionaryAdapter.IDictionaryPropertySetter
     {
         public ComponentAttribute() { }
@@ -92,7 +92,7 @@ namespace Castle.Components.DictionaryAdapter
         public Castle.Components.DictionaryAdapter.IDictionaryBehavior Copy() { }
         public object GetPropertyValue(Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter, string key, object storedValue, Castle.Components.DictionaryAdapter.PropertyDescriptor property, bool ifExists) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Class | System.AttributeTargets.All, AllowMultiple=false, Inherited=false)]
+    [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.All, AllowMultiple=false, Inherited=false)]
     public class DictionaryAdapterAttribute : System.Attribute
     {
         public DictionaryAdapterAttribute(System.Type interfaceType) { }
@@ -123,16 +123,16 @@ namespace Castle.Components.DictionaryAdapter
         public void CancelEdit() { }
         protected bool ClearEditProperty(Castle.Components.DictionaryAdapter.PropertyDescriptor property, string key) { }
         public void ClearProperty(Castle.Components.DictionaryAdapter.PropertyDescriptor property, string key) { }
+        public object Coerce(System.Type type) { }
         public T Coerce<T>()
             where T :  class { }
-        public object Coerce(System.Type type) { }
         public void CopyTo(Castle.Components.DictionaryAdapter.IDictionaryAdapter other) { }
         public void CopyTo(Castle.Components.DictionaryAdapter.IDictionaryAdapter other, System.Func<Castle.Components.DictionaryAdapter.PropertyDescriptor, bool> selector) { }
-        public T Create<T>() { }
         public object Create(System.Type type) { }
-        public T Create<T>(System.Collections.IDictionary dictionary) { }
         public object Create(System.Type type, System.Collections.IDictionary dictionary) { }
+        public T Create<T>() { }
         public T Create<T>(System.Action<T> init) { }
+        public T Create<T>(System.Collections.IDictionary dictionary) { }
         public T Create<T>(System.Collections.IDictionary dictionary, System.Action<T> init) { }
         protected bool EditProperty(Castle.Components.DictionaryAdapter.PropertyDescriptor property, string key, object propertyValue) { }
         public void EndEdit() { }
@@ -144,8 +144,8 @@ namespace Castle.Components.DictionaryAdapter
         public T GetPropertyOfType<T>(string propertyName) { }
         protected void Initialize() { }
         protected void Invalidate() { }
-        protected void NotifyPropertyChanged(Castle.Components.DictionaryAdapter.PropertyDescriptor property, object oldValue, object newValue) { }
         protected void NotifyPropertyChanged(string propertyName) { }
+        protected void NotifyPropertyChanged(Castle.Components.DictionaryAdapter.PropertyDescriptor property, object oldValue, object newValue) { }
         protected bool NotifyPropertyChanging(Castle.Components.DictionaryAdapter.PropertyDescriptor property, object oldValue, object newValue) { }
         public object ReadProperty(string key) { }
         public void RejectChanges() { }
@@ -169,25 +169,25 @@ namespace Castle.Components.DictionaryAdapter
             public bool Notify() { }
         }
     }
-    public class static DictionaryAdapterExtensions
+    public static class DictionaryAdapterExtensions
     {
         public static Castle.Components.DictionaryAdapter.IVirtual AsVirtual(this Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter) { }
     }
     public class DictionaryAdapterFactory : Castle.Components.DictionaryAdapter.IDictionaryAdapterFactory
     {
         public DictionaryAdapterFactory() { }
-        public T GetAdapter<T>(System.Collections.IDictionary dictionary) { }
         public object GetAdapter(System.Type type, System.Collections.IDictionary dictionary) { }
-        public object GetAdapter(System.Type type, System.Collections.IDictionary dictionary, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor) { }
-        public T GetAdapter<T, R>(System.Collections.Generic.IDictionary<string, R> dictionary) { }
-        public object GetAdapter<R>(System.Type type, System.Collections.Generic.IDictionary<string, R> dictionary) { }
-        public T GetAdapter<T>(System.Collections.Specialized.NameValueCollection nameValues) { }
         public object GetAdapter(System.Type type, System.Collections.Specialized.NameValueCollection nameValues) { }
-        public T GetAdapter<T>(System.Xml.XmlNode xmlNode) { }
         public object GetAdapter(System.Type type, System.Xml.XmlNode xmlNode) { }
+        public object GetAdapter(System.Type type, System.Collections.IDictionary dictionary, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor) { }
+        public T GetAdapter<T>(System.Collections.IDictionary dictionary) { }
+        public T GetAdapter<T>(System.Collections.Specialized.NameValueCollection nameValues) { }
+        public T GetAdapter<T>(System.Xml.XmlNode xmlNode) { }
+        public object GetAdapter<R>(System.Type type, System.Collections.Generic.IDictionary<string, R> dictionary) { }
+        public T GetAdapter<T, R>(System.Collections.Generic.IDictionary<string, R> dictionary) { }
         public Castle.Components.DictionaryAdapter.DictionaryAdapterMeta GetAdapterMeta(System.Type type) { }
-        public Castle.Components.DictionaryAdapter.DictionaryAdapterMeta GetAdapterMeta(System.Type type, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor) { }
         public Castle.Components.DictionaryAdapter.DictionaryAdapterMeta GetAdapterMeta(System.Type type, Castle.Components.DictionaryAdapter.DictionaryAdapterMeta other) { }
+        public Castle.Components.DictionaryAdapter.DictionaryAdapterMeta GetAdapterMeta(System.Type type, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor) { }
     }
     public class DictionaryAdapterInstance
     {
@@ -204,7 +204,7 @@ namespace Castle.Components.DictionaryAdapter
         public System.Collections.Generic.IDictionary<string, Castle.Components.DictionaryAdapter.PropertyDescriptor> Properties { get; }
         public void AddCopyStrategy(Castle.Components.DictionaryAdapter.IDictionaryCopyStrategy copyStrategy) { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("Type: {Type.FullName,nq}")]
+    [System.Diagnostics.DebuggerDisplay("Type: {Type.FullName,nq}")]
     public class DictionaryAdapterMeta
     {
         public DictionaryAdapterMeta(System.Type type, System.Type implementation, object[] behaviors, Castle.Components.DictionaryAdapter.IDictionaryMetaInitializer[] metaInitializers, Castle.Components.DictionaryAdapter.IDictionaryInitializer[] initializers, System.Collections.Generic.IDictionary<string, Castle.Components.DictionaryAdapter.PropertyDescriptor> properties, Castle.Components.DictionaryAdapter.IDictionaryAdapterFactory factory, System.Func<Castle.Components.DictionaryAdapter.DictionaryAdapterInstance, Castle.Components.DictionaryAdapter.IDictionaryAdapter> creator) { }
@@ -287,14 +287,14 @@ namespace Castle.Components.DictionaryAdapter
         public void EndEdit() { }
         public void RejectChanges() { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false)]
     public class FetchAttribute : System.Attribute
     {
         public FetchAttribute() { }
         public FetchAttribute(bool fetch) { }
         public bool Fetch { get; }
     }
-    public class static GenericDictionaryAdapter
+    public static class GenericDictionaryAdapter
     {
         public static Castle.Components.DictionaryAdapter.GenericDictionaryAdapter<TValue> ForDictionaryAdapter<TValue>(this System.Collections.Generic.IDictionary<string, TValue> dictionary) { }
     }
@@ -305,7 +305,7 @@ namespace Castle.Components.DictionaryAdapter
         public override object this[object key] { get; set; }
         public override bool Contains(object key) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=true)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=true)]
     public class GroupAttribute : System.Attribute
     {
         public GroupAttribute(object group) { }
@@ -327,7 +327,7 @@ namespace Castle.Components.DictionaryAdapter
         bool SupportsChangeNotification { get; }
         bool SupportsSearching { get; }
         bool SupportsSorting { get; }
-        public event System.ComponentModel.ListChangedEventHandler ListChanged;
+        event System.ComponentModel.ListChangedEventHandler ListChanged;
         void AddIndex(System.ComponentModel.PropertyDescriptor property);
         T AddNew();
         void ApplySort(System.ComponentModel.PropertyDescriptor property, System.ComponentModel.ListSortDirection direction);
@@ -379,9 +379,9 @@ namespace Castle.Components.DictionaryAdapter
         Castle.Components.DictionaryAdapter.DictionaryAdapterMeta Meta { get; }
         Castle.Components.DictionaryAdapter.DictionaryAdapterInstance This { get; }
         void ClearProperty(Castle.Components.DictionaryAdapter.PropertyDescriptor property, string key);
+        object Coerce(System.Type type);
         T Coerce<T>()
             where T :  class;
-        object Coerce(System.Type type);
         void CopyTo(Castle.Components.DictionaryAdapter.IDictionaryAdapter other);
         void CopyTo(Castle.Components.DictionaryAdapter.IDictionaryAdapter other, System.Func<Castle.Components.DictionaryAdapter.PropertyDescriptor, bool> selector);
         string GetKey(string propertyName);
@@ -394,16 +394,16 @@ namespace Castle.Components.DictionaryAdapter
     }
     public interface IDictionaryAdapterFactory
     {
-        T GetAdapter<T>(System.Collections.IDictionary dictionary);
         object GetAdapter(System.Type type, System.Collections.IDictionary dictionary);
-        object GetAdapter(System.Type type, System.Collections.IDictionary dictionary, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor);
-        T GetAdapter<T>(System.Collections.Specialized.NameValueCollection nameValues);
         object GetAdapter(System.Type type, System.Collections.Specialized.NameValueCollection nameValues);
-        T GetAdapter<T>(System.Xml.XmlNode xmlNode);
         object GetAdapter(System.Type type, System.Xml.XmlNode xmlNode);
+        object GetAdapter(System.Type type, System.Collections.IDictionary dictionary, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor);
+        T GetAdapter<T>(System.Collections.IDictionary dictionary);
+        T GetAdapter<T>(System.Collections.Specialized.NameValueCollection nameValues);
+        T GetAdapter<T>(System.Xml.XmlNode xmlNode);
         Castle.Components.DictionaryAdapter.DictionaryAdapterMeta GetAdapterMeta(System.Type type);
-        Castle.Components.DictionaryAdapter.DictionaryAdapterMeta GetAdapterMeta(System.Type type, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor);
         Castle.Components.DictionaryAdapter.DictionaryAdapterMeta GetAdapterMeta(System.Type type, Castle.Components.DictionaryAdapter.DictionaryAdapterMeta other);
+        Castle.Components.DictionaryAdapter.DictionaryAdapterMeta GetAdapterMeta(System.Type type, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor);
     }
     public interface IDictionaryAdapterVisitor
     {
@@ -432,11 +432,11 @@ namespace Castle.Components.DictionaryAdapter
     }
     public interface IDictionaryCreate
     {
-        T Create<T>();
         object Create(System.Type type);
-        T Create<T>(System.Collections.IDictionary dictionary);
         object Create(System.Type type, System.Collections.IDictionary dictionary);
+        T Create<T>();
         T Create<T>(System.Action<T> init);
+        T Create<T>(System.Collections.IDictionary dictionary);
         T Create<T>(System.Collections.IDictionary dictionary, System.Action<T> init);
     }
     public interface IDictionaryCreateStrategy
@@ -526,7 +526,7 @@ namespace Castle.Components.DictionaryAdapter
     public interface IVirtual
     {
         bool IsReal { get; }
-        public event System.EventHandler Realized;
+        event System.EventHandler Realized;
         void Realize();
     }
     public interface IVirtualSite<T>
@@ -543,32 +543,32 @@ namespace Castle.Components.DictionaryAdapter
         T Realize();
         void RemoveSite(Castle.Components.DictionaryAdapter.IVirtualSite<T> site);
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false)]
     public class IfExistsAttribute : System.Attribute
     {
         public IfExistsAttribute() { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false, Inherited=true)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false, Inherited=true)]
     public class KeyAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryKeyBuilder
     {
         public KeyAttribute(string key) { }
         public KeyAttribute(string[] keys) { }
         public string Key { get; }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false, Inherited=false)]
+    [System.AttributeUsage(System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false, Inherited=false)]
     public class KeyPrefixAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryKeyBuilder
     {
         public KeyPrefixAttribute() { }
         public KeyPrefixAttribute(string keyPrefix) { }
         public string KeyPrefix { get; set; }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=true, Inherited=true)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=true, Inherited=true)]
     public class KeySubstitutionAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryKeyBuilder
     {
         public KeySubstitutionAttribute(string oldValue, string newValue) { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("Count = {Count}, Adapter = {Adapter}")]
-    [System.Diagnostics.DebuggerTypeProxyAttribute(typeof(Castle.Components.DictionaryAdapter.ListProjectionDebugView<T>))]
+    [System.Diagnostics.DebuggerDisplay("Count = {Count}, Adapter = {Adapter}")]
+    [System.Diagnostics.DebuggerTypeProxy(typeof(Castle.Components.DictionaryAdapter.ListProjectionDebugView<T>))]
     public class ListProjection<T> : Castle.Components.DictionaryAdapter.IBindingListSource, Castle.Components.DictionaryAdapter.IBindingList<T>, Castle.Components.DictionaryAdapter.ICollectionAdapterObserver<T>, Castle.Components.DictionaryAdapter.ICollectionProjection, System.Collections.Generic.ICollection<T>, System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IList<T>, System.Collections.ICollection, System.Collections.IEnumerable, System.Collections.IList, System.ComponentModel.IBindingList, System.ComponentModel.ICancelAddNew, System.ComponentModel.IChangeTracking, System.ComponentModel.IEditableObject, System.ComponentModel.IRaiseItemChangedEvents, System.ComponentModel.IRevertibleChangeTracking
     {
         public ListProjection(Castle.Components.DictionaryAdapter.ICollectionAdapter<T> adapter) { }
@@ -618,7 +618,7 @@ namespace Castle.Components.DictionaryAdapter
         public int GetHashCode(Castle.Components.DictionaryAdapter.IDictionaryAdapter adapter) { }
         public bool GetHashCode(Castle.Components.DictionaryAdapter.IDictionaryAdapter adapter, out int hashCode) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false)]
+    [System.AttributeUsage(System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false)]
     public class MultiLevelEditAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryInitializer
     {
         public MultiLevelEditAttribute() { }
@@ -629,21 +629,21 @@ namespace Castle.Components.DictionaryAdapter
         public NameValueCollectionAdapter(System.Collections.Specialized.NameValueCollection nameValues) { }
         public override bool IsReadOnly { get; }
         public override object this[object key] { get; set; }
-        public static Castle.Components.DictionaryAdapter.NameValueCollectionAdapter Adapt(System.Collections.Specialized.NameValueCollection nameValues) { }
         public override bool Contains(object key) { }
+        public static Castle.Components.DictionaryAdapter.NameValueCollectionAdapter Adapt(System.Collections.Specialized.NameValueCollection nameValues) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false)]
     public class NewGuidAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryPropertyGetter
     {
         public NewGuidAttribute() { }
         public object GetPropertyValue(Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter, string key, object storedValue, Castle.Components.DictionaryAdapter.PropertyDescriptor property, bool ifExists) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false)]
     public class OnDemandAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryPropertyGetter
     {
         public OnDemandAttribute() { }
-        public OnDemandAttribute(System.Type type) { }
         public OnDemandAttribute(object value) { }
+        public OnDemandAttribute(System.Type type) { }
         public System.Type Type { get; }
         public object Value { get; }
         public object GetPropertyValue(Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter, string key, object storedValue, Castle.Components.DictionaryAdapter.PropertyDescriptor property, bool ifExists) { }
@@ -661,14 +661,14 @@ namespace Castle.Components.DictionaryAdapter
         public object NewValue { get; }
         public object OldValue { get; }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("{Property.DeclaringType.FullName,nq}.{PropertyName,nq}")]
+    [System.Diagnostics.DebuggerDisplay("{Property.DeclaringType.FullName,nq}.{PropertyName,nq}")]
     public class PropertyDescriptor : Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryKeyBuilder, Castle.Components.DictionaryAdapter.IDictionaryPropertyGetter, Castle.Components.DictionaryAdapter.IDictionaryPropertySetter
     {
         protected System.Collections.Generic.List<Castle.Components.DictionaryAdapter.IDictionaryBehavior> dictionaryBehaviors;
         public PropertyDescriptor() { }
-        public PropertyDescriptor(System.Reflection.PropertyInfo property, object[] annotations) { }
         public PropertyDescriptor(object[] annotations) { }
         public PropertyDescriptor(Castle.Components.DictionaryAdapter.PropertyDescriptor source, bool copyBehaviors) { }
+        public PropertyDescriptor(System.Reflection.PropertyInfo property, object[] annotations) { }
         public object[] Annotations { get; }
         public System.Collections.Generic.IEnumerable<Castle.Components.DictionaryAdapter.IDictionaryBehavior> Behaviors { get; }
         public int ExecutionOrder { get; }
@@ -694,22 +694,22 @@ namespace Castle.Components.DictionaryAdapter
         public Castle.Components.DictionaryAdapter.PropertyDescriptor CopyBehaviors(Castle.Components.DictionaryAdapter.PropertyDescriptor other) { }
         public string GetKey(Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter, string key, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor) { }
         public object GetPropertyValue(Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter, string key, object storedValue, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor, bool ifExists) { }
+        public bool SetPropertyValue(Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter, string key, ref object value, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor) { }
         public static void MergeBehavior<T>(ref System.Collections.Generic.List<T> dictionaryBehaviors, T behavior)
             where T :  class, Castle.Components.DictionaryAdapter.IDictionaryBehavior { }
-        public bool SetPropertyValue(Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter, string key, ref object value, Castle.Components.DictionaryAdapter.PropertyDescriptor descriptor) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All)]
     public class ReferenceAttribute : System.Attribute
     {
         public ReferenceAttribute() { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=true)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=true)]
     public class RemoveIfAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryPropertySetter
     {
         public RemoveIfAttribute() { }
+        protected RemoveIfAttribute(Castle.Components.DictionaryAdapter.ICondition condition) { }
         public RemoveIfAttribute(params object[] values) { }
         public RemoveIfAttribute(object[] values, System.Type comparerType) { }
-        protected RemoveIfAttribute(Castle.Components.DictionaryAdapter.ICondition condition) { }
         public System.Type Condition { set; }
     }
     public class RemoveIfEmptyAttribute : Castle.Components.DictionaryAdapter.RemoveIfAttribute
@@ -738,38 +738,38 @@ namespace Castle.Components.DictionaryAdapter
         public void SymmetricExceptWith(System.Collections.Generic.IEnumerable<T> other) { }
         public void UnionWith(System.Collections.Generic.IEnumerable<T> other) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false, Inherited=false)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false, Inherited=false)]
     public class StringFormatAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryPropertyGetter
     {
         public StringFormatAttribute(string format, string properties) { }
         public string Format { get; }
         public string Properties { get; }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false, Inherited=true)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false, Inherited=true)]
     public class StringListAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryPropertyGetter, Castle.Components.DictionaryAdapter.IDictionaryPropertySetter
     {
         public StringListAttribute() { }
         public char Separator { get; set; }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false)]
     public class StringStorageAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryPropertySetter
     {
         public StringStorageAttribute() { }
         public bool SetPropertyValue(Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter, string key, ref object value, Castle.Components.DictionaryAdapter.PropertyDescriptor property) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false, Inherited=true)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false, Inherited=true)]
     public class StringValuesAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryPropertySetter
     {
         public StringValuesAttribute() { }
         public string Format { get; set; }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.All, AllowMultiple=false)]
     public class SuppressNotificationsAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IPropertyDescriptorInitializer
     {
         public SuppressNotificationsAttribute() { }
         public void Initialize(Castle.Components.DictionaryAdapter.PropertyDescriptor propertyDescriptor, object[] behaviors) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false, Inherited=true)]
+    [System.AttributeUsage(System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false, Inherited=true)]
     public class TypeKeyPrefixAttribute : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryKeyBuilder
     {
         public TypeKeyPrefixAttribute() { }
@@ -791,24 +791,24 @@ namespace Castle.Components.DictionaryAdapter
         public VirtualSite(Castle.Components.DictionaryAdapter.IVirtualTarget<TNode, TMember> target, TMember member) { }
         public TMember Member { get; }
         public Castle.Components.DictionaryAdapter.IVirtualTarget<TNode, TMember> Target { get; }
-        public override bool Equals(object obj) { }
         public bool Equals(Castle.Components.DictionaryAdapter.VirtualSite<TNode, TMember> other) { }
+        public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public void OnRealizing(TNode node) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=false)]
     public class VolatileAttribute : System.Attribute
     {
         public VolatileAttribute() { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Interface | System.AttributeTargets.All)]
+    [System.AttributeUsage(System.AttributeTargets.Interface | System.AttributeTargets.All)]
     public class XmlDefaultsAttribute : System.Attribute
     {
         public XmlDefaultsAttribute() { }
         public bool IsNullable { get; set; }
         public bool Qualified { get; set; }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=true)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=true)]
     public class XmlNamespaceAttribute : System.Attribute
     {
         public XmlNamespaceAttribute(string namespaceUri, string prefix) { }
@@ -846,7 +846,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public Castle.Components.DictionaryAdapter.Xml.CompiledXPathStep NextStep { get; }
         public System.Xml.XPath.XPathExpression Path { get; }
     }
-    [System.FlagsAttribute()]
+    [System.Flags]
     public enum CursorFlags
     {
         None = 0,
@@ -856,7 +856,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
         Mutable = 8,
         AllNodes = 3,
     }
-    public class static CursorFlagsExtensions
+    public static class CursorFlagsExtensions
     {
         public static bool AllowsMultipleItems(this Castle.Components.DictionaryAdapter.Xml.CursorFlags flags) { }
         public static bool IncludesAttributes(this Castle.Components.DictionaryAdapter.Xml.CursorFlags flags) { }
@@ -874,7 +874,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public bool TryGetIdentity(Castle.Components.DictionaryAdapter.Xml.IXmlNode node, out int id) { }
         public bool TryGetReference(Castle.Components.DictionaryAdapter.Xml.IXmlNode node, out int id) { }
     }
-    public class static DictionaryAdapterExtensions
+    public static class DictionaryAdapterExtensions
     {
         public static object CreateChildAdapter(this Castle.Components.DictionaryAdapter.IDictionaryAdapter parent, System.Type type, Castle.Components.DictionaryAdapter.Xml.XmlAdapter adapter) { }
         public static object CreateChildAdapter(this Castle.Components.DictionaryAdapter.IDictionaryAdapter parent, System.Type type, Castle.Components.DictionaryAdapter.Xml.XmlAdapter adapter, System.Collections.IDictionary dictionary) { }
@@ -1025,7 +1025,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
         bool TryGetIdentity(Castle.Components.DictionaryAdapter.Xml.IXmlNode node, out int id);
         bool TryGetReference(Castle.Components.DictionaryAdapter.Xml.IXmlNode node, out int id);
     }
-    public class static RealizableExtensions
+    public static class RealizableExtensions
     {
         public static Castle.Components.DictionaryAdapter.Xml.IRealizable<T> RequireRealizable<T>(this Castle.Components.DictionaryAdapter.Xml.IRealizableSource obj) { }
     }
@@ -1043,13 +1043,13 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public bool HasCurrent { get; }
         public override bool IsAttribute { get; }
         public override bool IsElement { get; }
-        public override bool IsNil { get; set; }
         public override bool IsReal { get; }
         public override Castle.Components.DictionaryAdapter.Xml.XmlName Name { get; }
-        public override string Value { get; set; }
         public override string Xml { get; }
         public override Castle.Components.DictionaryAdapter.Xml.XmlName XsiType { get; }
-        public event System.EventHandler Realized;
+        public override bool IsNil { get; set; }
+        public override string Value { get; set; }
+        public  override  event System.EventHandler Realized;
         protected virtual bool AdvanceToFirstAttribute() { }
         protected virtual bool AdvanceToFirstElement() { }
         public void Coerce(System.Type clrType) { }
@@ -1076,7 +1076,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
             Attribute = 2,
         }
     }
-    public class static SysXmlExtensions
+    public static class SysXmlExtensions
     {
         public static void DefineNamespace(this System.Xml.XmlElement node, string prefix, string namespaceUri) { }
         public static System.Xml.XmlElement FindRoot(this System.Xml.XmlElement node) { }
@@ -1120,25 +1120,25 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public bool MoveNext() { }
         public override Castle.Components.DictionaryAdapter.Xml.IXmlNode Save() { }
     }
-    public class static Try
+    public static class Try
     {
-        [System.Diagnostics.DebuggerHiddenAttribute()]
+        [System.Diagnostics.DebuggerHidden]
         public static bool Failure<T>(out T result) { }
-        [System.Diagnostics.DebuggerHiddenAttribute()]
+        [System.Diagnostics.DebuggerHidden]
         public static bool Success<T>(out T result, T value) { }
     }
-    public class static TypeExtensions
+    public static class TypeExtensions
     {
         public static System.Type GetCollectionItemType(this System.Type type) { }
         public static System.Type GetComponentType(this object obj) { }
         public static System.Type NonNullable(this System.Type type) { }
     }
-    public class static Wsdl
+    public static class Wsdl
     {
         public const string NamespaceUri = "http://microsoft.com/wsdl/types/";
         public const string Prefix = "wsdl";
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=true)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=true)]
     public class XPathAttribute : System.Attribute
     {
         public XPathAttribute(string path) { }
@@ -1151,8 +1151,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
     {
         protected XPathBehaviorAccessor(System.Type type, Castle.Components.DictionaryAdapter.Xml.IXmlContext context) { }
         public void Configure(Castle.Components.DictionaryAdapter.Xml.XPathAttribute attribute) { }
-        public void Configure(Castle.Components.DictionaryAdapter.Xml.XPathVariableAttribute attribute) { }
         public void Configure(Castle.Components.DictionaryAdapter.Xml.XPathFunctionAttribute attribute) { }
+        public void Configure(Castle.Components.DictionaryAdapter.Xml.XPathVariableAttribute attribute) { }
         public override Castle.Components.DictionaryAdapter.Xml.IXmlCollectionAccessor GetCollectionAccessor(System.Type itemType) { }
         public override object GetPropertyValue(Castle.Components.DictionaryAdapter.Xml.IXmlNode parentNode, Castle.Components.DictionaryAdapter.IDictionaryAdapter parentObject, Castle.Components.DictionaryAdapter.Xml.XmlReferenceManager references, bool orStub) { }
         public override bool IsPropertyDefined(Castle.Components.DictionaryAdapter.Xml.IXmlNode parentNode) { }
@@ -1164,11 +1164,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public bool TryGet(Castle.Components.DictionaryAdapter.Xml.XmlName xsiType, out Castle.Components.DictionaryAdapter.Xml.IXmlIncludedType includedType) { }
         public bool TryGet(System.Type clrType, out Castle.Components.DictionaryAdapter.Xml.IXmlIncludedType includedType) { }
     }
-    public class static XPathCompiler
+    public static class XPathCompiler
     {
         public static Castle.Components.DictionaryAdapter.Xml.CompiledXPath Compile(string path) { }
     }
-    public class static XPathExtensions
+    public static class XPathExtensions
     {
         public static System.Xml.XPath.XPathNavigator CreateNavigatorSafe(this System.Xml.XPath.IXPathNavigable source) { }
         public static void DeleteChildren(this System.Xml.XPath.XPathNavigator node) { }
@@ -1177,7 +1177,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public static bool MoveToLastAttribute(this System.Xml.XPath.XPathNavigator navigator) { }
         public static bool MoveToLastChild(this System.Xml.XPath.XPathNavigator navigator) { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=true)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=true)]
     public abstract class XPathFunctionAttribute : System.Attribute, System.Xml.Xsl.IXsltContextFunction
     {
         public static readonly System.Xml.XPath.XPathResultType[] NoArgs;
@@ -1235,7 +1235,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public void Reset() { }
         public override Castle.Components.DictionaryAdapter.Xml.IXmlNode Save() { }
     }
-    [System.AttributeUsageAttribute(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=true)]
+    [System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Interface | System.AttributeTargets.All, AllowMultiple=true)]
     public abstract class XPathVariableAttribute : System.Attribute, System.Xml.Xsl.IXsltContextVariable
     {
         protected XPathVariableAttribute() { }
@@ -1243,11 +1243,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public abstract System.Xml.XPath.XPathResultType VariableType { get; }
         public abstract object Evaluate(System.Xml.Xsl.XsltContext context);
     }
-    public class static XRef
+    public static class XRef
     {
-        public static readonly Castle.Components.DictionaryAdapter.Xml.XmlName Id;
         public const string NamespaceUri = "urn:schemas-castle-org:xml-reference";
         public const string Prefix = "x";
+        public static readonly Castle.Components.DictionaryAdapter.Xml.XmlName Id;
         public static readonly Castle.Components.DictionaryAdapter.Xml.XmlName Ref;
         public static string GetId(this Castle.Components.DictionaryAdapter.Xml.IXmlNode node) { }
         public static string GetReference(this Castle.Components.DictionaryAdapter.Xml.IXmlNode node) { }
@@ -1284,7 +1284,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public virtual Castle.Components.DictionaryAdapter.Xml.IXmlCursor SelectPropertyNode(Castle.Components.DictionaryAdapter.Xml.IXmlNode parentNode, bool mutable) { }
         public virtual void SetPropertyValue(Castle.Components.DictionaryAdapter.Xml.IXmlNode parentNode, Castle.Components.DictionaryAdapter.IDictionaryAdapter parentObject, Castle.Components.DictionaryAdapter.Xml.XmlReferenceManager references, object oldValue, ref object value) { }
         public virtual void SetValue(Castle.Components.DictionaryAdapter.Xml.IXmlCursor cursor, Castle.Components.DictionaryAdapter.IDictionaryAdapter parentObject, Castle.Components.DictionaryAdapter.Xml.XmlReferenceManager references, bool hasCurrent, object oldValue, ref object newValue) { }
-        [System.FlagsAttribute()]
+        [System.Flags]
         protected enum States
         {
             Nillable = 1,
@@ -1306,11 +1306,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public Castle.Components.DictionaryAdapter.Xml.IXmlNode Node { get; }
         public event System.EventHandler Realized;
         public override Castle.Components.DictionaryAdapter.IDictionaryBehavior Copy() { }
+        public bool HasProperty(string propertyName, Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter) { }
+        protected virtual void OnRealized() { }
         public static Castle.Components.DictionaryAdapter.Xml.XmlAdapter For(object obj) { }
         public static Castle.Components.DictionaryAdapter.Xml.XmlAdapter For(object obj, bool required) { }
-        public bool HasProperty(string propertyName, Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter) { }
         public static bool IsPropertyDefined(string propertyName, Castle.Components.DictionaryAdapter.IDictionaryAdapter dictionaryAdapter) { }
-        protected virtual void OnRealized() { }
     }
     public class XmlArrayBehaviorAccessor : Castle.Components.DictionaryAdapter.Xml.XmlNodeAccessor, Castle.Components.DictionaryAdapter.Xml.IConfigurable<System.Xml.Serialization.XmlArrayAttribute>, Castle.Components.DictionaryAdapter.Xml.IConfigurable<System.Xml.Serialization.XmlArrayItemAttribute>
     {
@@ -1363,8 +1363,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
     }
     public class XmlContext : Castle.Components.DictionaryAdapter.Xml.XmlContextBase, Castle.Components.DictionaryAdapter.Xml.IXmlContext, Castle.Components.DictionaryAdapter.Xml.IXmlNamespaceSource
     {
-        public XmlContext(Castle.Components.DictionaryAdapter.Xml.XmlMetadata metadata) { }
         protected XmlContext(Castle.Components.DictionaryAdapter.Xml.XmlContext parent) { }
+        public XmlContext(Castle.Components.DictionaryAdapter.Xml.XmlMetadata metadata) { }
         public string ChildNamespaceUri { get; }
         public Castle.Components.DictionaryAdapter.Xml.IXmlContext Clone() { }
         public Castle.Components.DictionaryAdapter.Xml.XmlName GetDefaultXsiType(System.Type clrType) { }
@@ -1376,14 +1376,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public XmlContextBase() { }
         protected XmlContextBase(Castle.Components.DictionaryAdapter.Xml.XmlContextBase parent) { }
         public override bool Whitespace { get; }
-        public void AddFunction(string prefix, string name, System.Xml.Xsl.IXsltContextFunction function) { }
         public void AddFunction(Castle.Components.DictionaryAdapter.Xml.XPathFunctionAttribute attribute) { }
         public void AddFunction(Castle.Components.DictionaryAdapter.Xml.XmlName name, System.Xml.Xsl.IXsltContextFunction function) { }
+        public void AddFunction(string prefix, string name, System.Xml.Xsl.IXsltContextFunction function) { }
         public void AddNamespace(Castle.Components.DictionaryAdapter.XmlNamespaceAttribute attribute) { }
         public override void AddNamespace(string prefix, string uri) { }
-        public void AddVariable(string prefix, string name, System.Xml.Xsl.IXsltContextVariable variable) { }
         public void AddVariable(Castle.Components.DictionaryAdapter.Xml.XPathVariableAttribute attribute) { }
         public void AddVariable(Castle.Components.DictionaryAdapter.Xml.XmlName name, System.Xml.Xsl.IXsltContextVariable variable) { }
+        public void AddVariable(string prefix, string name, System.Xml.Xsl.IXsltContextVariable variable) { }
         public override int CompareDocument(string baseUriA, string baseUriB) { }
         public void Enlist(Castle.Components.DictionaryAdapter.Xml.CompiledXPath path) { }
         public string GetAttributePrefix(Castle.Components.DictionaryAdapter.Xml.IXmlNode node, string namespaceUri) { }
@@ -1461,7 +1461,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public System.Type ClrType { get; }
         public Castle.Components.DictionaryAdapter.Xml.XmlName XsiType { get; }
     }
-    public class static XmlIncludedTypeMapExtensions
+    public static class XmlIncludedTypeMapExtensions
     {
         public static Castle.Components.DictionaryAdapter.Xml.IXmlIncludedType Require(this Castle.Components.DictionaryAdapter.Xml.IXmlIncludedTypeMap includedTypes, System.Type clrType) { }
     }
@@ -1482,7 +1482,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public Castle.Components.DictionaryAdapter.Xml.XmlName Name { get; }
         public Castle.Components.DictionaryAdapter.Xml.XmlName XsiType { get; }
     }
-    public class static XmlKnownTypeMapExtensions
+    public static class XmlKnownTypeMapExtensions
     {
         public static Castle.Components.DictionaryAdapter.Xml.IXmlKnownType Require(this Castle.Components.DictionaryAdapter.Xml.IXmlKnownTypeMap map, System.Type clrType) { }
     }
@@ -1511,11 +1511,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public System.Type ClrType { get; }
         public Castle.Components.DictionaryAdapter.Xml.IXmlContext Context { get; }
         public Castle.Components.DictionaryAdapter.Xml.XmlIncludedTypeSet IncludedTypes { get; }
-        public System.Nullable<bool> IsNullable { get; }
-        public System.Nullable<bool> IsReference { get; }
+        public bool? IsNullable { get; }
+        public bool? IsReference { get; }
         public Castle.Components.DictionaryAdapter.Xml.XmlName Name { get; }
         public Castle.Components.DictionaryAdapter.Xml.CompiledXPath Path { get; }
-        public System.Nullable<bool> Qualified { get; }
+        public bool? Qualified { get; }
         public System.Collections.Generic.IEnumerable<string> ReservedNamespaceUris { get; }
         public Castle.Components.DictionaryAdapter.Xml.XmlName XsiType { get; }
         public Castle.Components.DictionaryAdapter.Xml.XmlName GetDefaultXsiType(System.Type clrType) { }
@@ -1523,9 +1523,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public bool IsReservedNamespaceUri(string namespaceUri) { }
         public Castle.Components.DictionaryAdapter.Xml.IXmlCursor SelectBase(Castle.Components.DictionaryAdapter.Xml.IXmlNode node) { }
         public bool TryGet(Castle.Components.DictionaryAdapter.Xml.IXmlIdentity xmlIdentity, out Castle.Components.DictionaryAdapter.Xml.IXmlKnownType knownType) { }
-        public bool TryGet(System.Type clrType, out Castle.Components.DictionaryAdapter.Xml.IXmlKnownType knownType) { }
         public bool TryGet(Castle.Components.DictionaryAdapter.Xml.XmlName xsiType, out Castle.Components.DictionaryAdapter.Xml.IXmlIncludedType includedType) { }
         public bool TryGet(System.Type clrType, out Castle.Components.DictionaryAdapter.Xml.IXmlIncludedType includedType) { }
+        public bool TryGet(System.Type clrType, out Castle.Components.DictionaryAdapter.Xml.IXmlKnownType knownType) { }
     }
     public class XmlMetadataBehavior : Castle.Components.DictionaryAdapter.DictionaryBehaviorAttribute, Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryMetaInitializer
     {
@@ -1543,11 +1543,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public bool Equals(Castle.Components.DictionaryAdapter.Xml.XmlName other) { }
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
-        public static Castle.Components.DictionaryAdapter.Xml.XmlName ParseQName(string text) { }
         public override string ToString() { }
         public Castle.Components.DictionaryAdapter.Xml.XmlName WithNamespaceUri(string namespaceUri) { }
-        public static bool ==(Castle.Components.DictionaryAdapter.Xml.XmlName x, Castle.Components.DictionaryAdapter.Xml.XmlName y) { }
         public static bool !=(Castle.Components.DictionaryAdapter.Xml.XmlName x, Castle.Components.DictionaryAdapter.Xml.XmlName y) { }
+        public static bool ==(Castle.Components.DictionaryAdapter.Xml.XmlName x, Castle.Components.DictionaryAdapter.Xml.XmlName y) { }
+        public static Castle.Components.DictionaryAdapter.Xml.XmlName ParseQName(string text) { }
     }
     public class XmlNameComparer : System.Collections.Generic.IEqualityComparer<Castle.Components.DictionaryAdapter.Xml.XmlName>
     {
@@ -1582,7 +1582,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public Castle.Components.DictionaryAdapter.Xml.IXmlNamespaceSource Namespaces { get; }
         public Castle.Components.DictionaryAdapter.Xml.IXmlNode Parent { get; }
         public virtual Castle.Components.DictionaryAdapter.Xml.CompiledXPath Path { get; }
-        public event System.EventHandler Realized;
+        public  virtual  event System.EventHandler Realized;
         protected virtual void Realize() { }
     }
     public class XmlPositionComparer
@@ -1661,7 +1661,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
         protected XmlSetSerializer() { }
         public override System.Type ListTypeConstructor { get; }
     }
-    public class static XmlSimpleSerializer
+    public static class XmlSimpleSerializer
     {
         public static readonly Castle.Components.DictionaryAdapter.Xml.XmlTypeSerializer ForBoolean;
         public static readonly Castle.Components.DictionaryAdapter.Xml.XmlTypeSerializer ForByte;
@@ -1755,8 +1755,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public override void WriteRaw(string data) { }
         public override void WriteRaw(char[] buffer, int index, int count) { }
         public override void WriteStartAttribute(string prefix, string localName, string ns) { }
-        public override void WriteStartDocument(bool standalone) { }
         public override void WriteStartDocument() { }
+        public override void WriteStartDocument(bool standalone) { }
         public override void WriteStartElement(string prefix, string localName, string ns) { }
         public override void WriteString(string text) { }
         public override void WriteSurrogateCharEntity(char lowChar, char highChar) { }
@@ -1773,10 +1773,10 @@ namespace Castle.Components.DictionaryAdapter.Xml
         protected XmlTypeSerializer() { }
         public virtual bool CanGetStub { get; }
         public abstract Castle.Components.DictionaryAdapter.Xml.XmlTypeKind Kind { get; }
-        public static Castle.Components.DictionaryAdapter.Xml.XmlTypeSerializer For(System.Type type) { }
         public virtual object GetStub(Castle.Components.DictionaryAdapter.Xml.IXmlNode node, Castle.Components.DictionaryAdapter.IDictionaryAdapter parent, Castle.Components.DictionaryAdapter.Xml.IXmlAccessor accessor) { }
         public abstract object GetValue(Castle.Components.DictionaryAdapter.Xml.IXmlNode node, Castle.Components.DictionaryAdapter.IDictionaryAdapter parent, Castle.Components.DictionaryAdapter.Xml.IXmlAccessor accessor);
         public abstract void SetValue(Castle.Components.DictionaryAdapter.Xml.IXmlNode node, Castle.Components.DictionaryAdapter.IDictionaryAdapter parent, Castle.Components.DictionaryAdapter.Xml.IXmlAccessor accessor, object oldValue, ref object value);
+        public static Castle.Components.DictionaryAdapter.Xml.XmlTypeSerializer For(System.Type type) { }
     }
     public class XmlXmlNodeSerializer : Castle.Components.DictionaryAdapter.Xml.XmlTypeSerializer
     {
@@ -1785,22 +1785,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public override object GetValue(Castle.Components.DictionaryAdapter.Xml.IXmlNode node, Castle.Components.DictionaryAdapter.IDictionaryAdapter parent, Castle.Components.DictionaryAdapter.Xml.IXmlAccessor accessor) { }
         public override void SetValue(Castle.Components.DictionaryAdapter.Xml.IXmlNode node, Castle.Components.DictionaryAdapter.IDictionaryAdapter parent, Castle.Components.DictionaryAdapter.Xml.IXmlAccessor accessor, object oldValue, ref object value) { }
     }
-    public class static Xmlns
+    public static class Xmlns
     {
         public const string NamespaceUri = "http://www.w3.org/2000/xmlns/";
         public const string Prefix = "xmlns";
     }
-    public class static Xsd
+    public static class Xsd
     {
         public const string NamespaceUri = "http://www.w3.org/2001/XMLSchema";
         public const string Prefix = "xsd";
     }
-    public class static Xsi
+    public static class Xsi
     {
         public const string NamespaceUri = "http://www.w3.org/2001/XMLSchema-instance";
-        public static readonly Castle.Components.DictionaryAdapter.Xml.XmlName Nil;
         public const string NilValue = "true";
         public const string Prefix = "xsi";
+        public static readonly Castle.Components.DictionaryAdapter.Xml.XmlName Nil;
         public static readonly Castle.Components.DictionaryAdapter.Xml.XmlName Type;
         public static Castle.Components.DictionaryAdapter.Xml.XmlName GetXsiType(this Castle.Components.DictionaryAdapter.Xml.IXmlNode node) { }
         public static bool IsXsiNil(this Castle.Components.DictionaryAdapter.Xml.IXmlNode node) { }
@@ -1844,9 +1844,9 @@ namespace Castle.Core.Configuration
         public MutableConfiguration(string name, string value) { }
         public new string Value { get; set; }
         public Castle.Core.Configuration.MutableConfiguration Attribute(string name, string value) { }
-        public static Castle.Core.Configuration.MutableConfiguration Create(string name) { }
         public Castle.Core.Configuration.MutableConfiguration CreateChild(string name) { }
         public Castle.Core.Configuration.MutableConfiguration CreateChild(string name, string value) { }
+        public static Castle.Core.Configuration.MutableConfiguration Create(string name) { }
     }
 }
 namespace Castle.Core.Configuration.Xml
@@ -1885,7 +1885,7 @@ namespace Castle.Core
         public override int GetHashCode() { }
         public override string ToString() { }
     }
-    public class static ProxyServices
+    public static class ProxyServices
     {
         public static bool IsDynamicProxy(System.Type type) { }
     }
@@ -1908,8 +1908,8 @@ namespace Castle.Core
         public void Clear() { }
         public bool Contains(object key) { }
         public System.Collections.IEnumerator GetEnumerator() { }
-        public static void Read(System.Collections.IDictionary targetDictionary, object valuesAsAnonymousObject) { }
         public void Remove(object key) { }
+        public static void Read(System.Collections.IDictionary targetDictionary, object valuesAsAnonymousObject) { }
     }
     public sealed class StringObjectDictionaryAdapter : System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.Generic.IDictionary<string, object>, System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, object>>, System.Collections.IEnumerable
     {
@@ -1932,16 +1932,16 @@ namespace Castle.Core
 }
 namespace Castle.Core.Internal
 {
-    public class static AttributesUtil
+    public static class AttributesUtil
     {
-        public static T GetAttribute<T>(this System.Type type)
-            where T : System.Attribute { }
         public static T GetAttribute<T>(this System.Reflection.MemberInfo member)
             where T : System.Attribute { }
-        public static System.AttributeUsageAttribute GetAttributeUsage(this System.Type attributeType) { }
-        public static System.Collections.Generic.IEnumerable<T> GetAttributes<T>(this System.Type type)
+        public static T GetAttribute<T>(this System.Type type)
             where T : System.Attribute { }
+        public static System.AttributeUsageAttribute GetAttributeUsage(this System.Type attributeType) { }
         public static System.Collections.Generic.IEnumerable<T> GetAttributes<T>(this System.Reflection.MemberInfo member)
+            where T : System.Attribute { }
+        public static System.Collections.Generic.IEnumerable<T> GetAttributes<T>(this System.Type type)
             where T : System.Attribute { }
         public static T GetTypeAttribute<T>(this System.Type type)
             where T : System.Attribute { }
@@ -1949,7 +1949,7 @@ namespace Castle.Core.Internal
             where T : System.Attribute { }
         public static System.Type GetTypeConverter(System.Reflection.MemberInfo member) { }
     }
-    public class static CollectionExtensions
+    public static class CollectionExtensions
     {
         public static bool AreEquivalent<T>(System.Collections.Generic.IList<T> listA, System.Collections.Generic.IList<T> listB) { }
         public static T Find<T>(this T[] items, System.Predicate<T> predicate) { }
@@ -1957,13 +1957,13 @@ namespace Castle.Core.Internal
         public static int GetContentsHashCode<T>(System.Collections.Generic.IList<T> list) { }
         public static bool IsNullOrEmpty(this System.Collections.IEnumerable @this) { }
     }
-    [System.ObsoleteAttribute("Consider using `System.Threading.ReaderWriterLockSlim` instead of `Lock` and rela" +
+    [System.Obsolete("Consider using `System.Threading.ReaderWriterLockSlim` instead of `Lock` and rela" +
         "ted types.")]
     public interface ILockHolder : System.IDisposable
     {
         bool LockAcquired { get; }
     }
-    [System.ObsoleteAttribute("Consider using `System.Threading.ReaderWriterLockSlim` instead of `Lock` and rela" +
+    [System.Obsolete("Consider using `System.Threading.ReaderWriterLockSlim` instead of `Lock` and rela" +
         "ted types.")]
     public interface IUpgradeableLockHolder : Castle.Core.Internal.ILockHolder, System.IDisposable
     {
@@ -1976,18 +1976,18 @@ namespace Castle.Core.Internal
         public const string ToDynamicProxyGenAssembly2 = @"DynamicProxyGenAssembly2, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7";
         public InternalsVisible() { }
     }
-    [System.ObsoleteAttribute("Consider using `System.Threading.ReaderWriterLockSlim` instead of `Lock` and rela" +
+    [System.Obsolete("Consider using `System.Threading.ReaderWriterLockSlim` instead of `Lock` and rela" +
         "ted types.")]
     public abstract class Lock
     {
         protected Lock() { }
-        public static Castle.Core.Internal.Lock Create() { }
         public abstract Castle.Core.Internal.ILockHolder ForReading();
         public abstract Castle.Core.Internal.ILockHolder ForReading(bool waitForLock);
         public abstract Castle.Core.Internal.IUpgradeableLockHolder ForReadingUpgradeable();
         public abstract Castle.Core.Internal.IUpgradeableLockHolder ForReadingUpgradeable(bool waitForLock);
         public abstract Castle.Core.Internal.ILockHolder ForWriting();
         public abstract Castle.Core.Internal.ILockHolder ForWriting(bool waitForLock);
+        public static Castle.Core.Internal.Lock Create() { }
     }
 }
 namespace Castle.Core.Logging
@@ -1995,29 +1995,29 @@ namespace Castle.Core.Logging
     public abstract class AbstractExtendedLoggerFactory : System.MarshalByRefObject, Castle.Core.Logging.IExtendedLoggerFactory, Castle.Core.Logging.ILoggerFactory
     {
         protected AbstractExtendedLoggerFactory() { }
-        public virtual Castle.Core.Logging.IExtendedLogger Create(System.Type type) { }
         public abstract Castle.Core.Logging.IExtendedLogger Create(string name);
-        public virtual Castle.Core.Logging.IExtendedLogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level) { }
+        public virtual Castle.Core.Logging.IExtendedLogger Create(System.Type type) { }
         public abstract Castle.Core.Logging.IExtendedLogger Create(string name, Castle.Core.Logging.LoggerLevel level);
+        public virtual Castle.Core.Logging.IExtendedLogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level) { }
         protected static System.IO.FileInfo GetConfigFile(string fileName) { }
     }
     public abstract class AbstractLoggerFactory : System.MarshalByRefObject, Castle.Core.Logging.ILoggerFactory
     {
         protected AbstractLoggerFactory() { }
-        public virtual Castle.Core.Logging.ILogger Create(System.Type type) { }
-        public virtual Castle.Core.Logging.ILogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level) { }
         public abstract Castle.Core.Logging.ILogger Create(string name);
+        public virtual Castle.Core.Logging.ILogger Create(System.Type type) { }
         public abstract Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level);
+        public virtual Castle.Core.Logging.ILogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level) { }
         protected static System.IO.FileInfo GetConfigFile(string fileName) { }
     }
     public class ConsoleFactory : System.MarshalByRefObject, Castle.Core.Logging.ILoggerFactory
     {
         public ConsoleFactory() { }
         public ConsoleFactory(Castle.Core.Logging.LoggerLevel level) { }
-        public Castle.Core.Logging.ILogger Create(System.Type type) { }
         public Castle.Core.Logging.ILogger Create(string name) { }
-        public Castle.Core.Logging.ILogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level) { }
+        public Castle.Core.Logging.ILogger Create(System.Type type) { }
         public Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level) { }
+        public Castle.Core.Logging.ILogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level) { }
     }
     public class ConsoleLogger : Castle.Core.Logging.LevelFilteredLogger
     {
@@ -2068,10 +2068,10 @@ namespace Castle.Core.Logging
     }
     public interface IExtendedLoggerFactory : Castle.Core.Logging.ILoggerFactory
     {
-        Castle.Core.Logging.IExtendedLogger Create(System.Type type);
         Castle.Core.Logging.IExtendedLogger Create(string name);
-        Castle.Core.Logging.IExtendedLogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level);
+        Castle.Core.Logging.IExtendedLogger Create(System.Type type);
         Castle.Core.Logging.IExtendedLogger Create(string name, Castle.Core.Logging.LoggerLevel level);
+        Castle.Core.Logging.IExtendedLogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level);
     }
     public interface ILogger
     {
@@ -2082,43 +2082,43 @@ namespace Castle.Core.Logging
         bool IsTraceEnabled { get; }
         bool IsWarnEnabled { get; }
         Castle.Core.Logging.ILogger CreateChildLogger(string loggerName);
-        void Debug(string message);
         void Debug(System.Func<string> messageFactory);
+        void Debug(string message);
         void Debug(string message, System.Exception exception);
         void DebugFormat(string format, params object[] args);
         void DebugFormat(System.Exception exception, string format, params object[] args);
         void DebugFormat(System.IFormatProvider formatProvider, string format, params object[] args);
         void DebugFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args);
-        void Error(string message);
         void Error(System.Func<string> messageFactory);
+        void Error(string message);
         void Error(string message, System.Exception exception);
         void ErrorFormat(string format, params object[] args);
         void ErrorFormat(System.Exception exception, string format, params object[] args);
         void ErrorFormat(System.IFormatProvider formatProvider, string format, params object[] args);
         void ErrorFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args);
-        void Fatal(string message);
         void Fatal(System.Func<string> messageFactory);
+        void Fatal(string message);
         void Fatal(string message, System.Exception exception);
         void FatalFormat(string format, params object[] args);
         void FatalFormat(System.Exception exception, string format, params object[] args);
         void FatalFormat(System.IFormatProvider formatProvider, string format, params object[] args);
         void FatalFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args);
-        void Info(string message);
         void Info(System.Func<string> messageFactory);
+        void Info(string message);
         void Info(string message, System.Exception exception);
         void InfoFormat(string format, params object[] args);
         void InfoFormat(System.Exception exception, string format, params object[] args);
         void InfoFormat(System.IFormatProvider formatProvider, string format, params object[] args);
         void InfoFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args);
-        void Trace(string message);
         void Trace(System.Func<string> messageFactory);
+        void Trace(string message);
         void Trace(string message, System.Exception exception);
         void TraceFormat(string format, params object[] args);
         void TraceFormat(System.Exception exception, string format, params object[] args);
         void TraceFormat(System.IFormatProvider formatProvider, string format, params object[] args);
         void TraceFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args);
-        void Warn(string message);
         void Warn(System.Func<string> messageFactory);
+        void Warn(string message);
         void Warn(string message, System.Exception exception);
         void WarnFormat(string format, params object[] args);
         void WarnFormat(System.Exception exception, string format, params object[] args);
@@ -2127,16 +2127,16 @@ namespace Castle.Core.Logging
     }
     public interface ILoggerFactory
     {
-        Castle.Core.Logging.ILogger Create(System.Type type);
         Castle.Core.Logging.ILogger Create(string name);
-        Castle.Core.Logging.ILogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level);
+        Castle.Core.Logging.ILogger Create(System.Type type);
         Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level);
+        Castle.Core.Logging.ILogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level);
     }
     public abstract class LevelFilteredLogger : System.MarshalByRefObject, Castle.Core.Logging.ILogger
     {
         protected LevelFilteredLogger() { }
-        protected LevelFilteredLogger(string name) { }
         protected LevelFilteredLogger(Castle.Core.Logging.LoggerLevel loggerLevel) { }
+        protected LevelFilteredLogger(string name) { }
         protected LevelFilteredLogger(string loggerName, Castle.Core.Logging.LoggerLevel loggerLevel) { }
         public bool IsDebugEnabled { get; }
         public bool IsErrorEnabled { get; }
@@ -2148,29 +2148,29 @@ namespace Castle.Core.Logging
         public string Name { get; }
         protected void ChangeName(string newName) { }
         public abstract Castle.Core.Logging.ILogger CreateChildLogger(string loggerName);
-        public void Debug(string message) { }
         public void Debug(System.Func<string> messageFactory) { }
+        public void Debug(string message) { }
         public void Debug(string message, System.Exception exception) { }
         public void DebugFormat(string format, params object[] args) { }
         public void DebugFormat(System.Exception exception, string format, params object[] args) { }
         public void DebugFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void DebugFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        public void Error(string message) { }
         public void Error(System.Func<string> messageFactory) { }
+        public void Error(string message) { }
         public void Error(string message, System.Exception exception) { }
         public void ErrorFormat(string format, params object[] args) { }
         public void ErrorFormat(System.Exception exception, string format, params object[] args) { }
         public void ErrorFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void ErrorFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        public void Fatal(string message) { }
         public void Fatal(System.Func<string> messageFactory) { }
+        public void Fatal(string message) { }
         public void Fatal(string message, System.Exception exception) { }
         public void FatalFormat(string format, params object[] args) { }
         public void FatalFormat(System.Exception exception, string format, params object[] args) { }
         public void FatalFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void FatalFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        public void Info(string message) { }
         public void Info(System.Func<string> messageFactory) { }
+        public void Info(string message) { }
         public void Info(string message, System.Exception exception) { }
         public void InfoFormat(string format, params object[] args) { }
         public void InfoFormat(System.Exception exception, string format, params object[] args) { }
@@ -2178,15 +2178,15 @@ namespace Castle.Core.Logging
         public void InfoFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
         public override object InitializeLifetimeService() { }
         protected abstract void Log(Castle.Core.Logging.LoggerLevel loggerLevel, string loggerName, string message, System.Exception exception);
-        public void Trace(string message) { }
         public void Trace(System.Func<string> messageFactory) { }
+        public void Trace(string message) { }
         public void Trace(string message, System.Exception exception) { }
         public void TraceFormat(string format, params object[] args) { }
         public void TraceFormat(System.Exception exception, string format, params object[] args) { }
         public void TraceFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void TraceFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        public void Warn(string message) { }
         public void Warn(System.Func<string> messageFactory) { }
+        public void Warn(string message) { }
         public void Warn(string message, System.Exception exception) { }
         public void WarnFormat(string format, params object[] args) { }
         public void WarnFormat(System.Exception exception, string format, params object[] args) { }
@@ -2197,8 +2197,8 @@ namespace Castle.Core.Logging
     {
         public LoggerException() { }
         public LoggerException(string message) { }
-        public LoggerException(string message, System.Exception innerException) { }
         protected LoggerException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        public LoggerException(string message, System.Exception innerException) { }
     }
     public enum LoggerLevel
     {
@@ -2230,43 +2230,43 @@ namespace Castle.Core.Logging
         public Castle.Core.Logging.IContextProperties ThreadProperties { get; }
         public Castle.Core.Logging.IContextStacks ThreadStacks { get; }
         public Castle.Core.Logging.ILogger CreateChildLogger(string loggerName) { }
-        public void Debug(string message) { }
         public void Debug(System.Func<string> messageFactory) { }
+        public void Debug(string message) { }
         public void Debug(string message, System.Exception exception) { }
         public void DebugFormat(string format, params object[] args) { }
         public void DebugFormat(System.Exception exception, string format, params object[] args) { }
         public void DebugFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void DebugFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        public void Error(string message) { }
         public void Error(System.Func<string> messageFactory) { }
+        public void Error(string message) { }
         public void Error(string message, System.Exception exception) { }
         public void ErrorFormat(string format, params object[] args) { }
         public void ErrorFormat(System.Exception exception, string format, params object[] args) { }
         public void ErrorFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void ErrorFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        public void Fatal(string message) { }
         public void Fatal(System.Func<string> messageFactory) { }
+        public void Fatal(string message) { }
         public void Fatal(string message, System.Exception exception) { }
         public void FatalFormat(string format, params object[] args) { }
         public void FatalFormat(System.Exception exception, string format, params object[] args) { }
         public void FatalFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void FatalFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        public void Info(string message) { }
         public void Info(System.Func<string> messageFactory) { }
+        public void Info(string message) { }
         public void Info(string message, System.Exception exception) { }
         public void InfoFormat(string format, params object[] args) { }
         public void InfoFormat(System.Exception exception, string format, params object[] args) { }
         public void InfoFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void InfoFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        public void Trace(string message) { }
         public void Trace(System.Func<string> messageFactory) { }
+        public void Trace(string message) { }
         public void Trace(string message, System.Exception exception) { }
         public void TraceFormat(string format, params object[] args) { }
         public void TraceFormat(System.Exception exception, string format, params object[] args) { }
         public void TraceFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void TraceFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        public void Warn(string message) { }
         public void Warn(System.Func<string> messageFactory) { }
+        public void Warn(string message) { }
         public void Warn(string message, System.Exception exception) { }
         public void WarnFormat(string format, params object[] args) { }
         public void WarnFormat(System.Exception exception, string format, params object[] args) { }
@@ -2276,9 +2276,9 @@ namespace Castle.Core.Logging
     public class StreamLogger : Castle.Core.Logging.LevelFilteredLogger, System.IDisposable
     {
         public StreamLogger(string name, System.IO.Stream stream) { }
+        protected StreamLogger(string name, System.IO.StreamWriter writer) { }
         public StreamLogger(string name, System.IO.Stream stream, System.Text.Encoding encoding) { }
         public StreamLogger(string name, System.IO.Stream stream, System.Text.Encoding encoding, int bufferSize) { }
-        protected StreamLogger(string name, System.IO.StreamWriter writer) { }
         public override Castle.Core.Logging.ILogger CreateChildLogger(string loggerName) { }
         public void Dispose() { }
         protected virtual void Dispose(bool disposing) { }
@@ -2337,8 +2337,8 @@ namespace Castle.Core.Resource
     public class AssemblyResource : Castle.Core.Resource.AbstractStreamResource
     {
         public AssemblyResource(Castle.Core.Resource.CustomUri resource) { }
-        public AssemblyResource(Castle.Core.Resource.CustomUri resource, string basePath) { }
         public AssemblyResource(string resource) { }
+        public AssemblyResource(Castle.Core.Resource.CustomUri resource, string basePath) { }
         public override Castle.Core.Resource.IResource CreateRelative(string relativePath) { }
         public override string ToString() { }
     }
@@ -2382,8 +2382,8 @@ namespace Castle.Core.Resource
     public class FileResource : Castle.Core.Resource.AbstractStreamResource
     {
         public FileResource(Castle.Core.Resource.CustomUri resource) { }
-        public FileResource(Castle.Core.Resource.CustomUri resource, string basePath) { }
         public FileResource(string resourceName) { }
+        public FileResource(Castle.Core.Resource.CustomUri resource, string basePath) { }
         public FileResource(string resourceName, string basePath) { }
         public override string FileBasePath { get; }
         public override Castle.Core.Resource.IResource CreateRelative(string relativePath) { }
@@ -2413,8 +2413,8 @@ namespace Castle.Core.Resource
     {
         public ResourceException() { }
         public ResourceException(string message) { }
-        public ResourceException(string message, System.Exception innerException) { }
         protected ResourceException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        public ResourceException(string message, System.Exception innerException) { }
     }
     public class StaticContentResource : Castle.Core.Resource.AbstractResource
     {
@@ -2427,8 +2427,8 @@ namespace Castle.Core.Resource
     public class UncResource : Castle.Core.Resource.AbstractStreamResource
     {
         public UncResource(Castle.Core.Resource.CustomUri resource) { }
-        public UncResource(Castle.Core.Resource.CustomUri resource, string basePath) { }
         public UncResource(string resourceName) { }
+        public UncResource(Castle.Core.Resource.CustomUri resource, string basePath) { }
         public UncResource(string resourceName, string basePath) { }
         public override string FileBasePath { get; }
         public override Castle.Core.Resource.IResource CreateRelative(string relativePath) { }
@@ -2457,15 +2457,15 @@ namespace Castle.Core.Smtp
         public bool UseSsl { get; set; }
         public string UserName { get; set; }
         protected virtual void Configure(System.Net.Mail.SmtpClient smtpClient) { }
-        public void Send(string from, string to, string subject, string messageText) { }
-        public void Send(System.Net.Mail.MailMessage message) { }
         public void Send(System.Collections.Generic.IEnumerable<System.Net.Mail.MailMessage> messages) { }
+        public void Send(System.Net.Mail.MailMessage message) { }
+        public void Send(string from, string to, string subject, string messageText) { }
     }
     public interface IEmailSender
     {
-        void Send(string from, string to, string subject, string messageText);
-        void Send(System.Net.Mail.MailMessage message);
         void Send(System.Collections.Generic.IEnumerable<System.Net.Mail.MailMessage> messages);
+        void Send(System.Net.Mail.MailMessage message);
+        void Send(string from, string to, string subject, string messageText);
     }
 }
 namespace Castle.DynamicProxy
@@ -2504,14 +2504,14 @@ namespace Castle.DynamicProxy
     }
     public class CustomAttributeInfo : System.IEquatable<Castle.DynamicProxy.CustomAttributeInfo>
     {
-        public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object[] constructorArgs, System.Reflection.PropertyInfo[] namedProperties, object[] propertyValues, System.Reflection.FieldInfo[] namedFields, object[] fieldValues) { }
-        public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object[] constructorArgs, System.Reflection.PropertyInfo[] namedProperties, object[] propertyValues) { }
-        public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object[] constructorArgs, System.Reflection.FieldInfo[] namedFields, object[] fieldValues) { }
         public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object[] constructorArgs) { }
+        public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object[] constructorArgs, System.Reflection.FieldInfo[] namedFields, object[] fieldValues) { }
+        public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object[] constructorArgs, System.Reflection.PropertyInfo[] namedProperties, object[] propertyValues) { }
+        public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object[] constructorArgs, System.Reflection.PropertyInfo[] namedProperties, object[] propertyValues, System.Reflection.FieldInfo[] namedFields, object[] fieldValues) { }
         public bool Equals(Castle.DynamicProxy.CustomAttributeInfo other) { }
         public override bool Equals(object obj) { }
-        public static Castle.DynamicProxy.CustomAttributeInfo FromExpression(System.Linq.Expressions.Expression<System.Func<System.Attribute>> expression) { }
         public override int GetHashCode() { }
+        public static Castle.DynamicProxy.CustomAttributeInfo FromExpression(System.Linq.Expressions.Expression<System.Func<System.Attribute>> expression) { }
     }
     public class DefaultProxyBuilder : Castle.DynamicProxy.IProxyBuilder
     {
@@ -2528,7 +2528,7 @@ namespace Castle.DynamicProxy
     public interface IChangeProxyTarget
     {
         void ChangeInvocationTarget(object target);
-        [System.ObsoleteAttribute("Use ((IProxyTargetAccessor)invocation.Proxy).DynProxySetTarget(target) instead.")]
+        [System.Obsolete("Use ((IProxyTargetAccessor)invocation.Proxy).DynProxySetTarget(target) instead.")]
         void ChangeProxyTarget(object target);
     }
     public interface IInterceptor
@@ -2576,60 +2576,60 @@ namespace Castle.DynamicProxy
         void NonProxyableMemberNotification(System.Type type, System.Reflection.MemberInfo memberInfo);
         bool ShouldInterceptMethod(System.Type type, System.Reflection.MethodInfo methodInfo);
     }
-    [System.CLSCompliantAttribute(true)]
+    [System.CLSCompliant(true)]
     public interface IProxyGenerator
     {
         Castle.Core.Logging.ILogger Logger { get; set; }
         Castle.DynamicProxy.IProxyBuilder ProxyBuilder { get; }
+        object CreateClassProxy(System.Type classToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxy(System.Type classToProxy, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
         TClass CreateClassProxy<TClass>(params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class;
         TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class;
-        object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxy(System.Type classToProxy, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxy(System.Type classToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxyWithTarget(System.Type classToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxyWithTarget(System.Type classToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxyWithTarget(System.Type classToProxy, object target, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxyWithTarget(System.Type classToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
         TClass CreateClassProxyWithTarget<TClass>(TClass target, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class;
         TClass CreateClassProxyWithTarget<TClass>(TClass target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class;
-        object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxyWithTarget(System.Type classToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxyWithTarget(System.Type classToProxy, object target, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxyWithTarget(System.Type classToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxyWithTarget(System.Type classToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        TInterface CreateInterfaceProxyWithTarget<TInterface>(TInterface target, params Castle.DynamicProxy.IInterceptor[] interceptors)
-            where TInterface :  class;
-        TInterface CreateInterfaceProxyWithTarget<TInterface>(TInterface target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
-            where TInterface :  class;
         object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
         object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
         object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
         object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        TInterface CreateInterfaceProxyWithTarget<TInterface>(TInterface target, params Castle.DynamicProxy.IInterceptor[] interceptors)
+            where TInterface :  class;
+        TInterface CreateInterfaceProxyWithTarget<TInterface>(TInterface target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
+            where TInterface :  class;
         object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
         TInterface CreateInterfaceProxyWithTargetInterface<TInterface>(TInterface target, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class;
         TInterface CreateInterfaceProxyWithTargetInterface<TInterface>(TInterface target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class;
-        object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, Castle.DynamicProxy.IInterceptor interceptor);
+        object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
         TInterface CreateInterfaceProxyWithoutTarget<TInterface>(Castle.DynamicProxy.IInterceptor interceptor)
             where TInterface :  class;
         TInterface CreateInterfaceProxyWithoutTarget<TInterface>(params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class;
         TInterface CreateInterfaceProxyWithoutTarget<TInterface>(Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class;
-        object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, Castle.DynamicProxy.IInterceptor interceptor);
-        object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
     }
     public interface IProxyTargetAccessor
     {
@@ -2640,8 +2640,8 @@ namespace Castle.DynamicProxy
     public class InvalidMixinConfigurationException : System.Exception
     {
         public InvalidMixinConfigurationException(string message) { }
-        public InvalidMixinConfigurationException(string message, System.Exception innerException) { }
         protected InvalidMixinConfigurationException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        public InvalidMixinConfigurationException(string message, System.Exception innerException) { }
     }
     public class InvalidProxyConstructorArgumentsException : System.ArgumentException
     {
@@ -2669,7 +2669,7 @@ namespace Castle.DynamicProxy
         public ModuleScope(bool savePhysicalAssembly, bool disableSignedModule) { }
         public ModuleScope(bool savePhysicalAssembly, bool disableSignedModule, string strongAssemblyName, string strongModulePath, string weakAssemblyName, string weakModulePath) { }
         public ModuleScope(bool savePhysicalAssembly, bool disableSignedModule, Castle.DynamicProxy.Generators.INamingScope namingScope, string strongAssemblyName, string strongModulePath, string weakAssemblyName, string weakModulePath) { }
-        [System.ObsoleteAttribute("Exposes a component that is intended for internal use only.")]
+        [System.Obsolete("Exposes a component that is intended for internal use only.")]
         public Castle.Core.Internal.Lock Lock { get; }
         public Castle.DynamicProxy.Generators.INamingScope NamingScope { get; }
         public System.Reflection.Emit.ModuleBuilder StrongNamedModule { get; }
@@ -2678,19 +2678,19 @@ namespace Castle.DynamicProxy
         public System.Reflection.Emit.ModuleBuilder WeakNamedModule { get; }
         public string WeakNamedModuleDirectory { get; }
         public string WeakNamedModuleName { get; }
-        [System.ObsoleteAttribute("Exposes a component that is intended for internal use only.")]
+        [System.Obsolete("Exposes a component that is intended for internal use only.")]
         public System.Reflection.Emit.TypeBuilder DefineType(bool inSignedModulePreferably, string name, System.Reflection.TypeAttributes flags) { }
-        [System.ObsoleteAttribute("Exposes a component that is intended for internal use only.")]
+        [System.Obsolete("Exposes a component that is intended for internal use only.")]
         public System.Type GetFromCache(Castle.DynamicProxy.Generators.CacheKey key) { }
-        public static byte[] GetKeyPair() { }
         public void LoadAssemblyIntoCache(System.Reflection.Assembly assembly) { }
         public System.Reflection.Emit.ModuleBuilder ObtainDynamicModule(bool isStrongNamed) { }
         public System.Reflection.Emit.ModuleBuilder ObtainDynamicModuleWithStrongName() { }
         public System.Reflection.Emit.ModuleBuilder ObtainDynamicModuleWithWeakName() { }
-        [System.ObsoleteAttribute("Exposes a component that is intended for internal use only.")]
+        [System.Obsolete("Exposes a component that is intended for internal use only.")]
         public void RegisterInCache(Castle.DynamicProxy.Generators.CacheKey key, System.Type type) { }
         public string SaveAssembly() { }
         public string SaveAssembly(bool strongNamed) { }
+        public static byte[] GetKeyPair() { }
     }
     public class PersistentProxyBuilder : Castle.DynamicProxy.DefaultProxyBuilder
     {
@@ -2705,8 +2705,8 @@ namespace Castle.DynamicProxy
     public class ProxyGenerationOptions : System.Runtime.Serialization.ISerializable
     {
         public static readonly Castle.DynamicProxy.ProxyGenerationOptions Default;
-        public ProxyGenerationOptions(Castle.DynamicProxy.IProxyGenerationHook hook) { }
         public ProxyGenerationOptions() { }
+        public ProxyGenerationOptions(Castle.DynamicProxy.IProxyGenerationHook hook) { }
         public System.Collections.Generic.IList<Castle.DynamicProxy.CustomAttributeInfo> AdditionalAttributes { get; }
         public System.Type BaseTypeForInterfaceProxy { get; set; }
         public bool HasMixins { get; }
@@ -2722,11 +2722,11 @@ namespace Castle.DynamicProxy
         public void Initialize() { }
         public object[] MixinsAsArray() { }
     }
-    [System.CLSCompliantAttribute(true)]
+    [System.CLSCompliant(true)]
     public class ProxyGenerator : Castle.DynamicProxy.IProxyGenerator
     {
-        public ProxyGenerator(Castle.DynamicProxy.IProxyBuilder builder) { }
         public ProxyGenerator() { }
+        public ProxyGenerator(Castle.DynamicProxy.IProxyBuilder builder) { }
         public ProxyGenerator(bool disableSignedModule) { }
         public Castle.Core.Logging.ILogger Logger { get; set; }
         public Castle.DynamicProxy.IProxyBuilder ProxyBuilder { get; }
@@ -2734,72 +2734,72 @@ namespace Castle.DynamicProxy
         protected System.Collections.Generic.List<object> BuildArgumentListForClassProxyWithTarget(object target, Castle.DynamicProxy.ProxyGenerationOptions options, Castle.DynamicProxy.IInterceptor[] interceptors) { }
         protected void CheckNotGenericTypeDefinition(System.Type type, string argumentName) { }
         protected void CheckNotGenericTypeDefinitions(System.Collections.Generic.IEnumerable<System.Type> types, string argumentName) { }
+        public object CreateClassProxy(System.Type classToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxy(System.Type classToProxy, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public virtual object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public TClass CreateClassProxy<TClass>(params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class { }
         public TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class { }
-        public object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxy(System.Type classToProxy, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxy(System.Type classToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public virtual object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         protected object CreateClassProxyInstance(System.Type proxyType, System.Collections.Generic.List<object> proxyArguments, System.Type classToProxy, object[] constructorArguments) { }
         protected System.Type CreateClassProxyType(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         protected System.Type CreateClassProxyTypeWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        public object CreateClassProxyWithTarget(System.Type classToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxyWithTarget(System.Type classToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxyWithTarget(System.Type classToProxy, object target, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxyWithTarget(System.Type classToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public virtual object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public TClass CreateClassProxyWithTarget<TClass>(TClass target, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class { }
         public TClass CreateClassProxyWithTarget<TClass>(TClass target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class { }
-        public object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxyWithTarget(System.Type classToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxyWithTarget(System.Type classToProxy, object target, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxyWithTarget(System.Type classToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxyWithTarget(System.Type classToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public virtual object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         protected System.Type CreateInterfaceProxyTypeWithTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, System.Type targetType, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         protected System.Type CreateInterfaceProxyTypeWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         protected System.Type CreateInterfaceProxyTypeWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
-        public TInterface CreateInterfaceProxyWithTarget<TInterface>(TInterface target, params Castle.DynamicProxy.IInterceptor[] interceptors)
-            where TInterface :  class { }
-        public TInterface CreateInterfaceProxyWithTarget<TInterface>(TInterface target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
-            where TInterface :  class { }
         public object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public virtual object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public TInterface CreateInterfaceProxyWithTarget<TInterface>(TInterface target, params Castle.DynamicProxy.IInterceptor[] interceptors)
+            where TInterface :  class { }
+        public TInterface CreateInterfaceProxyWithTarget<TInterface>(TInterface target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
+            where TInterface :  class { }
         public object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public virtual object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public TInterface CreateInterfaceProxyWithTargetInterface<TInterface>(TInterface target, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class { }
         public TInterface CreateInterfaceProxyWithTargetInterface<TInterface>(TInterface target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class { }
-        public object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public virtual object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, Castle.DynamicProxy.IInterceptor interceptor) { }
+        public object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public virtual object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public TInterface CreateInterfaceProxyWithoutTarget<TInterface>(Castle.DynamicProxy.IInterceptor interceptor)
             where TInterface :  class { }
         public TInterface CreateInterfaceProxyWithoutTarget<TInterface>(params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class { }
         public TInterface CreateInterfaceProxyWithoutTarget<TInterface>(Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class { }
-        public object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, Castle.DynamicProxy.IInterceptor interceptor) { }
-        public object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public virtual object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         protected System.Collections.Generic.List<object> GetConstructorArguments(object target, Castle.DynamicProxy.IInterceptor[] interceptors, Castle.DynamicProxy.ProxyGenerationOptions options) { }
     }
-    public class static ProxyUtil
+    public static class ProxyUtil
     {
-        public static TDelegate CreateDelegateToMixin<TDelegate>(object proxy) { }
         public static System.Delegate CreateDelegateToMixin(object proxy, System.Type delegateType) { }
+        public static TDelegate CreateDelegateToMixin<TDelegate>(object proxy) { }
         public static object GetUnproxiedInstance(object instance) { }
         public static System.Type GetUnproxiedType(object instance) { }
         public static bool IsAccessible(System.Reflection.MethodBase method) { }
-        public static bool IsAccessible(System.Reflection.MethodBase method, out string message) { }
         public static bool IsAccessible(System.Type type) { }
+        public static bool IsAccessible(System.Reflection.MethodBase method, out string message) { }
         public static bool IsProxy(object instance) { }
         public static bool IsProxyType(System.Type type) { }
     }
@@ -2990,7 +2990,7 @@ namespace Castle.DynamicProxy.Contributors
 }
 namespace Castle.DynamicProxy.Generators
 {
-    public class static AttributesToAvoidReplicating
+    public static class AttributesToAvoidReplicating
     {
         public static void Add(System.Type attribute) { }
         public static void Add<T>() { }
@@ -3006,7 +3006,7 @@ namespace Castle.DynamicProxy.Generators
         protected void AddMapping(System.Type @interface, Castle.DynamicProxy.Contributors.ITypeContributor implementer, System.Collections.Generic.IDictionary<System.Type, Castle.DynamicProxy.Contributors.ITypeContributor> mapping) { }
         protected void AddMappingForISerializable(System.Collections.Generic.IDictionary<System.Type, Castle.DynamicProxy.Contributors.ITypeContributor> typeImplementerMapping, Castle.DynamicProxy.Contributors.ITypeContributor instance) { }
         protected void AddMappingNoCheck(System.Type @interface, Castle.DynamicProxy.Contributors.ITypeContributor implementer, System.Collections.Generic.IDictionary<System.Type, Castle.DynamicProxy.Contributors.ITypeContributor> mapping) { }
-        [System.ObsoleteAttribute("Exposes a component that is intended for internal use only.")]
+        [System.Obsolete("Exposes a component that is intended for internal use only.")]
         protected void AddToCache(Castle.DynamicProxy.Generators.CacheKey key, System.Type type) { }
         protected virtual Castle.DynamicProxy.Generators.Emitters.ClassEmitter BuildClassEmitter(string typeName, System.Type parentType, System.Collections.Generic.IEnumerable<System.Type> interfaces) { }
         protected void CheckNotGenericTypeDefinition(System.Type type, string argumentName) { }
@@ -3022,18 +3022,18 @@ namespace Castle.DynamicProxy.Generators
         protected void GenerateConstructors(Castle.DynamicProxy.Generators.Emitters.ClassEmitter emitter, System.Type baseType, params Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference[] fields) { }
         protected void GenerateParameterlessConstructor(Castle.DynamicProxy.Generators.Emitters.ClassEmitter emitter, System.Type baseClass, Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference interceptorField) { }
         protected Castle.DynamicProxy.Generators.Emitters.ConstructorEmitter GenerateStaticConstructor(Castle.DynamicProxy.Generators.Emitters.ClassEmitter emitter) { }
-        [System.ObsoleteAttribute("Exposes a component that is intended for internal use only.")]
+        [System.Obsolete("Exposes a component that is intended for internal use only.")]
         protected System.Type GetFromCache(Castle.DynamicProxy.Generators.CacheKey key) { }
         protected void HandleExplicitlyPassedProxyTargetAccessor(System.Collections.Generic.ICollection<System.Type> targetInterfaces, System.Collections.Generic.ICollection<System.Type> additionalInterfaces) { }
         protected void InitializeStaticFields(System.Type builtType) { }
-        [System.ObsoleteAttribute("Exposes a component that is intended for internal use only.")]
+        [System.Obsolete("Exposes a component that is intended for internal use only.")]
         protected System.Type ObtainProxyType(Castle.DynamicProxy.Generators.CacheKey cacheKey, System.Func<string, Castle.DynamicProxy.Generators.INamingScope, System.Type> factory) { }
     }
-    [System.ObsoleteAttribute("Intended for internal use only.")]
+    [System.Obsolete("Intended for internal use only.")]
     public class CacheKey
     {
-        public CacheKey(System.Reflection.MemberInfo target, System.Type type, System.Type[] interfaces, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         public CacheKey(System.Type target, System.Type[] interfaces, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        public CacheKey(System.Reflection.MemberInfo target, System.Type type, System.Type[] interfaces, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
     }
@@ -3082,10 +3082,10 @@ namespace Castle.DynamicProxy.Generators
     public class GeneratorException : System.Exception
     {
         public GeneratorException(string message) { }
-        public GeneratorException(string message, System.Exception innerException) { }
         public GeneratorException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        public GeneratorException(string message, System.Exception innerException) { }
     }
-    public class static GeneratorUtil
+    public static class GeneratorUtil
     {
         public static void CopyOutAndRefParameters(Castle.DynamicProxy.Generators.Emitters.SimpleAST.TypeReference[] dereferencedArguments, Castle.DynamicProxy.Generators.Emitters.SimpleAST.LocalReference invocation, System.Reflection.MethodInfo method, Castle.DynamicProxy.Generators.Emitters.MethodEmitter emitter) { }
     }
@@ -3163,11 +3163,11 @@ namespace Castle.DynamicProxy.Generators
         public Castle.DynamicProxy.Generators.Emitters.EventEmitter Emitter { get; }
         public Castle.DynamicProxy.Generators.MetaMethod Remover { get; }
         public void BuildEventEmitter(Castle.DynamicProxy.Generators.Emitters.ClassEmitter classEmitter) { }
-        public override bool Equals(object obj) { }
         public bool Equals(Castle.DynamicProxy.Generators.MetaEvent other) { }
+        public override bool Equals(object obj) { }
         public override int GetHashCode() { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("{Method}")]
+    [System.Diagnostics.DebuggerDisplay("{Method}")]
     public class MetaMethod : Castle.DynamicProxy.Generators.MetaTypeElement, System.IEquatable<Castle.DynamicProxy.Generators.MetaMethod>
     {
         public MetaMethod(System.Reflection.MethodInfo method, System.Reflection.MethodInfo methodOnTarget, bool standalone, bool proxyable, bool hasTarget) { }
@@ -3192,8 +3192,8 @@ namespace Castle.DynamicProxy.Generators
         public System.Reflection.MethodInfo SetMethod { get; }
         public Castle.DynamicProxy.Generators.MetaMethod Setter { get; }
         public void BuildPropertyEmitter(Castle.DynamicProxy.Generators.Emitters.ClassEmitter classEmitter) { }
-        public override bool Equals(object obj) { }
         public bool Equals(Castle.DynamicProxy.Generators.MetaProperty other) { }
+        public override bool Equals(object obj) { }
         public override int GetHashCode() { }
     }
     public class MetaType
@@ -3278,50 +3278,50 @@ namespace Castle.DynamicProxy.Generators.Emitters
         public Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference CreateField(string name, System.Type fieldType) { }
         public Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference CreateField(string name, System.Type fieldType, bool serializable) { }
         public Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference CreateField(string name, System.Type fieldType, System.Reflection.FieldAttributes atts) { }
-        public Castle.DynamicProxy.Generators.Emitters.MethodEmitter CreateMethod(string name, System.Reflection.MethodAttributes attrs, System.Type returnType, params System.Type[] argumentTypes) { }
-        public Castle.DynamicProxy.Generators.Emitters.MethodEmitter CreateMethod(string name, System.Type returnType, params System.Type[] parameterTypes) { }
         public Castle.DynamicProxy.Generators.Emitters.MethodEmitter CreateMethod(string name, System.Reflection.MethodInfo methodToUseAsATemplate) { }
         public Castle.DynamicProxy.Generators.Emitters.MethodEmitter CreateMethod(string name, System.Reflection.MethodAttributes attributes, System.Reflection.MethodInfo methodToUseAsATemplate) { }
+        public Castle.DynamicProxy.Generators.Emitters.MethodEmitter CreateMethod(string name, System.Type returnType, params System.Type[] parameterTypes) { }
+        public Castle.DynamicProxy.Generators.Emitters.MethodEmitter CreateMethod(string name, System.Reflection.MethodAttributes attrs, System.Type returnType, params System.Type[] argumentTypes) { }
         public Castle.DynamicProxy.Generators.Emitters.PropertyEmitter CreateProperty(string name, System.Reflection.PropertyAttributes attributes, System.Type propertyType, System.Type[] arguments) { }
         public Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference CreateStaticField(string name, System.Type fieldType) { }
         public Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference CreateStaticField(string name, System.Type fieldType, System.Reflection.FieldAttributes atts) { }
         protected System.Type CreateType(System.Reflection.Emit.TypeBuilder type) { }
         public Castle.DynamicProxy.Generators.Emitters.ConstructorEmitter CreateTypeConstructor() { }
         public void DefineCustomAttribute(System.Reflection.Emit.CustomAttributeBuilder attribute) { }
-        public void DefineCustomAttribute<TAttribute>(object[] constructorArguments)
-            where TAttribute : System.Attribute { }
         public void DefineCustomAttribute<TAttribute>()
             where TAttribute : System.Attribute, new () { }
+        public void DefineCustomAttribute<TAttribute>(object[] constructorArguments)
+            where TAttribute : System.Attribute { }
         public void DefineCustomAttributeFor<TAttribute>(Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference field)
             where TAttribute : System.Attribute, new () { }
         protected virtual void EnsureBuildersAreInAValidState() { }
         public System.Collections.Generic.IEnumerable<Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference> GetAllFields() { }
         public Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference GetField(string name) { }
         public System.Type GetGenericArgument(string genericArgumentName) { }
-        public System.Type[] GetGenericArgumentsFor(System.Type genericType) { }
         public System.Type[] GetGenericArgumentsFor(System.Reflection.MethodInfo genericMethod) { }
+        public System.Type[] GetGenericArgumentsFor(System.Type genericType) { }
         public void SetGenericTypeParameters(System.Reflection.Emit.GenericTypeParameterBuilder[] genericTypeParameterBuilders) { }
     }
     public abstract class ArgumentsUtil
     {
         protected ArgumentsUtil() { }
         public static Castle.DynamicProxy.Generators.Emitters.SimpleAST.Expression[] ConvertArgumentReferenceToExpression(Castle.DynamicProxy.Generators.Emitters.SimpleAST.ArgumentReference[] args) { }
-        public static Castle.DynamicProxy.Generators.Emitters.SimpleAST.ArgumentReference[] ConvertToArgumentReference(System.Type[] args) { }
         public static Castle.DynamicProxy.Generators.Emitters.SimpleAST.ArgumentReference[] ConvertToArgumentReference(System.Reflection.ParameterInfo[] args) { }
+        public static Castle.DynamicProxy.Generators.Emitters.SimpleAST.ArgumentReference[] ConvertToArgumentReference(System.Type[] args) { }
         public static Castle.DynamicProxy.Generators.Emitters.SimpleAST.ReferenceExpression[] ConvertToArgumentReferenceExpression(System.Reflection.ParameterInfo[] args) { }
         public static void EmitLoadOwnerAndReference(Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference reference, System.Reflection.Emit.ILGenerator il) { }
         public static System.Type[] GetTypes(System.Reflection.ParameterInfo[] parameters) { }
         public static System.Type[] InitializeAndConvert(Castle.DynamicProxy.Generators.Emitters.SimpleAST.ArgumentReference[] args) { }
         public static void InitializeArgumentsByPosition(Castle.DynamicProxy.Generators.Emitters.SimpleAST.ArgumentReference[] args, bool isStatic) { }
-        [System.ObsoleteAttribute()]
+        [System.Obsolete]
         public static bool IsAnyByRef(System.Reflection.ParameterInfo[] parameters) { }
     }
     public class ClassEmitter : Castle.DynamicProxy.Generators.Emitters.AbstractTypeEmitter
     {
+        public ClassEmitter(System.Reflection.Emit.TypeBuilder typeBuilder) { }
         public ClassEmitter(Castle.DynamicProxy.ModuleScope modulescope, string name, System.Type baseType, System.Collections.Generic.IEnumerable<System.Type> interfaces) { }
         public ClassEmitter(Castle.DynamicProxy.ModuleScope modulescope, string name, System.Type baseType, System.Collections.Generic.IEnumerable<System.Type> interfaces, System.Reflection.TypeAttributes flags) { }
         public ClassEmitter(Castle.DynamicProxy.ModuleScope modulescope, string name, System.Type baseType, System.Collections.Generic.IEnumerable<System.Type> interfaces, System.Reflection.TypeAttributes flags, bool forceUnsigned) { }
-        public ClassEmitter(System.Reflection.Emit.TypeBuilder typeBuilder) { }
         public Castle.DynamicProxy.ModuleScope ModuleScope { get; }
         protected virtual System.Collections.Generic.IEnumerable<System.Type> InitializeGenericArgumentsFromBases(ref System.Type baseType, System.Collections.Generic.IEnumerable<System.Type> interfaces) { }
     }
@@ -3362,21 +3362,21 @@ namespace Castle.DynamicProxy.Generators.Emitters
     }
     public sealed class LdcOpCodesDictionary : System.Collections.Generic.Dictionary<System.Type, System.Reflection.Emit.OpCode>
     {
+        public System.Reflection.Emit.OpCode this[System.Type type] { get; }
         public static System.Reflection.Emit.OpCode EmptyOpCode { get; }
         public static Castle.DynamicProxy.Generators.Emitters.LdcOpCodesDictionary Instance { get; }
-        public System.Reflection.Emit.OpCode this[System.Type type] { get; }
     }
     public sealed class LdindOpCodesDictionary : System.Collections.Generic.Dictionary<System.Type, System.Reflection.Emit.OpCode>
     {
+        public System.Reflection.Emit.OpCode this[System.Type type] { get; }
         public static System.Reflection.Emit.OpCode EmptyOpCode { get; }
         public static Castle.DynamicProxy.Generators.Emitters.LdindOpCodesDictionary Instance { get; }
-        public System.Reflection.Emit.OpCode this[System.Type type] { get; }
     }
     public class MethodCollection : System.Collections.ObjectModel.Collection<Castle.DynamicProxy.Generators.Emitters.MethodEmitter>
     {
         public MethodCollection() { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("{builder.Name}")]
+    [System.Diagnostics.DebuggerDisplay("{builder.Name}")]
     public class MethodEmitter : Castle.DynamicProxy.Generators.Emitters.IMemberEmitter
     {
         protected MethodEmitter(System.Reflection.Emit.MethodBuilder builder) { }
@@ -3397,9 +3397,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
     }
     public class NestedClassEmitter : Castle.DynamicProxy.Generators.Emitters.AbstractTypeEmitter
     {
+        public NestedClassEmitter(Castle.DynamicProxy.Generators.Emitters.AbstractTypeEmitter maintype, System.Reflection.Emit.TypeBuilder typeBuilder) { }
         public NestedClassEmitter(Castle.DynamicProxy.Generators.Emitters.AbstractTypeEmitter maintype, string name, System.Type baseType, System.Type[] interfaces) { }
         public NestedClassEmitter(Castle.DynamicProxy.Generators.Emitters.AbstractTypeEmitter maintype, string name, System.Reflection.TypeAttributes attributes, System.Type baseType, System.Type[] interfaces) { }
-        public NestedClassEmitter(Castle.DynamicProxy.Generators.Emitters.AbstractTypeEmitter maintype, System.Reflection.Emit.TypeBuilder typeBuilder) { }
     }
     public class PropertiesCollection : System.Collections.ObjectModel.Collection<Castle.DynamicProxy.Generators.Emitters.PropertyEmitter>
     {
@@ -3410,21 +3410,21 @@ namespace Castle.DynamicProxy.Generators.Emitters
         public PropertyEmitter(Castle.DynamicProxy.Generators.Emitters.AbstractTypeEmitter parentTypeEmitter, string name, System.Reflection.PropertyAttributes attributes, System.Type propertyType, System.Type[] arguments) { }
         public System.Reflection.MemberInfo Member { get; }
         public System.Type ReturnType { get; }
-        public Castle.DynamicProxy.Generators.Emitters.MethodEmitter CreateGetMethod(string name, System.Reflection.MethodAttributes attrs, System.Reflection.MethodInfo methodToOverride, params System.Type[] parameters) { }
         public Castle.DynamicProxy.Generators.Emitters.MethodEmitter CreateGetMethod(string name, System.Reflection.MethodAttributes attributes, System.Reflection.MethodInfo methodToOverride) { }
-        public Castle.DynamicProxy.Generators.Emitters.MethodEmitter CreateSetMethod(string name, System.Reflection.MethodAttributes attrs, System.Reflection.MethodInfo methodToOverride, params System.Type[] parameters) { }
+        public Castle.DynamicProxy.Generators.Emitters.MethodEmitter CreateGetMethod(string name, System.Reflection.MethodAttributes attrs, System.Reflection.MethodInfo methodToOverride, params System.Type[] parameters) { }
         public Castle.DynamicProxy.Generators.Emitters.MethodEmitter CreateSetMethod(string name, System.Reflection.MethodAttributes attributes, System.Reflection.MethodInfo methodToOverride) { }
+        public Castle.DynamicProxy.Generators.Emitters.MethodEmitter CreateSetMethod(string name, System.Reflection.MethodAttributes attrs, System.Reflection.MethodInfo methodToOverride, params System.Type[] parameters) { }
         public void DefineCustomAttribute(System.Reflection.Emit.CustomAttributeBuilder attribute) { }
         public void EnsureValidCodeBlock() { }
         public void Generate() { }
     }
     public sealed class StindOpCodesDictionary : System.Collections.Generic.Dictionary<System.Type, System.Reflection.Emit.OpCode>
     {
+        public System.Reflection.Emit.OpCode this[System.Type type] { get; }
         public static System.Reflection.Emit.OpCode EmptyOpCode { get; }
         public static Castle.DynamicProxy.Generators.Emitters.StindOpCodesDictionary Instance { get; }
-        public System.Reflection.Emit.OpCode this[System.Type type] { get; }
     }
-    public class static StrongNameUtil
+    public static class StrongNameUtil
     {
         public static bool IsAnyTypeFromUnsignedAssembly(System.Collections.Generic.IEnumerable<System.Type> types) { }
         public static bool IsAnyTypeFromUnsignedAssembly(System.Type baseType, System.Collections.Generic.IEnumerable<System.Type> interfaces) { }
@@ -3465,7 +3465,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
         public AddressOfReferenceExpression(Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference reference) { }
         public override void Emit(Castle.DynamicProxy.Generators.Emitters.IMemberEmitter member, System.Reflection.Emit.ILGenerator gen) { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("argument {Type}")]
+    [System.Diagnostics.DebuggerDisplay("argument {Type}")]
     public class ArgumentReference : Castle.DynamicProxy.Generators.Emitters.SimpleAST.TypeReference
     {
         public ArgumentReference(System.Type argumentType) { }
@@ -3474,7 +3474,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
         public override void LoadReference(System.Reflection.Emit.ILGenerator gen) { }
         public override void StoreReference(System.Reflection.Emit.ILGenerator gen) { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("{reference} as {type}")]
+    [System.Diagnostics.DebuggerDisplay("{reference} as {type}")]
     public class AsTypeReference : Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference
     {
         public AsTypeReference(Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference reference, System.Type type) { }
@@ -3502,7 +3502,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
         public BindDelegateExpression(System.Type @delegate, Castle.DynamicProxy.Generators.Emitters.SimpleAST.Expression owner, System.Reflection.MethodInfo methodToBindTo, System.Reflection.Emit.GenericTypeParameterBuilder[] genericTypeParams) { }
         public override void Emit(Castle.DynamicProxy.Generators.Emitters.IMemberEmitter member, System.Reflection.Emit.ILGenerator gen) { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("&{localReference}")]
+    [System.Diagnostics.DebuggerDisplay("&{localReference}")]
     public class ByRefReference : Castle.DynamicProxy.Generators.Emitters.SimpleAST.TypeReference
     {
         public ByRefReference(Castle.DynamicProxy.Generators.Emitters.SimpleAST.LocalReference localReference) { }
@@ -3510,7 +3510,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
         public override void LoadReference(System.Reflection.Emit.ILGenerator gen) { }
         public override void StoreReference(System.Reflection.Emit.ILGenerator gen) { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("{value}")]
+    [System.Diagnostics.DebuggerDisplay("{value}")]
     public class ConstReference : Castle.DynamicProxy.Generators.Emitters.SimpleAST.TypeReference
     {
         public ConstReference(object value) { }
@@ -3550,11 +3550,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
         public ExpressionStatement(Castle.DynamicProxy.Generators.Emitters.SimpleAST.Expression expression) { }
         public override void Emit(Castle.DynamicProxy.Generators.Emitters.IMemberEmitter member, System.Reflection.Emit.ILGenerator gen) { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("{fieldbuilder.Name} ({fieldbuilder.FieldType})")]
+    [System.Diagnostics.DebuggerDisplay("{fieldbuilder.Name} ({fieldbuilder.FieldType})")]
     public class FieldReference : Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference
     {
-        public FieldReference(System.Reflection.FieldInfo field) { }
         public FieldReference(System.Reflection.Emit.FieldBuilder fieldbuilder) { }
+        public FieldReference(System.Reflection.FieldInfo field) { }
         public System.Reflection.Emit.FieldBuilder Fieldbuilder { get; }
         public System.Reflection.FieldInfo Reference { get; }
         public override void LoadAddressOfReference(System.Reflection.Emit.ILGenerator gen) { }
@@ -3572,11 +3572,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
     }
     public class IfNullExpression : Castle.DynamicProxy.Generators.Emitters.SimpleAST.Expression
     {
-        public IfNullExpression(Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference reference, Castle.DynamicProxy.Generators.Emitters.SimpleAST.IILEmitter ifNull, Castle.DynamicProxy.Generators.Emitters.SimpleAST.IILEmitter ifNotNull = null) { }
         public IfNullExpression(Castle.DynamicProxy.Generators.Emitters.SimpleAST.Expression expression, Castle.DynamicProxy.Generators.Emitters.SimpleAST.IILEmitter ifNull, Castle.DynamicProxy.Generators.Emitters.SimpleAST.IILEmitter ifNotNull = null) { }
+        public IfNullExpression(Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference reference, Castle.DynamicProxy.Generators.Emitters.SimpleAST.IILEmitter ifNull, Castle.DynamicProxy.Generators.Emitters.SimpleAST.IILEmitter ifNotNull = null) { }
         public override void Emit(Castle.DynamicProxy.Generators.Emitters.IMemberEmitter member, System.Reflection.Emit.ILGenerator gen) { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("&{OwnerReference}")]
+    [System.Diagnostics.DebuggerDisplay("&{OwnerReference}")]
     public class IndirectReference : Castle.DynamicProxy.Generators.Emitters.SimpleAST.TypeReference
     {
         public IndirectReference(Castle.DynamicProxy.Generators.Emitters.SimpleAST.TypeReference byRefReference) { }
@@ -3593,17 +3593,17 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
     }
     public class LoadArrayElementExpression : Castle.DynamicProxy.Generators.Emitters.SimpleAST.Expression
     {
-        public LoadArrayElementExpression(int index, Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference arrayReference, System.Type returnType) { }
         public LoadArrayElementExpression(Castle.DynamicProxy.Generators.Emitters.SimpleAST.ConstReference index, Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference arrayReference, System.Type returnType) { }
+        public LoadArrayElementExpression(int index, Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference arrayReference, System.Type returnType) { }
         public override void Emit(Castle.DynamicProxy.Generators.Emitters.IMemberEmitter member, System.Reflection.Emit.ILGenerator gen) { }
     }
     public class LoadRefArrayElementExpression : Castle.DynamicProxy.Generators.Emitters.SimpleAST.Expression
     {
-        public LoadRefArrayElementExpression(int index, Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference arrayReference) { }
         public LoadRefArrayElementExpression(Castle.DynamicProxy.Generators.Emitters.SimpleAST.ConstReference index, Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference arrayReference) { }
+        public LoadRefArrayElementExpression(int index, Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference arrayReference) { }
         public override void Emit(Castle.DynamicProxy.Generators.Emitters.IMemberEmitter member, System.Reflection.Emit.ILGenerator gen) { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("local {Type}")]
+    [System.Diagnostics.DebuggerDisplay("local {Type}")]
     public class LocalReference : Castle.DynamicProxy.Generators.Emitters.SimpleAST.TypeReference
     {
         public LocalReference(System.Type type) { }
@@ -3617,8 +3617,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
         protected readonly Castle.DynamicProxy.Generators.Emitters.SimpleAST.Expression[] args;
         protected readonly System.Reflection.MethodInfo method;
         protected readonly Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference owner;
-        public MethodInvocationExpression(System.Reflection.MethodInfo method, params Castle.DynamicProxy.Generators.Emitters.SimpleAST.Expression[] args) { }
         public MethodInvocationExpression(Castle.DynamicProxy.Generators.Emitters.MethodEmitter method, params Castle.DynamicProxy.Generators.Emitters.SimpleAST.Expression[] args) { }
+        public MethodInvocationExpression(System.Reflection.MethodInfo method, params Castle.DynamicProxy.Generators.Emitters.SimpleAST.Expression[] args) { }
         public MethodInvocationExpression(Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference owner, Castle.DynamicProxy.Generators.Emitters.MethodEmitter method, params Castle.DynamicProxy.Generators.Emitters.SimpleAST.Expression[] args) { }
         public MethodInvocationExpression(Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference owner, System.Reflection.MethodInfo method, params Castle.DynamicProxy.Generators.Emitters.SimpleAST.Expression[] args) { }
         public bool VirtualCall { get; set; }
@@ -3689,11 +3689,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
     public class ReturnStatement : Castle.DynamicProxy.Generators.Emitters.SimpleAST.Statement
     {
         public ReturnStatement() { }
-        public ReturnStatement(Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference reference) { }
         public ReturnStatement(Castle.DynamicProxy.Generators.Emitters.SimpleAST.Expression expression) { }
+        public ReturnStatement(Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference reference) { }
         public override void Emit(Castle.DynamicProxy.Generators.Emitters.IMemberEmitter member, System.Reflection.Emit.ILGenerator gen) { }
     }
-    [System.Diagnostics.DebuggerDisplayAttribute("this")]
+    [System.Diagnostics.DebuggerDisplay("this")]
     public class SelfReference : Castle.DynamicProxy.Generators.Emitters.SimpleAST.Reference
     {
         public static readonly Castle.DynamicProxy.Generators.Emitters.SimpleAST.SelfReference Self;
@@ -3731,12 +3731,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 }
 namespace Castle.DynamicProxy.Internal
 {
-    public class static AttributeUtil
+    public static class AttributeUtil
     {
         public static Castle.DynamicProxy.CustomAttributeInfo CreateInfo(System.Reflection.CustomAttributeData attribute) { }
+        public static Castle.DynamicProxy.CustomAttributeInfo CreateInfo(System.Type attribute, object[] constructorArguments) { }
         public static Castle.DynamicProxy.CustomAttributeInfo CreateInfo<TAttribute>()
             where TAttribute : System.Attribute, new () { }
-        public static Castle.DynamicProxy.CustomAttributeInfo CreateInfo(System.Type attribute, object[] constructorArguments) { }
         public static System.Collections.Generic.IEnumerable<Castle.DynamicProxy.CustomAttributeInfo> GetNonInheritableAttributes(this System.Reflection.MemberInfo member) { }
         public static System.Collections.Generic.IEnumerable<Castle.DynamicProxy.CustomAttributeInfo> GetNonInheritableAttributes(this System.Reflection.ParameterInfo parameter) { }
     }
@@ -3756,24 +3756,24 @@ namespace Castle.DynamicProxy.Internal
         public override object InvocationTarget { get; }
         public override System.Reflection.MethodInfo MethodInvocationTarget { get; }
         public override System.Type TargetType { get; }
-        protected virtual void InvokeMethodOnTarget() { }
+        protected abstract override void InvokeMethodOnTarget() { }
     }
-    public class static InternalsUtil
+    public static class InternalsUtil
     {
-        [System.ObsoleteAttribute("Use ProxyUtil.IsAccessible instead, which performs a more accurate accessibility " +
+        [System.Obsolete("Use ProxyUtil.IsAccessible instead, which performs a more accurate accessibility " +
             "check.")]
         public static bool IsAccessible(this System.Reflection.MethodBase method) { }
-        [System.ObsoleteAttribute()]
+        [System.Obsolete]
         public static bool IsInternal(this System.Reflection.MethodBase method) { }
-        [System.ObsoleteAttribute()]
+        [System.Obsolete]
         public static bool IsInternalToDynamicProxy(this System.Reflection.Assembly asm) { }
     }
-    public class static InvocationHelper
+    public static class InvocationHelper
     {
         public static System.Reflection.MethodInfo GetMethodOnObject(object target, System.Reflection.MethodInfo proxiedMethod) { }
         public static System.Reflection.MethodInfo GetMethodOnType(System.Type type, System.Reflection.MethodInfo proxiedMethod) { }
     }
-    public class static TypeUtil
+    public static class TypeUtil
     {
         public static System.Type[] AsTypeArray(this System.Reflection.Emit.GenericTypeParameterBuilder[] typeInfos) { }
         public static System.Reflection.FieldInfo[] GetAllFields(this System.Type type) { }
@@ -3791,16 +3791,16 @@ namespace Castle.DynamicProxy.Internal
 }
 namespace Castle.DynamicProxy.Serialization
 {
-    [System.AttributeUsageAttribute(System.AttributeTargets.Assembly | System.AttributeTargets.All, AllowMultiple=false)]
-    [System.CLSCompliantAttribute(false)]
+    [System.AttributeUsage(System.AttributeTargets.Assembly | System.AttributeTargets.All, AllowMultiple=false)]
+    [System.CLSCompliant(false)]
     public class CacheMappingsAttribute : System.Attribute
     {
         public CacheMappingsAttribute(byte[] serializedCacheMappings) { }
         public byte[] SerializedCacheMappings { get; }
-        [System.ObsoleteAttribute("Exposes a component that is intended for internal use only.")]
-        public static void ApplyTo(System.Reflection.Emit.AssemblyBuilder assemblyBuilder, System.Collections.Generic.Dictionary<Castle.DynamicProxy.Generators.CacheKey, string> mappings) { }
-        [System.ObsoleteAttribute("Exposes a component that is intended for internal use only.")]
+        [System.Obsolete("Exposes a component that is intended for internal use only.")]
         public System.Collections.Generic.Dictionary<Castle.DynamicProxy.Generators.CacheKey, string> GetDeserializedMappings() { }
+        [System.Obsolete("Exposes a component that is intended for internal use only.")]
+        public static void ApplyTo(System.Reflection.Emit.AssemblyBuilder assemblyBuilder, System.Collections.Generic.Dictionary<Castle.DynamicProxy.Generators.CacheKey, string> mappings) { }
     }
     public class ProxyObjectReference : System.Runtime.Serialization.IDeserializationCallback, System.Runtime.Serialization.IObjectReference, System.Runtime.Serialization.ISerializable
     {
@@ -3819,20 +3819,20 @@ namespace Castle.DynamicProxy.Serialization
 }
 namespace Castle.DynamicProxy.Tokens
 {
-    public class static DelegateMethods
+    public static class DelegateMethods
     {
         public static readonly System.Reflection.MethodInfo CreateDelegate;
     }
-    public class static FormatterServicesMethods
+    public static class FormatterServicesMethods
     {
         public static readonly System.Reflection.MethodInfo GetObjectData;
         public static readonly System.Reflection.MethodInfo GetSerializableMembers;
     }
-    public class static InterceptorSelectorMethods
+    public static class InterceptorSelectorMethods
     {
         public static readonly System.Reflection.MethodInfo SelectInterceptors;
     }
-    public class static InvocationMethods
+    public static class InvocationMethods
     {
         public static readonly System.Reflection.ConstructorInfo CompositionInvocationConstructor;
         public static readonly System.Reflection.MethodInfo CompositionInvocationEnsureValidTarget;
@@ -3851,11 +3851,11 @@ namespace Castle.DynamicProxy.Tokens
         public static readonly System.Reflection.FieldInfo Target;
         public static readonly System.Reflection.MethodInfo ThrowOnNoTarget;
     }
-    public class static MethodBaseMethods
+    public static class MethodBaseMethods
     {
         public static readonly System.Reflection.MethodInfo GetMethodFromHandle;
     }
-    public class static SerializationInfoMethods
+    public static class SerializationInfoMethods
     {
         public static readonly System.Reflection.MethodInfo AddValue_Bool;
         public static readonly System.Reflection.MethodInfo AddValue_Int32;
@@ -3863,12 +3863,12 @@ namespace Castle.DynamicProxy.Tokens
         public static readonly System.Reflection.MethodInfo GetValue;
         public static readonly System.Reflection.MethodInfo SetType;
     }
-    public class static TypeMethods
+    public static class TypeMethods
     {
         public static readonly System.Reflection.MethodInfo GetTypeFromHandle;
         public static readonly System.Reflection.MethodInfo StaticGetType;
     }
-    public class static TypeUtilMethods
+    public static class TypeUtilMethods
     {
         public static readonly System.Reflection.MethodInfo GetTypeOrNull;
         public static readonly System.Reflection.MethodInfo Sort;
