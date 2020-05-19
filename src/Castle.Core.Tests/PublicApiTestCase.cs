@@ -81,7 +81,7 @@ namespace Castle
 					string assemblyRefPath = $"{refDir}/{assemblyName}-{framework}.cs";
 
 					var assembly = Assembly.LoadFile(Path.GetFullPath(assemblyBinPath));
-					string publicApi = ApiGenerator.GeneratePublicApi(assembly);
+					string publicApi = assembly.GeneratePublicApi();
 
 					if (compare)
 					{
