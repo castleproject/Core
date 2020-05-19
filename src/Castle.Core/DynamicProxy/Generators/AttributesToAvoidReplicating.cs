@@ -32,9 +32,7 @@ namespace Castle.DynamicProxy.Generators
 				typeof(System.Runtime.InteropServices.ComImportAttribute),
 				typeof(System.Runtime.InteropServices.MarshalAsAttribute),
 				typeof(System.Runtime.InteropServices.TypeIdentifierAttribute),
-#if FEATURE_SECURITY_PERMISSIONS
 				typeof(System.Security.Permissions.SecurityAttribute),
-#endif
 			};
 		}
 

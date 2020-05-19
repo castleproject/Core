@@ -17,9 +17,6 @@ namespace Castle.Core.Logging
 	using System;
 	using System.Diagnostics;
 	using System.Collections.Generic;
-#if FEATURE_SECURITY_PERMISSIONS
-	using System.Security;
-#endif
 
 	/// <summary>
 	///   The TraceLogger sends all logging to the System.Diagnostics.TraceSource
@@ -47,9 +44,6 @@ namespace Castle.Core.Logging
 		/// Build a new trace logger based on the named TraceSource
 		/// </summary>
 		/// <param name="name">The name used to locate the best TraceSource. In most cases comes from the using type's fullname.</param>
-#if FEATURE_SECURITY_PERMISSIONS
-		[SecuritySafeCritical]
-#endif
 		public TraceLogger(string name)
 			: base(name)
 		{
@@ -63,9 +57,6 @@ namespace Castle.Core.Logging
 		/// <param name="name">The name used to locate the best TraceSource. In most cases comes from the using type's fullname.</param>
 		/// <param name="level">The default logging level at which this source should write messages. In almost all cases this
 		/// default value will be overridden in the config file. </param>
-#if FEATURE_SECURITY_PERMISSIONS
-		[SecuritySafeCritical]
-#endif
 		public TraceLogger(string name, LoggerLevel level)
 			: base(name, level)
 		{
@@ -79,17 +70,11 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name="loggerName">The Subname of this logger.</param>
 		/// <returns>The New ILogger instance.</returns> 
-#if FEATURE_SECURITY_PERMISSIONS
-		[SecuritySafeCritical]
-#endif
 		public override ILogger CreateChildLogger(string loggerName)
 		{
 			return InternalCreateChildLogger(loggerName);
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS
-		[SecurityCritical]
-#endif
 		private ILogger InternalCreateChildLogger(string loggerName)
 		{
 			return new TraceLogger(string.Concat(Name, ".", loggerName), Level);
@@ -107,9 +92,6 @@ namespace Castle.Core.Logging
 			}
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS
-		[SecurityCritical]
-#endif
 		private void Initialize()
 		{
 			lock (cache)
@@ -172,9 +154,6 @@ namespace Castle.Core.Logging
 			return null;
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS
-		[SecuritySafeCritical]
-#endif
 		private static bool IsSourceConfigured(TraceSource source)
 		{
 			if (source.Listeners.Count == 1 &&

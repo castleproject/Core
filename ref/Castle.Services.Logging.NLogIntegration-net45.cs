@@ -1,7 +1,6 @@
 [assembly: System.CLSCompliantAttribute(true)]
 [assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
 [assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETFramework,Version=v4.5", FrameworkDisplayName=".NET Framework 4.5")]
-[assembly: System.Security.SecurityRulesAttribute(System.Security.SecurityRuleSet.Level2)]
 namespace Castle.Services.Logging.NLogIntegration
 {
     public class ExtendedNLogFactory : Castle.Core.Logging.AbstractExtendedLoggerFactory

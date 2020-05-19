@@ -21,9 +21,6 @@ namespace Castle.DynamicProxy
 #if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
 #endif
-#if FEATURE_SECURITY_PERMISSIONS
-	using System.Security;
-#endif
 
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Internal;
@@ -102,9 +99,6 @@ namespace Castle.DynamicProxy
 		}
 
 #if FEATURE_SERIALIZATION
-#if FEATURE_SECURITY_PERMISSIONS
-		[SecurityCritical]
-#endif
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue("hook", Hook);

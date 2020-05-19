@@ -30,13 +30,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private readonly ModuleScope moduleScope;
 
 		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, IEnumerable<Type> interfaces)
-			: this(modulescope, name, baseType, interfaces, DefaultAttributes, ShouldForceUnsigned())
+			: this(modulescope, name, baseType, interfaces, DefaultAttributes, forceUnsigned: false)
 		{
 		}
 
 		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, IEnumerable<Type> interfaces,
 		                    TypeAttributes flags)
-			: this(modulescope, name, baseType, interfaces, flags, ShouldForceUnsigned())
+			: this(modulescope, name, baseType, interfaces, flags, forceUnsigned: false)
 		{
 		}
 
@@ -110,11 +110,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			var isAssemblySigned = !forceUnsigned && !StrongNameUtil.IsAnyTypeFromUnsignedAssembly(baseType, interfaces);
 			return modulescope.DefineType(isAssemblySigned, name, flags);
-		}
-
-		private static bool ShouldForceUnsigned()
-		{
-			return StrongNameUtil.CanStrongNameAssembly == false;
 		}
 	}
 }

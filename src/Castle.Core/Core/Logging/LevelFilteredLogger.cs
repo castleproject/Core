@@ -16,9 +16,6 @@ namespace Castle.Core.Logging
 {
 	using System;
 	using System.Globalization;
-#if FEATURE_SECURITY_PERMISSIONS
-	using System.Security;
-#endif
 
 	/// <summary>
 	/// The Level Filtered Logger class.  This is a base class which
@@ -63,9 +60,6 @@ namespace Castle.Core.Logging
 		/// <summary>
 		/// Keep the instance alive in a remoting scenario
 		/// </summary>
-#if FEATURE_SECURITY_PERMISSIONS
-		[SecurityCritical]
-#endif
 		public override object InitializeLifetimeService()
 		{
 			return null;
