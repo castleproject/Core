@@ -1,25 +1,25 @@
-[assembly: System.CLSCompliantAttribute(true)]
-[assembly: System.Runtime.InteropServices.ComVisibleAttribute(false)]
-[assembly: System.Runtime.Versioning.TargetFrameworkAttribute(".NETStandard,Version=v2.1", FrameworkDisplayName="")]
+[assembly: System.CLSCompliant(true)]
+[assembly: System.Runtime.InteropServices.ComVisible(false)]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.1", FrameworkDisplayName="")]
 namespace Castle.Services.Logging.Log4netIntegration
 {
     public class ExtendedLog4netFactory : Castle.Core.Logging.AbstractExtendedLoggerFactory
     {
         public ExtendedLog4netFactory() { }
         public ExtendedLog4netFactory(bool configuredExternally) { }
-        public ExtendedLog4netFactory(string configFile) { }
         public ExtendedLog4netFactory(System.IO.Stream config) { }
+        public ExtendedLog4netFactory(string configFile) { }
         public override Castle.Core.Logging.IExtendedLogger Create(string name) { }
         public override Castle.Core.Logging.IExtendedLogger Create(string name, Castle.Core.Logging.LoggerLevel level) { }
     }
     public class ExtendedLog4netLogger : Castle.Services.Logging.Log4netIntegration.Log4netLogger, Castle.Core.Logging.IExtendedLogger, Castle.Core.Logging.ILogger
     {
-        public ExtendedLog4netLogger(log4net.ILog log, Castle.Services.Logging.Log4netIntegration.ExtendedLog4netFactory factory) { }
         public ExtendedLog4netLogger(log4net.Core.ILogger logger, Castle.Services.Logging.Log4netIntegration.ExtendedLog4netFactory factory) { }
-        protected Castle.Services.Logging.Log4netIntegration.ExtendedLog4netFactory Factory { get; set; }
+        public ExtendedLog4netLogger(log4net.ILog log, Castle.Services.Logging.Log4netIntegration.ExtendedLog4netFactory factory) { }
         public Castle.Core.Logging.IContextProperties GlobalProperties { get; }
         public Castle.Core.Logging.IContextProperties ThreadProperties { get; }
         public Castle.Core.Logging.IContextStacks ThreadStacks { get; }
+        protected new Castle.Services.Logging.Log4netIntegration.ExtendedLog4netFactory Factory { get; set; }
         public override Castle.Core.Logging.ILogger CreateChildLogger(string name) { }
         public Castle.Core.Logging.IExtendedLogger CreateExtendedChildLogger(string name) { }
     }
@@ -31,9 +31,9 @@ namespace Castle.Services.Logging.Log4netIntegration
     public class Log4netFactory : Castle.Core.Logging.AbstractLoggerFactory
     {
         public Log4netFactory() { }
-        public Log4netFactory(string configFile) { }
         public Log4netFactory(bool configuredExternally) { }
         public Log4netFactory(System.IO.Stream config) { }
+        public Log4netFactory(string configFile) { }
         public override Castle.Core.Logging.ILogger Create(string name) { }
         public override Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level) { }
     }
@@ -49,44 +49,44 @@ namespace Castle.Services.Logging.Log4netIntegration
         public bool IsWarnEnabled { get; }
         protected log4net.Core.ILogger Logger { get; set; }
         public virtual Castle.Core.Logging.ILogger CreateChildLogger(string name) { }
-        public void Debug(string message) { }
         public void Debug(System.Func<string> messageFactory) { }
+        public void Debug(string message) { }
         public void Debug(string message, System.Exception exception) { }
         public void DebugFormat(string format, params object[] args) { }
         public void DebugFormat(System.Exception exception, string format, params object[] args) { }
         public void DebugFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void DebugFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        public void Error(string message) { }
         public void Error(System.Func<string> messageFactory) { }
+        public void Error(string message) { }
         public void Error(string message, System.Exception exception) { }
         public void ErrorFormat(string format, params object[] args) { }
         public void ErrorFormat(System.Exception exception, string format, params object[] args) { }
         public void ErrorFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void ErrorFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        public void Fatal(string message) { }
         public void Fatal(System.Func<string> messageFactory) { }
+        public void Fatal(string message) { }
         public void Fatal(string message, System.Exception exception) { }
         public void FatalFormat(string format, params object[] args) { }
         public void FatalFormat(System.Exception exception, string format, params object[] args) { }
         public void FatalFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void FatalFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        public void Info(string message) { }
         public void Info(System.Func<string> messageFactory) { }
+        public void Info(string message) { }
         public void Info(string message, System.Exception exception) { }
         public void InfoFormat(string format, params object[] args) { }
         public void InfoFormat(System.Exception exception, string format, params object[] args) { }
         public void InfoFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void InfoFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
         public override string ToString() { }
-        public void Trace(string message) { }
         public void Trace(System.Func<string> messageFactory) { }
+        public void Trace(string message) { }
         public void Trace(string message, System.Exception exception) { }
         public void TraceFormat(string format, params object[] args) { }
         public void TraceFormat(System.Exception exception, string format, params object[] args) { }
         public void TraceFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void TraceFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        public void Warn(string message) { }
         public void Warn(System.Func<string> messageFactory) { }
+        public void Warn(string message) { }
         public void Warn(string message, System.Exception exception) { }
         public void WarnFormat(string format, params object[] args) { }
         public void WarnFormat(System.Exception exception, string format, params object[] args) { }
