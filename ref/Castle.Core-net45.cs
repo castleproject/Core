@@ -1957,37 +1957,11 @@ namespace Castle.Core.Internal
         public static int GetContentsHashCode<T>(System.Collections.Generic.IList<T> list) { }
         public static bool IsNullOrEmpty(this System.Collections.IEnumerable @this) { }
     }
-    [System.Obsolete("Consider using `System.Threading.ReaderWriterLockSlim` instead of `Lock` and rela" +
-        "ted types.")]
-    public interface ILockHolder : System.IDisposable
-    {
-        bool LockAcquired { get; }
-    }
-    [System.Obsolete("Consider using `System.Threading.ReaderWriterLockSlim` instead of `Lock` and rela" +
-        "ted types.")]
-    public interface IUpgradeableLockHolder : Castle.Core.Internal.ILockHolder, System.IDisposable
-    {
-        Castle.Core.Internal.ILockHolder Upgrade();
-        Castle.Core.Internal.ILockHolder Upgrade(bool waitForLock);
-    }
     public class InternalsVisible
     {
         public const string ToCastleCore = @"Castle.Core, PublicKey=002400000480000094000000060200000024000052534131000400000100010077F5E87030DADCCCE6902C6ADAB7A987BD69CB5819991531F560785EACFC89B6FCDDF6BB2A00743A7194E454C0273447FC6EEC36474BA8E5A3823147D214298E4F9A631B1AFEE1A51FFEAE4672D498F14B000E3D321453CDD8AC064DE7E1CF4D222B7E81F54D4FD46725370D702A05B48738CC29D09228F1AA722AE1A9CA02FB";
         public const string ToDynamicProxyGenAssembly2 = @"DynamicProxyGenAssembly2, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7";
         public InternalsVisible() { }
-    }
-    [System.Obsolete("Consider using `System.Threading.ReaderWriterLockSlim` instead of `Lock` and rela" +
-        "ted types.")]
-    public abstract class Lock
-    {
-        protected Lock() { }
-        public abstract Castle.Core.Internal.ILockHolder ForReading();
-        public abstract Castle.Core.Internal.ILockHolder ForReading(bool waitForLock);
-        public abstract Castle.Core.Internal.IUpgradeableLockHolder ForReadingUpgradeable();
-        public abstract Castle.Core.Internal.IUpgradeableLockHolder ForReadingUpgradeable(bool waitForLock);
-        public abstract Castle.Core.Internal.ILockHolder ForWriting();
-        public abstract Castle.Core.Internal.ILockHolder ForWriting(bool waitForLock);
-        public static Castle.Core.Internal.Lock Create() { }
     }
 }
 namespace Castle.Core.Logging
@@ -2669,8 +2643,6 @@ namespace Castle.DynamicProxy
         public ModuleScope(bool savePhysicalAssembly, bool disableSignedModule) { }
         public ModuleScope(bool savePhysicalAssembly, bool disableSignedModule, string strongAssemblyName, string strongModulePath, string weakAssemblyName, string weakModulePath) { }
         public ModuleScope(bool savePhysicalAssembly, bool disableSignedModule, Castle.DynamicProxy.Generators.INamingScope namingScope, string strongAssemblyName, string strongModulePath, string weakAssemblyName, string weakModulePath) { }
-        [System.Obsolete("Exposes a component that is intended for internal use only.")]
-        public Castle.Core.Internal.Lock Lock { get; }
         public Castle.DynamicProxy.Generators.INamingScope NamingScope { get; }
         public System.Reflection.Emit.ModuleBuilder StrongNamedModule { get; }
         public string StrongNamedModuleDirectory { get; }
@@ -2678,16 +2650,10 @@ namespace Castle.DynamicProxy
         public System.Reflection.Emit.ModuleBuilder WeakNamedModule { get; }
         public string WeakNamedModuleDirectory { get; }
         public string WeakNamedModuleName { get; }
-        [System.Obsolete("Exposes a component that is intended for internal use only.")]
-        public System.Reflection.Emit.TypeBuilder DefineType(bool inSignedModulePreferably, string name, System.Reflection.TypeAttributes flags) { }
-        [System.Obsolete("Exposes a component that is intended for internal use only.")]
-        public System.Type GetFromCache(Castle.DynamicProxy.Generators.CacheKey key) { }
         public void LoadAssemblyIntoCache(System.Reflection.Assembly assembly) { }
         public System.Reflection.Emit.ModuleBuilder ObtainDynamicModule(bool isStrongNamed) { }
         public System.Reflection.Emit.ModuleBuilder ObtainDynamicModuleWithStrongName() { }
         public System.Reflection.Emit.ModuleBuilder ObtainDynamicModuleWithWeakName() { }
-        [System.Obsolete("Exposes a component that is intended for internal use only.")]
-        public void RegisterInCache(Castle.DynamicProxy.Generators.CacheKey key, System.Type type) { }
         public string SaveAssembly() { }
         public string SaveAssembly(bool strongNamed) { }
         public static byte[] GetKeyPair() { }
@@ -3006,8 +2972,6 @@ namespace Castle.DynamicProxy.Generators
         protected void AddMapping(System.Type @interface, Castle.DynamicProxy.Contributors.ITypeContributor implementer, System.Collections.Generic.IDictionary<System.Type, Castle.DynamicProxy.Contributors.ITypeContributor> mapping) { }
         protected void AddMappingForISerializable(System.Collections.Generic.IDictionary<System.Type, Castle.DynamicProxy.Contributors.ITypeContributor> typeImplementerMapping, Castle.DynamicProxy.Contributors.ITypeContributor instance) { }
         protected void AddMappingNoCheck(System.Type @interface, Castle.DynamicProxy.Contributors.ITypeContributor implementer, System.Collections.Generic.IDictionary<System.Type, Castle.DynamicProxy.Contributors.ITypeContributor> mapping) { }
-        [System.Obsolete("Exposes a component that is intended for internal use only.")]
-        protected void AddToCache(Castle.DynamicProxy.Generators.CacheKey key, System.Type type) { }
         protected virtual Castle.DynamicProxy.Generators.Emitters.ClassEmitter BuildClassEmitter(string typeName, System.Type parentType, System.Collections.Generic.IEnumerable<System.Type> interfaces) { }
         protected void CheckNotGenericTypeDefinition(System.Type type, string argumentName) { }
         protected void CheckNotGenericTypeDefinitions(System.Collections.Generic.IEnumerable<System.Type> types, string argumentName) { }
@@ -3022,20 +2986,8 @@ namespace Castle.DynamicProxy.Generators
         protected void GenerateConstructors(Castle.DynamicProxy.Generators.Emitters.ClassEmitter emitter, System.Type baseType, params Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference[] fields) { }
         protected void GenerateParameterlessConstructor(Castle.DynamicProxy.Generators.Emitters.ClassEmitter emitter, System.Type baseClass, Castle.DynamicProxy.Generators.Emitters.SimpleAST.FieldReference interceptorField) { }
         protected Castle.DynamicProxy.Generators.Emitters.ConstructorEmitter GenerateStaticConstructor(Castle.DynamicProxy.Generators.Emitters.ClassEmitter emitter) { }
-        [System.Obsolete("Exposes a component that is intended for internal use only.")]
-        protected System.Type GetFromCache(Castle.DynamicProxy.Generators.CacheKey key) { }
         protected void HandleExplicitlyPassedProxyTargetAccessor(System.Collections.Generic.ICollection<System.Type> targetInterfaces, System.Collections.Generic.ICollection<System.Type> additionalInterfaces) { }
         protected void InitializeStaticFields(System.Type builtType) { }
-        [System.Obsolete("Exposes a component that is intended for internal use only.")]
-        protected System.Type ObtainProxyType(Castle.DynamicProxy.Generators.CacheKey cacheKey, System.Func<string, Castle.DynamicProxy.Generators.INamingScope, System.Type> factory) { }
-    }
-    [System.Obsolete("Intended for internal use only.")]
-    public class CacheKey
-    {
-        public CacheKey(System.Type target, System.Type[] interfaces, Castle.DynamicProxy.ProxyGenerationOptions options) { }
-        public CacheKey(System.Reflection.MemberInfo target, System.Type type, System.Type[] interfaces, Castle.DynamicProxy.ProxyGenerationOptions options) { }
-        public override bool Equals(object obj) { }
-        public override int GetHashCode() { }
     }
     public class ClassProxyGenerator : Castle.DynamicProxy.Generators.BaseProxyGenerator
     {
@@ -3313,8 +3265,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
         public static System.Type[] GetTypes(System.Reflection.ParameterInfo[] parameters) { }
         public static System.Type[] InitializeAndConvert(Castle.DynamicProxy.Generators.Emitters.SimpleAST.ArgumentReference[] args) { }
         public static void InitializeArgumentsByPosition(Castle.DynamicProxy.Generators.Emitters.SimpleAST.ArgumentReference[] args, bool isStatic) { }
-        [System.Obsolete]
-        public static bool IsAnyByRef(System.Reflection.ParameterInfo[] parameters) { }
     }
     public class ClassEmitter : Castle.DynamicProxy.Generators.Emitters.AbstractTypeEmitter
     {
@@ -3758,16 +3708,6 @@ namespace Castle.DynamicProxy.Internal
         public override System.Type TargetType { get; }
         protected abstract override void InvokeMethodOnTarget() { }
     }
-    public static class InternalsUtil
-    {
-        [System.Obsolete("Use ProxyUtil.IsAccessible instead, which performs a more accurate accessibility " +
-            "check.")]
-        public static bool IsAccessible(this System.Reflection.MethodBase method) { }
-        [System.Obsolete]
-        public static bool IsInternal(this System.Reflection.MethodBase method) { }
-        [System.Obsolete]
-        public static bool IsInternalToDynamicProxy(this System.Reflection.Assembly asm) { }
-    }
     public static class InvocationHelper
     {
         public static System.Reflection.MethodInfo GetMethodOnObject(object target, System.Reflection.MethodInfo proxiedMethod) { }
@@ -3797,10 +3737,6 @@ namespace Castle.DynamicProxy.Serialization
     {
         public CacheMappingsAttribute(byte[] serializedCacheMappings) { }
         public byte[] SerializedCacheMappings { get; }
-        [System.Obsolete("Exposes a component that is intended for internal use only.")]
-        public System.Collections.Generic.Dictionary<Castle.DynamicProxy.Generators.CacheKey, string> GetDeserializedMappings() { }
-        [System.Obsolete("Exposes a component that is intended for internal use only.")]
-        public static void ApplyTo(System.Reflection.Emit.AssemblyBuilder assemblyBuilder, System.Collections.Generic.Dictionary<Castle.DynamicProxy.Generators.CacheKey, string> mappings) { }
     }
     public class ProxyObjectReference : System.Runtime.Serialization.IDeserializationCallback, System.Runtime.Serialization.IObjectReference, System.Runtime.Serialization.ISerializable
     {
