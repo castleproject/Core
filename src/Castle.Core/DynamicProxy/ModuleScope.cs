@@ -54,10 +54,6 @@ namespace Castle.DynamicProxy
 		// Keeps track of generated types
 		private readonly SynchronizedDictionary<CacheKey, Type> typeCache = new SynchronizedDictionary<CacheKey, Type>();
 
-		// Users of ModuleScope should use this lock when accessing the cache
-		[Obsolete] // TODO: Remove this field together with the `Lock` property.
-		private readonly Lock cacheLock;
-
 		// Used to lock the module builder creation
 		private readonly object moduleLocker = new object();
 
@@ -143,23 +139,11 @@ namespace Castle.DynamicProxy
 			this.strongModulePath = strongModulePath;
 			this.weakAssemblyName = weakAssemblyName;
 			this.weakModulePath = weakModulePath;
-
-			this.cacheLock = Lock.CreateFor(typeCache.Lock);
 		}
 
 		public INamingScope NamingScope
 		{
 			get { return namingScope; }
-		}
-
-		/// <summary>
-		///   Users of this <see cref = "ModuleScope" /> should use this lock when accessing the cache.
-		/// </summary>
-		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this property.
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public Lock Lock
-		{
-			get { return cacheLock; }
 		}
 
 		internal SynchronizedDictionary<CacheKey, Type> TypeCache => typeCache;
