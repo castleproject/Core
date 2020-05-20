@@ -116,11 +116,5 @@ namespace Castle.Core.Internal
 				itemsLock.ExitReadLock();
 			}
 		}
-
-		[Obsolete] // TODO: Remove this method along with the `ModuleScope.GetFromCache` method.
-		public bool TryGetValueWithoutTakingLock(TKey key, out TValue value)
-		{
-			return items.TryGetValue(key, out value);
-		}
 	}
 }
