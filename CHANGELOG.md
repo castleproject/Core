@@ -9,8 +9,13 @@ Deprecations:
  - Removed support for the .NET Framework < 4.5 and .NET Standard 1.x. (@stakx, #495, #496)
  - Removed support for Code Access Security (CAS). (@stakx, #502)
  - The following public members have been removed:
+    - `Castle.Core.Internal.Lock` (class) along with all related types and methods
     - `Castle.Core.Internal.PermissionUtil.IsGranted` (method)
+    - `Castle.DynamicProxy.Generators.Emitters.AttributesUtil.IsAnyByRef` (method)
     - `Castle.DynamicProxy.Generators.Emitters.StrongNameUtil.CanStrongNameAssembly` (property)
+    - `Castle.DynamicProxy.Internal.InternalsUtil` (class)
+    - `Castle.DynamicProxy.ModuleScope.DefineType` (method)
+    - `Castle.DynamicProxy.ModuleScope.GetFromCache` (method), `Castle.DynamicProxy.ModuleScope.RegisterInCache` (method), `Castle.DynamicProxy.Generators.CacheKey` (class) and a few other related methods that allowed direct access to DynamicProxy's type cache.
 
 ## 4.4.1 (2020-05-06)
 
