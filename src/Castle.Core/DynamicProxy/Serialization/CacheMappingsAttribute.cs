@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Serialization
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.IO;
 	using System.Reflection;
 	using System.Reflection.Emit;
@@ -48,9 +47,7 @@ namespace Castle.DynamicProxy.Serialization
 			get { return serializedCacheMappings; }
 		}
 
-		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Redeclare this method as `internal`.
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public Dictionary<CacheKey, string> GetDeserializedMappings()
+		internal Dictionary<CacheKey, string> GetDeserializedMappings()
 		{
 			using (var stream = new MemoryStream(SerializedCacheMappings))
 			{
@@ -59,9 +56,7 @@ namespace Castle.DynamicProxy.Serialization
 			}
 		}
 
-		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Redeclare this method as `internal`.
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public static void ApplyTo(AssemblyBuilder assemblyBuilder, Dictionary<CacheKey, string> mappings)
+		internal static void ApplyTo(AssemblyBuilder assemblyBuilder, Dictionary<CacheKey, string> mappings)
 		{
 			using (var stream = new MemoryStream())
 			{
