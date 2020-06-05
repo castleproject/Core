@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	public class EventEmitter : IMemberEmitter
+	internal class EventEmitter : IMemberEmitter
 	{
 		private readonly EventBuilder eventBuilder;
 		private readonly Type type;

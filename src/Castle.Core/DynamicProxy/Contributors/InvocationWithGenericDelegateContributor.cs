@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
-	public class InvocationWithGenericDelegateContributor : IInvocationCreationContributor
+	internal class InvocationWithGenericDelegateContributor : IInvocationCreationContributor
 	{
 		private readonly Type delegateType;
 		private readonly MetaMethod method;

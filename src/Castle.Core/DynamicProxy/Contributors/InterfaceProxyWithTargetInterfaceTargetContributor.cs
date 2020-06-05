@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Contributors
 
 	using Castle.DynamicProxy.Generators;
 
-	public class InterfaceProxyWithTargetInterfaceTargetContributor : InterfaceProxyTargetContributor
+	internal class InterfaceProxyWithTargetInterfaceTargetContributor : InterfaceProxyTargetContributor
 	{
 		public InterfaceProxyWithTargetInterfaceTargetContributor(Type proxyTargetType, bool allowChangeTarget,
 		                                                          INamingScope namingScope)

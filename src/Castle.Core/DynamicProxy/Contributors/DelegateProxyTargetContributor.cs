@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 
-	public class DelegateProxyTargetContributor : CompositeTypeContributor
+	internal class DelegateProxyTargetContributor : CompositeTypeContributor
 	{
 		private readonly Type targetType;
 

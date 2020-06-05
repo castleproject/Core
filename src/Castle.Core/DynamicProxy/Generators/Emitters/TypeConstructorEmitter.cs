@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public class TypeConstructorEmitter : ConstructorEmitter
+	internal class TypeConstructorEmitter : ConstructorEmitter
 	{
 		internal TypeConstructorEmitter(AbstractTypeEmitter maintype)
 			: base(maintype, maintype.TypeBuilder.DefineTypeInitializer())

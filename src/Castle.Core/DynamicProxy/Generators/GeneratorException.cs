@@ -24,16 +24,16 @@ namespace Castle.DynamicProxy.Generators
 #endif
 	public class GeneratorException : Exception
 	{
-		public GeneratorException(string message) : base(message)
+		internal GeneratorException(string message) : base(message)
 		{
 		}
 
-		public GeneratorException(string message, Exception innerException) : base(message, innerException)
+		internal GeneratorException(string message, Exception innerException) : base(message, innerException)
 		{
 		}
 
 #if FEATURE_SERIALIZATION
-		public GeneratorException(SerializationInfo info, StreamingContext context) : base(info, context)
+		private protected GeneratorException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 #endif

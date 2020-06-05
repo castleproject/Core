@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	using Castle.DynamicProxy.Internal;
 
-	public class ClassEmitter : AbstractTypeEmitter
+	internal class ClassEmitter : AbstractTypeEmitter
 	{
 		internal const TypeAttributes DefaultAttributes =
 			TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable;

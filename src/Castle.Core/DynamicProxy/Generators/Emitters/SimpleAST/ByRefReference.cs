@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 
 	[DebuggerDisplay("&{localReference}")]
-	public class ByRefReference : TypeReference
+	internal class ByRefReference : TypeReference
 	{
 		private readonly LocalReference localReference;
 

@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Internal
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
 
-	public static class InvocationHelper
+	internal static class InvocationHelper
 	{
 		private static readonly SynchronizedDictionary<CacheKey, MethodInfo> cache =
 			new SynchronizedDictionary<CacheKey, MethodInfo>();

@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Reflection;
 
-	public class DelegateProxyGenerationHook : IProxyGenerationHook
+	internal class DelegateProxyGenerationHook : IProxyGenerationHook
 	{
 		public override bool Equals(object obj)
 		{

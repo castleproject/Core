@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Generators
 	///   Base class that exposes the common functionalities
 	///   to proxy generation.
 	/// </summary>
-	public abstract class BaseProxyGenerator
+	internal abstract class BaseProxyGenerator
 	{
 		protected readonly Type targetType;
 		private readonly ModuleScope scope;

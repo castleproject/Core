@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Internal
 
 	using Castle.DynamicProxy.Generators;
 
-	public static class AttributeUtil
+	internal static class AttributeUtil
 	{
 		public static CustomAttributeInfo CreateInfo(CustomAttributeData attribute)
 		{

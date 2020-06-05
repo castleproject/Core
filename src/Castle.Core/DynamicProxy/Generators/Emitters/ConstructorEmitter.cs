@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public class ConstructorEmitter : IMemberEmitter
+	internal class ConstructorEmitter : IMemberEmitter
 	{
 		private readonly ConstructorBuilder builder;
 		private readonly AbstractTypeEmitter maintype;

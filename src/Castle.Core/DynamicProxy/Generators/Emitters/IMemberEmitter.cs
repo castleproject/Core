@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System;
 	using System.Reflection;
 
-	public interface IMemberEmitter
+	internal interface IMemberEmitter
 	{
 		MemberInfo Member { get; }
 

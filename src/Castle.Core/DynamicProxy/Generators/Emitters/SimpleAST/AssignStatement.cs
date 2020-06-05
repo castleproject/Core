@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	public class AssignStatement : Statement
+	internal class AssignStatement : Statement
 	{
 		private readonly Expression expression;
 		private readonly Reference target;

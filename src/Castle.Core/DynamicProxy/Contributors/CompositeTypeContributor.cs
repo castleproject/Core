@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Internal;
 
-	public abstract class CompositeTypeContributor : ITypeContributor
+	internal abstract class CompositeTypeContributor : ITypeContributor
 	{
 		protected readonly INamingScope namingScope;
 

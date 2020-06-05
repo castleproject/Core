@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
-	public class ClassProxyInstanceContributor : ProxyInstanceContributor
+	internal class ClassProxyInstanceContributor : ProxyInstanceContributor
 	{
 #if FEATURE_SERIALIZATION
 		private readonly bool delegateToBaseGetObjectData;

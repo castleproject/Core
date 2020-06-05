@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
-	public abstract class InvocationTypeGenerator : IGenerator<AbstractTypeEmitter>
+	internal abstract class InvocationTypeGenerator : IGenerator<AbstractTypeEmitter>
 	{
 		protected readonly MetaMethod method;
 		protected readonly Type targetType;

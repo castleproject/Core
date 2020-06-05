@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Serialization;
 
-	public class ClassProxyWithTargetGenerator : BaseProxyGenerator
+	internal class ClassProxyWithTargetGenerator : BaseProxyGenerator
 	{
 		private readonly Type[] additionalInterfacesToProxy;
 

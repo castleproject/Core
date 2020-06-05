@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Serialization;
 
-	public class DelegateProxyGenerator : BaseProxyGenerator
+	internal class DelegateProxyGenerator : BaseProxyGenerator
 	{
 		public DelegateProxyGenerator(ModuleScope scope, Type delegateType) : base(scope, delegateType)
 		{

@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Linq;
 	using System.Reflection;
 
-	public static class StrongNameUtil
+	internal static class StrongNameUtil
 	{
 		private static readonly IDictionary<Assembly, bool> signedAssemblyCache = new Dictionary<Assembly, bool>();
 		private static readonly object lockObject = new object();

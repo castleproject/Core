@@ -24,13 +24,13 @@ namespace Castle.DynamicProxy.Internal
 
 	public static class TypeUtil
 	{
-		public static bool IsNullableType(this Type type)
+		internal static bool IsNullableType(this Type type)
 		{
 			return type.IsGenericType &&
 			       type.GetGenericTypeDefinition() == typeof(Nullable<>);
 		}
 
-		public static FieldInfo[] GetAllFields(this Type type)
+		internal static FieldInfo[] GetAllFields(this Type type)
 		{
 			if (type == null)
 			{
@@ -58,7 +58,7 @@ namespace Castle.DynamicProxy.Internal
 		/// <summary>
 		///   Returns list of all unique interfaces implemented given types, including their base interfaces.
 		/// </summary>
-		public static Type[] GetAllInterfaces(params Type[] types)
+		internal static Type[] GetAllInterfaces(params Type[] types)
 		{
 			if (types == null)
 			{
@@ -93,12 +93,12 @@ namespace Castle.DynamicProxy.Internal
 			return Sort(interfaces);
 		}
 
-		public static Type[] GetAllInterfaces(this Type type)
+		internal static Type[] GetAllInterfaces(this Type type)
 		{
 			return GetAllInterfaces(new[] { type });
 		}
 
-		public static Type GetClosedParameterType(this AbstractTypeEmitter type, Type parameter)
+		internal static Type GetClosedParameterType(this AbstractTypeEmitter type, Type parameter)
 		{
 			if (parameter.IsGenericTypeDefinition)
 			{
@@ -146,7 +146,7 @@ namespace Castle.DynamicProxy.Internal
 			return target.GetType();
 		}
 
-		public static Type[] AsTypeArray(this GenericTypeParameterBuilder[] typeInfos)
+		internal static Type[] AsTypeArray(this GenericTypeParameterBuilder[] typeInfos)
 		{
 			Type[] types = new Type[typeInfos.Length];
 			for (int i = 0; i < types.Length; i++)
@@ -156,22 +156,22 @@ namespace Castle.DynamicProxy.Internal
 			return types;
 		}
 
-		public static bool IsFinalizer(this MethodInfo methodInfo)
+		internal static bool IsFinalizer(this MethodInfo methodInfo)
 		{
 			return string.Equals("Finalize", methodInfo.Name) && methodInfo.GetBaseDefinition().DeclaringType == typeof(object);
 		}
 
-		public static bool IsGetType(this MethodInfo methodInfo)
+		internal static bool IsGetType(this MethodInfo methodInfo)
 		{
 			return methodInfo.DeclaringType == typeof(object) && string.Equals("GetType", methodInfo.Name, StringComparison.OrdinalIgnoreCase);
 		}
 
-		public static bool IsMemberwiseClone(this MethodInfo methodInfo)
+		internal static bool IsMemberwiseClone(this MethodInfo methodInfo)
 		{
 			return methodInfo.DeclaringType == typeof(object) && string.Equals("MemberwiseClone", methodInfo.Name, StringComparison.OrdinalIgnoreCase);
 		}
 
-		public static void SetStaticField(this Type type, string fieldName, BindingFlags additionalFlags, object value)
+		internal static void SetStaticField(this Type type, string fieldName, BindingFlags additionalFlags, object value)
 		{
 			var flags = additionalFlags | BindingFlags.Static;
 
