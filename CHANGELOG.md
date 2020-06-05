@@ -11,11 +11,8 @@ Deprecations:
  - The following public members have been removed:
     - `Castle.Core.Internal.Lock` (class) along with all related types and methods
     - `Castle.Core.Internal.PermissionUtil.IsGranted` (method)
-    - `Castle.DynamicProxy.Generators.Emitters.AttributesUtil.IsAnyByRef` (method)
-    - `Castle.DynamicProxy.Generators.Emitters.StrongNameUtil.CanStrongNameAssembly` (property)
-    - `Castle.DynamicProxy.Internal.InternalsUtil` (class)
-    - `Castle.DynamicProxy.ModuleScope.DefineType` (method)
-    - `Castle.DynamicProxy.ModuleScope.GetFromCache` (method), `Castle.DynamicProxy.ModuleScope.RegisterInCache` (method), `Castle.DynamicProxy.Generators.CacheKey` (class) and a few other related methods that allowed direct access to DynamicProxy's type cache.
+    - all type members in `Castle.DynamicProxy.ModuleScope` that gave direct access to DynamicProxy's type cache and `ModuleBuilder`s. Only `SaveAssembly`, `LoadAssemblyIntoCache`, and members supporting these two facilities are left public.
+    - almost all types and type members in the `Castle.DynamicProxy.*` sub-namespaces, as most of them are intended for internal use only.
 
 ## 4.4.1 (2020-05-06)
 
