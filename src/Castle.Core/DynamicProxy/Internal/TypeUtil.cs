@@ -93,7 +93,7 @@ namespace Castle.DynamicProxy.Internal
 			return Sort(interfaces);
 		}
 
-		internal static Type[] GetAllInterfaces(this Type type)
+		public static Type[] GetAllInterfaces(this Type type)  // NOTE: also used by Windsor
 		{
 			return GetAllInterfaces(new[] { type });
 		}
