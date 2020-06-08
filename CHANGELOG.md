@@ -8,6 +8,7 @@ Enhancements:
 Deprecations:
  - Removed support for the .NET Framework < 4.5 and .NET Standard 1.x. (@stakx, #495, #496)
  - Removed support for Code Access Security (CAS). (@stakx, #502)
+ - Removed support for Remoting. This library no longer defines any types deriving from `MarshalByRefObject`, and `ProxyUtil.IsProxy` (which used to recognize remoting/"transparent" proxies) now tests only for DynamicProxy proxies. (@stakx, #507)
  - The following public members have been removed:
     - `Castle.Core.Internal.Lock` (class) along with all related types and methods
     - `Castle.Core.Internal.PermissionUtil.IsGranted` (method)

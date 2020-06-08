@@ -19,9 +19,6 @@ namespace Castle.DynamicProxy
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.InteropServices;
-#if FEATURE_REMOTING
-	using System.Runtime.Remoting;
-#endif
 	using System.Text;
 
 	using Castle.Core.Internal;
@@ -559,13 +556,9 @@ namespace Castle.DynamicProxy
 				throw new ArgumentException("Specified type is not an interface", "interfaceToProxy");
 			}
 
-			var isRemotingProxy = false;
-#if FEATURE_REMOTING
 			if (target != null)
 			{
-				isRemotingProxy = RemotingServices.IsTransparentProxy(target);
-
-				if (!isRemotingProxy && Marshal.IsComObject(target))
+				if (Marshal.IsComObject(target))
 				{
 					var interfaceId = interfaceToProxy.GUID;
 					if (interfaceId != Guid.Empty)
@@ -588,7 +581,6 @@ namespace Castle.DynamicProxy
 					}
 				}
 			}
-#endif
 
 			CheckNotGenericTypeDefinition(interfaceToProxy, "interfaceToProxy");
 			CheckNotGenericTypeDefinitions(additionalInterfacesToProxy, "additionalInterfacesToProxy");
@@ -596,14 +588,6 @@ namespace Castle.DynamicProxy
 			var generatedType = CreateInterfaceProxyTypeWithTargetInterface(interfaceToProxy, additionalInterfacesToProxy,
 			                                                                options);
 			var arguments = GetConstructorArguments(target, interceptors, options);
-			if (isRemotingProxy)
-			{
-				var constructors = generatedType.GetConstructors();
-
-				// one .ctor to rule them all
-				Debug.Assert(constructors.Length == 1, "constructors.Length == 1");
-				return constructors[0].Invoke(arguments.ToArray());
-			}
 			return Activator.CreateInstance(generatedType, arguments.ToArray());
 		}
 

@@ -1966,7 +1966,7 @@ namespace Castle.Core.Internal
 }
 namespace Castle.Core.Logging
 {
-    public abstract class AbstractExtendedLoggerFactory : System.MarshalByRefObject, Castle.Core.Logging.IExtendedLoggerFactory, Castle.Core.Logging.ILoggerFactory
+    public abstract class AbstractExtendedLoggerFactory : Castle.Core.Logging.IExtendedLoggerFactory, Castle.Core.Logging.ILoggerFactory
     {
         protected AbstractExtendedLoggerFactory() { }
         public abstract Castle.Core.Logging.IExtendedLogger Create(string name);
@@ -1975,7 +1975,7 @@ namespace Castle.Core.Logging
         public virtual Castle.Core.Logging.IExtendedLogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level) { }
         protected static System.IO.FileInfo GetConfigFile(string fileName) { }
     }
-    public abstract class AbstractLoggerFactory : System.MarshalByRefObject, Castle.Core.Logging.ILoggerFactory
+    public abstract class AbstractLoggerFactory : Castle.Core.Logging.ILoggerFactory
     {
         protected AbstractLoggerFactory() { }
         public abstract Castle.Core.Logging.ILogger Create(string name);
@@ -1984,7 +1984,7 @@ namespace Castle.Core.Logging
         public virtual Castle.Core.Logging.ILogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level) { }
         protected static System.IO.FileInfo GetConfigFile(string fileName) { }
     }
-    public class ConsoleFactory : System.MarshalByRefObject, Castle.Core.Logging.ILoggerFactory
+    public class ConsoleFactory : Castle.Core.Logging.ILoggerFactory
     {
         public ConsoleFactory() { }
         public ConsoleFactory(Castle.Core.Logging.LoggerLevel level) { }
@@ -2106,7 +2106,7 @@ namespace Castle.Core.Logging
         Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level);
         Castle.Core.Logging.ILogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level);
     }
-    public abstract class LevelFilteredLogger : System.MarshalByRefObject, Castle.Core.Logging.ILogger
+    public abstract class LevelFilteredLogger : Castle.Core.Logging.ILogger
     {
         protected LevelFilteredLogger() { }
         protected LevelFilteredLogger(Castle.Core.Logging.LoggerLevel loggerLevel) { }
@@ -2150,7 +2150,6 @@ namespace Castle.Core.Logging
         public void InfoFormat(System.Exception exception, string format, params object[] args) { }
         public void InfoFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void InfoFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
-        public override object InitializeLifetimeService() { }
         protected abstract void Log(Castle.Core.Logging.LoggerLevel loggerLevel, string loggerName, string message, System.Exception exception);
         public void Trace(System.Func<string> messageFactory) { }
         public void Trace(string message) { }
@@ -2752,7 +2751,7 @@ namespace Castle.DynamicProxy
         public static bool IsProxy(object instance) { }
         public static bool IsProxyType(System.Type type) { }
     }
-    public class StandardInterceptor : System.MarshalByRefObject, Castle.DynamicProxy.IInterceptor
+    public class StandardInterceptor : Castle.DynamicProxy.IInterceptor
     {
         public StandardInterceptor() { }
         public void Intercept(Castle.DynamicProxy.IInvocation invocation) { }
