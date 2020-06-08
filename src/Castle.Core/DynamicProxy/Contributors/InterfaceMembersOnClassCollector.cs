@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Contributors
 
 	using Castle.DynamicProxy.Generators;
 
-	public class InterfaceMembersOnClassCollector : MembersCollector
+	internal class InterfaceMembersOnClassCollector : MembersCollector
 	{
 		private readonly InterfaceMapping map;
 		private readonly bool onlyProxyVirtual;

@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Tokens
 	using System;
 	using System.Reflection;
 
-	public static class TypeMethods
+	internal static class TypeMethods
 	{
 		public static readonly MethodInfo GetTypeFromHandle = typeof(Type).GetMethod("GetTypeFromHandle");
 

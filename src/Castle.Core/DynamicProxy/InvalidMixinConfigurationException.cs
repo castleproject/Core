@@ -24,17 +24,17 @@ namespace Castle.DynamicProxy
 #endif
 	public class InvalidMixinConfigurationException : Exception
 	{
-		public InvalidMixinConfigurationException(string message)
+		internal InvalidMixinConfigurationException(string message)
 			: base(message)
 		{
 		}
 
-		public InvalidMixinConfigurationException(string message, Exception innerException) : base(message, innerException)
+		internal InvalidMixinConfigurationException(string message, Exception innerException) : base(message, innerException)
 		{
 		}
 
 #if FEATURE_SERIALIZATION
-		protected InvalidMixinConfigurationException(SerializationInfo info, StreamingContext context) : base(info, context)
+		private protected InvalidMixinConfigurationException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 #endif

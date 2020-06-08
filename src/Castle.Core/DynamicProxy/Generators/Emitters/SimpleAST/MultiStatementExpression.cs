@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Collections.Generic;
 	using System.Reflection.Emit;
 
-	public class MultiStatementExpression : Expression
+	internal class MultiStatementExpression : Expression
 	{
 		private readonly List<Statement> statements = new List<Statement>();
 

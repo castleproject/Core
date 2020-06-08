@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Contributors
 
 	using Castle.DynamicProxy.Generators;
 
-	public class ClassMembersCollector : MembersCollector
+	internal class ClassMembersCollector : MembersCollector
 	{
 		public ClassMembersCollector(Type targetType)
 			: base(targetType)

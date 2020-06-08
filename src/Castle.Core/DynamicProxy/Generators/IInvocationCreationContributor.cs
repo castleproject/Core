@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public interface IInvocationCreationContributor
+	internal interface IInvocationCreationContributor
 	{
 		ConstructorEmitter CreateConstructor(ArgumentReference[] baseCtorArguments, AbstractTypeEmitter invocation);
 

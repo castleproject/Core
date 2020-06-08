@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	public class ConvertExpression : Expression
+	internal class ConvertExpression : Expression
 	{
 		private readonly Expression right;
 		private Type fromType;

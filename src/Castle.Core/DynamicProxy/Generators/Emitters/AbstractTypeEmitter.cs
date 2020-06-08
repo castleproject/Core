@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 
-	public abstract class AbstractTypeEmitter
+	internal abstract class AbstractTypeEmitter
 	{
 		private const MethodAttributes defaultAttributes =
 			MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public;

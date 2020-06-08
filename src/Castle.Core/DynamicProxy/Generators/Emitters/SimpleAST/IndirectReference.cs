@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	///   ByRef and provides indirect load/store support.
 	/// </summary>
 	[DebuggerDisplay("&{OwnerReference}")]
-	public class IndirectReference : TypeReference
+	internal class IndirectReference : TypeReference
 	{
 		public IndirectReference(TypeReference byRefReference) :
 			base(byRefReference, byRefReference.Type.GetElementType())

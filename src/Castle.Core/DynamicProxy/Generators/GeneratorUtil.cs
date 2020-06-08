@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
 
-	public static class GeneratorUtil
+	internal static class GeneratorUtil
 	{
 		public static void CopyOutAndRefParameters(TypeReference[] dereferencedArguments, LocalReference invocation,
 		                                           MethodInfo method, MethodEmitter emitter)

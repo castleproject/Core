@@ -25,20 +25,16 @@ namespace Castle.DynamicProxy.Tests
 	{
 		private Type GenerateProxyType<TDelegate>()
 		{
-			var scope = generator.ProxyBuilder.ModuleScope;
-			var proxyGenerator = new DelegateProxyGenerator(scope, typeof (TDelegate))
-			                     	{
-			                     		Logger = generator.ProxyBuilder.Logger
-			                     	};
-			return proxyGenerator.GetProxyType();
+			var options = new ProxyGenerationOptions();
+			options.AddDelegateTypeMixin(typeof(TDelegate));
+			return generator.ProxyBuilder.CreateClassProxyType(typeof(object), null, options);
 		}
 
 		private T GetProxyInstance<T>(T func, params IInterceptor[] interceptors)
 		{
 			var type = GenerateProxyType<T>();
 			var instance = Activator.CreateInstance(type, func, interceptors);
-			var methodInfo = instance.GetType().GetMethod("Invoke");
-			return (T)(object)methodInfo.CreateDelegate(typeof(T), instance);
+			return (T)(object)ProxyUtil.CreateDelegateToMixin(instance, typeof(T));
 		}
 
 		[Test]

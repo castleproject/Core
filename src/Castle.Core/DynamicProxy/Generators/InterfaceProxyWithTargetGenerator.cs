@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Serialization;
 
-	public class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
+	internal class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
 	{
 		protected FieldReference targetField;
 

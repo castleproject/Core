@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public abstract class AbstractCodeBuilder
+	internal abstract class AbstractCodeBuilder
 	{
 		private readonly ILGenerator generator;
 		private readonly List<Reference> ilmarkers;

@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
 
-	public abstract class TypeReference : Reference
+	internal abstract class TypeReference : Reference
 	{
 		private readonly Type type;
 

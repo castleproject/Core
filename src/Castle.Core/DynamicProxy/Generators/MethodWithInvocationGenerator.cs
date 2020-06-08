@@ -29,7 +29,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
-	public class MethodWithInvocationGenerator : MethodGenerator
+	internal class MethodWithInvocationGenerator : MethodGenerator
 	{
 		private readonly IInvocationCreationContributor contributor;
 		private readonly GetTargetExpressionDelegate getTargetExpression;

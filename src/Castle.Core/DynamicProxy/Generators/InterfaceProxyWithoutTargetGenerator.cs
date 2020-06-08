@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Serialization;
 
-	public class InterfaceProxyWithoutTargetGenerator : InterfaceProxyWithTargetGenerator
+	internal class InterfaceProxyWithoutTargetGenerator : InterfaceProxyWithTargetGenerator
 	{
 		public InterfaceProxyWithoutTargetGenerator(ModuleScope scope, Type @interface) : base(scope, @interface)
 		{

@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 
-	public abstract class MethodGenerator : IGenerator<MethodEmitter>
+	internal abstract class MethodGenerator : IGenerator<MethodEmitter>
 	{
 		private readonly MetaMethod method;
 		private readonly OverrideMethodDelegate overrideMethod;

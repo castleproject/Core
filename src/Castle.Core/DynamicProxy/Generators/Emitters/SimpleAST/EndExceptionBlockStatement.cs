@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	public class EndExceptionBlockStatement : Statement
+	internal class EndExceptionBlockStatement : Statement
 	{
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{

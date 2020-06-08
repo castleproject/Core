@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Contributors
 #endif
 	using Castle.DynamicProxy.Tokens;
 
-	public abstract class ProxyInstanceContributor : ITypeContributor
+	internal abstract class ProxyInstanceContributor : ITypeContributor
 	{
 		protected readonly Type targetType;
 		private readonly string proxyTypeId;

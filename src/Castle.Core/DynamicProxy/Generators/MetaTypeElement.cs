@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Generators
 	using System;
 	using System.Reflection;
 
-	public abstract class MetaTypeElement
+	internal abstract class MetaTypeElement
 	{
 		protected readonly Type sourceType;
 

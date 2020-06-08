@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Contributors
 	/// <summary>
 	///   Interface describing elements composing generated type
 	/// </summary>
-	public interface ITypeContributor
+	internal interface ITypeContributor
 	{
 		void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model);
 

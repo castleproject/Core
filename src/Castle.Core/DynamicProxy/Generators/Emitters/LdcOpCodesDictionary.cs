@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	/// <summary>
 	///   Provides appropriate Ldc.X opcode for the type of primitive value to be loaded.
 	/// </summary>
-	public sealed class LdcOpCodesDictionary : Dictionary<Type, OpCode>
+	internal sealed class LdcOpCodesDictionary : Dictionary<Type, OpCode>
 	{
 		private static readonly LdcOpCodesDictionary dict = new LdcOpCodesDictionary();
 

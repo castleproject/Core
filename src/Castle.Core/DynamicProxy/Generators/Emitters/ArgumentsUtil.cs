@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public abstract class ArgumentsUtil
+	internal abstract class ArgumentsUtil
 	{
 		public static Expression[] ConvertArgumentReferenceToExpression(ArgumentReference[] args)
 		{

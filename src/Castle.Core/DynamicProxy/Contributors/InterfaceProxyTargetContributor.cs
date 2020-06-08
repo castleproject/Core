@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 
-	public class InterfaceProxyTargetContributor : CompositeTypeContributor
+	internal class InterfaceProxyTargetContributor : CompositeTypeContributor
 	{
 		private readonly bool canChangeTarget;
 		private readonly Type proxyTargetType;

@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Internal;
 
-	public abstract class MembersCollector
+	internal abstract class MembersCollector
 	{
 		private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		private ILogger logger = NullLogger.Instance;
