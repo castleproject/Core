@@ -20,11 +20,7 @@ namespace Castle.Core.Resource
 
 	public abstract class AbstractResource : IResource
 	{
-#if FEATURE_APPDOMAIN
 		protected static readonly string DefaultBasePath = AppDomain.CurrentDomain.BaseDirectory;
-#else
-		protected static readonly string DefaultBasePath = AppContext.BaseDirectory;
-#endif
 
 		public virtual string FileBasePath
 		{

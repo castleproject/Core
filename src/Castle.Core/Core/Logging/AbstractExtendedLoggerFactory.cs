@@ -101,11 +101,7 @@ namespace Castle.Core.Logging
 			}
 			else
 			{
-#if FEATURE_APPDOMAIN
 				string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-#else
-				string baseDirectory = AppContext.BaseDirectory;
-#endif
 				result = new FileInfo(Path.Combine(baseDirectory, fileName));
 			}
 
