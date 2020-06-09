@@ -65,7 +65,6 @@ Symbol                              | .NET 4.5           | .NET Standard 2.x
 `FEATURE_APPDOMAIN`                 | :white_check_mark: | :no_entry_sign:
 `FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :no_entry_sign:
 `FEATURE_EVENTLOG`                  | :white_check_mark: | :no_entry_sign:
-`FEATURE_REMOTING`                  | :white_check_mark: | :no_entry_sign:
 `FEATURE_SERIALIZATION`             | :white_check_mark: | :no_entry_sign:
 `FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :no_entry_sign:
 `FEATURE_TEST_COM`                  | :white_check_mark: | :no_entry_sign:
@@ -77,7 +76,6 @@ Symbol                              | .NET 4.5           | .NET Standard 2.x
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.
 * `FEATURE_EVENTLOG` - provides a diagnostics logger using the Windows Event Log.
-* `FEATURE_REMOTING` - supports remoting on various types including inheriting from MarshalByRefObject.
 * `FEATURE_SERIALIZATION` - enables support for serialization of dynamic proxies and other types.
 * `FEATURE_SYSTEM_CONFIGURATION` - enables features that use System.Configuration and the ConfigurationManager.
 * `FEATURE_TEST_COM` - enables COM Interop tests.

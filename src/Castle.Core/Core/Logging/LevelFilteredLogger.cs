@@ -25,11 +25,7 @@ namespace Castle.Core.Logging
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
-	public abstract class LevelFilteredLogger :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
-		ILogger
+	public abstract class LevelFilteredLogger : ILogger
 	{
 		private LoggerLevel level = LoggerLevel.Off;
 		private String name = "unnamed";
@@ -55,16 +51,6 @@ namespace Castle.Core.Logging
 		{
 			ChangeName(loggerName);
 		}
-
-#if FEATURE_REMOTING
-		/// <summary>
-		/// Keep the instance alive in a remoting scenario
-		/// </summary>
-		public override object InitializeLifetimeService()
-		{
-			return null;
-		}
-#endif
 
 		public abstract ILogger CreateChildLogger(string loggerName);
 

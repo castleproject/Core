@@ -21,10 +21,6 @@ namespace Castle.DynamicProxy
 	using System.Runtime.CompilerServices;
 	using System.Threading;
 
-#if FEATURE_REMOTING
-	using System.Runtime.Remoting;
-#endif
-
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Internal;
@@ -85,15 +81,9 @@ namespace Castle.DynamicProxy
 
 		public static object GetUnproxiedInstance(object instance)
 		{
-#if FEATURE_REMOTING
-			if (!RemotingServices.IsTransparentProxy(instance))
-#endif
+			if (instance is IProxyTargetAccessor accessor)
 			{
-				var accessor = instance as IProxyTargetAccessor;
-				if (accessor != null)
-				{
-					instance = accessor.DynProxyGetTarget();
-				}
+				instance = accessor.DynProxyGetTarget();
 			}
 
 			return instance;
@@ -101,25 +91,17 @@ namespace Castle.DynamicProxy
 
 		public static Type GetUnproxiedType(object instance)
 		{
-#if FEATURE_REMOTING
-			if (!RemotingServices.IsTransparentProxy(instance))
-#endif
+			if (instance is IProxyTargetAccessor accessor)
 			{
-				var accessor = instance as IProxyTargetAccessor;
-
-				if (accessor != null)
+				var target = accessor.DynProxyGetTarget();
+				if (target != null)
 				{
-					var target = accessor.DynProxyGetTarget();
-
-					if (target != null)
+					if (ReferenceEquals(target, instance))
 					{
-						if (ReferenceEquals(target, instance))
-						{
-							return instance.GetType().BaseType;
-						}
-
-						instance = target;
+						return instance.GetType().BaseType;
 					}
+
+					instance = target;
 				}
 			}
 
@@ -128,12 +110,6 @@ namespace Castle.DynamicProxy
 
 		public static bool IsProxy(object instance)
 		{
-#if FEATURE_REMOTING
-			if (RemotingServices.IsTransparentProxy(instance))
-			{
-				return true;
-			}
-#endif
 			return instance is IProxyTargetAccessor;
 		}
 
