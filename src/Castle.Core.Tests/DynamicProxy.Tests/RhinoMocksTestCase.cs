@@ -289,7 +289,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("Foo ", logging.LogContents);
 		}
 
-#if FEATURE_TEST_COM
 		[Test]
 		public void ProxyingComInteraces()
 		{
@@ -297,7 +296,6 @@ namespace Castle.DynamicProxy.Tests
 				.CreateInterfaceProxyWithoutTarget(typeof (IComServiceProvider), new StandardInterceptor());
 			Assert.IsNotNull(o);
 		}
-#endif
 
 		[Test]
 		public void ProxyingGenericClassWithGenericClassConstraint()

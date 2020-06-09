@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_TEST_COM
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -27,6 +26,7 @@ namespace Castle.DynamicProxy.Tests
 	public class ComInterfacesTests:BasePEVerifyTestCase
 	{
 		[Test]
+		[Platform(Include = "Win,Mono", Reason = "`Marshal.Release` triggers a `PlatformNotSupportedException` with .NET Core on Linux.")]
 		public void Marshal_Release_throws_when_called_with_IntPtr_Zero()
 		{
 			Assert.Catch<ArgumentException>(() => Marshal.Release(IntPtr.Zero));
@@ -51,4 +51,3 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 }
-#endif

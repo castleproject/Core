@@ -45,7 +45,7 @@
 		<DiagnosticsConstants>DEBUG</DiagnosticsConstants>
 		<NetStandard20Constants>TRACE</NetStandard20Constants>
 		<NetStandard21Constants>TRACE</NetStandard21Constants>
-		<CommonDesktopClrConstants>TRACE;FEATURE_APPDOMAIN;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_EVENTLOG;FEATURE_SERIALIZATION;FEATURE_SYSTEM_CONFIGURATION;FEATURE_TEST_COM;FEATURE_TEST_WINFORMS</CommonDesktopClrConstants>
+		<CommonDesktopClrConstants>TRACE;FEATURE_APPDOMAIN;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_EVENTLOG;FEATURE_SERIALIZATION;FEATURE_SYSTEM_CONFIGURATION;FEATURE_TEST_WINFORMS</CommonDesktopClrConstants>
 		<DesktopClrConstants Condition="'$(OS)'=='Unix'">$(CommonDesktopClrConstants)</DesktopClrConstants>
 		<DesktopClrConstants Condition="'$(OS)'=='Windows_NT'">$(CommonDesktopClrConstants);FEATURE_TEST_PEVERIFY</DesktopClrConstants>
 	</PropertyGroup>
