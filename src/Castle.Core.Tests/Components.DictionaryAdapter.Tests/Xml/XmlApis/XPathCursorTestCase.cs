@@ -301,9 +301,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 
 		protected abstract IXmlCursor Cursor(IXmlNode parent, CompiledXPath path, IXmlIncludedTypeMap includedTypes, CursorFlags flags);
 
-#pragma warning disable 618 // Don't use OneTimeSetUp yet because ReSharper doesn't support it
-		[TestFixtureSetUp]
-#pragma warning restore 618
+		[OneTimeSetUp]
 		public void OneTimeSetUp()
 		{
 			if (IncludedTypes == null)
