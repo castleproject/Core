@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_TEST_COM
-
 namespace Castle.DynamicProxy.Tests.ComInteropTypes.ADODB
 {
 	using System;
@@ -198,5 +196,3 @@ namespace Castle.DynamicProxy.Tests.ComInteropTypes.ADODB
 		}
 	}
 }
-
-#endif
