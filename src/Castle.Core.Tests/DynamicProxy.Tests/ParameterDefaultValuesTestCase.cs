@@ -185,7 +185,7 @@ namespace Castle.DynamicProxy.Tests
 			AssertParameter(typeof(HasDefaultValue<>).MakeGenericType(parameterType), nameof(HasDefaultValue<object>.Method));
 		}
 
-		[ExcludeOnFramework(Framework.NetCore | Framework.NetFramework, "ParameterBuilder.SetConstant does not accept a null default value for value type parameters. See https://github.com/dotnet/corefx/issues/26164.")]
+		[Platform(Exclude = "Net,NetCore", Reason = "ParameterBuilder.SetConstant does not accept a null default value for value type parameters. See https://github.com/dotnet/corefx/issues/26164.")]
 		[TestCase(typeof(bool))]
 		[TestCase(typeof(decimal))]
 		[TestCase(typeof(double))]
@@ -199,7 +199,7 @@ namespace Castle.DynamicProxy.Tests
 			AssertParameter(typeof(HasDefaultValue<>).MakeGenericType(parameterType), nameof(HasDefaultValue<object>.Method));
 		}
 
-		[ExcludeOnFramework(Framework.NetCore | Framework.NetFramework, "ParameterBuilder.SetConstant does not accept a null default value for value type parameters. See https://github.com/dotnet/corefx/issues/26164.")]
+		[Platform(Exclude = "Net,NetCore", Reason = "ParameterBuilder.SetConstant does not accept a null default value for value type parameters. See https://github.com/dotnet/corefx/issues/26164.")]
 		[TestCase(nameof(HasDefaultValues.DateTime_default))]
 		[TestCase(nameof(HasDefaultValues.UserDefinedStruct_default))]
 		public void Not_supported_on_the_CLR_Struct_default(string methodName)
@@ -207,7 +207,7 @@ namespace Castle.DynamicProxy.Tests
 			AssertParameter(typeof(HasDefaultValues), methodName);
 		}
 
-		[ExcludeOnFramework(Framework.NetCore | Framework.NetFramework, "ParameterBuilder.SetConstant does not accept non-null default values for nullable enum parameters. See https://github.com/dotnet/coreclr/issues/17893.")]
+		[Platform(Exclude = "Net,NetCore", Reason = "ParameterBuilder.SetConstant does not accept non-null default values for nullable enum parameters. See https://github.com/dotnet/coreclr/issues/17893.")]
 		[TestCase(nameof(HasDefaultValues.UserDefinedEnum_nullable_default))]
 		[TestCase(nameof(HasDefaultValues.UserDefinedEnum_nullable_default_from_attribute))]
 		[TestCase(nameof(HasDefaultValues.UserDefinedEnum_nullable_non_default))]
@@ -217,7 +217,7 @@ namespace Castle.DynamicProxy.Tests
 			AssertParameter(typeof(HasDefaultValues), methodName);
 		}
 
-		[ExcludeOnFramework(Framework.Mono, "ParameterInfo.DefaultValue does not report the correct default value for non-null optional parameters of type `DateTime?` and `decimal?`. See https://github.com/mono/mono/issues/11303.")]
+		[Platform(Exclude = "Mono", Reason = "ParameterInfo.DefaultValue does not report the correct default value for non-null optional parameters of type `DateTime?` and `decimal?`. See https://github.com/mono/mono/issues/11303.")]
 		[TestCase(nameof(HasDefaultValues.DateTime_nullable_default_from_attribute))]
 		[TestCase(nameof(HasDefaultValues.DateTime_nullable_non_default_from_attribute))]
 		[TestCase(nameof(HasDefaultValues.Decimal_nullable_default))]

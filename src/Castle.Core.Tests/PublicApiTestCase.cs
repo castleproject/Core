@@ -42,7 +42,7 @@ namespace Castle
 		};
 
 		[Test]
-		[ExcludeOnFramework(Framework.Mono, "On Mono, the FrameworkDisplayNameAttribute isn't populated")]
+		[Platform(Exclude = "Mono", Reason = "On Mono, the FrameworkDisplayNameAttribute isn't populated")]
 		public void PublicApi()
 		{
 			// Determine if we are in write (developer) or compare (CI server) mode

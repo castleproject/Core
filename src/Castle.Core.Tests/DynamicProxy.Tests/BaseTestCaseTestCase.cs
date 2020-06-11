@@ -82,7 +82,7 @@ namespace Castle.DynamicProxy.Tests
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
-		[ExcludeOnFramework(Framework.Mono, "Mono doesn't have peverify, so we can't perform verification.")]
+		[Platform(Exclude = "Mono", Reason = "Mono doesn't have peverify, so we can't perform verification.")]
 		public void TearDown_FindsVerificationErrors()
 		{
 			var ex = Assert.Throws<AssertionException>(() => FindVerificationErrors());

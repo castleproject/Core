@@ -104,7 +104,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		[ExcludeOnFramework(Framework.Mono, "Mono does not currently emit custom attributes on generic type parameters of methods. See https://github.com/mono/mono/issues/8512.")]
+		[Platform(Exclude = "Mono", Reason = "Mono does not currently emit custom attributes on generic type parameters of methods. See https://github.com/mono/mono/issues/8512.")]
 		public void EnsureProxyHasAttributesOnGenericArgument()
 		{
 			var proxy = generator.CreateClassProxy<HasNonInheritableAttribute>();
