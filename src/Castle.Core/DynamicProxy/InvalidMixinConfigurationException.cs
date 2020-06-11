@@ -15,13 +15,9 @@
 namespace Castle.DynamicProxy
 {
 	using System;
-#if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
-#endif
 
-#if FEATURE_SERIALIZATION
 	[Serializable]
-#endif
 	public class InvalidMixinConfigurationException : Exception
 	{
 		internal InvalidMixinConfigurationException(string message)
@@ -33,10 +29,8 @@ namespace Castle.DynamicProxy
 		{
 		}
 
-#if FEATURE_SERIALIZATION
 		private protected InvalidMixinConfigurationException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
-#endif
 	}
 }

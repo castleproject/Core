@@ -15,19 +15,33 @@
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Runtime.Serialization;
 
-#if FEATURE_SERIALIZATION
 	[Serializable]
-#endif
 	public class InvalidProxyConstructorArgumentsException : ArgumentException
 	{
 		internal InvalidProxyConstructorArgumentsException(string message, Type proxyType, Type classToProxy) : base(message)
 		{
-			ProxyType = proxyType;
 			ClassToProxy = classToProxy;
+			ProxyType = proxyType;
+		}
+
+		private protected InvalidProxyConstructorArgumentsException(SerializationInfo info, StreamingContext context) : base(info, context)
+		{
+			// Binary serialization on .NET Core does not support `Type`,
+			// so we need to make do with type name strings:
+			ClassToProxy = Type.GetType(info.GetString("classToProxy"));
+			ProxyType = Type.GetType(info.GetString("proxyType"));
 		}
 
 		public Type ClassToProxy { get; private set; }
 		public Type ProxyType { get; private set; }
+
+		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			base.GetObjectData(info, context);
+			info.AddValue("classToProxy", ClassToProxy.AssemblyQualifiedName);
+			info.AddValue("proxyType", ProxyType.AssemblyQualifiedName);
+		}
 	}
 }
