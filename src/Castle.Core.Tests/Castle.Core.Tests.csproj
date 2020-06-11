@@ -55,7 +55,6 @@
 		<PackageReference Include="System.Net.Primitives" Version="4.3.0" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='net461'">
-		<Reference Include="System.Windows.Forms" />
 		<PackageReference Include="PublicApiGenerator" Version="10.1.0" />
 	</ItemGroup>
 
