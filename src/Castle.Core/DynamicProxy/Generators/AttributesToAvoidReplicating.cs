@@ -29,6 +29,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			attributes = new List<Type>()
 			{
+				typeof(SerializableAttribute),
 				typeof(System.Runtime.InteropServices.ComImportAttribute),
 				typeof(System.Runtime.InteropServices.MarshalAsAttribute),
 				typeof(System.Runtime.InteropServices.TypeIdentifierAttribute),
