@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_SERIALIZATION
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 
 namespace Castle.DynamicProxy.Tests
 {
