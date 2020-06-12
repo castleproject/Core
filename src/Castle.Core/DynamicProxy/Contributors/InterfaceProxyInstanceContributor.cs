@@ -17,20 +17,18 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 
 	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Castle.DynamicProxy.Tokens;
 
 	internal class InterfaceProxyInstanceContributor : ProxyInstanceContributor
 	{
+		public InterfaceProxyInstanceContributor(Type targetType)
+			: base(targetType)
+		{
+		}
+
 		protected override Reference GetTargetReference(ClassEmitter emitter)
 		{
 			return emitter.GetField("__target");
-		}
-
-		public InterfaceProxyInstanceContributor(Type targetType, Type[] interfaces)
-			: base(targetType, interfaces)
-		{
 		}
 	}
 }

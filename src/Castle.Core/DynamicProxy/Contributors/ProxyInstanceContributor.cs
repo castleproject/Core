@@ -15,24 +15,19 @@
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
-	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
-	using Castle.DynamicProxy.Tokens;
 
 	internal abstract class ProxyInstanceContributor : ITypeContributor
 	{
 		protected readonly Type targetType;
-		private readonly Type[] interfaces;
 
-		protected ProxyInstanceContributor(Type targetType, Type[] interfaces)
+		protected ProxyInstanceContributor(Type targetType)
 		{
 			this.targetType = targetType;
-			this.interfaces = interfaces ?? Type.EmptyTypes;
 		}
 
 		protected abstract Reference GetTargetReference(ClassEmitter emitter);

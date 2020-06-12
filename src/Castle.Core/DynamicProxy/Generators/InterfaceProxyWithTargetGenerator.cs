@@ -200,7 +200,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// 4. plus special interfaces
-			var instance = new InterfaceProxyInstanceContributor(targetType, interfaces);
+			var instance = new InterfaceProxyInstanceContributor(targetType);
 			try
 			{
 				AddMappingNoCheck(typeof(IProxyTargetAccessor), instance, typeImplementerMapping);

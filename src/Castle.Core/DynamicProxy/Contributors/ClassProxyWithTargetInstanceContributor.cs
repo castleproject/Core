@@ -15,17 +15,14 @@
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	class ClassProxyWithTargetInstanceContributor : ClassProxyInstanceContributor
 	{
-		public ClassProxyWithTargetInstanceContributor(Type targetType, IList<MethodInfo> methodsToSkip,
-		                                               Type[] interfaces)
-			: base(targetType, methodsToSkip, interfaces)
+		public ClassProxyWithTargetInstanceContributor(Type targetType)
+			: base(targetType)
 		{
 		}
 
