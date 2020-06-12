@@ -21,17 +21,11 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
-	using Castle.DynamicProxy.Serialization;
 
 	internal class InterfaceProxyWithoutTargetGenerator : InterfaceProxyWithTargetGenerator
 	{
 		public InterfaceProxyWithoutTargetGenerator(ModuleScope scope, Type @interface) : base(scope, @interface)
 		{
-		}
-
-		protected override string GeneratorType
-		{
-			get { return ProxyTypeConstants.InterfaceWithoutTarget; }
 		}
 
 		protected override ITypeContributor AddMappingForTargetType(

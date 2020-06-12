@@ -27,13 +27,11 @@ namespace Castle.DynamicProxy.Contributors
 	internal abstract class ProxyInstanceContributor : ITypeContributor
 	{
 		protected readonly Type targetType;
-		private readonly string proxyTypeId;
 		private readonly Type[] interfaces;
 
-		protected ProxyInstanceContributor(Type targetType, Type[] interfaces, string proxyTypeId)
+		protected ProxyInstanceContributor(Type targetType, Type[] interfaces)
 		{
 			this.targetType = targetType;
-			this.proxyTypeId = proxyTypeId;
 			this.interfaces = interfaces ?? Type.EmptyTypes;
 		}
 

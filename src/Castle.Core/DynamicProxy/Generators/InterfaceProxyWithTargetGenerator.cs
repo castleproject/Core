@@ -23,7 +23,6 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
-	using Castle.DynamicProxy.Serialization;
 
 	internal class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
 	{
@@ -38,11 +37,6 @@ namespace Castle.DynamicProxy.Generators
 		protected virtual bool AllowChangeTarget
 		{
 			get { return false; }
-		}
-
-		protected virtual string GeneratorType
-		{
-			get { return ProxyTypeConstants.InterfaceWithTarget; }
 		}
 
 		public Type GenerateCode(Type proxyTargetType, Type[] interfaces, ProxyGenerationOptions options)
@@ -206,7 +200,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// 4. plus special interfaces
-			var instance = new InterfaceProxyInstanceContributor(targetType, GeneratorType, interfaces);
+			var instance = new InterfaceProxyInstanceContributor(targetType, interfaces);
 			try
 			{
 				AddMappingNoCheck(typeof(IProxyTargetAccessor), instance, typeImplementerMapping);

@@ -23,7 +23,6 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
-	using Castle.DynamicProxy.Serialization;
 
 	internal class ClassProxyGenerator : BaseProxyGenerator
 	{
@@ -106,7 +105,7 @@ namespace Castle.DynamicProxy.Generators
 																	  INamingScope namingScope)
 		{
 			var methodsToSkip = new List<MethodInfo>();
-			var proxyInstance = new ClassProxyInstanceContributor(targetType, methodsToSkip, interfaces, ProxyTypeConstants.Class);
+			var proxyInstance = new ClassProxyInstanceContributor(targetType, methodsToSkip, interfaces);
 			// TODO: the trick with methodsToSkip is not very nice...
 			var proxyTarget = new ClassProxyTargetContributor(targetType, methodsToSkip, namingScope) { Logger = Logger };
 			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();

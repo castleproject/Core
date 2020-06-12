@@ -26,9 +26,8 @@ namespace Castle.DynamicProxy.Contributors
 
 	internal class ClassProxyInstanceContributor : ProxyInstanceContributor
 	{
-		public ClassProxyInstanceContributor(Type targetType, IList<MethodInfo> methodsToSkip, Type[] interfaces,
-		                                     string typeId)
-			: base(targetType, interfaces, typeId)
+		public ClassProxyInstanceContributor(Type targetType, IList<MethodInfo> methodsToSkip, Type[] interfaces)
+			: base(targetType, interfaces)
 		{
 		}
 

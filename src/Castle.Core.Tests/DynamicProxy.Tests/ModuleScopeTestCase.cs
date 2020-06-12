@@ -18,7 +18,9 @@ namespace Castle.DynamicProxy.Tests
 	using System.IO;
 	using System.Reflection;
 	using Castle.DynamicProxy.Generators;
+#if FEATURE_SERIALIZATION
 	using Castle.DynamicProxy.Serialization;
+#endif
 	using Castle.DynamicProxy.Tests.InterClasses;
 	using NUnit.Framework;
 

@@ -216,14 +216,6 @@ namespace Castle.DynamicProxy.Internal
 			}
 		}
 
-		public static MemberInfo[] Sort(MemberInfo[] members)
-		{
-			var sortedMembers = new MemberInfo[members.Length];
-			Array.Copy(members, sortedMembers, members.Length);
-			Array.Sort(sortedMembers, (l, r) => string.Compare(l.Name, r.Name, StringComparison.OrdinalIgnoreCase));
-			return sortedMembers;
-		}
-
 		/// <summary>
 		///   Checks whether the specified <paramref name="type"/> is a delegate type (i.e. a direct subclass of <see cref="MulticastDelegate"/>).
 		/// </summary>

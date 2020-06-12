@@ -28,8 +28,8 @@ namespace Castle.DynamicProxy.Contributors
 			return emitter.GetField("__target");
 		}
 
-		public InterfaceProxyInstanceContributor(Type targetType, string proxyGeneratorId, Type[] interfaces)
-			: base(targetType, interfaces, proxyGeneratorId)
+		public InterfaceProxyInstanceContributor(Type targetType, Type[] interfaces)
+			: base(targetType, interfaces)
 		{
 		}
 	}
