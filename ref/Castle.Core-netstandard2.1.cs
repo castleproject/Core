@@ -2763,6 +2763,5 @@ namespace Castle.DynamicProxy.Internal
     {
         public static System.Type[] GetAllInterfaces(this System.Type type) { }
         public static System.Type GetTypeOrNull(object target) { }
-        public static System.Reflection.MemberInfo[] Sort(System.Reflection.MemberInfo[] members) { }
     }
 }

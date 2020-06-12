@@ -2639,7 +2639,6 @@ namespace Castle.DynamicProxy
         public string StrongNamedModuleName { get; }
         public string WeakNamedModuleDirectory { get; }
         public string WeakNamedModuleName { get; }
-        public void LoadAssemblyIntoCache(System.Reflection.Assembly assembly) { }
         public string SaveAssembly() { }
         public string SaveAssembly(bool strongNamed) { }
         public static byte[] GetKeyPair() { }
@@ -2650,7 +2649,7 @@ namespace Castle.DynamicProxy
         public string SaveAssembly() { }
     }
     public class ProxyGenerationException : System.Exception { }
-    public class ProxyGenerationOptions : System.Runtime.Serialization.ISerializable
+    public class ProxyGenerationOptions
     {
         public static readonly Castle.DynamicProxy.ProxyGenerationOptions Default;
         public ProxyGenerationOptions() { }
@@ -2666,7 +2665,6 @@ namespace Castle.DynamicProxy
         public void AddMixinInstance(object instance) { }
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
-        public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public void Initialize() { }
         public object[] MixinsAsArray() { }
     }
@@ -2794,30 +2792,5 @@ namespace Castle.DynamicProxy.Internal
     {
         public static System.Type[] GetAllInterfaces(this System.Type type) { }
         public static System.Type GetTypeOrNull(object target) { }
-        public static System.Reflection.MemberInfo[] Sort(System.Reflection.MemberInfo[] members) { }
-    }
-}
-namespace Castle.DynamicProxy.Serialization
-{
-    [System.AttributeUsage(System.AttributeTargets.Assembly | System.AttributeTargets.All, AllowMultiple=false)]
-    [System.CLSCompliant(false)]
-    public class CacheMappingsAttribute : System.Attribute
-    {
-        public CacheMappingsAttribute(byte[] serializedCacheMappings) { }
-        public byte[] SerializedCacheMappings { get; }
-    }
-    public class ProxyObjectReference : System.Runtime.Serialization.IDeserializationCallback, System.Runtime.Serialization.IObjectReference, System.Runtime.Serialization.ISerializable
-    {
-        protected ProxyObjectReference(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
-        public static Castle.DynamicProxy.ModuleScope ModuleScope { get; }
-        public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
-        public object GetRealObject(System.Runtime.Serialization.StreamingContext context) { }
-        protected void InvokeCallback(object target) { }
-        public void OnDeserialization(object sender) { }
-        public object RecreateClassProxy() { }
-        public object RecreateInterfaceProxy(string generatorType) { }
-        protected virtual object RecreateProxy() { }
-        public static void ResetScope() { }
-        public static void SetScope(Castle.DynamicProxy.ModuleScope scope) { }
     }
 }
