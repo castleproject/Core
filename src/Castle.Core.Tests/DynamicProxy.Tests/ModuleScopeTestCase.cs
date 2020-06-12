@@ -17,11 +17,10 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.IO;
 	using System.Reflection;
+
 	using Castle.DynamicProxy.Generators;
-#if FEATURE_SERIALIZATION
-	using Castle.DynamicProxy.Serialization;
-#endif
 	using Castle.DynamicProxy.Tests.InterClasses;
+
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -274,54 +273,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 #endif
 
-#if FEATURE_SERIALIZATION
-		[Test]
-		public void SavedAssemblyHasCacheMappings()
-		{
-			var scope = new ModuleScope(true);
-			scope.ObtainDynamicModuleWithWeakName();
-
-			var savedPath = scope.SaveAssembly();
-
-			CrossAppDomainCaller.RunInOtherAppDomain(delegate(object[] args)
-			                                         	{
-			                                         		var assembly = Assembly.LoadFrom((string) args[0]);
-			                                         		Assert.IsTrue(assembly.IsDefined(typeof (CacheMappingsAttribute), false));
-			                                         	},
-			                                         savedPath);
-
-			File.Delete(savedPath);
-		}
-
-		[Test]
-		public void CacheMappingsHoldTypes()
-		{
-			var scope = new ModuleScope(true);
-			var builder = new DefaultProxyBuilder(scope);
-			var cp = builder.CreateClassProxyType(typeof (object), Type.EmptyTypes, ProxyGenerationOptions.Default);
-
-			var savedPath = scope.SaveAssembly();
-
-			CrossAppDomainCaller.RunInOtherAppDomain(delegate(object[] args)
-			                                         	{
-			                                         		var assembly = Assembly.LoadFrom((string) args[0]);
-			                                         		var attribute =
-			                                         			(CacheMappingsAttribute)
-			                                         			assembly.GetCustomAttributes(typeof (CacheMappingsAttribute), false)[0];
-			                                         		var entries = attribute.GetDeserializedMappings();
-			                                         		Assert.AreEqual(1, entries.Count);
-
-			                                         		var key = new CacheKey(typeof (object), new Type[0],
-			                                         		                       ProxyGenerationOptions.Default);
-			                                         		Assert.IsTrue(entries.ContainsKey(key));
-			                                         		Assert.AreEqual(args[1], entries[key]);
-			                                         	},
-			                                         savedPath, cp.FullName);
-
-			File.Delete(savedPath);
-		}
-#endif
-
 		[Test]
 		public void GeneratedAssembliesDefaultName()
 		{
@@ -384,129 +335,5 @@ namespace Castle.DynamicProxy.Tests
 			var builder = new DefaultProxyBuilder(scope);
 			Assert.AreSame(scope, builder.ModuleScope);
 		}
-
-#if FEATURE_SERIALIZATION
-		[Test]
-		public void LoadAssemblyIntoCache_InvalidAssembly()
-		{
-			var newScope = new ModuleScope(false);
-
-			Assert.Throws<ArgumentException>(() =>
-				newScope.LoadAssemblyIntoCache(Assembly.GetExecutingAssembly())
-			);
-		}
-
-		[Test]
-		public void LoadAssemblyIntoCache_CreateClassProxy()
-		{
-			CheckLoadAssemblyIntoCache(
-				builder => builder.CreateClassProxyType(typeof (object), null, ProxyGenerationOptions.Default));
-		}
-
-		[Test]
-		public void LoadAssemblyIntoCache_CreateInterfaceProxyTypeWithoutTarget()
-		{
-			CheckLoadAssemblyIntoCache(
-				delegate(IProxyBuilder builder)
-					{
-						return builder.CreateInterfaceProxyTypeWithoutTarget(typeof (IServiceProvider), new Type[0],
-						                                                     ProxyGenerationOptions.Default);
-					});
-		}
-
-		[Test]
-		public void LoadAssemblyIntoCache_CreateInterfaceProxyTypeWithTarget()
-		{
-			CheckLoadAssemblyIntoCache(
-				delegate(IProxyBuilder builder)
-					{
-						return builder.CreateInterfaceProxyTypeWithTarget(typeof (IMyInterface2), new Type[0], typeof (MyInterfaceImpl),
-						                                                  ProxyGenerationOptions.Default);
-					});
-		}
-
-		[Test]
-		public void LoadAssemblyIntoCache_CreateInterfaceProxyTypeWithTargetInterface()
-		{
-			CheckLoadAssemblyIntoCache(
-				delegate(IProxyBuilder builder)
-					{
-						return builder.CreateInterfaceProxyTypeWithTargetInterface(typeof (IMyInterface2), null,
-						                                                           ProxyGenerationOptions.Default);
-					});
-		}
-
-		[Test]
-		public void LoadAssemblyIntoCache_DifferentGenerationOptions()
-		{
-			var savedScope = new ModuleScope(true);
-			var builder = new DefaultProxyBuilder(savedScope);
-
-			var options1 = new ProxyGenerationOptions();
-			options1.AddMixinInstance(new DateTime());
-			var options2 = ProxyGenerationOptions.Default;
-
-			var cp1 = builder.CreateClassProxyType(typeof (object), Type.EmptyTypes, options1);
-			var cp2 = builder.CreateClassProxyType(typeof (object), Type.EmptyTypes, options2);
-			Assert.AreNotSame(cp1, cp2);
-			Assert.AreSame(cp1, builder.CreateClassProxyType(typeof (object), Type.EmptyTypes, options1));
-			Assert.AreSame(cp2, builder.CreateClassProxyType(typeof (object), Type.EmptyTypes, options2));
-
-			var path = savedScope.SaveAssembly();
-
-			CrossAppDomainCaller.RunInOtherAppDomain(delegate(object[] args)
-			                                         	{
-			                                         		var newScope = new ModuleScope(false);
-			                                         		var newBuilder = new DefaultProxyBuilder(newScope);
-
-			                                         		var assembly = Assembly.LoadFrom((string) args[0]);
-			                                         		newScope.LoadAssemblyIntoCache(assembly);
-
-			                                         		var newOptions1 = new ProxyGenerationOptions();
-			                                         		newOptions1.AddMixinInstance(new DateTime());
-			                                         		var newOptions2 = ProxyGenerationOptions.Default;
-
-			                                         		var loadedCP1 = newBuilder.CreateClassProxyType(typeof (object),
-			                                         		                                                Type.EmptyTypes,
-			                                         		                                                newOptions1);
-			                                         		var loadedCP2 = newBuilder.CreateClassProxyType(typeof (object),
-			                                         		                                                Type.EmptyTypes,
-			                                         		                                                newOptions2);
-			                                         		Assert.AreNotSame(loadedCP1, loadedCP2);
-			                                         		Assert.AreEqual(assembly, loadedCP1.Assembly);
-			                                         		Assert.AreEqual(assembly, loadedCP2.Assembly);
-			                                         	}, path);
-
-			File.Delete(path);
-		}
-
-		private delegate Type ProxyCreator(IProxyBuilder proxyBuilder);
-
-		private void CheckLoadAssemblyIntoCache(ProxyCreator creator)
-		{
-			var savedScope = new ModuleScope(true);
-			var builder = new DefaultProxyBuilder(savedScope);
-
-			var cp = creator(builder);
-			Assert.AreSame(cp, creator(builder));
-
-			var path = savedScope.SaveAssembly();
-
-			CrossAppDomainCaller.RunInOtherAppDomain(delegate(object[] args)
-			                                         	{
-			                                         		var newScope = new ModuleScope(false);
-			                                         		var newBuilder = new DefaultProxyBuilder(newScope);
-
-			                                         		var assembly = Assembly.LoadFrom((string) args[0]);
-			                                         		newScope.LoadAssemblyIntoCache(assembly);
-
-			                                         		var loadedCP = assembly.GetType((string) args[1]);
-			                                         		Assert.AreSame(loadedCP, ((ProxyCreator) args[2])(newBuilder));
-			                                         		Assert.AreEqual(assembly, ((ProxyCreator) args[2])(newBuilder).Assembly);
-			                                         	}, path, cp.FullName, creator);
-
-			File.Delete(path);
-		}
-#endif
 	}
 }
