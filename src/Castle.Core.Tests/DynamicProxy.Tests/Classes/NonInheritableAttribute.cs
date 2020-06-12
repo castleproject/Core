@@ -16,9 +16,6 @@ namespace Castle.DynamicProxy.Tests.Classes
 {
 	using System;
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	[AttributeUsage(AttributeTargets.All, Inherited = false)]
 	public class NonInheritableAttribute : Attribute
 	{

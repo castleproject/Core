@@ -60,9 +60,6 @@ namespace Castle.DynamicProxy.Tests.Classes
 		}
 	}
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	[AttributeUsage(AttributeTargets.All, Inherited = false)]
 	public class ComplexNonInheritableAttribute : Attribute
 	{

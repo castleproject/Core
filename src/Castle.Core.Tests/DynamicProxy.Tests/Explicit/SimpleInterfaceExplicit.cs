@@ -16,9 +16,6 @@ namespace Castle.DynamicProxy.Tests.Explicit
 {
 	using System;
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class SimpleInterfaceExplicit : ISimpleInterface
 	{
 		int ISimpleInterface.Do()

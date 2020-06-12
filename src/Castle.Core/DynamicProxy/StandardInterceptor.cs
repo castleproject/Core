@@ -16,9 +16,6 @@ namespace Castle.DynamicProxy
 {
 	using System;
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class StandardInterceptor : IInterceptor
 	{
 		public void Intercept(IInvocation invocation)

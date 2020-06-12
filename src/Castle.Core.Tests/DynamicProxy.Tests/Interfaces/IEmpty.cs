@@ -20,9 +20,6 @@ namespace Castle.DynamicProxy.Tests.Interfaces
 	{
 	}
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class Empty : IEmpty
 	{
 	}

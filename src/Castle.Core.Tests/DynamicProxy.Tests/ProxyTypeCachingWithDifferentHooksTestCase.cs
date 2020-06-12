@@ -24,9 +24,6 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class ProxyTypeCachingWithDifferentHooksTestCase : BasePEVerifyTestCase
 	{
-#if FEATURE_SERIALIZATION
-		[Serializable]
-#endif
 		public class CustomHook : AllMethodsHook { }
 
 		[Test]

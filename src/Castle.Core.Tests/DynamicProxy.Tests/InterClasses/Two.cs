@@ -18,9 +18,6 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 
 	using Castle.DynamicProxy.Tests.Interfaces;
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class Two : ITwo
 	{
 		public int TwoMethod()

@@ -18,9 +18,6 @@ namespace Castle.DynamicProxy
 	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Reflection.Emit;
-#if FEATURE_SERIALIZATION
-	using System.Runtime.Serialization;
-#endif
 
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Internal;
@@ -36,22 +33,13 @@ namespace Castle.DynamicProxy
 	///     used to create a proxy (or proxy type).
 	///   </para>
 	/// </summary>
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class ProxyGenerationOptions
-#if FEATURE_SERIALIZATION
-		: ISerializable
-#endif
 	{
 		public static readonly ProxyGenerationOptions Default = new ProxyGenerationOptions();
 
 		private List<object> mixins;
 		private readonly IList<CustomAttributeInfo> additionalAttributes = new List<CustomAttributeInfo>();
 
-#if FEATURE_SERIALIZATION
-		[NonSerialized]
-#endif
 		private MixinData mixinData; // this is calculated dynamically on proxy type creation
 
 		/// <summary>
@@ -72,16 +60,6 @@ namespace Castle.DynamicProxy
 		{
 		}
 
-#if FEATURE_SERIALIZATION
-		private ProxyGenerationOptions(SerializationInfo info, StreamingContext context)
-		{
-			Hook = (IProxyGenerationHook)info.GetValue("hook", typeof(IProxyGenerationHook));
-			Selector = (IInterceptorSelector)info.GetValue("selector", typeof(IInterceptorSelector));
-			mixins = (List<object>)info.GetValue("mixins", typeof(List<object>));
-			BaseTypeForInterfaceProxy = Type.GetType(info.GetString("baseTypeForInterfaceProxy.AssemblyQualifiedName"));
-		}
-#endif
-
 		public void Initialize()
 		{
 			if (mixinData == null)
@@ -97,16 +75,6 @@ namespace Castle.DynamicProxy
 				}
 			}
 		}
-
-#if FEATURE_SERIALIZATION
-		public void GetObjectData(SerializationInfo info, StreamingContext context)
-		{
-			info.AddValue("hook", Hook);
-			info.AddValue("selector", Selector);
-			info.AddValue("mixins", mixins);
-			info.AddValue("baseTypeForInterfaceProxy.AssemblyQualifiedName", BaseTypeForInterfaceProxy.AssemblyQualifiedName);
-		}
-#endif
 
 		/// <summary>
 		///   Gets or sets the <see cref="IProxyGenerationHook"/> that should be used during proxy type

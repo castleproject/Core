@@ -155,9 +155,6 @@ namespace Castle.DynamicProxy.Tests
 			}
 		}
 
-#if FEATURE_SERIALIZATION
-		[Serializable]
-#endif
 		public sealed class InterceptorSelector : IInterceptorSelector
 		{
 			public Type ReceivedType { get; private set; }

@@ -31,9 +31,6 @@ namespace Castle.DynamicProxy.Tests.Mixins
 		void DoThird();
 	}
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class ComplexMixin : IThird
 	{
 		public ComplexMixin()

@@ -16,9 +16,6 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 {
 	using System;
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class ServiceImpl : IService, IExtendedService
 	{
 		public int Sum(int b1, int b2)

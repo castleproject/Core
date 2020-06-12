@@ -15,7 +15,6 @@ If you're new to DynamicProxy you can read a [quick introduction](dynamicproxy-i
 * [Leaking this](dynamicproxy-leaking-this.md)
 * [Make proxy generation hooks purely functional](dynamicproxy-generation-hook-pure-function.md)
 * [Overriding Equals/GetHashCode on proxy generation hook](dynamicproxy-generation-hook-override-equals-gethashcode.md)
-* [Make your supporting classes serializable](dynamicproxy-serializable-types.md)
 * [Use proxy generation hooks and interceptor selectors for fine grained control](dynamicproxy-fine-grained-control.md)
 * [SRP applies to interceptors](dynamicproxy-srp-applies-to-interceptors.md)
 * [Behavior of by-reference parameters during interception](dynamicproxy-by-ref-parameters.md)

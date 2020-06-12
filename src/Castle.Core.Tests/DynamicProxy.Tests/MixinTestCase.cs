@@ -52,9 +52,6 @@ namespace Castle.DynamicProxy.Tests
 			int Calc(int x, int y, int z, Single k);
 		}
 
-#if FEATURE_SERIALIZATION
-		[Serializable]
-#endif
 		public class MyInterfaceImpl : IMyInterface
 		{
 			private String _name;

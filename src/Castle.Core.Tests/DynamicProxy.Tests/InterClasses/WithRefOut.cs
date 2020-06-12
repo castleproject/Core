@@ -18,9 +18,6 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 
 	using Castle.DynamicProxy.Tests.Interfaces;
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class WithRefOut : IWithRefOut
 	{
 		public void Do(out int i)
