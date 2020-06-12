@@ -12,19 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_SERIALIZATION
-
-namespace Castle.DynamicProxy.Tests.Serialization
+namespace Castle.DynamicProxy.Tests.Classes
 {
 	using System;
+	using System.Runtime.Serialization;
 
 	[Serializable]
-	public class EventHandlerClass
+	public class SerializableExplicitImpl : ISerializable
 	{
-		public void TestHandler(object sender, EventArgs e)
+		void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 		}
 	}
 }
-
-#endif
