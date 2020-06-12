@@ -15,19 +15,13 @@
 namespace Castle.DynamicProxy
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.IO;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Resources;
-	using System.Threading;
 
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
-#if FEATURE_SERIALIZATION
-	using Castle.DynamicProxy.Serialization;
-#endif
 
 	public class ModuleScope
 	{
@@ -463,70 +457,8 @@ namespace Castle.DynamicProxy
 				File.Delete(assemblyFilePath);
 			}
 
-#if FEATURE_SERIALIZATION
-			AddCacheMappings(assemblyBuilder);
-#endif
-
 			assemblyBuilder.Save(assemblyFileName);
 			return assemblyFilePath;
-		}
-#endif
-
-#if FEATURE_SERIALIZATION
-		private void AddCacheMappings(AssemblyBuilder builder)
-		{
-			var mappings = new Dictionary<CacheKey, string>();
-
-			typeCache.ForEach((key, value) =>
-			{
-				// NOTE: using == returns invalid results.
-				// we need to use Equals here for it to work properly
-				if (builder.Equals(value.Assembly))
-				{
-					mappings.Add(key, value.FullName);
-				}
-			});
-
-			CacheMappingsAttribute.ApplyTo(builder, mappings);
-		}
-
-		/// <summary>
-		///   Loads the generated types from the given assembly into this <see cref = "ModuleScope" />'s cache.
-		/// </summary>
-		/// <param name = "assembly">The assembly to load types from. This assembly must have been saved via <see
-		///    cref = "SaveAssembly(bool)" /> or
-		///   <see cref = "SaveAssembly()" />, or it must have the <see cref = "CacheMappingsAttribute" /> manually applied.</param>
-		/// <remarks>
-		///   This method can be used to load previously generated and persisted proxy types from disk into this scope's type cache, e.g. in order
-		///   to avoid the performance hit associated with proxy generation.
-		/// </remarks>
-		public void LoadAssemblyIntoCache(Assembly assembly)
-		{
-			if (assembly == null)
-			{
-				throw new ArgumentNullException("assembly");
-			}
-
-			var cacheMappings =
-				(CacheMappingsAttribute[])assembly.GetCustomAttributes(typeof(CacheMappingsAttribute), false);
-
-			if (cacheMappings.Length == 0)
-			{
-				var message = string.Format(
-					"The given assembly '{0}' does not contain any cache information for generated types.",
-					assembly.FullName);
-				throw new ArgumentException(message, "assembly");
-			}
-
-			foreach (var mapping in cacheMappings[0].GetDeserializedMappings())
-			{
-				var loadedType = assembly.GetType(mapping.Value);
-
-				if (loadedType != null)
-				{
-					typeCache.AddOrUpdateWithoutTakingLock(mapping.Key, loadedType);
-				}
-			}
 		}
 #endif
 
