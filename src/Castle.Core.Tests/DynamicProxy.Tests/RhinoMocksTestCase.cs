@@ -179,10 +179,13 @@ namespace Castle.DynamicProxy.Tests
 
 			var iHaveMethodWithModOptsType = typeBuilder.CreateTypeInfo();
 
-#if FEATURE_ASSEMBLYBUILDER_SAVE && FEATURE_TEST_PEVERIFY
-			// Let's persist and PE-verify the dynamic assembly before it gets used in tests:
-			var assemblyPath = moduleScope.SaveAssembly();
-			base.RunPEVerifyOnGeneratedAssembly(assemblyPath);
+#if FEATURE_ASSEMBLYBUILDER_SAVE
+			if (IsVerificationPossible)
+			{
+				// Let's persist and PE-verify the dynamic assembly before it gets used in tests:
+				var assemblyPath = moduleScope.SaveAssembly();
+				RunPEVerifyOnGeneratedAssembly(assemblyPath);
+			}
 #endif
 
 			this.iHaveMethodWithModOptsType = iHaveMethodWithModOptsType;

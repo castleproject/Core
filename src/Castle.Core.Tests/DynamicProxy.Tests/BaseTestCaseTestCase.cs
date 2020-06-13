@@ -46,7 +46,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsFalse(File.Exists(path));
 		}
 
-#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
 		public void TearDown_SavesAssembly_IfProxyGenerated()
 		{
@@ -59,9 +58,8 @@ namespace Castle.DynamicProxy.Tests
 			generator.CreateClassProxy(typeof(object), new StandardInterceptor());
 
 			base.TearDown();
-			Assert.IsTrue(File.Exists(path));
+			Assert.AreEqual(IsVerificationPossible, File.Exists(path));
 		}
-#endif
 
 		private void FindVerificationErrors()
 		{
@@ -80,16 +78,15 @@ namespace Castle.DynamicProxy.Tests
 			base.TearDown();
 		}
 
-#if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
-		[Platform(Exclude = "Mono", Reason = "Mono doesn't have peverify, so we can't perform verification.")]
 		public void TearDown_FindsVerificationErrors()
 		{
+			if (!IsVerificationPossible) Assert.Ignore();
+
 			var ex = Assert.Throws<AssertionException>(() => FindVerificationErrors());
 			StringAssert.Contains("PeVerify reported error(s)", ex.Message);
 			StringAssert.Contains("fall through end of the method without returning", ex.Message);
 		}
-#endif
 
 		[Test]
 		public void DisableVerification_DisablesVerificationForTestCase()
