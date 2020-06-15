@@ -15,14 +15,11 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
-#if FEATURE_ASSEMBLYBUILDER_SAVE
 	using System.Diagnostics;
-#endif
 	using System.IO;
 
 	using NUnit.Framework;
 
-#if FEATURE_TEST_PEVERIFY
 	public class FindPeVerify
 	{
 		private static readonly string[] PeVerifyProbingPaths =
@@ -55,18 +52,13 @@ namespace Castle.DynamicProxy.Tests
 					return file;
 				}
 			}
-			throw new FileNotFoundException(
-				"Please check the PeVerifyProbingPaths configuration setting and set it to the folder where peverify.exe is located");
+			return null;
 		}
 
-		private static string peVerifyPath;
+		private static Lazy<string> peVerifyPath => new Lazy<string>(FindPeVerifyPath);
 
-		public static string PeVerifyPath
-		{
-			get { return peVerifyPath ?? (peVerifyPath = FindPeVerifyPath()); }
-		}
+		public static string PeVerifyPath => peVerifyPath.Value;
 	}
-#endif
 
 	public abstract class BasePEVerifyTestCase
 	{
@@ -109,25 +101,30 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE
+
+		public bool IsVerificationPossible => FindPeVerify.PeVerifyPath != null;
+
 		[TearDown]
 		public virtual void TearDown()
 		{
-			if (!IsVerificationDisabled)
+			if (IsVerificationPossible && !IsVerificationDisabled)
 			{
 				// Note: only supports one generated assembly at the moment
 				var path = ((PersistentProxyBuilder)builder).SaveAssembly();
-#if FEATURE_TEST_PEVERIFY
 				if (path != null)
 				{
 					RunPEVerifyOnGeneratedAssembly(path);
 				}
-#endif
 			}
 		}
 
-#if FEATURE_TEST_PEVERIFY
 		public void RunPEVerifyOnGeneratedAssembly(string assemblyPath)
 		{
+			if (!IsVerificationPossible)
+			{
+				throw new InvalidOperationException();
+			}
+
 			var process = new Process
 			{
 				StartInfo =
@@ -152,9 +149,10 @@ namespace Castle.DynamicProxy.Tests
 				Assert.Fail("PeVerify reported error(s): " + Environment.NewLine + processOutput, result);
 			}
 		}
-#endif // FEATURE_TEST_PEVERIFY
 
 #else
+		public bool IsVerificationPossible => false;
+
 		[TearDown]
 		public virtual void TearDown()
 		{

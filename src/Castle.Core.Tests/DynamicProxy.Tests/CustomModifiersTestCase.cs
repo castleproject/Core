@@ -11,7 +11,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#if FEATURE_ASSEMBLYBUILDER_SAVE
 
 namespace Castle.DynamicProxy.Tests
 {
@@ -123,10 +122,13 @@ namespace Castle.DynamicProxy.Tests
 				this.AddTypeWithCustomModifiersAsModreqOnReturnType(moduleScope, partialTypeName, customModifiers);
 			}
 
-#if FEATURE_TEST_PEVERIFY
-			// Let's persist and PE-verify the dynamic assembly before it gets used in tests:
-			var assemblyPath = moduleScope.SaveAssembly();
-			base.RunPEVerifyOnGeneratedAssembly(assemblyPath);
+#if FEATURE_ASSEMBLYBUILDER_SAVE
+			if (IsVerificationPossible)
+			{
+				// Let's persist and PE-verify the dynamic assembly before it gets used in tests:
+				var assemblyPath = moduleScope.SaveAssembly();
+				RunPEVerifyOnGeneratedAssembly(assemblyPath);
+			}
 #endif
 		}
 
@@ -396,5 +398,3 @@ namespace Castle.DynamicProxy.Tests
 		public class Bar { }
 	}
 }
-
-#endif
