@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_EVENTLOG
 namespace Castle.Core.Logging.Tests
 {
 	using System;
@@ -76,6 +75,7 @@ namespace Castle.Core.Logging.Tests
 		}
 
 		[Test]
+		[Platform(Include = "Win,Mono")]
 		public void SimpleUsage()
 		{
 			DiagnosticsLogger logger = new DiagnosticsLogger("castle_testlog", "test_source");
@@ -91,4 +91,3 @@ namespace Castle.Core.Logging.Tests
 		}
 	}
 }
-#endif
