@@ -20,6 +20,7 @@
 		<AssemblyVersion>$(BuildVersionMajor).0.0</AssemblyVersion>
 		<PackageLicenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</PackageLicenseUrl>
 		<PackageProjectUrl>http://www.castleproject.org/</PackageProjectUrl>
+		<PackageIconUrl>http://www.castleproject.org/img/castle-logo.png</PackageIconUrl>
 		<PackageIcon>castle-logo.png</PackageIcon>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageVersion>$(BuildVersion)</PackageVersion>
