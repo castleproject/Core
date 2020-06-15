@@ -12,50 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Contributors
+namespace Castle.DynamicProxy.Generators
 {
-	using System.Reflection;
-
-	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	internal class MinimialisticMethodGenerator : MethodGenerator
+	internal class ForwardingMethodGenerator : MethodGenerator
 	{
-		public MinimialisticMethodGenerator(MetaMethod method, OverrideMethodDelegate overrideMethod)
+		private readonly GetTargetReferenceDelegate getTargetReference;
+
+		public ForwardingMethodGenerator(MetaMethod method, OverrideMethodDelegate overrideMethod,
+		                                 GetTargetReferenceDelegate getTargetReference)
 			: base(method, overrideMethod)
 		{
+			this.getTargetReference = getTargetReference;
 		}
 
 		protected override MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class,
 		                                                        ProxyGenerationOptions options, INamingScope namingScope)
 		{
-			InitOutParameters(emitter, MethodToOverride.GetParameters());
+			var targetReference = getTargetReference(@class, MethodToOverride);
+			var arguments = ArgumentsUtil.ConvertToArgumentReferenceExpression(MethodToOverride.GetParameters());
 
-			if (emitter.ReturnType == typeof(void))
-			{
-				emitter.CodeBuilder.AddStatement(new ReturnStatement());
-			}
-			else
-			{
-				emitter.CodeBuilder.AddStatement(new ReturnStatement(new DefaultValueExpression(emitter.ReturnType)));
-			}
-
+			emitter.CodeBuilder.AddStatement(new ReturnStatement(
+			                                 	new MethodInvocationExpression(
+			                                 		targetReference,
+			                                 		MethodToOverride,
+			                                 		arguments) { VirtualCall = true }));
 			return emitter;
-		}
-
-		private void InitOutParameters(MethodEmitter emitter, ParameterInfo[] parameters)
-		{
-			for (var index = 0; index < parameters.Length; index++)
-			{
-				var parameter = parameters[index];
-				if (parameter.IsOut)
-				{
-					emitter.CodeBuilder.AddStatement(
-						new AssignArgumentStatement(new ArgumentReference(parameter.ParameterType, index + 1),
-						                            new DefaultValueExpression(parameter.ParameterType)));
-				}
-			}
 		}
 	}
 }
