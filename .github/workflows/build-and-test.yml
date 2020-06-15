@@ -1,0 +1,64 @@
+name: Build and test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+
+  build:
+    runs_on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+      - name: Install dependencies
+        run: dotnet restore --no-cache --packages .nuget/packages --use-lock-file
+      - name: Build project
+        run: dotnet build --configuration Release --no-restore
+      - name: Cache built project
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: ./
+
+  test-netfx-on-win:
+    needs: build
+    runs-on: windows-latest
+    steps:
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Restore pre-built project
+      uses: actions/download-artifact@v2
+      with:
+        name: build
+        path: ./
+    - name: Test
+      run: dotnet test --framework net461 --configuration Release --no-restore --no-build
+
+  test-netcore:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, windows-latest]
+    needs: build
+    runs-on: ${{ matrix.platform }}
+    steps:
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Restore pre-built project
+      uses: actions/download-artifact@v2
+      with:
+        name: build
+        path: bin/
+    - name: Test
+      run: dotnet test --framework netcoreapp3.1 --configuration Release --no-restore --no-build
