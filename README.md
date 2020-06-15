@@ -24,9 +24,9 @@ Browse the [contributing section](https://github.com/castleproject/Home#its-comm
 
 ## Building
 
-| Platforms       | Build Status | NuGet Feed |
-|-----------------|-------------:|------------|
-| Windows & Linux | [![Build status](https://ci.appveyor.com/api/projects/status/49a6i0ydiku56r5b/branch/master?svg=true)](https://ci.appveyor.com/project/castleproject/core/branch/master) | [Preview Feed](https://ci.appveyor.com/nuget/core-0mhe40ifodk8)
+| Platforms       | NuGet Feed |
+|-----------------|------------|
+| Windows & Linux | [Preview Feed](https://ci.appveyor.com/nuget/core-0mhe40ifodk8)
 
 ### On Windows
 
