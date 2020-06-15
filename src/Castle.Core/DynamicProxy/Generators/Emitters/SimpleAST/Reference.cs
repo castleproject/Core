@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	public abstract class Reference
+	internal abstract class Reference
 	{
 		protected Reference owner = SelfReference.Self;
 

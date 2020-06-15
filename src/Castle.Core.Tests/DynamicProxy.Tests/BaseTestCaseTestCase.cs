@@ -70,11 +70,7 @@ namespace Castle.DynamicProxy.Tests
 			MethodBuilder invalidMethod = invalidType.DefineMethod("InvalidMethod", MethodAttributes.Public);
 			invalidMethod.GetILGenerator().Emit(OpCodes.Ldnull); // missing RET statement
 
-#if FEATURE_LEGACY_REFLECTION_API
-			invalidType.CreateType();
-#else
-			invalidType.CreateTypeInfo().AsType();
-#endif
+			invalidType.CreateTypeInfo();
 
 			if (!IsVerificationDisabled)
 			{
@@ -86,7 +82,7 @@ namespace Castle.DynamicProxy.Tests
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE
 		[Test]
-		[ExcludeOnFramework(Framework.Mono, "Mono doesn't have peverify, so we can't perform verification.")]
+		[Platform(Exclude = "Mono", Reason = "Mono doesn't have peverify, so we can't perform verification.")]
 		public void TearDown_FindsVerificationErrors()
 		{
 			var ex = Assert.Throws<AssertionException>(() => FindVerificationErrors());

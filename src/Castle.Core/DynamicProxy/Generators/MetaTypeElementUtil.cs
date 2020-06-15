@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy.Generators
 			var ns = sourceType.Namespace;
 			Debug.Assert(ns == null || ns != "");
 
-			if (sourceType.GetTypeInfo().IsGenericType)
+			if (sourceType.IsGenericType)
 			{
 				var nameBuilder = new StringBuilder();
 				if (ns != null)
@@ -52,7 +52,7 @@ namespace Castle.DynamicProxy.Generators
 		private static void AppendNameOf(this StringBuilder nameBuilder, Type type)
 		{
 			nameBuilder.Append(type.Name);
-			if (type.GetTypeInfo().IsGenericType)
+			if (type.IsGenericType)
 			{
 				nameBuilder.Append('[');
 				var genericTypeArguments = type.GetGenericArguments();

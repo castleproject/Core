@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Generators
 
 	using Castle.DynamicProxy.Generators.Emitters;
 
-	public class MetaProperty : MetaTypeElement, IEquatable<MetaProperty>
+	internal class MetaProperty : MetaTypeElement, IEquatable<MetaProperty>
 	{
 		private readonly Type[] arguments;
 		private readonly PropertyAttributes attributes;

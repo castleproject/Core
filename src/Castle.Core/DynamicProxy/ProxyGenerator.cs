@@ -19,13 +19,6 @@ namespace Castle.DynamicProxy
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.InteropServices;
-#if FEATURE_REMOTING
-	using System.Runtime.Remoting;
-#endif
-#if FEATURE_SECURITY_PERMISSIONS
-	using System.Security;
-	using System.Security.Permissions;
-#endif
 	using System.Text;
 
 	using Castle.Core.Internal;
@@ -49,21 +42,8 @@ namespace Castle.DynamicProxy
 		{
 			proxyBuilder = builder;
 
-#if FEATURE_SECURITY_PERMISSIONS
-			if (HasSecurityPermission())
-#endif
-			{
-				Logger = new TraceLogger("Castle.DynamicProxy", LoggerLevel.Warn);
-			}
+			Logger = new TraceLogger("Castle.DynamicProxy", LoggerLevel.Warn);
 		}
-
-#if FEATURE_SECURITY_PERMISSIONS
-		private bool HasSecurityPermission()
-		{
-			const SecurityPermissionFlag flag = SecurityPermissionFlag.ControlEvidence | SecurityPermissionFlag.ControlPolicy;
-			return new SecurityPermission(flag).IsGranted();
-		}
-#endif
 
 		/// <summary>
 		///   Initializes a new instance of the <see cref = "ProxyGenerator" /> class.
@@ -320,7 +300,7 @@ namespace Castle.DynamicProxy
 				throw new ArgumentNullException("interceptors");
 			}
 
-			if (!interfaceToProxy.GetTypeInfo().IsInterface)
+			if (!interfaceToProxy.IsInterface)
 			{
 				throw new ArgumentException("Specified type is not an interface", "interfaceToProxy");
 			}
@@ -550,9 +530,6 @@ namespace Castle.DynamicProxy
 		///   This method uses <see cref = "IProxyBuilder" /> implementation to generate a proxy type.
 		///   As such caller should expect any type of exception that given <see cref = "IProxyBuilder" /> implementation may throw.
 		/// </remarks>
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
-		[SecuritySafeCritical]
-#endif
 		public virtual object CreateInterfaceProxyWithTargetInterface(Type interfaceToProxy,
 		                                                              Type[] additionalInterfacesToProxy,
 		                                                              object target, ProxyGenerationOptions options,
@@ -574,18 +551,14 @@ namespace Castle.DynamicProxy
 				throw new ArgumentNullException("interceptors");
 			}
 
-			if (!interfaceToProxy.GetTypeInfo().IsInterface)
+			if (!interfaceToProxy.IsInterface)
 			{
 				throw new ArgumentException("Specified type is not an interface", "interfaceToProxy");
 			}
 
-			var isRemotingProxy = false;
-#if FEATURE_REMOTING
 			if (target != null)
 			{
-				isRemotingProxy = RemotingServices.IsTransparentProxy(target);
-
-				if (!isRemotingProxy && Marshal.IsComObject(target))
+				if (Marshal.IsComObject(target))
 				{
 					var interfaceId = interfaceToProxy.GUID;
 					if (interfaceId != Guid.Empty)
@@ -608,7 +581,6 @@ namespace Castle.DynamicProxy
 					}
 				}
 			}
-#endif
 
 			CheckNotGenericTypeDefinition(interfaceToProxy, "interfaceToProxy");
 			CheckNotGenericTypeDefinitions(additionalInterfacesToProxy, "additionalInterfacesToProxy");
@@ -616,14 +588,6 @@ namespace Castle.DynamicProxy
 			var generatedType = CreateInterfaceProxyTypeWithTargetInterface(interfaceToProxy, additionalInterfacesToProxy,
 			                                                                options);
 			var arguments = GetConstructorArguments(target, interceptors, options);
-			if (isRemotingProxy)
-			{
-				var constructors = generatedType.GetConstructors();
-
-				// one .ctor to rule them all
-				Debug.Assert(constructors.Length == 1, "constructors.Length == 1");
-				return constructors[0].Invoke(arguments.ToArray());
-			}
 			return Activator.CreateInstance(generatedType, arguments.ToArray());
 		}
 
@@ -856,7 +820,7 @@ namespace Castle.DynamicProxy
 				throw new ArgumentNullException("interceptors");
 			}
 
-			if (!interfaceToProxy.GetTypeInfo().IsInterface)
+			if (!interfaceToProxy.IsInterface)
 			{
 				throw new ArgumentException("Specified type is not an interface", "interfaceToProxy");
 			}
@@ -1165,7 +1129,7 @@ namespace Castle.DynamicProxy
 			{
 				throw new ArgumentNullException("options");
 			}
-			if (!classToProxy.GetTypeInfo().IsClass)
+			if (!classToProxy.IsClass)
 			{
 				throw new ArgumentException("'classToProxy' must be a class", "classToProxy");
 			}
@@ -1429,7 +1393,7 @@ namespace Castle.DynamicProxy
 			{
 				throw new ArgumentNullException("options");
 			}
-			if (!classToProxy.GetTypeInfo().IsClass)
+			if (!classToProxy.IsClass)
 			{
 				throw new ArgumentException("'classToProxy' must be a class", "classToProxy");
 			}
@@ -1480,7 +1444,7 @@ namespace Castle.DynamicProxy
 
 		protected void CheckNotGenericTypeDefinition(Type type, string argumentName)
 		{
-			if (type != null && type.GetTypeInfo().IsGenericTypeDefinition)
+			if (type != null && type.IsGenericTypeDefinition)
 			{
 				throw new GeneratorException(string.Format("Can not create proxy for type {0} because it is an open generic type.",
 														   type.GetBestName()));

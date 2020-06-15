@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Generators
 	/// <summary>
 	///   Represents the scope of uniqueness of names for types and their members
 	/// </summary>
-	public interface INamingScope
+	internal interface INamingScope
 	{
 		INamingScope ParentScope { get; }
 

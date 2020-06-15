@@ -1,16 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Castle Build", "Castle Build", "{1B999D24-B7AB-4997-96E7-08FA05325694}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
 		build.cmd = build.cmd
 		build.sh = build.sh
 		CHANGELOG.md = CHANGELOG.md
+		buildscripts\common.props = buildscripts\common.props
 		CONTRIBUTING.md = CONTRIBUTING.md
 		LICENSE = LICENSE
 		README.md = README.md
@@ -68,5 +70,8 @@ Global
 		{AFD3B071-E971-499B-A95B-E98155EB66E8} = {A598EE9B-41CE-4BE8-BF93-2C91F919F97E}
 		{344D907D-6641-4A61-94C2-4980B5804FE2} = {A598EE9B-41CE-4BE8-BF93-2C91F919F97E}
 		{91B2A82F-63F6-46B1-8EDC-5D029BCF6A2B} = {A598EE9B-41CE-4BE8-BF93-2C91F919F97E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {682D4399-4863-4813-B495-5FEDD22496ED}
 	EndGlobalSection
 EndGlobal

@@ -500,7 +500,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			var season = CreateXmlAdapter<ISeason>(xml, ref document);
 			foreach (var team in season.Teams.ToArray())
 			{
-				season.Teams.Remove(team);								
+				season.Teams.Remove(team);
 			}
 			Assert.AreEqual(0, season.Teams.Count);
 			var teams = document.GetElementsByTagName("Team", "RISE");
@@ -853,12 +853,11 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			Assert.IsFalse(XmlAdapter.IsPropertyDefined("Name", season));
 		}
 
-#if !DOTNET35
 		[Test]
 		public void Can_Detect_Circularities()
 		{
-			var starWars = new[] 
-			{ 
+			var starWars = new[]
+			{
 				"Star Wars Episode IV: A New Hope",
 				"Star Wars Episode V: The Empire Strikes Back",
 				"Star Wars Episode VI: Return of the Jedi",
@@ -886,7 +885,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 				book.RelatedBooks = relatedBooks;
 			}
 		}
-#endif
 
 		private T CreateXmlAdapter<T>(string xml, ref XmlDocument document)
 		{
@@ -1238,7 +1236,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 	{
 		int Level { get; set; }
 	}
-	
+
 	#endregion
 
 	#region Xml Serialization Model
@@ -1307,7 +1305,7 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
 			reader.MoveToContent();
 			var isEmptyElement = reader.IsEmptyElement;
 			reader.ReadStartElement();
-			if (isEmptyElement == false) 
+			if (isEmptyElement == false)
 			{
 				Tag = reader.ReadElementString("Tag");
 				reader.ReadEndElement();

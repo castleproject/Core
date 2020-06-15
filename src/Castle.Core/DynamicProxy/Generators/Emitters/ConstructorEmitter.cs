@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public class ConstructorEmitter : IMemberEmitter
+	internal class ConstructorEmitter : IMemberEmitter
 	{
 		private readonly ConstructorBuilder builder;
 		private readonly AbstractTypeEmitter maintype;
@@ -75,11 +75,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			get
 			{
-#if FEATURE_LEGACY_REFLECTION_API
-				var attributes = builder.GetMethodImplementationFlags();
-#else
 				var attributes = builder.MethodImplementationFlags;
-#endif
 				return (attributes & MethodImplAttributes.Runtime) != 0;
 			}
 		}

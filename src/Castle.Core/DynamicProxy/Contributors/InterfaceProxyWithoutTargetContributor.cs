@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 
-	public class InterfaceProxyWithoutTargetContributor : CompositeTypeContributor
+	internal class InterfaceProxyWithoutTargetContributor : CompositeTypeContributor
 	{
 		private readonly GetTargetExpressionDelegate getTargetExpression;
 		protected bool canChangeTarget = false;

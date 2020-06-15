@@ -29,9 +29,9 @@ namespace Castle.DynamicProxy.Tests
 		public void ProxyForBaseTypeFromUnsignedAssembly()
 		{
 			Type t = typeof(Class);
-			Assert.False(StrongNameUtil.IsAssemblySigned(t.GetTypeInfo().Assembly));
+			Assert.False(StrongNameUtil.IsAssemblySigned(t.Assembly));
 			object proxy = generator.CreateClassProxy(t, new StandardInterceptor());
-			Assert.False(StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
+			Assert.False(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
 		[Test]
@@ -39,10 +39,10 @@ namespace Castle.DynamicProxy.Tests
 		{
 			Type t1 = typeof(Class);
 			Type t2 = typeof(IInterface);
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t1.GetTypeInfo().Assembly));
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t2.GetTypeInfo().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t1.Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t2.Assembly));
 			object proxy = generator.CreateClassProxy(t1, new Type[] { t2 }, new StandardInterceptor());
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
 		[Test]
@@ -50,10 +50,10 @@ namespace Castle.DynamicProxy.Tests
 		{
 			Type t1 = typeof(Class);
 			Type t2 = typeof(IServiceProvider);
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t1.GetTypeInfo().Assembly));
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t2.GetTypeInfo().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t1.Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t2.Assembly));
 			object proxy = generator.CreateClassProxy(t1, new Type[] { t2 }, new StandardInterceptor());
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
 		[Test]
@@ -61,10 +61,10 @@ namespace Castle.DynamicProxy.Tests
 		{
 			Type t1 = typeof(List<int>);
 			Type t2 = typeof(IInterface);
-			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t1.GetTypeInfo().Assembly));
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t2.GetTypeInfo().Assembly));
+			Assert.IsTrue(StrongNameUtil.IsAssemblySigned(t1.Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t2.Assembly));
 			object proxy = generator.CreateClassProxy(t1, new Type[] { t2 }, new StandardInterceptor());
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().GetTypeInfo().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(proxy.GetType().Assembly));
 		}
 
 		public abstract class Class

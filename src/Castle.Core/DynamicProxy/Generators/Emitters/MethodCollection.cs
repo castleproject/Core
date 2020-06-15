@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System.Collections.ObjectModel;
 
-	public class MethodCollection : Collection<MethodEmitter>
+	internal class MethodCollection : Collection<MethodEmitter>
 	{
 	}
 }

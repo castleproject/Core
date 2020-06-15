@@ -15,13 +15,12 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
-	using System.ComponentModel;
 	using System.Reflection;
 	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	public abstract class ArgumentsUtil
+	internal abstract class ArgumentsUtil
 	{
 		public static Expression[] ConvertArgumentReferenceToExpression(ArgumentReference[] args)
 		{
@@ -113,20 +112,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				args[i].Position = i + offset;
 			}
-		}
-
-		[Obsolete]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public static bool IsAnyByRef(ParameterInfo[] parameters)
-		{
-			for (var i = 0; i < parameters.Length; i++)
-			{
-				if (parameters[i].ParameterType.GetTypeInfo().IsByRef)
-				{
-					return true;
-				}
-			}
-			return false;
 		}
 	}
 }

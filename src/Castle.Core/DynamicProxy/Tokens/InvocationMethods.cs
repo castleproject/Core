@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Tokens
 	/// <summary>
 	///   Holds <see cref = "MethodInfo" /> objects representing methods of <see cref = "AbstractInvocation" /> class.
 	/// </summary>
-	public static class InvocationMethods
+	internal static class InvocationMethods
 	{
 		public static readonly ConstructorInfo CompositionInvocationConstructor =
 			typeof(CompositionInvocation).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null,

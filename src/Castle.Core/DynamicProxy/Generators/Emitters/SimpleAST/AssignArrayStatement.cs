@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	public class AssignArrayStatement : Statement
+	internal class AssignArrayStatement : Statement
 	{
 		private readonly Reference targetArray;
 		private readonly int targetPosition;

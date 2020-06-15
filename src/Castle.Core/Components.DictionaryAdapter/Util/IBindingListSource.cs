@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_BINDINGLIST
 namespace Castle.Components.DictionaryAdapter
 {
 	using System.ComponentModel;
@@ -22,4 +21,3 @@ namespace Castle.Components.DictionaryAdapter
 		IBindingList AsBindingList { get; }
 	}
 }
-#endif

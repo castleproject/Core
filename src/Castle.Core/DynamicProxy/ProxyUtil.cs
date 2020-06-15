@@ -21,10 +21,6 @@ namespace Castle.DynamicProxy
 	using System.Runtime.CompilerServices;
 	using System.Threading;
 
-#if FEATURE_REMOTING
-	using System.Runtime.Remoting;
-#endif
-
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Internal;
@@ -79,25 +75,15 @@ namespace Castle.DynamicProxy
 			}
 			else
 			{
-#if FEATURE_NETCORE_REFLECTION_API
-				return proxiedInvokeMethod.CreateDelegate(delegateType, proxy);
-#else
 				return Delegate.CreateDelegate(delegateType, proxy, proxiedInvokeMethod);
-#endif
 			}
 		}
 
 		public static object GetUnproxiedInstance(object instance)
 		{
-#if FEATURE_REMOTING
-			if (!RemotingServices.IsTransparentProxy(instance))
-#endif
+			if (instance is IProxyTargetAccessor accessor)
 			{
-				var accessor = instance as IProxyTargetAccessor;
-				if (accessor != null)
-				{
-					instance = accessor.DynProxyGetTarget();
-				}
+				instance = accessor.DynProxyGetTarget();
 			}
 
 			return instance;
@@ -105,25 +91,17 @@ namespace Castle.DynamicProxy
 
 		public static Type GetUnproxiedType(object instance)
 		{
-#if FEATURE_REMOTING
-			if (!RemotingServices.IsTransparentProxy(instance))
-#endif
+			if (instance is IProxyTargetAccessor accessor)
 			{
-				var accessor = instance as IProxyTargetAccessor;
-
-				if (accessor != null)
+				var target = accessor.DynProxyGetTarget();
+				if (target != null)
 				{
-					var target = accessor.DynProxyGetTarget();
-
-					if (target != null)
+					if (ReferenceEquals(target, instance))
 					{
-						if (ReferenceEquals(target, instance))
-						{
-							return instance.GetType().GetTypeInfo().BaseType;
-						}
-
-						instance = target;
+						return instance.GetType().BaseType;
 					}
+
+					instance = target;
 				}
 			}
 
@@ -132,12 +110,6 @@ namespace Castle.DynamicProxy
 
 		public static bool IsProxy(object instance)
 		{
-#if FEATURE_REMOTING
-			if (RemotingServices.IsTransparentProxy(instance))
-			{
-				return true;
-			}
-#endif
 			return instance is IProxyTargetAccessor;
 		}
 
@@ -196,19 +168,17 @@ namespace Castle.DynamicProxy
 
 		internal static bool IsAccessibleType(Type target)
 		{
-			var typeInfo = target.GetTypeInfo();
-
-			var isPublic = typeInfo.IsPublic || typeInfo.IsNestedPublic;
+			var isPublic = target.IsPublic || target.IsNestedPublic;
 			if (isPublic)
 			{
 				return true;
 			}
 
 			var isTargetNested = target.IsNested;
-			var isNestedAndInternal = isTargetNested && (typeInfo.IsNestedAssembly || typeInfo.IsNestedFamORAssem);
-			var isInternalNotNested = typeInfo.IsVisible == false && isTargetNested == false;
+			var isNestedAndInternal = isTargetNested && (target.IsNestedAssembly || target.IsNestedFamORAssem);
+			var isInternalNotNested = target.IsVisible == false && isTargetNested == false;
 			var isInternal = isInternalNotNested || isNestedAndInternal;
-			if (isInternal && AreInternalsVisibleToDynamicProxy(typeInfo.Assembly))
+			if (isInternal && AreInternalsVisibleToDynamicProxy(target.Assembly))
 			{
 				return true;
 			}
@@ -231,7 +201,7 @@ namespace Castle.DynamicProxy
 
 			if (method.IsAssembly || method.IsFamilyAndAssembly)
 			{
-				return AreInternalsVisibleToDynamicProxy(method.DeclaringType.GetTypeInfo().Assembly);
+				return AreInternalsVisibleToDynamicProxy(method.DeclaringType.Assembly);
 			}
 
 			return false;
@@ -252,7 +222,7 @@ namespace Castle.DynamicProxy
 		private static string CreateMessageForInaccessibleMethod(MethodBase inaccessibleMethod)
 		{
 			var containingType = inaccessibleMethod.DeclaringType;
-			var targetAssembly = containingType.GetTypeInfo().Assembly;
+			var targetAssembly = containingType.Assembly;
 
 			var messageFormat = "Can not create proxy for method {0} because it or its declaring type is not accessible. ";
 

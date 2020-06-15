@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
 
-	public class InvocationWithDelegateContributor : IInvocationCreationContributor
+	internal class InvocationWithDelegateContributor : IInvocationCreationContributor
 	{
 		private readonly Type delegateType;
 		private readonly MetaMethod method;
@@ -33,7 +33,7 @@ namespace Castle.DynamicProxy.Contributors
 		public InvocationWithDelegateContributor(Type delegateType, Type targetType, MetaMethod method,
 		                                         INamingScope namingScope)
 		{
-			Debug.Assert(delegateType.GetTypeInfo().IsGenericType == false, "delegateType.IsGenericType == false");
+			Debug.Assert(delegateType.IsGenericType == false, "delegateType.IsGenericType == false");
 			this.delegateType = delegateType;
 			this.targetType = targetType;
 			this.method = method;

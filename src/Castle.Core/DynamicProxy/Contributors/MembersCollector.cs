@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Internal;
 
-	public abstract class MembersCollector
+	internal abstract class MembersCollector
 	{
 		private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		private ILogger logger = NullLogger.Instance;
@@ -203,10 +203,7 @@ namespace Castle.DynamicProxy.Contributors
 			var isOverridable = method.IsVirtual && !method.IsFinal;
 			if (onlyVirtuals && !isOverridable)
 			{
-				if (
-#if FEATURE_REMOTING
-					method.DeclaringType != typeof(MarshalByRefObject) &&
-#endif
+				if (method.DeclaringType != typeof(MarshalByRefObject) &&
 					method.IsGetType() == false &&
 					method.IsMemberwiseClone() == false)
 				{
@@ -231,12 +228,11 @@ namespace Castle.DynamicProxy.Contributors
 				return false;
 			}
 
-#if FEATURE_REMOTING
 			if (method.DeclaringType == typeof(MarshalByRefObject))
 			{
 				return false;
 			}
-#endif
+
 			if (method.IsFinalizer())
 			{
 				return false;
@@ -248,7 +244,7 @@ namespace Castle.DynamicProxy.Contributors
 		private static bool IsInternalAndNotVisibleToDynamicProxy(MethodInfo method)
 		{
 			return ProxyUtil.IsInternal(method) &&
-				   ProxyUtil.AreInternalsVisibleToDynamicProxy(method.DeclaringType.GetTypeInfo().Assembly) == false;
+				   ProxyUtil.AreInternalsVisibleToDynamicProxy(method.DeclaringType.Assembly) == false;
 		}
 	}
 }

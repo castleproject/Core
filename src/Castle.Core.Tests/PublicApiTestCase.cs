@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if DOTNET40 // PublicApiGenerator requires .NET Standard 2.0, and we only need to run it once
+#if DOTNET45 // PublicApiGenerator requires .NET Standard 2.0, and we only need to run it once
 
 namespace Castle
 {
@@ -42,7 +42,7 @@ namespace Castle
 		};
 
 		[Test]
-		[ExcludeOnFramework(Framework.Mono, "On Mono, the FrameworkDisplayNameAttribute isn't populated")]
+		[Platform(Exclude = "Mono", Reason = "On Mono, the FrameworkDisplayNameAttribute isn't populated")]
 		public void PublicApi()
 		{
 			// Determine if we are in write (developer) or compare (CI server) mode
@@ -81,7 +81,7 @@ namespace Castle
 					string assemblyRefPath = $"{refDir}/{assemblyName}-{framework}.cs";
 
 					var assembly = Assembly.LoadFile(Path.GetFullPath(assemblyBinPath));
-					string publicApi = ApiGenerator.GeneratePublicApi(assembly);
+					string publicApi = assembly.GeneratePublicApi();
 
 					if (compare)
 					{

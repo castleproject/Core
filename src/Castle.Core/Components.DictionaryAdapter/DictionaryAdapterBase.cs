@@ -27,11 +27,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			CanEdit = typeof(IEditableObject).IsAssignableFrom(Meta.Type);
 			CanNotify = typeof(INotifyPropertyChanged).IsAssignableFrom(Meta.Type);
-#if FEATURE_IDATAERRORINFO
 			CanValidate = typeof(IDataErrorInfo).IsAssignableFrom(Meta.Type);
-#else
-			CanValidate = false;
-#endif
 
 			Initialize();
 		}

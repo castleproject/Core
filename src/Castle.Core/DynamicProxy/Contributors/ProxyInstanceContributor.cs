@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Contributors
 #endif
 	using Castle.DynamicProxy.Tokens;
 
-	public abstract class ProxyInstanceContributor : ITypeContributor
+	internal abstract class ProxyInstanceContributor : ITypeContributor
 	{
 		protected readonly Type targetType;
 		private readonly string proxyTypeId;
@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Contributors
 			ImplementGetObjectData(@class);
 #endif
 			ImplementProxyTargetAccessor(@class, interceptors);
-			foreach (var attribute in targetType.GetTypeInfo().GetNonInheritableAttributes())
+			foreach (var attribute in targetType.GetNonInheritableAttributes())
 			{
 				@class.DefineCustomAttribute(attribute.Builder);
 			}

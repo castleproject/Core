@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_DICTIONARYADAPTER_XML
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -43,4 +42,3 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 	}
 }
-#endif

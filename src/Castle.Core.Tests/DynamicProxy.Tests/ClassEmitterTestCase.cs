@@ -73,7 +73,7 @@ namespace Castle.DynamicProxy.Tests
 			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes,
 			                                        TypeAttributes.Public, false);
 			Type t = emitter.BuildType();
-			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(t.GetTypeInfo().Assembly));
+			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(t.Assembly));
 		}
 
 		[Test]
@@ -82,7 +82,7 @@ namespace Castle.DynamicProxy.Tests
 			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes,
 			                                        TypeAttributes.Public, true);
 			Type t = emitter.BuildType();
-			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t.GetTypeInfo().Assembly));
+			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t.Assembly));
 		}
 
 		[Test]
@@ -115,7 +115,7 @@ namespace Castle.DynamicProxy.Tests
 			emitter.CreateMethod("MyMethod", MethodAttributes.Public | MethodAttributes.Abstract | MethodAttributes.Virtual,
 			                     typeof(void), Type.EmptyTypes);
 			Type t = emitter.BuildType();
-			Assert.IsTrue(t.GetTypeInfo().IsInterface);
+			Assert.IsTrue(t.IsInterface);
 			MethodInfo method = t.GetMethod("MyMethod");
 			Assert.IsNotNull(method);
 		}
@@ -169,7 +169,7 @@ namespace Castle.DynamicProxy.Tests
 			                          typeof(void), Type.EmptyTypes);
 			Type inner = innerEmitter.BuildType();
 			Type outer = outerEmitter.BuildType();
-			Assert.IsTrue(inner.GetTypeInfo().IsInterface);
+			Assert.IsTrue(inner.IsInterface);
 			MethodInfo method = inner.GetMethod("MyMethod");
 			Assert.IsNotNull(method);
 			Assert.AreSame(inner, outer.GetNestedType("IInner", BindingFlags.Public));

@@ -20,11 +20,7 @@ namespace Castle.Core.Logging
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
-	public abstract class AbstractLoggerFactory :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
-		ILoggerFactory
+	public abstract class AbstractLoggerFactory : ILoggerFactory
 	{
 		public virtual ILogger Create(Type type)
 		{
@@ -64,11 +60,7 @@ namespace Castle.Core.Logging
 			}
 			else
 			{
-#if FEATURE_APPDOMAIN
 				string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-#else
-				string baseDirectory = AppContext.BaseDirectory;
-#endif
 				result = new FileInfo(Path.Combine(baseDirectory, fileName));
 			}
 

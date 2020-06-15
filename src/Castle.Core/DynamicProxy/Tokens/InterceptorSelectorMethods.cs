@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Tokens
 {
 	using System.Reflection;
 
-	public static class InterceptorSelectorMethods
+	internal static class InterceptorSelectorMethods
 	{
 		public static readonly MethodInfo SelectInterceptors = typeof(IInterceptorSelector).GetMethod("SelectInterceptors", BindingFlags.Instance | BindingFlags.Public);
 	}

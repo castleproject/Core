@@ -26,11 +26,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 	public class Log4netFactory : AbstractLoggerFactory
 	{
 		internal const string defaultConfigFileName = "log4net.config";
-#if FEATURE_LEGACY_REFLECTION_API
 		static readonly Assembly _callingAssembly = typeof(Log4netFactory).Assembly;
-#else
-		static readonly Assembly _callingAssembly = typeof(Log4netFactory).GetTypeInfo().Assembly;
-#endif
 
 		public Log4netFactory() : this(defaultConfigFileName)
 		{

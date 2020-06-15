@@ -21,12 +21,12 @@ namespace Castle.DynamicProxy
 #if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
 #endif
-#if DOTNET40
-	using System.Security;
-#endif
 
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Internal;
+
+	// prevent collision with new class in netstandard 2.1
+	using CollectionExtensions = Castle.Core.Internal.CollectionExtensions;
 
 	/// <summary>
 	///   <see cref="ProxyGenerationOptions"/> allows customization of the behavior of proxies created by
@@ -99,9 +99,6 @@ namespace Castle.DynamicProxy
 		}
 
 #if FEATURE_SERIALIZATION
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
-		[SecurityCritical]
-#endif
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue("hook", Hook);

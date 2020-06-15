@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Internal;
 
-	public class WrappedClassMembersCollector : ClassMembersCollector
+	internal class WrappedClassMembersCollector : ClassMembersCollector
 	{
 		public WrappedClassMembersCollector(Type type) : base(type)
 		{

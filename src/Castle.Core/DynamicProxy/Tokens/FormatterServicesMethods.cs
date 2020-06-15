@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Tokens
 	using System.Reflection;
 	using System.Runtime.Serialization;
 
-	public static class FormatterServicesMethods
+	internal static class FormatterServicesMethods
 	{
 		public static readonly MethodInfo GetObjectData =
 			typeof(FormatterServices).GetMethod("GetObjectData", new[] { typeof(object), typeof(MemberInfo[]) });

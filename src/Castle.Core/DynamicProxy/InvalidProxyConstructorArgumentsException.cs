@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy
 #endif
 	public class InvalidProxyConstructorArgumentsException : ArgumentException
 	{
-		public InvalidProxyConstructorArgumentsException(string message, Type proxyType, Type classToProxy) : base(message)
+		internal InvalidProxyConstructorArgumentsException(string message, Type proxyType, Type classToProxy) : base(message)
 		{
 			ProxyType = proxyType;
 			ClassToProxy = classToProxy;

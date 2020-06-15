@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	using Castle.DynamicProxy.Internal;
 
-	public class ClassEmitter : AbstractTypeEmitter
+	internal class ClassEmitter : AbstractTypeEmitter
 	{
 		internal const TypeAttributes DefaultAttributes =
 			TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable;
@@ -30,13 +30,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private readonly ModuleScope moduleScope;
 
 		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, IEnumerable<Type> interfaces)
-			: this(modulescope, name, baseType, interfaces, DefaultAttributes, ShouldForceUnsigned())
+			: this(modulescope, name, baseType, interfaces, DefaultAttributes, forceUnsigned: false)
 		{
 		}
 
 		public ClassEmitter(ModuleScope modulescope, String name, Type baseType, IEnumerable<Type> interfaces,
 		                    TypeAttributes flags)
-			: this(modulescope, name, baseType, interfaces, flags, ShouldForceUnsigned())
+			: this(modulescope, name, baseType, interfaces, flags, forceUnsigned: false)
 		{
 		}
 
@@ -51,7 +51,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				foreach (var inter in interfaces)
 				{
-					if (inter.GetTypeInfo().IsInterface)
+					if (inter.IsInterface)
 					{
 						TypeBuilder.AddInterfaceImplementation(inter);
 					}
@@ -84,7 +84,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		protected virtual IEnumerable<Type> InitializeGenericArgumentsFromBases(ref Type baseType,
 		                                                                        IEnumerable<Type> interfaces)
 		{
-			if (baseType != null && baseType.GetTypeInfo().IsGenericTypeDefinition)
+			if (baseType != null && baseType.IsGenericTypeDefinition)
 			{
 				throw new NotSupportedException("ClassEmitter does not support open generic base types. Type: " + baseType.FullName);
 			}
@@ -96,7 +96,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			foreach (var inter in interfaces)
 			{
-				if (inter.GetTypeInfo().IsGenericTypeDefinition)
+				if (inter.IsGenericTypeDefinition)
 				{
 					throw new NotSupportedException("ClassEmitter does not support open generic interfaces. Type: " + inter.FullName);
 				}
@@ -110,11 +110,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			var isAssemblySigned = !forceUnsigned && !StrongNameUtil.IsAnyTypeFromUnsignedAssembly(baseType, interfaces);
 			return modulescope.DefineType(isAssemblySigned, name, flags);
-		}
-
-		private static bool ShouldForceUnsigned()
-		{
-			return StrongNameUtil.CanStrongNameAssembly == false;
 		}
 	}
 }

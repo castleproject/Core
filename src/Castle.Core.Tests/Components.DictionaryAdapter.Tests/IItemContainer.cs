@@ -43,9 +43,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		IList<TItem> GenericItems { get; set; }
 
-#if FEATURE_BINDINGLIST
 		BindingList<TItem> Bindingtems { get; set; }
-#endif
 
 		IList Items { get; set; }
 	}

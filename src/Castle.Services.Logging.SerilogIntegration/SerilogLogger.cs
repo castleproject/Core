@@ -22,11 +22,7 @@ namespace Castle.Services.Logging.SerilogIntegration
 #if FEATURE_SERIALIZATION
     [Serializable]
 #endif
-    public class SerilogLogger :
-#if FEATURE_APPDOMAIN
-        MarshalByRefObject,
-#endif
-        Castle.Core.Logging.ILogger
+    public class SerilogLogger : Castle.Core.Logging.ILogger
     {
         public SerilogLogger(ILogger logger, SerilogFactory factory)
         {

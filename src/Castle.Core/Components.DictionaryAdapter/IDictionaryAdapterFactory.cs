@@ -80,7 +80,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// </remarks>
 		object GetAdapter(Type type, NameValueCollection nameValues);
 
-#if FEATURE_DICTIONARYADAPTER_XML
 		/// <summary>
 		/// Gets a typed adapter bound to the <see cref="System.Xml.XmlNode"/>.
 		/// </summary>
@@ -102,7 +101,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// The type represented by T must be an interface with properties.
 		/// </remarks>
 		object GetAdapter(Type type, System.Xml.XmlNode xmlNode);
-#endif
 
 		/// <summary>
 		/// Gets the <see cref="DictionaryAdapterMeta"/> associated with the type.

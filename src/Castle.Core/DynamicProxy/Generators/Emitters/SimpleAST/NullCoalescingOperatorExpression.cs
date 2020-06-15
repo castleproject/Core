@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System;
 	using System.Reflection.Emit;
 
-	public class NullCoalescingOperatorExpression : Expression
+	internal class NullCoalescingOperatorExpression : Expression
 	{
 		private readonly Expression @default;
 		private readonly Expression expression;

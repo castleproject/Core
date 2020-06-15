@@ -2,10 +2,25 @@
 
 ## Unreleased
 
+Enhancements:
+- .NET Standard 2.0 and 2.1 support (@lg2de, #485)
+
+Deprecations:
+ - Removed support for the .NET Framework < 4.5 and .NET Standard 1.x. (@stakx, #495, #496)
+ - Removed support for Code Access Security (CAS). (@stakx, #502)
+ - Removed support for Remoting. This library no longer defines any types deriving from `MarshalByRefObject`, and `ProxyUtil.IsProxy` (which used to recognize remoting/"transparent" proxies) now tests only for DynamicProxy proxies. (@stakx, #507)
+ - The following public members have been removed:
+    - `Castle.Core.Internal.Lock` (class) along with all related types and methods
+    - `Castle.Core.Internal.PermissionUtil.IsGranted` (method)
+    - all type members in `Castle.DynamicProxy.ModuleScope` that gave direct access to DynamicProxy's type cache and `ModuleBuilder`s. Only `SaveAssembly`, `LoadAssemblyIntoCache`, and members supporting these two facilities are left public.
+    - almost all types and type members in the `Castle.DynamicProxy.*` sub-namespaces, as most of them are intended for internal use only.
+
+## 4.4.1 (2020-05-06)
+
 Bugfixes:
 - Prevent method name collisions when a proxy type implements more than two identically named interfaces having one or more identically named methods each. Name collisions are avoided by including the declaring types' namespaces in the proxy type's method names. (@stakx, #469)
 - Reduce lock contention while generating new proxy types which previously blocked new proxy instances (@tangdf, #484)
-- Fix mixins where proxy constructor fields were order differently to interfaces because of different case comparisons (@zapov, #475) 
+- Fix mixins where proxy constructor fields were ordered differently to interfaces because of different case comparisons (@zapov, #475)
 - Fix proxy generation for types having only a `private protected` constructor (@mriehm, #491)
 
 ## 4.4.0 (2019-04-05)

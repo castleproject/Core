@@ -67,7 +67,7 @@ namespace Castle.Components.DictionaryAdapter
 
 					if (IsAcceptedType(type))
 					{
-						if (type.GetTypeInfo().IsInterface)
+						if (type.IsInterface)
 						{
 							if (property.IsDynamicProperty == false)
 							{
@@ -77,7 +77,7 @@ namespace Castle.Components.DictionaryAdapter
 								}
 							}
 						}
-						else if (type.GetTypeInfo().IsArray)
+						else if (type.IsArray)
 						{
 							storedValue = Array.CreateInstance(type.GetElementType(), 0);
 						}
@@ -118,13 +118,11 @@ namespace Castle.Components.DictionaryAdapter
 				{
 					using (dictionaryAdapter.SuppressNotificationsBlock())
 					{
-#if FEATURE_ISUPPORTINITIALIZE
 						if (storedValue is ISupportInitialize)
 						{
 							((ISupportInitialize)storedValue).BeginInit();
 							((ISupportInitialize)storedValue).EndInit();
 						}
-#endif
 						if (initializer != null)
 						{
 							initializer.Initialize(dictionaryAdapter, storedValue);
@@ -141,7 +139,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static bool IsAcceptedType(Type type)
 		{
-			return type != null && type != typeof(string) && !type.GetTypeInfo().IsPrimitive && !type.GetTypeInfo().IsEnum;
+			return type != null && type != typeof(string) && !type.IsPrimitive && !type.IsEnum;
 		}
 
 		private static Type GetInferredType(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, out IValueInitializer initializer)
@@ -157,37 +155,27 @@ namespace Castle.Components.DictionaryAdapter
 
 			Type collectionType = null;
 
-			if (type.GetTypeInfo().IsGenericType)
+			if (type.IsGenericType)
 			{
 				var genericDef = type.GetGenericTypeDefinition();
 				var genericArg = type.GetGenericArguments()[0];
 				bool isBindingList =
-#if !FEATURE_BINDINGLIST
-					false;
-#else
 					genericDef == typeof(System.ComponentModel.BindingList<>);
-#endif
 
 				if (isBindingList || genericDef == typeof(List<>))
 				{
 					if (dictionaryAdapter.CanEdit)
 					{
-#if !FEATURE_BINDINGLIST
-						collectionType =  typeof(EditableList<>);
-#else
 						collectionType = isBindingList ? typeof(EditableBindingList<>) : typeof(EditableList<>);
-#endif
 					}
 
-#if FEATURE_BINDINGLIST
-					if (isBindingList && genericArg.GetTypeInfo().IsInterface)
+					if (isBindingList && genericArg.IsInterface)
 					{
 						Func<object> addNew = () => dictionaryAdapter.Create(genericArg);
 						initializer = (IValueInitializer)Activator.CreateInstance(
 							typeof(BindingListInitializer<>).MakeGenericType(genericArg),
 							null, addNew, null, null, null);
 					}
-#endif
 				}
 				else if (genericDef == typeof(IList<>) || genericDef == typeof(ICollection<>))
 				{

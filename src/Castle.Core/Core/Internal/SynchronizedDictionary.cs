@@ -29,9 +29,6 @@ namespace Castle.Core.Internal
 			itemsLock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
 		}
 
-		[Obsolete] // TODO: Remove this property along with the `ModuleScope.Lock` property.
-		public ReaderWriterLockSlim Lock => itemsLock;
-
 		public void AddOrUpdateWithoutTakingLock(TKey key, TValue value)
 		{
 			items[key] = value;
@@ -118,12 +115,6 @@ namespace Castle.Core.Internal
 			{
 				itemsLock.ExitReadLock();
 			}
-		}
-
-		[Obsolete] // TODO: Remove this method along with the `ModuleScope.GetFromCache` method.
-		public bool TryGetValueWithoutTakingLock(TKey key, out TValue value)
-		{
-			return items.TryGetValue(key, out value);
 		}
 	}
 }

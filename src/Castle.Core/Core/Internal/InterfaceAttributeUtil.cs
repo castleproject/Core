@@ -45,10 +45,10 @@ namespace Castle.Core.Internal
 
 		public static object[] GetAttributes(Type type, bool inherit)
 		{
-			if (type.GetTypeInfo().IsInterface == false)
+			if (type.IsInterface == false)
 				throw new ArgumentOutOfRangeException("type");
 
-			var attributes = type.GetTypeInfo().GetCustomAttributes(false).ToArray();
+			var attributes = type.GetCustomAttributes(false).ToArray();
 			var baseTypes  = type.GetInterfaces();
 
 			if (baseTypes.Length == 0 || !inherit)
@@ -91,7 +91,7 @@ namespace Castle.Core.Internal
 		private object[] GetAttributes(object[] attributes)
 		{
 			for (index = types.Length - 1; index > 0; index--)
-				ProcessType(CurrentType.GetTypeInfo().GetCustomAttributes(false).ToArray());
+				ProcessType(CurrentType.GetCustomAttributes(false).ToArray());
 
 			ProcessType(attributes);
 

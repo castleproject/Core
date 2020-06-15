@@ -46,7 +46,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			if (storedValue == null || !storedValue.GetType().IsInstanceOfType(propertyType))
 			{
-				if (propertyType.GetTypeInfo().IsGenericType)
+				if (propertyType.IsGenericType)
 				{
 					var genericDef = propertyType.GetGenericTypeDefinition();
 

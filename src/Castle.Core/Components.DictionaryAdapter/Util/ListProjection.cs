@@ -27,11 +27,7 @@ namespace Castle.Components.DictionaryAdapter
 	[DebuggerTypeProxy(typeof(ListProjectionDebugView<>))]
 	public class ListProjection<T> :
 		IBindingList<T>, // Castle
-#if !FEATURE_BINDINGLIST
-		IList,
-#else
 		IBindingList,    // System
-#endif
 		IEditableObject,
 		IRevertibleChangeTracking,
 		ICollectionProjection,
@@ -41,11 +37,9 @@ namespace Castle.Components.DictionaryAdapter
 		private int addNewIndex  = NoIndex;
 		private int addedIndex   = NoIndex;
 		private int suspendLevel = 0;
-#if FEATURE_BINDINGLIST
 		private int changedIndex = NoIndex;
 		private PropertyChangedEventHandler propertyHandler;
 		private static PropertyDescriptorCollection itemProperties;
-#endif
 		private const int NoIndex = -1;
 
 		public ListProjection(ICollectionAdapter<T> adapter)
@@ -62,12 +56,10 @@ namespace Castle.Components.DictionaryAdapter
 			get { return adapter.Count; }
 		}
 
-#if FEATURE_BINDINGLIST
 		public IBindingList AsBindingList
 		{
 			get { return this; }
 		}
-#endif
 
 		public ICollectionAdapter<T> Adapter
 		{
@@ -88,11 +80,8 @@ namespace Castle.Components.DictionaryAdapter
 		bool IBindingList<T>.SupportsSorting                { get { return false; } }
 		bool IBindingList<T>.IsSorted                       { get { return false; } }
 		SysPropertyDescriptor IBindingList<T>.SortProperty  { get { return null;  } }
-#if FEATURE_LISTSORT
 		ListSortDirection     IBindingList<T>.SortDirection { get { return ListSortDirection.Ascending; } }
-#endif
 
-#if FEATURE_BINDINGLIST
 		// System IBindingList Properties
 		bool IBindingList.AllowEdit                      { get { return true;  } }
 		bool IBindingList.AllowNew                       { get { return true;  } }
@@ -106,7 +95,6 @@ namespace Castle.Components.DictionaryAdapter
 
 		// Other Binding Properties
 		bool IRaiseItemChangedEvents.RaisesItemChangedEvents { get { return true; } }
-#endif
 
 		// IList Properties
 		bool   IList.IsFixedSize          { get { return false; } }
@@ -229,12 +217,10 @@ namespace Castle.Components.DictionaryAdapter
 			return item;
 		}
 
-#if FEATURE_BINDINGLIST
 		object IBindingList.AddNew()
 		{
 			return AddNew();
 		}
-#endif
 
 		public bool IsNew(int index)
 		{
@@ -427,16 +413,9 @@ namespace Castle.Components.DictionaryAdapter
 			CancelEdit();
 		}
 
-#if !FEATURE_BINDINGLIST
-		[Conditional("NOP")]
-		private void AttachPropertyChanged(T value) { }
-
-		[Conditional("NOP")]
-		private void DetachPropertyChanged(T value) { }
-#else
 		private void AttachPropertyChanged(T value)
 		{
-			if (typeof(T).GetTypeInfo().IsValueType)
+			if (typeof(T).IsValueType)
 				return;
 
 			var notifier = value as INotifyPropertyChanged;
@@ -451,7 +430,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private void DetachPropertyChanged(T value)
 		{
-			if (typeof(T).GetTypeInfo().IsValueType)
+			if (typeof(T).IsValueType)
 				return;
 
 			var notifier = value as INotifyPropertyChanged;
@@ -528,9 +507,7 @@ namespace Castle.Components.DictionaryAdapter
 
 			return itemProperties.Find(e.PropertyName, true);
 		}
-#endif
 
-#if FEATURE_BINDINGLIST
 		public event ListChangedEventHandler ListChanged;
 		protected virtual void OnListChanged(ListChangedEventArgs args)
 		{
@@ -538,22 +515,7 @@ namespace Castle.Components.DictionaryAdapter
 			if (handler != null)
 				handler(this, args);
 		}
-#endif
 
-#if !FEATURE_BINDINGLIST
-		protected enum ListChangedType
-		{
-			ItemAdded,
-			ItemChanged,
-			ItemDeleted
-		}
-
-		[Conditional("NOP")]
-		protected void NotifyListChanged(ListChangedType type, int index) { }
-
-		[Conditional("NOP")]
-		protected void NotifyListReset() { }
-#else
 		protected void NotifyListChanged(ListChangedType type, int index)
 		{
 			if (EventsEnabled)
@@ -565,7 +527,6 @@ namespace Castle.Components.DictionaryAdapter
 			if (EventsEnabled)
 				OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1));
 		}
-#endif
 
 		public bool EventsEnabled
 		{
@@ -594,61 +555,49 @@ namespace Castle.Components.DictionaryAdapter
 			// Do nothing
 		}
 
-#if FEATURE_BINDINGLIST
 		void IBindingList.AddIndex(SysPropertyDescriptor property)
 		{
 			// Do nothing
 		}
-#endif
 
 		void IBindingList<T>.RemoveIndex(SysPropertyDescriptor property)
 		{
 			// Do nothing
 		}
 
-#if FEATURE_BINDINGLIST
 		void IBindingList.RemoveIndex(SysPropertyDescriptor property)
 		{
 			// Do nothing
 		}
-#endif
 
 		int IBindingList<T>.Find(SysPropertyDescriptor property, object key)
 		{
 			throw new NotSupportedException();
 		}
 
-#if FEATURE_BINDINGLIST
 		int IBindingList.Find(SysPropertyDescriptor property, object key)
 		{
 			throw new NotSupportedException();
 		}
-#endif
 
-#if FEATURE_LISTSORT
 		void IBindingList<T>.ApplySort(SysPropertyDescriptor property, ListSortDirection direction)
 		{
 			throw new NotSupportedException();
 		}
-#endif
 
-#if FEATURE_BINDINGLIST
 		void IBindingList.ApplySort(SysPropertyDescriptor property, ListSortDirection direction)
 		{
 			throw new NotSupportedException();
 		}
-#endif
 
 		void IBindingList<T>.RemoveSort()
 		{
 			throw new NotSupportedException();
 		}
 
-#if FEATURE_BINDINGLIST
 		void IBindingList.RemoveSort()
 		{
 			throw new NotSupportedException();
 		}
-#endif
 	}
 }

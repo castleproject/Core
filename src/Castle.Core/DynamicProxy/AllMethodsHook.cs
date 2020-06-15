@@ -26,10 +26,8 @@ namespace Castle.DynamicProxy
 		protected static readonly ICollection<Type> SkippedTypes = new[]
 		{
 			typeof(object),
-#if FEATURE_REMOTING
 			typeof(MarshalByRefObject),
 			typeof(ContextBoundObject)
-#endif
 		};
 
 		public virtual bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)

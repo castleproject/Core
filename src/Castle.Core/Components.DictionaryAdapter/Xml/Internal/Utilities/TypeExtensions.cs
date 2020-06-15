@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_DICTIONARYADAPTER_XML
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
@@ -24,7 +23,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	{
 		public static Type NonNullable(this Type type)
 		{
-			return type.GetTypeInfo().IsGenericType
+			return type.IsGenericType
 				&& type.GetGenericTypeDefinition() == typeof(Nullable<>)
 				? type.GetGenericArguments()[0]
 				: type;
@@ -32,9 +31,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 
 		public static Type GetCollectionItemType(this Type type)
 		{
-			if (type.GetTypeInfo().IsArray)
+			if (type.IsArray)
 				return type.GetElementType();
-			if (type.GetTypeInfo().IsGenericType)
+			if (type.IsGenericType)
 				return type.GetGenericArguments().Single();
 			throw Error.NotCollectionType("type");
 		}
@@ -53,4 +52,3 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 	}
 }
-#endif

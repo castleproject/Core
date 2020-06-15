@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Serialization;
 
-	public class ClassProxyWithTargetGenerator : BaseProxyGenerator
+	internal class ClassProxyWithTargetGenerator : BaseProxyGenerator
 	{
 		private readonly Type[] additionalInterfacesToProxy;
 
@@ -47,7 +47,7 @@ namespace Castle.DynamicProxy.Generators
 
 		public Type GetGeneratedType()
 		{
-			var cacheKey = new CacheKey(targetType.GetTypeInfo(), targetType, additionalInterfacesToProxy, ProxyGenerationOptions);
+			var cacheKey = new CacheKey(targetType, targetType, additionalInterfacesToProxy, ProxyGenerationOptions);
 			return ObtainProxyType(cacheKey, GenerateType);
 		}
 

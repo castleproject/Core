@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_SECURITY_PERMISSIONS
-
 namespace Castle.DynamicProxy.Tests
 {
-	using System.Windows.Forms;
+	using System;
 
 	using NUnit.Framework;
 
@@ -24,13 +22,17 @@ namespace Castle.DynamicProxy.Tests
 	public class WinFormsTestCase : BasePEVerifyTestCase
 	{
 		[Test]
-		[ExcludeOnFramework(Framework.Mono, "Disabled on Mono to remove the need to have X installed.")]
+		[Platform(Exclude = "Mono", Reason = "Disabled on Mono to remove the need to have X installed.")]
 		public void Can_proxy_windows_forms_control()
 		{
-			var proxy = generator.CreateClassProxy<Control>();
+			var controlType = Type.GetType("System.Windows.Forms.Control, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
+			if (controlType == null)
+			{
+				Assert.Ignore("Windows Forms is not available on this system.");
+			}
+
+			var proxy = generator.CreateClassProxy(controlType);
 			Assert.IsNotNull(proxy);
 		}
 	}
 }
-
-#endif

@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 
-	public abstract class MethodGenerator : IGenerator<MethodEmitter>
+	internal abstract class MethodGenerator : IGenerator<MethodEmitter>
 	{
 		private readonly MetaMethod method;
 		private readonly OverrideMethodDelegate overrideMethod;
@@ -48,7 +48,7 @@ namespace Castle.DynamicProxy.Generators
 			var methodEmitter = overrideMethod(method.Name, method.Attributes, MethodToOverride);
 			var proxiedMethod = BuildProxiedMethodBody(methodEmitter, @class, options, namingScope);
 
-			if (MethodToOverride.DeclaringType.GetTypeInfo().IsInterface)
+			if (MethodToOverride.DeclaringType.IsInterface)
 			{
 				@class.TypeBuilder.DefineMethodOverride(proxiedMethod.MethodBuilder, MethodToOverride);
 			}

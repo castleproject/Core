@@ -31,12 +31,8 @@ namespace Castle.DynamicProxy.Generators
 			{
 				typeof(System.Runtime.InteropServices.ComImportAttribute),
 				typeof(System.Runtime.InteropServices.MarshalAsAttribute),
-#if !DOTNET35
 				typeof(System.Runtime.InteropServices.TypeIdentifierAttribute),
-#endif
-#if FEATURE_SECURITY_PERMISSIONS
 				typeof(System.Security.Permissions.SecurityAttribute),
-#endif
 			};
 		}
 
@@ -61,7 +57,7 @@ namespace Castle.DynamicProxy.Generators
 
 		internal static bool ShouldAvoid(Type attribute)
 		{
-			return attributes.Any(attr => attr.GetTypeInfo().IsAssignableFrom(attribute.GetTypeInfo()));
+			return attributes.Any(attr => attr.IsAssignableFrom(attribute));
 		}
 	}
 }

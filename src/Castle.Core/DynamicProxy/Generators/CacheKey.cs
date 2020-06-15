@@ -15,15 +15,12 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
-	using System.ComponentModel;
 	using System.Reflection;
 
-	[Obsolete("Intended for internal use only.")] // TODO: Redeclare this type as `internal`.
-	[EditorBrowsable(EditorBrowsableState.Never)]
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
-	public class CacheKey
+	internal class CacheKey
 	{
 		private readonly MemberInfo target;
 		private readonly Type[] interfaces;
@@ -52,7 +49,7 @@ namespace Castle.DynamicProxy.Generators
 		/// <param name = "interfaces">The interfaces.</param>
 		/// <param name = "options">The options.</param>
 		public CacheKey(Type target, Type[] interfaces, ProxyGenerationOptions options)
-			: this(target.GetTypeInfo(), null, interfaces, options)
+			: this(target, null, interfaces, options)
 		{
 		}
 

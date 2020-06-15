@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Collections.Generic;
 
-	public class FieldReferenceComparer : IComparer<Type>
+	internal class FieldReferenceComparer : IComparer<Type>
 	{
 		public int Compare(Type x, Type y)
 		{

@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 
-	public class InterfaceProxyWithOptionalTargetContributor : InterfaceProxyWithoutTargetContributor
+	internal class InterfaceProxyWithOptionalTargetContributor : InterfaceProxyWithoutTargetContributor
 	{
 		private readonly GetTargetReferenceDelegate getTargetReference;
 

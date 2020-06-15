@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Tokens
 	/// <summary>
 	///   Holds <see cref = "MethodInfo" /> objects representing methods of <see cref = "SerializationInfo" /> class.
 	/// </summary>
-	public static class SerializationInfoMethods
+	internal static class SerializationInfoMethods
 	{
 		/// <summary>
 		///   <see cref = "SerializationInfo.AddValue(string,bool)" />

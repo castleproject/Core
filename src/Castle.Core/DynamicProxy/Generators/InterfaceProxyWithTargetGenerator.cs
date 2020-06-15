@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Serialization;
 
-	public class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
+	internal class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
 	{
 		protected FieldReference targetField;
 
@@ -59,7 +59,7 @@ namespace Castle.DynamicProxy.Generators
 			ProxyGenerationOptions = options;
 
 			interfaces = TypeUtil.GetAllInterfaces(interfaces);
-			var cacheKey = new CacheKey(proxyTargetType.GetTypeInfo(), targetType, interfaces, options);
+			var cacheKey = new CacheKey(proxyTargetType, targetType, interfaces, options);
 
 			return ObtainProxyType(cacheKey, (n, s) => GenerateType(n, proxyTargetType, interfaces, s));
 		}
@@ -271,12 +271,12 @@ namespace Castle.DynamicProxy.Generators
 					"Base type for proxy is null reference. Please set it to System.Object or some other valid type.");
 			}
 
-			if (!type.GetTypeInfo().IsClass)
+			if (!type.IsClass)
 			{
 				ThrowInvalidBaseType(type, "it is not a class type");
 			}
 
-			if (type.GetTypeInfo().IsSealed)
+			if (type.IsSealed)
 			{
 				ThrowInvalidBaseType(type, "it is sealed");
 			}

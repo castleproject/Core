@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-#if FEATURE_CUSTOMMODIFIERS && FEATURE_ASSEMBLYBUILDER_SAVE
+#if FEATURE_ASSEMBLYBUILDER_SAVE
 
 namespace Castle.DynamicProxy.Tests
 {
@@ -135,7 +135,7 @@ namespace Castle.DynamicProxy.Tests
 		/// the parameter type in the generated types.
 		/// </summary>
 		[TestCaseSource(nameof(AsModoptOnParamTypeNames))]
-		[ExcludeOnFramework(Framework.Mono, "Mono reports custom modifiers in the opposite order than the CLR does. See https://github.com/castleproject/Core/issues/414 and https://github.com/mono/mono/issues/11302.")]
+		[Platform(Exclude = "Mono", Reason = "Mono reports custom modifiers in the opposite order than the CLR does. See https://github.com/castleproject/Core/issues/414 and https://github.com/mono/mono/issues/11302.")]
 		public void ReflectionReturnsCorrectModoptOnParamTypeForGeneratedType(string typeName)
 		{
 			Assume.That(this.generatedTypes.ContainsKey(typeName));
@@ -167,7 +167,7 @@ namespace Castle.DynamicProxy.Tests
 		/// the parameter type in the generated types.
 		/// </summary>
 		[TestCaseSource(nameof(AsModreqOnParamTypeNames))]
-		[ExcludeOnFramework(Framework.Mono, "Mono reports custom modifiers in the opposite order than the CLR does. See https://github.com/castleproject/Core/issues/414 and https://github.com/mono/mono/issues/11302.")]
+		[Platform(Exclude = "Mono", Reason = "Mono reports custom modifiers in the opposite order than the CLR does. See https://github.com/castleproject/Core/issues/414 and https://github.com/mono/mono/issues/11302.")]
 		public void ReflectionReturnsCorrectModreqsOnParamTypeForGeneratedType(string typeName)
 		{
 			Assume.That(this.generatedTypes.ContainsKey(typeName));

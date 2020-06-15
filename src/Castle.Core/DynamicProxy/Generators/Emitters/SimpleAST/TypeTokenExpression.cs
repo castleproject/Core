@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	using Castle.DynamicProxy.Tokens;
 
-	public class TypeTokenExpression : Expression
+	internal class TypeTokenExpression : Expression
 	{
 		private readonly Type type;
 

@@ -14,10 +14,9 @@
 
 namespace Castle.Components.DictionaryAdapter.Xml.Tests
 {
-	using NUnit.Framework;
-#if DOTNET40
     using System.Threading.Tasks;
-#endif
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class XmlTypeSerializerCacheTestCase
@@ -48,7 +47,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
             Assert.AreNotSame(b, a);
         }
 
-#if DOTNET40
         [Test]
         public void Indexer_ForSameType_ReturnsSameInstance_Concurrently()
         {
@@ -63,7 +61,6 @@ namespace Castle.Components.DictionaryAdapter.Xml.Tests
                 Assert.AreSame(serializers[0], serializers[i]);
             }
         }
-#endif
 
         public class A { public int    X { get; set; } }
         public class B { public string X { get; set; } }

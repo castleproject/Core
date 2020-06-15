@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_SMTP
-
 #pragma warning disable 618 // Mono marked SmtpClient obsolete
 
 namespace Castle.Core.Smtp
@@ -23,10 +21,7 @@ namespace Castle.Core.Smtp
 	using System.ComponentModel;
 	using System.Net;
 	using System.Net.Mail;
-#if DOTNET40
-	using System.Security;
-#endif
-	using System.Security.Permissions;
+
 	using Castle.Core.Internal;
 
 	/// <summary>
@@ -39,14 +34,13 @@ namespace Castle.Core.Smtp
 		private int port = 25;
 		private int? timeout;
 		private bool useSsl;
-		private readonly NetworkCredential credentials = new NetworkCredential();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultSmtpSender"/> class based on the <see cref="SmtpClient"/> configuration provided in the application configuration file.
 		/// </summary>
 		/// <remarks>
 		/// This constructor is based on the default <see cref="SmtpClient"/> configuration in the application configuration file.
-		/// </remarks> 
+		/// </remarks>
 		public DefaultSmtpSender() { }
 
 		/// <summary>
@@ -60,7 +54,7 @@ namespace Castle.Core.Smtp
 		}
 
 		/// <summary>
-		/// Gets or sets the port used to 
+		/// Gets or sets the port used to
 		/// access the SMTP server
 		/// </summary>
 		public int Port
@@ -79,7 +73,7 @@ namespace Castle.Core.Smtp
 		}
 
 		/// <summary>
-		/// Gets or sets a value which is used to 
+		/// Gets or sets a value which is used to
 		/// configure if emails are going to be sent asynchronously or not.
 		/// </summary>
 		public bool AsyncSend
@@ -89,7 +83,7 @@ namespace Castle.Core.Smtp
 		}
 
 		/// <summary>
-		/// Gets or sets a value that specifies 
+		/// Gets or sets a value that specifies
 		/// the amount of time after which a synchronous Send call times out.
 		/// </summary>
 		public int Timeout
@@ -99,7 +93,7 @@ namespace Castle.Core.Smtp
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the email should be sent using 
+		/// Gets or sets a value indicating whether the email should be sent using
 		/// a secure communication channel.
 		/// </summary>
 		/// <value><c>true</c> if should use SSL; otherwise, <c>false</c>.</value>
@@ -110,16 +104,13 @@ namespace Castle.Core.Smtp
 		}
 
 		/// <summary>
-		/// Sends a message. 
+		/// Sends a message.
 		/// </summary>
 		/// <exception cref="ArgumentNullException">If any of the parameters is null</exception>
 		/// <param name="from">From field</param>
 		/// <param name="to">To field</param>
 		/// <param name="subject">e-mail's subject</param>
 		/// <param name="messageText">message's body</param>
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
-		[SecuritySafeCritical]
-#endif
 		public void Send(String from, String to, String subject, String messageText)
 		{
 			if (from == null) throw new ArgumentNullException("from");
@@ -131,21 +122,15 @@ namespace Castle.Core.Smtp
 		}
 
 		/// <summary>
-		/// Sends a message. 
+		/// Sends a message.
 		/// </summary>
 		/// <exception cref="ArgumentNullException">If the message is null</exception>
 		/// <param name="message">Message instance</param>
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
-		[SecuritySafeCritical]
-#endif
 		public void Send(MailMessage message)
 		{
 			InternalSend(message);
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
-		[SecurityCritical]
-#endif
 		private void InternalSend(MailMessage message)
 		{
 			if (message == null) throw new ArgumentNullException("message");
@@ -182,9 +167,6 @@ namespace Castle.Core.Smtp
 			}
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
-		[SecuritySafeCritical]
-#endif
 		public void Send(IEnumerable<MailMessage> messages)
 		{
 			foreach (MailMessage message in messages)
@@ -197,31 +179,19 @@ namespace Castle.Core.Smtp
 		/// Gets or sets the domain.
 		/// </summary>
 		/// <value>The domain.</value>
-		public String Domain
-		{
-			get { return credentials.Domain; }
-			set { credentials.Domain = value; }
-		}
+		public string Domain { get; set; }
 
 		/// <summary>
 		/// Gets or sets the name of the user.
 		/// </summary>
 		/// <value>The name of the user.</value>
-		public String UserName
-		{
-			get { return credentials.UserName; }
-			set { credentials.UserName = value; }
-		}
+		public string UserName { get; set; }
 
 		/// <summary>
 		/// Gets or sets the password.
 		/// </summary>
 		/// <value>The password.</value>
-		public String Password
-		{
-			get { return credentials.Password; }
-			set { credentials.Password = value; }
-		}
+		public string Password { get; set; }
 
 		/// <summary>
 		/// Configures the sender
@@ -229,15 +199,13 @@ namespace Castle.Core.Smtp
 		/// informed
 		/// </summary>
 		/// <param name="smtpClient">Message instance</param>
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
-		[SecurityCritical]
-#endif
 		protected virtual void Configure(SmtpClient smtpClient)
 		{
 			smtpClient.Credentials = null;
 
-			if (CanAccessCredentials() && HasCredentials)
+			if (HasCredentials)
 			{
+				var credentials = new NetworkCredential(UserName, Password, Domain);
 				smtpClient.Credentials = credentials;
 			}
 
@@ -260,12 +228,9 @@ namespace Castle.Core.Smtp
 		/// </value>
 		private bool HasCredentials
 		{
-			get { return !string.IsNullOrEmpty(credentials.UserName); }
+			get { return !string.IsNullOrEmpty(UserName); }
 		}
 
-#if FEATURE_SECURITY_PERMISSIONS && DOTNET40
-		[SecuritySafeCritical]
-#endif
 		private SmtpClient CreateSmtpClient()
 		{
 			if (string.IsNullOrEmpty(hostname))
@@ -279,14 +244,7 @@ namespace Castle.Core.Smtp
 			Configure(smtpClient);
 			return smtpClient;
 		}
-
-		private static bool CanAccessCredentials()
-		{
-			return new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).IsGranted();
-		}
 	}
 }
 
 #pragma warning restore 618 // Mono marked SmtpClient obsolete
-
-#endif

@@ -24,20 +24,20 @@ namespace Castle.DynamicProxy.Internal
 
 	public static class TypeUtil
 	{
-		public static bool IsNullableType(this Type type)
+		internal static bool IsNullableType(this Type type)
 		{
-			return type.GetTypeInfo().IsGenericType &&
+			return type.IsGenericType &&
 			       type.GetGenericTypeDefinition() == typeof(Nullable<>);
 		}
 
-		public static FieldInfo[] GetAllFields(this Type type)
+		internal static FieldInfo[] GetAllFields(this Type type)
 		{
 			if (type == null)
 			{
 				throw new ArgumentNullException("type");
 			}
 
-			if (type.GetTypeInfo().IsClass == false)
+			if (type.IsClass == false)
 			{
 				throw new ArgumentException(string.Format("Type {0} is not a class type. This method supports only classes", type));
 			}
@@ -49,7 +49,7 @@ namespace Castle.DynamicProxy.Internal
 				Debug.Assert(currentType != null);
 				var currentFields = currentType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 				fields.AddRange(currentFields);
-				currentType = currentType.GetTypeInfo().BaseType;
+				currentType = currentType.BaseType;
 			}
 
 			return fields.ToArray();
@@ -58,7 +58,7 @@ namespace Castle.DynamicProxy.Internal
 		/// <summary>
 		///   Returns list of all unique interfaces implemented given types, including their base interfaces.
 		/// </summary>
-		public static Type[] GetAllInterfaces(params Type[] types)
+		internal static Type[] GetAllInterfaces(params Type[] types)
 		{
 			if (types == null)
 			{
@@ -74,7 +74,7 @@ namespace Castle.DynamicProxy.Internal
 					continue;
 				}
 
-				if (type.GetTypeInfo().IsInterface)
+				if (type.IsInterface)
 				{
 					if (interfaces.Add(type) == false)
 					{
@@ -93,19 +93,19 @@ namespace Castle.DynamicProxy.Internal
 			return Sort(interfaces);
 		}
 
-		public static Type[] GetAllInterfaces(this Type type)
+		public static Type[] GetAllInterfaces(this Type type)  // NOTE: also used by Windsor
 		{
 			return GetAllInterfaces(new[] { type });
 		}
 
-		public static Type GetClosedParameterType(this AbstractTypeEmitter type, Type parameter)
+		internal static Type GetClosedParameterType(this AbstractTypeEmitter type, Type parameter)
 		{
-			if (parameter.GetTypeInfo().IsGenericTypeDefinition)
+			if (parameter.IsGenericTypeDefinition)
 			{
 				return parameter.GetGenericTypeDefinition().MakeGenericType(type.GetGenericArgumentsFor(parameter));
 			}
 
-			if (parameter.GetTypeInfo().IsGenericType)
+			if (parameter.IsGenericType)
 			{
 				var arguments = parameter.GetGenericArguments();
 				if (CloseGenericParametersIfAny(type, arguments))
@@ -114,12 +114,12 @@ namespace Castle.DynamicProxy.Internal
 				}
 			}
 
-			if (parameter.GetTypeInfo().IsGenericParameter)
+			if (parameter.IsGenericParameter)
 			{
 				return type.GetGenericArgument(parameter.Name);
 			}
 
-			if (parameter.GetTypeInfo().IsArray)
+			if (parameter.IsArray)
 			{
 				var elementType = GetClosedParameterType(type, parameter.GetElementType());
 				int rank = parameter.GetArrayRank();
@@ -128,7 +128,7 @@ namespace Castle.DynamicProxy.Internal
 					: elementType.MakeArrayType(rank);
 			}
 
-			if (parameter.GetTypeInfo().IsByRef)
+			if (parameter.IsByRef)
 			{
 				var elementType = GetClosedParameterType(type, parameter.GetElementType());
 				return elementType.MakeByRefType();
@@ -146,32 +146,32 @@ namespace Castle.DynamicProxy.Internal
 			return target.GetType();
 		}
 
-		public static Type[] AsTypeArray(this GenericTypeParameterBuilder[] typeInfos)
+		internal static Type[] AsTypeArray(this GenericTypeParameterBuilder[] typeInfos)
 		{
 			Type[] types = new Type[typeInfos.Length];
 			for (int i = 0; i < types.Length; i++)
 			{
-				types[i] = typeInfos[i].AsType();
+				types[i] = typeInfos[i];
 			}
 			return types;
 		}
 
-		public static bool IsFinalizer(this MethodInfo methodInfo)
+		internal static bool IsFinalizer(this MethodInfo methodInfo)
 		{
 			return string.Equals("Finalize", methodInfo.Name) && methodInfo.GetBaseDefinition().DeclaringType == typeof(object);
 		}
 
-		public static bool IsGetType(this MethodInfo methodInfo)
+		internal static bool IsGetType(this MethodInfo methodInfo)
 		{
 			return methodInfo.DeclaringType == typeof(object) && string.Equals("GetType", methodInfo.Name, StringComparison.OrdinalIgnoreCase);
 		}
 
-		public static bool IsMemberwiseClone(this MethodInfo methodInfo)
+		internal static bool IsMemberwiseClone(this MethodInfo methodInfo)
 		{
 			return methodInfo.DeclaringType == typeof(object) && string.Equals("MemberwiseClone", methodInfo.Name, StringComparison.OrdinalIgnoreCase);
 		}
 
-		public static void SetStaticField(this Type type, string fieldName, BindingFlags additionalFlags, object value)
+		internal static void SetStaticField(this Type type, string fieldName, BindingFlags additionalFlags, object value)
 		{
 			var flags = additionalFlags | BindingFlags.Static;
 
@@ -195,7 +195,6 @@ namespace Castle.DynamicProxy.Internal
 						fieldName,
 						type), e);
 			}
-#if FEATURE_TARGETEXCEPTION
 			catch (TargetException e)
 			{
 				throw new ProxyGenerationException(
@@ -204,7 +203,6 @@ namespace Castle.DynamicProxy.Internal
 						fieldName,
 						type), e);
 			}
-#endif
 			catch (TargetInvocationException e) // yes, this is not documented in MSDN. Yay for documentation
 			{
 				if ((e.InnerException is TypeInitializationException) == false)
@@ -231,7 +229,7 @@ namespace Castle.DynamicProxy.Internal
 		/// </summary>
 		internal static bool IsDelegateType(this Type type)
 		{
-			return type.GetTypeInfo().BaseType == typeof(MulticastDelegate);
+			return type.BaseType == typeof(MulticastDelegate);
 		}
 
 		private static bool CloseGenericParametersIfAny(AbstractTypeEmitter emitter, Type[] arguments)
@@ -273,7 +271,7 @@ namespace Castle.DynamicProxy.Internal
 				// of `type.FullName` and `type.Assembly.FullName`. We can avoid this
 				// overhead by comparing the two properties separately.
 				int result = string.CompareOrdinal(x.FullName, y.FullName);
-				return result != 0 ? result : string.CompareOrdinal(x.GetTypeInfo().Assembly.FullName, y.GetTypeInfo().Assembly.FullName);
+				return result != 0 ? result : string.CompareOrdinal(x.Assembly.FullName, y.Assembly.FullName);
 			}
 		}
 	}

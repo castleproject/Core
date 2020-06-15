@@ -17,11 +17,7 @@ namespace Castle.Core.Logging
 	using System;
 	using System.IO;
 
-	public abstract class AbstractExtendedLoggerFactory :
-#if FEATURE_REMOTING
-		MarshalByRefObject,
-#endif
-		IExtendedLoggerFactory
+	public abstract class AbstractExtendedLoggerFactory : IExtendedLoggerFactory
 	{
 		/// <summary>
 		///   Creates a new extended logger, getting the logger name from the specified type.
@@ -105,11 +101,7 @@ namespace Castle.Core.Logging
 			}
 			else
 			{
-#if FEATURE_APPDOMAIN
 				string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-#else
-				string baseDirectory = AppContext.BaseDirectory;
-#endif
 				result = new FileInfo(Path.Combine(baseDirectory, fileName));
 			}
 

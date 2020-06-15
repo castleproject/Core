@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	using Castle.DynamicProxy.Internal;
 
-	public class BindDelegateExpression : Expression
+	internal class BindDelegateExpression : Expression
 	{
 		private readonly ConstructorInfo delegateCtor;
 		private readonly MethodInfo methodToBindTo;
@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			delegateCtor = @delegate.GetConstructors()[0];
 			this.methodToBindTo = methodToBindTo;
-			if (@delegate.GetTypeInfo().IsGenericTypeDefinition)
+			if (@delegate.IsGenericTypeDefinition)
 			{
 				var genericTypeParameters = genericTypeParams.AsTypeArray();
 				var closedDelegate = @delegate.MakeGenericType(genericTypeParameters);

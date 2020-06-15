@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 
-	public class InterfaceProxyTargetContributor : CompositeTypeContributor
+	internal class InterfaceProxyTargetContributor : CompositeTypeContributor
 	{
 		private readonly bool canChangeTarget;
 		private readonly Type proxyTargetType;
@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Contributors
 		protected virtual MembersCollector GetCollectorForInterface(Type @interface)
 		{
 			return new InterfaceMembersOnClassCollector(@interface, false,
-				proxyTargetType.GetTypeInfo().GetRuntimeInterfaceMap(@interface));
+				proxyTargetType.GetInterfaceMap(@interface));
 		}
 
 		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,

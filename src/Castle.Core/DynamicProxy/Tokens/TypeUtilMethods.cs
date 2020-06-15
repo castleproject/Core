@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Tokens
 
 	using Castle.DynamicProxy.Internal;
 
-	public static class TypeUtilMethods
+	internal static class TypeUtilMethods
 	{
 		public static readonly MethodInfo Sort = typeof(TypeUtil).GetMethod("Sort", BindingFlags.Public | BindingFlags.Static);
 		public static readonly MethodInfo GetTypeOrNull = typeof(TypeUtil).GetMethod("GetTypeOrNull", BindingFlags.Public | BindingFlags.Static);

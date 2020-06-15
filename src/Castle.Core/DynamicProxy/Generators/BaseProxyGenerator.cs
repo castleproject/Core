@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
-	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Reflection;
@@ -36,7 +35,7 @@ namespace Castle.DynamicProxy.Generators
 	///   Base class that exposes the common functionalities
 	///   to proxy generation.
 	/// </summary>
-	public abstract class BaseProxyGenerator
+	internal abstract class BaseProxyGenerator
 	{
 		protected readonly Type targetType;
 		private readonly ModuleScope scope;
@@ -84,7 +83,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			Debug.Assert(implementer != null, "implementer != null");
 			Debug.Assert(@interface != null, "@interface != null");
-			Debug.Assert(@interface.GetTypeInfo().IsInterface, "@interface.IsInterface");
+			Debug.Assert(@interface.IsInterface, "@interface.IsInterface");
 
 			if (!mapping.ContainsKey(@interface))
 			{
@@ -109,13 +108,6 @@ namespace Castle.DynamicProxy.Generators
 			mapping.Add(@interface, implementer);
 		}
 
-		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this method.
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected void AddToCache(CacheKey key, Type type)
-		{
-			scope.RegisterInCache(key, type);
-		}
-
 		protected virtual ClassEmitter BuildClassEmitter(string typeName, Type parentType, IEnumerable<Type> interfaces)
 		{
 			CheckNotGenericTypeDefinition(parentType, "parentType");
@@ -126,7 +118,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void CheckNotGenericTypeDefinition(Type type, string argumentName)
 		{
-			if (type != null && type.GetTypeInfo().IsGenericTypeDefinition)
+			if (type != null && type.IsGenericTypeDefinition)
 			{
 				throw new ArgumentException("Type cannot be a generic type definition. Type: " + type.FullName, argumentName);
 			}
@@ -335,13 +327,6 @@ namespace Castle.DynamicProxy.Generators
 			return emitter.CreateTypeConstructor();
 		}
 
-		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Remove this method.
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected Type GetFromCache(CacheKey key)
-		{
-			return scope.GetFromCache(key);
-		}
-
 		protected void HandleExplicitlyPassedProxyTargetAccessor(ICollection<Type> targetInterfaces,
 		                                                         ICollection<Type> additionalInterfaces)
 		{
@@ -384,9 +369,7 @@ namespace Castle.DynamicProxy.Generators
 			builtType.SetStaticField("proxyGenerationOptions", BindingFlags.NonPublic, ProxyGenerationOptions);
 		}
 
-		[Obsolete("Exposes a component that is intended for internal use only.")] // TODO: Redeclare this method as `private protected`.
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected Type ObtainProxyType(CacheKey cacheKey, Func<string, INamingScope, Type> factory)
+		private protected Type ObtainProxyType(CacheKey cacheKey, Func<string, INamingScope, Type> factory)
 		{
 			bool notFoundInTypeCache = false;
 

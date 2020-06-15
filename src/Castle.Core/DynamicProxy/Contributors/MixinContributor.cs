@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 
-	public class MixinContributor : CompositeTypeContributor
+	internal class MixinContributor : CompositeTypeContributor
 	{
 		private readonly bool canChangeTarget;
 		private readonly IList<Type> empty = new List<Type>();
@@ -46,7 +46,7 @@ namespace Castle.DynamicProxy.Contributors
 		public void AddEmptyInterface(Type @interface)
 		{
 			Debug.Assert(@interface != null, "@interface == null", "Shouldn't be adding empty interfaces...");
-			Debug.Assert(@interface.GetTypeInfo().IsInterface, "@interface.IsInterface", "Should be adding interfaces only...");
+			Debug.Assert(@interface.IsInterface, "@interface.IsInterface", "Should be adding interfaces only...");
 			Debug.Assert(!interfaces.Contains(@interface), "!interfaces.Contains(@interface)",
 			             "Shouldn't be adding same interface twice...");
 			Debug.Assert(!empty.Contains(@interface), "!empty.Contains(@interface)",
@@ -74,7 +74,7 @@ namespace Castle.DynamicProxy.Contributors
 			foreach (var @interface in interfaces)
 			{
 				MembersCollector item;
-				if (@interface.GetTypeInfo().IsInterface)
+				if (@interface.IsInterface)
 				{
 					item = new InterfaceMembersCollector(@interface);
 				}

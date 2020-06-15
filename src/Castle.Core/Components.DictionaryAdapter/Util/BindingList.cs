@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_BINDINGLIST // Until support for other platforms is verified
 namespace Castle.Components.DictionaryAdapter
 {
 	using System;
@@ -324,4 +323,3 @@ namespace Castle.Components.DictionaryAdapter
 		}
 	}
 }
-#endif
