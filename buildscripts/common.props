@@ -21,6 +21,7 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>http://www.castleproject.org/</PackageProjectUrl>
 		<PackageIconUrl>http://www.castleproject.org/img/castle-logo.png</PackageIconUrl>
+		<PackageIcon>castle-logo.png</PackageIcon>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageVersion>$(BuildVersion)</PackageVersion>
 		<IncludeSymbols>true</IncludeSymbols>
@@ -95,5 +96,9 @@
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp3.1|Release'">
 		<DefineConstants>$(NetStandard21Constants)</DefineConstants>
 	</PropertyGroup>
+	
+	<ItemGroup>
+		<None Include="$(SolutionDir)docs\images\castle-logo.png" Pack="true" PackagePath=""/>
+	</ItemGroup>
 
 </Project>
