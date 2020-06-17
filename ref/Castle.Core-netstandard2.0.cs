@@ -2169,6 +2169,7 @@ namespace Castle.Core.Logging
     {
         public LoggerException() { }
         public LoggerException(string message) { }
+        protected LoggerException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public LoggerException(string message, System.Exception innerException) { }
     }
     public enum LoggerLevel
@@ -2367,6 +2368,7 @@ namespace Castle.Core.Resource
     {
         public ResourceException() { }
         public ResourceException(string message) { }
+        protected ResourceException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public ResourceException(string message, System.Exception innerException) { }
     }
     public class StaticContentResource : Castle.Core.Resource.AbstractResource
@@ -2595,6 +2597,7 @@ namespace Castle.DynamicProxy
     {
         public System.Type ClassToProxy { get; }
         public System.Type ProxyType { get; }
+        public override void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
     }
     public class MixinData
     {

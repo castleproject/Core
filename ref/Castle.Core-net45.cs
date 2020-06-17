@@ -2615,6 +2615,7 @@ namespace Castle.DynamicProxy
     {
         public System.Type ClassToProxy { get; }
         public System.Type ProxyType { get; }
+        public override void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
     }
     public class MixinData
     {
