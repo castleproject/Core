@@ -37,6 +37,7 @@ namespace Castle.Services.Logging.Log4netIntegration
         public override Castle.Core.Logging.ILogger Create(string name) { }
         public override Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level) { }
     }
+    [System.Serializable]
     public class Log4netLogger : Castle.Core.Logging.ILogger
     {
         public Log4netLogger(log4net.Core.ILogger logger, Castle.Services.Logging.Log4netIntegration.Log4netFactory factory) { }
