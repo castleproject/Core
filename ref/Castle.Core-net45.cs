@@ -1810,6 +1810,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 }
 namespace Castle.Core.Configuration
 {
+    [System.Serializable]
     public abstract class AbstractConfiguration : Castle.Core.Configuration.IConfiguration
     {
         protected AbstractConfiguration() { }
@@ -1819,11 +1820,13 @@ namespace Castle.Core.Configuration
         public string Value { get; set; }
         public virtual object GetValue(System.Type type, object defaultValue) { }
     }
+    [System.Serializable]
     public class ConfigurationAttributeCollection : System.Collections.Specialized.NameValueCollection
     {
         public ConfigurationAttributeCollection() { }
         protected ConfigurationAttributeCollection(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
     }
+    [System.Serializable]
     public class ConfigurationCollection : System.Collections.Generic.List<Castle.Core.Configuration.IConfiguration>
     {
         public ConfigurationCollection() { }
@@ -1838,6 +1841,7 @@ namespace Castle.Core.Configuration
         string Value { get; }
         object GetValue(System.Type type, object defaultValue);
     }
+    [System.Serializable]
     public class MutableConfiguration : Castle.Core.Configuration.AbstractConfiguration
     {
         public MutableConfiguration(string name) { }
@@ -1889,6 +1893,7 @@ namespace Castle.Core
     {
         public static bool IsDynamicProxy(System.Type type) { }
     }
+    [System.Serializable]
     public class ReferenceEqualityComparer<T> : System.Collections.Generic.IEqualityComparer<T>, System.Collections.IEqualityComparer
     {
         public static Castle.Core.ReferenceEqualityComparer<T> Instance { get; }
@@ -1975,6 +1980,7 @@ namespace Castle.Core.Logging
         public virtual Castle.Core.Logging.IExtendedLogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level) { }
         protected static System.IO.FileInfo GetConfigFile(string fileName) { }
     }
+    [System.Serializable]
     public abstract class AbstractLoggerFactory : Castle.Core.Logging.ILoggerFactory
     {
         protected AbstractLoggerFactory() { }
@@ -1984,6 +1990,7 @@ namespace Castle.Core.Logging
         public virtual Castle.Core.Logging.ILogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level) { }
         protected static System.IO.FileInfo GetConfigFile(string fileName) { }
     }
+    [System.Serializable]
     public class ConsoleFactory : Castle.Core.Logging.ILoggerFactory
     {
         public ConsoleFactory() { }
@@ -1993,6 +2000,7 @@ namespace Castle.Core.Logging
         public Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level) { }
         public Castle.Core.Logging.ILogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level) { }
     }
+    [System.Serializable]
     public class ConsoleLogger : Castle.Core.Logging.LevelFilteredLogger
     {
         public ConsoleLogger() { }
@@ -2002,6 +2010,7 @@ namespace Castle.Core.Logging
         public override Castle.Core.Logging.ILogger CreateChildLogger(string loggerName) { }
         protected override void Log(Castle.Core.Logging.LoggerLevel loggerLevel, string loggerName, string message, System.Exception exception) { }
     }
+    [System.Serializable]
     public class DiagnosticsLogger : Castle.Core.Logging.LevelFilteredLogger, System.IDisposable
     {
         public DiagnosticsLogger(string logName) { }
@@ -2013,6 +2022,7 @@ namespace Castle.Core.Logging
         protected override void Finalize() { }
         protected override void Log(Castle.Core.Logging.LoggerLevel loggerLevel, string loggerName, string message, System.Exception exception) { }
     }
+    [System.Serializable]
     public class DiagnosticsLoggerFactory : Castle.Core.Logging.AbstractLoggerFactory
     {
         public DiagnosticsLoggerFactory() { }
@@ -2106,6 +2116,7 @@ namespace Castle.Core.Logging
         Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level);
         Castle.Core.Logging.ILogger Create(System.Type type, Castle.Core.Logging.LoggerLevel level);
     }
+    [System.Serializable]
     public abstract class LevelFilteredLogger : Castle.Core.Logging.ILogger
     {
         protected LevelFilteredLogger() { }
@@ -2166,6 +2177,7 @@ namespace Castle.Core.Logging
         public void WarnFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void WarnFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
     }
+    [System.Serializable]
     public class LoggerException : System.Exception
     {
         public LoggerException() { }
@@ -2183,6 +2195,7 @@ namespace Castle.Core.Logging
         Debug = 5,
         Trace = 6,
     }
+    [System.Serializable]
     public class NullLogFactory : Castle.Core.Logging.AbstractLoggerFactory
     {
         public NullLogFactory() { }
@@ -2246,6 +2259,7 @@ namespace Castle.Core.Logging
         public void WarnFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void WarnFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
     }
+    [System.Serializable]
     public class StreamLogger : Castle.Core.Logging.LevelFilteredLogger, System.IDisposable
     {
         public StreamLogger(string name, System.IO.Stream stream) { }
@@ -2258,6 +2272,7 @@ namespace Castle.Core.Logging
         protected override void Finalize() { }
         protected override void Log(Castle.Core.Logging.LoggerLevel loggerLevel, string loggerName, string message, System.Exception exception) { }
     }
+    [System.Serializable]
     public class StreamLoggerFactory : Castle.Core.Logging.AbstractLoggerFactory
     {
         public StreamLoggerFactory() { }
@@ -2339,6 +2354,7 @@ namespace Castle.Core.Resource
         public Castle.Core.Resource.IResource Create(Castle.Core.Resource.CustomUri uri) { }
         public Castle.Core.Resource.IResource Create(Castle.Core.Resource.CustomUri uri, string basePath) { }
     }
+    [System.Serializable]
     public sealed class CustomUri
     {
         public static readonly string SchemeDelimiter;
@@ -2382,6 +2398,7 @@ namespace Castle.Core.Resource
         Castle.Core.Resource.IResource Create(Castle.Core.Resource.CustomUri uri);
         Castle.Core.Resource.IResource Create(Castle.Core.Resource.CustomUri uri, string basePath);
     }
+    [System.Serializable]
     public class ResourceException : System.Exception
     {
         public ResourceException() { }
@@ -2465,6 +2482,7 @@ namespace Castle.DynamicProxy
         public void SetGenericMethodArguments(System.Type[] arguments) { }
         protected void ThrowOnNoTarget() { }
     }
+    [System.Serializable]
     public class AllMethodsHook : Castle.DynamicProxy.IProxyGenerationHook
     {
         protected static readonly System.Collections.Generic.ICollection<System.Type> SkippedTypes;
@@ -2610,7 +2628,9 @@ namespace Castle.DynamicProxy
         void DynProxySetTarget(object target);
         Castle.DynamicProxy.IInterceptor[] GetInterceptors();
     }
+    [System.Serializable]
     public class InvalidMixinConfigurationException : System.Exception { }
+    [System.Serializable]
     public class InvalidProxyConstructorArgumentsException : System.ArgumentException
     {
         public System.Type ClassToProxy { get; }
@@ -2651,6 +2671,7 @@ namespace Castle.DynamicProxy
         public string SaveAssembly() { }
     }
     public class ProxyGenerationException : System.Exception { }
+    [System.Serializable]
     public class ProxyGenerationOptions : System.Runtime.Serialization.ISerializable
     {
         public static readonly Castle.DynamicProxy.ProxyGenerationOptions Default;
@@ -2752,6 +2773,7 @@ namespace Castle.DynamicProxy
         public static bool IsProxy(object instance) { }
         public static bool IsProxyType(System.Type type) { }
     }
+    [System.Serializable]
     public class StandardInterceptor : Castle.DynamicProxy.IInterceptor
     {
         public StandardInterceptor() { }
@@ -2769,6 +2791,7 @@ namespace Castle.DynamicProxy.Generators
         public static void Add<T>() { }
         public static bool Contains(System.Type attribute) { }
     }
+    [System.Serializable]
     public class GeneratorException : System.Exception { }
 }
 namespace Castle.DynamicProxy.Internal
@@ -2807,6 +2830,7 @@ namespace Castle.DynamicProxy.Serialization
         public CacheMappingsAttribute(byte[] serializedCacheMappings) { }
         public byte[] SerializedCacheMappings { get; }
     }
+    [System.Serializable]
     public class ProxyObjectReference : System.Runtime.Serialization.IDeserializationCallback, System.Runtime.Serialization.IObjectReference, System.Runtime.Serialization.ISerializable
     {
         protected ProxyObjectReference(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }

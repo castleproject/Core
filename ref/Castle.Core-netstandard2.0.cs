@@ -2165,6 +2165,7 @@ namespace Castle.Core.Logging
         public void WarnFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void WarnFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
     }
+    [System.Serializable]
     public class LoggerException : System.Exception
     {
         public LoggerException() { }
@@ -2364,6 +2365,7 @@ namespace Castle.Core.Resource
         Castle.Core.Resource.IResource Create(Castle.Core.Resource.CustomUri uri);
         Castle.Core.Resource.IResource Create(Castle.Core.Resource.CustomUri uri, string basePath);
     }
+    [System.Serializable]
     public class ResourceException : System.Exception
     {
         public ResourceException() { }
@@ -2592,7 +2594,9 @@ namespace Castle.DynamicProxy
         void DynProxySetTarget(object target);
         Castle.DynamicProxy.IInterceptor[] GetInterceptors();
     }
+    [System.Serializable]
     public class InvalidMixinConfigurationException : System.Exception { }
+    [System.Serializable]
     public class InvalidProxyConstructorArgumentsException : System.ArgumentException
     {
         public System.Type ClassToProxy { get; }
@@ -2740,6 +2744,7 @@ namespace Castle.DynamicProxy.Generators
         public static void Add<T>() { }
         public static bool Contains(System.Type attribute) { }
     }
+    [System.Serializable]
     public class GeneratorException : System.Exception { }
 }
 namespace Castle.DynamicProxy.Internal
