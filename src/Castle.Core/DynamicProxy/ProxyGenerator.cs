@@ -1419,7 +1419,7 @@ namespace Castle.DynamicProxy
 			{
 				return Activator.CreateInstance(proxyType, proxyArguments.ToArray());
 			}
-			catch (MissingMethodException)
+			catch (MissingMethodException ex)
 			{
 				var message = new StringBuilder();
 				message.AppendFormat("Can not instantiate proxy of class: {0}.", classToProxy.FullName);
@@ -1438,7 +1438,7 @@ namespace Castle.DynamicProxy
 					}
 				}
 
-				throw new InvalidProxyConstructorArgumentsException(message.ToString(),proxyType,classToProxy);
+				throw new ArgumentException(message.ToString(), nameof(constructorArguments), ex);
 			}
 		}
 
