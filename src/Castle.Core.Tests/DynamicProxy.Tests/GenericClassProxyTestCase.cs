@@ -319,7 +319,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			KeepDataInterceptor interceptor = new KeepDataInterceptor();
 
-			Assert.Throws<GeneratorException>(delegate {
+			Assert.Throws<ArgumentException>(delegate {
 				generator.CreateClassProxy(typeof(GenClassWithGenReturn<,>), interceptor);
 			});
 		}

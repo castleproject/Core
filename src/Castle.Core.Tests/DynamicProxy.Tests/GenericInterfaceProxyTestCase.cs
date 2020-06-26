@@ -398,7 +398,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var interceptor = new KeepDataInterceptor();
 
-			Assert.Throws<GeneratorException>(() =>
+			Assert.Throws<ArgumentException>(() =>
 				generator.CreateInterfaceProxyWithoutTarget(typeof(IGenInterfaceHierarchyBase<>), interceptor)
 			);
 		}

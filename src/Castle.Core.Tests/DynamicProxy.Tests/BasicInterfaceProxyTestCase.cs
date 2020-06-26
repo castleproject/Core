@@ -340,8 +340,10 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void Cannot_proxy_open_generic_type()
 		{
-			var ex = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithoutTarget(typeof(IList<>), new IInterceptor[0]));
-			Assert.AreEqual("Can not create proxy for type System.Collections.Generic.IList`1 because it is an open generic type.", ex.Message);
+			var ex = Assert.Throws<ArgumentException>(() => generator.CreateInterfaceProxyWithoutTarget(typeof(IList<>), new IInterceptor[0]));
+			StringAssert.StartsWith(
+				"Can not create proxy for type System.Collections.Generic.IList`1 because it is an open generic type.",
+				ex.Message);
 		}
 
 		[Test]
@@ -349,7 +351,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var innerType = typeof(IList<>);
 			var targetType = innerType.MakeGenericType(typeof(IList<>));
-			var ex = Assert.Throws<GeneratorException>(() => generator.CreateInterfaceProxyWithoutTarget(targetType, new IInterceptor[0]));
+			var ex = Assert.Throws<ArgumentException>(() => generator.CreateInterfaceProxyWithoutTarget(targetType, new IInterceptor[0]));
 			StringAssert.StartsWith(
 				"Can not create proxy for type IList`1 because type System.Collections.Generic.IList`1 is an open generic type.",
 				ex.Message);
