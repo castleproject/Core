@@ -2663,7 +2663,6 @@ namespace Castle.DynamicProxy
         public PersistentProxyBuilder() { }
         public string SaveAssembly() { }
     }
-    public class ProxyGenerationException : System.Exception { }
     [System.Serializable]
     public class ProxyGenerationOptions : System.Runtime.Serialization.ISerializable
     {

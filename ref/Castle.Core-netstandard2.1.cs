@@ -2619,7 +2619,6 @@ namespace Castle.DynamicProxy
         public string WeakNamedModuleName { get; }
         public static byte[] GetKeyPair() { }
     }
-    public class ProxyGenerationException : System.Exception { }
     public class ProxyGenerationOptions
     {
         public static readonly Castle.DynamicProxy.ProxyGenerationOptions Default;
