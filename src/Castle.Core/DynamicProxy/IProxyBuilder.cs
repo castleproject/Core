@@ -51,7 +51,7 @@ namespace Castle.DynamicProxy
 		/// </remarks>
 		/// <exception cref = "ArgumentException">Thrown when <paramref name = "classToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is a generic type definition.</exception>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "classToProxy" /> or any of <paramref
+		/// <exception cref = "ArgumentException">Thrown when <paramref name = "classToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is not public.
 		///   Note that to avoid this exception, you can mark offending type internal, and define <see
 		///    cref = "InternalsVisibleToAttribute" /> 
@@ -79,7 +79,7 @@ namespace Castle.DynamicProxy
 		/// </remarks>
 		/// <exception cref = "ArgumentException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is a generic type definition.</exception>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
+		/// <exception cref = "ArgumentException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is not public.
 		///   Note that to avoid this exception, you can mark offending type internal, and define <see
 		///    cref = "InternalsVisibleToAttribute" /> 
@@ -104,7 +104,7 @@ namespace Castle.DynamicProxy
 		/// </remarks>
 		/// <exception cref = "ArgumentException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is a generic type definition.</exception>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
+		/// <exception cref = "ArgumentException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is not public.
 		///   Note that to avoid this exception, you can mark offending type internal, and define <see
 		///    cref = "InternalsVisibleToAttribute" /> 
@@ -125,7 +125,7 @@ namespace Castle.DynamicProxy
 		/// </remarks>
 		/// <exception cref = "ArgumentException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is a generic type definition.</exception>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
+		/// <exception cref = "ArgumentException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is not public.
 		///   Note that to avoid this exception, you can mark offending type internal, and define <see
 		///    cref = "InternalsVisibleToAttribute" /> 

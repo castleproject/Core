@@ -82,7 +82,7 @@ namespace Castle.DynamicProxy.Tests
 			var type = Type.GetType("System.Text.Latin1Encoding");
 			Assert.True(type.IsNotPublic); // Just ensure it is internal as a good use case for this test
 
-			var ex = Assert.Throws<GeneratorException>(() => generator.CreateClassProxy(type, new StandardInterceptor()));
+			var ex = Assert.Throws<ArgumentException>(() => generator.CreateClassProxy(type, new StandardInterceptor()));
 			StringAssert.StartsWith(
 				"Can not create proxy for type System.Text.Latin1Encoding because it is not accessible. Make it public, or internal and mark your assembly with " +
 				"[assembly: InternalsVisibleTo(\"DynamicProxyGenAssembly2, PublicKey=002400000480000094000000060200000024000052534131000400000100010" +

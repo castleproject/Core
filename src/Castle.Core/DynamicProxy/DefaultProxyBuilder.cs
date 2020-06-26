@@ -125,7 +125,7 @@ namespace Castle.DynamicProxy
 			}
 			if (ProxyUtil.IsAccessibleType(type) == false)
 			{
-				throw new GeneratorException(ExceptionMessageBuilder.CreateMessageForInaccessibleType(type, target));
+				throw new ArgumentException(ExceptionMessageBuilder.CreateMessageForInaccessibleType(type, target), paramName);
 			}
 			foreach (var typeArgument in type.GetGenericArguments())
 			{
