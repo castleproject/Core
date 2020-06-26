@@ -14,6 +14,7 @@ Deprecations:
     - `Castle.Core.Internal.PermissionUtil.IsGranted` (method)
     - all type members in `Castle.DynamicProxy.ModuleScope` that gave direct access to DynamicProxy's type cache and `ModuleBuilder`s. Only `SaveAssembly`, `LoadAssemblyIntoCache`, and members supporting these two facilities are left public.
     - almost all types and type members in the `Castle.DynamicProxy.*` sub-namespaces, as most of them are intended for internal use only.
+    - DynamicProxy's custom exception types have been replaced by standard BCL exceptions (where appropriate), and by a single `DynamicProxyException` type for internal DynamicProxy errors.
 
 ## 4.4.1 (2020-05-06)
 
