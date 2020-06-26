@@ -115,7 +115,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			// big sanity check
 			if (genericTypeParams != null)
 			{
-				throw new ProxyGenerationException("CopyGenericParametersFromMethod: cannot invoke me twice");
+				throw new InvalidOperationException("Cannot invoke me twice");
 			}
 
 			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typebuilder, name2GenericType));
