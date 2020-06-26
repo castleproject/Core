@@ -21,38 +21,28 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	internal class NewInstanceExpression : Expression
 	{
 		private readonly Expression[] arguments;
-		private readonly Type[] constructorArgs;
-		private readonly Type type;
 		private ConstructorInfo constructor;
 
 		public NewInstanceExpression(ConstructorInfo constructor, params Expression[] args)
 		{
-			this.constructor = constructor;
+			this.constructor = constructor ?? throw new ArgumentNullException(nameof(constructor));
 			arguments = args;
 		}
 
-		public NewInstanceExpression(Type target, Type[] constructor_args, params Expression[] args)
+		public NewInstanceExpression(Type target)
 		{
-			type = target;
-			constructorArgs = constructor_args;
-			arguments = args;
+			constructor = target.GetConstructor(Type.EmptyTypes) ?? throw new MissingMethodException("Could not find default constructor.");
+			arguments = null;
 		}
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			foreach (var exp in arguments)
+			if (arguments != null)
 			{
-				exp.Emit(member, gen);
-			}
-
-			if (constructor == null)
-			{
-				constructor = type.GetConstructor(constructorArgs);
-			}
-
-			if (constructor == null)
-			{
-				throw new ProxyGenerationException("Could not find constructor matching specified arguments");
+				foreach (var exp in arguments)
+				{
+					exp.Emit(member, gen);
+				}
 			}
 
 			gen.Emit(OpCodes.Newobj, constructor);
