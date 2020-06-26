@@ -2628,8 +2628,6 @@ namespace Castle.DynamicProxy
         void DynProxySetTarget(object target);
         Castle.DynamicProxy.IInterceptor[] GetInterceptors();
     }
-    [System.Serializable]
-    public class InvalidMixinConfigurationException : System.Exception { }
     public class MixinData
     {
         public MixinData(System.Collections.Generic.IEnumerable<object> mixinInstances) { }
