@@ -48,7 +48,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else
 			{
-				throw new ProxyGenerationException("Can't emit default value for type " + type);
+				throw new NotImplementedException("Can't emit default value for type " + type);
 			}
 		}
 
@@ -66,7 +66,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else
 			{
-				throw new ProxyGenerationException("Can't emit default value for reference of type " + elementType);
+				throw new NotImplementedException("Can't emit default value for reference of type " + elementType);
 			}
 		}
 
