@@ -178,7 +178,7 @@ namespace Castle.DynamicProxy.Internal
 			FieldInfo field = type.GetField(fieldName, flags);
 			if (field == null)
 			{
-				throw new ProxyGenerationException(string.Format(
+				throw new DynamicProxyException(string.Format(
 					"Could not find field named '{0}' on type {1}. This is likely a bug in DynamicProxy. Please report it.",
 					fieldName, type));
 			}
@@ -189,7 +189,7 @@ namespace Castle.DynamicProxy.Internal
 			}
 			catch (MissingFieldException e)
 			{
-				throw new ProxyGenerationException(
+				throw new DynamicProxyException(
 					string.Format(
 						"Could not find field named '{0}' on type {1}. This is likely a bug in DynamicProxy. Please report it.",
 						fieldName,
@@ -197,7 +197,7 @@ namespace Castle.DynamicProxy.Internal
 			}
 			catch (TargetException e)
 			{
-				throw new ProxyGenerationException(
+				throw new DynamicProxyException(
 					string.Format(
 						"There was an error trying to set field named '{0}' on type {1}. This is likely a bug in DynamicProxy. Please report it.",
 						fieldName,
@@ -209,7 +209,7 @@ namespace Castle.DynamicProxy.Internal
 				{
 					throw;
 				}
-				throw new ProxyGenerationException(
+				throw new DynamicProxyException(
 					string.Format(
 						"There was an error in static constructor on type {0}. This is likely a bug in DynamicProxy. Please report it.",
 						type), e);

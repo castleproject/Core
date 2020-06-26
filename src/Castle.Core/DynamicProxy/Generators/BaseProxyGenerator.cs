@@ -363,7 +363,7 @@ namespace Castle.DynamicProxy.Generators
 				// this can technically never happen
 				message = string.Format("It looks like we have a bug with regards to how we handle {0}. Please report it.",
 				                        interfaceName);
-				throw new ProxyGenerationException("This is a DynamicProxy2 error: " + message);
+				throw new DynamicProxyException(message);
 			}
 		}
 
