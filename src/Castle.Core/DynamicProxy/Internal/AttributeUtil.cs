@@ -144,7 +144,7 @@ namespace Castle.DynamicProxy.Internal
 							member.DeclaringType.FullName,
 							(member is TypeInfo) ? "" : ("." + member.Name),
 							typeof(AttributesToAvoidReplicating).FullName);
-					throw new ProxyGenerationException(message, e);
+					throw new NotSupportedException(message, e);
 				}
 				if (info != null)
 				{
