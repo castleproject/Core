@@ -313,7 +313,7 @@ namespace Castle.DynamicProxy.Generators
 			constructor.CodeBuilder.AddStatement(new AssignStatement(interceptorField,
 			                                                         new NewArrayExpression(1, typeof(IInterceptor))));
 			constructor.CodeBuilder.AddStatement(
-				new AssignArrayStatement(interceptorField, 0, new NewInstanceExpression(typeof(StandardInterceptor), new Type[0])));
+				new AssignArrayStatement(interceptorField, 0, new NewInstanceExpression(typeof(StandardInterceptor))));
 
 			// Invoke base constructor
 
@@ -339,6 +339,7 @@ namespace Castle.DynamicProxy.Generators
 					string.Format(
 						"Target type for the proxy implements {0} which is a DynamicProxy infrastructure interface and you should never implement it yourself. Are you trying to proxy an existing proxy?",
 						interfaceName);
+				throw new InvalidOperationException("This is a DynamicProxy2 error: " + message);
 			}
 			else if (ProxyGenerationOptions.MixinData.ContainsMixin(typeof(IProxyTargetAccessor)))
 			{
@@ -347,6 +348,7 @@ namespace Castle.DynamicProxy.Generators
 					string.Format(
 						"Mixin type {0} implements {1} which is a DynamicProxy infrastructure interface and you should never implement it yourself. Are you trying to mix in an existing proxy?",
 						mixinType.Name, interfaceName);
+				throw new InvalidOperationException("This is a DynamicProxy2 error: " + message);
 			}
 			else if (additionalInterfaces.Contains(typeof(IProxyTargetAccessor)))
 			{
@@ -354,14 +356,15 @@ namespace Castle.DynamicProxy.Generators
 					string.Format(
 						"You passed {0} as one of additional interfaces to proxy which is a DynamicProxy infrastructure interface and is implemented by every proxy anyway. Please remove it from the list of additional interfaces to proxy.",
 						interfaceName);
+				throw new InvalidOperationException("This is a DynamicProxy2 error: " + message);
 			}
 			else
 			{
 				// this can technically never happen
 				message = string.Format("It looks like we have a bug with regards to how we handle {0}. Please report it.",
 				                        interfaceName);
+				throw new DynamicProxyException(message);
 			}
-			throw new ProxyGenerationException("This is a DynamicProxy2 error: " + message);
 		}
 
 		protected void InitializeStaticFields(Type builtType)

@@ -2482,6 +2482,8 @@ namespace Castle.DynamicProxy
         public System.Type CreateInterfaceProxyTypeWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         public System.Type CreateInterfaceProxyTypeWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
     }
+    [System.Serializable]
+    public sealed class DynamicProxyException : System.Exception { }
     public interface IChangeProxyTarget
     {
         void ChangeInvocationTarget(object target);
@@ -2617,7 +2619,6 @@ namespace Castle.DynamicProxy
         public string WeakNamedModuleName { get; }
         public static byte[] GetKeyPair() { }
     }
-    public class ProxyGenerationException : System.Exception { }
     public class ProxyGenerationOptions
     {
         public static readonly Castle.DynamicProxy.ProxyGenerationOptions Default;

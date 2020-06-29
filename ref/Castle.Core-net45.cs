@@ -2516,6 +2516,8 @@ namespace Castle.DynamicProxy
         public System.Type CreateInterfaceProxyTypeWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         public System.Type CreateInterfaceProxyTypeWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
     }
+    [System.Serializable]
+    public sealed class DynamicProxyException : System.Exception { }
     public interface IChangeProxyTarget
     {
         void ChangeInvocationTarget(object target);
@@ -2661,7 +2663,6 @@ namespace Castle.DynamicProxy
         public PersistentProxyBuilder() { }
         public string SaveAssembly() { }
     }
-    public class ProxyGenerationException : System.Exception { }
     [System.Serializable]
     public class ProxyGenerationOptions : System.Runtime.Serialization.ISerializable
     {

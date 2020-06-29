@@ -115,7 +115,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			// big sanity check
 			if (genericTypeParams != null)
 			{
-				throw new ProxyGenerationException("CopyGenericParametersFromMethod: cannot invoke me twice");
+				throw new InvalidOperationException("Cannot invoke me twice");
 			}
 
 			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typebuilder, name2GenericType));
@@ -316,36 +316,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		protected Type CreateType(TypeBuilder type)
 		{
-			try
-			{
-				return type.CreateTypeInfo();
-			}
-			catch (BadImageFormatException ex)
-			{
-				if (Debugger.IsAttached == false)
-				{
-					throw;
-				}
-
-				if (ex.Message.Contains(@"HRESULT: 0x8007000B") == false)
-				{
-					throw;
-				}
-
-				if (type.IsGenericTypeDefinition == false)
-				{
-					throw;
-				}
-
-				var message =
-					"This is a DynamicProxy2 error: It looks like you encountered a bug in Visual Studio debugger, " +
-					"which causes this exception when proxying types with generic methods having constraints on their generic arguments." +
-					"This code will work just fine without the debugger attached. " +
-					"If you wish to use debugger you may have to switch to Visual Studio 2010 where this bug was fixed.";
-				var exception = new ProxyGenerationException(message);
-				exception.Data.Add("ProxyType", type.ToString());
-				throw exception;
-			}
+			return type.CreateTypeInfo();
 		}
 
 		protected virtual void EnsureBuildersAreInAValidState()

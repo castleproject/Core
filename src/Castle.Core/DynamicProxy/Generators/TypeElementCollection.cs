@@ -46,7 +46,7 @@ namespace Castle.DynamicProxy.Generators
 				if (Contains(item))
 				{
 					// there is something *really* wrong going on here
-					throw new ProxyGenerationException("Duplicate element: " + item);
+					throw new DynamicProxyException("Duplicate element: " + item);
 				}
 			}
 			items.Add(item);
