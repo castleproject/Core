@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 		[Test]
 		public void ShouldGenerateTypeWithIndexers()
 		{
-			Assert.Throws<InvalidProxyConstructorArgumentsException>(delegate {
+			var ex = Assert.Throws<ArgumentException>(delegate {
 				generator.CreateClassProxy(typeof(Core40ClassToProxy), new object[] { null, null, null });
 			});
 		}

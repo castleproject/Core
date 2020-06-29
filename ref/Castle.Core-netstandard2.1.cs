@@ -2596,13 +2596,6 @@ namespace Castle.DynamicProxy
     }
     [System.Serializable]
     public class InvalidMixinConfigurationException : System.Exception { }
-    [System.Serializable]
-    public class InvalidProxyConstructorArgumentsException : System.ArgumentException
-    {
-        public System.Type ClassToProxy { get; }
-        public System.Type ProxyType { get; }
-        public override void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
-    }
     public class MixinData
     {
         public MixinData(System.Collections.Generic.IEnumerable<object> mixinInstances) { }
