@@ -1446,8 +1446,9 @@ namespace Castle.DynamicProxy
 		{
 			if (type != null && type.IsGenericTypeDefinition)
 			{
-				throw new GeneratorException(string.Format("Can not create proxy for type {0} because it is an open generic type.",
-														   type.GetBestName()));
+				throw new ArgumentException(
+					$"Can not create proxy for type {type.GetBestName()} because it is an open generic type.",
+					argumentName);
 			}
 		}
 

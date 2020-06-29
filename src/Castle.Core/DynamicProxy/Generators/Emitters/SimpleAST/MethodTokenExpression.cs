@@ -14,7 +14,7 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
-	using System;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
 
@@ -23,22 +23,17 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	internal class MethodTokenExpression : Expression
 	{
 		private readonly MethodInfo method;
-		private readonly Type declaringType;
 
 		public MethodTokenExpression(MethodInfo method)
 		{
 			this.method = method;
-			declaringType = method.DeclaringType;
+			Debug.Assert(method.DeclaringType != null);  // DynamicProxy isn't using global methods nor `DynamicMethod`
 		}
 
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldtoken, method);
-			if (declaringType == null)
-			{
-				throw new GeneratorException("declaringType can't be null for this situation");
-			}
-			gen.Emit(OpCodes.Ldtoken, declaringType);
+			gen.Emit(OpCodes.Ldtoken, method.DeclaringType);
 
 			var minfo = MethodBaseMethods.GetMethodFromHandle;
 			gen.Emit(OpCodes.Call, minfo);

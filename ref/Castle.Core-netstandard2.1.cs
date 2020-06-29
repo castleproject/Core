@@ -2744,8 +2744,6 @@ namespace Castle.DynamicProxy.Generators
         public static void Add<T>() { }
         public static bool Contains(System.Type attribute) { }
     }
-    [System.Serializable]
-    public class GeneratorException : System.Exception { }
 }
 namespace Castle.DynamicProxy.Internal
 {

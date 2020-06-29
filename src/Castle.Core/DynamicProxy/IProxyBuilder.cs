@@ -49,9 +49,9 @@ namespace Castle.DynamicProxy
 		///   Additional interfaces should be only 'mark' interfaces, that is, they should work like interface proxy without target. (See <see
 		///    cref = "CreateInterfaceProxyTypeWithoutTarget" /> method.)
 		/// </remarks>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "classToProxy" /> or any of <paramref
+		/// <exception cref = "ArgumentException">Thrown when <paramref name = "classToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is a generic type definition.</exception>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "classToProxy" /> or any of <paramref
+		/// <exception cref = "ArgumentException">Thrown when <paramref name = "classToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is not public.
 		///   Note that to avoid this exception, you can mark offending type internal, and define <see
 		///    cref = "InternalsVisibleToAttribute" /> 
@@ -77,9 +77,9 @@ namespace Castle.DynamicProxy
 		///   Additional interfaces should be only 'mark' interfaces, that is, they should work like interface proxy without target. (See <see
 		///    cref = "CreateInterfaceProxyTypeWithoutTarget" /> method.)
 		/// </remarks>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
+		/// <exception cref = "ArgumentException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is a generic type definition.</exception>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
+		/// <exception cref = "ArgumentException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is not public.
 		///   Note that to avoid this exception, you can mark offending type internal, and define <see
 		///    cref = "InternalsVisibleToAttribute" /> 
@@ -102,9 +102,9 @@ namespace Castle.DynamicProxy
 		///    cref = "IInvocation" /> classes should then implement <see cref = "IChangeProxyTarget" /> interface,
 		///   to allow interceptors to switch invocation target with instance of another type implementing called interface.
 		/// </remarks>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
+		/// <exception cref = "ArgumentException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is a generic type definition.</exception>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
+		/// <exception cref = "ArgumentException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is not public.
 		///   Note that to avoid this exception, you can mark offending type internal, and define <see
 		///    cref = "InternalsVisibleToAttribute" /> 
@@ -123,9 +123,9 @@ namespace Castle.DynamicProxy
 		/// <remarks>
 		///   Implementers should return a proxy type for the specified interface and additional interfaces that delegate all executions to the specified interceptors.
 		/// </remarks>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
+		/// <exception cref = "ArgumentException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is a generic type definition.</exception>
-		/// <exception cref = "GeneratorException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
+		/// <exception cref = "ArgumentException">Thrown when <paramref name = "interfaceToProxy" /> or any of <paramref
 		///    name = "additionalInterfacesToProxy" /> is not public.
 		///   Note that to avoid this exception, you can mark offending type internal, and define <see
 		///    cref = "InternalsVisibleToAttribute" /> 
