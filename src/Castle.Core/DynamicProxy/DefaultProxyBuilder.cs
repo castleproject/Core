@@ -63,6 +63,7 @@ namespace Castle.DynamicProxy
 		{
 			AssertValidType(classToProxy, nameof(classToProxy));
 			AssertValidTypes(additionalInterfacesToProxy, nameof(additionalInterfacesToProxy));
+			AssertValidMixins(options, nameof(options));
 
 			var generator = new ClassProxyGenerator(scope, classToProxy) { Logger = logger };
 			return generator.GenerateCode(additionalInterfacesToProxy, options);
@@ -73,6 +74,7 @@ namespace Castle.DynamicProxy
 		{
 			AssertValidType(classToProxy, nameof(classToProxy));
 			AssertValidTypes(additionalInterfacesToProxy, nameof(additionalInterfacesToProxy));
+			AssertValidMixins(options, nameof(options));
 
 			var generator = new ClassProxyWithTargetGenerator(scope, classToProxy, additionalInterfacesToProxy, options)
 			{ Logger = logger };
@@ -85,6 +87,7 @@ namespace Castle.DynamicProxy
 		{
 			AssertValidType(interfaceToProxy, nameof(interfaceToProxy));
 			AssertValidTypes(additionalInterfacesToProxy, nameof(additionalInterfacesToProxy));
+			AssertValidMixins(options, nameof(options));
 
 			var generator = new InterfaceProxyWithTargetGenerator(scope, interfaceToProxy) { Logger = logger };
 			return generator.GenerateCode(targetType, additionalInterfacesToProxy, options);
@@ -95,6 +98,7 @@ namespace Castle.DynamicProxy
 		{
 			AssertValidType(interfaceToProxy, nameof(interfaceToProxy));
 			AssertValidTypes(additionalInterfacesToProxy, nameof(additionalInterfacesToProxy));
+			AssertValidMixins(options, nameof(options));
 
 			var generator = new InterfaceProxyWithTargetInterfaceGenerator(scope, interfaceToProxy) { Logger = logger };
 			return generator.GenerateCode(interfaceToProxy, additionalInterfacesToProxy, options);
@@ -105,9 +109,22 @@ namespace Castle.DynamicProxy
 		{
 			AssertValidType(interfaceToProxy, nameof(interfaceToProxy));
 			AssertValidTypes(additionalInterfacesToProxy, nameof(additionalInterfacesToProxy));
+			AssertValidMixins(options, nameof(options));
 
 			var generator = new InterfaceProxyWithoutTargetGenerator(scope, interfaceToProxy) { Logger = logger };
 			return generator.GenerateCode(typeof(object), additionalInterfacesToProxy, options);
+		}
+
+		private void AssertValidMixins(ProxyGenerationOptions options, string paramName)
+		{
+			try
+			{
+				options.Initialize();
+			}
+			catch (InvalidOperationException ex)
+			{
+				throw new ArgumentException(ex.Message, paramName, ex.InnerException);  // convert to more suitable exception type
+			}
 		}
 
 		private void AssertValidType(Type target, string paramName)

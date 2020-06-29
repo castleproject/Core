@@ -264,8 +264,7 @@ namespace Castle.DynamicProxy.Tests
 			var options = new ProxyGenerationOptions();
 			options.AddDelegateTypeMixin(typeof(Func<Exception, bool>));
 			options.AddDelegateTypeMixin(typeof(Predicate<Exception>));
-			Assert.Throws<InvalidMixinConfigurationException>(() => options.Initialize());
-
+			Assert.Throws<InvalidOperationException>(() => options.Initialize());
 		}
 
 		[Serializable]

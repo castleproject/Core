@@ -92,8 +92,8 @@ namespace Castle.DynamicProxy
 				}
 				catch (ArgumentException ex)
 				{
-					throw new InvalidMixinConfigurationException(
-						"There is a problem with the mixins added to this ProxyGenerationOptions: " + ex.Message, ex);
+					throw new InvalidOperationException(
+						"There is a problem with the mixins added to this ProxyGenerationOptions. See the inner exception for details.", ex);
 				}
 			}
 		}

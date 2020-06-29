@@ -371,7 +371,7 @@ namespace Castle.DynamicProxy.Tests
 
 			StandardInterceptor interceptor = new StandardInterceptor();
 
-			Assert.Throws<InvalidMixinConfigurationException>(() =>
+			Assert.Throws<ArgumentException>(() =>
 				generator.CreateClassProxy(typeof(SimpleClass), options, interceptor)
 			);
 		}
