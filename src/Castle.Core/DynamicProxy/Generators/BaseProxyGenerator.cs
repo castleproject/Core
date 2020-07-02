@@ -42,10 +42,12 @@ namespace Castle.DynamicProxy.Generators
 		private ILogger logger = NullLogger.Instance;
 		private ProxyGenerationOptions proxyGenerationOptions;
 
-		protected BaseProxyGenerator(ModuleScope scope, Type targetType)
+		protected BaseProxyGenerator(ModuleScope scope, Type targetType, ProxyGenerationOptions proxyGenerationOptions)
 		{
 			this.scope = scope;
 			this.targetType = targetType;
+			this.proxyGenerationOptions = proxyGenerationOptions;
+			this.proxyGenerationOptions.Initialize();
 		}
 
 		public ILogger Logger
@@ -56,22 +58,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected ProxyGenerationOptions ProxyGenerationOptions
 		{
-			get
-			{
-				if (proxyGenerationOptions == null)
-				{
-					throw new InvalidOperationException("ProxyGenerationOptions must be set before being retrieved.");
-				}
-				return proxyGenerationOptions;
-			}
-			set
-			{
-				if (proxyGenerationOptions != null)
-				{
-					throw new InvalidOperationException("ProxyGenerationOptions can only be set once.");
-				}
-				proxyGenerationOptions = value;
-			}
+			get { return proxyGenerationOptions; }
 		}
 
 		protected ModuleScope Scope

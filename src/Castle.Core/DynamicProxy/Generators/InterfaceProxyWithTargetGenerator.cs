@@ -32,8 +32,8 @@ namespace Castle.DynamicProxy.Generators
 	{
 		protected FieldReference targetField;
 
-		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type @interface)
-			: base(scope, @interface)
+		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type @interface, ProxyGenerationOptions options)
+			: base(scope, @interface, options)
 		{
 			CheckNotGenericTypeDefinition(@interface, "@interface");
 		}
@@ -48,18 +48,14 @@ namespace Castle.DynamicProxy.Generators
 			get { return ProxyTypeConstants.InterfaceWithTarget; }
 		}
 
-		public Type GenerateCode(Type proxyTargetType, Type[] interfaces, ProxyGenerationOptions options)
+		public Type GenerateCode(Type proxyTargetType, Type[] interfaces)
 		{
-			// make sure ProxyGenerationOptions is initialized
-			options.Initialize();
-
 			CheckNotGenericTypeDefinition(proxyTargetType, "proxyTargetType");
 			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
-			EnsureValidBaseType(options.BaseTypeForInterfaceProxy);
-			ProxyGenerationOptions = options;
+			EnsureValidBaseType(ProxyGenerationOptions.BaseTypeForInterfaceProxy);
 
 			interfaces = TypeUtil.GetAllInterfaces(interfaces);
-			var cacheKey = new CacheKey(proxyTargetType, targetType, interfaces, options);
+			var cacheKey = new CacheKey(proxyTargetType, targetType, interfaces, ProxyGenerationOptions);
 
 			return ObtainProxyType(cacheKey, (n, s) => GenerateType(n, proxyTargetType, interfaces, s));
 		}
