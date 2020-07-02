@@ -30,7 +30,6 @@ namespace Castle.DynamicProxy.Contributors
 		}
 
 		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
-		                                                      ProxyGenerationOptions options,
 		                                                      OverrideMethodDelegate overrideMethod)
 		{
 			if (!method.Proxyable)
@@ -38,7 +37,7 @@ namespace Castle.DynamicProxy.Contributors
 				return new OptionallyForwardingMethodGenerator(method, overrideMethod, getTargetReference);
 			}
 
-			return base.GetMethodGenerator(method, @class, options, overrideMethod);
+			return base.GetMethodGenerator(method, @class, overrideMethod);
 		}
 	}
 }

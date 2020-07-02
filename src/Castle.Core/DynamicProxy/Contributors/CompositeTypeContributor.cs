@@ -70,7 +70,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected abstract IEnumerable<MembersCollector> CollectElementsToProxyInternal(IProxyGenerationHook hook);
 
-		public virtual void Generate(ClassEmitter @class, ProxyGenerationOptions options)
+		public virtual void Generate(ClassEmitter @class)
 		{
 			foreach (var method in methods)
 			{
@@ -81,18 +81,17 @@ namespace Castle.DynamicProxy.Contributors
 
 				ImplementMethod(method,
 				                @class,
-				                options,
 				                @class.CreateMethod);
 			}
 
 			foreach (var property in properties)
 			{
-				ImplementProperty(@class, property, options);
+				ImplementProperty(@class, property);
 			}
 
 			foreach (var @event in events)
 			{
-				ImplementEvent(@class, @event, options);
+				ImplementEvent(@class, @event);
 			}
 		}
 
@@ -106,41 +105,40 @@ namespace Castle.DynamicProxy.Contributors
 			interfaces.Add(@interface);
 		}
 
-		private void ImplementEvent(ClassEmitter emitter, MetaEvent @event, ProxyGenerationOptions options)
+		private void ImplementEvent(ClassEmitter emitter, MetaEvent @event)
 		{
 			@event.BuildEventEmitter(emitter);
-			ImplementMethod(@event.Adder, emitter, options, @event.Emitter.CreateAddMethod);
-			ImplementMethod(@event.Remover, emitter, options, @event.Emitter.CreateRemoveMethod);
+			ImplementMethod(@event.Adder, emitter, @event.Emitter.CreateAddMethod);
+			ImplementMethod(@event.Remover, emitter, @event.Emitter.CreateRemoveMethod);
 		}
 
-		private void ImplementProperty(ClassEmitter emitter, MetaProperty property, ProxyGenerationOptions options)
+		private void ImplementProperty(ClassEmitter emitter, MetaProperty property)
 		{
 			property.BuildPropertyEmitter(emitter);
 			if (property.CanRead)
 			{
-				ImplementMethod(property.Getter, emitter, options, property.Emitter.CreateGetMethod);
+				ImplementMethod(property.Getter, emitter, property.Emitter.CreateGetMethod);
 			}
 
 			if (property.CanWrite)
 			{
-				ImplementMethod(property.Setter, emitter, options, property.Emitter.CreateSetMethod);
+				ImplementMethod(property.Setter, emitter, property.Emitter.CreateSetMethod);
 			}
 		}
 
 		protected abstract MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
-		                                                      ProxyGenerationOptions options,
 		                                                      OverrideMethodDelegate overrideMethod);
 
-		private void ImplementMethod(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options,
+		private void ImplementMethod(MetaMethod method, ClassEmitter @class,
 		                             OverrideMethodDelegate overrideMethod)
 		{
 			{
-				var generator = GetMethodGenerator(method, @class, options, overrideMethod);
+				var generator = GetMethodGenerator(method, @class, overrideMethod);
 				if (generator == null)
 				{
 					return;
 				}
-				var proxyMethod = generator.Generate(@class, options, namingScope);
+				var proxyMethod = generator.Generate(@class, namingScope);
 				foreach (var attribute in method.Method.GetNonInheritableAttributes())
 				{
 					proxyMethod.DefineCustomAttribute(attribute.Builder);

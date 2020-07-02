@@ -192,7 +192,7 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach (var contributor in contributors)
 			{
-				contributor.Generate(emitter, ProxyGenerationOptions);
+				contributor.Generate(emitter);
 
 				// TODO: redo it
 				if (contributor is MixinContributor)

@@ -57,7 +57,6 @@ namespace Castle.DynamicProxy.Contributors
 		}
 
 		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
-		                                                      ProxyGenerationOptions options,
 		                                                      OverrideMethodDelegate overrideMethod)
 		{
 			if (methodsToSkip.Contains(method.Method))
@@ -73,10 +72,10 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (ExplicitlyImplementedInterfaceMethod(method))
 			{
-				return ExplicitlyImplementedInterfaceMethodGenerator(method, @class, options, overrideMethod);
+				return ExplicitlyImplementedInterfaceMethodGenerator(method, @class, overrideMethod);
 			}
 
-			var invocation = GetInvocationType(method, @class, options);
+			var invocation = GetInvocationType(method, @class);
 
 			GetTargetExpressionDelegate getTargetTypeExpression = (c, m) => new TypeTokenExpression(targetType);
 
@@ -89,7 +88,7 @@ namespace Castle.DynamicProxy.Contributors
 			                                         null);
 		}
 
-		private Type BuildInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
+		private Type BuildInvocationType(MetaMethod method, ClassEmitter @class)
 		{
 			var methodInfo = method.Method;
 			if (!method.HasTarget)
@@ -97,14 +96,14 @@ namespace Castle.DynamicProxy.Contributors
 				return new InheritanceInvocationTypeGenerator(targetType,
 				                                              method,
 				                                              null, null)
-					.Generate(@class, options, namingScope)
+					.Generate(@class, namingScope)
 					.BuildType();
 			}
 			var callback = CreateCallbackMethod(@class, methodInfo, method.MethodOnTarget);
 			return new InheritanceInvocationTypeGenerator(callback.DeclaringType,
 			                                              method,
 			                                              callback, null)
-				.Generate(@class, options, namingScope)
+				.Generate(@class, namingScope)
 				.BuildType();
 		}
 
@@ -141,13 +140,12 @@ namespace Castle.DynamicProxy.Contributors
 		}
 
 		private MethodGenerator ExplicitlyImplementedInterfaceMethodGenerator(MetaMethod method, ClassEmitter @class,
-		                                                                      ProxyGenerationOptions options,
 		                                                                      OverrideMethodDelegate overrideMethod)
 		{
-			var @delegate = GetDelegateType(method, @class, options);
+			var @delegate = GetDelegateType(method, @class);
 			var contributor = GetContributor(@delegate, method);
 			var invocation = new InheritanceInvocationTypeGenerator(targetType, method, null, contributor)
-				.Generate(@class, options, namingScope)
+				.Generate(@class, namingScope)
 				.BuildType();
 			return new MethodWithInvocationGenerator(method,
 			                                         @class.GetField("__interceptors"),
@@ -168,7 +166,7 @@ namespace Castle.DynamicProxy.Contributors
 			                                                    new FieldReference(InvocationMethods.ProxyObject));
 		}
 
-		private Type GetDelegateType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
+		private Type GetDelegateType(MetaMethod method, ClassEmitter @class)
 		{
 			var scope = @class.ModuleScope;
 			var key = new CacheKey(
@@ -181,14 +179,14 @@ namespace Castle.DynamicProxy.Contributors
 
 			return scope.TypeCache.GetOrAddWithoutTakingLock(key, _ =>
 				new DelegateTypeGenerator(method, targetType)
-				.Generate(@class, options, namingScope)
+				.Generate(@class, namingScope)
 				.BuildType());
 		}
 
-		private Type GetInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
+		private Type GetInvocationType(MetaMethod method, ClassEmitter @class)
 		{
 			// NOTE: No caching since invocation is tied to this specific proxy type via its invocation method
-			return BuildInvocationType(method, @class, options);
+			return BuildInvocationType(method, @class);
 		}
 	}
 }

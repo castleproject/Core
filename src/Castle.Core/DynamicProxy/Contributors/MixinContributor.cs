@@ -54,7 +54,7 @@ namespace Castle.DynamicProxy.Contributors
 			empty.Add(@interface);
 		}
 
-		public override void Generate(ClassEmitter @class, ProxyGenerationOptions options)
+		public override void Generate(ClassEmitter @class)
 		{
 			foreach (var @interface in interfaces)
 			{
@@ -66,7 +66,7 @@ namespace Castle.DynamicProxy.Contributors
 				fields[emptyInterface] = BuildTargetField(@class, emptyInterface);
 			}
 
-			base.Generate(@class, options);
+			base.Generate(@class);
 		}
 
 		protected override IEnumerable<MembersCollector> CollectElementsToProxyInternal(IProxyGenerationHook hook)
@@ -89,7 +89,6 @@ namespace Castle.DynamicProxy.Contributors
 		}
 
 		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
-		                                                      ProxyGenerationOptions options,
 		                                                      OverrideMethodDelegate overrideMethod)
 		{
 			if (!method.Proxyable)
@@ -99,7 +98,7 @@ namespace Castle.DynamicProxy.Contributors
 				                                     (c, i) => fields[i.DeclaringType]);
 			}
 
-			var invocation = GetInvocationType(method, @class, options);
+			var invocation = GetInvocationType(method, @class);
 			return new MethodWithInvocationGenerator(method,
 			                                         @class.GetField("__interceptors"),
 			                                         invocation,
@@ -126,7 +125,7 @@ namespace Castle.DynamicProxy.Contributors
 			return @class.CreateField(namingScope.GetUniqueName(name), type);
 		}
 
-		private Type GetInvocationType(MetaMethod method, ClassEmitter emitter, ProxyGenerationOptions options)
+		private Type GetInvocationType(MetaMethod method, ClassEmitter emitter)
 		{
 			var scope = emitter.ModuleScope;
 			Type[] invocationInterfaces;
@@ -148,7 +147,7 @@ namespace Castle.DynamicProxy.Contributors
 				                                       method.Method,
 				                                       canChangeTarget,
 				                                       null)
-				.Generate(emitter, options, namingScope)
+				.Generate(emitter, namingScope)
 				.BuildType());
 		}
 	}

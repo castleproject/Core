@@ -48,14 +48,13 @@ namespace Castle.DynamicProxy.Generators
 		///   <see cref = "AbstractInvocation" />
 		/// </summary>
 		protected abstract ArgumentReference[] GetBaseCtorArguments(Type targetFieldType,
-		                                                            ProxyGenerationOptions proxyGenerationOptions,
 		                                                            out ConstructorInfo baseConstructor);
 
 		protected abstract Type GetBaseType();
 
 		protected abstract FieldReference GetTargetReference();
 
-		public AbstractTypeEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
+		public AbstractTypeEmitter Generate(ClassEmitter @class, INamingScope namingScope)
 		{
 			var methodInfo = method.Method;
 
@@ -71,7 +70,7 @@ namespace Castle.DynamicProxy.Generators
 			// targetType cannot be a generic type definition (YET!)
 			invocation.CopyGenericParametersFromMethod(methodInfo);
 
-			CreateConstructor(invocation, options);
+			CreateConstructor(invocation);
 
 			var targetField = GetTargetReference();
 			if (canChangeTarget)
@@ -211,10 +210,10 @@ namespace Castle.DynamicProxy.Generators
 			invokeMethodOnTarget.CodeBuilder.AddStatement(new EndExceptionBlockStatement());
 		}
 
-		private void CreateConstructor(AbstractTypeEmitter invocation, ProxyGenerationOptions options)
+		private void CreateConstructor(AbstractTypeEmitter invocation)
 		{
 			ConstructorInfo baseConstructor;
-			var baseCtorArguments = GetBaseCtorArguments(targetType, options, out baseConstructor);
+			var baseCtorArguments = GetBaseCtorArguments(targetType, out baseConstructor);
 
 			var constructor = CreateConstructor(invocation, baseCtorArguments);
 			constructor.CodeBuilder.InvokeBaseConstructor(baseConstructor, baseCtorArguments);
