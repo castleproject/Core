@@ -144,15 +144,15 @@ namespace Castle.DynamicProxy.Serialization
 			InterfaceProxyWithTargetGenerator generator;
 			if (generatorType == ProxyTypeConstants.InterfaceWithTarget)
 			{
-				generator = new InterfaceProxyWithTargetGenerator(scope, @interface);
+				generator = new InterfaceProxyWithTargetGenerator(scope, @interface, proxyGenerationOptions);
 			}
 			else if (generatorType == ProxyTypeConstants.InterfaceWithoutTarget)
 			{
-				generator = new InterfaceProxyWithoutTargetGenerator(scope, @interface);
+				generator = new InterfaceProxyWithoutTargetGenerator(scope, @interface, proxyGenerationOptions);
 			}
 			else if (generatorType == ProxyTypeConstants.InterfaceWithTargetInterface)
 			{
-				generator = new InterfaceProxyWithTargetInterfaceGenerator(scope, @interface);
+				generator = new InterfaceProxyWithTargetInterfaceGenerator(scope, @interface, proxyGenerationOptions);
 			}
 			else
 			{
@@ -162,14 +162,14 @@ namespace Castle.DynamicProxy.Serialization
 						generatorType));
 			}
 
-			var proxyType = generator.GenerateCode(targetType, interfaces, proxyGenerationOptions);
+			var proxyType = generator.GenerateCode(targetType, interfaces);
 			return FormatterServices.GetSafeUninitializedObject(proxyType);
 		}
 
 		public object RecreateClassProxy()
 		{
-			var generator = new ClassProxyGenerator(scope, baseType);
-			var proxyType = generator.GenerateCode(interfaces, proxyGenerationOptions);
+			var generator = new ClassProxyGenerator(scope, baseType, proxyGenerationOptions);
+			var proxyType = generator.GenerateCode(interfaces);
 			return InstantiateClassProxy(proxyType);
 		}
 

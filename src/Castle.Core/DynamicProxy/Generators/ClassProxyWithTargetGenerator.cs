@@ -34,14 +34,12 @@ namespace Castle.DynamicProxy.Generators
 
 		public ClassProxyWithTargetGenerator(ModuleScope scope, Type classToProxy, Type[] additionalInterfacesToProxy,
 		                                     ProxyGenerationOptions options)
-			: base(scope, classToProxy)
+			: base(scope, classToProxy, options)
 		{
 			CheckNotGenericTypeDefinition(targetType, "targetType");
 			EnsureDoesNotImplementIProxyTargetAccessor(targetType, "targetType");
 			CheckNotGenericTypeDefinitions(additionalInterfacesToProxy, "additionalInterfacesToProxy");
 
-			options.Initialize();
-			ProxyGenerationOptions = options;
 			this.additionalInterfacesToProxy = TypeUtil.GetAllInterfaces(additionalInterfacesToProxy);
 		}
 
@@ -192,7 +190,7 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach (var contributor in contributors)
 			{
-				contributor.Generate(emitter, ProxyGenerationOptions);
+				contributor.Generate(emitter);
 
 				// TODO: redo it
 				if (contributor is MixinContributor)

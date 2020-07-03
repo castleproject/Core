@@ -56,7 +56,6 @@ namespace Castle.DynamicProxy.Contributors
 		}
 
 		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
-		                                                      ProxyGenerationOptions options,
 		                                                      OverrideMethodDelegate overrideMethod)
 		{
 			if (methodsToSkip.Contains(method.Method))
@@ -72,10 +71,10 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (IsDirectlyAccessible(method) == false)
 			{
-				return IndirectlyCalledMethodGenerator(method, @class, options, overrideMethod);
+				return IndirectlyCalledMethodGenerator(method, @class, overrideMethod);
 			}
 
-			var invocation = GetInvocationType(method, @class, options);
+			var invocation = GetInvocationType(method, @class);
 
 			return new MethodWithInvocationGenerator(method,
 			                                         @class.GetField("__interceptors"),
@@ -85,14 +84,14 @@ namespace Castle.DynamicProxy.Contributors
 			                                         null);
 		}
 
-		private Type BuildInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
+		private Type BuildInvocationType(MetaMethod method, ClassEmitter @class)
 		{
 			if (!method.HasTarget)
 			{
 				return new InheritanceInvocationTypeGenerator(targetType,
 				                                              method,
 				                                              null, null)
-					.Generate(@class, options, namingScope)
+					.Generate(@class, namingScope)
 					.BuildType();
 			}
 			return new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
@@ -100,7 +99,7 @@ namespace Castle.DynamicProxy.Contributors
 			                                              method.Method,
 			                                              false,
 			                                              null)
-				.Generate(@class, options, namingScope)
+				.Generate(@class, namingScope)
 				.BuildType();
 		}
 
@@ -115,7 +114,7 @@ namespace Castle.DynamicProxy.Contributors
 			                                                    new FieldReference(InvocationMethods.CompositionInvocationTarget));
 		}
 
-		private Type GetDelegateType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
+		private Type GetDelegateType(MetaMethod method, ClassEmitter @class)
 		{
 			var scope = @class.ModuleScope;
 			var key = new CacheKey(
@@ -128,11 +127,11 @@ namespace Castle.DynamicProxy.Contributors
 
 			return scope.TypeCache.GetOrAddWithoutTakingLock(key, _ =>
 				new DelegateTypeGenerator(method, targetType)
-				.Generate(@class, options, namingScope)
+				.Generate(@class, namingScope)
 				.BuildType());
 		}
 
-		private Type GetInvocationType(MetaMethod method, ClassEmitter @class, ProxyGenerationOptions options)
+		private Type GetInvocationType(MetaMethod method, ClassEmitter @class)
 		{
 			var scope = @class.ModuleScope;
 			var invocationInterfaces = new[] { typeof(IInvocation) };
@@ -141,17 +140,16 @@ namespace Castle.DynamicProxy.Contributors
 
 			// no locking required as we're already within a lock
 
-			return scope.TypeCache.GetOrAddWithoutTakingLock(key, _ => BuildInvocationType(method, @class, options));
+			return scope.TypeCache.GetOrAddWithoutTakingLock(key, _ => BuildInvocationType(method, @class));
 		}
 
 		private MethodGenerator IndirectlyCalledMethodGenerator(MetaMethod method, ClassEmitter proxy,
-		                                                        ProxyGenerationOptions options,
 		                                                        OverrideMethodDelegate overrideMethod)
 		{
-			var @delegate = GetDelegateType(method, proxy, options);
+			var @delegate = GetDelegateType(method, proxy);
 			var contributor = GetContributor(@delegate, method);
 			var invocation = new CompositionInvocationTypeGenerator(targetType, method, null, false, contributor)
-				.Generate(proxy, options, namingScope)
+				.Generate(proxy, namingScope)
 				.BuildType();
 			return new MethodWithInvocationGenerator(method,
 			                                         proxy.GetField("__interceptors"),

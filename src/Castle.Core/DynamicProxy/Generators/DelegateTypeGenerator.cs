@@ -38,7 +38,7 @@ namespace Castle.DynamicProxy.Generators
 			this.targetType = targetType;
 		}
 
-		public AbstractTypeEmitter Generate(ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
+		public AbstractTypeEmitter Generate(ClassEmitter @class, INamingScope namingScope)
 		{
 			var emitter = GetEmitter(@class, namingScope);
 			BuildConstructor(emitter);

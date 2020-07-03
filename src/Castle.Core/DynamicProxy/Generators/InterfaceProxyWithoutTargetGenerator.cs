@@ -25,7 +25,8 @@ namespace Castle.DynamicProxy.Generators
 
 	internal class InterfaceProxyWithoutTargetGenerator : InterfaceProxyWithTargetGenerator
 	{
-		public InterfaceProxyWithoutTargetGenerator(ModuleScope scope, Type @interface) : base(scope, @interface)
+		public InterfaceProxyWithoutTargetGenerator(ModuleScope scope, Type @interface, ProxyGenerationOptions options)
+			: base(scope, @interface, options)
 		{
 		}
 
@@ -73,7 +74,7 @@ namespace Castle.DynamicProxy.Generators
 
 			foreach (var contributor in contributors)
 			{
-				contributor.Generate(emitter, ProxyGenerationOptions);
+				contributor.Generate(emitter);
 
 				// TODO: redo it
 				if (contributor is MixinContributor)

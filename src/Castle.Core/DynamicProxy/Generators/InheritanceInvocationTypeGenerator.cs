@@ -33,7 +33,6 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		protected override ArgumentReference[] GetBaseCtorArguments(Type targetFieldType,
-		                                                            ProxyGenerationOptions proxyGenerationOptions,
 		                                                            out ConstructorInfo baseConstructor)
 		{
 			baseConstructor = InvocationMethods.InheritanceInvocationConstructor;

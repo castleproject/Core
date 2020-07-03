@@ -54,7 +54,7 @@ namespace Castle.DynamicProxy.Contributors
 			return SelfReference.Self;
 		}
 
-		public override void Generate(ClassEmitter @class, ProxyGenerationOptions options)
+		public override void Generate(ClassEmitter @class)
 		{
 			var interceptors = @class.GetField("__interceptors");
 #if FEATURE_SERIALIZATION

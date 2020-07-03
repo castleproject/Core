@@ -69,7 +69,7 @@ namespace Castle.DynamicProxy.Generators
 			return methodInterceptors;
 		}
 
-		protected override MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class, ProxyGenerationOptions options, INamingScope namingScope)
+		protected override MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class, INamingScope namingScope)
 		{
 			var invocationType = invocation;
 

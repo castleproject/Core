@@ -24,6 +24,6 @@ namespace Castle.DynamicProxy.Contributors
 	{
 		void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model);
 
-		void Generate(ClassEmitter @class, ProxyGenerationOptions options);
+		void Generate(ClassEmitter @class);
 	}
 }

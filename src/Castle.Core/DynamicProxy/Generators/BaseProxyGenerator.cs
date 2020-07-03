@@ -42,10 +42,12 @@ namespace Castle.DynamicProxy.Generators
 		private ILogger logger = NullLogger.Instance;
 		private ProxyGenerationOptions proxyGenerationOptions;
 
-		protected BaseProxyGenerator(ModuleScope scope, Type targetType)
+		protected BaseProxyGenerator(ModuleScope scope, Type targetType, ProxyGenerationOptions proxyGenerationOptions)
 		{
 			this.scope = scope;
 			this.targetType = targetType;
+			this.proxyGenerationOptions = proxyGenerationOptions;
+			this.proxyGenerationOptions.Initialize();
 		}
 
 		public ILogger Logger
@@ -56,22 +58,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected ProxyGenerationOptions ProxyGenerationOptions
 		{
-			get
-			{
-				if (proxyGenerationOptions == null)
-				{
-					throw new InvalidOperationException("ProxyGenerationOptions must be set before being retrieved.");
-				}
-				return proxyGenerationOptions;
-			}
-			set
-			{
-				if (proxyGenerationOptions != null)
-				{
-					throw new InvalidOperationException("ProxyGenerationOptions can only be set once.");
-				}
-				proxyGenerationOptions = value;
-			}
+			get { return proxyGenerationOptions; }
 		}
 
 		protected ModuleScope Scope
@@ -174,22 +161,22 @@ namespace Castle.DynamicProxy.Generators
 
 		protected virtual void CreateTypeAttributes(ClassEmitter emitter)
 		{
-			emitter.AddCustomAttributes(ProxyGenerationOptions);
+			emitter.AddCustomAttributes(ProxyGenerationOptions.AdditionalAttributes);
 #if FEATURE_SERIALIZATION
 			emitter.DefineCustomAttribute<XmlIncludeAttribute>(new object[] { targetType });
 #endif
 		}
 
-		protected void EnsureOptionsOverrideEqualsAndGetHashCode(ProxyGenerationOptions options)
+		protected void EnsureOptionsOverrideEqualsAndGetHashCode()
 		{
 			if (Logger.IsWarnEnabled)
 			{
 				// Check the proxy generation hook
-				if (!OverridesEqualsAndGetHashCode(options.Hook.GetType()))
+				if (!OverridesEqualsAndGetHashCode(ProxyGenerationOptions.Hook.GetType()))
 				{
 					Logger.WarnFormat("The IProxyGenerationHook type {0} does not override both Equals and GetHashCode. " +
 					                  "If these are not correctly overridden caching will fail to work causing performance problems.",
-					                  options.Hook.GetType().FullName);
+					                  ProxyGenerationOptions.Hook.GetType().FullName);
 				}
 
 				// Interceptor selectors no longer need to override Equals and GetHashCode
@@ -381,7 +368,7 @@ namespace Castle.DynamicProxy.Generators
 				notFoundInTypeCache = true;
 				Logger.DebugFormat("No cached proxy type was found for target type {0}.", targetType.FullName);
 
-				EnsureOptionsOverrideEqualsAndGetHashCode(ProxyGenerationOptions);
+				EnsureOptionsOverrideEqualsAndGetHashCode();
 
 				var name = Scope.NamingScope.GetUniqueName("Castle.Proxies." + targetType.Name + "Proxy");
 				return factory.Invoke(name, Scope.NamingScope.SafeSubScope());

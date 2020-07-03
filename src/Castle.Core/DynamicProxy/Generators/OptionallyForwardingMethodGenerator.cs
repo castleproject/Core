@@ -34,7 +34,7 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		protected override MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class,
-		                                                        ProxyGenerationOptions options, INamingScope namingScope)
+		                                                        INamingScope namingScope)
 		{
 			var targetReference = getTargetReference(@class, MethodToOverride);
 
