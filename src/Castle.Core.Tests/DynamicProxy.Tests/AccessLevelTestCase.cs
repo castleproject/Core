@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
 
@@ -84,6 +85,51 @@ namespace Castle.DynamicProxy.Tests
 		{
 			object proxy = generator.CreateClassProxy(typeof(InternalClass), new StandardInterceptor());
 			Assert.IsNotNull(proxy.GetType().GetConstructor(new[] { typeof(IInterceptor[]) }));
+		}
+
+		[TestCase(typeof(InternalMethodClass))]
+		[TestCase(typeof(PrivateProtectedMethodClass))]
+		[TestCase(typeof(ProtectedMethodClass))]
+		[TestCase(typeof(ProtectedInternalMethodClass))]
+		public void Methods_made_visible_by_InternalsVisibleTo_can_be_intercepted(Type methodClass)
+		{
+			var method = methodClass.GetMethod("Method", BindingFlags.NonPublic | BindingFlags.Instance);
+			Assume.That(ProxyUtil.IsAccessible(method));  // because this assembly makes its internals visible to DynamicProxy
+
+			var realObj = (IMethodClass)Activator.CreateInstance(methodClass);
+			Assert.Throws<Exception>(realObj.InvokeMethod);
+
+			var proxy = (IMethodClass)generator.CreateClassProxy(methodClass, new DoNothingInterceptor());
+			Assert.DoesNotThrow(proxy.InvokeMethod);
+		}
+
+		private interface IMethodClass
+		{
+			void InvokeMethod();
+		}
+
+		public class InternalMethodClass : IMethodClass
+		{
+			public void InvokeMethod() => Method();
+			internal virtual void Method() => throw new Exception();
+		}
+
+		public class PrivateProtectedMethodClass : IMethodClass
+		{
+			public void InvokeMethod() => Method();
+			private protected virtual void Method() => throw new Exception();
+		}
+
+		public class ProtectedMethodClass : IMethodClass
+		{
+			public void InvokeMethod() => Method();
+			protected virtual void Method() => throw new Exception();
+		}
+
+		public class ProtectedInternalMethodClass : IMethodClass
+		{
+			public void InvokeMethod() => Method();
+			protected internal virtual void Method() => throw new Exception();
 		}
 	}
 }
