@@ -1,4 +1,5 @@
 [assembly: System.CLSCompliant(true)]
+[assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/castleproject/Core")]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.5", FrameworkDisplayName=".NET Framework 4.5")]
 namespace Castle.Services.Logging.NLogIntegration

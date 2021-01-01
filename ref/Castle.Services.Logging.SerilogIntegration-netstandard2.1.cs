@@ -1,3 +1,4 @@
+[assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/castleproject/Core")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETStandard,Version=v2.1", FrameworkDisplayName="")]
 namespace Castle.Services.Logging.SerilogIntegration
 {
