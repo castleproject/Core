@@ -21,12 +21,12 @@ namespace Castle.DynamicProxy.Tests.Classes
 		private readonly string name;
 		private readonly int x;
 
-		public ClassWithConstructors(String name)
+		public ClassWithConstructors(string name)
 		{
 			this.name = name;
 		}
 
-		public ClassWithConstructors(String name, int x)
+		public ClassWithConstructors(string name, int x)
 		{
 			this.name = name;
 			this.x = x;

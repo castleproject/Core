@@ -146,7 +146,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 
-		private ProxyGenerationOptions MixIn(Object mixin)
+		private ProxyGenerationOptions MixIn(object mixin)
 		{
 			var options = new ProxyGenerationOptions();
 			options.AddMixinInstance(mixin);

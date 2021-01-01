@@ -35,7 +35,7 @@ namespace Castle.Core.Resource
 			};
 		}
 
-		public UncResource(CustomUri resource, String basePath)
+		public UncResource(CustomUri resource, string basePath)
 		{
 			CreateStream = delegate
 			{
@@ -43,30 +43,30 @@ namespace Castle.Core.Resource
 			};
 		}
 
-		public UncResource(String resourceName) : this(new CustomUri(resourceName))
+		public UncResource(string resourceName) : this(new CustomUri(resourceName))
 		{
 		}
 
-		public UncResource(String resourceName, String basePath) : this(new CustomUri(resourceName), basePath)
+		public UncResource(string resourceName, string basePath) : this(new CustomUri(resourceName), basePath)
 		{
 		}
 
-		public override String FileBasePath
+		public override string FileBasePath
 		{
 			get { return basePath; }
 		}
 
-		public override IResource CreateRelative(String relativePath)
+		public override IResource CreateRelative(string relativePath)
 		{
 			return new UncResource(Path.Combine(basePath, relativePath));
 		}
 
 		public override string ToString()
 		{
-			return String.Format(CultureInfo.CurrentCulture, "UncResource: [{0}] [{1}]", filePath, basePath);
+			return string.Format(CultureInfo.CurrentCulture, "UncResource: [{0}] [{1}]", filePath, basePath);
 		}
 
-		private Stream CreateStreamFromUri(CustomUri resource, String rootPath)
+		private Stream CreateStreamFromUri(CustomUri resource, string rootPath)
 		{
 			if (resource == null)
 				throw new ArgumentNullException("resource");
@@ -75,7 +75,7 @@ namespace Castle.Core.Resource
 			if (!resource.IsFile)
 				throw new ArgumentException("The specified resource is not a file", "resource");
 
-			String resourcePath = resource.Path;
+			string resourcePath = resource.Path;
 
 			if (!File.Exists(resourcePath) && rootPath != null)
 			{
@@ -90,11 +90,11 @@ namespace Castle.Core.Resource
 			return File.OpenRead(resourcePath);
 		}
 
-		private static void CheckFileExists(String path)
+		private static void CheckFileExists(string path)
 		{
 			if (!File.Exists(path))
 			{
-				String message = String.Format(CultureInfo.InvariantCulture, "File {0} could not be found", path);
+				string message = string.Format(CultureInfo.InvariantCulture, "File {0} could not be found", path);
 				throw new ResourceException(message);
 			}
 		}

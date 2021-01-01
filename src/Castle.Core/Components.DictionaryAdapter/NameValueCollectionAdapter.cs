@@ -76,7 +76,7 @@ namespace Castle.Components.DictionaryAdapter
 			get { return nameValues[key.ToString()]; }
 			set
 			{
-				String val = (value != null) ? value.ToString() : null;
+				string val = (value != null) ? value.ToString() : null;
 				nameValues[key.ToString()] = val;
 			}
 		}

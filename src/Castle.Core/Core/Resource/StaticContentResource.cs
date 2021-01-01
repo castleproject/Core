@@ -25,7 +25,7 @@ namespace Castle.Core.Resource
 	{
 		private readonly string contents;
 
-		public StaticContentResource(String contents)
+		public StaticContentResource(string contents)
 		{
 			this.contents = contents;
 		}
@@ -40,7 +40,7 @@ namespace Castle.Core.Resource
 			throw new NotImplementedException();
 		}
 
-		public override IResource CreateRelative(String relativePath)
+		public override IResource CreateRelative(string relativePath)
 		{
 			throw new NotImplementedException();
 		}

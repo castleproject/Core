@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 		{
 			invocations.Add(invocation.Method.Name);
 
-			sb.Append(String.Format("{0} ", invocation.Method.Name));
+			sb.Append(string.Format("{0} ", invocation.Method.Name));
 		}
 
 		protected override void PerformProceed (IInvocation invocation)
@@ -46,7 +46,7 @@ namespace Castle.DynamicProxy.Tests.Interceptors
 			}
 		}
 
-		public String LogContents
+		public string LogContents
 		{
 			get { return sb.ToString(); }
 		}

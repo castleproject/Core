@@ -36,7 +36,7 @@ namespace Castle.Core.Resource
 		{
 		}
 
-		public ConfigResource(String sectionName)
+		public ConfigResource(string sectionName)
 		{
 			this.sectionName = sectionName;
 
@@ -44,7 +44,7 @@ namespace Castle.Core.Resource
 
 			if (node == null)
 			{
-				String message = String.Format(CultureInfo.InvariantCulture, 
+				string message = string.Format(CultureInfo.InvariantCulture, 
 					"Could not find section '{0}' in the configuration file associated with this domain.", sectionName);
 				throw new ConfigurationErrorsException(message);
 			}
@@ -63,14 +63,14 @@ namespace Castle.Core.Resource
 			throw new NotSupportedException("Encoding is not supported");
 		}
 
-		public override IResource CreateRelative(String relativePath)
+		public override IResource CreateRelative(string relativePath)
 		{
 			return new ConfigResource(relativePath);
 		}
 
 		public override string ToString()
 		{
-			return String.Format(CultureInfo.CurrentCulture, "ConfigResource: [{0}]", sectionName);
+			return string.Format(CultureInfo.CurrentCulture, "ConfigResource: [{0}]", sectionName);
 		}
 	}
 }

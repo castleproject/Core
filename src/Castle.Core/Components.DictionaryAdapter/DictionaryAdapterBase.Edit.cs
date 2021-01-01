@@ -106,7 +106,7 @@ namespace Castle.Components.DictionaryAdapter
 								var oldValue = update.PropertyValue;
 								var newValue = GetProperty(update.Property.PropertyName, true);
 								
-								if (!Object.Equals(oldValue, newValue))
+								if (!object.Equals(oldValue, newValue))
 								{
 
 									NotifyPropertyChanging(update.Property, oldValue, newValue);

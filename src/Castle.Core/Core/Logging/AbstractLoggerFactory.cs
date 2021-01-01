@@ -42,9 +42,9 @@ namespace Castle.Core.Logging
 			return Create(type.FullName, level);
 		}
 
-		public abstract ILogger Create(String name);
+		public abstract ILogger Create(string name);
 
-		public abstract ILogger Create(String name, LoggerLevel level);
+		public abstract ILogger Create(string name, LoggerLevel level);
 
 		/// <summary>
 		///   Gets the configuration file.

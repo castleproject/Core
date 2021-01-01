@@ -74,7 +74,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		///   Creates a logger with specified <paramref name="name" />.
 		/// </summary>
 		/// <param name="name"> The name. </param>
-		public override Core.Logging.ILogger Create(String name)
+		public override Core.Logging.ILogger Create(string name)
 		{
 			var log = LogManager.GetLogger(name);
 			return new NLogLogger(log, this);
@@ -86,7 +86,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		/// <param name="name"> The name. </param>
 		/// <param name="level"> The level. </param>
 		/// <exception cref="NotImplementedException" />
-		public override Core.Logging.ILogger Create(String name, LoggerLevel level)
+		public override Core.Logging.ILogger Create(string name, LoggerLevel level)
 		{
 			throw new NotSupportedException("Logger levels cannot be set at runtime. Please review your configuration file.");
 		}

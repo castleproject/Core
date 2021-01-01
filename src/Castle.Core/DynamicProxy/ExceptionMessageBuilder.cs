@@ -46,7 +46,7 @@ namespace Castle.DynamicProxy
 				"[assembly: InternalsVisibleTo({0})] attribute, because assembly {1} " +
 				"is{2} strong-named.";
 
-			var instructions = String.Format(instructionsFormat,
+			var instructions = string.Format(instructionsFormat,
 				assemblyToBeVisibleTo,
 				targetAssembly.GetName().Name,
 				strongNamedOrNotIndicator);

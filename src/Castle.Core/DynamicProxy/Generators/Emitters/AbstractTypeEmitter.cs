@@ -36,7 +36,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private readonly MethodCollection methods;
 
-		private readonly Dictionary<String, GenericTypeParameterBuilder> name2GenericType;
+		private readonly Dictionary<string, GenericTypeParameterBuilder> name2GenericType;
 		private readonly NestedClassCollection nested;
 		private readonly PropertiesCollection properties;
 		private readonly TypeBuilder typebuilder;
@@ -51,7 +51,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			constructors = new ConstructorCollection();
 			properties = new PropertiesCollection();
 			events = new EventCollection();
-			name2GenericType = new Dictionary<String, GenericTypeParameterBuilder>();
+			name2GenericType = new Dictionary<string, GenericTypeParameterBuilder>();
 		}
 
 		public Type BaseType
@@ -271,7 +271,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return value;
 		}
 
-		public Type GetGenericArgument(String genericArgumentName)
+		public Type GetGenericArgument(string genericArgumentName)
 		{
 			if (name2GenericType.TryGetValue(genericArgumentName, out var genericTypeParameterBuilder))
 				return genericTypeParameterBuilder;

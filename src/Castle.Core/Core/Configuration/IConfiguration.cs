@@ -29,7 +29,7 @@ namespace Castle.Core.Configuration
 		/// <value>
 		/// The Name of the node.
 		/// </value> 
-		String Name { get; }
+		string Name { get; }
 
 		/// <summary>
 		/// Gets the value of the node.
@@ -37,7 +37,7 @@ namespace Castle.Core.Configuration
 		/// <value>
 		/// The Value of the node.
 		/// </value> 
-		String Value { get; }
+		string Value { get; }
 
 		/// <summary>
 		/// Gets an <see cref="ConfigurationCollection"/> of <see cref="IConfiguration"/>

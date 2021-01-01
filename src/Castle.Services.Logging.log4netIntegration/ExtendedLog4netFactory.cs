@@ -48,7 +48,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			XmlConfigurator.ConfigureAndWatch(LogManager.GetRepository(_callingAssembly), file);
 		}
 
-		public ExtendedLog4netFactory(String configFile)
+		public ExtendedLog4netFactory(string configFile)
 		{
 			var file = GetConfigFile(configFile);
 			XmlConfigurator.ConfigureAndWatch(LogManager.GetRepository(_callingAssembly), file);

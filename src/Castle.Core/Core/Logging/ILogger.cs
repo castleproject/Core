@@ -69,13 +69,13 @@ namespace Castle.Core.Logging
 		/// <param name = "loggerName">The Subname of this logger.</param>
 		/// <returns>The New ILogger instance.</returns>
 		/// <exception cref = "System.ArgumentException">If the name has an empty element name.</exception>
-		ILogger CreateChildLogger(String loggerName);
+		ILogger CreateChildLogger(string loggerName);
 
 		/// <summary>
 		///   Logs a trace message.
 		/// </summary>
 		/// <param name = "message">The message to log</param>
-		void Trace(String message);
+		void Trace(string message);
 
 		/// <summary>
 		///   Logs a trace message with lazily constructed message. The message will be constructed only if the <see cref = "IsTraceEnabled" /> is true.
@@ -87,14 +87,14 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name = "exception">The exception to log</param>
 		/// <param name = "message">The message to log</param>
-		void Trace(String message, Exception exception);
+		void Trace(string message, Exception exception);
 
 		/// <summary>
 		///   Logs a trace message.
 		/// </summary>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void TraceFormat(String format, params Object[] args);
+		void TraceFormat(string format, params object[] args);
 
 		/// <summary>
 		///   Logs a trace message.
@@ -102,7 +102,7 @@ namespace Castle.Core.Logging
 		/// <param name = "exception">The exception to log</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void TraceFormat(Exception exception, String format, params Object[] args);
+		void TraceFormat(Exception exception, string format, params object[] args);
 
 		/// <summary>
 		///   Logs a trace message.
@@ -110,7 +110,7 @@ namespace Castle.Core.Logging
 		/// <param name = "formatProvider">The format provider to use</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void TraceFormat(IFormatProvider formatProvider, String format, params Object[] args);
+		void TraceFormat(IFormatProvider formatProvider, string format, params object[] args);
 
 		/// <summary>
 		///   Logs a trace message.
@@ -119,13 +119,13 @@ namespace Castle.Core.Logging
 		/// <param name = "formatProvider">The format provider to use</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void TraceFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args);
+		void TraceFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args);
 
 		/// <summary>
 		///   Logs a debug message.
 		/// </summary>
 		/// <param name = "message">The message to log</param>
-		void Debug(String message);
+		void Debug(string message);
 
 		/// <summary>
 		///   Logs a debug message with lazily constructed message. The message will be constructed only if the <see cref = "IsDebugEnabled" /> is true.
@@ -137,14 +137,14 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name = "exception">The exception to log</param>
 		/// <param name = "message">The message to log</param>
-		void Debug(String message, Exception exception);
+		void Debug(string message, Exception exception);
 
 		/// <summary>
 		///   Logs a debug message.
 		/// </summary>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void DebugFormat(String format, params Object[] args);
+		void DebugFormat(string format, params object[] args);
 
 		/// <summary>
 		///   Logs a debug message.
@@ -152,7 +152,7 @@ namespace Castle.Core.Logging
 		/// <param name = "exception">The exception to log</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void DebugFormat(Exception exception, String format, params Object[] args);
+		void DebugFormat(Exception exception, string format, params object[] args);
 
 		/// <summary>
 		///   Logs a debug message.
@@ -160,7 +160,7 @@ namespace Castle.Core.Logging
 		/// <param name = "formatProvider">The format provider to use</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void DebugFormat(IFormatProvider formatProvider, String format, params Object[] args);
+		void DebugFormat(IFormatProvider formatProvider, string format, params object[] args);
 
 		/// <summary>
 		///   Logs a debug message.
@@ -169,13 +169,13 @@ namespace Castle.Core.Logging
 		/// <param name = "formatProvider">The format provider to use</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void DebugFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args);
+		void DebugFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args);
 
 		/// <summary>
 		///   Logs an error message.
 		/// </summary>
 		/// <param name = "message">The message to log</param>
-		void Error(String message);
+		void Error(string message);
 
 		/// <summary>
 		///   Logs an error message with lazily constructed message. The message will be constructed only if the <see cref = "IsErrorEnabled" /> is true.
@@ -187,14 +187,14 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name = "exception">The exception to log</param>
 		/// <param name = "message">The message to log</param>
-		void Error(String message, Exception exception);
+		void Error(string message, Exception exception);
 
 		/// <summary>
 		///   Logs an error message.
 		/// </summary>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void ErrorFormat(String format, params Object[] args);
+		void ErrorFormat(string format, params object[] args);
 
 		/// <summary>
 		///   Logs an error message.
@@ -202,7 +202,7 @@ namespace Castle.Core.Logging
 		/// <param name = "exception">The exception to log</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void ErrorFormat(Exception exception, String format, params Object[] args);
+		void ErrorFormat(Exception exception, string format, params object[] args);
 
 		/// <summary>
 		///   Logs an error message.
@@ -210,7 +210,7 @@ namespace Castle.Core.Logging
 		/// <param name = "formatProvider">The format provider to use</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void ErrorFormat(IFormatProvider formatProvider, String format, params Object[] args);
+		void ErrorFormat(IFormatProvider formatProvider, string format, params object[] args);
 
 		/// <summary>
 		///   Logs an error message.
@@ -219,13 +219,13 @@ namespace Castle.Core.Logging
 		/// <param name = "formatProvider">The format provider to use</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void ErrorFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args);
+		void ErrorFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args);
 
 		/// <summary>
 		///   Logs a fatal message.
 		/// </summary>
 		/// <param name = "message">The message to log</param>
-		void Fatal(String message);
+		void Fatal(string message);
 
 		/// <summary>
 		///   Logs a fatal message with lazily constructed message. The message will be constructed only if the <see cref = "IsFatalEnabled" /> is true.
@@ -237,14 +237,14 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name = "exception">The exception to log</param>
 		/// <param name = "message">The message to log</param>
-		void Fatal(String message, Exception exception);
+		void Fatal(string message, Exception exception);
 
 		/// <summary>
 		///   Logs a fatal message.
 		/// </summary>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void FatalFormat(String format, params Object[] args);
+		void FatalFormat(string format, params object[] args);
 
 		/// <summary>
 		///   Logs a fatal message.
@@ -252,7 +252,7 @@ namespace Castle.Core.Logging
 		/// <param name = "exception">The exception to log</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void FatalFormat(Exception exception, String format, params Object[] args);
+		void FatalFormat(Exception exception, string format, params object[] args);
 
 		/// <summary>
 		///   Logs a fatal message.
@@ -260,7 +260,7 @@ namespace Castle.Core.Logging
 		/// <param name = "formatProvider">The format provider to use</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void FatalFormat(IFormatProvider formatProvider, String format, params Object[] args);
+		void FatalFormat(IFormatProvider formatProvider, string format, params object[] args);
 
 		/// <summary>
 		///   Logs a fatal message.
@@ -269,13 +269,13 @@ namespace Castle.Core.Logging
 		/// <param name = "formatProvider">The format provider to use</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void FatalFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args);
+		void FatalFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args);
 
 		/// <summary>
 		///   Logs an info message.
 		/// </summary>
 		/// <param name = "message">The message to log</param>
-		void Info(String message);
+		void Info(string message);
 
 		/// <summary>
 		///   Logs a info message with lazily constructed message. The message will be constructed only if the <see cref = "IsInfoEnabled" /> is true.
@@ -287,14 +287,14 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name = "exception">The exception to log</param>
 		/// <param name = "message">The message to log</param>
-		void Info(String message, Exception exception);
+		void Info(string message, Exception exception);
 
 		/// <summary>
 		///   Logs an info message.
 		/// </summary>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void InfoFormat(String format, params Object[] args);
+		void InfoFormat(string format, params object[] args);
 
 		/// <summary>
 		///   Logs an info message.
@@ -302,7 +302,7 @@ namespace Castle.Core.Logging
 		/// <param name = "exception">The exception to log</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void InfoFormat(Exception exception, String format, params Object[] args);
+		void InfoFormat(Exception exception, string format, params object[] args);
 
 		/// <summary>
 		///   Logs an info message.
@@ -310,7 +310,7 @@ namespace Castle.Core.Logging
 		/// <param name = "formatProvider">The format provider to use</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void InfoFormat(IFormatProvider formatProvider, String format, params Object[] args);
+		void InfoFormat(IFormatProvider formatProvider, string format, params object[] args);
 
 		/// <summary>
 		///   Logs an info message.
@@ -319,13 +319,13 @@ namespace Castle.Core.Logging
 		/// <param name = "formatProvider">The format provider to use</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void InfoFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args);
+		void InfoFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args);
 
 		/// <summary>
 		///   Logs a warn message.
 		/// </summary>
 		/// <param name = "message">The message to log</param>
-		void Warn(String message);
+		void Warn(string message);
 
 		/// <summary>
 		///   Logs a warn message with lazily constructed message. The message will be constructed only if the <see cref = "IsWarnEnabled" /> is true.
@@ -337,14 +337,14 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name = "exception">The exception to log</param>
 		/// <param name = "message">The message to log</param>
-		void Warn(String message, Exception exception);
+		void Warn(string message, Exception exception);
 
 		/// <summary>
 		///   Logs a warn message.
 		/// </summary>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void WarnFormat(String format, params Object[] args);
+		void WarnFormat(string format, params object[] args);
 
 		/// <summary>
 		///   Logs a warn message.
@@ -352,7 +352,7 @@ namespace Castle.Core.Logging
 		/// <param name = "exception">The exception to log</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void WarnFormat(Exception exception, String format, params Object[] args);
+		void WarnFormat(Exception exception, string format, params object[] args);
 
 		/// <summary>
 		///   Logs a warn message.
@@ -360,7 +360,7 @@ namespace Castle.Core.Logging
 		/// <param name = "formatProvider">The format provider to use</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void WarnFormat(IFormatProvider formatProvider, String format, params Object[] args);
+		void WarnFormat(IFormatProvider formatProvider, string format, params object[] args);
 
 		/// <summary>
 		///   Logs a warn message.
@@ -369,6 +369,6 @@ namespace Castle.Core.Logging
 		/// <param name = "formatProvider">The format provider to use</param>
 		/// <param name = "format">Format string for the message to log</param>
 		/// <param name = "args">Format arguments for the message to log</param>
-		void WarnFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args);
+		void WarnFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args);
 	}
 }

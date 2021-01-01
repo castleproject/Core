@@ -107,7 +107,7 @@ namespace Castle.Core.Logging
 
 			var type = TranslateLevel(loggerLevel);
 
-			String contentToLog;
+			string contentToLog;
 
 			if (exception == null)
 			{

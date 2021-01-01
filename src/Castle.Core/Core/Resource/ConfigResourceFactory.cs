@@ -34,7 +34,7 @@ namespace Castle.Core.Resource
 			return new ConfigResource(uri);
 		}
 
-		public IResource Create(CustomUri uri, String basePath)
+		public IResource Create(CustomUri uri, string basePath)
 		{
 			return Create(uri);
 		}

@@ -60,7 +60,7 @@ namespace Castle.Core.Logging.Tests
 			log.Fatal("Some fatal error message");
 			log.Warn("Some warn message");
 
-			String logcontents = outWriter.GetStringBuilder().ToString();
+			string logcontents = outWriter.GetStringBuilder().ToString();
 			
 			StringWriter expected = new StringWriter();
 			expected.WriteLine("[Info] 'Logger' Some info message");
@@ -83,7 +83,7 @@ namespace Castle.Core.Logging.Tests
 			log.Fatal("Some fatal error message");
 			log.Warn("Some warn message");
 
-			String logcontents = outWriter.GetStringBuilder().ToString();
+			string logcontents = outWriter.GetStringBuilder().ToString();
 			
 			StringWriter expected = new StringWriter();
 			expected.WriteLine("[Debug] 'Logger' Some debug message");
@@ -107,7 +107,7 @@ namespace Castle.Core.Logging.Tests
 			log.Fatal("Some fatal error message");
 			log.Warn("Some warn message");
 
-			String logcontents = outWriter.GetStringBuilder().ToString();
+			string logcontents = outWriter.GetStringBuilder().ToString();
 
 			StringWriter expected = new StringWriter();
 			expected.WriteLine("[Trace] 'Logger' Some trace message");
@@ -132,7 +132,7 @@ namespace Castle.Core.Logging.Tests
 			log.Fatal("Some fatal error message");
 			log.Warn("Some warn message");
 
-			String logcontents = outWriter.GetStringBuilder().ToString();
+			string logcontents = outWriter.GetStringBuilder().ToString();
 			
 			StringWriter expected = new StringWriter();
 			expected.WriteLine("[Error] 'Logger' Some error message");
@@ -149,7 +149,7 @@ namespace Castle.Core.Logging.Tests
 
 			log.Debug("Some debug message", new Exception("Some exception message"));
 
-			String logcontents = outWriter.GetStringBuilder().ToString();
+			string logcontents = outWriter.GetStringBuilder().ToString();
 			
 			StringWriter expected = new StringWriter();
 			expected.WriteLine("[Debug] 'Logger' Some debug message");

@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 
 	public class Core40ClassToProxy
 	{
-		public Core40ClassToProxy(Object arg1, Object arg2)
+		public Core40ClassToProxy(object arg1, object arg2)
 		{
 		}
 	}

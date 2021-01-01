@@ -255,7 +255,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="dictionaryAdapter">The dictionary adapter.</param>
 		/// <param name="key">The key.</param>
 		/// <param name="descriptor">The descriptor.</param>
-		public string GetKey(IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor descriptor)
+		public string GetKey(IDictionaryAdapter dictionaryAdapter, string key, PropertyDescriptor descriptor)
 		{
 			var behaviors = dictionaryBehaviors;
 			if (behaviors != null)

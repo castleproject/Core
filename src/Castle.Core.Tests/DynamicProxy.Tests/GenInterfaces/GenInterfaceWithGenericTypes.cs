@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 		IList<T> Find<T>(string query);
 
-		IList<String> FindStrings(string query);
+		IList<string> FindStrings(string query);
 
 		void Populate<T>(IList<T> list);
 	}
@@ -34,12 +34,12 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 	{
 		public IList Find(string[,] query)
 		{
-			return new String[0];
+			return new string[0];
 		}
 
 		public IList Find(string query)
 		{
-			return new String[0];
+			return new string[0];
 		}
 
 		public IList<T> Find<T>(string query)
@@ -49,7 +49,7 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 		public IList<string> FindStrings(string query)
 		{
-			return new List<String>();
+			return new List<string>();
 		}
 
 		public void Populate<T>(IList<T> list)
@@ -135,7 +135,7 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 			protected override void InvokeMethodOnTarget()
 			{
-				ReturnValue = (target as GenInterfaceWithGenericTypesImpl).Find<T>((String) GetArgumentValue(0));
+				ReturnValue = (target as GenInterfaceWithGenericTypesImpl).Find<T>((string) GetArgumentValue(0));
 			}
 		}
 
@@ -167,7 +167,7 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 			protected override void InvokeMethodOnTarget()
 			{
-				ReturnValue = (target as GenInterfaceWithGenericTypesImpl).Find((String[,]) GetArgumentValue(0));
+				ReturnValue = (target as GenInterfaceWithGenericTypesImpl).Find((string[,]) GetArgumentValue(0));
 			}
 		}
 
@@ -199,7 +199,7 @@ namespace Castle.DynamicProxy.Tests.GenInterfaces
 
 			protected override void InvokeMethodOnTarget()
 			{
-				ReturnValue = (target as GenInterfaceWithGenericTypesImpl).Find((String) GetArgumentValue(0));
+				ReturnValue = (target as GenInterfaceWithGenericTypesImpl).Find((string) GetArgumentValue(0));
 			}
 		}
 

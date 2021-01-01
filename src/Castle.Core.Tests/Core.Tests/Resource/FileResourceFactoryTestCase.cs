@@ -42,7 +42,7 @@ namespace Castle.Core.Resource.Tests
 		[Test]
 		public void CreateWithAbsolutePath()
 		{
-			String file = Path.Combine(basePath, "file1.txt");
+			string file = Path.Combine(basePath, "file1.txt");
 
 			FileInfo fileInfo = new FileInfo(file);
 
@@ -51,7 +51,7 @@ namespace Castle.Core.Resource.Tests
 			IResource resource = resFactory.Create(uri, null);
 
 			Assert.IsNotNull(resource);
-			String line = resource.GetStreamReader().ReadLine();
+			string line = resource.GetStreamReader().ReadLine();
 			Assert.AreEqual("Something", line);
 		}
 
@@ -61,7 +61,7 @@ namespace Castle.Core.Resource.Tests
 			IResource resource = resFactory.Create( new CustomUri(basePath + "/file1.txt") );
 
 			Assert.IsNotNull(resource);
-			String line = resource.GetStreamReader().ReadLine();
+			string line = resource.GetStreamReader().ReadLine();
 			Assert.AreEqual("Something", line);
 		}
 
@@ -73,7 +73,7 @@ namespace Castle.Core.Resource.Tests
 			IResource resource = resFactory.Create( uri, basePath );
 
 			Assert.IsNotNull(resource);
-			String line = resource.GetStreamReader().ReadLine();
+			string line = resource.GetStreamReader().ReadLine();
 			Assert.AreEqual("Something", line);
 		}
 

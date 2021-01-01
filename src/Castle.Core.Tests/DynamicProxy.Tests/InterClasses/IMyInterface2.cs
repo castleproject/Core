@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 
 	public interface IMyInterface2
 	{
-		String Name { get; set; }
+		string Name { get; set; }
 
 		bool Started { get; set; }
 
@@ -33,10 +33,10 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 	[MyAttribute("MyInterfaceImpl")]
 	public class MyInterfaceImpl : IMyInterface2
 	{
-		private String _name;
+		private string _name;
 		private bool _started;
 
-		public virtual String Name
+		public virtual string Name
 		{
 			get { return _name; }
 			set { _name = value; }
@@ -71,7 +71,7 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 	{
 		private string _name;
 
-		public MyAttribute(String name)
+		public MyAttribute(string name)
 		{
 			_name = name;
 		}

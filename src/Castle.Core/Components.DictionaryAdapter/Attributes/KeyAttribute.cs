@@ -26,7 +26,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// Initializes a new instance of the <see cref="KeyAttribute"/> class.
 		/// </summary>
 		/// <param name="key">The key.</param>
-		public KeyAttribute(String key)
+		public KeyAttribute(string key)
 		{
 			Key = key;
 		}
@@ -35,14 +35,14 @@ namespace Castle.Components.DictionaryAdapter
 		/// Initializes a new instance of the <see cref="KeyAttribute"/> class.
 		/// </summary>
 		/// <param name="keys">The compound key.</param>
-		public KeyAttribute(String[] keys)
+		public KeyAttribute(string[] keys)
 		{
 			Key = string.Join(",", keys);
 		}
 
-		public String Key { get; private set; }
+		public string Key { get; private set; }
 
-		String IDictionaryKeyBuilder.GetKey(IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor property)
+		string IDictionaryKeyBuilder.GetKey(IDictionaryAdapter dictionaryAdapter, string key, PropertyDescriptor property)
 		{
 			return Key;
 		}

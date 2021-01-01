@@ -32,7 +32,7 @@ namespace Castle.Core.Resource
 			return new UncResource(uri);
 		}
 
-		public IResource Create(CustomUri uri, String basePath)
+		public IResource Create(CustomUri uri, string basePath)
 		{
 			return new UncResource(uri, basePath);
 		}

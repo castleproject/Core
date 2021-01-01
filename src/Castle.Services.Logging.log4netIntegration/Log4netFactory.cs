@@ -32,7 +32,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 		{
 		}
 
-		public Log4netFactory(String configFile)
+		public Log4netFactory(string configFile)
 		{
 			var file = GetConfigFile(configFile);
 			XmlConfigurator.ConfigureAndWatch(LogManager.GetRepository(_callingAssembly), file);
@@ -61,13 +61,13 @@ namespace Castle.Services.Logging.Log4netIntegration
 			XmlConfigurator.Configure(LogManager.GetRepository(_callingAssembly), config);
 		}
 
-		public override ILogger Create(String name)
+		public override ILogger Create(string name)
 		{
 			var log = LogManager.GetLogger(_callingAssembly, name);
 			return new Log4netLogger(log, this);
 		}
 
-		public override ILogger Create(String name, LoggerLevel level)
+		public override ILogger Create(string name, LoggerLevel level)
 		{
 			throw new NotSupportedException("Logger levels cannot be set at runtime. Please review your configuration file.");
 		}

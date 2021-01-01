@@ -37,7 +37,7 @@ namespace Castle.Core.Logging
 			return Create(type.FullName);
 		}
 
-		public ILogger Create(String name)
+		public ILogger Create(string name)
 		{
 			if (level.HasValue)
 			{
@@ -51,7 +51,7 @@ namespace Castle.Core.Logging
 			return new ConsoleLogger(type.Name, level);
 		}
 
-		public ILogger Create(String name, LoggerLevel level)
+		public ILogger Create(string name, LoggerLevel level)
 		{
 			return new ConsoleLogger(name, level);
 		}
