@@ -16,7 +16,7 @@ Debugging symbols are available in symbol packages in the AppVeyor build artifac
 
 ## License
 
-Castle Core is &copy; 2004-2020 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
+Castle Core is &copy; 2004-2021 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
 
 ## Contributing
 
