@@ -111,7 +111,7 @@ namespace Castle.Core.Smtp
 		/// <param name="to">To field</param>
 		/// <param name="subject">e-mail's subject</param>
 		/// <param name="messageText">message's body</param>
-		public void Send(String from, String to, String subject, String messageText)
+		public void Send(string from, string to, string subject, string messageText)
 		{
 			if (from == null) throw new ArgumentNullException("from");
 			if (to == null) throw new ArgumentNullException("to");

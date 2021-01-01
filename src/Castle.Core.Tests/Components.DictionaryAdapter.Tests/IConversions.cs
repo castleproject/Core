@@ -22,7 +22,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		float Float { get; set; }
 		double Double { get; set; }
 		decimal Decimal { get; set; }
-		String String { get; set; }
+		string String { get; set; }
 		DateTime DateTime { get; set; }
 		[NewGuid]Guid Guid { get; set; }
 		int? NullInt { get; set; }

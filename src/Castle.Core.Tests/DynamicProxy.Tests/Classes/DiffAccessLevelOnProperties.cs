@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 	{
 		private int age, age2;
 		private int maxval, maxval2;
-		private String name;
+		private string name;
 
 		public void SetProperties()
 		{
@@ -63,7 +63,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 
 		public override string ToString()
 		{
-			return String.Format("{0} {1} {2} {3} {4}", Age, Age2, Maxval, Maxval2, Name);
+			return string.Format("{0} {1} {2} {3} {4}", Age, Age2, Maxval, Maxval2, Name);
 		}
 	}
 }

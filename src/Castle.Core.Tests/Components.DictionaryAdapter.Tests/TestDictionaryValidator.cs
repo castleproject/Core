@@ -23,14 +23,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 	public interface IValidationRule
 	{
 		void Apply(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property, 
-				   object propertyValue, IList<String> errors);
+				   object propertyValue, IList<string> errors);
 	}
 
 	[AttributeUsage(AttributeTargets.Interface | AttributeTargets.Property, AllowMultiple = true)]
 	public abstract class ValidationRuleAttribute : Attribute, IValidationRule
 	{
 		public abstract void Apply(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property,
-								   object propertyValue, IList<String> errors);
+								   object propertyValue, IList<string> errors);
 	}
 
 	public class TestDictionaryValidator : DictionaryBehaviorAttribute, IDictionaryValidator, IDictionaryInitializer
@@ -42,12 +42,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		public bool IsValid(IDictionaryAdapter dictionaryAdapter)
 		{
-			return String.IsNullOrEmpty(Validate(dictionaryAdapter));
+			return string.IsNullOrEmpty(Validate(dictionaryAdapter));
 		}
 
 		public string Validate(IDictionaryAdapter dictionaryAdapter)
 		{
-			List<String> errors = new List<string>();
+			List<string> errors = new List<string>();
 			var globalRules = AttributesUtil.GetTypeAttributes<ValidationRuleAttribute>(dictionaryAdapter.Meta.Type);
 
 			foreach (var property in dictionaryAdapter.This.Properties.Values)
@@ -58,12 +58,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 				ApplyValidationRules(dictionaryAdapter, globalRules, property, propertyValue, errors);
 			}
 
-			return String.Join(Environment.NewLine, errors.ToArray());
+			return string.Join(Environment.NewLine, errors.ToArray());
 		}
 
 		public string Validate(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
 		{
-			List<String> errors = new List<string>();
+			List<string> errors = new List<string>();
 			var globalRules = AttributesUtil.GetTypeAttributes<ValidationRuleAttribute>(dictionaryAdapter.Meta.Type);
 
 			var propertyRules = AttributesUtil.GetAttributes<ValidationRuleAttribute>(property.Property).Select(x => (IValidationRule)x);
@@ -71,7 +71,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			ApplyValidationRules(dictionaryAdapter, propertyRules, property, propertyValue, errors);
 			ApplyValidationRules(dictionaryAdapter, globalRules, property, propertyValue, errors);
 
-			return String.Join(Environment.NewLine, errors.ToArray());
+			return string.Join(Environment.NewLine, errors.ToArray());
 		}
 
 		public void Invalidate(IDictionaryAdapter dictionaryAdapter)
@@ -79,7 +79,7 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		}
 
 		private void ApplyValidationRules(IDictionaryAdapter dictionaryAdapter, IEnumerable<IValidationRule> rules,
-										  PropertyDescriptor property, object propertyValue, IList<String> errors)
+										  PropertyDescriptor property, object propertyValue, IList<string> errors)
 		{
 			if (rules != null)
 			{
@@ -101,11 +101,11 @@ namespace Castle.Components.DictionaryAdapter.Tests
 		public int MinLength { get; private set; }
 
 		public override void Apply(IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property,
-								   object propertyValue, IList<String> errors)
+								   object propertyValue, IList<string> errors)
 		{
-			if (propertyValue == null || (propertyValue is String && ((String)propertyValue).Length < 10))
+			if (propertyValue == null || (propertyValue is string && ((string)propertyValue).Length < 10))
 			{
-				errors.Add(String.Format("Property {0} must be at least {1} characters long",
+				errors.Add(string.Format("Property {0} must be at least {1} characters long",
 						   property.PropertyName, MinLength));
 			}
 		}

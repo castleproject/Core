@@ -28,7 +28,7 @@ namespace Castle.Core.Logging
 	public abstract class LevelFilteredLogger : ILogger
 	{
 		private LoggerLevel level = LoggerLevel.Off;
-		private String name = "unnamed";
+		private string name = "unnamed";
 
 		/// <summary>
 		///   Creates a new <c>LevelFilteredLogger</c>.
@@ -37,7 +37,7 @@ namespace Castle.Core.Logging
 		{
 		}
 
-		protected LevelFilteredLogger(String name)
+		protected LevelFilteredLogger(string name)
 		{
 			ChangeName(name);
 		}
@@ -47,7 +47,7 @@ namespace Castle.Core.Logging
 			level = loggerLevel;
 		}
 
-		protected LevelFilteredLogger(String loggerName, LoggerLevel loggerLevel) : this(loggerLevel)
+		protected LevelFilteredLogger(string loggerName, LoggerLevel loggerLevel) : this(loggerLevel)
 		{
 			ChangeName(loggerName);
 		}
@@ -66,9 +66,9 @@ namespace Castle.Core.Logging
 
 		/// <value>
 		///   The name that this logger will be using. 
-		///   Defaults to <c>String.Empty</c>
+		///   Defaults to <c>string.Empty</c>
 		/// </value>
-		public String Name
+		public string Name
 		{
 			get { return name; }
 		}
@@ -123,7 +123,7 @@ namespace Castle.Core.Logging
 		{
 			if (IsTraceEnabled)
 			{
-				Log(LoggerLevel.Trace, String.Format(CultureInfo.CurrentCulture, format, args), null);
+				Log(LoggerLevel.Trace, string.Format(CultureInfo.CurrentCulture, format, args), null);
 			}
 		}
 
@@ -137,7 +137,7 @@ namespace Castle.Core.Logging
 		{
 			if (IsTraceEnabled)
 			{
-				Log(LoggerLevel.Trace, String.Format(CultureInfo.CurrentCulture, format, args), exception);
+				Log(LoggerLevel.Trace, string.Format(CultureInfo.CurrentCulture, format, args), exception);
 			}
 		}
 
@@ -151,7 +151,7 @@ namespace Castle.Core.Logging
 		{
 			if (IsTraceEnabled)
 			{
-				Log(LoggerLevel.Trace, String.Format(formatProvider, format, args), null);
+				Log(LoggerLevel.Trace, string.Format(formatProvider, format, args), null);
 			}
 		}
 
@@ -166,7 +166,7 @@ namespace Castle.Core.Logging
 		{
 			if (IsTraceEnabled)
 			{
-				Log(LoggerLevel.Trace, String.Format(formatProvider, format, args), exception);
+				Log(LoggerLevel.Trace, string.Format(formatProvider, format, args), exception);
 			}
 		}
 
@@ -225,7 +225,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Debug, String.Format(CultureInfo.CurrentCulture, format, args), null);
+			Log(LoggerLevel.Debug, string.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -241,7 +241,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Debug, String.Format(CultureInfo.CurrentCulture, format, args), exception);
+			Log(LoggerLevel.Debug, string.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -257,7 +257,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Debug, String.Format(formatProvider, format, args), null);
+			Log(LoggerLevel.Debug, string.Format(formatProvider, format, args), null);
 		}
 
 		/// <summary>
@@ -274,7 +274,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Debug, String.Format(formatProvider, format, args), exception);
+			Log(LoggerLevel.Debug, string.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
@@ -332,7 +332,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Info, String.Format(CultureInfo.CurrentCulture, format, args), null);
+			Log(LoggerLevel.Info, string.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -348,7 +348,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Info, String.Format(CultureInfo.CurrentCulture, format, args), exception);
+			Log(LoggerLevel.Info, string.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -364,7 +364,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Info, String.Format(formatProvider, format, args), null);
+			Log(LoggerLevel.Info, string.Format(formatProvider, format, args), null);
 		}
 
 		/// <summary>
@@ -381,7 +381,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Info, String.Format(formatProvider, format, args), exception);
+			Log(LoggerLevel.Info, string.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
@@ -439,7 +439,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Warn, String.Format(CultureInfo.CurrentCulture, format, args), null);
+			Log(LoggerLevel.Warn, string.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -455,7 +455,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Warn, String.Format(CultureInfo.CurrentCulture, format, args), exception);
+			Log(LoggerLevel.Warn, string.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -471,7 +471,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Warn, String.Format(formatProvider, format, args), null);
+			Log(LoggerLevel.Warn, string.Format(formatProvider, format, args), null);
 		}
 
 		/// <summary>
@@ -488,7 +488,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Warn, String.Format(formatProvider, format, args), exception);
+			Log(LoggerLevel.Warn, string.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
@@ -546,7 +546,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Error, String.Format(CultureInfo.CurrentCulture, format, args), null);
+			Log(LoggerLevel.Error, string.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -562,7 +562,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Error, String.Format(CultureInfo.CurrentCulture, format, args), exception);
+			Log(LoggerLevel.Error, string.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -578,7 +578,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Error, String.Format(formatProvider, format, args), null);
+			Log(LoggerLevel.Error, string.Format(formatProvider, format, args), null);
 		}
 
 		/// <summary>
@@ -595,7 +595,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Error, String.Format(formatProvider, format, args), exception);
+			Log(LoggerLevel.Error, string.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
@@ -653,7 +653,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Fatal, String.Format(CultureInfo.CurrentCulture, format, args), null);
+			Log(LoggerLevel.Fatal, string.Format(CultureInfo.CurrentCulture, format, args), null);
 		}
 
 		/// <summary>
@@ -669,7 +669,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Fatal, String.Format(CultureInfo.CurrentCulture, format, args), exception);
+			Log(LoggerLevel.Fatal, string.Format(CultureInfo.CurrentCulture, format, args), exception);
 		}
 
 		/// <summary>
@@ -685,7 +685,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Fatal, String.Format(formatProvider, format, args), null);
+			Log(LoggerLevel.Fatal, string.Format(formatProvider, format, args), null);
 		}
 
 		/// <summary>
@@ -702,7 +702,7 @@ namespace Castle.Core.Logging
 				return;
 			}
 
-			Log(LoggerLevel.Fatal, String.Format(formatProvider, format, args), exception);
+			Log(LoggerLevel.Fatal, string.Format(formatProvider, format, args), exception);
 		}
 
 		#endregion
@@ -767,9 +767,9 @@ namespace Castle.Core.Logging
 		///   Implementors output the log content by implementing this method only.
 		///   Note that exception can be null
 		/// </summary>
-		protected abstract void Log(LoggerLevel loggerLevel, String loggerName, String message, Exception exception);
+		protected abstract void Log(LoggerLevel loggerLevel, string loggerName, string message, Exception exception);
 
-		protected void ChangeName(String newName)
+		protected void ChangeName(string newName)
 		{
 			if (newName == null)
 			{
@@ -779,7 +779,7 @@ namespace Castle.Core.Logging
 			name = newName;
 		}
 
-		private void Log(LoggerLevel loggerLevel, String message, Exception exception)
+		private void Log(LoggerLevel loggerLevel, string message, Exception exception)
 		{
 			Log(loggerLevel, Name, message, exception);
 		}

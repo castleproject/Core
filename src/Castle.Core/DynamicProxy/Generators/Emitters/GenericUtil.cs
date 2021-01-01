@@ -23,14 +23,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Internal;
 
-	internal delegate GenericTypeParameterBuilder[] ApplyGenArgs(String[] argumentNames);
+	internal delegate GenericTypeParameterBuilder[] ApplyGenArgs(string[] argumentNames);
 
 	internal class GenericUtil
 	{
 		public static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,
 			TypeBuilder builder,
-			Dictionary<String, GenericTypeParameterBuilder> name2GenericType)
+			Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
 		{
 			return
 				CopyGenericArguments(methodToCopyGenericsFrom, name2GenericType,
@@ -40,7 +40,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,
 			MethodBuilder builder,
-			Dictionary<String, GenericTypeParameterBuilder> name2GenericType)
+			Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
 		{
 			return
 				CopyGenericArguments(methodToCopyGenericsFrom, name2GenericType,
@@ -90,7 +90,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static Type[] ExtractParametersTypes(
 			ParameterInfo[] baseMethodParameters,
-			Dictionary<String, GenericTypeParameterBuilder> name2GenericType)
+			Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
 		{
 			var newParameters = new Type[baseMethodParameters.Length];
 
@@ -184,7 +184,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,
-			Dictionary<String, GenericTypeParameterBuilder> name2GenericType,
+			Dictionary<string, GenericTypeParameterBuilder> name2GenericType,
 			ApplyGenArgs genericParameterGenerator)
 		{
 			var originalGenericArguments = methodToCopyGenericsFrom.GetGenericArguments();
@@ -231,7 +231,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private static string[] GetArgumentNames(Type[] originalGenericArguments)
 		{
-			var argumentNames = new String[originalGenericArguments.Length];
+			var argumentNames = new string[originalGenericArguments.Length];
 
 			for (var i = 0; i < argumentNames.Length; i++)
 			{

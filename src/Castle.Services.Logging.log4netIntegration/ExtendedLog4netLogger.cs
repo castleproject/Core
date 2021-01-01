@@ -71,7 +71,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			return Factory.Create(Logger.Name + "." + name);
 		}
 
-		public override Logger CreateChildLogger(String name)
+		public override Logger CreateChildLogger(string name)
 		{
 			return CreateExtendedChildLogger(name);
 		}

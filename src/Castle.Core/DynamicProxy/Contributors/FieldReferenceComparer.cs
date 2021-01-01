@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Contributors
 				throw new ArgumentNullException(nameof(y));
 			}
 
-			return String.CompareOrdinal(x.FullName, y.FullName);
+			return string.CompareOrdinal(x.FullName, y.FullName);
 		}
 	}
 }

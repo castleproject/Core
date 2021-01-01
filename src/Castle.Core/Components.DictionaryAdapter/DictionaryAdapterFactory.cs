@@ -300,7 +300,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private static void PreparePropertyMethod(PropertyDescriptor descriptor, ILGenerator propILGenerator)
 		{
-			propILGenerator.DeclareLocal(typeof(String));
+			propILGenerator.DeclareLocal(typeof(string));
 			propILGenerator.DeclareLocal(typeof(object));
 
 			// key = propertyInfo.Name
@@ -393,9 +393,9 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region Descriptors
 
-		private static Dictionary<String, PropertyDescriptor> GetPropertyDescriptors(Type type, PropertyDescriptor initializers, out object[] typeBehaviors)
+		private static Dictionary<string, PropertyDescriptor> GetPropertyDescriptors(Type type, PropertyDescriptor initializers, out object[] typeBehaviors)
 		{
-			var propertyMap = new Dictionary<String, PropertyDescriptor>();
+			var propertyMap = new Dictionary<string, PropertyDescriptor>();
 			var interfaceBehaviors = typeBehaviors = ExpandBehaviors(InterfaceAttributeUtil.GetAttributes(type, true)).ToArray();
 			var defaultFetch = typeBehaviors.OfType<FetchAttribute>().Select(b => (bool?)b.Fetch).FirstOrDefault().GetValueOrDefault();
 

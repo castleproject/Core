@@ -203,7 +203,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (!getObjectDataMethod.IsVirtual || getObjectDataMethod.IsFinal)
 			{
-				var message = String.Format("The type {0} implements ISerializable, but GetObjectData is not marked as virtual. " +
+				var message = string.Format("The type {0} implements ISerializable, but GetObjectData is not marked as virtual. " +
 				                            "Dynamic Proxy needs types implementing ISerializable to mark GetObjectData as virtual " +
 				                            "to ensure correct serialization process.",
 				                            baseType.FullName);
@@ -221,7 +221,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (serializationConstructor == null)
 			{
-				var message = String.Format("The type {0} implements ISerializable, " +
+				var message = string.Format("The type {0} implements ISerializable, " +
 				                            "but failed to provide a deserialization constructor",
 				                            baseType.FullName);
 				throw new ArgumentException(message);

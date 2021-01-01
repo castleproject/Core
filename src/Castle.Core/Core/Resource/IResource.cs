@@ -28,7 +28,7 @@ namespace Castle.Core.Resource
 		/// Only valid for resources that
 		/// can be obtained through relative paths
 		/// </remarks>
-		String FileBasePath { get; }
+		string FileBasePath { get; }
 
 		/// <summary>
 		/// Returns a reader for the stream
@@ -51,6 +51,6 @@ namespace Castle.Core.Resource
 		/// created according to the <c>relativePath</c>
 		/// using itself as the root.
 		/// </summary>
-		IResource CreateRelative(String relativePath);
+		IResource CreateRelative(string relativePath);
 	}
 }

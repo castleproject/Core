@@ -28,7 +28,7 @@ namespace Castle.Core.Resource
 			return Create(uri, null);
 		}
 
-		public IResource Create(CustomUri uri, String basePath)
+		public IResource Create(CustomUri uri, string basePath)
 		{
 			if (basePath == null)
 			{

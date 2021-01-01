@@ -29,6 +29,6 @@ namespace Castle.Components.DictionaryAdapter
 		/// <param name="key">The current key.</param>
 		/// <param name="property">The property.</param>
 		/// <returns>The updated key</returns>
-		String GetKey(IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor property);
+		string GetKey(IDictionaryAdapter dictionaryAdapter, string key, PropertyDescriptor property);
 	}
 }

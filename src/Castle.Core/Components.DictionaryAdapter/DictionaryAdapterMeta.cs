@@ -27,7 +27,7 @@ namespace Castle.Components.DictionaryAdapter
 		private readonly Func<DictionaryAdapterInstance, IDictionaryAdapter> creator;
 
 		public DictionaryAdapterMeta(Type type, Type implementation, object[] behaviors, IDictionaryMetaInitializer[] metaInitializers, 
-			                         IDictionaryInitializer[] initializers, IDictionary<String, PropertyDescriptor> properties,
+			                         IDictionaryInitializer[] initializers, IDictionary<string, PropertyDescriptor> properties,
 									 IDictionaryAdapterFactory factory, Func<DictionaryAdapterInstance, IDictionaryAdapter> creator)
 		{
 			Type = type;

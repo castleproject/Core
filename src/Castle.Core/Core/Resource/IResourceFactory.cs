@@ -43,6 +43,6 @@ namespace Castle.Core.Resource
 		/// Creates an <see cref="IResource"/> instance
 		/// for the given resource identifier
 		/// </summary>
-		IResource Create(CustomUri uri, String basePath);
+		IResource Create(CustomUri uri, string basePath);
 	}
 }

@@ -44,7 +44,7 @@ namespace Castle.Core.Logging
 		///  The stream that will be used for logging,
 		///  seeking while the logger is alive 
 		///</param>
-		public StreamLogger(String name, Stream stream) : this(name, new StreamWriter(stream))
+		public StreamLogger(string name, Stream stream) : this(name, new StreamWriter(stream))
 		{
 		}
 
@@ -63,7 +63,7 @@ namespace Castle.Core.Logging
 		///  The encoding that will be used for this stream.
 		///  <see cref = "StreamWriter" />
 		///</param>
-		public StreamLogger(String name, Stream stream, Encoding encoding) : this(name, new StreamWriter(stream, encoding))
+		public StreamLogger(string name, Stream stream, Encoding encoding) : this(name, new StreamWriter(stream, encoding))
 		{
 		}
 
@@ -86,7 +86,7 @@ namespace Castle.Core.Logging
 		///  The buffer size that will be used for this stream.
 		///  <see cref = "StreamWriter" />
 		///</param>
-		public StreamLogger(String name, Stream stream, Encoding encoding, int bufferSize)
+		public StreamLogger(string name, Stream stream, Encoding encoding, int bufferSize)
 			: this(name, new StreamWriter(stream, encoding, bufferSize))
 		{
 		}
@@ -124,13 +124,13 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name = "name">The name of the log.</param>
 		/// <param name = "writer">The <c>StreamWriter</c> the log will write to.</param>
-		protected StreamLogger(String name, StreamWriter writer) : base(name, LoggerLevel.Trace)
+		protected StreamLogger(string name, StreamWriter writer) : base(name, LoggerLevel.Trace)
 		{
 			this.writer = writer;
 			writer.AutoFlush = true;
 		}
 
-		protected override void Log(LoggerLevel loggerLevel, String loggerName, String message, Exception exception)
+		protected override void Log(LoggerLevel loggerLevel, string loggerName, string message, Exception exception)
 		{
 			if (writer == null)
 			{

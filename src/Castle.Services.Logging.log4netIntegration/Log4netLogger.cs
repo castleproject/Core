@@ -81,12 +81,12 @@ namespace Castle.Services.Logging.Log4netIntegration
 			return Logger.ToString();
 		}
 
-		public virtual Castle.Core.Logging.ILogger CreateChildLogger(String name)
+		public virtual Castle.Core.Logging.ILogger CreateChildLogger(string name)
 		{
 			return Factory.Create(Logger.Name + "." + name);
 		}
 
-		public void Trace(String message)
+		public void Trace(string message)
 		{
 			if (IsTraceEnabled)
 			{
@@ -102,7 +102,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void Trace(String message, Exception exception)
+		public void Trace(string message, Exception exception)
 		{
 			if (IsTraceEnabled)
 			{
@@ -110,7 +110,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void TraceFormat(String format, params Object[] args)
+		public void TraceFormat(string format, params object[] args)
 		{
 			if (IsTraceEnabled)
 			{
@@ -118,7 +118,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void TraceFormat(Exception exception, String format, params Object[] args)
+		public void TraceFormat(Exception exception, string format, params object[] args)
 		{
 			if (IsTraceEnabled)
 			{
@@ -126,7 +126,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void TraceFormat(IFormatProvider formatProvider, String format, params Object[] args)
+		public void TraceFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (IsTraceEnabled)
 			{
@@ -134,7 +134,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void TraceFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args)
+		public void TraceFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (IsTraceEnabled)
 			{
@@ -142,7 +142,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void Debug(String message)
+		public void Debug(string message)
 		{
 			if (IsDebugEnabled)
 			{
@@ -158,7 +158,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void Debug(String message, Exception exception)
+		public void Debug(string message, Exception exception)
 		{
 			if (IsDebugEnabled)
 			{
@@ -166,7 +166,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void DebugFormat(String format, params Object[] args)
+		public void DebugFormat(string format, params object[] args)
 		{
 			if (IsDebugEnabled)
 			{
@@ -174,7 +174,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void DebugFormat(Exception exception, String format, params Object[] args)
+		public void DebugFormat(Exception exception, string format, params object[] args)
 		{
 			if (IsDebugEnabled)
 			{
@@ -182,7 +182,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void DebugFormat(IFormatProvider formatProvider, String format, params Object[] args)
+		public void DebugFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (IsDebugEnabled)
 			{
@@ -190,7 +190,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void DebugFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args)
+		public void DebugFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (IsDebugEnabled)
 			{
@@ -198,7 +198,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void Error(String message)
+		public void Error(string message)
 		{
 			if (IsErrorEnabled)
 			{
@@ -214,7 +214,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void Error(String message, Exception exception)
+		public void Error(string message, Exception exception)
 		{
 			if (IsErrorEnabled)
 			{
@@ -222,7 +222,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void ErrorFormat(String format, params Object[] args)
+		public void ErrorFormat(string format, params object[] args)
 		{
 			if (IsErrorEnabled)
 			{
@@ -230,7 +230,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void ErrorFormat(Exception exception, String format, params Object[] args)
+		public void ErrorFormat(Exception exception, string format, params object[] args)
 		{
 			if (IsErrorEnabled)
 			{
@@ -238,7 +238,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void ErrorFormat(IFormatProvider formatProvider, String format, params Object[] args)
+		public void ErrorFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (IsErrorEnabled)
 			{
@@ -246,7 +246,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void ErrorFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args)
+		public void ErrorFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (IsErrorEnabled)
 			{
@@ -254,7 +254,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void Fatal(String message)
+		public void Fatal(string message)
 		{
 			if (IsFatalEnabled)
 			{
@@ -270,7 +270,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void Fatal(String message, Exception exception)
+		public void Fatal(string message, Exception exception)
 		{
 			if (IsFatalEnabled)
 			{
@@ -278,7 +278,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void FatalFormat(String format, params Object[] args)
+		public void FatalFormat(string format, params object[] args)
 		{
 			if (IsFatalEnabled)
 			{
@@ -286,7 +286,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void FatalFormat(Exception exception, String format, params Object[] args)
+		public void FatalFormat(Exception exception, string format, params object[] args)
 		{
 			if (IsFatalEnabled)
 			{
@@ -294,7 +294,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void FatalFormat(IFormatProvider formatProvider, String format, params Object[] args)
+		public void FatalFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (IsFatalEnabled)
 			{
@@ -302,7 +302,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void FatalFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args)
+		public void FatalFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (IsFatalEnabled)
 			{
@@ -310,7 +310,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void Info(String message)
+		public void Info(string message)
 		{
 			if (IsInfoEnabled)
 			{
@@ -326,7 +326,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void Info(String message, Exception exception)
+		public void Info(string message, Exception exception)
 		{
 			if (IsInfoEnabled)
 			{
@@ -334,7 +334,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void InfoFormat(String format, params Object[] args)
+		public void InfoFormat(string format, params object[] args)
 		{
 			if (IsInfoEnabled)
 			{
@@ -342,7 +342,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void InfoFormat(Exception exception, String format, params Object[] args)
+		public void InfoFormat(Exception exception, string format, params object[] args)
 		{
 			if (IsInfoEnabled)
 			{
@@ -350,7 +350,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void InfoFormat(IFormatProvider formatProvider, String format, params Object[] args)
+		public void InfoFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (IsInfoEnabled)
 			{
@@ -358,7 +358,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void InfoFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args)
+		public void InfoFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (IsInfoEnabled)
 			{
@@ -366,7 +366,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void Warn(String message)
+		public void Warn(string message)
 		{
 			if (IsWarnEnabled)
 			{
@@ -382,7 +382,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void Warn(String message, Exception exception)
+		public void Warn(string message, Exception exception)
 		{
 			if (IsWarnEnabled)
 			{
@@ -390,7 +390,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void WarnFormat(String format, params Object[] args)
+		public void WarnFormat(string format, params object[] args)
 		{
 			if (IsWarnEnabled)
 			{
@@ -398,7 +398,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void WarnFormat(Exception exception, String format, params Object[] args)
+		public void WarnFormat(Exception exception, string format, params object[] args)
 		{
 			if (IsWarnEnabled)
 			{
@@ -406,7 +406,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void WarnFormat(IFormatProvider formatProvider, String format, params Object[] args)
+		public void WarnFormat(IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (IsWarnEnabled)
 			{
@@ -414,7 +414,7 @@ namespace Castle.Services.Logging.Log4netIntegration
 			}
 		}
 
-		public void WarnFormat(Exception exception, IFormatProvider formatProvider, String format, params Object[] args)
+		public void WarnFormat(Exception exception, IFormatProvider formatProvider, string format, params object[] args)
 		{
 			if (IsWarnEnabled)
 			{

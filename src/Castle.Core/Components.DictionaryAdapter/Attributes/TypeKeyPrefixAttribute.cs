@@ -22,9 +22,9 @@ namespace Castle.Components.DictionaryAdapter
 	[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = true)]
 	public class TypeKeyPrefixAttribute : DictionaryBehaviorAttribute, IDictionaryKeyBuilder
 	{
-		String IDictionaryKeyBuilder.GetKey(IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor property)
+		string IDictionaryKeyBuilder.GetKey(IDictionaryAdapter dictionaryAdapter, string key, PropertyDescriptor property)
 		{
-			return String.Format("{0}#{1}", property.Property.DeclaringType.FullName, key);
+			return string.Format("{0}#{1}", property.Property.DeclaringType.FullName, key);
 		}
 	}
 }

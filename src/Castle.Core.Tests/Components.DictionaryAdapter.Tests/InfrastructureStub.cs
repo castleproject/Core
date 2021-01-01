@@ -39,12 +39,12 @@ namespace Castle.Components.DictionaryAdapter.Tests
 
 		public string Error
 		{
-			get { return String.Empty; }
+			get { return string.Empty; }
 		}
 
 		public string this[string columnName]
 		{
-			get { return String.Empty; }
+			get { return string.Empty; }
 		}
 	}
 }

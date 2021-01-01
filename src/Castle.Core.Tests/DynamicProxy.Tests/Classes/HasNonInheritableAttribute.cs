@@ -68,7 +68,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 	{
 		public int id, num;
 		public bool isSomething;
-		public String name;
+		public string name;
 		public FileAccess access;
 
 		public ComplexNonInheritableAttribute(int id, int num, string name)

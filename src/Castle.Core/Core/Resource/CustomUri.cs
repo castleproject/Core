@@ -22,24 +22,24 @@ namespace Castle.Core.Resource
 #endif
 	public sealed class CustomUri
 	{
-		public static readonly String SchemeDelimiter = "://";
-		public static readonly String UriSchemeFile = "file";
-		public static readonly String UriSchemeAssembly = "assembly";
+		public static readonly string SchemeDelimiter = "://";
+		public static readonly string UriSchemeFile = "file";
+		public static readonly string UriSchemeAssembly = "assembly";
 
-		private String scheme;
-		private String host;
-		private String path;
+		private string scheme;
+		private string host;
+		private string path;
 		private bool isUnc;
 		private bool isFile;
 		private bool isAssembly;
 
-		public CustomUri(String resourceIdentifier)
+		public CustomUri(string resourceIdentifier)
 		{
 			if (resourceIdentifier == null)
 			{
 				throw new ArgumentNullException("resourceIdentifier");
 			}
-			if (resourceIdentifier == String.Empty)
+			if (resourceIdentifier == string.Empty)
 			{
 				throw new ArgumentException("Empty resource identifier is not allowed", "resourceIdentifier");
 			}
@@ -72,12 +72,12 @@ namespace Castle.Core.Resource
 			get { return host; }
 		}
 
-		public String Path
+		public string Path
 		{
 			get { return path; }
 		}
 
-		private void ParseIdentifier(String identifier)
+		private void ParseIdentifier(string identifier)
 		{
 			int comma = identifier.IndexOf(':');
 

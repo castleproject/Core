@@ -39,7 +39,7 @@ namespace Castle.Core.Configuration
 		{
 		}
 
-		public IConfiguration this[String name]
+		public IConfiguration this[string name]
 		{
 			get
 			{

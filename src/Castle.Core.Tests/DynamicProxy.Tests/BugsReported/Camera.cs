@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 
 	public interface ICameraServiceBase
 	{
-		ICamera Add(String name, string ipNumber);
+		ICamera Add(string name, string ipNumber);
 	}
 
 	public interface ICameraService : ICameraServiceBase
@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Tests.BugsReported
 
 	public class CameraService : ICameraService
 	{
-		public ICamera Add(String name, String ipNumber)
+		public ICamera Add(string name, string ipNumber)
 		{
 			return null;
 		}

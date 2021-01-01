@@ -181,12 +181,12 @@ namespace Castle.Core.Logging.Tests
 			ValidateCall(level, message, exception);
 		}
 
-		private void ValidateCall(LoggerLevel level, String expectedMessage, Exception expectedException)
+		private void ValidateCall(LoggerLevel level, string expectedMessage, Exception expectedException)
 		{
 			stream.Seek(0, SeekOrigin.Begin);
 			
 			StreamReader reader = new StreamReader(stream);
-			String line = reader.ReadLine();
+			string line = reader.ReadLine();
 
 			Match match = Regex.Match(line, @"^\[(?<level>[^]]+)\] '(?<name>[^']+)' (?<message>.*)$");
 

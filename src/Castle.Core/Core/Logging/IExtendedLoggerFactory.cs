@@ -30,7 +30,7 @@ namespace Castle.Core.Logging
 		/// <summary>
 		///   Creates a new extended logger.
 		/// </summary>
-		new IExtendedLogger Create(String name);
+		new IExtendedLogger Create(string name);
 
 		/// <summary>
 		///   Creates a new extended logger, getting the logger name from the specified type.
@@ -40,6 +40,6 @@ namespace Castle.Core.Logging
 		/// <summary>
 		///   Creates a new extended logger.
 		/// </summary>
-		new IExtendedLogger Create(String name, LoggerLevel level);
+		new IExtendedLogger Create(string name, LoggerLevel level);
 	}
 }

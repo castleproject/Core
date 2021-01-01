@@ -29,8 +29,8 @@ namespace Castle.Core.Resource.Tests
 		}
 
 		private AssemblyResourceFactory resFactory;
-		private static readonly String AssemblyName = typeof(AssemblyResourceFactoryTestCase).Assembly.FullName;
-		private const String ResPath = "Resources";
+		private static readonly string AssemblyName = typeof(AssemblyResourceFactoryTestCase).Assembly.FullName;
+		private const string ResPath = "Resources";
 
 		[Test]
 		public void Accept()

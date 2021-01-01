@@ -46,7 +46,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 				return false;
 
 			// use this pattern to compare reference members
-			// if (!Object.Equals(Id, other.Id)) return false;
+			// if (!object.Equals(Id, other.Id)) return false;
 
 			return true;
 		}

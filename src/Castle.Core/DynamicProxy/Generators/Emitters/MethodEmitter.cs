@@ -40,12 +40,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			this.builder = builder;
 		}
 
-		internal MethodEmitter(AbstractTypeEmitter owner, String name, MethodAttributes attributes)
+		internal MethodEmitter(AbstractTypeEmitter owner, string name, MethodAttributes attributes)
 			: this(owner.TypeBuilder.DefineMethod(name, attributes))
 		{
 		}
 
-		internal MethodEmitter(AbstractTypeEmitter owner, String name,
+		internal MethodEmitter(AbstractTypeEmitter owner, string name,
 		                       MethodAttributes attributes, Type returnType,
 		                       params Type[] argumentTypes)
 			: this(owner, name, attributes)
@@ -54,7 +54,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			SetReturnType(returnType);
 		}
 
-		internal MethodEmitter(AbstractTypeEmitter owner, String name,
+		internal MethodEmitter(AbstractTypeEmitter owner, string name,
 		                       MethodAttributes attributes, MethodInfo methodToUseAsATemplate)
 			: this(owner, name, attributes)
 		{

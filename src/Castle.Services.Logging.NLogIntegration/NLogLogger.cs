@@ -117,7 +117,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		///   Creates a child logger with the specied <paramref name="name" />.
 		/// </summary>
 		/// <param name="name"> The name. </param>
-		public virtual Core.Logging.ILogger CreateChildLogger(String name)
+		public virtual Core.Logging.ILogger CreateChildLogger(string name)
 		{
 			return Factory.Create(Logger.Name + "." + name);
 		}

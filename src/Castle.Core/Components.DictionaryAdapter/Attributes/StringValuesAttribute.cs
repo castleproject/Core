@@ -42,7 +42,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (string.IsNullOrEmpty(Format) == false)
 			{
-				return String.Format(Format, value);
+				return string.Format(Format, value);
 			}
 
 			var converter = property.TypeConverter;

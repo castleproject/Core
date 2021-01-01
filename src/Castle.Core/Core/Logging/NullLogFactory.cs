@@ -28,7 +28,7 @@ namespace Castle.Core.Logging
 		///   Creates an instance of ILogger with the specified name.
 		/// </summary>
 		/// <param name = "name">Name.</param>
-		public override ILogger Create(String name)
+		public override ILogger Create(string name)
 		{
 			return NullLogger.Instance;
 		}
@@ -38,7 +38,7 @@ namespace Castle.Core.Logging
 		/// </summary>
 		/// <param name = "name">Name.</param>
 		/// <param name = "level">Level.</param>
-		public override ILogger Create(String name, LoggerLevel level)
+		public override ILogger Create(string name, LoggerLevel level)
 		{
 			return NullLogger.Instance;
 		}

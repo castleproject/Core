@@ -68,7 +68,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// </summary>
 		public static void EmitLoadOpCodeForConstantValue(ILGenerator gen, object value)
 		{
-			if (value is String)
+			if (value is string)
 			{
 				gen.Emit(OpCodes.Ldstr, value.ToString());
 			}

@@ -45,11 +45,11 @@ namespace Castle.Components.DictionaryAdapter
 					return string.Join(Environment.NewLine, validators.Select(
 						v => v.Validate(this)).Where(e => !string.IsNullOrEmpty(e)).ToArray());
 				}
-				return String.Empty;
+				return string.Empty;
 			}
 		}
 
-		public string this[String columnName]
+		public string this[string columnName]
 		{
 			get
 			{
@@ -63,7 +63,7 @@ namespace Castle.Components.DictionaryAdapter
 							.ToArray());
 					}
 				}
-				return String.Empty;
+				return string.Empty;
 			}
 		}
 

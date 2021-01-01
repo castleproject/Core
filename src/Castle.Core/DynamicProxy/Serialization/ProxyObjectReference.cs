@@ -90,7 +90,7 @@ namespace Castle.DynamicProxy.Serialization
 
 			baseType = DeserializeTypeFromString("__baseType");
 
-			var _interfaceNames = (String[])info.GetValue("__interfaces", typeof(String[]));
+			var _interfaceNames = (string[])info.GetValue("__interfaces", typeof(string[]));
 			interfaces = new Type[_interfaceNames.Length];
 
 			for (var i = 0; i < _interfaceNames.Length; i++)
@@ -223,7 +223,7 @@ namespace Castle.DynamicProxy.Serialization
 			var members = FormatterServices.GetSerializableMembers(proxyType);
 
 			var deserializedMembers = new List<MemberInfo>();
-			var deserializedValues = new List<Object>();
+			var deserializedValues = new List<object>();
 			for (var i = 0; i < members.Length; i++)
 			{
 				var member = members[i] as FieldInfo;

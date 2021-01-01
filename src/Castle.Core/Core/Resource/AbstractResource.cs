@@ -31,7 +31,7 @@ namespace Castle.Core.Resource
 
 		public abstract TextReader GetStreamReader(Encoding encoding);
 
-		public abstract IResource CreateRelative(String relativePath);
+		public abstract IResource CreateRelative(string relativePath);
 
 		public void Dispose()
 		{

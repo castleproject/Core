@@ -44,7 +44,7 @@ namespace Castle.Core.Resource.Tests
 			IResource resource = resFactory.Create(uri, null);
 
 			Assert.IsNotNull(resource);
-			String line = resource.GetStreamReader().ReadLine();
+			string line = resource.GetStreamReader().ReadLine();
 			Assert.AreEqual("The long and winding road", line);
 		}
 
@@ -58,7 +58,7 @@ namespace Castle.Core.Resource.Tests
 			resource = resource.CreateRelative("file2.txt");
 
 			Assert.IsNotNull(resource);
-			String line = resource.GetStreamReader().ReadLine();
+			string line = resource.GetStreamReader().ReadLine();
 			Assert.AreEqual("Something", line);
 		}
 

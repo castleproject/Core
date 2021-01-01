@@ -147,7 +147,7 @@ namespace Castle.Core.Logging.Tests
 		[Test]
 		public void DefaultName()
 		{
-			Assert.AreEqual("unnamed", logger.Name, "Default LevelFilteredLogger.Name is not String.Empty");
+			Assert.AreEqual("unnamed", logger.Name, "Default LevelFilteredLogger.Name is not string.Empty");
 		}
 
 		[Test]
@@ -178,8 +178,8 @@ namespace Castle.Core.Logging.Tests
 		private LevelFilteredLogger logger;
 
 		internal LoggerLevel level;
-		internal String name;
-		internal String message;
+		internal string name;
+		internal string message;
 		internal Exception exception;
 		internal int calls;
 
@@ -1346,7 +1346,7 @@ namespace Castle.Core.Logging.Tests
 
 		#endregion
 
-		private void ValidateCall(LoggerLevel expectedLevel, String expectedMessage, Exception expectedException)
+		private void ValidateCall(LoggerLevel expectedLevel, string expectedMessage, Exception expectedException)
 		{
 			Assert.AreEqual(1, calls, "LevelFilteredLogger.Log was not called the right number of times");
 			Assert.AreEqual(expectedLevel, level, "LevelFilteredLogger.Log was not called with the right level");
@@ -1370,7 +1370,7 @@ namespace Castle.Core.Logging.Tests
 			Fixture = fixture;
 		}
 
-		public new void ChangeName(String name)
+		public new void ChangeName(string name)
 		{
 			base.ChangeName(name);
 		}

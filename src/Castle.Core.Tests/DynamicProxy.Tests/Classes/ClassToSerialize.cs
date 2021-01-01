@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Tests.Classes
 	public class ClassToSerialize
 	{
 		private int id;
-		private String name;
+		private string name;
 
 		public int Id
 		{

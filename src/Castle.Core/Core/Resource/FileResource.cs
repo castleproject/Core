@@ -24,7 +24,7 @@ namespace Castle.Core.Resource
 	public class FileResource : AbstractStreamResource
 	{
 		private string filePath;
-		private String basePath;
+		private string basePath;
 
 		public FileResource(CustomUri resource)
 		{
@@ -34,7 +34,7 @@ namespace Castle.Core.Resource
 			};
 		}
 
-		public FileResource(CustomUri resource, String basePath)
+		public FileResource(CustomUri resource, string basePath)
 		{
 			CreateStream = delegate
 			{
@@ -42,7 +42,7 @@ namespace Castle.Core.Resource
 			};
 		}
 
-		public FileResource(String resourceName)
+		public FileResource(string resourceName)
 		{
 			CreateStream = delegate
 			{
@@ -50,7 +50,7 @@ namespace Castle.Core.Resource
 			};
 		}
 
-		public FileResource(String resourceName, String basePath)
+		public FileResource(string resourceName, string basePath)
 		{
 			CreateStream = delegate
 			{
@@ -60,20 +60,20 @@ namespace Castle.Core.Resource
 
 		public override string ToString()
 		{
-			return String.Format(CultureInfo.CurrentCulture, "FileResource: [{0}] [{1}]", filePath, basePath);
+			return string.Format(CultureInfo.CurrentCulture, "FileResource: [{0}] [{1}]", filePath, basePath);
 		}
 
-		public override String FileBasePath
+		public override string FileBasePath
 		{
 			get { return basePath; }
 		}
 
-		public override IResource CreateRelative(String relativePath)
+		public override IResource CreateRelative(string relativePath)
 		{
 			return new FileResource(relativePath, basePath);
 		}
 
-		private Stream CreateStreamFromUri(CustomUri resource, String rootPath)
+		private Stream CreateStreamFromUri(CustomUri resource, string rootPath)
 		{
 			if (resource == null) throw new ArgumentNullException("resource");
 			if (rootPath == null) throw new ArgumentNullException("rootPath");
@@ -84,7 +84,7 @@ namespace Castle.Core.Resource
 			return CreateStreamFromPath(resource.Path, rootPath);
 		}
 
-		private Stream CreateStreamFromPath(String resourcePath, String rootPath)
+		private Stream CreateStreamFromPath(string resourcePath, string rootPath)
 		{
 			if (resourcePath == null)
 				throw new ArgumentNullException("resourcePath");
@@ -107,11 +107,11 @@ namespace Castle.Core.Resource
 			return File.OpenRead(resourcePath);
 		}
 
-		private static void CheckFileExists(String path)
+		private static void CheckFileExists(string path)
 		{
 			if (!File.Exists(path))
 			{
-				String message = String.Format(CultureInfo.InvariantCulture, "File {0} could not be found", new FileInfo(path).FullName);
+				string message = string.Format(CultureInfo.InvariantCulture, "File {0} could not be found", new FileInfo(path).FullName);
 				throw new ResourceException(message);
 			}
 		}

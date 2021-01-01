@@ -43,7 +43,7 @@ namespace Castle.DynamicProxy.Tests
 
 		public interface IMyInterface
 		{
-			String Name { get; set; }
+			string Name { get; set; }
 
 			bool Started { get; set; }
 
@@ -57,14 +57,14 @@ namespace Castle.DynamicProxy.Tests
 #endif
 		public class MyInterfaceImpl : IMyInterface
 		{
-			private String _name;
+			private string _name;
 			private bool _started;
 
 			public MyInterfaceImpl()
 			{
 			}
 
-			public virtual String Name
+			public virtual string Name
 			{
 				get { return _name; }
 				set { _name = value; }

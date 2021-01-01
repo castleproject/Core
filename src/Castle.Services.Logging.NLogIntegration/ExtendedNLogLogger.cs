@@ -76,7 +76,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		///   Creates an extended child logger with the specified <paramref name="name" />
 		/// </summary>
 		/// <param name="name"> The name. </param>
-		public ExtendedLogger CreateExtendedChildLogger(String name)
+		public ExtendedLogger CreateExtendedChildLogger(string name)
 		{
 			return Factory.Create(Logger.Name + "." + name);
 		}
@@ -85,7 +85,7 @@ namespace Castle.Services.Logging.NLogIntegration
 		///   Creates a child logger with the specified <paramref name="name" />.
 		/// </summary>
 		/// <param name="name"> The name. </param>
-		public override Core.Logging.ILogger CreateChildLogger(String name)
+		public override Core.Logging.ILogger CreateChildLogger(string name)
 		{
 			return CreateExtendedChildLogger(name);
 		}

@@ -24,11 +24,11 @@ namespace Castle.Core.Logging
 		{
 		}
 
-		public LoggerException(String message) : base(message)
+		public LoggerException(string message) : base(message)
 		{
 		}
 
-		public LoggerException(String message, Exception innerException) : base(message, innerException)
+		public LoggerException(string message, Exception innerException) : base(message, innerException)
 		{
 		}
 

@@ -36,7 +36,7 @@ namespace Castle.Components.DictionaryAdapter
 		/// Initializes a new instance of the <see cref="KeyPrefixAttribute"/> class.
 		/// </summary>
 		/// <param name="keyPrefix">The prefix for the keyed properties of the interface.</param>
-		public KeyPrefixAttribute(String keyPrefix)
+		public KeyPrefixAttribute(string keyPrefix)
 		{
 			this.KeyPrefix = keyPrefix;
 		}
@@ -44,9 +44,9 @@ namespace Castle.Components.DictionaryAdapter
 		/// <summary>
 		/// Gets the prefix key added to the properties of the interface.
 		/// </summary>
-		public String KeyPrefix { get; set; }
+		public string KeyPrefix { get; set; }
 
-		String IDictionaryKeyBuilder.GetKey(IDictionaryAdapter dictionaryAdapter, String key, PropertyDescriptor property)
+		string IDictionaryKeyBuilder.GetKey(IDictionaryAdapter dictionaryAdapter, string key, PropertyDescriptor property)
 		{
 			return KeyPrefix + key;
 		}
