@@ -16,7 +16,6 @@
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
 		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
-		<LangVersion>7.2</LangVersion>
 		<StartupObject>Program</StartupObject>
 	</PropertyGroup>
 
