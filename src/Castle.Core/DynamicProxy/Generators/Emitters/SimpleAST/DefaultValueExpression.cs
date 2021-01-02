@@ -72,7 +72,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		private bool IsPrimitiveOrClass(Type type)
 		{
-			if ((type.IsPrimitive && type != typeof(IntPtr)))
+			if (type.IsPrimitive && type != typeof(IntPtr) && type != typeof(UIntPtr))
 			{
 				return true;
 			}
