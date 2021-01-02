@@ -1,6 +1,7 @@
 <Project>
 
 	<PropertyGroup>
+		<LangVersion>9.0</LangVersion>
 		<NoWarn>$(NoWarn);CS1591;CS3014;CS3003;CS3001;CS3021</NoWarn>
 		<NoWarn>$(NoWarn);CS0612;CS0618</NoWarn> <!-- TODO: Remove this line once `[Obsolete]` members have been dealt with. -->
 		<RepositoryType>git</RepositoryType>
