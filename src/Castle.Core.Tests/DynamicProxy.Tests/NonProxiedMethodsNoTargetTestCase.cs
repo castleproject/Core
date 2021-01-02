@@ -159,6 +159,15 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void Target_method_UIntPtr()
+		{
+			var proxy = CreateProxy<IFooWithUIntPtr>();
+			var result = new UIntPtr(123);
+			Assert.DoesNotThrow(() => result = proxy.Buffer(1u));
+			Assert.AreEqual(UIntPtr.Zero, result);
+		}
+
+		[Test]
 		public void Target_method_Nullable_parameters()
 		{
 			var proxy = CreateProxy<INullable>();
@@ -190,6 +199,15 @@ namespace Castle.DynamicProxy.Tests
 			var result = new IntPtr(123);
 			Assert.DoesNotThrow(() => proxy.Bar(out result));
 			Assert.AreEqual(IntPtr.Zero, result);
+		}
+
+		[Test]
+		public void Target_method_out_UIntPtr()
+		{
+			var proxy = CreateProxy<IFooWithOutUIntPtr>();
+			var result = new UIntPtr(123);
+			Assert.DoesNotThrow(() => proxy.Bar(out result));
+			Assert.AreEqual(UIntPtr.Zero, result);
 		}
 
 		[Test]
