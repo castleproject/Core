@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	internal delegate GenericTypeParameterBuilder[] ApplyGenArgs(string[] argumentNames);
 
-	internal class GenericUtil
+	internal sealed class GenericUtil
 	{
 		public static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,

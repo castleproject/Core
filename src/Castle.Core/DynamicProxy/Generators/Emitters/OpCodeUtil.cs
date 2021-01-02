@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal abstract class OpCodeUtil
+	internal static class OpCodeUtil
 	{
 		/// <summary>
 		///   Emits a load indirect opcode of the appropriate type for a value or object reference.

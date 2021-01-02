@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	using Castle.DynamicProxy.Internal;
 
-	internal class BindDelegateExpression : Expression
+	internal sealed class BindDelegateExpression : Expression
 	{
 		private readonly ConstructorInfo delegateCtor;
 		private readonly MethodInfo methodToBindTo;

@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
-	internal class ClassProxyTargetContributor : CompositeTypeContributor
+	internal sealed class ClassProxyTargetContributor : CompositeTypeContributor
 	{
 		private readonly IList<MethodInfo> methodsToSkip;
 		private readonly Type targetType;

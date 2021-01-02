@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Reflection;
 
-	internal class MethodSignatureComparer : IEqualityComparer<MethodInfo>
+	internal sealed class MethodSignatureComparer : IEqualityComparer<MethodInfo>
 	{
 		public static readonly MethodSignatureComparer Instance = new MethodSignatureComparer();
 

@@ -29,7 +29,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
-	internal class MethodWithInvocationGenerator : MethodGenerator
+	internal sealed class MethodWithInvocationGenerator : MethodGenerator
 	{
 		private readonly IInvocationCreationContributor contributor;
 		private readonly GetTargetExpressionDelegate getTargetExpression;
@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Generators
 			this.contributor = contributor;
 		}
 
-		protected FieldReference BuildMethodInterceptorsField(ClassEmitter @class, MethodInfo method, INamingScope namingScope)
+		private FieldReference BuildMethodInterceptorsField(ClassEmitter @class, MethodInfo method, INamingScope namingScope)
 		{
 			var methodInterceptors = @class.CreateField(
 				namingScope.GetUniqueName(string.Format("interceptors_{0}", method.Name)),

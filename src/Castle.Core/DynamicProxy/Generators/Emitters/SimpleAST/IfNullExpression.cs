@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System;
 	using System.Reflection.Emit;
 
-	internal class IfNullExpression : Expression
+	internal sealed class IfNullExpression : Expression
 	{
 		private readonly IILEmitter ifNotNull;
 		private readonly IILEmitter ifNull;

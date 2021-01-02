@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Internal;
 
-	internal class WrappedClassMembersCollector : ClassMembersCollector
+	internal sealed class WrappedClassMembersCollector : ClassMembersCollector
 	{
 		public WrappedClassMembersCollector(Type type) : base(type)
 		{
@@ -52,13 +52,13 @@ namespace Castle.DynamicProxy.Contributors
 			return new MetaMethod(method, method, isStandalone, accepted, hasTarget: true);
 		}
 
-		protected bool IsGeneratedByTheCompiler(FieldInfo field)
+		private bool IsGeneratedByTheCompiler(FieldInfo field)
 		{
 			// for example fields backing autoproperties
 			return field.IsDefined(typeof(CompilerGeneratedAttribute));
 		}
 
-		protected virtual bool IsOKToBeOnProxy(FieldInfo field)
+		private bool IsOKToBeOnProxy(FieldInfo field)
 		{
 			return IsGeneratedByTheCompiler(field);
 		}

@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class AddressOfReferenceExpression : Expression
+	internal sealed class AddressOfReferenceExpression : Expression
 	{
 		private readonly Reference reference;
 

@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Reflection;
 
 	[DebuggerDisplay("{Method}")]
-	internal class MetaMethod : MetaTypeElement, IEquatable<MetaMethod>
+	internal sealed class MetaMethod : MetaTypeElement, IEquatable<MetaMethod>
 	{
 		private const MethodAttributes ExplicitImplementationAttributes = MethodAttributes.Virtual |
 		                                                                  MethodAttributes.Public |

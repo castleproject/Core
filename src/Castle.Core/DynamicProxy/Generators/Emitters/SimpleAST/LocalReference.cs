@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection.Emit;
 
 	[DebuggerDisplay("local {Type}")]
-	internal class LocalReference : TypeReference
+	internal sealed class LocalReference : TypeReference
 	{
 		private LocalBuilder localbuilder;
 

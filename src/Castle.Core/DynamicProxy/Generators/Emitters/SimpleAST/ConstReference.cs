@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection.Emit;
 
 	[DebuggerDisplay("{value}")]
-	internal class ConstReference : TypeReference
+	internal sealed class ConstReference : TypeReference
 	{
 		private readonly object value;
 

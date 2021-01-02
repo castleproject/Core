@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	internal class ConstructorCodeBuilder : AbstractCodeBuilder
+	internal sealed class ConstructorCodeBuilder : AbstractCodeBuilder
 	{
 		private readonly Type baseType;
 

@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	internal class MinimialisticMethodGenerator : MethodGenerator
+	internal sealed class MinimialisticMethodGenerator : MethodGenerator
 	{
 		public MinimialisticMethodGenerator(MetaMethod method, OverrideMethodDelegate overrideMethod)
 			: base(method, overrideMethod)

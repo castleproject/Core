@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
-	internal class CacheKey
+	internal sealed class CacheKey
 	{
 		private readonly MemberInfo target;
 		private readonly Type[] interfaces;

@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Serialization;
 
-	internal class ClassProxyGenerator : BaseProxyGenerator
+	internal sealed class ClassProxyGenerator : BaseProxyGenerator
 	{
 		public ClassProxyGenerator(ModuleScope scope, Type targetType, Type[] interfaces, ProxyGenerationOptions options)
 			: base(scope, targetType, interfaces, options)
@@ -94,8 +94,7 @@ namespace Castle.DynamicProxy.Generators
 			return proxyType;
 		}
 
-		protected virtual IEnumerable<Type> GetTypeImplementerMapping(out IEnumerable<ITypeContributor> contributors,
-																	  INamingScope namingScope)
+		private IEnumerable<Type> GetTypeImplementerMapping(out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
 		{
 			var methodsToSkip = new List<MethodInfo>();
 			var proxyInstance = new ClassProxyInstanceContributor(targetType, methodsToSkip, interfaces, ProxyTypeConstants.Class);

@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
 
-	internal class InterfaceProxyInstanceContributor : ProxyInstanceContributor
+	internal sealed class InterfaceProxyInstanceContributor : ProxyInstanceContributor
 	{
 		protected override Reference GetTargetReference(ClassEmitter emitter)
 		{

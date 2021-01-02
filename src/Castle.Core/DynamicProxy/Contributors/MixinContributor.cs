@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 
-	internal class MixinContributor : CompositeTypeContributor
+	internal sealed class MixinContributor : CompositeTypeContributor
 	{
 		private readonly bool canChangeTarget;
 		private readonly IList<Type> empty = new List<Type>();

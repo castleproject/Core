@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using Castle.DynamicProxy.Internal;
 
 	[DebuggerDisplay("{builder.Name}")]
-	internal class MethodEmitter : IMemberEmitter
+	internal sealed class MethodEmitter : IMemberEmitter
 	{
 		private readonly MethodBuilder builder;
 		private readonly GenericTypeParameterBuilder[] genericTypeParams;
@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private MethodCodeBuilder codebuilder;
 
-		protected internal MethodEmitter(MethodBuilder builder)
+		private MethodEmitter(MethodBuilder builder)
 		{
 			this.builder = builder;
 		}
@@ -76,7 +76,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return arguments; }
 		}
 
-		public virtual MethodCodeBuilder CodeBuilder
+		public MethodCodeBuilder CodeBuilder
 		{
 			get
 			{
@@ -129,7 +129,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			ArgumentsUtil.InitializeArgumentsByPosition(arguments, MethodBuilder.IsStatic);
 		}
 
-		public virtual void EnsureValidCodeBlock()
+		public void EnsureValidCodeBlock()
 		{
 			if (ImplementedByRuntime == false && CodeBuilder.IsEmpty)
 			{
@@ -138,7 +138,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public virtual void Generate()
+		public void Generate()
 		{
 			if (ImplementedByRuntime)
 			{
