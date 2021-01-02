@@ -37,7 +37,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public NestedClassEmitter(AbstractTypeEmitter maintype, TypeBuilder typeBuilder)
 			: base(typeBuilder)
 		{
-			maintype.Nested.Add(this);
+			maintype.AddNestedClass(this);
 		}
 
 		private static TypeBuilder CreateTypeBuilder(AbstractTypeEmitter maintype, string name, TypeAttributes attributes,

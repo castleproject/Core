@@ -28,17 +28,17 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private const MethodAttributes defaultAttributes =
 			MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.Public;
 
-		private readonly ConstructorCollection constructors;
-		private readonly EventCollection events;
+		private readonly List<ConstructorEmitter> constructors;
+		private readonly List<EventEmitter> events;
 
 		private readonly IDictionary<string, FieldReference> fields =
 			new Dictionary<string, FieldReference>(StringComparer.OrdinalIgnoreCase);
 
-		private readonly MethodCollection methods;
+		private readonly List<MethodEmitter> methods;
 
 		private readonly Dictionary<string, GenericTypeParameterBuilder> name2GenericType;
-		private readonly NestedClassCollection nested;
-		private readonly PropertiesCollection properties;
+		private readonly List<NestedClassEmitter> nested;
+		private readonly List<PropertyEmitter> properties;
 		private readonly TypeBuilder typebuilder;
 
 		private GenericTypeParameterBuilder[] genericTypeParams;
@@ -46,11 +46,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		protected AbstractTypeEmitter(TypeBuilder typeBuilder)
 		{
 			typebuilder = typeBuilder;
-			nested = new NestedClassCollection();
-			methods = new MethodCollection();
-			constructors = new ConstructorCollection();
-			properties = new PropertiesCollection();
-			events = new EventCollection();
+			nested = new List<NestedClassEmitter>();
+			methods = new List<MethodEmitter>();
+			constructors = new List<ConstructorEmitter>();
+			properties = new List<PropertyEmitter>();
+			events = new List<EventEmitter>();
 			name2GenericType = new Dictionary<string, GenericTypeParameterBuilder>();
 		}
 
@@ -68,19 +68,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public TypeConstructorEmitter ClassConstructor { get; private set; }
 
-		public ConstructorCollection Constructors
-		{
-			get { return constructors; }
-		}
-
 		public GenericTypeParameterBuilder[] GenericTypeParams
 		{
 			get { return genericTypeParams; }
-		}
-
-		public NestedClassCollection Nested
-		{
-			get { return nested; }
 		}
 
 		public TypeBuilder TypeBuilder
@@ -94,6 +84,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				typebuilder.SetCustomAttribute(attribute.Builder);
 			}
+		}
+
+		public void AddNestedClass(NestedClassEmitter nestedClass)
+		{
+			nested.Add(nestedClass);
 		}
 
 		public virtual Type BuildType()
