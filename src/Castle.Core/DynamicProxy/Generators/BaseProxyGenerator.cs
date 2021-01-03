@@ -346,8 +346,7 @@ namespace Castle.DynamicProxy.Generators
 			return emitter.CreateTypeConstructor();
 		}
 
-		protected void HandleExplicitlyPassedProxyTargetAccessor(ICollection<Type> targetInterfaces,
-		                                                         ICollection<Type> additionalInterfaces)
+		protected void HandleExplicitlyPassedProxyTargetAccessor(ICollection<Type> targetInterfaces)
 		{
 			var interfaceName = typeof(IProxyTargetAccessor).ToString();
 			//ok, let's determine who tried to sneak the IProxyTargetAccessor in...
@@ -369,7 +368,7 @@ namespace Castle.DynamicProxy.Generators
 						mixinType.Name, interfaceName);
 				throw new InvalidOperationException("This is a DynamicProxy2 error: " + message);
 			}
-			else if (additionalInterfaces.Contains(typeof(IProxyTargetAccessor)))
+			else if (interfaces.Contains(typeof(IProxyTargetAccessor)))
 			{
 				message =
 					string.Format(

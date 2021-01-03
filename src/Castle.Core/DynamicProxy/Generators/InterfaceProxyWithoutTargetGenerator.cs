@@ -38,7 +38,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override ITypeContributor AddMappingForTargetType(
 			IDictionary<Type, ITypeContributor> interfaceTypeImplementerMapping, Type proxyTargetType,
-			ICollection<Type> targetInterfaces, ICollection<Type> additionalInterfaces, INamingScope namingScope)
+			ICollection<Type> targetInterfaces, INamingScope namingScope)
 		{
 			var contributor = new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance)
 			{ Logger = Logger };
@@ -53,7 +53,7 @@ namespace Castle.DynamicProxy.Generators
 		protected override Type GenerateType(string typeName, INamingScope namingScope)
 		{
 			IEnumerable<ITypeContributor> contributors;
-			var allInterfaces = GetTypeImplementerMapping(interfaces, targetType, out contributors, namingScope);
+			var allInterfaces = GetTypeImplementerMapping(targetType, out contributors, namingScope);
 			var model = new MetaType();
 			// collect elements
 			foreach (var contributor in contributors)
