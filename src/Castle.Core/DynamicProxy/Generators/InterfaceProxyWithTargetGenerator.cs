@@ -30,12 +30,21 @@ namespace Castle.DynamicProxy.Generators
 
 	internal class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
 	{
+		protected readonly Type[] interfaces;
+		protected readonly Type proxyTargetType;
+
 		protected FieldReference targetField;
 
-		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type @interface, ProxyGenerationOptions options)
+		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type @interface, Type[] interfaces, Type proxyTargetType, ProxyGenerationOptions options)
 			: base(scope, @interface, options)
 		{
 			CheckNotGenericTypeDefinition(@interface, "@interface");
+			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
+			CheckNotGenericTypeDefinition(proxyTargetType, "proxyTargetType");
+			EnsureValidBaseType(ProxyGenerationOptions.BaseTypeForInterfaceProxy);
+
+			this.proxyTargetType = proxyTargetType;
+			this.interfaces = TypeUtil.GetAllInterfaces(interfaces);
 		}
 
 		protected virtual bool AllowChangeTarget
@@ -48,16 +57,10 @@ namespace Castle.DynamicProxy.Generators
 			get { return ProxyTypeConstants.InterfaceWithTarget; }
 		}
 
-		public Type GenerateCode(Type proxyTargetType, Type[] interfaces)
+		public Type GenerateCode()
 		{
-			CheckNotGenericTypeDefinition(proxyTargetType, "proxyTargetType");
-			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
-			EnsureValidBaseType(ProxyGenerationOptions.BaseTypeForInterfaceProxy);
-
-			interfaces = TypeUtil.GetAllInterfaces(interfaces);
 			var cacheKey = new CacheKey(proxyTargetType, targetType, interfaces, ProxyGenerationOptions);
-
-			return ObtainProxyType(cacheKey, (n, s) => GenerateType(n, proxyTargetType, interfaces, s));
+			return ObtainProxyType(cacheKey, GenerateType);
 		}
 
 		protected virtual ITypeContributor AddMappingForTargetType(IDictionary<Type, ITypeContributor> typeImplementerMapping,
@@ -95,7 +98,7 @@ namespace Castle.DynamicProxy.Generators
 		}
 #endif
 
-		protected virtual Type GenerateType(string typeName, Type proxyTargetType, Type[] interfaces, INamingScope namingScope)
+		protected virtual Type GenerateType(string typeName, INamingScope namingScope)
 		{
 			IEnumerable<ITypeContributor> contributors;
 			var allInterfaces = GetTypeImplementerMapping(interfaces, proxyTargetType, out contributors, namingScope);

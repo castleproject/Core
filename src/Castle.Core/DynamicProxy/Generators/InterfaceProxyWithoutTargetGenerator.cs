@@ -25,8 +25,9 @@ namespace Castle.DynamicProxy.Generators
 
 	internal class InterfaceProxyWithoutTargetGenerator : InterfaceProxyWithTargetGenerator
 	{
-		public InterfaceProxyWithoutTargetGenerator(ModuleScope scope, Type @interface, ProxyGenerationOptions options)
-			: base(scope, @interface, options)
+		public InterfaceProxyWithoutTargetGenerator(ModuleScope scope, Type @interface, Type[] interfaces,
+		                                            Type proxyTargetType, ProxyGenerationOptions options)
+			: base(scope, @interface, interfaces, proxyTargetType, options)
 		{
 		}
 
@@ -49,8 +50,7 @@ namespace Castle.DynamicProxy.Generators
 			return contributor;
 		}
 
-		protected override Type GenerateType(string typeName, Type proxyTargetType, Type[] interfaces,
-		                                     INamingScope namingScope)
+		protected override Type GenerateType(string typeName, INamingScope namingScope)
 		{
 			IEnumerable<ITypeContributor> contributors;
 			var allInterfaces = GetTypeImplementerMapping(interfaces, targetType, out contributors, namingScope);
