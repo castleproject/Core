@@ -66,6 +66,33 @@ namespace Castle.DynamicProxy.Generators
 			get { return scope; }
 		}
 
+		public Type GetProxyType()
+		{
+			bool notFoundInTypeCache = false;
+
+			var proxyType = Scope.TypeCache.GetOrAdd(GetCacheKey(), cacheKey =>
+			{
+				notFoundInTypeCache = true;
+				Logger.DebugFormat("No cached proxy type was found for target type {0}.", targetType.FullName);
+
+				EnsureOptionsOverrideEqualsAndGetHashCode();
+
+				var name = Scope.NamingScope.GetUniqueName("Castle.Proxies." + targetType.Name + "Proxy");
+				return GenerateType(name, Scope.NamingScope.SafeSubScope());
+			});
+
+			if (!notFoundInTypeCache)
+			{
+				Logger.DebugFormat("Found cached proxy type {0} for target type {1}.", proxyType.FullName, targetType.FullName);
+			}
+
+			return proxyType;
+		}
+
+		protected abstract CacheKey GetCacheKey();
+
+		protected abstract Type GenerateType(string name, INamingScope namingScope);
+
 		protected void AddMapping(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)
 		{
 			Debug.Assert(implementer != null, "implementer != null");
@@ -357,29 +384,6 @@ namespace Castle.DynamicProxy.Generators
 		protected void InitializeStaticFields(Type builtType)
 		{
 			builtType.SetStaticField("proxyGenerationOptions", BindingFlags.NonPublic, ProxyGenerationOptions);
-		}
-
-		private protected Type ObtainProxyType(CacheKey cacheKey, Func<string, INamingScope, Type> factory)
-		{
-			bool notFoundInTypeCache = false;
-
-			var proxyType = Scope.TypeCache.GetOrAdd(cacheKey, _ =>
-			{
-				notFoundInTypeCache = true;
-				Logger.DebugFormat("No cached proxy type was found for target type {0}.", targetType.FullName);
-
-				EnsureOptionsOverrideEqualsAndGetHashCode();
-
-				var name = Scope.NamingScope.GetUniqueName("Castle.Proxies." + targetType.Name + "Proxy");
-				return factory.Invoke(name, Scope.NamingScope.SafeSubScope());
-			});
-
-			if (!notFoundInTypeCache)
-			{
-				Logger.DebugFormat("Found cached proxy type {0} for target type {1}.", proxyType.FullName, targetType.FullName);
-			}
-
-			return proxyType;
 		}
 
 		private bool OverridesEqualsAndGetHashCode(Type type)

@@ -132,7 +132,7 @@ namespace Castle.DynamicProxy.Serialization
 		private object RecreateClassProxyWithTarget()
 		{
 			var generator = new ClassProxyWithTargetGenerator(scope, baseType, interfaces, proxyGenerationOptions);
-			var proxyType = generator.GenerateCode();
+			var proxyType = generator.GetProxyType();
 			return InstantiateClassProxy(proxyType);
 		}
 
@@ -162,14 +162,14 @@ namespace Castle.DynamicProxy.Serialization
 						generatorType));
 			}
 
-			var proxyType = generator.GenerateCode();
+			var proxyType = generator.GetProxyType();
 			return FormatterServices.GetSafeUninitializedObject(proxyType);
 		}
 
 		public object RecreateClassProxy()
 		{
 			var generator = new ClassProxyGenerator(scope, baseType, interfaces, proxyGenerationOptions);
-			var proxyType = generator.GenerateCode();
+			var proxyType = generator.GetProxyType();
 			return InstantiateClassProxy(proxyType);
 		}
 

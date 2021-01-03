@@ -43,12 +43,6 @@ namespace Castle.DynamicProxy.Generators
 			this.additionalInterfacesToProxy = TypeUtil.GetAllInterfaces(additionalInterfacesToProxy);
 		}
 
-		public Type GenerateCode()
-		{
-			var cacheKey = new CacheKey(targetType, targetType, additionalInterfacesToProxy, ProxyGenerationOptions);
-			return ObtainProxyType(cacheKey, GenerateType);
-		}
-
 		protected virtual IEnumerable<Type> GetTypeImplementerMapping(out IEnumerable<ITypeContributor> contributors,
 		                                                              INamingScope namingScope)
 		{
@@ -164,7 +158,12 @@ namespace Castle.DynamicProxy.Generators
 			throw new ArgumentException(message, name);
 		}
 
-		private Type GenerateType(string name, INamingScope namingScope)
+		protected override CacheKey GetCacheKey()
+		{
+			return new CacheKey(targetType, targetType, additionalInterfacesToProxy, ProxyGenerationOptions);
+		}
+
+		protected override Type GenerateType(string name, INamingScope namingScope)
 		{
 			IEnumerable<ITypeContributor> contributors;
 			var implementedInterfaces = GetTypeImplementerMapping(out contributors, namingScope);
