@@ -5,6 +5,9 @@
 Enhancements:
 - .NET Standard 2.0 and 2.1 support (@lg2de, #485)
 
+Bugfixes:
+- `System.UIntPtr` unsupported (@stakx, #546)
+
 Deprecations:
  - Removed support for the .NET Framework < 4.5 and .NET Standard 1.x. (@stakx, #495, #496)
  - Removed support for Code Access Security (CAS). (@stakx, #502)
