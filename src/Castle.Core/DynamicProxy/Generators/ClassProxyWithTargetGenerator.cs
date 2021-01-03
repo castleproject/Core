@@ -43,7 +43,7 @@ namespace Castle.DynamicProxy.Generators
 			this.additionalInterfacesToProxy = TypeUtil.GetAllInterfaces(additionalInterfacesToProxy);
 		}
 
-		public Type GetGeneratedType()
+		public Type GenerateCode()
 		{
 			var cacheKey = new CacheKey(targetType, targetType, additionalInterfacesToProxy, ProxyGenerationOptions);
 			return ObtainProxyType(cacheKey, GenerateType);

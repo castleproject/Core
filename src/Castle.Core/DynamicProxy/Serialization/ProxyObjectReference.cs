@@ -132,7 +132,7 @@ namespace Castle.DynamicProxy.Serialization
 		private object RecreateClassProxyWithTarget()
 		{
 			var generator = new ClassProxyWithTargetGenerator(scope, baseType, interfaces, proxyGenerationOptions);
-			var proxyType = generator.GetGeneratedType();
+			var proxyType = generator.GenerateCode();
 			return InstantiateClassProxy(proxyType);
 		}
 
@@ -144,15 +144,15 @@ namespace Castle.DynamicProxy.Serialization
 			InterfaceProxyWithTargetGenerator generator;
 			if (generatorType == ProxyTypeConstants.InterfaceWithTarget)
 			{
-				generator = new InterfaceProxyWithTargetGenerator(scope, @interface, proxyGenerationOptions);
+				generator = new InterfaceProxyWithTargetGenerator(scope, @interface, interfaces, targetType, proxyGenerationOptions);
 			}
 			else if (generatorType == ProxyTypeConstants.InterfaceWithoutTarget)
 			{
-				generator = new InterfaceProxyWithoutTargetGenerator(scope, @interface, proxyGenerationOptions);
+				generator = new InterfaceProxyWithoutTargetGenerator(scope, @interface, interfaces, targetType, proxyGenerationOptions);
 			}
 			else if (generatorType == ProxyTypeConstants.InterfaceWithTargetInterface)
 			{
-				generator = new InterfaceProxyWithTargetInterfaceGenerator(scope, @interface, proxyGenerationOptions);
+				generator = new InterfaceProxyWithTargetInterfaceGenerator(scope, @interface, interfaces, targetType, proxyGenerationOptions);
 			}
 			else
 			{
@@ -162,14 +162,14 @@ namespace Castle.DynamicProxy.Serialization
 						generatorType));
 			}
 
-			var proxyType = generator.GenerateCode(targetType, interfaces);
+			var proxyType = generator.GenerateCode();
 			return FormatterServices.GetSafeUninitializedObject(proxyType);
 		}
 
 		public object RecreateClassProxy()
 		{
-			var generator = new ClassProxyGenerator(scope, baseType, proxyGenerationOptions);
-			var proxyType = generator.GenerateCode(interfaces);
+			var generator = new ClassProxyGenerator(scope, baseType, interfaces, proxyGenerationOptions);
+			var proxyType = generator.GenerateCode();
 			return InstantiateClassProxy(proxyType);
 		}
 
