@@ -44,7 +44,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override ITypeContributor AddMappingForTargetType(
 			IDictionary<Type, ITypeContributor> typeImplementerMapping, Type proxyTargetType, ICollection<Type> targetInterfaces,
-			ICollection<Type> additionalInterfaces, INamingScope namingScope)
+			INamingScope namingScope)
 		{
 			var contributor = new InterfaceProxyWithTargetInterfaceTargetContributor(
 				proxyTargetType,

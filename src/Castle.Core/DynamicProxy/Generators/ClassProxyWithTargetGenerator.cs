@@ -117,7 +117,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 			catch (ArgumentException)
 			{
-				HandleExplicitlyPassedProxyTargetAccessor(targetInterfaces, interfaces);
+				HandleExplicitlyPassedProxyTargetAccessor(targetInterfaces);
 			}
 
 			contributors = new List<ITypeContributor>
@@ -160,7 +160,7 @@ namespace Castle.DynamicProxy.Generators
 		protected override Type GenerateType(string name, INamingScope namingScope)
 		{
 			IEnumerable<ITypeContributor> contributors;
-			var implementedInterfaces = GetTypeImplementerMapping(out contributors, namingScope);
+			var allInterfaces = GetTypeImplementerMapping(out contributors, namingScope);
 
 			var model = new MetaType();
 			// Collect methods
@@ -170,7 +170,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 			ProxyGenerationOptions.Hook.MethodsInspected();
 
-			var emitter = BuildClassEmitter(name, targetType, implementedInterfaces);
+			var emitter = BuildClassEmitter(name, targetType, allInterfaces);
 
 			CreateFields(emitter);
 			CreateTypeAttributes(emitter);
