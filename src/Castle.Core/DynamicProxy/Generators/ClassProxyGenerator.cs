@@ -41,13 +41,12 @@ namespace Castle.DynamicProxy.Generators
 			this.interfaces = interfaces;
 		}
 
-		public Type GenerateCode()
+		protected override CacheKey GetCacheKey()
 		{
-			var cacheKey = new CacheKey(targetType, interfaces, ProxyGenerationOptions);
-			return ObtainProxyType(cacheKey, GenerateType);
+			return new CacheKey(targetType, interfaces, ProxyGenerationOptions);
 		}
 
-		protected virtual Type GenerateType(string name, INamingScope namingScope)
+		protected override Type GenerateType(string name, INamingScope namingScope)
 		{
 			IEnumerable<ITypeContributor> contributors;
 			var implementedInterfaces = GetTypeImplementerMapping(interfaces, out contributors, namingScope);

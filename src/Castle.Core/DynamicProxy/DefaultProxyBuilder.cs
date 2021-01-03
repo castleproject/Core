@@ -66,7 +66,7 @@ namespace Castle.DynamicProxy
 			AssertValidMixins(options, nameof(options));
 
 			var generator = new ClassProxyGenerator(scope, classToProxy, additionalInterfacesToProxy, options) { Logger = logger };
-			return generator.GenerateCode();
+			return generator.GetProxyType();
 		}
 
 		public Type CreateClassProxyTypeWithTarget(Type classToProxy, Type[] additionalInterfacesToProxy,
@@ -78,7 +78,7 @@ namespace Castle.DynamicProxy
 
 			var generator = new ClassProxyWithTargetGenerator(scope, classToProxy, additionalInterfacesToProxy, options)
 			{ Logger = logger };
-			return generator.GenerateCode();
+			return generator.GetProxyType();
 		}
 
 		public Type CreateInterfaceProxyTypeWithTarget(Type interfaceToProxy, Type[] additionalInterfacesToProxy,
@@ -90,7 +90,7 @@ namespace Castle.DynamicProxy
 			AssertValidMixins(options, nameof(options));
 
 			var generator = new InterfaceProxyWithTargetGenerator(scope, interfaceToProxy, additionalInterfacesToProxy, targetType, options) { Logger = logger };
-			return generator.GenerateCode();
+			return generator.GetProxyType();
 		}
 
 		public Type CreateInterfaceProxyTypeWithTargetInterface(Type interfaceToProxy, Type[] additionalInterfacesToProxy,
@@ -101,7 +101,7 @@ namespace Castle.DynamicProxy
 			AssertValidMixins(options, nameof(options));
 
 			var generator = new InterfaceProxyWithTargetInterfaceGenerator(scope, interfaceToProxy, additionalInterfacesToProxy, interfaceToProxy, options) { Logger = logger };
-			return generator.GenerateCode();
+			return generator.GetProxyType();
 		}
 
 		public Type CreateInterfaceProxyTypeWithoutTarget(Type interfaceToProxy, Type[] additionalInterfacesToProxy,
@@ -112,7 +112,7 @@ namespace Castle.DynamicProxy
 			AssertValidMixins(options, nameof(options));
 
 			var generator = new InterfaceProxyWithoutTargetGenerator(scope, interfaceToProxy, additionalInterfacesToProxy, typeof(object), options) { Logger = logger };
-			return generator.GenerateCode();
+			return generator.GetProxyType();
 		}
 
 		private void AssertValidMixins(ProxyGenerationOptions options, string paramName)
