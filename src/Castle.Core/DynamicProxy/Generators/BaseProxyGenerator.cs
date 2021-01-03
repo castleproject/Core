@@ -38,14 +38,19 @@ namespace Castle.DynamicProxy.Generators
 	internal abstract class BaseProxyGenerator
 	{
 		protected readonly Type targetType;
+		protected readonly Type[] interfaces;
 		private readonly ModuleScope scope;
 		private ILogger logger = NullLogger.Instance;
 		private ProxyGenerationOptions proxyGenerationOptions;
 
-		protected BaseProxyGenerator(ModuleScope scope, Type targetType, ProxyGenerationOptions proxyGenerationOptions)
+		protected BaseProxyGenerator(ModuleScope scope, Type targetType, Type[] interfaces, ProxyGenerationOptions proxyGenerationOptions)
 		{
+			CheckNotGenericTypeDefinition(targetType, "targetType");
+			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
+
 			this.scope = scope;
 			this.targetType = targetType;
+			this.interfaces = TypeUtil.GetAllInterfaces(interfaces);
 			this.proxyGenerationOptions = proxyGenerationOptions;
 			this.proxyGenerationOptions.Initialize();
 		}

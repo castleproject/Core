@@ -30,21 +30,18 @@ namespace Castle.DynamicProxy.Generators
 
 	internal class InterfaceProxyWithTargetGenerator : BaseProxyGenerator
 	{
-		protected readonly Type[] interfaces;
 		protected readonly Type proxyTargetType;
 
 		protected FieldReference targetField;
 
-		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type @interface, Type[] interfaces, Type proxyTargetType, ProxyGenerationOptions options)
-			: base(scope, @interface, options)
+		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type targetType, Type[] interfaces,
+		                                         Type proxyTargetType, ProxyGenerationOptions options)
+			: base(scope, targetType, interfaces, options)
 		{
-			CheckNotGenericTypeDefinition(@interface, "@interface");
-			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
 			CheckNotGenericTypeDefinition(proxyTargetType, "proxyTargetType");
 			EnsureValidBaseType(ProxyGenerationOptions.BaseTypeForInterfaceProxy);
 
 			this.proxyTargetType = proxyTargetType;
-			this.interfaces = TypeUtil.GetAllInterfaces(interfaces);
 		}
 
 		protected virtual bool AllowChangeTarget

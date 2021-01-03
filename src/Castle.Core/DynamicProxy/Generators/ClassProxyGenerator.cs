@@ -27,18 +27,10 @@ namespace Castle.DynamicProxy.Generators
 
 	internal class ClassProxyGenerator : BaseProxyGenerator
 	{
-		private readonly Type[] interfaces;
-
 		public ClassProxyGenerator(ModuleScope scope, Type targetType, Type[] interfaces, ProxyGenerationOptions options)
-			: base(scope, targetType, options)
+			: base(scope, targetType, interfaces, options)
 		{
-			CheckNotGenericTypeDefinition(targetType, "targetType");
 			EnsureDoesNotImplementIProxyTargetAccessor(targetType, "targetType");
-
-			interfaces = TypeUtil.GetAllInterfaces(interfaces);
-			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
-
-			this.interfaces = interfaces;
 		}
 
 		protected override CacheKey GetCacheKey()
