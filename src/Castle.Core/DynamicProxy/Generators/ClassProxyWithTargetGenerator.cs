@@ -30,12 +30,16 @@ namespace Castle.DynamicProxy.Generators
 
 	internal class ClassProxyWithTargetGenerator : BaseProxyGenerator
 	{
+		private FieldReference targetField;
+
 		public ClassProxyWithTargetGenerator(ModuleScope scope, Type targetType, Type[] interfaces,
 		                                     ProxyGenerationOptions options)
 			: base(scope, targetType, interfaces, options)
 		{
 			EnsureDoesNotImplementIProxyTargetAccessor(targetType, "targetType");
 		}
+
+		private FieldReference TargetField => targetField;
 
 		protected override CacheKey GetCacheKey()
 		{
@@ -63,8 +67,12 @@ namespace Castle.DynamicProxy.Generators
 			// Constructor
 			var cctor = GenerateStaticConstructor(emitter);
 
-			var targetField = CreateTargetField(emitter);
-			var constructorArguments = new List<FieldReference> { targetField };
+			var constructorArguments = new List<FieldReference>();
+
+			if (TargetField is { } targetField)
+			{
+				constructorArguments.Add(targetField);
+			}
 
 			foreach (var contributor in contributors)
 			{
@@ -97,6 +105,12 @@ namespace Castle.DynamicProxy.Generators
 			var proxyType = emitter.BuildType();
 			InitializeStaticFields(proxyType);
 			return proxyType;
+		}
+
+		protected override void CreateFields(ClassEmitter emitter)
+		{
+			base.CreateFields(emitter);
+			CreateTargetField(emitter);
 		}
 
 		private ClassProxyWithTargetInstanceContributor GetProxyInstanceContributor(List<MethodInfo> methodsToSkip)
@@ -200,13 +214,12 @@ namespace Castle.DynamicProxy.Generators
 			return typeImplementerMapping.Keys;
 		}
 
-		private FieldReference CreateTargetField(ClassEmitter emitter)
+		private void CreateTargetField(ClassEmitter emitter)
 		{
-			var targetField = emitter.CreateField("__target", targetType);
+			targetField = emitter.CreateField("__target", targetType);
 #if FEATURE_SERIALIZATION
 			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(targetField);
 #endif
-			return targetField;
 		}
 
 		private void EnsureDoesNotImplementIProxyTargetAccessor(Type type, string name)

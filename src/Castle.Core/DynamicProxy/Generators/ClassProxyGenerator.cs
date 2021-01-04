@@ -33,6 +33,8 @@ namespace Castle.DynamicProxy.Generators
 			EnsureDoesNotImplementIProxyTargetAccessor(targetType, "targetType");
 		}
 
+		private FieldReference TargetField => null;
+
 		protected override CacheKey GetCacheKey()
 		{
 			return new CacheKey(targetType, interfaces, ProxyGenerationOptions);
@@ -60,6 +62,12 @@ namespace Castle.DynamicProxy.Generators
 			var cctor = GenerateStaticConstructor(emitter);
 
 			var constructorArguments = new List<FieldReference>();
+
+			if (TargetField is { } targetField)
+			{
+				constructorArguments.Add(targetField);
+			}
+
 			foreach (var contributor in contributors)
 			{
 				contributor.Generate(emitter);
