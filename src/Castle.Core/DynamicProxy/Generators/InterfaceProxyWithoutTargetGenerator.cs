@@ -50,6 +50,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			IEnumerable<ITypeContributor> contributors;
 			var allInterfaces = GetTypeImplementerMapping(targetType, out contributors, namingScope);
+
 			var model = new MetaType();
 			// collect elements
 			foreach (var contributor in contributors)

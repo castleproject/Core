@@ -87,10 +87,6 @@ namespace Castle.DynamicProxy.Generators
 			IEnumerable<ITypeContributor> contributors;
 			var allInterfaces = GetTypeImplementerMapping(proxyTargetType, out contributors, namingScope);
 
-			ClassEmitter emitter;
-			FieldReference interceptorsField;
-			var baseType = Init(typeName, out emitter, proxyTargetType, out interceptorsField, allInterfaces);
-
 			var model = new MetaType();
 			// Collect methods
 			foreach (var contributor in contributors)
@@ -99,6 +95,10 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			ProxyGenerationOptions.Hook.MethodsInspected();
+
+			ClassEmitter emitter;
+			FieldReference interceptorsField;
+			var baseType = Init(typeName, out emitter, proxyTargetType, out interceptorsField, allInterfaces);
 
 			// Constructor
 
