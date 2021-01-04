@@ -49,21 +49,9 @@ namespace Castle.DynamicProxy.Generators
 
 		protected abstract CompositeTypeContributor GetProxyTargetContributor(Type proxyTargetType, INamingScope namingScope);
 
-		private void AddMappingForAdditionalInterfaces(CompositeTypeContributor contributor, Type[] proxiedInterfaces,
-		                                               IDictionary<Type, ITypeContributor> typeImplementerMapping,
-		                                               ICollection<Type> targetInterfaces)
-		{
-			foreach (var @interface in interfaces)
-			{
-				if (!ImplementedByTarget(targetInterfaces, @interface) || proxiedInterfaces.Contains(@interface))
-				{
-					continue;
-				}
-
-				contributor.AddInterfaceToProxy(@interface);
-				AddMappingNoCheck(@interface, contributor, typeImplementerMapping);
-			}
-		}
+		protected abstract void AddMappingForAdditionalInterfaces(CompositeTypeContributor contributor, Type[] proxiedInterfaces,
+		                                                          IDictionary<Type, ITypeContributor> typeImplementerMapping,
+		                                                          ICollection<Type> targetInterfaces);
 
 		protected virtual ITypeContributor AddMappingForTargetType(IDictionary<Type, ITypeContributor> typeImplementerMapping,
 		                                                           Type proxyTargetType, ICollection<Type> targetInterfaces,
@@ -281,11 +269,6 @@ namespace Castle.DynamicProxy.Generators
 			{
 				ThrowInvalidBaseType(type, "it does not have accessible parameterless constructor");
 			}
-		}
-
-		private bool ImplementedByTarget(ICollection<Type> targetInterfaces, Type @interface)
-		{
-			return targetInterfaces.Contains(@interface);
 		}
 
 		private void ThrowInvalidBaseType(Type type, string doesNotHaveAccessibleParameterlessConstructor)

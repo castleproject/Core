@@ -15,6 +15,8 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Serialization;
@@ -33,6 +35,27 @@ namespace Castle.DynamicProxy.Generators
 		protected override CompositeTypeContributor GetProxyTargetContributor(Type proxyTargetType, INamingScope namingScope)
 		{
 			return new InterfaceProxyTargetContributor(proxyTargetType, AllowChangeTarget, namingScope) { Logger = Logger };
+		}
+
+		protected override void AddMappingForAdditionalInterfaces(CompositeTypeContributor contributor, Type[] proxiedInterfaces,
+		                                                          IDictionary<Type, ITypeContributor> typeImplementerMapping,
+		                                                          ICollection<Type> targetInterfaces)
+		{
+			foreach (var @interface in interfaces)
+			{
+				if (!ImplementedByTarget(targetInterfaces, @interface) || proxiedInterfaces.Contains(@interface))
+				{
+					continue;
+				}
+
+				contributor.AddInterfaceToProxy(@interface);
+				AddMappingNoCheck(@interface, contributor, typeImplementerMapping);
+			}
+		}
+
+		private bool ImplementedByTarget(ICollection<Type> targetInterfaces, Type @interface)
+		{
+			return targetInterfaces.Contains(@interface);
 		}
 	}
 }
