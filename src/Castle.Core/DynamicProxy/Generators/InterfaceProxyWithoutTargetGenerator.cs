@@ -67,7 +67,7 @@ namespace Castle.DynamicProxy.Generators
 			// Constructor
 
 			var cctor = GenerateStaticConstructor(emitter);
-			var mixinFieldsList = new List<FieldReference>();
+			var ctorArguments = new List<FieldReference>();
 
 			foreach (var contributor in contributors)
 			{
@@ -76,11 +76,12 @@ namespace Castle.DynamicProxy.Generators
 				// TODO: redo it
 				if (contributor is MixinContributor)
 				{
-					mixinFieldsList.AddRange((contributor as MixinContributor).Fields);
+					ctorArguments.AddRange((contributor as MixinContributor).Fields);
 				}
 			}
 
-			var ctorArguments = new List<FieldReference>(mixinFieldsList) { interceptorsField, targetField };
+			ctorArguments.Add(interceptorsField);
+			ctorArguments.Add(targetField);
 			var selector = emitter.GetField("__selector");
 			if (selector != null)
 			{
