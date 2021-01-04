@@ -43,9 +43,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XmlMetadata(DictionaryAdapterMeta meta, IEnumerable<string> reservedNamespaceUris)
 		{
 			if (meta == null)
-				throw Error.ArgumentNull("meta");
+				throw Error.ArgumentNull(nameof(meta));
 			if (reservedNamespaceUris == null)
-				throw Error.ArgumentNull("reservedNamespaceUris");
+				throw Error.ArgumentNull(nameof(reservedNamespaceUris));
 
 			source        = meta;
 			clrType       = meta.Type;

@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Generators
 		protected BaseClassProxyGenerator(ModuleScope scope, Type targetType, Type[] interfaces, ProxyGenerationOptions options)
 			: base(scope, targetType, interfaces, options)
 		{
-			EnsureDoesNotImplementIProxyTargetAccessor(targetType, "targetType");
+			EnsureDoesNotImplementIProxyTargetAccessor(targetType, nameof(targetType));
 		}
 
 		protected abstract FieldReference TargetField { get; }

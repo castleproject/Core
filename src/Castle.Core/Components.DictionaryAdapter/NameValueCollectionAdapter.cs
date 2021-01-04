@@ -55,7 +55,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (key == null)
 			{
-				throw new ArgumentNullException("key");
+				throw new ArgumentNullException(nameof(key));
 			}
 
 			//Getting a value out is O(1), so in the case that the collection contains a non-null value for this key

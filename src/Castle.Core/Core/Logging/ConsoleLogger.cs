@@ -91,7 +91,7 @@ namespace Castle.Core.Logging
 		{
 			if (loggerName == null)
 			{
-				throw new ArgumentNullException("loggerName", "To create a child logger you must supply a non null name");
+				throw new ArgumentNullException(nameof(loggerName), "To create a child logger you must supply a non null name");
 			}
 
 			return new ConsoleLogger(string.Format(CultureInfo.CurrentCulture, "{0}.{1}", Name, loggerName), Level);

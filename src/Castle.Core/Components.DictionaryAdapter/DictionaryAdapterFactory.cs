@@ -121,9 +121,9 @@ namespace Castle.Components.DictionaryAdapter
 			PropertyDescriptor descriptor, DictionaryAdapterMeta other)
 		{
 			if (type == null)
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 			if (type.IsInterface == false)
-				throw new ArgumentException("Only interfaces can be adapted to a dictionary", "type");
+				throw new ArgumentException("Only interfaces can be adapted to a dictionary", nameof(type));
 
 			return interfaceToMeta.GetOrAdd(type, t =>
 			{

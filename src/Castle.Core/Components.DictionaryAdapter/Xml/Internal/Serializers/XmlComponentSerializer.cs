@@ -52,7 +52,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			// Require a dictionary adapter
 			var source = value as IDictionaryAdapter;
 			if (source == null)
-				throw Error.NotDictionaryAdapter("value");
+				throw Error.NotDictionaryAdapter(nameof(value));
 
 			// Detect assignment of own value
 			var sourceAdapter = XmlAdapter.For(source, false);

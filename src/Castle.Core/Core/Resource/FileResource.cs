@@ -75,11 +75,11 @@ namespace Castle.Core.Resource
 
 		private Stream CreateStreamFromUri(CustomUri resource, string rootPath)
 		{
-			if (resource == null) throw new ArgumentNullException("resource");
-			if (rootPath == null) throw new ArgumentNullException("rootPath");
+			if (resource == null) throw new ArgumentNullException(nameof(resource));
+			if (rootPath == null) throw new ArgumentNullException(nameof(rootPath));
 
 			if (!resource.IsFile)
-				throw new ArgumentException("The specified resource is not a file", "resource");
+				throw new ArgumentException("The specified resource is not a file", nameof(resource));
 
 			return CreateStreamFromPath(resource.Path, rootPath);
 		}
@@ -87,9 +87,9 @@ namespace Castle.Core.Resource
 		private Stream CreateStreamFromPath(string resourcePath, string rootPath)
 		{
 			if (resourcePath == null)
-				throw new ArgumentNullException("resourcePath");
+				throw new ArgumentNullException(nameof(resourcePath));
 			if (rootPath == null)
-				throw new ArgumentNullException("rootPath");
+				throw new ArgumentNullException(nameof(rootPath));
 
 			if (!Path.IsPathRooted(resourcePath) || !File.Exists(resourcePath))
 			{

@@ -27,7 +27,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			if (name.LocalName == null)
 				throw Error.ArgumentNull("name.LocalName");
 			if (clrType == null)
-				throw Error.ArgumentNull("clrType");
+				throw Error.ArgumentNull(nameof(clrType));
 
 			this.name    = name;
 			this.xsiType = xsiType;

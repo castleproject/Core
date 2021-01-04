@@ -32,11 +32,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			: base(path, namespaces, parent)
 		{
 			if (null == parent)
-				throw Error.ArgumentNull("parent");
+				throw Error.ArgumentNull(nameof(parent));
 			if (null == path)
-				throw Error.ArgumentNull("path");
+				throw Error.ArgumentNull(nameof(path));
 			if (null == knownTypes)
-				throw Error.ArgumentNull("knownTypes");
+				throw Error.ArgumentNull(nameof(knownTypes));
 			if (!path.IsCreatable)
 				throw Error.XPathNotCreatable(path);
 

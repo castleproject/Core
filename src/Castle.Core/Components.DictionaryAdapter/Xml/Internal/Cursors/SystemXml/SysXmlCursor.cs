@@ -40,9 +40,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			: base(namespaces, parent)
 		{
 			if (null == parent)
-				throw Error.ArgumentNull("parent");
+				throw Error.ArgumentNull(nameof(parent));
 			if (null == knownTypes)
-				throw Error.ArgumentNull("knownTypes");
+				throw Error.ArgumentNull(nameof(knownTypes));
 
 			this.knownTypes = knownTypes;
 			this.flags      = flags;

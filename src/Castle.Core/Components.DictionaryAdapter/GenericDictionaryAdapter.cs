@@ -50,7 +50,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (key == null)
 			{
-				throw new ArgumentNullException("key");
+				throw new ArgumentNullException(nameof(key));
 			}
 			return key.ToString();
 		}

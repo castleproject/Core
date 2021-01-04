@@ -28,7 +28,7 @@ namespace Castle.Core.Internal
 		public WeakKeyComparer(IEqualityComparer<TKey> comparer)
 		{
 			if (comparer == null)
-				throw new ArgumentNullException("comparer");
+				throw new ArgumentNullException(nameof(comparer));
 
 			this.comparer = comparer;
 		}

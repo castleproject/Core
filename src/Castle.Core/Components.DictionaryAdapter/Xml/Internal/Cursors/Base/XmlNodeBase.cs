@@ -25,7 +25,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		protected XmlNodeBase(IXmlNamespaceSource namespaces, IXmlNode parent)
 		{
 			if (null == namespaces)
-				throw Error.ArgumentNull("namespaces");
+				throw Error.ArgumentNull(nameof(namespaces));
 
 			this.namespaces = namespaces;
 			this.parent     = parent;

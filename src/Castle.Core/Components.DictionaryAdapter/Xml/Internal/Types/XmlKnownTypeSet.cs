@@ -28,7 +28,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XmlKnownTypeSet(Type defaultType)
 		{
 			if (defaultType == null)
-				throw Error.ArgumentNull("defaultType");
+				throw Error.ArgumentNull(nameof(defaultType));
 
 			itemsByXmlIdentity = new Dictionary<IXmlIdentity, IXmlKnownType>(XmlIdentityComparer.Instance);
 			itemsByClrType     = new Dictionary<Type,         IXmlKnownType>();

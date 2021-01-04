@@ -23,7 +23,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public static CompiledXPath Compile(string path)
 		{
 			if (null == path)
-				throw Error.ArgumentNull("path");
+				throw Error.ArgumentNull(nameof(path));
 
 			// Compile whole path to catch errors
 			var result = new CompiledXPath();

@@ -40,7 +40,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public RemoveIfAttribute(object[] values, Type comparerType) : this()
 		{
-			var comparer = Construct<IEqualityComparer>(comparerType, "comparerType");
+			var comparer = Construct<IEqualityComparer>(comparerType, nameof(comparerType));
 			condition = new ValueCondition(values, comparer);
 		}
 
@@ -51,7 +51,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public Type Condition
 		{
-			set { condition = Construct<ICondition>(value, "value"); }
+			set { condition = Construct<ICondition>(value, nameof(value)); }
 		}
 
 		bool IDictionaryPropertySetter.SetPropertyValue(IDictionaryAdapter dictionaryAdapter,

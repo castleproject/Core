@@ -37,11 +37,11 @@ namespace Castle.Core.Resource
 		{
 			if (resourceIdentifier == null)
 			{
-				throw new ArgumentNullException("resourceIdentifier");
+				throw new ArgumentNullException(nameof(resourceIdentifier));
 			}
 			if (resourceIdentifier == string.Empty)
 			{
-				throw new ArgumentException("Empty resource identifier is not allowed", "resourceIdentifier");
+				throw new ArgumentException("Empty resource identifier is not allowed", nameof(resourceIdentifier));
 			}
 
 			ParseIdentifier(resourceIdentifier);

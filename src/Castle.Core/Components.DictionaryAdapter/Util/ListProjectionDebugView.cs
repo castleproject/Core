@@ -24,7 +24,7 @@ namespace Castle.Components.DictionaryAdapter
 		public ListProjectionDebugView(ListProjection<T> projection)
 		{
 			if (projection == null)
-				throw new ArgumentNullException("projection");
+				throw new ArgumentNullException(nameof(projection));
 
 			this.projection = projection;
 		}

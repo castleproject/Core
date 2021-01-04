@@ -32,9 +32,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public XmlSubtreeReader(IXmlNode node, string rootLocalName, string rootNamespaceUri)
         {
             if (null == node)
-                throw Error.ArgumentNull("node");
+                throw Error.ArgumentNull(nameof(node));
             if (null == rootLocalName)
-                throw Error.ArgumentNull("rootLocalName");
+                throw Error.ArgumentNull(nameof(rootLocalName));
 
             this.reader           = node.ReadSubtree();
             this.rootLocalName    = reader.NameTable.Add(rootLocalName);

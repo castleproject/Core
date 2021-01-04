@@ -67,7 +67,7 @@ namespace Castle.DynamicProxy.Serialization
 		{
 			if (scope == null)
 			{
-				throw new ArgumentNullException("scope");
+				throw new ArgumentNullException(nameof(scope));
 			}
 			ProxyObjectReference.scope = scope;
 		}

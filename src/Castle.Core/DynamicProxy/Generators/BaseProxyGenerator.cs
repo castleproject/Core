@@ -45,8 +45,8 @@ namespace Castle.DynamicProxy.Generators
 
 		protected BaseProxyGenerator(ModuleScope scope, Type targetType, Type[] interfaces, ProxyGenerationOptions proxyGenerationOptions)
 		{
-			CheckNotGenericTypeDefinition(targetType, "targetType");
-			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
+			CheckNotGenericTypeDefinition(targetType, nameof(targetType));
+			CheckNotGenericTypeDefinitions(interfaces, nameof(interfaces));
 
 			this.scope = scope;
 			this.targetType = targetType;
@@ -129,8 +129,8 @@ namespace Castle.DynamicProxy.Generators
 
 		protected virtual ClassEmitter BuildClassEmitter(string typeName, Type parentType, IEnumerable<Type> interfaces)
 		{
-			CheckNotGenericTypeDefinition(parentType, "parentType");
-			CheckNotGenericTypeDefinitions(interfaces, "interfaces");
+			CheckNotGenericTypeDefinition(parentType, nameof(parentType));
+			CheckNotGenericTypeDefinitions(interfaces, nameof(interfaces));
 
 			return new ClassEmitter(Scope, typeName, parentType, interfaces);
 		}

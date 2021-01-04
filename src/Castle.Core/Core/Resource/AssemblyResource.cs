@@ -71,7 +71,7 @@ namespace Castle.Core.Resource
 
 		private Stream CreateResourceFromUri(CustomUri resourcex, string path)
 		{
-			if (resourcex == null) throw new ArgumentNullException("resourcex");
+			if (resourcex == null) throw new ArgumentNullException(nameof(resourcex));
 
 			assemblyName = resourcex.Host;
 			resourcePath = ConvertToResourceName(assemblyName, resourcex.Path);

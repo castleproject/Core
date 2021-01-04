@@ -504,7 +504,7 @@ namespace Castle.DynamicProxy
 		{
 			if (assembly == null)
 			{
-				throw new ArgumentNullException("assembly");
+				throw new ArgumentNullException(nameof(assembly));
 			}
 
 			var cacheMappings =
@@ -515,7 +515,7 @@ namespace Castle.DynamicProxy
 				var message = string.Format(
 					"The given assembly '{0}' does not contain any cache information for generated types.",
 					assembly.FullName);
-				throw new ArgumentException(message, "assembly");
+				throw new ArgumentException(message, nameof(assembly));
 			}
 
 			foreach (var mapping in cacheMappings[0].GetDeserializedMappings())

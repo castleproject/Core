@@ -773,7 +773,7 @@ namespace Castle.Core.Logging
 		{
 			if (newName == null)
 			{
-				throw new ArgumentNullException("newName");
+				throw new ArgumentNullException(nameof(newName));
 			}
 
 			name = newName;

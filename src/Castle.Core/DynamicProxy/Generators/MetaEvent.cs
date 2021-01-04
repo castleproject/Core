@@ -42,11 +42,11 @@ namespace Castle.DynamicProxy.Generators
 		{
 			if (adder == null)
 			{
-				throw new ArgumentNullException("adder");
+				throw new ArgumentNullException(nameof(adder));
 			}
 			if (remover == null)
 			{
-				throw new ArgumentNullException("remover");
+				throw new ArgumentNullException(nameof(remover));
 			}
 			this.name = name;
 			type = eventDelegateType;
