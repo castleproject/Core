@@ -41,7 +41,8 @@ namespace Castle.DynamicProxy.Generators
 		{
 			var contributor = new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance)
 			{ Logger = Logger };
-			foreach (var @interface in targetType.GetAllInterfaces())
+			var proxiedInterfaces = targetType.GetAllInterfaces();
+			foreach (var @interface in proxiedInterfaces)
 			{
 				contributor.AddInterfaceToProxy(@interface);
 				AddMappingNoCheck(@interface, contributor, interfaceTypeImplementerMapping);
