@@ -98,13 +98,18 @@ namespace Castle.DynamicProxy.Generators
 			return new ClassProxyInstanceContributor(targetType, methodsToSkip, interfaces, ProxyTypeConstants.Class);
 		}
 
+		private ClassProxyTargetContributor GetProxyTargetContributor(List<MethodInfo> methodsToSkip, INamingScope namingScope)
+		{
+			return new ClassProxyTargetContributor(targetType, methodsToSkip, namingScope) { Logger = Logger };
+		}
+
 		protected virtual IEnumerable<Type> GetTypeImplementerMapping(out IEnumerable<ITypeContributor> contributors,
 																	  INamingScope namingScope)
 		{
 			var methodsToSkip = new List<MethodInfo>();
 			var proxyInstance = GetProxyInstanceContributor(methodsToSkip);
 			// TODO: the trick with methodsToSkip is not very nice...
-			var proxyTarget = new ClassProxyTargetContributor(targetType, methodsToSkip, namingScope) { Logger = Logger };
+			var proxyTarget = GetProxyTargetContributor(methodsToSkip, namingScope);
 			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
 
 			// Order of interface precedence:
