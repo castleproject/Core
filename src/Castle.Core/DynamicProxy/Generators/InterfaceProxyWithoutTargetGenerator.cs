@@ -18,12 +18,10 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 
 	using Castle.DynamicProxy.Contributors;
-	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Serialization;
 
-	internal class InterfaceProxyWithoutTargetGenerator : InterfaceProxyWithTargetGenerator
+	internal sealed class InterfaceProxyWithoutTargetGenerator : BaseInterfaceProxyGenerator
 	{
 		public InterfaceProxyWithoutTargetGenerator(ModuleScope scope, Type targetType, Type[] interfaces,
 		                                            Type proxyTargetType, ProxyGenerationOptions options)
@@ -31,75 +29,24 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
-		protected override string GeneratorType
+		protected override bool AllowChangeTarget => false;
+
+		protected override string GeneratorType => ProxyTypeConstants.InterfaceWithoutTarget;
+
+		protected override CompositeTypeContributor GetProxyTargetContributor(Type proxyTargetType, INamingScope namingScope)
 		{
-			get { return ProxyTypeConstants.InterfaceWithoutTarget; }
+			return new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance) { Logger = Logger };
 		}
 
-		protected override ITypeContributor AddMappingForTargetType(
-			IDictionary<Type, ITypeContributor> interfaceTypeImplementerMapping, Type proxyTargetType,
-			ICollection<Type> targetInterfaces, INamingScope namingScope)
+		protected override void AddMappingForAdditionalInterfaces(CompositeTypeContributor contributor, Type[] proxiedInterfaces,
+		                                                          IDictionary<Type, ITypeContributor> typeImplementerMapping,
+		                                                          ICollection<Type> targetInterfaces)
 		{
-			var contributor = new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance)
-			{ Logger = Logger };
-			foreach (var @interface in targetType.GetAllInterfaces())
-			{
-				contributor.AddInterfaceToProxy(@interface);
-				AddMappingNoCheck(@interface, contributor, interfaceTypeImplementerMapping);
-			}
-			return contributor;
 		}
 
-		protected override Type GenerateType(string typeName, INamingScope namingScope)
+		protected override IEnumerable<Type> GetTypeImplementerMapping(Type _, out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
 		{
-			IEnumerable<ITypeContributor> contributors;
-			var allInterfaces = GetTypeImplementerMapping(targetType, out contributors, namingScope);
-			var model = new MetaType();
-			// collect elements
-			foreach (var contributor in contributors)
-			{
-				contributor.CollectElementsToProxy(ProxyGenerationOptions.Hook, model);
-			}
-
-			ProxyGenerationOptions.Hook.MethodsInspected();
-
-			ClassEmitter emitter;
-			FieldReference interceptorsField;
-			var baseType = Init(typeName, out emitter, proxyTargetType, out interceptorsField, allInterfaces);
-
-			// Constructor
-
-			var cctor = GenerateStaticConstructor(emitter);
-			var mixinFieldsList = new List<FieldReference>();
-
-			foreach (var contributor in contributors)
-			{
-				contributor.Generate(emitter);
-
-				// TODO: redo it
-				if (contributor is MixinContributor)
-				{
-					mixinFieldsList.AddRange((contributor as MixinContributor).Fields);
-				}
-			}
-
-			var ctorArguments = new List<FieldReference>(mixinFieldsList) { interceptorsField, targetField };
-			var selector = emitter.GetField("__selector");
-			if (selector != null)
-			{
-				ctorArguments.Add(selector);
-			}
-
-			GenerateConstructors(emitter, baseType, ctorArguments.ToArray());
-
-			// Complete type initializer code body
-			CompleteInitCacheMethod(cctor.CodeBuilder);
-
-			// Crosses fingers and build type
-			var generatedType = emitter.BuildType();
-
-			InitializeStaticFields(generatedType);
-			return generatedType;
+			return base.GetTypeImplementerMapping(proxyTargetType: targetType, out contributors, namingScope);
 		}
 	}
 }

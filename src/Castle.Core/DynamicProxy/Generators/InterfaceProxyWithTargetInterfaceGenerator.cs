@@ -24,7 +24,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Serialization;
 
-	internal class InterfaceProxyWithTargetInterfaceGenerator : InterfaceProxyWithTargetGenerator
+	internal sealed class InterfaceProxyWithTargetInterfaceGenerator : BaseInterfaceProxyGenerator
 	{
 		public InterfaceProxyWithTargetInterfaceGenerator(ModuleScope scope, Type targetType, Type[] interfaces,
 		                                                  Type proxyTargetType, ProxyGenerationOptions options)
@@ -32,31 +32,19 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
-		protected override bool AllowChangeTarget
+		protected override bool AllowChangeTarget => true;
+
+		protected override string GeneratorType => ProxyTypeConstants.InterfaceWithTargetInterface;
+
+		protected override CompositeTypeContributor GetProxyTargetContributor(Type proxyTargetType, INamingScope namingScope)
 		{
-			get { return true; }
+			return new InterfaceProxyWithTargetInterfaceTargetContributor(proxyTargetType, AllowChangeTarget, namingScope) { Logger = Logger };
 		}
 
-		protected override string GeneratorType
+		protected override void AddMappingForAdditionalInterfaces(CompositeTypeContributor contributor, Type[] proxiedInterfaces,
+		                                                          IDictionary<Type, ITypeContributor> typeImplementerMapping,
+		                                                          ICollection<Type> targetInterfaces)
 		{
-			get { return ProxyTypeConstants.InterfaceWithTargetInterface; }
-		}
-
-		protected override ITypeContributor AddMappingForTargetType(
-			IDictionary<Type, ITypeContributor> typeImplementerMapping, Type proxyTargetType, ICollection<Type> targetInterfaces,
-			INamingScope namingScope)
-		{
-			var contributor = new InterfaceProxyWithTargetInterfaceTargetContributor(
-				proxyTargetType,
-				AllowChangeTarget,
-				namingScope) { Logger = Logger };
-			foreach (var @interface in targetType.GetAllInterfaces())
-			{
-				contributor.AddInterfaceToProxy(@interface);
-				AddMappingNoCheck(@interface, contributor, typeImplementerMapping);
-			}
-
-			return contributor;
 		}
 
 		protected override InterfaceProxyWithoutTargetContributor GetContributorForAdditionalInterfaces(

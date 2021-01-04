@@ -141,7 +141,7 @@ namespace Castle.DynamicProxy.Serialization
 			var @interface = DeserializeTypeFromString("__theInterface");
 			var targetType = DeserializeTypeFromString("__targetFieldType");
 
-			InterfaceProxyWithTargetGenerator generator;
+			BaseInterfaceProxyGenerator generator;
 			if (generatorType == ProxyTypeConstants.InterfaceWithTarget)
 			{
 				generator = new InterfaceProxyWithTargetGenerator(scope, @interface, interfaces, targetType, proxyGenerationOptions);
