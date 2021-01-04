@@ -40,6 +40,12 @@ namespace Castle.DynamicProxy.Generators
 			return new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance) { Logger = Logger };
 		}
 
+		private void AddMappingForAdditionalInterfaces(CompositeTypeContributor contributor, Type[] proxiedInterfaces,
+		                                               IDictionary<Type, ITypeContributor> typeImplementerMapping,
+		                                               ICollection<Type> targetInterfaces)
+		{
+		}
+
 		protected override ITypeContributor AddMappingForTargetType(
 			IDictionary<Type, ITypeContributor> interfaceTypeImplementerMapping, Type proxyTargetType,
 			ICollection<Type> targetInterfaces, INamingScope namingScope)
@@ -51,6 +57,8 @@ namespace Castle.DynamicProxy.Generators
 				contributor.AddInterfaceToProxy(@interface);
 				AddMappingNoCheck(@interface, contributor, interfaceTypeImplementerMapping);
 			}
+
+			AddMappingForAdditionalInterfaces(contributor, proxiedInterfaces, interfaceTypeImplementerMapping, targetInterfaces);
 			return contributor;
 		}
 

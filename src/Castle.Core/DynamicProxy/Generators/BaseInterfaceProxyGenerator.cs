@@ -49,6 +49,22 @@ namespace Castle.DynamicProxy.Generators
 
 		protected abstract CompositeTypeContributor GetProxyTargetContributor(Type proxyTargetType, INamingScope namingScope);
 
+		private void AddMappingForAdditionalInterfaces(CompositeTypeContributor contributor, Type[] proxiedInterfaces,
+		                                               IDictionary<Type, ITypeContributor> typeImplementerMapping,
+		                                               ICollection<Type> targetInterfaces)
+		{
+			foreach (var @interface in interfaces)
+			{
+				if (!ImplementedByTarget(targetInterfaces, @interface) || proxiedInterfaces.Contains(@interface))
+				{
+					continue;
+				}
+
+				contributor.AddInterfaceToProxy(@interface);
+				AddMappingNoCheck(@interface, contributor, typeImplementerMapping);
+			}
+		}
+
 		protected virtual ITypeContributor AddMappingForTargetType(IDictionary<Type, ITypeContributor> typeImplementerMapping,
 		                                                           Type proxyTargetType, ICollection<Type> targetInterfaces,
 		                                                           INamingScope namingScope)
@@ -61,16 +77,7 @@ namespace Castle.DynamicProxy.Generators
 				AddMappingNoCheck(@interface, contributor, typeImplementerMapping);
 			}
 
-			foreach (var @interface in interfaces)
-			{
-				if (!ImplementedByTarget(targetInterfaces, @interface) || proxiedInterfaces.Contains(@interface))
-				{
-					continue;
-				}
-
-				contributor.AddInterfaceToProxy(@interface);
-				AddMappingNoCheck(@interface, contributor, typeImplementerMapping);
-			}
+			AddMappingForAdditionalInterfaces(contributor, proxiedInterfaces, typeImplementerMapping, targetInterfaces);
 			return contributor;
 		}
 
