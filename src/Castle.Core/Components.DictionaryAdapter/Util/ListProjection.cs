@@ -45,7 +45,7 @@ namespace Castle.Components.DictionaryAdapter
 		public ListProjection(ICollectionAdapter<T> adapter)
 		{
 			if (adapter == null)
-				throw new ArgumentNullException("adapter");
+				throw new ArgumentNullException(nameof(adapter));
 
 			this.adapter = adapter;
 			adapter.Initialize(this);
@@ -262,11 +262,11 @@ namespace Castle.Components.DictionaryAdapter
 		public void Insert(int index, T item)
 		{
 			if (index < 0)
-				throw new ArgumentOutOfRangeException("index");
+				throw new ArgumentOutOfRangeException(nameof(index));
 
 			var count = Count;
 			if (index > count)
-				throw new ArgumentOutOfRangeException("index");
+				throw new ArgumentOutOfRangeException(nameof(index));
 
 			EndNew(addNewIndex);
 			if (index == count)

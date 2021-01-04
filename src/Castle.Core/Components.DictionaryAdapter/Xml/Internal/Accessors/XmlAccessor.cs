@@ -28,9 +28,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		protected XmlAccessor(Type clrType, IXmlContext context)
 		{
 			if (clrType == null)
-				throw Error.ArgumentNull("clrType");
+				throw Error.ArgumentNull(nameof(clrType));
 			if (context == null)
-				throw Error.ArgumentNull("context");
+				throw Error.ArgumentNull(nameof(context));
 
 			clrType         = clrType.NonNullable();
 			this.clrType    = clrType;
@@ -121,7 +121,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private void SetContext(IXmlContext value)
 		{
 			if (null == value)
-				throw Error.ArgumentNull("value");
+				throw Error.ArgumentNull(nameof(value));
 
 			context = value;
 		}

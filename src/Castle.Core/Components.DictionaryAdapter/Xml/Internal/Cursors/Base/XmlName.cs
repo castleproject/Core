@@ -82,7 +82,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public static XmlName ParseQName(string text)
 		{
 			if (text == null)
-				throw Error.ArgumentNull("text");
+				throw Error.ArgumentNull(nameof(text));
 
 			var index = text.IndexOf(':');
 			if (index == -1)

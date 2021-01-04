@@ -23,7 +23,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public static XPathNavigator CreateNavigatorSafe(this IXPathNavigable source)
 		{
             if (source == null)
-                throw Error.ArgumentNull("source");
+                throw Error.ArgumentNull(nameof(source));
 			return source.CreateNavigator();
 		}
 

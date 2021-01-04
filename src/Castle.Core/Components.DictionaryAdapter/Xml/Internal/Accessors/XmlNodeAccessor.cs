@@ -32,7 +32,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			: base(type, context)
 		{
 			if (name == null)
-				throw Error.ArgumentNull("name");
+				throw Error.ArgumentNull(nameof(name));
 			if (name == string.Empty)
 				throw Error.InvalidLocalName();
 

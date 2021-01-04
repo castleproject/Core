@@ -32,7 +32,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			if ((flags & ~(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) != 0)
 			{
-				throw new ArgumentException("MethodFinder only supports the Public, NonPublic, and Instance binding flags.", "flags");
+				throw new ArgumentException("MethodFinder only supports the Public, NonPublic, and Instance binding flags.", nameof(flags));
 			}
 
 			MethodInfo[] methodsInCache;
@@ -59,7 +59,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			if ((visibilityFlags & ~(BindingFlags.Public | BindingFlags.NonPublic)) != 0)
 			{
-				throw new ArgumentException("Only supports BindingFlags.Public and NonPublic.", "visibilityFlags");
+				throw new ArgumentException("Only supports BindingFlags.Public and NonPublic.", nameof(visibilityFlags));
 			}
 
 			var includePublic = (visibilityFlags & BindingFlags.Public) == BindingFlags.Public;

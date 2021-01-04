@@ -37,7 +37,7 @@ namespace Castle.DynamicProxy.Generators
 		                                      Type proxyTargetType, ProxyGenerationOptions options)
 			: base(scope, targetType, interfaces, options)
 		{
-			CheckNotGenericTypeDefinition(proxyTargetType, "proxyTargetType");
+			CheckNotGenericTypeDefinition(proxyTargetType, nameof(proxyTargetType));
 			EnsureValidBaseType(ProxyGenerationOptions.BaseTypeForInterfaceProxy);
 
 			this.proxyTargetType = proxyTargetType;

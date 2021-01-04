@@ -24,7 +24,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XmlContext(XmlMetadata metadata)
 		{
 			if (metadata == null)
-				throw Error.ArgumentNull("metadata");
+				throw Error.ArgumentNull(nameof(metadata));
 
 			this.metadata = metadata;
 		}

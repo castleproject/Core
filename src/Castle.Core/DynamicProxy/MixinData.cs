@@ -90,7 +90,7 @@ namespace Castle.DynamicProxy
 									"The list of mixins already contains a mixin for delegate type '{0}'.",
 									inter.FullName);
 							}
-							throw new ArgumentException(message, "mixinInstances");
+							throw new ArgumentException(message, nameof(mixinInstances));
 						}
 						interface2Mixin[inter] = target;
 					}

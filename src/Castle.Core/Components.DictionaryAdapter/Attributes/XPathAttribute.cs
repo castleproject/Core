@@ -25,7 +25,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XPathAttribute(string path)
 		{
 			if (path == null)
-				throw Error.ArgumentNull("path");
+				throw Error.ArgumentNull(nameof(path));
 
 			this.getPath = XPathCompiler.Compile(path);
 			this.setPath = this.getPath;
@@ -34,9 +34,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XPathAttribute(string get, string set)
 		{
 			if (get == null)
-				throw Error.ArgumentNull("get");
+				throw Error.ArgumentNull(nameof(get));
 			if (set == null)
-				throw Error.ArgumentNull("set");
+				throw Error.ArgumentNull(nameof(set));
 
 			this.getPath = XPathCompiler.Compile(get);
 			this.setPath = XPathCompiler.Compile(set);

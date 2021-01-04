@@ -25,7 +25,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			: base(namespaces, parent)
 		{
 			if (null == parent)
-				throw Error.ArgumentNull("parent");
+				throw Error.ArgumentNull(nameof(parent));
 
 			var source = parent.RequireRealizable<XmlNode>();
 			if (source.IsReal)

@@ -36,7 +36,7 @@ namespace Castle.Core
 		{
 			if (target == null)
 			{
-				throw new ArgumentNullException("target");
+				throw new ArgumentNullException(nameof(target));
 			}
 			Read(properties, target);
 		}

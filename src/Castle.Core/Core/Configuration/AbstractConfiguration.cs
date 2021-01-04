@@ -83,7 +83,7 @@ namespace Castle.Core.Configuration
 		{
 			if (type == null)
 			{
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 			}
 
 			try

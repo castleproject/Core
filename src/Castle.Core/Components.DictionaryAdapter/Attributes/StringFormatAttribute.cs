@@ -28,7 +28,7 @@ namespace Castle.Components.DictionaryAdapter
 		{
 			if (format == null)
 			{
-				throw new ArgumentNullException("format");
+				throw new ArgumentNullException(nameof(format));
 			}
 
 			Format = format;

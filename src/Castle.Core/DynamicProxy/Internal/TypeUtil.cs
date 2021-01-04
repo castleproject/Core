@@ -34,7 +34,7 @@ namespace Castle.DynamicProxy.Internal
 		{
 			if (type == null)
 			{
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 			}
 
 			if (type.IsClass == false)

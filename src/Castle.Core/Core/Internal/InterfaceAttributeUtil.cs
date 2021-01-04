@@ -46,7 +46,7 @@ namespace Castle.Core.Internal
 		public static object[] GetAttributes(Type type, bool inherit)
 		{
 			if (type.IsInterface == false)
-				throw new ArgumentOutOfRangeException("type");
+				throw new ArgumentOutOfRangeException(nameof(type));
 
 			var attributes = type.GetCustomAttributes(false).ToArray();
 			var baseTypes  = type.GetInterfaces();

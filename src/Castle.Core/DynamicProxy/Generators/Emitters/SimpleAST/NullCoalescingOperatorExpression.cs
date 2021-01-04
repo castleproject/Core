@@ -26,12 +26,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			if (expression == null)
 			{
-				throw new ArgumentNullException("expression");
+				throw new ArgumentNullException(nameof(expression));
 			}
 
 			if (@default == null)
 			{
-				throw new ArgumentNullException("default");
+				throw new ArgumentNullException(nameof(@default));
 			}
 
 			this.expression = expression;

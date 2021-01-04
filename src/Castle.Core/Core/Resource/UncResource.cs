@@ -69,11 +69,11 @@ namespace Castle.Core.Resource
 		private Stream CreateStreamFromUri(CustomUri resource, string rootPath)
 		{
 			if (resource == null)
-				throw new ArgumentNullException("resource");
+				throw new ArgumentNullException(nameof(resource));
 			if (!resource.IsUnc)
-				throw new ArgumentException("Resource must be an Unc", "resource");
+				throw new ArgumentException("Resource must be an Unc", nameof(resource));
 			if (!resource.IsFile)
-				throw new ArgumentException("The specified resource is not a file", "resource");
+				throw new ArgumentException("The specified resource is not a file", nameof(resource));
 
 			string resourcePath = resource.Path;
 

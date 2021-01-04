@@ -113,10 +113,10 @@ namespace Castle.Core.Smtp
 		/// <param name="messageText">message's body</param>
 		public void Send(string from, string to, string subject, string messageText)
 		{
-			if (from == null) throw new ArgumentNullException("from");
-			if (to == null) throw new ArgumentNullException("to");
-			if (subject == null) throw new ArgumentNullException("subject");
-			if (messageText == null) throw new ArgumentNullException("messageText");
+			if (from == null) throw new ArgumentNullException(nameof(from));
+			if (to == null) throw new ArgumentNullException(nameof(to));
+			if (subject == null) throw new ArgumentNullException(nameof(subject));
+			if (messageText == null) throw new ArgumentNullException(nameof(messageText));
 
 			Send(new MailMessage(from, to, subject, messageText));
 		}
@@ -133,7 +133,7 @@ namespace Castle.Core.Smtp
 
 		private void InternalSend(MailMessage message)
 		{
-			if (message == null) throw new ArgumentNullException("message");
+			if (message == null) throw new ArgumentNullException(nameof(message));
 
 			if (asyncSend)
 			{

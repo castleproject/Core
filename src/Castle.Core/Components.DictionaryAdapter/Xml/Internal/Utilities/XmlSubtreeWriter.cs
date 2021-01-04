@@ -34,7 +34,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
         public XmlSubtreeWriter(IXmlNode node)
         {
             if (node == null)
-                throw Error.ArgumentNull("node");
+                throw Error.ArgumentNull(nameof(node));
 
             this.node = node;
         }

@@ -47,7 +47,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XmlAdapter(XmlNode node)
 		{
 		    if (node == null)
-		        throw Error.ArgumentNull("node");
+		        throw Error.ArgumentNull(nameof(node));
 
 			this.source = node;
 			this.isRoot = true;
@@ -60,9 +60,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public XmlAdapter(IXmlNode node, XmlReferenceManager references)
 		{
 		    if (node == null)
-		        throw Error.ArgumentNull("node");
+		        throw Error.ArgumentNull(nameof(node));
 		    if (references == null)
-		        throw Error.ArgumentNull("references");
+		        throw Error.ArgumentNull(nameof(references));
 
 			this.node = node;
 			this.references = references;
@@ -455,22 +455,22 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			if (obj == null)
 				if (!required) return null;
-				else throw Error.ArgumentNull("obj");
+				else throw Error.ArgumentNull(nameof(obj));
 
 			var dictionaryAdapter = obj as IDictionaryAdapter;
 			if (dictionaryAdapter == null)
 				if (!required) return null;
-				else throw Error.NotDictionaryAdapter("obj");
+				else throw Error.NotDictionaryAdapter(nameof(obj));
 
 			var descriptor = dictionaryAdapter.This.Descriptor;
 			if (descriptor == null)
 				if (!required) return null;
-				else throw Error.NoInstanceDescriptor("obj");
+				else throw Error.NoInstanceDescriptor(nameof(obj));
 
 			var getters = descriptor.Getters;
 			if (getters == null)
 				if (!required) return null;
-				else throw Error.NoXmlAdapter("obj");
+				else throw Error.NoXmlAdapter(nameof(obj));
 
 			XmlAdapter xmlAdapter;
 			foreach (var getter in getters)
@@ -478,7 +478,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					return xmlAdapter;
 
 			if (!required) return null;
-			else throw Error.NoXmlAdapter("obj");
+			else throw Error.NoXmlAdapter(nameof(obj));
 		}
 
 		public static bool IsPropertyDefined(string propertyName, IDictionaryAdapter dictionaryAdapter)

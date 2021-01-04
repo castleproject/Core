@@ -28,11 +28,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			if (reference == null)
 			{
-				throw new ArgumentNullException("reference");
+				throw new ArgumentNullException(nameof(reference));
 			}
 			if (type == null)
 			{
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 			}
 			this.reference = reference;
 			this.type = type;

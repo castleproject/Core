@@ -30,11 +30,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			if (name == null)
 			{
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 			}
 			if (type == null)
 			{
-				throw new ArgumentNullException("type");
+				throw new ArgumentNullException(nameof(type));
 			}
 			this.typeEmitter = typeEmitter;
 			this.type = type;

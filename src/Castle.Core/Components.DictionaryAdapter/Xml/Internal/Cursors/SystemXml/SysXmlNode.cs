@@ -31,9 +31,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			: base(namespaces, null)
 		{
 			if (node == null)
-				throw Error.ArgumentNull("node");
+				throw Error.ArgumentNull(nameof(node));
 			if (type == null)
-				throw Error.ArgumentNull("type");
+				throw Error.ArgumentNull(nameof(type));
 
 			this.node = node;
 			this.type = type;

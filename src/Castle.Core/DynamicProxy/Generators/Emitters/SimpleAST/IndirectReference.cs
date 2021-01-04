@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			if (!byRefReference.Type.IsByRef)
 			{
-				throw new ArgumentException("Expected an IsByRef reference", "byRefReference");
+				throw new ArgumentException("Expected an IsByRef reference", nameof(byRefReference));
 			}
 		}
 

@@ -244,7 +244,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			if (fieldbuilder == null)
 			{
 				throw new ArgumentException(
-					"Invalid field reference.This reference does not point to field on type being generated", "field");
+					"Invalid field reference.This reference does not point to field on type being generated", nameof(field));
 			}
 			fieldbuilder.SetCustomAttribute(customAttributeInfo.Builder);
 		}

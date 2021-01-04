@@ -27,11 +27,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			if (method == null)
 			{
-				throw new ArgumentNullException("method");
+				throw new ArgumentNullException(nameof(method));
 			}
 			if (args == null)
 			{
-				throw new ArgumentNullException("args");
+				throw new ArgumentNullException(nameof(args));
 			}
 
 			cmethod = method;

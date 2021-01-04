@@ -110,9 +110,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public void Add(IXmlNode node, object keyValue, object newValue, bool isInGraph)
 		{
 			if (keyValue == null)
-				throw Error.ArgumentNull("keyValue");
+				throw Error.ArgumentNull(nameof(keyValue));
 			if (newValue == null)
-				throw Error.ArgumentNull("newValue");
+				throw Error.ArgumentNull(nameof(newValue));
 
             var type = newValue.GetComponentType();
 			if (ShouldExclude(type))

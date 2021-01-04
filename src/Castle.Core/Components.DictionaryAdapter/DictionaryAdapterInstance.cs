@@ -75,7 +75,7 @@ namespace Castle.Components.DictionaryAdapter
 		public void AddCopyStrategy(IDictionaryCopyStrategy copyStrategy)
 		{
 			if (copyStrategy == null)
-				throw new ArgumentNullException("copyStrategy");
+				throw new ArgumentNullException(nameof(copyStrategy));
 
 			if (copyStrategies == null)
 				copyStrategies = new List<IDictionaryCopyStrategy>();

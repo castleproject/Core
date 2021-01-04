@@ -28,11 +28,11 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			: base(path, namespaces, parent)
 		{
 			if (parent == null)
-				throw Error.ArgumentNull("parent");
+				throw Error.ArgumentNull(nameof(parent));
 			if (path == null)
-				throw Error.ArgumentNull("path");
+				throw Error.ArgumentNull(nameof(path));
 			if (includedTypes == null)
-				throw Error.ArgumentNull("includedTypes");
+				throw Error.ArgumentNull(nameof(includedTypes));
 
 			this.includedTypes = includedTypes;
 			this.flags         = flags;

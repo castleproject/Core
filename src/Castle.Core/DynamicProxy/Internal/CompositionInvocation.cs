@@ -51,7 +51,7 @@ namespace Castle.DynamicProxy.Internal
 		{
 			if (newTarget == null)
 			{
-				throw new ArgumentNullException("newTarget");
+				throw new ArgumentNullException(nameof(newTarget));
 			}
 
 			if (!ReferenceEquals(newTarget, proxyObject))
