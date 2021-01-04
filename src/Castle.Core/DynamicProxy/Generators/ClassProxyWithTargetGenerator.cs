@@ -37,6 +37,68 @@ namespace Castle.DynamicProxy.Generators
 			EnsureDoesNotImplementIProxyTargetAccessor(targetType, "targetType");
 		}
 
+		protected override CacheKey GetCacheKey()
+		{
+			return new CacheKey(targetType, targetType, interfaces, ProxyGenerationOptions);
+		}
+
+		protected override Type GenerateType(string name, INamingScope namingScope)
+		{
+			IEnumerable<ITypeContributor> contributors;
+			var allInterfaces = GetTypeImplementerMapping(out contributors, namingScope);
+
+			var model = new MetaType();
+			// Collect methods
+			foreach (var contributor in contributors)
+			{
+				contributor.CollectElementsToProxy(ProxyGenerationOptions.Hook, model);
+			}
+			ProxyGenerationOptions.Hook.MethodsInspected();
+
+			var emitter = BuildClassEmitter(name, targetType, allInterfaces);
+
+			CreateFields(emitter);
+			CreateTypeAttributes(emitter);
+
+			// Constructor
+			var cctor = GenerateStaticConstructor(emitter);
+
+			var targetField = CreateTargetField(emitter);
+			var constructorArguments = new List<FieldReference> { targetField };
+
+			foreach (var contributor in contributors)
+			{
+				contributor.Generate(emitter);
+
+				// TODO: redo it
+				if (contributor is MixinContributor)
+				{
+					constructorArguments.AddRange((contributor as MixinContributor).Fields);
+				}
+			}
+
+			// constructor arguments
+			var interceptorsField = emitter.GetField("__interceptors");
+			constructorArguments.Add(interceptorsField);
+			var selector = emitter.GetField("__selector");
+			if (selector != null)
+			{
+				constructorArguments.Add(selector);
+			}
+
+			GenerateConstructors(emitter, targetType, constructorArguments.ToArray());
+			GenerateParameterlessConstructor(emitter, targetType, interceptorsField);
+
+			// Complete type initializer code body
+			CompleteInitCacheMethod(cctor.CodeBuilder);
+
+			// Crosses fingers and build type
+
+			var proxyType = emitter.BuildType();
+			InitializeStaticFields(proxyType);
+			return proxyType;
+		}
+
 		protected virtual IEnumerable<Type> GetTypeImplementerMapping(out IEnumerable<ITypeContributor> contributors,
 		                                                              INamingScope namingScope)
 		{
@@ -150,68 +212,6 @@ namespace Castle.DynamicProxy.Generators
 					"Target type for the proxy implements {0} which is a DynamicProxy infrastructure interface and you should never implement it yourself. Are you trying to proxy an existing proxy?",
 					typeof(IProxyTargetAccessor));
 			throw new ArgumentException(message, name);
-		}
-
-		protected override CacheKey GetCacheKey()
-		{
-			return new CacheKey(targetType, targetType, interfaces, ProxyGenerationOptions);
-		}
-
-		protected override Type GenerateType(string name, INamingScope namingScope)
-		{
-			IEnumerable<ITypeContributor> contributors;
-			var allInterfaces = GetTypeImplementerMapping(out contributors, namingScope);
-
-			var model = new MetaType();
-			// Collect methods
-			foreach (var contributor in contributors)
-			{
-				contributor.CollectElementsToProxy(ProxyGenerationOptions.Hook, model);
-			}
-			ProxyGenerationOptions.Hook.MethodsInspected();
-
-			var emitter = BuildClassEmitter(name, targetType, allInterfaces);
-
-			CreateFields(emitter);
-			CreateTypeAttributes(emitter);
-
-			// Constructor
-			var cctor = GenerateStaticConstructor(emitter);
-
-			var targetField = CreateTargetField(emitter);
-			var constructorArguments = new List<FieldReference> { targetField };
-
-			foreach (var contributor in contributors)
-			{
-				contributor.Generate(emitter);
-
-				// TODO: redo it
-				if (contributor is MixinContributor)
-				{
-					constructorArguments.AddRange((contributor as MixinContributor).Fields);
-				}
-			}
-
-			// constructor arguments
-			var interceptorsField = emitter.GetField("__interceptors");
-			constructorArguments.Add(interceptorsField);
-			var selector = emitter.GetField("__selector");
-			if (selector != null)
-			{
-				constructorArguments.Add(selector);
-			}
-
-			GenerateConstructors(emitter, targetType, constructorArguments.ToArray());
-			GenerateParameterlessConstructor(emitter, targetType, interceptorsField);
-
-			// Complete type initializer code body
-			CompleteInitCacheMethod(cctor.CodeBuilder);
-
-			// Crosses fingers and build type
-
-			var proxyType = emitter.BuildType();
-			InitializeStaticFields(proxyType);
-			return proxyType;
 		}
 	}
 }
