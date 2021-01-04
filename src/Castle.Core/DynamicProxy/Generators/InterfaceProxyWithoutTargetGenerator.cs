@@ -46,10 +46,15 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
+		protected override IEnumerable<Type> GetTypeImplementerMapping(Type _, out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
+		{
+			return base.GetTypeImplementerMapping(proxyTargetType: targetType, out contributors, namingScope);
+		}
+
 		protected override Type GenerateType(string typeName, INamingScope namingScope)
 		{
 			IEnumerable<ITypeContributor> contributors;
-			var allInterfaces = GetTypeImplementerMapping(targetType, out contributors, namingScope);
+			var allInterfaces = GetTypeImplementerMapping(proxyTargetType, out contributors, namingScope);
 
 			var model = new MetaType();
 			// collect elements
