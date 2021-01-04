@@ -35,12 +35,16 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override string GeneratorType => ProxyTypeConstants.InterfaceWithoutTarget;
 
+		private InterfaceProxyWithoutTargetContributor GetProxyTargetContributor(Type proxyTargetType, INamingScope namingScope)
+		{
+			return new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance) { Logger = Logger };
+		}
+
 		protected override ITypeContributor AddMappingForTargetType(
 			IDictionary<Type, ITypeContributor> interfaceTypeImplementerMapping, Type proxyTargetType,
 			ICollection<Type> targetInterfaces, INamingScope namingScope)
 		{
-			var contributor = new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance)
-			{ Logger = Logger };
+			var contributor = GetProxyTargetContributor(proxyTargetType, namingScope);
 			var proxiedInterfaces = targetType.GetAllInterfaces();
 			foreach (var @interface in proxiedInterfaces)
 			{
