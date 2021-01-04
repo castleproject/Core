@@ -16,11 +16,17 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 
+	using Castle.DynamicProxy.Serialization;
+
 	internal sealed class InterfaceProxyWithTargetGenerator : BaseInterfaceProxyGenerator
 	{
 		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type targetType, Type[] interfaces,
 		                                         Type proxyTargetType, ProxyGenerationOptions options)
 			: base(scope, targetType, interfaces, proxyTargetType, options)
 		{ }
+
+		protected override bool AllowChangeTarget => false;
+
+		protected override string GeneratorType => ProxyTypeConstants.InterfaceWithTarget;
 	}
 }

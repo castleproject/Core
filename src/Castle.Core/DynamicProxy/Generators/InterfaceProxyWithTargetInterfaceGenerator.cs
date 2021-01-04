@@ -32,15 +32,9 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
-		protected override bool AllowChangeTarget
-		{
-			get { return true; }
-		}
+		protected override bool AllowChangeTarget => true;
 
-		protected override string GeneratorType
-		{
-			get { return ProxyTypeConstants.InterfaceWithTargetInterface; }
-		}
+		protected override string GeneratorType => ProxyTypeConstants.InterfaceWithTargetInterface;
 
 		protected override ITypeContributor AddMappingForTargetType(
 			IDictionary<Type, ITypeContributor> typeImplementerMapping, Type proxyTargetType, ICollection<Type> targetInterfaces,

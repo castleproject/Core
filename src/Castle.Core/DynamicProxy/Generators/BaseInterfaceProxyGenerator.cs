@@ -26,7 +26,6 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
-	using Castle.DynamicProxy.Serialization;
 
 	internal abstract class BaseInterfaceProxyGenerator : BaseProxyGenerator
 	{
@@ -44,15 +43,9 @@ namespace Castle.DynamicProxy.Generators
 			this.proxyTargetType = proxyTargetType;
 		}
 
-		protected virtual bool AllowChangeTarget
-		{
-			get { return false; }
-		}
+		protected abstract bool AllowChangeTarget { get; }
 
-		protected virtual string GeneratorType
-		{
-			get { return ProxyTypeConstants.InterfaceWithTarget; }
-		}
+		protected abstract string GeneratorType { get; }
 
 		protected virtual ITypeContributor AddMappingForTargetType(IDictionary<Type, ITypeContributor> typeImplementerMapping,
 		                                                           Type proxyTargetType, ICollection<Type> targetInterfaces,

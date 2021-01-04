@@ -31,10 +31,9 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
-		protected override string GeneratorType
-		{
-			get { return ProxyTypeConstants.InterfaceWithoutTarget; }
-		}
+		protected override bool AllowChangeTarget => false;
+
+		protected override string GeneratorType => ProxyTypeConstants.InterfaceWithoutTarget;
 
 		protected override ITypeContributor AddMappingForTargetType(
 			IDictionary<Type, ITypeContributor> interfaceTypeImplementerMapping, Type proxyTargetType,
