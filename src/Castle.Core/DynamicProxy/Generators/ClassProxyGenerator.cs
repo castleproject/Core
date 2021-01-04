@@ -65,8 +65,7 @@ namespace Castle.DynamicProxy.Generators
 				contributor.Generate(emitter);
 
 				// TODO: redo it
-				var mixinContributor = contributor as MixinContributor;
-				if (mixinContributor != null)
+				if (contributor is MixinContributor mixinContributor)
 				{
 					constructorArguments.AddRange(mixinContributor.Fields);
 				}
