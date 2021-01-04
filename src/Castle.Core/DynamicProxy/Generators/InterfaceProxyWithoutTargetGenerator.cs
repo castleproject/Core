@@ -18,9 +18,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 
 	using Castle.DynamicProxy.Contributors;
-	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Serialization;
 
 	internal sealed class InterfaceProxyWithoutTargetGenerator : BaseInterfaceProxyGenerator
@@ -49,60 +47,6 @@ namespace Castle.DynamicProxy.Generators
 		protected override IEnumerable<Type> GetTypeImplementerMapping(Type _, out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
 		{
 			return base.GetTypeImplementerMapping(proxyTargetType: targetType, out contributors, namingScope);
-		}
-
-		protected override Type GenerateType(string typeName, INamingScope namingScope)
-		{
-			IEnumerable<ITypeContributor> contributors;
-			var allInterfaces = GetTypeImplementerMapping(proxyTargetType, out contributors, namingScope);
-
-			var model = new MetaType();
-			// collect elements
-			foreach (var contributor in contributors)
-			{
-				contributor.CollectElementsToProxy(ProxyGenerationOptions.Hook, model);
-			}
-
-			ProxyGenerationOptions.Hook.MethodsInspected();
-
-			ClassEmitter emitter;
-			FieldReference interceptorsField;
-			var baseType = Init(typeName, out emitter, proxyTargetType, out interceptorsField, allInterfaces);
-
-			// Constructor
-
-			var cctor = GenerateStaticConstructor(emitter);
-			var ctorArguments = new List<FieldReference>();
-
-			foreach (var contributor in contributors)
-			{
-				contributor.Generate(emitter);
-
-				// TODO: redo it
-				if (contributor is MixinContributor)
-				{
-					ctorArguments.AddRange((contributor as MixinContributor).Fields);
-				}
-			}
-
-			ctorArguments.Add(interceptorsField);
-			ctorArguments.Add(targetField);
-			var selector = emitter.GetField("__selector");
-			if (selector != null)
-			{
-				ctorArguments.Add(selector);
-			}
-
-			GenerateConstructors(emitter, baseType, ctorArguments.ToArray());
-
-			// Complete type initializer code body
-			CompleteInitCacheMethod(cctor.CodeBuilder);
-
-			// Crosses fingers and build type
-			var generatedType = emitter.BuildType();
-
-			InitializeStaticFields(generatedType);
-			return generatedType;
 		}
 	}
 }
