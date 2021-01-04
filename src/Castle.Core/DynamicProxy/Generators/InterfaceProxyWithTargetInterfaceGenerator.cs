@@ -36,7 +36,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override string GeneratorType => ProxyTypeConstants.InterfaceWithTargetInterface;
 
-		private InterfaceProxyWithTargetInterfaceTargetContributor GetProxyTargetContributor(Type proxyTargetType, INamingScope namingScope)
+		protected override CompositeTypeContributor GetProxyTargetContributor(Type proxyTargetType, INamingScope namingScope)
 		{
 			return new InterfaceProxyWithTargetInterfaceTargetContributor(proxyTargetType, AllowChangeTarget, namingScope) { Logger = Logger };
 		}

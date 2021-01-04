@@ -47,10 +47,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected abstract string GeneratorType { get; }
 
-		private InterfaceProxyTargetContributor GetProxyTargetContributor(Type proxyTargetType, INamingScope namingScope)
-		{
-			return new InterfaceProxyTargetContributor(proxyTargetType, AllowChangeTarget, namingScope) { Logger = Logger };
-		}
+		protected abstract CompositeTypeContributor GetProxyTargetContributor(Type proxyTargetType, INamingScope namingScope);
 
 		protected virtual ITypeContributor AddMappingForTargetType(IDictionary<Type, ITypeContributor> typeImplementerMapping,
 		                                                           Type proxyTargetType, ICollection<Type> targetInterfaces,
