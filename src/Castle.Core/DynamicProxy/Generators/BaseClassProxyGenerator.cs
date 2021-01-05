@@ -33,9 +33,13 @@ namespace Castle.DynamicProxy.Generators
 
 		protected abstract FieldReference TargetField { get; }
 
-		protected abstract ProxyInstanceContributor GetProxyInstanceContributor(List<MethodInfo> methodsToSkip);
+#if FEATURE_SERIALIZATION
+		protected abstract SerializableContributor GetSerializableContributor(List<MethodInfo> methodsToSkip);
+#endif
 
 		protected abstract CompositeTypeContributor GetProxyTargetContributor(List<MethodInfo> methodsToSkip, INamingScope namingScope);
+
+		protected abstract ProxyTargetAccessorContributor GetProxyTargetAccessorContributor();
 
 		protected sealed override Type GenerateType(string name, INamingScope namingScope)
 		{
@@ -91,6 +95,10 @@ namespace Castle.DynamicProxy.Generators
 			// Complete type initializer code body
 			CompleteInitCacheMethod(cctor.CodeBuilder);
 
+			// non-inheritable attributes from proxied type
+			var nonInheritableAttributesContributor = new NonInheritableAttributesContributor(targetType);
+			nonInheritableAttributesContributor.Generate(emitter);
+
 			// Crosses fingers and build type
 
 			var proxyType = emitter.BuildType();
@@ -100,7 +108,7 @@ namespace Castle.DynamicProxy.Generators
 
 		private IEnumerable<Type> GetTypeImplementerMapping(out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
 		{
-			var contributorsList = new List<ITypeContributor>(capacity: 4);
+			var contributorsList = new List<ITypeContributor>(capacity: 5);
 			var methodsToSkip = new List<MethodInfo>();  // TODO: the trick with methodsToSkip is not very nice...
 			var targetInterfaces = targetType.GetAllInterfaces();
 			var typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
@@ -171,17 +179,21 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// 4. plus special interfaces
-			var instanceContributor = GetProxyInstanceContributor(methodsToSkip);
-			contributorsList.Add(instanceContributor);
+
 #if FEATURE_SERIALIZATION
 			if (targetType.IsSerializable)
 			{
-				AddMappingForISerializable(typeImplementerMapping, instanceContributor);
+				var serializableContributor = GetSerializableContributor(methodsToSkip);
+				contributorsList.Add(serializableContributor);
+				AddMappingForISerializable(typeImplementerMapping, serializableContributor);
 			}
 #endif
+
+			var proxyTargetAccessorContributor = GetProxyTargetAccessorContributor();
+			contributorsList.Add(proxyTargetAccessorContributor);
 			try
 			{
-				AddMappingNoCheck(typeof(IProxyTargetAccessor), instanceContributor, typeImplementerMapping);
+				AddMappingNoCheck(typeof(IProxyTargetAccessor), proxyTargetAccessorContributor, typeImplementerMapping);
 			}
 			catch (ArgumentException)
 			{

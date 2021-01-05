@@ -50,14 +50,23 @@ namespace Castle.DynamicProxy.Generators
 			CreateTargetField(emitter);
 		}
 
-		protected override ProxyInstanceContributor GetProxyInstanceContributor(List<MethodInfo> methodsToSkip)
+#if FEATURE_SERIALIZATION
+		protected override SerializableContributor GetSerializableContributor(List<MethodInfo> methodsToSkip)
 		{
-			return new ClassProxyWithTargetInstanceContributor(targetType, methodsToSkip, interfaces, ProxyTypeConstants.ClassWithTarget);
+			return new ClassProxySerializableContributor(targetType, methodsToSkip, interfaces, ProxyTypeConstants.ClassWithTarget);
 		}
+#endif
 
 		protected override CompositeTypeContributor GetProxyTargetContributor(List<MethodInfo> methodsToSkip, INamingScope namingScope)
 		{
 			return new ClassProxyWithTargetTargetContributor(targetType, methodsToSkip, namingScope) { Logger = Logger };
+		}
+
+		protected override ProxyTargetAccessorContributor GetProxyTargetAccessorContributor()
+		{
+			return new ProxyTargetAccessorContributor(
+				getTargetReference: () => targetField,
+				targetType);
 		}
 
 		private void CreateTargetField(ClassEmitter emitter)

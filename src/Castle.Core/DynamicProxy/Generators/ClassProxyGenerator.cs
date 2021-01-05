@@ -36,14 +36,23 @@ namespace Castle.DynamicProxy.Generators
 			return new CacheKey(targetType, interfaces, ProxyGenerationOptions);
 		}
 
-		protected override ProxyInstanceContributor GetProxyInstanceContributor(List<MethodInfo> methodsToSkip)
+#if FEATURE_SERIALIZATION
+		protected override SerializableContributor GetSerializableContributor(List<MethodInfo> methodsToSkip)
 		{
-			return new ClassProxyInstanceContributor(targetType, methodsToSkip, interfaces, ProxyTypeConstants.Class);
+			return new ClassProxySerializableContributor(targetType, methodsToSkip, interfaces, ProxyTypeConstants.Class);
 		}
+#endif
 
 		protected override CompositeTypeContributor GetProxyTargetContributor(List<MethodInfo> methodsToSkip, INamingScope namingScope)
 		{
 			return new ClassProxyTargetContributor(targetType, methodsToSkip, namingScope) { Logger = Logger };
+		}
+
+		protected override ProxyTargetAccessorContributor GetProxyTargetAccessorContributor()
+		{
+			return new ProxyTargetAccessorContributor(
+				getTargetReference: () => SelfReference.Self,
+				targetType);
 		}
 	}
 }

@@ -12,89 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_SERIALIZATION
+
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
-	using System.Reflection;
-#if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
-#endif
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Castle.DynamicProxy.Internal;
-#if FEATURE_SERIALIZATION
 	using Castle.DynamicProxy.Serialization;
-#endif
 	using Castle.DynamicProxy.Tokens;
 
-	internal abstract class ProxyInstanceContributor : ITypeContributor
+	internal abstract class SerializableContributor : ITypeContributor
 	{
 		protected readonly Type targetType;
 		private readonly string proxyTypeId;
 		private readonly Type[] interfaces;
 
-		protected ProxyInstanceContributor(Type targetType, Type[] interfaces, string proxyTypeId)
+		protected SerializableContributor(Type targetType, Type[] interfaces, string proxyTypeId)
 		{
 			this.targetType = targetType;
 			this.proxyTypeId = proxyTypeId;
 			this.interfaces = interfaces ?? Type.EmptyTypes;
 		}
 
-		protected abstract Reference GetTargetReference(ClassEmitter emitter);
-
-		private Expression GetTargetReferenceExpression(ClassEmitter emitter)
-		{
-			return GetTargetReference(emitter).ToExpression();
-		}
-
 		public virtual void Generate(ClassEmitter @class)
 		{
-			var interceptors = @class.GetField("__interceptors");
-#if FEATURE_SERIALIZATION
 			ImplementGetObjectData(@class);
-#endif
-			ImplementProxyTargetAccessor(@class, interceptors);
-			foreach (var attribute in targetType.GetNonInheritableAttributes())
-			{
-				@class.DefineCustomAttribute(attribute.Builder);
-			}
 		}
 
-		protected void ImplementProxyTargetAccessor(ClassEmitter emitter, FieldReference interceptorsField)
-		{
-			var dynProxyGetTarget = emitter.CreateMethod("DynProxyGetTarget", typeof(object));
-
-			dynProxyGetTarget.CodeBuilder.AddStatement(
-				new ReturnStatement(new ConvertExpression(typeof(object), targetType, GetTargetReferenceExpression(emitter))));
-
-			var dynProxySetTarget = emitter.CreateMethod("DynProxySetTarget", typeof(void), typeof(object));
-
-			// we can only change the target of the interface proxy
-			var targetField = GetTargetReference(emitter) as FieldReference;
-			if (targetField != null)
-			{
-				dynProxySetTarget.CodeBuilder.AddStatement(
-					new AssignStatement(targetField,
-						new ConvertExpression(targetField.Fieldbuilder.FieldType, dynProxySetTarget.Arguments[0].ToExpression())));
-			}
-			else
-			{
-				dynProxySetTarget.CodeBuilder.AddStatement(
-					new ThrowStatement(typeof(InvalidOperationException), "Cannot change the target of the class proxy."));
-			}
-
-			dynProxySetTarget.CodeBuilder.AddStatement(new ReturnStatement());
-
-			var getInterceptors = emitter.CreateMethod("GetInterceptors", typeof(IInterceptor[]));
-
-			getInterceptors.CodeBuilder.AddStatement(
-				new ReturnStatement(interceptorsField));
-		}
-
-#if FEATURE_SERIALIZATION
 		protected void ImplementGetObjectData(ClassEmitter emitter)
 		{
 			var getObjectData = emitter.CreateMethod("GetObjectData", typeof(void),
@@ -200,10 +149,11 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected abstract void CustomizeGetObjectData(AbstractCodeBuilder builder, ArgumentReference serializationInfo,
 		                                               ArgumentReference streamingContext, ClassEmitter emitter);
-#endif
 
 		public void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)
 		{
 		}
 	}
 }
+
+#endif

@@ -49,6 +49,8 @@ namespace Castle.DynamicProxy.Generators
 
 		protected abstract CompositeTypeContributor GetProxyTargetContributor(Type proxyTargetType, INamingScope namingScope);
 
+		protected abstract ProxyTargetAccessorContributor GetProxyTargetAccessorContributor();
+
 		protected abstract void AddMappingForAdditionalInterfaces(CompositeTypeContributor contributor, Type[] proxiedInterfaces,
 		                                                          IDictionary<Type, ITypeContributor> typeImplementerMapping,
 		                                                          ICollection<Type> targetInterfaces);
@@ -129,6 +131,10 @@ namespace Castle.DynamicProxy.Generators
 			// Complete type initializer code body
 			CompleteInitCacheMethod(cctor.CodeBuilder);
 
+			// non-inheritable attributes from proxied type
+			var nonInheritableAttributesContributor = new NonInheritableAttributesContributor(targetType);
+			nonInheritableAttributesContributor.Generate(emitter);
+
 			// Crosses fingers and build type
 			var generatedType = emitter.BuildType();
 
@@ -146,7 +152,7 @@ namespace Castle.DynamicProxy.Generators
 		                                                              out IEnumerable<ITypeContributor> contributors,
 		                                                              INamingScope namingScope)
 		{
-			var contributorsList = new List<ITypeContributor>(capacity: 4);
+			var contributorsList = new List<ITypeContributor>(capacity: 5);
 			var targetInterfaces = proxyTargetType.GetAllInterfaces();
 			var typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
 
@@ -208,14 +214,18 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// 4. plus special interfaces
-			var instanceContributor = new InterfaceProxyInstanceContributor(targetType, GeneratorType, interfaces);
-			contributorsList.Add(instanceContributor);
+
 #if FEATURE_SERIALIZATION
-			AddMappingForISerializable(typeImplementerMapping, instanceContributor);
+			var serializableContributor = new InterfaceProxySerializableContributor(targetType, GeneratorType, interfaces);
+			contributorsList.Add(serializableContributor);
+			AddMappingForISerializable(typeImplementerMapping, serializableContributor);
 #endif
+
+			var proxyTargetAccessorContributor = GetProxyTargetAccessorContributor();
+			contributorsList.Add(proxyTargetAccessorContributor);
 			try
 			{
-				AddMappingNoCheck(typeof(IProxyTargetAccessor), instanceContributor, typeImplementerMapping);
+				AddMappingNoCheck(typeof(IProxyTargetAccessor), proxyTargetAccessorContributor, typeImplementerMapping);
 			}
 			catch (ArgumentException)
 			{
