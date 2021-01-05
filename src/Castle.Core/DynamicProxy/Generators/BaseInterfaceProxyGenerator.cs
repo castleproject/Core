@@ -147,15 +147,16 @@ namespace Castle.DynamicProxy.Generators
 		                                                              INamingScope namingScope)
 		{
 			var contributorsList = new List<ITypeContributor>(capacity: 4);
+			var targetInterfaces = proxyTargetType.GetAllInterfaces();
 			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
-			var mixins = new MixinContributor(namingScope, AllowChangeTarget) { Logger = Logger };
+
 			// Order of interface precedence:
 			// 1. first target
-			var targetInterfaces = proxyTargetType.GetAllInterfaces();
 			var target = AddMappingForTargetType(typeImplementerMapping, proxyTargetType, targetInterfaces, namingScope);
 			contributorsList.Add(target);
 
 			// 2. then mixins
+			var mixins = new MixinContributor(namingScope, AllowChangeTarget) { Logger = Logger };
 			contributorsList.Add(mixins);
 			if (ProxyGenerationOptions.HasMixins)
 			{
@@ -183,8 +184,8 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 
-			var additionalInterfacesContributor = GetContributorForAdditionalInterfaces(namingScope);
 			// 3. then additional interfaces
+			var additionalInterfacesContributor = GetContributorForAdditionalInterfaces(namingScope);
 			contributorsList.Add(additionalInterfacesContributor);
 			foreach (var @interface in interfaces)
 			{

@@ -102,17 +102,17 @@ namespace Castle.DynamicProxy.Generators
 		{
 			var contributorsList = new List<ITypeContributor>(capacity: 4);
 			var methodsToSkip = new List<MethodInfo>();
-			var proxyInstance = GetProxyInstanceContributor(methodsToSkip);
 			// TODO: the trick with methodsToSkip is not very nice...
-			var proxyTarget = GetProxyTargetContributor(methodsToSkip, namingScope);
+			var targetInterfaces = targetType.GetAllInterfaces();
 			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
 
 			// Order of interface precedence:
+
 			// 1. first target
 			// target is not an interface so we do nothing
+			var proxyTarget = GetProxyTargetContributor(methodsToSkip, namingScope);
 			contributorsList.Add(proxyTarget);
 
-			var targetInterfaces = targetType.GetAllInterfaces();
 			// 2. then mixins
 			var mixins = new MixinContributor(namingScope, false) { Logger = Logger };
 			contributorsList.Add(mixins);
@@ -142,10 +142,11 @@ namespace Castle.DynamicProxy.Generators
 					}
 				}
 			}
+
+			// 3. then additional interfaces
 			var additionalInterfacesContributor = new InterfaceProxyWithoutTargetContributor(namingScope,
 			                                                                                 (c, m) => NullExpression.Instance)
 			{ Logger = Logger };
-			// 3. then additional interfaces
 			contributorsList.Add(additionalInterfacesContributor);
 			foreach (var @interface in interfaces)
 			{
@@ -166,7 +167,9 @@ namespace Castle.DynamicProxy.Generators
 					AddMapping(@interface, additionalInterfacesContributor, typeImplementerMapping);
 				}
 			}
+
 			// 4. plus special interfaces
+			var proxyInstance = GetProxyInstanceContributor(methodsToSkip);
 			contributorsList.Add(proxyInstance);
 #if FEATURE_SERIALIZATION
 			if (targetType.IsSerializable)
