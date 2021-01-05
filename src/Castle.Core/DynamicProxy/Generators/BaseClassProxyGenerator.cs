@@ -37,6 +37,8 @@ namespace Castle.DynamicProxy.Generators
 
 		protected abstract CompositeTypeContributor GetProxyTargetContributor(List<MethodInfo> methodsToSkip, INamingScope namingScope);
 
+		protected abstract ProxyTargetAccessorContributor GetProxyTargetAccessorContributor();
+
 		protected sealed override Type GenerateType(string name, INamingScope namingScope)
 		{
 			IEnumerable<ITypeContributor> contributors;
@@ -100,7 +102,7 @@ namespace Castle.DynamicProxy.Generators
 
 		private IEnumerable<Type> GetTypeImplementerMapping(out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
 		{
-			var contributorsList = new List<ITypeContributor>(capacity: 4);
+			var contributorsList = new List<ITypeContributor>(capacity: 5);
 			var methodsToSkip = new List<MethodInfo>();  // TODO: the trick with methodsToSkip is not very nice...
 			var targetInterfaces = targetType.GetAllInterfaces();
 			var typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
@@ -171,6 +173,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// 4. plus special interfaces
+
 			var instanceContributor = GetProxyInstanceContributor(methodsToSkip);
 			contributorsList.Add(instanceContributor);
 #if FEATURE_SERIALIZATION
@@ -179,9 +182,12 @@ namespace Castle.DynamicProxy.Generators
 				AddMappingForISerializable(typeImplementerMapping, instanceContributor);
 			}
 #endif
+
+			var proxyTargetAccessorContributor = GetProxyTargetAccessorContributor();
+			contributorsList.Add(proxyTargetAccessorContributor);
 			try
 			{
-				AddMappingNoCheck(typeof(IProxyTargetAccessor), instanceContributor, typeImplementerMapping);
+				AddMappingNoCheck(typeof(IProxyTargetAccessor), proxyTargetAccessorContributor, typeImplementerMapping);
 			}
 			catch (ArgumentException)
 			{

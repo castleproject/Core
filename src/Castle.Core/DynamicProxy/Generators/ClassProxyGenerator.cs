@@ -45,5 +45,12 @@ namespace Castle.DynamicProxy.Generators
 		{
 			return new ClassProxyTargetContributor(targetType, methodsToSkip, namingScope) { Logger = Logger };
 		}
+
+		protected override ProxyTargetAccessorContributor GetProxyTargetAccessorContributor()
+		{
+			return new ProxyTargetAccessorContributor(
+				getTargetReference: () => SelfReference.Self,
+				targetType);
+		}
 	}
 }

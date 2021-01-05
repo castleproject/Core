@@ -23,11 +23,6 @@ namespace Castle.DynamicProxy.Contributors
 
 	internal class InterfaceProxyInstanceContributor : ProxyInstanceContributor
 	{
-		protected override Reference GetTargetReference(ClassEmitter emitter)
-		{
-			return emitter.GetField("__target");
-		}
-
 		public InterfaceProxyInstanceContributor(Type targetType, string proxyGeneratorId, Type[] interfaces)
 			: base(targetType, interfaces, proxyGeneratorId)
 		{

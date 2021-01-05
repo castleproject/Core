@@ -52,12 +52,19 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override ProxyInstanceContributor GetProxyInstanceContributor(List<MethodInfo> methodsToSkip)
 		{
-			return new ClassProxyWithTargetInstanceContributor(targetType, methodsToSkip, interfaces, ProxyTypeConstants.ClassWithTarget);
+			return new ClassProxyInstanceContributor(targetType, methodsToSkip, interfaces, ProxyTypeConstants.ClassWithTarget);
 		}
 
 		protected override CompositeTypeContributor GetProxyTargetContributor(List<MethodInfo> methodsToSkip, INamingScope namingScope)
 		{
 			return new ClassProxyWithTargetTargetContributor(targetType, methodsToSkip, namingScope) { Logger = Logger };
+		}
+
+		protected override ProxyTargetAccessorContributor GetProxyTargetAccessorContributor()
+		{
+			return new ProxyTargetAccessorContributor(
+				getTargetReference: () => targetField,
+				targetType);
 		}
 
 		private void CreateTargetField(ClassEmitter emitter)

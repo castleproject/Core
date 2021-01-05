@@ -43,55 +43,15 @@ namespace Castle.DynamicProxy.Contributors
 			this.interfaces = interfaces ?? Type.EmptyTypes;
 		}
 
-		protected abstract Reference GetTargetReference(ClassEmitter emitter);
-
-		private Expression GetTargetReferenceExpression(ClassEmitter emitter)
-		{
-			return GetTargetReference(emitter).ToExpression();
-		}
-
 		public virtual void Generate(ClassEmitter @class)
 		{
-			var interceptors = @class.GetField("__interceptors");
 #if FEATURE_SERIALIZATION
 			ImplementGetObjectData(@class);
 #endif
-			ImplementProxyTargetAccessor(@class, interceptors);
 			foreach (var attribute in targetType.GetNonInheritableAttributes())
 			{
 				@class.DefineCustomAttribute(attribute.Builder);
 			}
-		}
-
-		protected void ImplementProxyTargetAccessor(ClassEmitter emitter, FieldReference interceptorsField)
-		{
-			var dynProxyGetTarget = emitter.CreateMethod("DynProxyGetTarget", typeof(object));
-
-			dynProxyGetTarget.CodeBuilder.AddStatement(
-				new ReturnStatement(new ConvertExpression(typeof(object), targetType, GetTargetReferenceExpression(emitter))));
-
-			var dynProxySetTarget = emitter.CreateMethod("DynProxySetTarget", typeof(void), typeof(object));
-
-			// we can only change the target of the interface proxy
-			var targetField = GetTargetReference(emitter) as FieldReference;
-			if (targetField != null)
-			{
-				dynProxySetTarget.CodeBuilder.AddStatement(
-					new AssignStatement(targetField,
-						new ConvertExpression(targetField.Fieldbuilder.FieldType, dynProxySetTarget.Arguments[0].ToExpression())));
-			}
-			else
-			{
-				dynProxySetTarget.CodeBuilder.AddStatement(
-					new ThrowStatement(typeof(InvalidOperationException), "Cannot change the target of the class proxy."));
-			}
-
-			dynProxySetTarget.CodeBuilder.AddStatement(new ReturnStatement());
-
-			var getInterceptors = emitter.CreateMethod("GetInterceptors", typeof(IInterceptor[]));
-
-			getInterceptors.CodeBuilder.AddStatement(
-				new ReturnStatement(interceptorsField));
 		}
 
 #if FEATURE_SERIALIZATION

@@ -49,14 +49,8 @@ namespace Castle.DynamicProxy.Contributors
 #endif
 		}
 
-		protected override Reference GetTargetReference(ClassEmitter emitter)
-		{
-			return SelfReference.Self;
-		}
-
 		public override void Generate(ClassEmitter @class)
 		{
-			var interceptors = @class.GetField("__interceptors");
 #if FEATURE_SERIALIZATION
 			if (implementISerializable)
 			{
@@ -64,7 +58,6 @@ namespace Castle.DynamicProxy.Contributors
 				Constructor(@class);
 			}
 #endif
-			ImplementProxyTargetAccessor(@class, interceptors);
 			foreach (var attribute in targetType.GetNonInheritableAttributes())
 			{
 				@class.DefineCustomAttribute(attribute.Builder);

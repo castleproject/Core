@@ -37,6 +37,13 @@ namespace Castle.DynamicProxy.Generators
 			return new InterfaceProxyTargetContributor(proxyTargetType, AllowChangeTarget, namingScope) { Logger = Logger };
 		}
 
+		protected override ProxyTargetAccessorContributor GetProxyTargetAccessorContributor()
+		{
+			return new ProxyTargetAccessorContributor(
+				getTargetReference: () => targetField,
+				proxyTargetType);
+		}
+
 		protected override void AddMappingForAdditionalInterfaces(CompositeTypeContributor contributor, Type[] proxiedInterfaces,
 		                                                          IDictionary<Type, ITypeContributor> typeImplementerMapping,
 		                                                          ICollection<Type> targetInterfaces)
