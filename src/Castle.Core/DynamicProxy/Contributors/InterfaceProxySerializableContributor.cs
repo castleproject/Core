@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_SERIALIZATION
+
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
@@ -21,14 +23,13 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
 
-	internal class InterfaceProxyInstanceContributor : ProxyInstanceContributor
+	internal class InterfaceProxySerializableContributor : SerializableContributor
 	{
-		public InterfaceProxyInstanceContributor(Type targetType, string proxyGeneratorId, Type[] interfaces)
+		public InterfaceProxySerializableContributor(Type targetType, string proxyGeneratorId, Type[] interfaces)
 			: base(targetType, interfaces, proxyGeneratorId)
 		{
 		}
 
-#if FEATURE_SERIALIZATION
 		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo,
 		                                               ArgumentReference streamingContext, ClassEmitter emitter)
 		{
@@ -47,6 +48,7 @@ namespace Castle.DynamicProxy.Contributors
 			                         	                               new ConstReference(targetType.AssemblyQualifiedName).
 			                         	                               	ToExpression())));
 		}
-#endif
 	}
 }
+
+#endif

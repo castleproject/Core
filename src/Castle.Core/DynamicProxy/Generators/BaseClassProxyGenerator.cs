@@ -33,7 +33,9 @@ namespace Castle.DynamicProxy.Generators
 
 		protected abstract FieldReference TargetField { get; }
 
-		protected abstract ProxyInstanceContributor GetProxyInstanceContributor(List<MethodInfo> methodsToSkip);
+#if FEATURE_SERIALIZATION
+		protected abstract SerializableContributor GetSerializableContributor(List<MethodInfo> methodsToSkip);
+#endif
 
 		protected abstract CompositeTypeContributor GetProxyTargetContributor(List<MethodInfo> methodsToSkip, INamingScope namingScope);
 
@@ -178,12 +180,12 @@ namespace Castle.DynamicProxy.Generators
 
 			// 4. plus special interfaces
 
-			var instanceContributor = GetProxyInstanceContributor(methodsToSkip);
-			contributorsList.Add(instanceContributor);
 #if FEATURE_SERIALIZATION
 			if (targetType.IsSerializable)
 			{
-				AddMappingForISerializable(typeImplementerMapping, instanceContributor);
+				var serializableContributor = GetSerializableContributor(methodsToSkip);
+				contributorsList.Add(serializableContributor);
+				AddMappingForISerializable(typeImplementerMapping, serializableContributor);
 			}
 #endif
 

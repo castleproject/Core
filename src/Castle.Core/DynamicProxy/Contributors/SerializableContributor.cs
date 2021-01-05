@@ -12,31 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_SERIALIZATION
+
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
-	using System.Reflection;
-#if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
-#endif
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Castle.DynamicProxy.Internal;
-#if FEATURE_SERIALIZATION
 	using Castle.DynamicProxy.Serialization;
-#endif
 	using Castle.DynamicProxy.Tokens;
 
-	internal abstract class ProxyInstanceContributor : ITypeContributor
+	internal abstract class SerializableContributor : ITypeContributor
 	{
 		protected readonly Type targetType;
 		private readonly string proxyTypeId;
 		private readonly Type[] interfaces;
 
-		protected ProxyInstanceContributor(Type targetType, Type[] interfaces, string proxyTypeId)
+		protected SerializableContributor(Type targetType, Type[] interfaces, string proxyTypeId)
 		{
 			this.targetType = targetType;
 			this.proxyTypeId = proxyTypeId;
@@ -45,12 +41,9 @@ namespace Castle.DynamicProxy.Contributors
 
 		public virtual void Generate(ClassEmitter @class)
 		{
-#if FEATURE_SERIALIZATION
 			ImplementGetObjectData(@class);
-#endif
 		}
 
-#if FEATURE_SERIALIZATION
 		protected void ImplementGetObjectData(ClassEmitter emitter)
 		{
 			var getObjectData = emitter.CreateMethod("GetObjectData", typeof(void),
@@ -156,10 +149,11 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected abstract void CustomizeGetObjectData(AbstractCodeBuilder builder, ArgumentReference serializationInfo,
 		                                               ArgumentReference streamingContext, ClassEmitter emitter);
-#endif
 
 		public void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)
 		{
 		}
 	}
 }
+
+#endif

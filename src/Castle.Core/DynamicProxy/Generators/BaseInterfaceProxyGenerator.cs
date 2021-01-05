@@ -215,10 +215,10 @@ namespace Castle.DynamicProxy.Generators
 
 			// 4. plus special interfaces
 
-			var instanceContributor = new InterfaceProxyInstanceContributor(targetType, GeneratorType, interfaces);
-			contributorsList.Add(instanceContributor);
 #if FEATURE_SERIALIZATION
-			AddMappingForISerializable(typeImplementerMapping, instanceContributor);
+			var serializableContributor = new InterfaceProxySerializableContributor(targetType, GeneratorType, interfaces);
+			contributorsList.Add(serializableContributor);
+			AddMappingForISerializable(typeImplementerMapping, serializableContributor);
 #endif
 
 			var proxyTargetAccessorContributor = GetProxyTargetAccessorContributor();

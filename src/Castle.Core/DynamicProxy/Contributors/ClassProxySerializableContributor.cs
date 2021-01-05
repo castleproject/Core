@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_SERIALIZATION
+
 namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
-#if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
-#endif
 
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
@@ -27,40 +27,33 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
-	internal class ClassProxyInstanceContributor : ProxyInstanceContributor
+	internal class ClassProxySerializableContributor : SerializableContributor
 	{
-#if FEATURE_SERIALIZATION
 		private readonly bool delegateToBaseGetObjectData;
 		private readonly bool implementISerializable;
 		private ConstructorInfo serializationConstructor;
 		private readonly IList<FieldReference> serializedFields = new List<FieldReference>();
-#endif
 
-		public ClassProxyInstanceContributor(Type targetType, IList<MethodInfo> methodsToSkip, Type[] interfaces,
+		public ClassProxySerializableContributor(Type targetType, IList<MethodInfo> methodsToSkip, Type[] interfaces,
 		                                     string typeId)
 			: base(targetType, interfaces, typeId)
 		{
-#if FEATURE_SERIALIZATION
 			if (targetType.IsSerializable)
 			{
 				implementISerializable = true;
 				delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType, methodsToSkip);
 			}
-#endif
 		}
 
 		public override void Generate(ClassEmitter @class)
 		{
-#if FEATURE_SERIALIZATION
 			if (implementISerializable)
 			{
 				ImplementGetObjectData(@class);
 				Constructor(@class);
 			}
-#endif
 		}
 
-#if FEATURE_SERIALIZATION
 		protected override void AddAddValueInvocation(ArgumentReference serializationInfo, MethodEmitter getObjectData,
 		                                              FieldReference field)
 		{
@@ -218,6 +211,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			return true;
 		}
-#endif
 	}
 }
+
+#endif
