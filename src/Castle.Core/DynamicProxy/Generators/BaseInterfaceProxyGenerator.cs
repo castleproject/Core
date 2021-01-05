@@ -148,18 +148,18 @@ namespace Castle.DynamicProxy.Generators
 		{
 			var contributorsList = new List<ITypeContributor>(capacity: 4);
 			var targetInterfaces = proxyTargetType.GetAllInterfaces();
-			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
+			var typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
 
 			// Order of interface precedence:
 			// 1. first target
-			var target = AddMappingForTargetType(typeImplementerMapping, proxyTargetType, targetInterfaces, namingScope);
-			contributorsList.Add(target);
+			var targetContributor = AddMappingForTargetType(typeImplementerMapping, proxyTargetType, targetInterfaces, namingScope);
+			contributorsList.Add(targetContributor);
 
 			// 2. then mixins
 			if (ProxyGenerationOptions.HasMixins)
 			{
-				var mixins = new MixinContributor(namingScope, AllowChangeTarget) { Logger = Logger };
-				contributorsList.Add(mixins);
+				var mixinContributor = new MixinContributor(namingScope, AllowChangeTarget) { Logger = Logger };
+				contributorsList.Add(mixinContributor);
 
 				foreach (var mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfaces)
 				{
@@ -169,17 +169,17 @@ namespace Castle.DynamicProxy.Generators
 						if (interfaces.Contains(mixinInterface))
 						{
 							// we intercept the interface, and forward calls to the target type
-							AddMapping(mixinInterface, target, typeImplementerMapping);
+							AddMapping(mixinInterface, targetContributor, typeImplementerMapping);
 						}
 						// we do not intercept the interface
-						mixins.AddEmptyInterface(mixinInterface);
+						mixinContributor.AddEmptyInterface(mixinInterface);
 					}
 					else
 					{
 						if (!typeImplementerMapping.ContainsKey(mixinInterface))
 						{
-							mixins.AddInterfaceToProxy(mixinInterface);
-							typeImplementerMapping.Add(mixinInterface, mixins);
+							mixinContributor.AddInterfaceToProxy(mixinInterface);
+							typeImplementerMapping.Add(mixinInterface, mixinContributor);
 						}
 					}
 				}
@@ -208,14 +208,14 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// 4. plus special interfaces
-			var instance = new InterfaceProxyInstanceContributor(targetType, GeneratorType, interfaces);
-			contributorsList.Add(instance);
+			var instanceContributor = new InterfaceProxyInstanceContributor(targetType, GeneratorType, interfaces);
+			contributorsList.Add(instanceContributor);
 #if FEATURE_SERIALIZATION
-			AddMappingForISerializable(typeImplementerMapping, instance);
+			AddMappingForISerializable(typeImplementerMapping, instanceContributor);
 #endif
 			try
 			{
-				AddMappingNoCheck(typeof(IProxyTargetAccessor), instance, typeImplementerMapping);
+				AddMappingNoCheck(typeof(IProxyTargetAccessor), instanceContributor, typeImplementerMapping);
 			}
 			catch (ArgumentException)
 			{

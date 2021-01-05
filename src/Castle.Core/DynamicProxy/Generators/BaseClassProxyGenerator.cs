@@ -101,23 +101,22 @@ namespace Castle.DynamicProxy.Generators
 		private IEnumerable<Type> GetTypeImplementerMapping(out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
 		{
 			var contributorsList = new List<ITypeContributor>(capacity: 4);
-			var methodsToSkip = new List<MethodInfo>();
-			// TODO: the trick with methodsToSkip is not very nice...
+			var methodsToSkip = new List<MethodInfo>();  // TODO: the trick with methodsToSkip is not very nice...
 			var targetInterfaces = targetType.GetAllInterfaces();
-			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
+			var typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
 
 			// Order of interface precedence:
 
 			// 1. first target
 			// target is not an interface so we do nothing
-			var proxyTarget = GetProxyTargetContributor(methodsToSkip, namingScope);
-			contributorsList.Add(proxyTarget);
+			var targetContributor = GetProxyTargetContributor(methodsToSkip, namingScope);
+			contributorsList.Add(targetContributor);
 
 			// 2. then mixins
 			if (ProxyGenerationOptions.HasMixins)
 			{
-				var mixins = new MixinContributor(namingScope, false) { Logger = Logger };
-				contributorsList.Add(mixins);
+				var mixinContributor = new MixinContributor(namingScope, false) { Logger = Logger };
+				contributorsList.Add(mixinContributor);
 
 				foreach (var mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfaces)
 				{
@@ -127,18 +126,18 @@ namespace Castle.DynamicProxy.Generators
 						if (interfaces.Contains(mixinInterface) &&
 							typeImplementerMapping.ContainsKey(mixinInterface) == false)
 						{
-							AddMappingNoCheck(mixinInterface, proxyTarget, typeImplementerMapping);
-							proxyTarget.AddInterfaceToProxy(mixinInterface);
+							AddMappingNoCheck(mixinInterface, targetContributor, typeImplementerMapping);
+							targetContributor.AddInterfaceToProxy(mixinInterface);
 						}
 						// we do not intercept the interface
-						mixins.AddEmptyInterface(mixinInterface);
+						mixinContributor.AddEmptyInterface(mixinInterface);
 					}
 					else
 					{
 						if (!typeImplementerMapping.ContainsKey(mixinInterface))
 						{
-							mixins.AddInterfaceToProxy(mixinInterface);
-							AddMappingNoCheck(mixinInterface, mixins, typeImplementerMapping);
+							mixinContributor.AddInterfaceToProxy(mixinInterface);
+							AddMappingNoCheck(mixinInterface, mixinContributor, typeImplementerMapping);
 						}
 					}
 				}
@@ -160,8 +159,8 @@ namespace Castle.DynamicProxy.Generators
 						}
 
 						// we intercept the interface, and forward calls to the target type
-						AddMappingNoCheck(@interface, proxyTarget, typeImplementerMapping);
-						proxyTarget.AddInterfaceToProxy(@interface);
+						AddMappingNoCheck(@interface, targetContributor, typeImplementerMapping);
+						targetContributor.AddInterfaceToProxy(@interface);
 					}
 					else if (ProxyGenerationOptions.MixinData.ContainsMixin(@interface) == false)
 					{
@@ -172,17 +171,17 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// 4. plus special interfaces
-			var proxyInstance = GetProxyInstanceContributor(methodsToSkip);
-			contributorsList.Add(proxyInstance);
+			var instanceContributor = GetProxyInstanceContributor(methodsToSkip);
+			contributorsList.Add(instanceContributor);
 #if FEATURE_SERIALIZATION
 			if (targetType.IsSerializable)
 			{
-				AddMappingForISerializable(typeImplementerMapping, proxyInstance);
+				AddMappingForISerializable(typeImplementerMapping, instanceContributor);
 			}
 #endif
 			try
 			{
-				AddMappingNoCheck(typeof(IProxyTargetAccessor), proxyInstance, typeImplementerMapping);
+				AddMappingNoCheck(typeof(IProxyTargetAccessor), instanceContributor, typeImplementerMapping);
 			}
 			catch (ArgumentException)
 			{
