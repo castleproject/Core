@@ -156,10 +156,11 @@ namespace Castle.DynamicProxy.Generators
 			contributorsList.Add(target);
 
 			// 2. then mixins
-			var mixins = new MixinContributor(namingScope, AllowChangeTarget) { Logger = Logger };
-			contributorsList.Add(mixins);
 			if (ProxyGenerationOptions.HasMixins)
 			{
+				var mixins = new MixinContributor(namingScope, AllowChangeTarget) { Logger = Logger };
+				contributorsList.Add(mixins);
+
 				foreach (var mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfaces)
 				{
 					if (targetInterfaces.Contains(mixinInterface))
@@ -185,21 +186,25 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// 3. then additional interfaces
-			var additionalInterfacesContributor = GetContributorForAdditionalInterfaces(namingScope);
-			contributorsList.Add(additionalInterfacesContributor);
-			foreach (var @interface in interfaces)
+			if (interfaces.Length > 0)
 			{
-				if (typeImplementerMapping.ContainsKey(@interface))
-				{
-					continue;
-				}
-				if (ProxyGenerationOptions.MixinData.ContainsMixin(@interface))
-				{
-					continue;
-				}
+				var additionalInterfacesContributor = GetContributorForAdditionalInterfaces(namingScope);
+				contributorsList.Add(additionalInterfacesContributor);
 
-				additionalInterfacesContributor.AddInterfaceToProxy(@interface);
-				AddMappingNoCheck(@interface, additionalInterfacesContributor, typeImplementerMapping);
+				foreach (var @interface in interfaces)
+				{
+					if (typeImplementerMapping.ContainsKey(@interface))
+					{
+						continue;
+					}
+					if (ProxyGenerationOptions.MixinData.ContainsMixin(@interface))
+					{
+						continue;
+					}
+
+					additionalInterfacesContributor.AddInterfaceToProxy(@interface);
+					AddMappingNoCheck(@interface, additionalInterfacesContributor, typeImplementerMapping);
+				}
 			}
 
 			// 4. plus special interfaces

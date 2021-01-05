@@ -114,10 +114,11 @@ namespace Castle.DynamicProxy.Generators
 			contributorsList.Add(proxyTarget);
 
 			// 2. then mixins
-			var mixins = new MixinContributor(namingScope, false) { Logger = Logger };
-			contributorsList.Add(mixins);
 			if (ProxyGenerationOptions.HasMixins)
 			{
+				var mixins = new MixinContributor(namingScope, false) { Logger = Logger };
+				contributorsList.Add(mixins);
+
 				foreach (var mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfaces)
 				{
 					if (targetInterfaces.Contains(mixinInterface))
@@ -144,27 +145,29 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// 3. then additional interfaces
-			var additionalInterfacesContributor = new InterfaceProxyWithoutTargetContributor(namingScope,
-			                                                                                 (c, m) => NullExpression.Instance)
-			{ Logger = Logger };
-			contributorsList.Add(additionalInterfacesContributor);
-			foreach (var @interface in interfaces)
+			if (interfaces.Length > 0)
 			{
-				if (targetInterfaces.Contains(@interface))
-				{
-					if (typeImplementerMapping.ContainsKey(@interface))
-					{
-						continue;
-					}
+				var additionalInterfacesContributor = new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance) { Logger = Logger };
+				contributorsList.Add(additionalInterfacesContributor);
 
-					// we intercept the interface, and forward calls to the target type
-					AddMappingNoCheck(@interface, proxyTarget, typeImplementerMapping);
-					proxyTarget.AddInterfaceToProxy(@interface);
-				}
-				else if (ProxyGenerationOptions.MixinData.ContainsMixin(@interface) == false)
+				foreach (var @interface in interfaces)
 				{
-					additionalInterfacesContributor.AddInterfaceToProxy(@interface);
-					AddMapping(@interface, additionalInterfacesContributor, typeImplementerMapping);
+					if (targetInterfaces.Contains(@interface))
+					{
+						if (typeImplementerMapping.ContainsKey(@interface))
+						{
+							continue;
+						}
+
+						// we intercept the interface, and forward calls to the target type
+						AddMappingNoCheck(@interface, proxyTarget, typeImplementerMapping);
+						proxyTarget.AddInterfaceToProxy(@interface);
+					}
+					else if (ProxyGenerationOptions.MixinData.ContainsMixin(@interface) == false)
+					{
+						additionalInterfacesContributor.AddInterfaceToProxy(@interface);
+						AddMapping(@interface, additionalInterfacesContributor, typeImplementerMapping);
+					}
 				}
 			}
 
