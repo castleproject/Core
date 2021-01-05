@@ -100,6 +100,7 @@ namespace Castle.DynamicProxy.Generators
 
 		private IEnumerable<Type> GetTypeImplementerMapping(out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
 		{
+			var contributorsList = new List<ITypeContributor>(capacity: 4);
 			var methodsToSkip = new List<MethodInfo>();
 			var proxyInstance = GetProxyInstanceContributor(methodsToSkip);
 			// TODO: the trick with methodsToSkip is not very nice...
@@ -109,10 +110,12 @@ namespace Castle.DynamicProxy.Generators
 			// Order of interface precedence:
 			// 1. first target
 			// target is not an interface so we do nothing
+			contributorsList.Add(proxyTarget);
 
 			var targetInterfaces = targetType.GetAllInterfaces();
 			// 2. then mixins
 			var mixins = new MixinContributor(namingScope, false) { Logger = Logger };
+			contributorsList.Add(mixins);
 			if (ProxyGenerationOptions.HasMixins)
 			{
 				foreach (var mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfaces)
@@ -143,6 +146,7 @@ namespace Castle.DynamicProxy.Generators
 			                                                                                 (c, m) => NullExpression.Instance)
 			{ Logger = Logger };
 			// 3. then additional interfaces
+			contributorsList.Add(additionalInterfacesContributor);
 			foreach (var @interface in interfaces)
 			{
 				if (targetInterfaces.Contains(@interface))
@@ -163,6 +167,7 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 			// 4. plus special interfaces
+			contributorsList.Add(proxyInstance);
 #if FEATURE_SERIALIZATION
 			if (targetType.IsSerializable)
 			{
@@ -178,13 +183,7 @@ namespace Castle.DynamicProxy.Generators
 				HandleExplicitlyPassedProxyTargetAccessor(targetInterfaces);
 			}
 
-			contributors = new List<ITypeContributor>
-			{
-				proxyTarget,
-				mixins,
-				additionalInterfacesContributor,
-				proxyInstance
-			};
+			contributors = contributorsList;
 			return typeImplementerMapping.Keys;
 		}
 

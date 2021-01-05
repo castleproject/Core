@@ -146,14 +146,17 @@ namespace Castle.DynamicProxy.Generators
 		                                                              out IEnumerable<ITypeContributor> contributors,
 		                                                              INamingScope namingScope)
 		{
+			var contributorsList = new List<ITypeContributor>(capacity: 4);
 			IDictionary<Type, ITypeContributor> typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
 			var mixins = new MixinContributor(namingScope, AllowChangeTarget) { Logger = Logger };
 			// Order of interface precedence:
 			// 1. first target
 			var targetInterfaces = proxyTargetType.GetAllInterfaces();
 			var target = AddMappingForTargetType(typeImplementerMapping, proxyTargetType, targetInterfaces, namingScope);
+			contributorsList.Add(target);
 
 			// 2. then mixins
+			contributorsList.Add(mixins);
 			if (ProxyGenerationOptions.HasMixins)
 			{
 				foreach (var mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfaces)
@@ -182,6 +185,7 @@ namespace Castle.DynamicProxy.Generators
 
 			var additionalInterfacesContributor = GetContributorForAdditionalInterfaces(namingScope);
 			// 3. then additional interfaces
+			contributorsList.Add(additionalInterfacesContributor);
 			foreach (var @interface in interfaces)
 			{
 				if (typeImplementerMapping.ContainsKey(@interface))
@@ -199,6 +203,7 @@ namespace Castle.DynamicProxy.Generators
 
 			// 4. plus special interfaces
 			var instance = new InterfaceProxyInstanceContributor(targetType, GeneratorType, interfaces);
+			contributorsList.Add(instance);
 #if FEATURE_SERIALIZATION
 			AddMappingForISerializable(typeImplementerMapping, instance);
 #endif
@@ -211,13 +216,7 @@ namespace Castle.DynamicProxy.Generators
 				HandleExplicitlyPassedProxyTargetAccessor(targetInterfaces);
 			}
 
-			contributors = new List<ITypeContributor>
-			{
-				target,
-				additionalInterfacesContributor,
-				mixins,
-				instance
-			};
+			contributors = contributorsList;
 			return typeImplementerMapping.Keys;
 		}
 
