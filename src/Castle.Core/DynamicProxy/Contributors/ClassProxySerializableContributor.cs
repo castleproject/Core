@@ -18,6 +18,7 @@ namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 
@@ -30,7 +31,6 @@ namespace Castle.DynamicProxy.Contributors
 	internal class ClassProxySerializableContributor : SerializableContributor
 	{
 		private readonly bool delegateToBaseGetObjectData;
-		private readonly bool implementISerializable;
 		private ConstructorInfo serializationConstructor;
 		private readonly IList<FieldReference> serializedFields = new List<FieldReference>();
 
@@ -38,20 +38,15 @@ namespace Castle.DynamicProxy.Contributors
 		                                     string typeId)
 			: base(targetType, interfaces, typeId)
 		{
-			if (targetType.IsSerializable)
-			{
-				implementISerializable = true;
-				delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType, methodsToSkip);
-			}
+			Debug.Assert(targetType.IsSerializable, "This contributor is intended for serializable types only.");
+
+			delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType, methodsToSkip);
 		}
 
 		public override void Generate(ClassEmitter @class)
 		{
-			if (implementISerializable)
-			{
-				ImplementGetObjectData(@class);
-				Constructor(@class);
-			}
+			ImplementGetObjectData(@class);
+			Constructor(@class);
 		}
 
 		protected override void AddAddValueInvocation(ArgumentReference serializationInfo, MethodEmitter getObjectData,
