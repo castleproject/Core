@@ -48,10 +48,6 @@ namespace Castle.DynamicProxy.Contributors
 #if FEATURE_SERIALIZATION
 			ImplementGetObjectData(@class);
 #endif
-			foreach (var attribute in targetType.GetNonInheritableAttributes())
-			{
-				@class.DefineCustomAttribute(attribute.Builder);
-			}
 		}
 
 #if FEATURE_SERIALIZATION

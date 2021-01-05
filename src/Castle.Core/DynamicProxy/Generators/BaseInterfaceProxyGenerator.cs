@@ -131,6 +131,10 @@ namespace Castle.DynamicProxy.Generators
 			// Complete type initializer code body
 			CompleteInitCacheMethod(cctor.CodeBuilder);
 
+			// non-inheritable attributes from proxied type
+			var nonInheritableAttributesContributor = new NonInheritableAttributesContributor(targetType);
+			nonInheritableAttributesContributor.Generate(emitter);
+
 			// Crosses fingers and build type
 			var generatedType = emitter.BuildType();
 
