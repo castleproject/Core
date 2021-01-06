@@ -19,9 +19,11 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 
+	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
@@ -30,17 +32,19 @@ namespace Castle.DynamicProxy.Contributors
 
 	internal class ClassProxySerializableContributor : SerializableContributor
 	{
-		private readonly bool delegateToBaseGetObjectData;
+		private bool delegateToBaseGetObjectData;
 		private ConstructorInfo serializationConstructor;
 		private readonly IList<FieldReference> serializedFields = new List<FieldReference>();
 
-		public ClassProxySerializableContributor(Type targetType, IList<MethodInfo> methodsToSkip, Type[] interfaces,
-		                                     string typeId)
+		public ClassProxySerializableContributor(Type targetType, Type[] interfaces, string typeId)
 			: base(targetType, interfaces, typeId)
 		{
 			Debug.Assert(targetType.IsSerializable, "This contributor is intended for serializable types only.");
+		}
 
-			delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType, methodsToSkip);
+		public override void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)
+		{
+			delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType, model);
 		}
 
 		public override void Generate(ClassEmitter @class)
@@ -157,7 +161,7 @@ namespace Castle.DynamicProxy.Contributors
 			ctor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		private bool VerifyIfBaseImplementsGetObjectData(Type baseType, IList<MethodInfo> methodsToSkip)
+		private bool VerifyIfBaseImplementsGetObjectData(Type baseType, MetaType model)
 		{
 			if (!typeof(ISerializable).IsAssignableFrom(baseType))
 			{
@@ -187,7 +191,11 @@ namespace Castle.DynamicProxy.Contributors
 				throw new ArgumentException(message);
 			}
 
-			methodsToSkip.Add(getObjectDataMethod);
+			var getObjectData = model.Methods.FirstOrDefault(m => m.Method == getObjectDataMethod);
+			if (getObjectData != null && getObjectData.Proxyable)
+			{
+				getObjectData.Ignore = true;
+			}
 
 			serializationConstructor = baseType.GetConstructor(
 				BindingFlags.Instance | BindingFlags.Public |

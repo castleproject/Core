@@ -52,6 +52,8 @@ namespace Castle.DynamicProxy.Generators
 			get { return name; }
 		}
 
+		public bool Ignore { get; internal set; }
+
 		public bool Proxyable { get; private set; }
 
 		public bool Standalone { get; private set; }

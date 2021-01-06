@@ -34,10 +34,10 @@ namespace Castle.DynamicProxy.Generators
 		protected abstract FieldReference TargetField { get; }
 
 #if FEATURE_SERIALIZATION
-		protected abstract SerializableContributor GetSerializableContributor(List<MethodInfo> methodsToSkip);
+		protected abstract SerializableContributor GetSerializableContributor();
 #endif
 
-		protected abstract CompositeTypeContributor GetProxyTargetContributor(List<MethodInfo> methodsToSkip, INamingScope namingScope);
+		protected abstract CompositeTypeContributor GetProxyTargetContributor(INamingScope namingScope);
 
 		protected abstract ProxyTargetAccessorContributor GetProxyTargetAccessorContributor();
 
@@ -109,7 +109,6 @@ namespace Castle.DynamicProxy.Generators
 		private IEnumerable<Type> GetTypeImplementerMapping(out IEnumerable<ITypeContributor> contributors, INamingScope namingScope)
 		{
 			var contributorsList = new List<ITypeContributor>(capacity: 5);
-			var methodsToSkip = new List<MethodInfo>();  // TODO: the trick with methodsToSkip is not very nice...
 			var targetInterfaces = targetType.GetAllInterfaces();
 			var typeImplementerMapping = new Dictionary<Type, ITypeContributor>();
 
@@ -117,7 +116,7 @@ namespace Castle.DynamicProxy.Generators
 
 			// 1. first target
 			// target is not an interface so we do nothing
-			var targetContributor = GetProxyTargetContributor(methodsToSkip, namingScope);
+			var targetContributor = GetProxyTargetContributor(namingScope);
 			contributorsList.Add(targetContributor);
 
 			// 2. then mixins
@@ -183,7 +182,7 @@ namespace Castle.DynamicProxy.Generators
 #if FEATURE_SERIALIZATION
 			if (targetType.IsSerializable)
 			{
-				var serializableContributor = GetSerializableContributor(methodsToSkip);
+				var serializableContributor = GetSerializableContributor();
 				contributorsList.Add(serializableContributor);
 				AddMappingForISerializable(typeImplementerMapping, serializableContributor);
 			}
