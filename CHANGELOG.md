@@ -15,6 +15,7 @@ Deprecations:
  - The following public members have been removed:
     - `Castle.Core.Internal.Lock` (class) along with all related types and methods
     - `Castle.Core.Internal.PermissionUtil.IsGranted` (method)
+    - `Castle.Core.Pair<,>` (type). Use `System.ValueTuple<,>` or `System.Tuple<,>` instead.
     - all type members in `Castle.DynamicProxy.ModuleScope` that gave direct access to DynamicProxy's type cache and `ModuleBuilder`s. Only `SaveAssembly`, `LoadAssemblyIntoCache`, and members supporting these two facilities are left public.
     - almost all types and type members in the `Castle.DynamicProxy.*` sub-namespaces, as most of them are intended for internal use only.
     - DynamicProxy's custom exception types have been replaced by standard BCL exceptions (where appropriate), and by a single `DynamicProxyException` type for internal DynamicProxy errors.
