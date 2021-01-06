@@ -44,7 +44,37 @@ namespace Castle.DynamicProxy.Contributors
 
 		public override void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)
 		{
-			delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType, model);
+			delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType, model, out var getObjectData);
+
+			// This contributor is going to add a `GetObjectData` method to the proxy type.
+			// If a method with the same name and signature exists in the proxied class type,
+			// and another contributor has decided to proxy it, we need to tell it not to.
+			// Otherwise, we'll end up with two implementations!
+
+			if (getObjectData == null)
+			{
+				// `VerifyIfBaseImplementsGetObjectData` only searches for `GetObjectData`
+				// in the implementation map for `ISerializable`. In the best case, it was
+				// already found there. If not, we need to look again, since *any* method
+				// with the same signature is a problem.
+
+				var getObjectDataMethod = targetType.GetMethod(
+					"GetObjectData",
+					BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+					null,
+					new[] { typeof(SerializationInfo), typeof(StreamingContext) },
+					null);
+
+				if (getObjectDataMethod != null)
+				{
+					getObjectData = model.Methods.FirstOrDefault(m => m.Method == getObjectDataMethod);
+				}
+			}
+
+			if (getObjectData != null && getObjectData.Proxyable)
+			{
+				getObjectData.Ignore = true;
+			}
 		}
 
 		public override void Generate(ClassEmitter @class)
@@ -161,8 +191,10 @@ namespace Castle.DynamicProxy.Contributors
 			ctor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		private bool VerifyIfBaseImplementsGetObjectData(Type baseType, MetaType model)
+		private bool VerifyIfBaseImplementsGetObjectData(Type baseType, MetaType model, out MetaMethod getObjectData)
 		{
+			getObjectData = null;
+
 			if (!typeof(ISerializable).IsAssignableFrom(baseType))
 			{
 				return false;
@@ -191,11 +223,7 @@ namespace Castle.DynamicProxy.Contributors
 				throw new ArgumentException(message);
 			}
 
-			var getObjectData = model.Methods.FirstOrDefault(m => m.Method == getObjectDataMethod);
-			if (getObjectData != null && getObjectData.Proxyable)
-			{
-				getObjectData.Ignore = true;
-			}
+			getObjectData = model.Methods.FirstOrDefault(m => m.Method == getObjectDataMethod);
 
 			serializationConstructor = baseType.GetConstructor(
 				BindingFlags.Instance | BindingFlags.Public |
