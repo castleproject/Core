@@ -63,7 +63,7 @@ namespace Castle.DynamicProxy.Tests
 
 		private void FindVerificationErrors()
 		{
-			ModuleBuilder moduleBuilder = generator.ProxyBuilder.ModuleScope.ObtainDynamicModule(true);
+			ModuleBuilder moduleBuilder = builder.ModuleScope.ObtainDynamicModule(true);
 			TypeBuilder invalidType = moduleBuilder.DefineType("InvalidType");
 			MethodBuilder invalidMethod = invalidType.DefineMethod("InvalidMethod", MethodAttributes.Public);
 			invalidMethod.GetILGenerator().Emit(OpCodes.Ldnull); // missing RET statement

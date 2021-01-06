@@ -73,7 +73,7 @@ namespace Castle.DynamicProxy.Tests
 	public abstract class BasePEVerifyTestCase
 	{
 		protected ProxyGenerator generator;
-		protected IProxyBuilder builder;
+		protected DefaultProxyBuilder builder;
 
 		private bool verificationDisabled;
 

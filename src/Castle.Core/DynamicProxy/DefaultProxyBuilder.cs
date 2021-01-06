@@ -44,7 +44,7 @@ namespace Castle.DynamicProxy
 		///   Initializes a new instance of the <see cref = "DefaultProxyBuilder" /> class.
 		/// </summary>
 		/// <param name = "scope">The module scope for generated proxy types.</param>
-		public DefaultProxyBuilder(ModuleScope scope)
+		internal DefaultProxyBuilder(ModuleScope scope)
 		{
 			this.scope = scope;
 		}
@@ -55,7 +55,10 @@ namespace Castle.DynamicProxy
 			set { logger = value; }
 		}
 
-		public ModuleScope ModuleScope
+		/// <summary>
+		///   Gets the <see cref="ModuleScope" /> associated with this builder.
+		/// </summary>
+		internal ModuleScope ModuleScope
 		{
 			get { return scope; }
 		}

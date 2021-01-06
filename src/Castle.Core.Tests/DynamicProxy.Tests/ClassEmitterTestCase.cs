@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void AutomaticDefaultConstructorGeneration()
 		{
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
+			ClassEmitter emitter = new ClassEmitter(builder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
 			Type t = emitter.BuildType();
 			Activator.CreateInstance(t);
 		}
@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void AutomaticDefaultConstructorGenerationWithClosedGenericType()
 		{
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (List<object>),
+			ClassEmitter emitter = new ClassEmitter(builder.ModuleScope, "Foo", typeof (List<object>),
 			                                        Type.EmptyTypes);
 			Type t = emitter.BuildType();
 			Activator.CreateInstance(t);
@@ -44,7 +44,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void StaticMethodArguments()
 		{
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (List<object>),
+			ClassEmitter emitter = new ClassEmitter(builder.ModuleScope, "Foo", typeof (List<object>),
 			                                        Type.EmptyTypes);
 			MethodEmitter methodEmitter = emitter.CreateMethod("StaticMethod", MethodAttributes.Public | MethodAttributes.Static,
 			                                                   typeof (string), typeof (string));
@@ -56,7 +56,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void InstanceMethodArguments()
 		{
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (List<object>),
+			ClassEmitter emitter = new ClassEmitter(builder.ModuleScope, "Foo", typeof (List<object>),
 			                                        Type.EmptyTypes);
 			MethodEmitter methodEmitter = emitter.CreateMethod("InstanceMethod", MethodAttributes.Public,
 			                                                   typeof (string), typeof (string));
@@ -70,7 +70,7 @@ namespace Castle.DynamicProxy.Tests
 		public void ForceUnsignedFalseWithSignedTypes()
 		{
 			const bool shouldBeSigned = true;
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes,
+			ClassEmitter emitter = new ClassEmitter(builder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes,
 			                                        TypeAttributes.Public, false);
 			Type t = emitter.BuildType();
 			Assert.AreEqual(shouldBeSigned, StrongNameUtil.IsAssemblySigned(t.Assembly));
@@ -79,7 +79,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void ForceUnsignedTrueWithSignedTypes()
 		{
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes,
+			ClassEmitter emitter = new ClassEmitter(builder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes,
 			                                        TypeAttributes.Public, true);
 			Type t = emitter.BuildType();
 			Assert.IsFalse(StrongNameUtil.IsAssemblySigned(t.Assembly));
@@ -88,7 +88,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void CreateFieldWithAttributes()
 		{
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
+			ClassEmitter emitter = new ClassEmitter(builder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
 			emitter.CreateField("myField", typeof (string), FieldAttributes.FamANDAssem | FieldAttributes.InitOnly);
 			Type t = emitter.BuildType();
 			FieldInfo field = t.GetField("myField", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -99,7 +99,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void CreateStaticFieldWithAttributes()
 		{
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
+			ClassEmitter emitter = new ClassEmitter(builder.ModuleScope, "Foo", typeof (object), Type.EmptyTypes);
 			emitter.CreateStaticField("myField", typeof (string), FieldAttributes.FamANDAssem | FieldAttributes.InitOnly);
 			Type t = emitter.BuildType();
 			FieldInfo field = t.GetField("myField", BindingFlags.NonPublic | BindingFlags.Static);
@@ -110,7 +110,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void UsingClassEmitterForInterfaces()
 		{
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes, 
+			ClassEmitter emitter = new ClassEmitter(builder.ModuleScope, "IFoo", null, Type.EmptyTypes,
 				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
 			emitter.CreateMethod("MyMethod", MethodAttributes.Public | MethodAttributes.Abstract | MethodAttributes.Virtual,
 			                     typeof(void), Type.EmptyTypes);
@@ -124,7 +124,7 @@ namespace Castle.DynamicProxy.Tests
 		public void NoBaseTypeForInterfaces()
 		{
 			DisableVerification();
-			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
+			ClassEmitter emitter = new ClassEmitter (builder.ModuleScope, "IFoo", null, Type.EmptyTypes,
 				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
 
 			Assert.Throws<InvalidOperationException>(delegate {
@@ -138,7 +138,7 @@ namespace Castle.DynamicProxy.Tests
 		public void NoDefaultCtorForInterfaces()
 		{
 			DisableVerification();
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
+			ClassEmitter emitter = new ClassEmitter(builder.ModuleScope, "IFoo", null, Type.EmptyTypes,
 				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
 
 			Assert.Throws<InvalidOperationException>(delegate {
@@ -150,7 +150,7 @@ namespace Castle.DynamicProxy.Tests
 		public void NoCustomCtorForInterfaces()
 		{
 			DisableVerification();
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
+			ClassEmitter emitter = new ClassEmitter(builder.ModuleScope, "IFoo", null, Type.EmptyTypes,
 				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
 
 			Assert.Throws<InvalidOperationException>(delegate {
@@ -161,7 +161,7 @@ namespace Castle.DynamicProxy.Tests
 		[Test]
 		public void NestedInterface()
 		{
-			ClassEmitter outerEmitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IOuter", null, Type.EmptyTypes, 
+			ClassEmitter outerEmitter = new ClassEmitter(builder.ModuleScope, "IOuter", null, Type.EmptyTypes,
 				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
 			NestedClassEmitter innerEmitter = new NestedClassEmitter(outerEmitter, "IInner", 
 				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.NestedPublic, null, Type.EmptyTypes);

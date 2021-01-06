@@ -31,12 +31,6 @@ namespace Castle.DynamicProxy
 		ILogger Logger { get; set; }
 
 		/// <summary>
-		///   Gets the <see cref = "ModuleScope" /> associated with this builder.
-		/// </summary>
-		/// <value>The module scope associated with this builder.</value>
-		ModuleScope ModuleScope { get; }
-
-		/// <summary>
 		///   Creates a proxy type for given <paramref name = "classToProxy" />, implementing <paramref
 		///    name = "additionalInterfacesToProxy" />, using <paramref name = "options" /> provided.
 		/// </summary>
