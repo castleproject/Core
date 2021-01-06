@@ -89,9 +89,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void DeserializationWithSpecificModuleScope()
+		public void DeserializationWithSpecificProxyBuilder()
 		{
-			ProxyObjectReference.SetScope(generator.ProxyBuilder.ModuleScope);
+			ProxyObjectReference.SetProxyBuilder(generator.ProxyBuilder);
 			var first = generator.CreateClassProxy<MySerializableClass>(new StandardInterceptor());
 			var second = SerializeAndDeserialize(first);
 			Assert.AreSame(first.GetType(), second.GetType());
@@ -125,7 +125,7 @@ namespace Castle.DynamicProxy.Tests
 		public override void Init()
 		{
 			base.Init();
-			ProxyObjectReference.ResetScope();
+			ProxyObjectReference.ResetProxyBuilder();
 		}
 
 		[Test]
@@ -356,13 +356,12 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void ReusingModuleScopeFromProxyObjectReference()
+		public void ReusingProxyBuilderFromProxyObjectReference()
 		{
-			var generatorWithSpecificModuleScope =
-				new ProxyGenerator(new DefaultProxyBuilder(ProxyObjectReference.ModuleScope));
-			Assert.AreSame(generatorWithSpecificModuleScope.ProxyBuilder.ModuleScope, ProxyObjectReference.ModuleScope);
-			var first =
-				generatorWithSpecificModuleScope.CreateClassProxy<MySerializableClass>(new StandardInterceptor());
+			var generatorWithSpecificBuilder = new ProxyGenerator(ProxyObjectReference.ProxyBuilder);
+			Assert.AreSame(generatorWithSpecificBuilder.ProxyBuilder, ProxyObjectReference.ProxyBuilder);
+
+			var first = generatorWithSpecificBuilder.CreateClassProxy<MySerializableClass>(new StandardInterceptor());
 			var second = SerializeAndDeserialize(first);
 			Assert.AreSame(first.GetType(), second.GetType());
 		}
@@ -594,7 +593,7 @@ namespace Castle.DynamicProxy.Tests
 		public override void TearDown()
 		{
 			base.TearDown();
-			ProxyObjectReference.ResetScope();
+			ProxyObjectReference.ResetProxyBuilder();
 		}
 
 		public static T SerializeAndDeserialize<T>(T proxy)

@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Serialization
 	[Serializable]
 	public class ProxyObjectReference : IObjectReference, ISerializable, IDeserializationCallback
 	{
-		private static ModuleScope scope = new ModuleScope();
+		private static IProxyBuilder builder = new DefaultProxyBuilder();
 
 		private readonly SerializationInfo info;
 		private readonly StreamingContext context;
@@ -45,42 +45,47 @@ namespace Castle.DynamicProxy.Serialization
 		private bool delegateToBase;
 
 		/// <summary>
-		///   Resets the <see cref="ModuleScope" /> used for deserialization to a new scope.
+		///   Resets the <see cref="IProxyBuilder" /> used for deserialization to a new scope.
 		/// </summary>
 		/// <remarks>
 		///   This is useful for test cases.
 		/// </remarks>
-		public static void ResetScope()
+		public static void ResetProxyBuilder()
 		{
-			SetScope(new ModuleScope());
+			SetProxyBuilder(new DefaultProxyBuilder());
 		}
 
 		/// <summary>
-		///   Resets the <see cref="ModuleScope" /> used for deserialization to a given <paramref name="scope" />.
+		///   Resets the <see cref="IProxyBuilder" /> used for deserialization to a given <paramref name="builder" />.
 		/// </summary>
-		/// <param name="scope"> The scope to be used for deserialization. </param>
+		/// <param name="builder">The builder to be used for deserialization.</param>
 		/// <remarks>
-		///   By default, the deserialization process uses a different scope than the rest of the application, which can lead to multiple proxies
-		///   being generated for the same type. By explicitly setting the deserialization scope to the application's scope, this can be avoided.
+		///   By default, the deserialization process uses a different builder than the rest of the application,
+		///   which can lead to multiple proxy types being generated for the same type. By explicitly setting
+		///   the deserialization builder to the application's builder, this can be avoided.
 		/// </remarks>
-		public static void SetScope(ModuleScope scope)
+		public static void SetProxyBuilder(IProxyBuilder builder)
 		{
-			if (scope == null)
+			if (builder == null)
 			{
-				throw new ArgumentNullException(nameof(scope));
+				throw new ArgumentNullException(nameof(builder));
 			}
-			ProxyObjectReference.scope = scope;
+			ProxyObjectReference.builder = builder;
 		}
 
 		/// <summary>
-		///   Gets the <see cref="ModuleScope" /> used for deserialization.
+		///   Gets the <see cref="IProxyBuilder" /> used for deserialization.
 		/// </summary>
-		/// <value> As <see cref="ProxyObjectReference" /> has no way of automatically determining the scope used by the application (and the application might use more than one scope at the same time), <see
-		///    cref="ProxyObjectReference" /> uses a dedicated scope instance for deserializing proxy types. This instance can be reset and set to a specific value via <see
-		///    cref="ResetScope" /> and <see cref="SetScope" /> . </value>
-		public static ModuleScope ModuleScope
+		/// <value>
+		///   As <see cref="ProxyObjectReference" /> has no way of automatically determining the builder
+		///   used by the application (and the application might use more than one scope at the same time),
+		///   <see cref="ProxyObjectReference" /> uses a dedicated builder instance for deserializing proxy types.
+		///   This instance can be reset and set to a specific value via <see cref="ResetProxyBuilder" />
+		///   and <see cref="SetProxyBuilder" />.
+		/// </value>
+		public static IProxyBuilder ProxyBuilder
 		{
-			get { return scope; }
+			get { return builder; }
 		}
 
 		protected ProxyObjectReference(SerializationInfo info, StreamingContext context)
@@ -131,6 +136,7 @@ namespace Castle.DynamicProxy.Serialization
 
 		private object RecreateClassProxyWithTarget()
 		{
+			var scope = builder.ModuleScope;
 			var generator = new ClassProxyWithTargetGenerator(scope, baseType, interfaces, proxyGenerationOptions);
 			var proxyType = generator.GetProxyType();
 			return InstantiateClassProxy(proxyType);
@@ -141,6 +147,7 @@ namespace Castle.DynamicProxy.Serialization
 			var @interface = DeserializeTypeFromString("__theInterface");
 			var targetType = DeserializeTypeFromString("__targetFieldType");
 
+			var scope = builder.ModuleScope;
 			BaseInterfaceProxyGenerator generator;
 			if (generatorType == ProxyTypeConstants.InterfaceWithTarget)
 			{
@@ -168,6 +175,7 @@ namespace Castle.DynamicProxy.Serialization
 
 		public object RecreateClassProxy()
 		{
+			var scope = builder.ModuleScope;
 			var generator = new ClassProxyGenerator(scope, baseType, interfaces, proxyGenerationOptions);
 			var proxyType = generator.GetProxyType();
 			return InstantiateClassProxy(proxyType);
