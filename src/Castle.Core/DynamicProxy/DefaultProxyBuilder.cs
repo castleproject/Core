@@ -22,11 +22,12 @@ namespace Castle.DynamicProxy
 	using Castle.Core.Internal;
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Serialization;
 
 	/// <summary>
 	///   Default implementation of <see cref = "IProxyBuilder" /> interface producing in-memory proxy assemblies.
 	/// </summary>
-	public class DefaultProxyBuilder : IProxyBuilder
+	public class DefaultProxyBuilder : IProxyBuilderWithCache
 	{
 		private readonly ModuleScope scope;
 		private ILogger logger = NullLogger.Instance;
@@ -114,6 +115,13 @@ namespace Castle.DynamicProxy
 			var generator = new InterfaceProxyWithoutTargetGenerator(scope, interfaceToProxy, additionalInterfacesToProxy, typeof(object), options) { Logger = logger };
 			return generator.GetProxyType();
 		}
+
+#if FEATURE_SERIALIZATION
+		public void LoadAssemblyIntoCache(Assembly assembly)
+		{
+			ModuleScope.LoadAssemblyIntoCache(assembly);
+		}
+#endif
 
 		private void AssertValidMixins(ProxyGenerationOptions options, string paramName)
 		{
