@@ -2495,17 +2495,16 @@ namespace Castle.DynamicProxy
         public override int GetHashCode() { }
         public static Castle.DynamicProxy.CustomAttributeInfo FromExpression(System.Linq.Expressions.Expression<System.Func<System.Attribute>> expression) { }
     }
-    public class DefaultProxyBuilder : Castle.DynamicProxy.IProxyBuilder
+    public class DefaultProxyBuilder : Castle.DynamicProxy.IProxyBuilder, Castle.DynamicProxy.IProxyBuilderWithCache
     {
         public DefaultProxyBuilder() { }
-        public DefaultProxyBuilder(Castle.DynamicProxy.ModuleScope scope) { }
         public Castle.Core.Logging.ILogger Logger { get; set; }
-        public Castle.DynamicProxy.ModuleScope ModuleScope { get; }
         public System.Type CreateClassProxyType(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         public System.Type CreateClassProxyTypeWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         public System.Type CreateInterfaceProxyTypeWithTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, System.Type targetType, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         public System.Type CreateInterfaceProxyTypeWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         public System.Type CreateInterfaceProxyTypeWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        public void LoadAssemblyIntoCache(System.Reflection.Assembly assembly) { }
     }
     [System.Serializable]
     public sealed class DynamicProxyException : System.Exception { }
@@ -2547,12 +2546,15 @@ namespace Castle.DynamicProxy
     public interface IProxyBuilder
     {
         Castle.Core.Logging.ILogger Logger { get; set; }
-        Castle.DynamicProxy.ModuleScope ModuleScope { get; }
         System.Type CreateClassProxyType(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options);
         System.Type CreateClassProxyTypeWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options);
         System.Type CreateInterfaceProxyTypeWithTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, System.Type targetType, Castle.DynamicProxy.ProxyGenerationOptions options);
         System.Type CreateInterfaceProxyTypeWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options);
         System.Type CreateInterfaceProxyTypeWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options);
+    }
+    public interface IProxyBuilderWithCache : Castle.DynamicProxy.IProxyBuilder
+    {
+        void LoadAssemblyIntoCache(System.Reflection.Assembly assembly);
     }
     public interface IProxyGenerationHook
     {
@@ -2631,23 +2633,6 @@ namespace Castle.DynamicProxy
         public override int GetHashCode() { }
         public object GetMixinInstance(System.Type mixinInterfaceType) { }
         public int GetMixinPosition(System.Type mixinInterfaceType) { }
-    }
-    public class ModuleScope
-    {
-        public static readonly string DEFAULT_ASSEMBLY_NAME;
-        public static readonly string DEFAULT_FILE_NAME;
-        public ModuleScope() { }
-        public ModuleScope(bool savePhysicalAssembly) { }
-        public ModuleScope(bool savePhysicalAssembly, bool disableSignedModule) { }
-        public ModuleScope(bool savePhysicalAssembly, bool disableSignedModule, string strongAssemblyName, string strongModulePath, string weakAssemblyName, string weakModulePath) { }
-        public string StrongNamedModuleDirectory { get; }
-        public string StrongNamedModuleName { get; }
-        public string WeakNamedModuleDirectory { get; }
-        public string WeakNamedModuleName { get; }
-        public void LoadAssemblyIntoCache(System.Reflection.Assembly assembly) { }
-        public string SaveAssembly() { }
-        public string SaveAssembly(bool strongNamed) { }
-        public static byte[] GetKeyPair() { }
     }
     public class PersistentProxyBuilder : Castle.DynamicProxy.DefaultProxyBuilder
     {
@@ -2815,7 +2800,7 @@ namespace Castle.DynamicProxy.Serialization
     public class ProxyObjectReference : System.Runtime.Serialization.IDeserializationCallback, System.Runtime.Serialization.IObjectReference, System.Runtime.Serialization.ISerializable
     {
         protected ProxyObjectReference(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
-        public static Castle.DynamicProxy.ModuleScope ModuleScope { get; }
+        public static Castle.DynamicProxy.IProxyBuilder ProxyBuilder { get; }
         public void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public object GetRealObject(System.Runtime.Serialization.StreamingContext context) { }
         protected void InvokeCallback(object target) { }
@@ -2823,7 +2808,7 @@ namespace Castle.DynamicProxy.Serialization
         public object RecreateClassProxy() { }
         public object RecreateInterfaceProxy(string generatorType) { }
         protected virtual object RecreateProxy() { }
-        public static void ResetScope() { }
-        public static void SetScope(Castle.DynamicProxy.ModuleScope scope) { }
+        public static void ResetProxyBuilder() { }
+        public static void SetProxyBuilder(Castle.DynamicProxy.IProxyBuilder builder) { }
     }
 }
