@@ -136,9 +136,7 @@ namespace Castle.DynamicProxy.Serialization
 
 		private object RecreateClassProxyWithTarget()
 		{
-			var scope = builder.ModuleScope;
-			var generator = new ClassProxyWithTargetGenerator(scope, baseType, interfaces, proxyGenerationOptions);
-			var proxyType = generator.GetProxyType();
+			var proxyType = builder.CreateClassProxyTypeWithTarget(baseType, interfaces, proxyGenerationOptions);
 			return InstantiateClassProxy(proxyType);
 		}
 
@@ -147,19 +145,18 @@ namespace Castle.DynamicProxy.Serialization
 			var @interface = DeserializeTypeFromString("__theInterface");
 			var targetType = DeserializeTypeFromString("__targetFieldType");
 
-			var scope = builder.ModuleScope;
-			BaseInterfaceProxyGenerator generator;
+			Type proxyType;
 			if (generatorType == ProxyTypeConstants.InterfaceWithTarget)
 			{
-				generator = new InterfaceProxyWithTargetGenerator(scope, @interface, interfaces, targetType, proxyGenerationOptions);
+				proxyType = builder.CreateInterfaceProxyTypeWithTarget(@interface, interfaces, targetType, proxyGenerationOptions);
 			}
 			else if (generatorType == ProxyTypeConstants.InterfaceWithoutTarget)
 			{
-				generator = new InterfaceProxyWithoutTargetGenerator(scope, @interface, interfaces, targetType, proxyGenerationOptions);
+				proxyType = builder.CreateInterfaceProxyTypeWithoutTarget(@interface, interfaces, proxyGenerationOptions);
 			}
 			else if (generatorType == ProxyTypeConstants.InterfaceWithTargetInterface)
 			{
-				generator = new InterfaceProxyWithTargetInterfaceGenerator(scope, @interface, interfaces, targetType, proxyGenerationOptions);
+				proxyType = builder.CreateInterfaceProxyTypeWithTargetInterface(@interface, interfaces, proxyGenerationOptions);
 			}
 			else
 			{
@@ -169,15 +166,12 @@ namespace Castle.DynamicProxy.Serialization
 						generatorType));
 			}
 
-			var proxyType = generator.GetProxyType();
 			return FormatterServices.GetSafeUninitializedObject(proxyType);
 		}
 
 		public object RecreateClassProxy()
 		{
-			var scope = builder.ModuleScope;
-			var generator = new ClassProxyGenerator(scope, baseType, interfaces, proxyGenerationOptions);
-			var proxyType = generator.GetProxyType();
+			var proxyType = builder.CreateClassProxyType(baseType, interfaces, proxyGenerationOptions);
 			return InstantiateClassProxy(proxyType);
 		}
 
