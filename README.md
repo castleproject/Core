@@ -34,11 +34,11 @@ Browse the [contributing section](https://github.com/castleproject/Home#its-comm
 build.cmd
 ```
 
-Compilation requires an up-to-date .NET Core SDK and MSBuild 15+ (which should be included in the former).
+Compilation requires a C# 9 compiler, an up-to-date .NET Core SDK, and MSBuild 15+ (which should be included in the former).
 
-Running the unit tests additionally requires the .NET Framework 4.6.1+ as well as the .NET Core 3.1 runtime to be installed.
+Running the unit tests additionally requires the .NET Framework 4.6.1+ as well as the .NET Core 2.1 and 3.1 runtimes to be installed. (If you do not have all of those installed, you can run the tests for a specific target framework using `dotnet test -f <framework>`.)
 
-Most of these requirements should be covered by Visual Studio 2019.
+These requirements should be covered by Visual Studio 2019 and the .NET 5 SDK.
 
 ### On Linux
 
@@ -54,7 +54,7 @@ Running the unit tests additionally requires the .NET Core 3.1 runtime to be ins
 
 We test against up-to-date Mono versions in order to fix known defects as soon as possible. Because of this, if you are using an older Mono version than our Continuous Integration (CI) build, you might see some unit tests fail.
 
-For known Mono defects, check [our issue tracker](https://github.com/castleproject/Core/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20mono), as well as unit tests marked with `[ExcludeOnFramework(Framework.Mono, ...)]` in the source code.
+For known Mono defects, check [our issue tracker](https://github.com/castleproject/Core/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20mono), as well as unit tests marked with `[Platform(Exclude = "Mono", ...)]` in the source code.
 
 ### Conditional Compilation Symbols
 
