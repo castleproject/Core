@@ -24,6 +24,16 @@ namespace Castle.DynamicProxy.Tests
 	{
 		private static readonly string[] PeVerifyProbingPaths =
 		{
+			@"C:\Program Files\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools",
+			@"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools",
+			@"C:\Program Files\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7.2 Tools",
+			@"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7.2 Tools",
+			@"C:\Program Files\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7.1 Tools",
+			@"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7.1 Tools",
+			@"C:\Program Files\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7 Tools",
+			@"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.7 Tools",
+			@"C:\Program Files\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.2 Tools",
+			@"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.2 Tools",
 			@"C:\Program Files\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools",
 			@"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools",
 			@"C:\Program Files\Microsoft SDKs\Windows\v8.1A\bin\NETFX 4.5.1 Tools",
