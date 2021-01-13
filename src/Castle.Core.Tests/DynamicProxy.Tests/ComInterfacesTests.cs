@@ -43,6 +43,7 @@ namespace Castle.DynamicProxy.Tests
 
 		[Test]
 		[Platform(Include = "Win", Reason = "Depends on OLE32.dll due to co-class instantiation, which is likely only available on Windows.")]
+		[Platform(Exclude = "NetCore", Reason = "Co-class instantiation is not supported by all versions of .NET Core, and can crash the test host.")]
 		public void Can_proxy_existing_com_object()
 		{
 			var command = new Command();
