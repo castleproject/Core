@@ -1880,16 +1880,6 @@ namespace Castle.Core
     {
         Castle.Core.IServiceProviderEx ServiceProvider { get; }
     }
-    public class Pair<TFirst, TSecond> : System.IEquatable<Castle.Core.Pair<TFirst, TSecond>>
-    {
-        public Pair(TFirst first, TSecond second) { }
-        public TFirst First { get; }
-        public TSecond Second { get; }
-        public bool Equals(Castle.Core.Pair<TFirst, TSecond> other) { }
-        public override bool Equals(object obj) { }
-        public override int GetHashCode() { }
-        public override string ToString() { }
-    }
     public static class ProxyServices
     {
         public static bool IsDynamicProxy(System.Type type) { }
