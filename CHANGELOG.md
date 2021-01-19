@@ -6,6 +6,7 @@ Enhancements:
 - .NET Standard 2.0 and 2.1 support (@lg2de, #485)
 
 Bugfixes:
+- `private protected` methods are not intercepted (@CrispyDrone, #535)
 - `System.UIntPtr` unsupported (@stakx, #546)
 
 Deprecations:
