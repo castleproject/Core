@@ -67,7 +67,7 @@ namespace Castle.DynamicProxy.Contributors
 
 				if (getObjectDataMethod != null)
 				{
-					getObjectData = model.Methods.FirstOrDefault(m => m.Method == getObjectDataMethod);
+					getObjectData = model.FindMethod(getObjectDataMethod);
 				}
 			}
 
@@ -223,7 +223,7 @@ namespace Castle.DynamicProxy.Contributors
 				throw new ArgumentException(message);
 			}
 
-			getObjectData = model.Methods.FirstOrDefault(m => m.Method == getObjectDataMethod);
+			getObjectData = model.FindMethod(getObjectDataMethod);
 
 			serializationConstructor = baseType.GetConstructor(
 				BindingFlags.Instance | BindingFlags.Public |
