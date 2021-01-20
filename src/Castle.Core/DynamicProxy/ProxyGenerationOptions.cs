@@ -16,17 +16,14 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Reflection;
 	using System.Reflection.Emit;
 #if FEATURE_SERIALIZATION
 	using System.Runtime.Serialization;
 #endif
 
-	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Internal;
-
-	// prevent collision with new class in netstandard 2.1
-	using CollectionExtensions = Castle.Core.Internal.CollectionExtensions;
 
 	/// <summary>
 	///   <see cref="ProxyGenerationOptions"/> allows customization of the behavior of proxies created by
@@ -280,7 +277,7 @@ namespace Castle.DynamicProxy
 			{
 				return false;
 			}
-			if (!CollectionExtensions.AreEquivalent(AdditionalAttributes, proxyGenerationOptions.AdditionalAttributes))
+			if (!HasEquivalentAdditionalAttributes(proxyGenerationOptions))
 			{
 				return false;
 			}
@@ -296,8 +293,61 @@ namespace Castle.DynamicProxy
 			result = 29*result + (Selector != null ? 1 : 0);
 			result = 29*result + MixinData.GetHashCode();
 			result = 29*result + (BaseTypeForInterfaceProxy != null ? BaseTypeForInterfaceProxy.GetHashCode() : 0);
-			result = 29*result + CollectionExtensions.GetContentsHashCode(AdditionalAttributes);
+			result = 29*result + GetAdditionalAttributesHashCode();
 			return result;
+		}
+
+		private int GetAdditionalAttributesHashCode()
+		{
+			var result = 0;
+			for (var i = 0; i < additionalAttributes.Count; i++)
+			{
+				if (additionalAttributes[i] != null)
+				{
+					// simply add since order does not matter
+					result += additionalAttributes[i].GetHashCode();
+				}
+			}
+
+			return result;
+		}
+
+		private bool HasEquivalentAdditionalAttributes(ProxyGenerationOptions other)
+		{
+			var listA = additionalAttributes;
+			var listB = other.additionalAttributes;
+
+			if (listA.Count != listB.Count)
+			{
+				return false;
+			}
+
+			// copy contents to another list so that contents can be removed as they are found,
+			// in order to consider duplicates
+			var listBAvailableContents = listB.ToList();
+
+			// order is not important, just make sure that each entry in A is also found in B
+			for (var i = 0; i < listA.Count; i++)
+			{
+				var found = false;
+
+				for (var j = 0; j < listBAvailableContents.Count; j++)
+				{
+					if (Equals(listA[i], listBAvailableContents[j]))
+					{
+						found = true;
+						listBAvailableContents.RemoveAt(j);
+						break;
+					}
+				}
+
+				if (!found)
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 	}
 }

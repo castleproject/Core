@@ -1945,14 +1945,6 @@ namespace Castle.Core.Internal
             where T : System.Attribute { }
         public static System.Type GetTypeConverter(System.Reflection.MemberInfo member) { }
     }
-    public static class CollectionExtensions
-    {
-        public static bool AreEquivalent<T>(System.Collections.Generic.IList<T> listA, System.Collections.Generic.IList<T> listB) { }
-        public static T Find<T>(this T[] items, System.Predicate<T> predicate) { }
-        public static T[] FindAll<T>(this T[] items, System.Predicate<T> predicate) { }
-        public static int GetContentsHashCode<T>(System.Collections.Generic.IList<T> list) { }
-        public static bool IsNullOrEmpty(this System.Collections.IEnumerable @this) { }
-    }
     public class InternalsVisible
     {
         public const string ToCastleCore = @"Castle.Core, PublicKey=002400000480000094000000060200000024000052534131000400000100010077F5E87030DADCCCE6902C6ADAB7A987BD69CB5819991531F560785EACFC89B6FCDDF6BB2A00743A7194E454C0273447FC6EEC36474BA8E5A3823147D214298E4F9A631B1AFEE1A51FFEAE4672D498F14B000E3D321453CDD8AC064DE7E1CF4D222B7E81F54D4FD46725370D702A05B48738CC29D09228F1AA722AE1A9CA02FB";
