@@ -51,15 +51,15 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 #if FEATURE_SERIALIZATION
-		protected override SerializableContributor GetSerializableContributor(List<MethodInfo> methodsToSkip)
+		protected override SerializableContributor GetSerializableContributor()
 		{
-			return new ClassProxySerializableContributor(targetType, methodsToSkip, interfaces, ProxyTypeConstants.ClassWithTarget);
+			return new ClassProxySerializableContributor(targetType, interfaces, ProxyTypeConstants.ClassWithTarget);
 		}
 #endif
 
-		protected override CompositeTypeContributor GetProxyTargetContributor(List<MethodInfo> methodsToSkip, INamingScope namingScope)
+		protected override CompositeTypeContributor GetProxyTargetContributor(INamingScope namingScope)
 		{
-			return new ClassProxyWithTargetTargetContributor(targetType, methodsToSkip, namingScope) { Logger = Logger };
+			return new ClassProxyWithTargetTargetContributor(targetType, namingScope) { Logger = Logger };
 		}
 
 		protected override ProxyTargetAccessorContributor GetProxyTargetAccessorContributor()

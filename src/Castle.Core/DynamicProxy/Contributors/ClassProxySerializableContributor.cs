@@ -18,9 +18,12 @@ namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
+	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.Serialization;
 
+	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
@@ -29,29 +32,55 @@ namespace Castle.DynamicProxy.Contributors
 
 	internal class ClassProxySerializableContributor : SerializableContributor
 	{
-		private readonly bool delegateToBaseGetObjectData;
-		private readonly bool implementISerializable;
+		private bool delegateToBaseGetObjectData;
 		private ConstructorInfo serializationConstructor;
 		private readonly IList<FieldReference> serializedFields = new List<FieldReference>();
 
-		public ClassProxySerializableContributor(Type targetType, IList<MethodInfo> methodsToSkip, Type[] interfaces,
-		                                     string typeId)
+		public ClassProxySerializableContributor(Type targetType, Type[] interfaces, string typeId)
 			: base(targetType, interfaces, typeId)
 		{
-			if (targetType.IsSerializable)
+			Debug.Assert(targetType.IsSerializable, "This contributor is intended for serializable types only.");
+		}
+
+		public override void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)
+		{
+			delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType, model, out var getObjectData);
+
+			// This contributor is going to add a `GetObjectData` method to the proxy type.
+			// If a method with the same name and signature exists in the proxied class type,
+			// and another contributor has decided to proxy it, we need to tell it not to.
+			// Otherwise, we'll end up with two implementations!
+
+			if (getObjectData == null)
 			{
-				implementISerializable = true;
-				delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType, methodsToSkip);
+				// `VerifyIfBaseImplementsGetObjectData` only searches for `GetObjectData`
+				// in the implementation map for `ISerializable`. In the best case, it was
+				// already found there. If not, we need to look again, since *any* method
+				// with the same signature is a problem.
+
+				var getObjectDataMethod = targetType.GetMethod(
+					"GetObjectData",
+					BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+					null,
+					new[] { typeof(SerializationInfo), typeof(StreamingContext) },
+					null);
+
+				if (getObjectDataMethod != null)
+				{
+					getObjectData = model.FindMethod(getObjectDataMethod);
+				}
+			}
+
+			if (getObjectData != null && getObjectData.Proxyable)
+			{
+				getObjectData.Ignore = true;
 			}
 		}
 
 		public override void Generate(ClassEmitter @class)
 		{
-			if (implementISerializable)
-			{
-				ImplementGetObjectData(@class);
-				Constructor(@class);
-			}
+			ImplementGetObjectData(@class);
+			Constructor(@class);
 		}
 
 		protected override void AddAddValueInvocation(ArgumentReference serializationInfo, MethodEmitter getObjectData,
@@ -162,8 +191,10 @@ namespace Castle.DynamicProxy.Contributors
 			ctor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		private bool VerifyIfBaseImplementsGetObjectData(Type baseType, IList<MethodInfo> methodsToSkip)
+		private bool VerifyIfBaseImplementsGetObjectData(Type baseType, MetaType model, out MetaMethod getObjectData)
 		{
+			getObjectData = null;
+
 			if (!typeof(ISerializable).IsAssignableFrom(baseType))
 			{
 				return false;
@@ -192,7 +223,7 @@ namespace Castle.DynamicProxy.Contributors
 				throw new ArgumentException(message);
 			}
 
-			methodsToSkip.Add(getObjectDataMethod);
+			getObjectData = model.FindMethod(getObjectDataMethod);
 
 			serializationConstructor = baseType.GetConstructor(
 				BindingFlags.Instance | BindingFlags.Public |

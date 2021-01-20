@@ -29,14 +29,12 @@ namespace Castle.DynamicProxy.Contributors
 
 	internal class ClassProxyTargetContributor : CompositeTypeContributor
 	{
-		private readonly IList<MethodInfo> methodsToSkip;
 		private readonly Type targetType;
 
-		public ClassProxyTargetContributor(Type targetType, IList<MethodInfo> methodsToSkip, INamingScope namingScope)
+		public ClassProxyTargetContributor(Type targetType, INamingScope namingScope)
 			: base(namingScope)
 		{
 			this.targetType = targetType;
-			this.methodsToSkip = methodsToSkip;
 		}
 
 		protected override IEnumerable<MembersCollector> CollectElementsToProxyInternal(IProxyGenerationHook hook)
@@ -59,7 +57,7 @@ namespace Castle.DynamicProxy.Contributors
 		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,
 		                                                      OverrideMethodDelegate overrideMethod)
 		{
-			if (methodsToSkip.Contains(method.Method))
+			if (method.Ignore)
 			{
 				return null;
 			}

@@ -591,6 +591,19 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(current, otherProxy.Current);
 		}
 
+		[Test]
+		public void BadSerializable()
+		{
+			const int expectedValue = 13;
+
+			var proxy = generator.CreateClassProxy<BadSerializable>();
+			proxy.Value = expectedValue;
+
+			var otherProxy = SerializeAndDeserialize(proxy);
+
+			Assert.AreEqual(expectedValue, otherProxy.Value);
+		}
+
 		public override void TearDown()
 		{
 			base.TearDown();
