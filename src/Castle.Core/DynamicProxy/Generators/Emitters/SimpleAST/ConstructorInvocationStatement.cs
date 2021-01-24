@@ -23,6 +23,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		private readonly Expression[] args;
 		private readonly ConstructorInfo cmethod;
 
+		public ConstructorInvocationStatement(Type baseType)
+			: this(GetDefaultConstructor(baseType))
+		{
+		}
+
 		public ConstructorInvocationStatement(ConstructorInfo method, params Expression[] args)
 		{
 			if (method == null)
@@ -53,6 +58,19 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 
 			gen.Emit(OpCodes.Call, cmethod);
+		}
+
+		private static ConstructorInfo GetDefaultConstructor(Type baseType)
+		{
+			var type = baseType;
+			if (type.ContainsGenericParameters)
+			{
+				type = type.GetGenericTypeDefinition();
+				// need to get generic type definition, otherwise the GetConstructor method might throw NotSupportedException
+			}
+
+			var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+			return type.GetConstructor(flags, null, Type.EmptyTypes, null);
 		}
 	}
 }

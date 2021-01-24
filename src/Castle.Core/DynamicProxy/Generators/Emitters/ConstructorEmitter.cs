@@ -83,7 +83,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			if (ImplementedByRuntime == false && CodeBuilder.IsEmpty)
 			{
-				CodeBuilder.InvokeBaseConstructor();
+				CodeBuilder.AddStatement(new ConstructorInvocationStatement(maintype.BaseType));
 				CodeBuilder.AddStatement(new ReturnStatement());
 			}
 		}

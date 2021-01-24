@@ -279,7 +279,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 			else
 			{
-				constructor.CodeBuilder.InvokeBaseConstructor();
+				constructor.CodeBuilder.AddStatement(new ConstructorInvocationStatement(emitter.BaseType));
 			}
 
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());

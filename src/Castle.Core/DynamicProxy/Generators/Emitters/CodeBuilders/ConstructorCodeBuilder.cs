@@ -27,20 +27,5 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 		{
 			this.baseType = baseType;
 		}
-
-		public void InvokeBaseConstructor()
-		{
-			var type = baseType;
-			if (type.ContainsGenericParameters)
-			{
-				type = type.GetGenericTypeDefinition();
-					// need to get generic type definition, otherwise the GetConstructor method might throw NotSupportedException
-			}
-
-			var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-			var baseDefaultCtor = type.GetConstructor(flags, null, new Type[0], null);
-
-			AddStatement(new ConstructorInvocationStatement(baseDefaultCtor));
-		}
 	}
 }
