@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
+namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections.Generic;
@@ -20,13 +20,13 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	internal abstract class AbstractCodeBuilder
+	internal sealed class CodeBuilder
 	{
 		private readonly List<Reference> ilmarkers;
 		private readonly List<Statement> stmts;
 		private bool isEmpty;
 
-		protected AbstractCodeBuilder()
+		public CodeBuilder()
 		{
 			stmts = new List<Statement>();
 			ilmarkers = new List<Reference>();
@@ -38,12 +38,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			get { return isEmpty; }
 		}
 
-		public AbstractCodeBuilder AddExpression(Expression expression)
+		public CodeBuilder AddExpression(Expression expression)
 		{
 			return AddStatement(new ExpressionStatement(expression));
 		}
 
-		public AbstractCodeBuilder AddStatement(Statement stmt)
+		public CodeBuilder AddStatement(Statement stmt)
 		{
 			SetNonEmpty();
 			stmts.Add(stmt);

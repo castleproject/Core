@@ -21,7 +21,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 
@@ -33,7 +32,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private ArgumentReference[] arguments;
 
-		private MethodCodeBuilder codebuilder;
+		private CodeBuilder codebuilder;
 
 		protected internal MethodEmitter(MethodBuilder builder)
 		{
@@ -76,13 +75,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return arguments; }
 		}
 
-		public virtual MethodCodeBuilder CodeBuilder
+		public virtual CodeBuilder CodeBuilder
 		{
 			get
 			{
 				if (codebuilder == null)
 				{
-					codebuilder = new MethodCodeBuilder();
+					codebuilder = new CodeBuilder();
 				}
 				return codebuilder;
 			}

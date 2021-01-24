@@ -18,7 +18,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	internal class ConstructorEmitter : IMemberEmitter
@@ -26,7 +25,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private readonly ConstructorBuilder builder;
 		private readonly AbstractTypeEmitter maintype;
 
-		private ConstructorCodeBuilder constructorCodeBuilder;
+		private CodeBuilder constructorCodeBuilder;
 
 		protected internal ConstructorEmitter(AbstractTypeEmitter maintype, ConstructorBuilder builder)
 		{
@@ -43,13 +42,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			builder = maintype.TypeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, args);
 		}
 
-		public virtual ConstructorCodeBuilder CodeBuilder
+		public virtual CodeBuilder CodeBuilder
 		{
 			get
 			{
 				if (constructorCodeBuilder == null)
 				{
-					constructorCodeBuilder = new ConstructorCodeBuilder(maintype.BaseType);
+					constructorCodeBuilder = new CodeBuilder();
 				}
 				return constructorCodeBuilder;
 			}

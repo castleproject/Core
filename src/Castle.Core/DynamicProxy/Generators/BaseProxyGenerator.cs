@@ -27,7 +27,6 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 
@@ -155,7 +154,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		protected void CompleteInitCacheMethod(ConstructorCodeBuilder constCodeBuilder)
+		protected void CompleteInitCacheMethod(CodeBuilder constCodeBuilder)
 		{
 			constCodeBuilder.AddStatement(new ReturnStatement());
 		}
