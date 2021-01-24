@@ -22,14 +22,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	internal sealed class CodeBuilder
 	{
-		private readonly List<Reference> ilmarkers;
-		private readonly List<Statement> stmts;
+		private readonly List<LocalReference> locals;
+		private readonly List<Statement> statements;
 		private bool isEmpty;
 
 		public CodeBuilder()
 		{
-			stmts = new List<Statement>();
-			ilmarkers = new List<Reference>();
+			statements = new List<Statement>();
+			locals = new List<LocalReference>();
 			isEmpty = true;
 		}
 
@@ -43,35 +43,30 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return AddStatement(new ExpressionStatement(expression));
 		}
 
-		public CodeBuilder AddStatement(Statement stmt)
+		public CodeBuilder AddStatement(Statement statement)
 		{
-			SetNonEmpty();
-			stmts.Add(stmt);
+			isEmpty = false;
+			statements.Add(statement);
 			return this;
 		}
 
 		public LocalReference DeclareLocal(Type type)
 		{
 			var local = new LocalReference(type);
-			ilmarkers.Add(local);
+			locals.Add(local);
 			return local;
-		}
-
-		public /*protected internal*/ void SetNonEmpty()
-		{
-			isEmpty = false;
 		}
 
 		internal void Generate(IMemberEmitter member, ILGenerator il)
 		{
-			foreach (var local in ilmarkers)
+			foreach (var local in locals)
 			{
 				local.Generate(il);
 			}
 
-			foreach (var stmt in stmts)
+			foreach (var statement in statements)
 			{
-				stmt.Emit(member, il);
+				statement.Emit(member, il);
 			}
 		}
 	}
