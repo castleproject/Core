@@ -40,12 +40,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 			var baseDefaultCtor = type.GetConstructor(flags, null, new Type[0], null);
 
-			InvokeBaseConstructor(baseDefaultCtor);
-		}
-
-		public void InvokeBaseConstructor(ConstructorInfo constructor)
-		{
-			AddStatement(new ConstructorInvocationStatement(constructor));
+			AddStatement(new ConstructorInvocationStatement(baseDefaultCtor));
 		}
 
 		public void InvokeBaseConstructor(ConstructorInfo constructor, params ArgumentReference[] arguments)

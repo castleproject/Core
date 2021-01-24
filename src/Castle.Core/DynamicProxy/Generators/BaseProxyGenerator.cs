@@ -336,7 +336,7 @@ namespace Castle.DynamicProxy.Generators
 
 			// Invoke base constructor
 
-			constructor.CodeBuilder.InvokeBaseConstructor(defaultConstructor);
+			constructor.CodeBuilder.AddStatement(new ConstructorInvocationStatement(defaultConstructor));
 
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
