@@ -14,12 +14,7 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 {
-	using System.Reflection.Emit;
-
 	internal class MethodCodeBuilder : AbstractCodeBuilder
 	{
-		public MethodCodeBuilder(ILGenerator generator) : base(generator)
-		{
-		}
 	}
 }

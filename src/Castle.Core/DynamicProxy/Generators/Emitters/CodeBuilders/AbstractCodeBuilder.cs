@@ -22,23 +22,15 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 
 	internal abstract class AbstractCodeBuilder
 	{
-		private readonly ILGenerator generator;
 		private readonly List<Reference> ilmarkers;
 		private readonly List<Statement> stmts;
 		private bool isEmpty;
 
-		protected AbstractCodeBuilder(ILGenerator generator)
+		protected AbstractCodeBuilder()
 		{
-			this.generator = generator;
 			stmts = new List<Statement>();
 			ilmarkers = new List<Reference>();
 			isEmpty = true;
-		}
-
-		//NOTE: should we make this obsolete if no one is using it?
-		public /*protected internal*/ ILGenerator Generator
-		{
-			get { return generator; }
 		}
 
 		internal bool IsEmpty

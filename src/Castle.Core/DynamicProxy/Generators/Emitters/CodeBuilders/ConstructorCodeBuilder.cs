@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 {
 	using System;
 	using System.Reflection;
-	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
@@ -24,7 +23,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 	{
 		private readonly Type baseType;
 
-		public ConstructorCodeBuilder(Type baseType, ILGenerator generator) : base(generator)
+		public ConstructorCodeBuilder(Type baseType)
 		{
 			this.baseType = baseType;
 		}

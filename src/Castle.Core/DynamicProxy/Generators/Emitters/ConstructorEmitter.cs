@@ -49,8 +49,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				if (constructorCodeBuilder == null)
 				{
-					constructorCodeBuilder = new ConstructorCodeBuilder(
-						maintype.BaseType, builder.GetILGenerator());
+					constructorCodeBuilder = new ConstructorCodeBuilder(maintype.BaseType);
 				}
 				return constructorCodeBuilder;
 			}
