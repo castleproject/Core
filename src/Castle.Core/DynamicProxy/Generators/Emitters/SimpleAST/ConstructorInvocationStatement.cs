@@ -38,6 +38,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.args = args;
 		}
 
+		public ConstructorInvocationStatement(ConstructorInfo method, ArgumentReference[] args)
+			: this(method, ArgumentsUtil.ConvertArgumentReferenceToExpression(args))
+		{
+		}
+
 		public override void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldarg_0);

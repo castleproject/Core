@@ -275,7 +275,7 @@ namespace Castle.DynamicProxy.Generators
 				var slice = new ArgumentReference[baseConstructorParams.Length];
 				Array.Copy(args, fields.Length, slice, 0, baseConstructorParams.Length);
 
-				constructor.CodeBuilder.InvokeBaseConstructor(baseConstructor, slice);
+				constructor.CodeBuilder.AddStatement(new ConstructorInvocationStatement(baseConstructor, slice));
 			}
 			else
 			{

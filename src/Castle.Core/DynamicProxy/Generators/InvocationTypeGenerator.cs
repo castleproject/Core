@@ -216,7 +216,7 @@ namespace Castle.DynamicProxy.Generators
 			var baseCtorArguments = GetBaseCtorArguments(targetType, out baseConstructor);
 
 			var constructor = CreateConstructor(invocation, baseCtorArguments);
-			constructor.CodeBuilder.InvokeBaseConstructor(baseConstructor, baseCtorArguments);
+			constructor.CodeBuilder.AddStatement(new ConstructorInvocationStatement(baseConstructor, baseCtorArguments));
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 

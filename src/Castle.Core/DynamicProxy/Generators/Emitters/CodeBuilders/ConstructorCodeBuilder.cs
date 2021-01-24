@@ -42,12 +42,5 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 
 			AddStatement(new ConstructorInvocationStatement(baseDefaultCtor));
 		}
-
-		public void InvokeBaseConstructor(ConstructorInfo constructor, params ArgumentReference[] arguments)
-		{
-			AddStatement(
-				new ConstructorInvocationStatement(constructor,
-				                                   ArgumentsUtil.ConvertArgumentReferenceToExpression(arguments)));
-		}
 	}
 }
