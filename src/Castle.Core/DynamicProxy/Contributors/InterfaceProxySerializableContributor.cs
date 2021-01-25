@@ -38,15 +38,15 @@ namespace Castle.DynamicProxy.Contributors
 				new MethodInvocationExpression(
 					serializationInfo,
 					SerializationInfoMethods.AddValue_Object,
-					new ConstReference("__targetFieldType").ToExpression(),
-					new ConstReference(targetField.Reference.FieldType.AssemblyQualifiedName).ToExpression()));
+					new ConstReference("__targetFieldType"),
+					new ConstReference(targetField.Reference.FieldType.AssemblyQualifiedName)));
 
 			codebuilder.AddStatement(
 				new MethodInvocationExpression(
 					serializationInfo,
 					SerializationInfoMethods.AddValue_Object,
-					new ConstReference("__theInterface").ToExpression(),
-					new ConstReference(targetType.AssemblyQualifiedName).ToExpression()));
+					new ConstReference("__theInterface"),
+					new ConstReference(targetType.AssemblyQualifiedName)));
 		}
 	}
 }

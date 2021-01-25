@@ -110,12 +110,12 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			if (!canChangeTarget)
 			{
-				return (c, m) => fields[m.DeclaringType].ToExpression();
+				return (c, m) => fields[m.DeclaringType];
 			}
 
 			return (c, m) => new NullCoalescingOperatorExpression(
-			                 	new AsTypeReference(c.GetField("__target"), m.DeclaringType).ToExpression(),
-			                 	fields[m.DeclaringType].ToExpression());
+			                 	new AsTypeReference(c.GetField("__target"), m.DeclaringType),
+			                 	fields[m.DeclaringType]);
 		}
 
 		private FieldReference BuildTargetField(ClassEmitter @class, Type type)

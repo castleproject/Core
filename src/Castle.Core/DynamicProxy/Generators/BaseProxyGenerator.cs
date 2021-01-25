@@ -262,7 +262,7 @@ namespace Castle.DynamicProxy.Generators
 
 			for (var i = 0; i < fields.Length; i++)
 			{
-				constructor.CodeBuilder.AddStatement(new AssignStatement(fields[i], args[i].ToExpression()));
+				constructor.CodeBuilder.AddStatement(new AssignStatement(fields[i], args[i]));
 			}
 
 			// Invoke base constructor

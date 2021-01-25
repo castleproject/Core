@@ -68,7 +68,7 @@ namespace Castle.DynamicProxy.Generators
 
 		private IExpression GetTargetExpression(ClassEmitter @class, MethodInfo method)
 		{
-			return GetTarget(@class, method).ToExpression();
+			return GetTarget(@class, method);
 		}
 	}
 }

@@ -96,8 +96,8 @@ namespace Castle.DynamicProxy.Contributors
 				new MethodInvocationExpression(
 					serializationInfo,
 					SerializationInfoMethods.AddValue_Bool,
-					new ConstReference("__delegateToBase").ToExpression(),
-					new ConstReference(delegateToBaseGetObjectData).ToExpression()));
+					new ConstReference("__delegateToBase"),
+					new ConstReference(delegateToBaseGetObjectData)));
 
 			if (delegateToBaseGetObjectData == false)
 			{
@@ -123,21 +123,21 @@ namespace Castle.DynamicProxy.Contributors
 			var callSort = new MethodInvocationExpression(
 				null,
 				TypeUtilMethods.Sort,
-				members.ToExpression());
+				members);
 			codebuilder.AddStatement(new AssignStatement(members, callSort));
 
 			var getObjectData = new MethodInvocationExpression(
 				null,
 				FormatterServicesMethods.GetObjectData,
-				SelfReference.Self.ToExpression(),
-				members.ToExpression());
+				SelfReference.Self,
+				members);
 			codebuilder.AddStatement(new AssignStatement(data, getObjectData));
 
 			var addValue = new MethodInvocationExpression(
 				serializationInfo,
 				SerializationInfoMethods.AddValue_Object,
-				new ConstReference("__data").ToExpression(),
-				data.ToExpression());
+				new ConstReference("__data"),
+				data);
 			codebuilder.AddStatement(addValue);
 		}
 
@@ -150,8 +150,8 @@ namespace Castle.DynamicProxy.Contributors
 			codebuilder.AddStatement(
 				new MethodInvocationExpression(
 					baseGetObjectData,
-					serializationInfo.ToExpression(),
-					streamingContext.ToExpression()));
+					serializationInfo,
+					streamingContext));
 		}
 
 		private void Constructor(ClassEmitter emitter)
@@ -172,14 +172,14 @@ namespace Castle.DynamicProxy.Contributors
 
 			ctor.CodeBuilder.AddStatement(
 				new ConstructorInvocationStatement(serializationConstructor,
-				                                   serializationInfo.ToExpression(),
-				                                   streamingContext.ToExpression()));
+				                                   serializationInfo,
+				                                   streamingContext));
 
 			foreach (var field in serializedFields)
 			{
 				var getValue = new MethodInvocationExpression(serializationInfo,
 				                                              SerializationInfoMethods.GetValue,
-				                                              new ConstReference(field.Reference.Name).ToExpression(),
+				                                              new ConstReference(field.Reference.Name),
 				                                              new TypeTokenExpression(field.Reference.FieldType));
 				ctor.CodeBuilder.AddStatement(new AssignStatement(
 				                              	field,

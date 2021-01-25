@@ -135,7 +135,7 @@ namespace Castle.DynamicProxy.Generators
 							                                                                         InvocationMethods.GetArgumentValue,
 							                                                                         new LiteralIntExpression(i)))));
 					var byRefReference = new ByRefReference(localReference);
-					args[i] = new ReferenceExpression(byRefReference);
+					args[i] = byRefReference;
 					byRefArguments[i] = localReference;
 				}
 				else
@@ -174,7 +174,7 @@ namespace Castle.DynamicProxy.Generators
 				var setRetVal =
 					new MethodInvocationExpression(SelfReference.Self,
 					                               InvocationMethods.SetReturnValue,
-					                               new ConvertExpression(typeof(object), returnValue.Type, returnValue.ToExpression()));
+					                               new ConvertExpression(typeof(object), returnValue.Type, returnValue));
 
 				invokeMethodOnTarget.CodeBuilder.AddStatement(setRetVal);
 			}
@@ -202,7 +202,7 @@ namespace Castle.DynamicProxy.Generators
 						new ConvertExpression(
 							typeof(object),
 							localReference.Type,
-							new ReferenceExpression(localReference))));
+							localReference)));
 			}
 			invokeMethodOnTarget.CodeBuilder.AddStatement(new EndExceptionBlockStatement());
 		}
@@ -275,7 +275,7 @@ namespace Castle.DynamicProxy.Generators
 			var changeInvocationTarget = invocation.CreateMethod("ChangeInvocationTarget", typeof(void), new[] { typeof(object) });
 			changeInvocationTarget.CodeBuilder.AddStatement(
 				new AssignStatement(targetField,
-				                    new ConvertExpression(targetType, changeInvocationTarget.Arguments[0].ToExpression())));
+				                    new ConvertExpression(targetType, changeInvocationTarget.Arguments[0])));
 			changeInvocationTarget.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
@@ -287,12 +287,12 @@ namespace Castle.DynamicProxy.Generators
 			var localProxy = changeProxyTarget.CodeBuilder.DeclareLocal(typeof(IProxyTargetAccessor));
 			changeProxyTarget.CodeBuilder.AddStatement(
 				new AssignStatement(localProxy,
-					new ConvertExpression(localProxy.Type, proxyObject.ToExpression())));
+					new ConvertExpression(localProxy.Type, proxyObject)));
 
 			var dynSetProxy = typeof(IProxyTargetAccessor).GetMethod(nameof(IProxyTargetAccessor.DynProxySetTarget));
 
 			changeProxyTarget.CodeBuilder.AddStatement(
-				new MethodInvocationExpression(localProxy, dynSetProxy, changeProxyTarget.Arguments[0].ToExpression())
+				new MethodInvocationExpression(localProxy, dynSetProxy, changeProxyTarget.Arguments[0])
 				{
 					VirtualCall = true
 				});
