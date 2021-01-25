@@ -45,12 +45,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 		}
 
-		public virtual Expression ToAddressOfExpression()
+		public virtual IExpression ToAddressOfExpression()
 		{
 			return new AddressOfReferenceExpression(this);
 		}
 
-		public virtual Expression ToExpression()
+		public virtual IExpression ToExpression()
 		{
 			return new ReferenceExpression(this);
 		}

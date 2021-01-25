@@ -22,9 +22,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	internal abstract class ArgumentsUtil
 	{
-		public static Expression[] ConvertArgumentReferenceToExpression(ArgumentReference[] args)
+		public static IExpression[] ConvertArgumentReferenceToExpression(ArgumentReference[] args)
 		{
-			var expressions = new Expression[args.Length];
+			var expressions = new IExpression[args.Length];
 
 			for (var i = 0; i < args.Length; ++i)
 			{

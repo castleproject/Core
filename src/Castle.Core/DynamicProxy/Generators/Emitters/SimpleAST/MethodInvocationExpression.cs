@@ -17,28 +17,28 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class MethodInvocationExpression : Expression
+	internal class MethodInvocationExpression : IExpression
 	{
-		protected readonly Expression[] args;
+		protected readonly IExpression[] args;
 		protected readonly MethodInfo method;
 		protected readonly Reference owner;
 
-		public MethodInvocationExpression(MethodInfo method, params Expression[] args) :
+		public MethodInvocationExpression(MethodInfo method, params IExpression[] args) :
 			this(SelfReference.Self, method, args)
 		{
 		}
 
-		public MethodInvocationExpression(MethodEmitter method, params Expression[] args) :
+		public MethodInvocationExpression(MethodEmitter method, params IExpression[] args) :
 			this(SelfReference.Self, method.MethodBuilder, args)
 		{
 		}
 
-		public MethodInvocationExpression(Reference owner, MethodEmitter method, params Expression[] args) :
+		public MethodInvocationExpression(Reference owner, MethodEmitter method, params IExpression[] args) :
 			this(owner, method.MethodBuilder, args)
 		{
 		}
 
-		public MethodInvocationExpression(Reference owner, MethodInfo method, params Expression[] args)
+		public MethodInvocationExpression(Reference owner, MethodInfo method, params IExpression[] args)
 		{
 			this.owner = owner;
 			this.method = method;
@@ -47,7 +47,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public bool VirtualCall { get; set; }
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			ArgumentsUtil.EmitLoadOwnerAndReference(owner, gen);
 

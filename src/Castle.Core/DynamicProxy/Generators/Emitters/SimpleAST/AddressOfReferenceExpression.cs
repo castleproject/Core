@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class AddressOfReferenceExpression : Expression
+	internal class AddressOfReferenceExpression : IExpression
 	{
 		private readonly Reference reference;
 
@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.reference = reference;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			ArgumentsUtil.EmitLoadOwnerAndReference(reference.OwnerReference, gen);
 

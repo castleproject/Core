@@ -78,7 +78,7 @@ namespace Castle.DynamicProxy.Generators
 
 			var constructor = invocation.GetConstructors()[0];
 
-			Expression proxiedMethodTokenExpression;
+			IExpression proxiedMethodTokenExpression;
 			if (MethodToOverride.IsGenericMethod)
 			{
 				// bind generic method arguments to invocation's type arguments
@@ -159,7 +159,7 @@ namespace Castle.DynamicProxy.Generators
 			return emitter;
 		}
 
-		private Expression SetMethodInterceptors(ClassEmitter @class, INamingScope namingScope, MethodEmitter emitter, Expression proxiedMethodTokenExpression)
+		private IExpression SetMethodInterceptors(ClassEmitter @class, INamingScope namingScope, MethodEmitter emitter, IExpression proxiedMethodTokenExpression)
 		{
 			var selector = @class.GetField("__selector");
 			if(selector == null)
@@ -169,7 +169,7 @@ namespace Castle.DynamicProxy.Generators
 
 			var methodInterceptorsField = BuildMethodInterceptorsField(@class, MethodToOverride, namingScope);
 
-			Expression targetTypeExpression;
+			IExpression targetTypeExpression;
 			if (getTargetTypeExpression != null)
 			{
 				targetTypeExpression = getTargetTypeExpression(@class, MethodToOverride);
@@ -212,7 +212,7 @@ namespace Castle.DynamicProxy.Generators
 					                               genericParamsArrayLocal)));
 		}
 
-		private Expression[] GetCtorArguments(ClassEmitter @class, Expression proxiedMethodTokenExpression, TypeReference[] dereferencedArguments, Expression methodInterceptors)
+		private IExpression[] GetCtorArguments(ClassEmitter @class, IExpression proxiedMethodTokenExpression, TypeReference[] dereferencedArguments, IExpression methodInterceptors)
 		{
 			return new[]
 			{
@@ -224,7 +224,7 @@ namespace Castle.DynamicProxy.Generators
 			};
 		}
 
-		private Expression[] ModifyArguments(ClassEmitter @class, Expression[] arguments)
+		private IExpression[] ModifyArguments(ClassEmitter @class, IExpression[] arguments)
 		{
 			if (contributor == null)
 			{

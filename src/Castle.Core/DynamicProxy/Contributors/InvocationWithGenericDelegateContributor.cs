@@ -49,7 +49,7 @@ namespace Castle.DynamicProxy.Contributors
 			return delegateType.GetMethod("Invoke");
 		}
 
-		public MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, Expression[] args,
+		public MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, IExpression[] args,
 		                                                              Reference targetField,
 		                                                              MethodEmitter invokeMethodOnTarget)
 		{
@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Contributors
 			return new MethodInvocationExpression(@delegate, GetCallbackMethod(), args);
 		}
 
-		public Expression[] GetConstructorInvocationArguments(Expression[] arguments, ClassEmitter proxy)
+		public IExpression[] GetConstructorInvocationArguments(IExpression[] arguments, ClassEmitter proxy)
 		{
 			return arguments;
 		}

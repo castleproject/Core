@@ -17,23 +17,23 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Collections.Generic;
 	using System.Reflection.Emit;
 
-	internal class MultiStatementExpression : Expression
+	internal class MultiStatementExpression : IExpression
 	{
-		private readonly List<Statement> statements = new List<Statement>();
+		private readonly List<IStatement> statements = new List<IStatement>();
 
-		public void AddStatement(Statement statement)
+		public void AddStatement(IStatement statement)
 		{
 			statements.Add(statement);
 		}
 
-		public void AddExpression(Expression expression)
+		public void AddExpression(IExpression expression)
 		{
 			AddStatement(new ExpressionStatement(expression));
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			foreach (Statement s in statements)
+			foreach (var s in statements)
 			{
 				s.Emit(member, gen);
 			}

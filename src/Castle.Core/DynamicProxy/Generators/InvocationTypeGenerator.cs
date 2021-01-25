@@ -87,7 +87,7 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		protected virtual MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation,
-		                                                                         Expression[] args, MethodInfo callbackMethod,
+		                                                                         IExpression[] args, MethodInfo callbackMethod,
 		                                                                         Reference targetField,
 		                                                                         MethodEmitter invokeMethodOnTarget)
 		{
@@ -113,7 +113,7 @@ namespace Castle.DynamicProxy.Generators
 				return;
 			}
 
-			var args = new Expression[parameters.Length];
+			var args = new IExpression[parameters.Length];
 
 			// Idea: instead of grab parameters one by one
 			// we should grab an array

@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	using Castle.DynamicProxy.Tokens;
 
-	internal class TypeTokenExpression : Expression
+	internal class TypeTokenExpression : IExpression
 	{
 		private readonly Type type;
 
@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.type = type;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldtoken, type);
 			gen.Emit(OpCodes.Call, TypeMethods.GetTypeFromHandle);

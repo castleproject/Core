@@ -16,18 +16,18 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class AssignArgumentStatement : Statement
+	internal class AssignArgumentStatement : IStatement
 	{
 		private readonly ArgumentReference argument;
-		private readonly Expression expression;
+		private readonly IExpression expression;
 
-		public AssignArgumentStatement(ArgumentReference argument, Expression expression)
+		public AssignArgumentStatement(ArgumentReference argument, IExpression expression)
 		{
 			this.argument = argument;
 			this.expression = expression;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			ArgumentsUtil.EmitLoadOwnerAndReference(argument, gen);
 			expression.Emit(member, gen);

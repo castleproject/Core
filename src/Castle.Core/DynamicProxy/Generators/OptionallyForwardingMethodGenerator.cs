@@ -44,7 +44,7 @@ namespace Castle.DynamicProxy.Generators
 			return emitter;
 		}
 
-		private Expression IfNotNull(Reference targetReference)
+		private IExpression IfNotNull(Reference targetReference)
 		{
 			var expression = new MultiStatementExpression();
 			var arguments = ArgumentsUtil.ConvertToArgumentReferenceExpression(MethodToOverride.GetParameters());
@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Generators
 			return expression;
 		}
 
-		private Expression IfNull(Type returnType)
+		private IExpression IfNull(Type returnType)
 		{
 			var expression = new MultiStatementExpression();
 			InitOutParameters(expression, MethodToOverride.GetParameters());

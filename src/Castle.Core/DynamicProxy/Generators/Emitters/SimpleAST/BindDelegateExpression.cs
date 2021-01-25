@@ -20,13 +20,13 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	using Castle.DynamicProxy.Internal;
 
-	internal class BindDelegateExpression : Expression
+	internal class BindDelegateExpression : IExpression
 	{
 		private readonly ConstructorInfo delegateCtor;
 		private readonly MethodInfo methodToBindTo;
-		private readonly Expression owner;
+		private readonly IExpression owner;
 
-		public BindDelegateExpression(Type @delegate, Expression owner, MethodInfo methodToBindTo,
+		public BindDelegateExpression(Type @delegate, IExpression owner, MethodInfo methodToBindTo,
 		                              GenericTypeParameterBuilder[] genericTypeParams)
 		{
 			delegateCtor = @delegate.GetConstructors()[0];
@@ -41,7 +41,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.owner = owner;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			owner.Emit(member, gen);
 			gen.Emit(OpCodes.Dup);

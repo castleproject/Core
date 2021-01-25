@@ -16,20 +16,20 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class AssignArrayStatement : Statement
+	internal class AssignArrayStatement : IStatement
 	{
 		private readonly Reference targetArray;
 		private readonly int targetPosition;
-		private readonly Expression value;
+		private readonly IExpression value;
 
-		public AssignArrayStatement(Reference targetArray, int targetPosition, Expression value)
+		public AssignArrayStatement(Reference targetArray, int targetPosition, IExpression value)
 		{
 			this.targetArray = targetArray;
 			this.targetPosition = targetPosition;
 			this.value = value;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator il)
+		public void Emit(IMemberEmitter member, ILGenerator il)
 		{
 			ArgumentsUtil.EmitLoadOwnerAndReference(targetArray, il);
 

@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System;
 	using System.Reflection.Emit;
 
-	internal class NewArrayExpression : Expression
+	internal class NewArrayExpression : IExpression
 	{
 		private readonly Type arrayType;
 		private readonly int size;
@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.arrayType = arrayType;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldc_I4, size);
 			gen.Emit(OpCodes.Newarr, arrayType);

@@ -17,12 +17,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System;
 	using System.Reflection.Emit;
 
-	internal class NullCoalescingOperatorExpression : Expression
+	internal class NullCoalescingOperatorExpression : IExpression
 	{
-		private readonly Expression @default;
-		private readonly Expression expression;
+		private readonly IExpression @default;
+		private readonly IExpression expression;
 
-		public NullCoalescingOperatorExpression(Expression expression, Expression @default)
+		public NullCoalescingOperatorExpression(IExpression expression, IExpression @default)
 		{
 			if (expression == null)
 			{
@@ -38,7 +38,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.@default = @default;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			expression.Emit(member, gen);
 			gen.Emit(OpCodes.Dup);

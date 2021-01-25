@@ -16,16 +16,16 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class ExpressionStatement : Statement
+	internal class ExpressionStatement : IStatement
 	{
-		private readonly Expression expression;
+		private readonly IExpression expression;
 
-		public ExpressionStatement(Expression expression)
+		public ExpressionStatement(IExpression expression)
 		{
 			this.expression = expression;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			// TODO: Should it discard any possible return value with a pop?
 			expression.Emit(member, gen);
