@@ -45,11 +45,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 		}
 
-		public virtual IExpression ToAddressOfExpression()
-		{
-			return new AddressOfReferenceExpression(this);
-		}
-
 		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			ArgumentsUtil.EmitLoadOwnerAndReference(this, gen);
