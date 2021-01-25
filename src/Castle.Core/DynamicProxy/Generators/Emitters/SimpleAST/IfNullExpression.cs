@@ -19,19 +19,19 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	internal class IfNullExpression : IExpression, IStatement
 	{
-		private readonly IILEmitter ifNotNull;
-		private readonly IILEmitter ifNull;
+		private readonly IExpressionOrStatement ifNotNull;
+		private readonly IExpressionOrStatement ifNull;
 		private readonly Reference reference;
 		private readonly IExpression expression;
 
-		public IfNullExpression(Reference reference, IILEmitter ifNull, IILEmitter ifNotNull = null)
+		public IfNullExpression(Reference reference, IExpressionOrStatement ifNull, IExpressionOrStatement ifNotNull = null)
 		{
 			this.reference = reference ?? throw new ArgumentNullException(nameof(reference));
 			this.ifNull = ifNull;
 			this.ifNotNull = ifNotNull;
 		}
 
-		public IfNullExpression(IExpression expression, IILEmitter ifNull, IILEmitter ifNotNull = null)
+		public IfNullExpression(IExpression expression, IExpressionOrStatement ifNull, IExpressionOrStatement ifNotNull = null)
 		{
 			this.expression = expression ?? throw new ArgumentNullException(nameof(expression));
 			this.ifNull = ifNull;
