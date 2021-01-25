@@ -19,7 +19,6 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 
 	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
 
@@ -30,7 +29,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 		}
 
-		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo,
+		protected override void CustomizeGetObjectData(CodeBuilder codebuilder, ArgumentReference serializationInfo,
 		                                               ArgumentReference streamingContext, ClassEmitter emitter)
 		{
 			var targetField = emitter.GetField("__target");

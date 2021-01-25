@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
+namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
 	using System.Collections.Generic;
@@ -20,25 +20,17 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	internal abstract class AbstractCodeBuilder
+	internal sealed class CodeBuilder
 	{
-		private readonly ILGenerator generator;
-		private readonly List<Reference> ilmarkers;
-		private readonly List<Statement> stmts;
+		private readonly List<LocalReference> locals;
+		private readonly List<Statement> statements;
 		private bool isEmpty;
 
-		protected AbstractCodeBuilder(ILGenerator generator)
+		public CodeBuilder()
 		{
-			this.generator = generator;
-			stmts = new List<Statement>();
-			ilmarkers = new List<Reference>();
+			statements = new List<Statement>();
+			locals = new List<LocalReference>();
 			isEmpty = true;
-		}
-
-		//NOTE: should we make this obsolete if no one is using it?
-		public /*protected internal*/ ILGenerator Generator
-		{
-			get { return generator; }
 		}
 
 		internal bool IsEmpty
@@ -46,40 +38,35 @@ namespace Castle.DynamicProxy.Generators.Emitters.CodeBuilders
 			get { return isEmpty; }
 		}
 
-		public AbstractCodeBuilder AddExpression(Expression expression)
+		public CodeBuilder AddExpression(Expression expression)
 		{
 			return AddStatement(new ExpressionStatement(expression));
 		}
 
-		public AbstractCodeBuilder AddStatement(Statement stmt)
+		public CodeBuilder AddStatement(Statement statement)
 		{
-			SetNonEmpty();
-			stmts.Add(stmt);
+			isEmpty = false;
+			statements.Add(statement);
 			return this;
 		}
 
 		public LocalReference DeclareLocal(Type type)
 		{
 			var local = new LocalReference(type);
-			ilmarkers.Add(local);
+			locals.Add(local);
 			return local;
-		}
-
-		public /*protected internal*/ void SetNonEmpty()
-		{
-			isEmpty = false;
 		}
 
 		internal void Generate(IMemberEmitter member, ILGenerator il)
 		{
-			foreach (var local in ilmarkers)
+			foreach (var local in locals)
 			{
 				local.Generate(il);
 			}
 
-			foreach (var stmt in stmts)
+			foreach (var statement in statements)
 			{
-				stmt.Emit(member, il);
+				statement.Emit(member, il);
 			}
 		}
 	}

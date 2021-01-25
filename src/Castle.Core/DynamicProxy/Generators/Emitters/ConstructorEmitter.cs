@@ -18,20 +18,19 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	internal class ConstructorEmitter : IMemberEmitter
 	{
 		private readonly ConstructorBuilder builder;
+		private readonly CodeBuilder codeBuilder;
 		private readonly AbstractTypeEmitter maintype;
-
-		private ConstructorCodeBuilder constructorCodeBuilder;
 
 		protected internal ConstructorEmitter(AbstractTypeEmitter maintype, ConstructorBuilder builder)
 		{
 			this.maintype = maintype;
 			this.builder = builder;
+			codeBuilder = new CodeBuilder();
 		}
 
 		internal ConstructorEmitter(AbstractTypeEmitter maintype, params ArgumentReference[] arguments)
@@ -41,19 +40,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			var args = ArgumentsUtil.InitializeAndConvert(arguments);
 
 			builder = maintype.TypeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, args);
+			codeBuilder = new CodeBuilder();
 		}
 
-		public virtual ConstructorCodeBuilder CodeBuilder
+		public CodeBuilder CodeBuilder
 		{
-			get
-			{
-				if (constructorCodeBuilder == null)
-				{
-					constructorCodeBuilder = new ConstructorCodeBuilder(
-						maintype.BaseType, builder.GetILGenerator());
-				}
-				return constructorCodeBuilder;
-			}
+			get { return codeBuilder; }
 		}
 
 		public ConstructorBuilder ConstructorBuilder
@@ -84,7 +76,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			if (ImplementedByRuntime == false && CodeBuilder.IsEmpty)
 			{
-				CodeBuilder.InvokeBaseConstructor();
+				CodeBuilder.AddStatement(new ConstructorInvocationStatement(maintype.BaseType));
 				CodeBuilder.AddStatement(new ReturnStatement());
 			}
 		}

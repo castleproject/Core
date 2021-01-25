@@ -20,7 +20,6 @@ namespace Castle.DynamicProxy.Generators
 
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
@@ -216,7 +215,7 @@ namespace Castle.DynamicProxy.Generators
 			var baseCtorArguments = GetBaseCtorArguments(targetType, out baseConstructor);
 
 			var constructor = CreateConstructor(invocation, baseCtorArguments);
-			constructor.CodeBuilder.InvokeBaseConstructor(baseConstructor, baseCtorArguments);
+			constructor.CodeBuilder.AddStatement(new ConstructorInvocationStatement(baseConstructor, baseCtorArguments));
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 

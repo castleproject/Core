@@ -21,7 +21,6 @@ namespace Castle.DynamicProxy.Contributors
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Serialization;
 	using Castle.DynamicProxy.Tokens;
@@ -147,7 +146,7 @@ namespace Castle.DynamicProxy.Contributors
 			return;
 		}
 
-		protected abstract void CustomizeGetObjectData(AbstractCodeBuilder builder, ArgumentReference serializationInfo,
+		protected abstract void CustomizeGetObjectData(CodeBuilder builder, ArgumentReference serializationInfo,
 		                                               ArgumentReference streamingContext, ClassEmitter emitter);
 
 		public virtual void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)

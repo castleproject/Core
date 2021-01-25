@@ -21,7 +21,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 
@@ -29,15 +28,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	internal class MethodEmitter : IMemberEmitter
 	{
 		private readonly MethodBuilder builder;
+		private readonly CodeBuilder codeBuilder;
 		private readonly GenericTypeParameterBuilder[] genericTypeParams;
 
 		private ArgumentReference[] arguments;
 
-		private MethodCodeBuilder codebuilder;
-
 		protected internal MethodEmitter(MethodBuilder builder)
 		{
 			this.builder = builder;
+			codeBuilder = new CodeBuilder();
 		}
 
 		internal MethodEmitter(AbstractTypeEmitter owner, string name, MethodAttributes attributes)
@@ -76,16 +75,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return arguments; }
 		}
 
-		public virtual MethodCodeBuilder CodeBuilder
+		public CodeBuilder CodeBuilder
 		{
-			get
-			{
-				if (codebuilder == null)
-				{
-					codebuilder = new MethodCodeBuilder(builder.GetILGenerator());
-				}
-				return codebuilder;
-			}
+			get { return codeBuilder; }
 		}
 
 		public GenericTypeParameterBuilder[] GenericTypeParams
@@ -145,7 +137,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				return;
 			}
 
-			codebuilder.Generate(this, builder.GetILGenerator());
+			codeBuilder.Generate(this, builder.GetILGenerator());
 		}
 
 		private void DefineParameters(ParameterInfo[] parameters)

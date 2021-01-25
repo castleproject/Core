@@ -25,7 +25,6 @@ namespace Castle.DynamicProxy.Contributors
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
@@ -90,7 +89,7 @@ namespace Castle.DynamicProxy.Contributors
 			base.AddAddValueInvocation(serializationInfo, getObjectData, field);
 		}
 
-		protected override void CustomizeGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo,
+		protected override void CustomizeGetObjectData(CodeBuilder codebuilder, ArgumentReference serializationInfo,
 		                                               ArgumentReference streamingContext, ClassEmitter emitter)
 		{
 			codebuilder.AddStatement(new ExpressionStatement(
@@ -110,7 +109,7 @@ namespace Castle.DynamicProxy.Contributors
 			EmitCallToBaseGetObjectData(codebuilder, serializationInfo, streamingContext);
 		}
 
-		private void EmitCustomGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo)
+		private void EmitCustomGetObjectData(CodeBuilder codebuilder, ArgumentReference serializationInfo)
 		{
 			var members = codebuilder.DeclareLocal(typeof(MemberInfo[]));
 			var data = codebuilder.DeclareLocal(typeof(object[]));
@@ -143,7 +142,7 @@ namespace Castle.DynamicProxy.Contributors
 			codebuilder.AddStatement(new ExpressionStatement(addValue));
 		}
 
-		private void EmitCallToBaseGetObjectData(AbstractCodeBuilder codebuilder, ArgumentReference serializationInfo,
+		private void EmitCallToBaseGetObjectData(CodeBuilder codebuilder, ArgumentReference serializationInfo,
 		                                         ArgumentReference streamingContext)
 		{
 			var baseGetObjectData = targetType.GetMethod("GetObjectData",

@@ -27,7 +27,6 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.Core.Logging;
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
-	using Castle.DynamicProxy.Generators.Emitters.CodeBuilders;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 
@@ -155,7 +154,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		protected void CompleteInitCacheMethod(ConstructorCodeBuilder constCodeBuilder)
+		protected void CompleteInitCacheMethod(CodeBuilder constCodeBuilder)
 		{
 			constCodeBuilder.AddStatement(new ReturnStatement());
 		}
@@ -275,11 +274,11 @@ namespace Castle.DynamicProxy.Generators
 				var slice = new ArgumentReference[baseConstructorParams.Length];
 				Array.Copy(args, fields.Length, slice, 0, baseConstructorParams.Length);
 
-				constructor.CodeBuilder.InvokeBaseConstructor(baseConstructor, slice);
+				constructor.CodeBuilder.AddStatement(new ConstructorInvocationStatement(baseConstructor, slice));
 			}
 			else
 			{
-				constructor.CodeBuilder.InvokeBaseConstructor();
+				constructor.CodeBuilder.AddStatement(new ConstructorInvocationStatement(emitter.BaseType));
 			}
 
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
@@ -336,7 +335,7 @@ namespace Castle.DynamicProxy.Generators
 
 			// Invoke base constructor
 
-			constructor.CodeBuilder.InvokeBaseConstructor(defaultConstructor);
+			constructor.CodeBuilder.AddStatement(new ConstructorInvocationStatement(defaultConstructor));
 
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
