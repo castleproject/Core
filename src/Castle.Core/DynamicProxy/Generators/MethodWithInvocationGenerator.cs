@@ -119,7 +119,7 @@ namespace Castle.DynamicProxy.Generators
 				emitter.CodeBuilder.AddStatement(new TryStatement());
 			}
 
-			var proceed = new ExpressionStatement(new MethodInvocationExpression(invocationLocal, InvocationMethods.Proceed));
+			var proceed = new MethodInvocationExpression(invocationLocal, InvocationMethods.Proceed);
 			emitter.CodeBuilder.AddStatement(proceed);
 
 			if (hasByRefArguments)
@@ -144,7 +144,7 @@ namespace Castle.DynamicProxy.Generators
 					LocalReference returnValue = emitter.CodeBuilder.DeclareLocal(typeof(object));
 					emitter.CodeBuilder.AddStatement(new AssignStatement(returnValue, getRetVal));
 
-					emitter.CodeBuilder.AddExpression(new IfNullExpression(returnValue, new ThrowStatement(typeof(InvalidOperationException),
+					emitter.CodeBuilder.AddStatement(new IfNullExpression(returnValue, new ThrowStatement(typeof(InvalidOperationException),
 						"Interceptors failed to set a return value, or swallowed the exception thrown by the target")));
 				}
 
@@ -185,7 +185,7 @@ namespace Castle.DynamicProxy.Generators
 			                                                        proxiedMethodTokenExpression, interceptors.ToExpression())
 			{ VirtualCall = true };
 
-			emitter.CodeBuilder.AddExpression(
+			emitter.CodeBuilder.AddStatement(
 				new IfNullExpression(methodInterceptorsField,
 				                     new AssignStatement(methodInterceptorsField,
 				                                         new NullCoalescingOperatorExpression(selectInterceptors, emptyInterceptors))));
@@ -205,7 +205,7 @@ namespace Castle.DynamicProxy.Generators
 				methodEmitter.CodeBuilder.AddStatement(
 					new AssignArrayStatement(genericParamsArrayLocal, i, new TypeTokenExpression(genericParameters[i])));
 			}
-			methodEmitter.CodeBuilder.AddExpression(
+			methodEmitter.CodeBuilder.AddStatement(
 				new MethodInvocationExpression(invocationLocal,
 				                               InvocationMethods.SetGenericMethodArguments,
 				                               new ReferenceExpression(

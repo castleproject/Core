@@ -92,13 +92,12 @@ namespace Castle.DynamicProxy.Contributors
 		protected override void CustomizeGetObjectData(CodeBuilder codebuilder, ArgumentReference serializationInfo,
 		                                               ArgumentReference streamingContext, ClassEmitter emitter)
 		{
-			codebuilder.AddStatement(new ExpressionStatement(
-			                         	new MethodInvocationExpression(
-			                         		serializationInfo,
-			                         		SerializationInfoMethods.AddValue_Bool,
-			                         		new ConstReference("__delegateToBase").ToExpression(),
-			                         		new ConstReference(delegateToBaseGetObjectData).
-			                         			ToExpression())));
+			codebuilder.AddStatement(
+				new MethodInvocationExpression(
+					serializationInfo,
+					SerializationInfoMethods.AddValue_Bool,
+					new ConstReference("__delegateToBase").ToExpression(),
+					new ConstReference(delegateToBaseGetObjectData).ToExpression()));
 
 			if (delegateToBaseGetObjectData == false)
 			{
@@ -139,7 +138,7 @@ namespace Castle.DynamicProxy.Contributors
 				SerializationInfoMethods.AddValue_Object,
 				new ConstReference("__data").ToExpression(),
 				data.ToExpression());
-			codebuilder.AddStatement(new ExpressionStatement(addValue));
+			codebuilder.AddStatement(addValue);
 		}
 
 		private void EmitCallToBaseGetObjectData(CodeBuilder codebuilder, ArgumentReference serializationInfo,
@@ -148,10 +147,11 @@ namespace Castle.DynamicProxy.Contributors
 			var baseGetObjectData = targetType.GetMethod("GetObjectData",
 			                                             new[] { typeof(SerializationInfo), typeof(StreamingContext) });
 
-			codebuilder.AddStatement(new ExpressionStatement(
-			                         	new MethodInvocationExpression(baseGetObjectData,
-			                         	                               serializationInfo.ToExpression(),
-			                         	                               streamingContext.ToExpression())));
+			codebuilder.AddStatement(
+				new MethodInvocationExpression(
+					baseGetObjectData,
+					serializationInfo.ToExpression(),
+					streamingContext.ToExpression()));
 		}
 
 		private void Constructor(ClassEmitter emitter)

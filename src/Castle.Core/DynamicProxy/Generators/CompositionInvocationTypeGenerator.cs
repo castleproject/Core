@@ -61,8 +61,10 @@ namespace Castle.DynamicProxy.Generators
 		                                                      MethodEmitter invokeMethodOnTarget, Reference targetField)
 		{
 			invokeMethodOnTarget.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new MethodInvocationExpression(SelfReference.Self, InvocationMethods.CompositionInvocationEnsureValidTarget)));
+				new MethodInvocationExpression(
+					SelfReference.Self,
+					InvocationMethods.CompositionInvocationEnsureValidTarget));
+
 			base.ImplementInvokeMethodOnTarget(invocation, parameters, invokeMethodOnTarget, targetField);
 		}
 	}

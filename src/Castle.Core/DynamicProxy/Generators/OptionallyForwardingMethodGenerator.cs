@@ -39,8 +39,11 @@ namespace Castle.DynamicProxy.Generators
 			var targetReference = getTargetReference(@class, MethodToOverride);
 
 			emitter.CodeBuilder.AddStatement(
-				new ExpressionStatement(
-					new IfNullExpression(targetReference, IfNull(emitter.ReturnType), IfNotNull(targetReference))));
+				new IfNullExpression(
+					targetReference,
+					IfNull(emitter.ReturnType),
+					IfNotNull(targetReference)));
+
 			return emitter;
 		}
 

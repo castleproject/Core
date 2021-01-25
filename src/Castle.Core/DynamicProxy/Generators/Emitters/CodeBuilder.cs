@@ -38,11 +38,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return isEmpty; }
 		}
 
-		public CodeBuilder AddExpression(IExpression expression)
-		{
-			return AddStatement(new ExpressionStatement(expression));
-		}
-
 		public CodeBuilder AddStatement(IStatement statement)
 		{
 			isEmpty = false;
