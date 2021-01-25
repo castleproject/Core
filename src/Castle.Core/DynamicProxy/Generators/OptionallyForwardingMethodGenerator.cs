@@ -47,43 +47,43 @@ namespace Castle.DynamicProxy.Generators
 			return emitter;
 		}
 
-		private IExpression IfNotNull(Reference targetReference)
+		private IStatement IfNotNull(Reference targetReference)
 		{
-			var expression = new MultiStatementExpression();
+			var statements = new BlockStatement();
 			var arguments = ArgumentsUtil.ConvertToArgumentReferenceExpression(MethodToOverride.GetParameters());
 
-			expression.AddStatement(new ReturnStatement(
+			statements.AddStatement(new ReturnStatement(
 			                        	new MethodInvocationExpression(
 			                        		targetReference,
 			                        		MethodToOverride,
 			                        		arguments) { VirtualCall = true }));
-			return expression;
+			return statements;
 		}
 
-		private IExpression IfNull(Type returnType)
+		private IStatement IfNull(Type returnType)
 		{
-			var expression = new MultiStatementExpression();
-			InitOutParameters(expression, MethodToOverride.GetParameters());
+			var statements = new BlockStatement();
+			InitOutParameters(statements, MethodToOverride.GetParameters());
 
 			if (returnType == typeof(void))
 			{
-				expression.AddStatement(new ReturnStatement());
+				statements.AddStatement(new ReturnStatement());
 			}
 			else
 			{
-				expression.AddStatement(new ReturnStatement(new DefaultValueExpression(returnType)));
+				statements.AddStatement(new ReturnStatement(new DefaultValueExpression(returnType)));
 			}
-			return expression;
+			return statements;
 		}
 
-		private void InitOutParameters(MultiStatementExpression expression, ParameterInfo[] parameters)
+		private void InitOutParameters(BlockStatement statements, ParameterInfo[] parameters)
 		{
 			for (var index = 0; index < parameters.Length; index++)
 			{
 				var parameter = parameters[index];
 				if (parameter.IsOut)
 				{
-					expression.AddStatement(
+					statements.AddStatement(
 						new AssignArgumentStatement(new ArgumentReference(parameter.ParameterType, index + 1),
 						                            new DefaultValueExpression(parameter.ParameterType)));
 				}
