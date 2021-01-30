@@ -145,5 +145,23 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("hello world", target.Property);
 			Assert.AreEqual("hello world", proxy.Property);
 		}
+
+		[Test]
+		public void Unproxied_public_method_should_not_invoke_interceptor()
+		{
+			var target = new VirtualClassWithMethod();
+			var options = new ProxyGenerationOptions(new ProxyNothingHook());
+			var proxy = generator.CreateClassProxyWithTarget(target, options, new ThrowingInterceptor());
+			proxy.Method();  // the hook says "don't proxy anything", so this should not call the throwing interceptor
+		}
+
+		[Test]
+		public void Unproxied_non_public_method_should_not_invoke_interceptor()
+		{
+			var target = new ClassWithProtectedMethod();
+			var options = new ProxyGenerationOptions(new ProxyNothingHook());
+			var proxy = generator.CreateClassProxyWithTarget(target, options, new ThrowingInterceptor());
+			proxy.PublicMethod();
+		}
 	}
 }
