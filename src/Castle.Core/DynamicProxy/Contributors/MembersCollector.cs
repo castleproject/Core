@@ -164,6 +164,18 @@ namespace Castle.DynamicProxy.Contributors
 		/// </summary>
 		protected bool AcceptMethod(MethodInfo method, bool onlyVirtuals, IProxyGenerationHook hook)
 		{
+			return AcceptMethodPreScreen(method, onlyVirtuals, hook) && hook.ShouldInterceptMethod(type, method);
+		}
+
+		/// <summary>
+		///   Performs some basic screening to filter out non-interceptable methods.
+		/// </summary>
+		/// <remarks>
+		///   The <paramref name="hook"/> will get invoked for non-interceptable method notification only;
+		///   it does not get asked whether or not to intercept the <paramref name="method"/>.
+		/// </remarks>
+		protected bool AcceptMethodPreScreen(MethodInfo method, bool onlyVirtuals, IProxyGenerationHook hook)
+		{
 			if (IsInternalAndNotVisibleToDynamicProxy(method))
 			{
 				return false;
@@ -207,7 +219,7 @@ namespace Castle.DynamicProxy.Contributors
 				return false;
 			}
 
-			return hook.ShouldInterceptMethod(type, method);
+			return true;
 		}
 
 		private static bool IsInternalAndNotVisibleToDynamicProxy(MethodInfo method)

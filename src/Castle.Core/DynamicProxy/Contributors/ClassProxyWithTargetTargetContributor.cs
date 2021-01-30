@@ -56,15 +56,14 @@ namespace Castle.DynamicProxy.Contributors
 				return null;
 			}
 
-			if (!method.Proxyable)
-			{
-				return new MinimialisticMethodGenerator(method,
-				                                        overrideMethod);
-			}
-
 			if (IsDirectlyAccessible(method) == false)
 			{
 				return IndirectlyCalledMethodGenerator(method, @class, overrideMethod);
+			}
+
+			if (!method.Proxyable)
+			{
+				return new ForwardingMethodGenerator(method, overrideMethod, (c, m) => c.GetField("__target"));
 			}
 
 			var invocation = GetInvocationType(method, @class);
