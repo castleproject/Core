@@ -9,6 +9,7 @@ Bugfixes:
 - Proxying certain `[Serializable]` classes produces proxy types that fail PEVerify test (@stakx, #367)
 - `private protected` methods are not intercepted (@CrispyDrone, #535)
 - `System.UIntPtr` unsupported (@stakx, #546)
+- DynamicProxy generates two modules when proceeding from a class proxy's protected method to the target, causing an `InvalidOperationException` when saving the generated assembly to disk (@stakx, #569)
 
 Deprecations:
  - Removed support for the .NET Framework < 4.5 and .NET Standard 1.x. (@stakx, #495, #496)
