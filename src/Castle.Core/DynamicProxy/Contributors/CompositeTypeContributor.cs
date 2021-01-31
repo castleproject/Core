@@ -31,9 +31,9 @@ namespace Castle.DynamicProxy.Contributors
 		protected readonly ICollection<Type> interfaces = new HashSet<Type>();
 		
 		private ILogger logger = NullLogger.Instance;
-		private readonly ICollection<MetaProperty> properties = new TypeElementCollection<MetaProperty>();
-		private readonly ICollection<MetaEvent> events = new TypeElementCollection<MetaEvent>();
-		private readonly ICollection<MetaMethod> methods = new TypeElementCollection<MetaMethod>();
+		private readonly List<MetaProperty> properties = new List<MetaProperty>();
+		private readonly List<MetaEvent> events = new List<MetaEvent>();
+		private readonly List<MetaMethod> methods = new List<MetaMethod>();
 
 		protected CompositeTypeContributor(INamingScope namingScope)
 		{
