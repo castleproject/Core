@@ -34,15 +34,12 @@ namespace Castle.DynamicProxy.Contributors
 			this.canChangeTarget = canChangeTarget;
 		}
 
-		protected override IEnumerable<MembersCollector> CollectElementsToProxyInternal(IProxyGenerationHook hook)
+		protected override IEnumerable<MembersCollector> GetCollectors()
 		{
-			Debug.Assert(hook != null, "hook != null");
-
 			foreach (var @interface in interfaces)
 			{
 				var item = GetCollectorForInterface(@interface);
 				item.Logger = Logger;
-				item.CollectMembersToProxy(hook);
 				yield return item;
 			}
 		}

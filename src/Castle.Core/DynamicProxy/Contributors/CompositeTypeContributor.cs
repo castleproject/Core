@@ -48,8 +48,12 @@ namespace Castle.DynamicProxy.Contributors
 
 		public void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)
 		{
-			foreach (var collector in CollectElementsToProxyInternal(hook))
+			Debug.Assert(hook != null);
+
+			foreach (var collector in GetCollectors())
 			{
+				collector.CollectMembersToProxy(hook);
+
 				foreach (var method in collector.Methods)
 				{
 					model.AddMethod(method);
@@ -68,7 +72,7 @@ namespace Castle.DynamicProxy.Contributors
 			}
 		}
 
-		protected abstract IEnumerable<MembersCollector> CollectElementsToProxyInternal(IProxyGenerationHook hook);
+		protected abstract IEnumerable<MembersCollector> GetCollectors();
 
 		public virtual void Generate(ClassEmitter @class)
 		{
