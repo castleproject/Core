@@ -78,7 +78,8 @@ namespace Castle.DynamicProxy.Generators
 			                                 uniqueName,
 			                                 typeof(MulticastDelegate),
 			                                 Type.EmptyTypes,
-			                                 DelegateFlags);
+			                                 DelegateFlags,
+			                                 forceUnsigned: @class.InStrongNamedModule == false);
 			@delegate.CopyGenericParametersFromMethod(method.Method);
 			return @delegate;
 		}
