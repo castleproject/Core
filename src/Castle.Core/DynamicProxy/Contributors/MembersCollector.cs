@@ -174,10 +174,6 @@ namespace Castle.DynamicProxy.Contributors
 			}
 			checkedMethods.Add(method);
 
-			if (methods.ContainsKey(method))
-			{
-				return null;
-			}
 			var methodToGenerate = GetMethodToGenerate(method, hook, isStandalone);
 			if (methodToGenerate != null)
 			{
