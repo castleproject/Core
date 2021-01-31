@@ -148,6 +148,20 @@ namespace Castle.DynamicProxy.Contributors
 				this.contributor = contributor;
 			}
 
+			// You may have noticed that most contributors do not query `MetaType` at all,
+			// but only their own collections. So perhaps you are wondering why collected
+			// type elements are added to `model` at all, and not just to `contributor`?
+			//
+			// TL;DR: This prevents member name collisions in the generated proxy type.
+			//
+			// `MetaType` uses `TypeElementCollection`s internally, which switches members
+			// to explicit implementation whenever a name collision with a previously added
+			// member occurs.
+			//
+			// It would be pointless to do this at the level of the individual contributor,
+			// because name collisions could still occur across several contributors. This
+			// is why they all share the same `MetaType` instance.
+
 			public void Add(MetaEvent @event)
 			{
 				model.AddEvent(@event);
