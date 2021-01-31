@@ -28,11 +28,6 @@ namespace Castle.DynamicProxy.Contributors
 		private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		private ILogger logger = NullLogger.Instance;
 
-		private HashSet<MethodInfo> checkedMethods = new HashSet<MethodInfo>();
-		private readonly List<MetaProperty> properties = new List<MetaProperty>();
-		private readonly List<MetaEvent> events = new List<MetaEvent>();
-		private readonly List<MetaMethod> methods = new List<MetaMethod>();
-
 		protected readonly Type type;
 
 		protected MembersCollector(Type type)
@@ -46,37 +41,16 @@ namespace Castle.DynamicProxy.Contributors
 			set { logger = value; }
 		}
 
-		public IEnumerable<MetaMethod> Methods
+		public virtual void CollectMembersToProxy(IProxyGenerationHook hook, IMembersCollectorSink sink)
 		{
-			get { return methods; }
-		}
+			var checkedMethods = new HashSet<MethodInfo>();
 
-		public IEnumerable<MetaProperty> Properties
-		{
-			get { return properties; }
-		}
-
-		public IEnumerable<MetaEvent> Events
-		{
-			get { return events; }
-		}
-
-		public virtual void CollectMembersToProxy(IProxyGenerationHook hook)
-		{
-			if (checkedMethods == null) // this method was already called!
-			{
-				throw new InvalidOperationException(
-					string.Format("Can't call 'CollectMembersToProxy' method twice. This usually signifies a bug in custom {0}.",
-					              typeof(ITypeContributor)));
-			}
 			CollectProperties();
 			CollectEvents();
 			// Methods go last, because properties and events have methods too (getters/setters add/remove)
 			// and we don't want to get duplicates, so we collect property and event methods first
 			// then we collect methods, and add only these that aren't there yet
 			CollectMethods();
-
-			checkedMethods = null; // this is ugly, should have a boolean flag for this or something
 
 			void CollectProperties()
 			{
@@ -130,13 +104,13 @@ namespace Castle.DynamicProxy.Contributors
 				var nonInheritableAttributes = property.GetNonInheritableAttributes();
 				var arguments = property.GetIndexParameters();
 
-				properties.Add(new MetaProperty(property.Name,
-				                                property.PropertyType,
-				                                property.DeclaringType,
-				                                getter,
-				                                setter,
-				                                nonInheritableAttributes.Select(a => a.Builder),
-				                                arguments.Select(a => a.ParameterType).ToArray()));
+				sink.Add(new MetaProperty(property.Name,
+				                          property.PropertyType,
+				                          property.DeclaringType,
+				                          getter,
+				                          setter,
+				                          nonInheritableAttributes.Select(a => a.Builder),
+				                          arguments.Select(a => a.ParameterType).ToArray()));
 			}
 
 			void AddEvent(EventInfo @event)
@@ -161,8 +135,8 @@ namespace Castle.DynamicProxy.Contributors
 					return;
 				}
 
-				events.Add(new MetaEvent(@event.Name,
-				                         @event.DeclaringType, @event.EventHandlerType, adder, remover, EventAttributes.None));
+				sink.Add(new MetaEvent(@event.Name,
+				                       @event.DeclaringType, @event.EventHandlerType, adder, remover, EventAttributes.None));
 			}
 
 			MetaMethod AddMethod(MethodInfo method, bool isStandalone)
@@ -175,7 +149,7 @@ namespace Castle.DynamicProxy.Contributors
 				var methodToGenerate = GetMethodToGenerate(method, hook, isStandalone);
 				if (methodToGenerate != null)
 				{
-					methods.Add(methodToGenerate);
+					sink.Add(methodToGenerate);
 				}
 
 				return methodToGenerate;

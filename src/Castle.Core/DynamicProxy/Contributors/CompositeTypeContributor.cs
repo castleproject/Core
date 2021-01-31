@@ -49,26 +49,13 @@ namespace Castle.DynamicProxy.Contributors
 		public void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)
 		{
 			Debug.Assert(hook != null);
+			Debug.Assert(model != null);
+
+			var sink = new MembersCollectorSink(model, this);
 
 			foreach (var collector in GetCollectors())
 			{
-				collector.CollectMembersToProxy(hook);
-
-				foreach (var method in collector.Methods)
-				{
-					model.AddMethod(method);
-					methods.Add(method);
-				}
-				foreach (var @event in collector.Events)
-				{
-					model.AddEvent(@event);
-					events.Add(@event);
-				}
-				foreach (var property in collector.Properties)
-				{
-					model.AddProperty(property);
-					properties.Add(property);
-				}
+				collector.CollectMembersToProxy(hook, sink);
 			}
 		}
 
@@ -147,6 +134,36 @@ namespace Castle.DynamicProxy.Contributors
 				{
 					proxyMethod.DefineCustomAttribute(attribute.Builder);
 				}
+			}
+		}
+
+		private sealed class MembersCollectorSink : IMembersCollectorSink
+		{
+			private readonly MetaType model;
+			private readonly CompositeTypeContributor contributor;
+
+			public MembersCollectorSink(MetaType model, CompositeTypeContributor contributor)
+			{
+				this.model = model;
+				this.contributor = contributor;
+			}
+
+			public void Add(MetaEvent @event)
+			{
+				model.AddEvent(@event);
+				contributor.events.Add(@event);
+			}
+
+			public void Add(MetaMethod method)
+			{
+				model.AddMethod(method);
+				contributor.methods.Add(method);
+			}
+
+			public void Add(MetaProperty property)
+			{
+				model.AddProperty(property);
+				contributor.properties.Add(property);
 			}
 		}
 	}
