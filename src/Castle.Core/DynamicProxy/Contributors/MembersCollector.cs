@@ -29,9 +29,9 @@ namespace Castle.DynamicProxy.Contributors
 		private ILogger logger = NullLogger.Instance;
 
 		private HashSet<MethodInfo> checkedMethods = new HashSet<MethodInfo>();
-		private readonly IDictionary<PropertyInfo, MetaProperty> properties = new Dictionary<PropertyInfo, MetaProperty>();
-		private readonly IDictionary<EventInfo, MetaEvent> events = new Dictionary<EventInfo, MetaEvent>();
-		private readonly IDictionary<MethodInfo, MetaMethod> methods = new Dictionary<MethodInfo, MetaMethod>();
+		private readonly List<MetaProperty> properties = new List<MetaProperty>();
+		private readonly List<MetaEvent> events = new List<MetaEvent>();
+		private readonly List<MetaMethod> methods = new List<MetaMethod>();
 
 		protected readonly Type type;
 
@@ -48,17 +48,17 @@ namespace Castle.DynamicProxy.Contributors
 
 		public IEnumerable<MetaMethod> Methods
 		{
-			get { return methods.Values; }
+			get { return methods; }
 		}
 
 		public IEnumerable<MetaProperty> Properties
 		{
-			get { return properties.Values; }
+			get { return properties; }
 		}
 
 		public IEnumerable<MetaEvent> Events
 		{
-			get { return events.Values; }
+			get { return events; }
 		}
 
 		public virtual void CollectMembersToProxy(IProxyGenerationHook hook)
@@ -131,13 +131,13 @@ namespace Castle.DynamicProxy.Contributors
 			var nonInheritableAttributes = property.GetNonInheritableAttributes();
 			var arguments = property.GetIndexParameters();
 
-			properties[property] = new MetaProperty(property.Name,
-			                                        property.PropertyType,
-			                                        property.DeclaringType,
-			                                        getter,
-			                                        setter,
-			                                        nonInheritableAttributes.Select(a => a.Builder),
-			                                        arguments.Select(a => a.ParameterType).ToArray());
+			properties.Add(new MetaProperty(property.Name,
+			                                property.PropertyType,
+			                                property.DeclaringType,
+			                                getter,
+			                                setter,
+			                                nonInheritableAttributes.Select(a => a.Builder),
+			                                arguments.Select(a => a.ParameterType).ToArray()));
 		}
 
 		private void AddEvent(EventInfo @event, IProxyGenerationHook hook)
@@ -162,8 +162,8 @@ namespace Castle.DynamicProxy.Contributors
 				return;
 			}
 
-			events[@event] = new MetaEvent(@event.Name,
-			                               @event.DeclaringType, @event.EventHandlerType, adder, remover, EventAttributes.None);
+			events.Add(new MetaEvent(@event.Name,
+			                         @event.DeclaringType, @event.EventHandlerType, adder, remover, EventAttributes.None));
 		}
 
 		private MetaMethod AddMethod(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
@@ -176,7 +176,7 @@ namespace Castle.DynamicProxy.Contributors
 			var methodToGenerate = GetMethodToGenerate(method, hook, isStandalone);
 			if (methodToGenerate != null)
 			{
-				methods[method] = methodToGenerate;
+				methods.Add(methodToGenerate);
 			}
 
 			return methodToGenerate;
