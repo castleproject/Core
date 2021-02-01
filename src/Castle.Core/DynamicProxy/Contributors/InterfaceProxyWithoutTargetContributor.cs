@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Contributors
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Internal;
 
 	internal class InterfaceProxyWithoutTargetContributor : CompositeTypeContributor
 	{
@@ -60,6 +61,15 @@ namespace Castle.DynamicProxy.Contributors
 
 		private Type GetInvocationType(MetaMethod method, ClassEmitter emitter)
 		{
+			var methodInfo = method.Method;
+
+			if (canChangeTarget == false && methodInfo.IsAbstract && methodInfo.IsGenericMethod == false && methodInfo.IsGenericMethodDefinition == false)
+			{
+				// We do not need to generate a custom invocation type because no custom implementation
+				// for `InvokeMethodOnTarget` will be needed (proceeding to target isn't possible here):
+				return typeof(InterfaceMethodWithoutTargetInvocation);
+			}
+
 			var scope = emitter.ModuleScope;
 			Type[] invocationInterfaces;
 			if (canChangeTarget)
@@ -70,14 +80,14 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				invocationInterfaces = new[] { typeof(IInvocation) };
 			}
-			var key = new CacheKey(method.Method, CompositionInvocationTypeGenerator.BaseType, invocationInterfaces, null);
+			var key = new CacheKey(methodInfo, CompositionInvocationTypeGenerator.BaseType, invocationInterfaces, null);
 
 			// no locking required as we're already within a lock
 
 			return scope.TypeCache.GetOrAddWithoutTakingLock(key, _ =>
-				new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
+				new CompositionInvocationTypeGenerator(methodInfo.DeclaringType,
 				                                       method,
-				                                       method.Method,
+				                                       methodInfo,
 				                                       canChangeTarget,
 				                                       null)
 				.Generate(emitter, namingScope)
