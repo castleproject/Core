@@ -63,7 +63,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			var methodInfo = method.Method;
 
-			if (canChangeTarget == false && methodInfo.IsAbstract && methodInfo.IsGenericMethod == false && methodInfo.IsGenericMethodDefinition == false)
+			if (canChangeTarget == false && methodInfo.IsAbstract)
 			{
 				// We do not need to generate a custom invocation type because no custom implementation
 				// for `InvokeMethodOnTarget` will be needed (proceeding to target isn't possible here):
