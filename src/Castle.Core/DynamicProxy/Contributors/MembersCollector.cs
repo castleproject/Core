@@ -28,11 +28,6 @@ namespace Castle.DynamicProxy.Contributors
 		private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		private ILogger logger = NullLogger.Instance;
 
-		private ICollection<MethodInfo> checkedMethods = new HashSet<MethodInfo>();
-		private readonly IDictionary<PropertyInfo, MetaProperty> properties = new Dictionary<PropertyInfo, MetaProperty>();
-		private readonly IDictionary<EventInfo, MetaEvent> events = new Dictionary<EventInfo, MetaEvent>();
-		private readonly IDictionary<MethodInfo, MetaMethod> methods = new Dictionary<MethodInfo, MetaMethod>();
-
 		protected readonly Type type;
 
 		protected MembersCollector(Type type)
@@ -46,145 +41,119 @@ namespace Castle.DynamicProxy.Contributors
 			set { logger = value; }
 		}
 
-		public IEnumerable<MetaMethod> Methods
+		public virtual void CollectMembersToProxy(IProxyGenerationHook hook, IMembersCollectorSink sink)
 		{
-			get { return methods.Values; }
-		}
+			var checkedMethods = new HashSet<MethodInfo>();
 
-		public IEnumerable<MetaProperty> Properties
-		{
-			get { return properties.Values; }
-		}
-
-		public IEnumerable<MetaEvent> Events
-		{
-			get { return events.Values; }
-		}
-
-		public virtual void CollectMembersToProxy(IProxyGenerationHook hook)
-		{
-			if (checkedMethods == null) // this method was already called!
-			{
-				throw new InvalidOperationException(
-					string.Format("Can't call 'CollectMembersToProxy' method twice. This usually signifies a bug in custom {0}.",
-					              typeof(ITypeContributor)));
-			}
-			CollectProperties(hook);
-			CollectEvents(hook);
+			CollectProperties();
+			CollectEvents();
 			// Methods go last, because properties and events have methods too (getters/setters add/remove)
 			// and we don't want to get duplicates, so we collect property and event methods first
 			// then we collect methods, and add only these that aren't there yet
-			CollectMethods(hook);
+			CollectMethods();
 
-			checkedMethods = null; // this is ugly, should have a boolean flag for this or something
-		}
-
-		private void CollectProperties(IProxyGenerationHook hook)
-		{
-			var propertiesFound = type.GetProperties(Flags);
-			foreach (var property in propertiesFound)
+			void CollectProperties()
 			{
-				AddProperty(property, hook);
-			}
-		}
-
-		private void CollectEvents(IProxyGenerationHook hook)
-		{
-			var eventsFound = type.GetEvents(Flags);
-			foreach (var @event in eventsFound)
-			{
-				AddEvent(@event, hook);
-			}
-		}
-
-		private void CollectMethods(IProxyGenerationHook hook)
-		{
-			var methodsFound = MethodFinder.GetAllInstanceMethods(type, Flags);
-			foreach (var method in methodsFound)
-			{
-				AddMethod(method, hook, true);
-			}
-		}
-
-		private void AddProperty(PropertyInfo property, IProxyGenerationHook hook)
-		{
-			MetaMethod getter = null;
-			MetaMethod setter = null;
-
-			if (property.CanRead)
-			{
-				var getMethod = property.GetGetMethod(true);
-				getter = AddMethod(getMethod, hook, false);
+				var propertiesFound = type.GetProperties(Flags);
+				foreach (var property in propertiesFound)
+				{
+					AddProperty(property);
+				}
 			}
 
-			if (property.CanWrite)
+			void CollectEvents()
 			{
-				var setMethod = property.GetSetMethod(true);
-				setter = AddMethod(setMethod, hook, false);
+				var eventsFound = type.GetEvents(Flags);
+				foreach (var @event in eventsFound)
+				{
+					AddEvent(@event);
+				}
 			}
 
-			if (setter == null && getter == null)
+			void CollectMethods()
 			{
-				return;
+				var methodsFound = MethodFinder.GetAllInstanceMethods(type, Flags);
+				foreach (var method in methodsFound)
+				{
+					AddMethod(method, true);
+				}
 			}
 
-			var nonInheritableAttributes = property.GetNonInheritableAttributes();
-			var arguments = property.GetIndexParameters();
-
-			properties[property] = new MetaProperty(property.Name,
-			                                        property.PropertyType,
-			                                        property.DeclaringType,
-			                                        getter,
-			                                        setter,
-			                                        nonInheritableAttributes.Select(a => a.Builder),
-			                                        arguments.Select(a => a.ParameterType).ToArray());
-		}
-
-		private void AddEvent(EventInfo @event, IProxyGenerationHook hook)
-		{
-			var addMethod = @event.GetAddMethod(true);
-			var removeMethod = @event.GetRemoveMethod(true);
-			MetaMethod adder = null;
-			MetaMethod remover = null;
-
-			if (addMethod != null)
+			void AddProperty(PropertyInfo property)
 			{
-				adder = AddMethod(addMethod, hook, false);
+				MetaMethod getter = null;
+				MetaMethod setter = null;
+
+				if (property.CanRead)
+				{
+					var getMethod = property.GetGetMethod(true);
+					getter = AddMethod(getMethod, false);
+				}
+
+				if (property.CanWrite)
+				{
+					var setMethod = property.GetSetMethod(true);
+					setter = AddMethod(setMethod, false);
+				}
+
+				if (setter == null && getter == null)
+				{
+					return;
+				}
+
+				var nonInheritableAttributes = property.GetNonInheritableAttributes();
+				var arguments = property.GetIndexParameters();
+
+				sink.Add(new MetaProperty(property.Name,
+				                          property.PropertyType,
+				                          property.DeclaringType,
+				                          getter,
+				                          setter,
+				                          nonInheritableAttributes.Select(a => a.Builder),
+				                          arguments.Select(a => a.ParameterType).ToArray()));
 			}
 
-			if (removeMethod != null)
+			void AddEvent(EventInfo @event)
 			{
-				remover = AddMethod(removeMethod, hook, false);
+				var addMethod = @event.GetAddMethod(true);
+				var removeMethod = @event.GetRemoveMethod(true);
+				MetaMethod adder = null;
+				MetaMethod remover = null;
+
+				if (addMethod != null)
+				{
+					adder = AddMethod(addMethod, false);
+				}
+
+				if (removeMethod != null)
+				{
+					remover = AddMethod(removeMethod, false);
+				}
+
+				if (adder == null && remover == null)
+				{
+					return;
+				}
+
+				sink.Add(new MetaEvent(@event.Name,
+				                       @event.DeclaringType, @event.EventHandlerType, adder, remover, EventAttributes.None));
 			}
 
-			if (adder == null && remover == null)
+			MetaMethod AddMethod(MethodInfo method, bool isStandalone)
 			{
-				return;
-			}
+				if (checkedMethods.Add(method) == false)
+				{
+					return null;
+				}
 
-			events[@event] = new MetaEvent(@event.Name,
-			                               @event.DeclaringType, @event.EventHandlerType, adder, remover, EventAttributes.None);
-		}
+				var methodToGenerate = GetMethodToGenerate(method, hook, isStandalone);
+				if (methodToGenerate != null)
+				{
+					sink.Add(methodToGenerate);
+				}
 
-		private MetaMethod AddMethod(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
-		{
-			if (checkedMethods.Contains(method))
-			{
-				return null;
+				return methodToGenerate;
 			}
-			checkedMethods.Add(method);
-
-			if (methods.ContainsKey(method))
-			{
-				return null;
-			}
-			var methodToGenerate = GetMethodToGenerate(method, hook, isStandalone);
-			if (methodToGenerate != null)
-			{
-				methods[method] = methodToGenerate;
-			}
-
-			return methodToGenerate;
 		}
 
 		protected abstract MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone);

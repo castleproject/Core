@@ -69,7 +69,7 @@ namespace Castle.DynamicProxy.Contributors
 			base.Generate(@class);
 		}
 
-		protected override IEnumerable<MembersCollector> CollectElementsToProxyInternal(IProxyGenerationHook hook)
+		protected override IEnumerable<MembersCollector> GetCollectors()
 		{
 			foreach (var @interface in interfaces)
 			{
@@ -83,7 +83,6 @@ namespace Castle.DynamicProxy.Contributors
 					Debug.Assert(@interface.IsDelegateType());
 					item = new DelegateTypeMembersCollector(@interface);
 				}
-				item.CollectMembersToProxy(hook);
 				yield return item;
 			}
 		}

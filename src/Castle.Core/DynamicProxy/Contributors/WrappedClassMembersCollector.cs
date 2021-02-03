@@ -28,9 +28,9 @@ namespace Castle.DynamicProxy.Contributors
 		{
 		}
 
-		public override void CollectMembersToProxy(IProxyGenerationHook hook)
+		public override void CollectMembersToProxy(IProxyGenerationHook hook, IMembersCollectorSink sink)
 		{
-			base.CollectMembersToProxy(hook);
+			base.CollectMembersToProxy(hook, sink);
 			CollectFields(hook);
 			// TODO: perhaps we should also look for nested classes...
 		}
