@@ -16,18 +16,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class ReferenceExpression : Expression
+	internal interface IExpressionOrStatement
 	{
-		private readonly Reference reference;
-
-		public ReferenceExpression(Reference reference)
-		{
-			this.reference = reference;
-		}
-
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
-		{
-			ArgumentsUtil.EmitLoadOwnerAndReference(reference, gen);
-		}
+		void Emit(IMemberEmitter member, ILGenerator gen);
 	}
 }

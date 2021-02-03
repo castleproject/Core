@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class ReferencesToObjectArrayExpression : Expression
+	internal class ReferencesToObjectArrayExpression : IExpression
 	{
 		private readonly TypeReference[] args;
 
@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.args = args;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			var local = gen.DeclareLocal(typeof(object[]));
 

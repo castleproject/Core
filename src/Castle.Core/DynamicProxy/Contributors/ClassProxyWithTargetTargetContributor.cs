@@ -72,7 +72,7 @@ namespace Castle.DynamicProxy.Contributors
 			return new MethodWithInvocationGenerator(method,
 			                                         @class.GetField("__interceptors"),
 			                                         invocation,
-			                                         (c, m) => c.GetField("__target").ToExpression(),
+			                                         (c, m) => c.GetField("__target"),
 			                                         overrideMethod,
 			                                         null);
 		}
@@ -147,7 +147,7 @@ namespace Castle.DynamicProxy.Contributors
 			return new MethodWithInvocationGenerator(method,
 			                                         proxy.GetField("__interceptors"),
 			                                         invocation,
-			                                         (c, m) => c.GetField("__target").ToExpression(),
+			                                         (c, m) => c.GetField("__target"),
 			                                         overrideMethod,
 			                                         contributor);
 		}

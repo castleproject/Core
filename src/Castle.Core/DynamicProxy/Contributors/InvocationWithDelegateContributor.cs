@@ -46,7 +46,7 @@ namespace Castle.DynamicProxy.Contributors
 			var constructor = invocation.CreateConstructor(arguments);
 
 			var delegateField = invocation.CreateField("delegate", delegateType);
-			constructor.CodeBuilder.AddStatement(new AssignStatement(delegateField, new ReferenceExpression(arguments[0])));
+			constructor.CodeBuilder.AddStatement(new AssignStatement(delegateField, arguments[0]));
 			return constructor;
 		}
 
@@ -55,7 +55,7 @@ namespace Castle.DynamicProxy.Contributors
 			return delegateType.GetMethod("Invoke");
 		}
 
-		public MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, Expression[] args,
+		public MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, IExpression[] args,
 		                                                              Reference targetField,
 		                                                              MethodEmitter invokeMethodOnTarget)
 		{
@@ -65,10 +65,10 @@ namespace Castle.DynamicProxy.Contributors
 			return new MethodInvocationExpression(@delegate, GetCallbackMethod(), allArgs);
 		}
 
-		public Expression[] GetConstructorInvocationArguments(Expression[] arguments, ClassEmitter proxy)
+		public IExpression[] GetConstructorInvocationArguments(IExpression[] arguments, ClassEmitter proxy)
 		{
-			var allArguments = new Expression[arguments.Length + 1];
-			allArguments[0] = new ReferenceExpression(BuildDelegateToken(proxy));
+			var allArguments = new IExpression[arguments.Length + 1];
+			allArguments[0] = BuildDelegateToken(proxy);
 			Array.Copy(arguments, 0, allArguments, 1, arguments.Length);
 			return allArguments;
 		}
@@ -88,11 +88,11 @@ namespace Castle.DynamicProxy.Contributors
 			return callback;
 		}
 
-		private Expression[] GetAllArgs(Expression[] args, Reference targetField)
+		private IExpression[] GetAllArgs(IExpression[] args, Reference targetField)
 		{
-			var allArgs = new Expression[args.Length + 1];
+			var allArgs = new IExpression[args.Length + 1];
 			args.CopyTo(allArgs, 1);
-			allArgs[0] = new ConvertExpression(targetType, targetField.ToExpression());
+			allArgs[0] = new ConvertExpression(targetType, targetField);
 			return allArgs;
 		}
 

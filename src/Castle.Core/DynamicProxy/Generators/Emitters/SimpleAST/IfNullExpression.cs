@@ -17,28 +17,28 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System;
 	using System.Reflection.Emit;
 
-	internal class IfNullExpression : Expression
+	internal class IfNullExpression : IExpression, IStatement
 	{
-		private readonly IILEmitter ifNotNull;
-		private readonly IILEmitter ifNull;
+		private readonly IExpressionOrStatement ifNotNull;
+		private readonly IExpressionOrStatement ifNull;
 		private readonly Reference reference;
-		private readonly Expression expression;
+		private readonly IExpression expression;
 
-		public IfNullExpression(Reference reference, IILEmitter ifNull, IILEmitter ifNotNull = null)
+		public IfNullExpression(Reference reference, IExpressionOrStatement ifNull, IExpressionOrStatement ifNotNull = null)
 		{
 			this.reference = reference ?? throw new ArgumentNullException(nameof(reference));
 			this.ifNull = ifNull;
 			this.ifNotNull = ifNotNull;
 		}
 
-		public IfNullExpression(Expression expression, IILEmitter ifNull, IILEmitter ifNotNull = null)
+		public IfNullExpression(IExpression expression, IExpressionOrStatement ifNull, IExpressionOrStatement ifNotNull = null)
 		{
 			this.expression = expression ?? throw new ArgumentNullException(nameof(expression));
 			this.ifNull = ifNull;
 			this.ifNotNull = ifNotNull;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			if (reference != null)
 			{

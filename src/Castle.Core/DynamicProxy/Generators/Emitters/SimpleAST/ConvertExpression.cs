@@ -18,25 +18,25 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class ConvertExpression : Expression
+	internal class ConvertExpression : IExpression
 	{
-		private readonly Expression right;
+		private readonly IExpression right;
 		private Type fromType;
 		private Type target;
 
-		public ConvertExpression(Type targetType, Expression right)
+		public ConvertExpression(Type targetType, IExpression right)
 			: this(targetType, typeof(object), right)
 		{
 		}
 
-		public ConvertExpression(Type targetType, Type fromType, Expression right)
+		public ConvertExpression(Type targetType, Type fromType, IExpression right)
 		{
 			target = targetType;
 			this.fromType = fromType;
 			this.right = right;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			right.Emit(member, gen);
 

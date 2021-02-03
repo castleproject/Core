@@ -66,9 +66,9 @@ namespace Castle.DynamicProxy.Generators
 			return new AsTypeReference(@class.GetField("__target"), method.DeclaringType);
 		}
 
-		private Expression GetTargetExpression(ClassEmitter @class, MethodInfo method)
+		private IExpression GetTargetExpression(ClassEmitter @class, MethodInfo method)
 		{
-			return GetTarget(@class, method).ToExpression();
+			return GetTarget(@class, method);
 		}
 	}
 }

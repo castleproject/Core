@@ -16,9 +16,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class ReturnStatement : Statement
+	internal class ReturnStatement : IStatement
 	{
-		private readonly Expression expression;
+		private readonly IExpression expression;
 		private readonly Reference reference;
 
 		public ReturnStatement()
@@ -30,12 +30,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.reference = reference;
 		}
 
-		public ReturnStatement(Expression expression)
+		public ReturnStatement(IExpression expression)
 		{
 			this.expression = expression;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			if (reference != null)
 			{

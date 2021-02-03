@@ -111,19 +111,13 @@ namespace Castle.DynamicProxy.Contributors
 				targetMethod = targetMethod.MakeGenericMethod(callBackMethod.GenericTypeParams.AsTypeArray());
 			}
 
-			var exps = new Expression[callBackMethod.Arguments.Length];
-			for (var i = 0; i < callBackMethod.Arguments.Length; i++)
-			{
-				exps[i] = callBackMethod.Arguments[i].ToExpression();
-			}
-
 			// invocation on base class
 
 			callBackMethod.CodeBuilder.AddStatement(
 				new ReturnStatement(
 					new MethodInvocationExpression(SelfReference.Self,
 					                               targetMethod,
-					                               exps)));
+					                               callBackMethod.Arguments)));
 
 			return callBackMethod.MethodBuilder;
 		}

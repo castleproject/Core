@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class LoadRefArrayElementExpression : Expression
+	internal class LoadRefArrayElementExpression : IExpression
 	{
 		private readonly Reference arrayReference;
 		private readonly ConstReference index;
@@ -32,7 +32,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.arrayReference = arrayReference;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			ArgumentsUtil.EmitLoadOwnerAndReference(arrayReference, gen);
 			ArgumentsUtil.EmitLoadOwnerAndReference(index, gen);

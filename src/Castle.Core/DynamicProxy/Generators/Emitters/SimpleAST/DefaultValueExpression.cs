@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class DefaultValueExpression : Expression
+	internal class DefaultValueExpression : IExpression
 	{
 		private readonly Type type;
 
@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.type = type;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			// TODO: check if this can be simplified by using more of OpCodeUtil and other existing types
 			if (IsPrimitiveOrClass(type))

@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	using Castle.DynamicProxy.Tokens;
 
-	internal class MethodTokenExpression : Expression
+	internal class MethodTokenExpression : IExpression
 	{
 		private readonly MethodInfo method;
 
@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			Debug.Assert(method.DeclaringType != null);  // DynamicProxy isn't using global methods nor `DynamicMethod`
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldtoken, method);
 			gen.Emit(OpCodes.Ldtoken, method.DeclaringType);

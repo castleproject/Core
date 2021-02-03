@@ -23,12 +23,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	internal sealed class CodeBuilder
 	{
 		private readonly List<LocalReference> locals;
-		private readonly List<Statement> statements;
+		private readonly List<IStatement> statements;
 		private bool isEmpty;
 
 		public CodeBuilder()
 		{
-			statements = new List<Statement>();
+			statements = new List<IStatement>();
 			locals = new List<LocalReference>();
 			isEmpty = true;
 		}
@@ -38,12 +38,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return isEmpty; }
 		}
 
-		public CodeBuilder AddExpression(Expression expression)
-		{
-			return AddStatement(new ExpressionStatement(expression));
-		}
-
-		public CodeBuilder AddStatement(Statement statement)
+		public CodeBuilder AddStatement(IStatement statement)
 		{
 			isEmpty = false;
 			statements.Add(statement);

@@ -46,7 +46,7 @@ namespace Castle.DynamicProxy.Contributors
 			var dynProxyGetTarget = emitter.CreateMethod(nameof(IProxyTargetAccessor.DynProxyGetTarget), typeof(object));
 
 			dynProxyGetTarget.CodeBuilder.AddStatement(
-				new ReturnStatement(new ConvertExpression(typeof(object), targetType, targetReference.ToExpression())));
+				new ReturnStatement(new ConvertExpression(typeof(object), targetType, targetReference)));
 
 			var dynProxySetTarget = emitter.CreateMethod(nameof(IProxyTargetAccessor.DynProxySetTarget), typeof(void), typeof(object));
 
@@ -55,7 +55,7 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				dynProxySetTarget.CodeBuilder.AddStatement(
 					new AssignStatement(targetField,
-						new ConvertExpression(targetField.Fieldbuilder.FieldType, dynProxySetTarget.Arguments[0].ToExpression())));
+						new ConvertExpression(targetField.Fieldbuilder.FieldType, dynProxySetTarget.Arguments[0])));
 			}
 			else
 			{

@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal abstract class Reference
+	internal abstract class Reference : IExpression
 	{
 		protected Reference owner = SelfReference.Self;
 
@@ -45,14 +45,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 		}
 
-		public virtual Expression ToAddressOfExpression()
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			return new AddressOfReferenceExpression(this);
-		}
-
-		public virtual Expression ToExpression()
-		{
-			return new ReferenceExpression(this);
+			ArgumentsUtil.EmitLoadOwnerAndReference(this, gen);
 		}
 	}
 }

@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Contributors
 	internal delegate MethodEmitter OverrideMethodDelegate(
 		string name, MethodAttributes attributes, MethodInfo methodToOverride);
 
-	internal delegate Expression GetTargetExpressionDelegate(ClassEmitter @class, MethodInfo method);
+	internal delegate IExpression GetTargetExpressionDelegate(ClassEmitter @class, MethodInfo method);
 
 	internal delegate Reference GetTargetReferenceDelegate(ClassEmitter @class, MethodInfo method);
 }

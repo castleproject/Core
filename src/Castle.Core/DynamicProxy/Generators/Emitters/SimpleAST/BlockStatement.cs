@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,21 +14,24 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
+	using System.Collections.Generic;
 	using System.Reflection.Emit;
 
-	internal class ExpressionStatement : Statement
+	internal class BlockStatement : IStatement
 	{
-		private readonly Expression expression;
+		private readonly List<IStatement> statements = new List<IStatement>();
 
-		public ExpressionStatement(Expression expression)
+		public void AddStatement(IStatement statement)
 		{
-			this.expression = expression;
+			statements.Add(statement);
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			// TODO: Should it discard any possible return value with a pop?
-			expression.Emit(member, gen);
+			foreach (var s in statements)
+			{
+				s.Emit(member, gen);
+			}
 		}
 	}
 }

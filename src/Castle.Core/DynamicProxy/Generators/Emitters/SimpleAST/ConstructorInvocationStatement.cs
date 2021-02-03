@@ -18,9 +18,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class ConstructorInvocationStatement : Statement
+	internal class ConstructorInvocationStatement : IStatement
 	{
-		private readonly Expression[] args;
+		private readonly IExpression[] args;
 		private readonly ConstructorInfo cmethod;
 
 		public ConstructorInvocationStatement(Type baseType)
@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 		}
 
-		public ConstructorInvocationStatement(ConstructorInfo method, params Expression[] args)
+		public ConstructorInvocationStatement(ConstructorInfo method, params IExpression[] args)
 		{
 			if (method == null)
 			{
@@ -43,12 +43,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.args = args;
 		}
 
-		public ConstructorInvocationStatement(ConstructorInfo method, ArgumentReference[] args)
-			: this(method, ArgumentsUtil.ConvertArgumentReferenceToExpression(args))
-		{
-		}
-
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldarg_0);
 

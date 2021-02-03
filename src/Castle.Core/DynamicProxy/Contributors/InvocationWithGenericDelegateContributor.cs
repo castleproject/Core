@@ -49,7 +49,7 @@ namespace Castle.DynamicProxy.Contributors
 			return delegateType.GetMethod("Invoke");
 		}
 
-		public MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, Expression[] args,
+		public MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, IExpression[] args,
 		                                                              Reference targetField,
 		                                                              MethodEmitter invokeMethodOnTarget)
 		{
@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Contributors
 			return new MethodInvocationExpression(@delegate, GetCallbackMethod(), args);
 		}
 
-		public Expression[] GetConstructorInvocationArguments(Expression[] arguments, ClassEmitter proxy)
+		public IExpression[] GetConstructorInvocationArguments(IExpression[] arguments, ClassEmitter proxy)
 		{
 			return arguments;
 		}
@@ -68,13 +68,12 @@ namespace Castle.DynamicProxy.Contributors
 			var closedDelegateType = delegateType.MakeGenericType(genericTypeParameters);
 			var localReference = invokeMethodOnTarget.CodeBuilder.DeclareLocal(closedDelegateType);
 			var closedMethodOnTarget = method.MethodOnTarget.MakeGenericMethod(genericTypeParameters);
-			var localTarget = new ReferenceExpression(targetReference);
 			invokeMethodOnTarget.CodeBuilder.AddStatement(
-				SetDelegate(localReference, localTarget, closedDelegateType, closedMethodOnTarget));
+				SetDelegate(localReference, targetReference, closedDelegateType, closedMethodOnTarget));
 			return localReference;
 		}
 
-		private AssignStatement SetDelegate(LocalReference localDelegate, ReferenceExpression localTarget,
+		private AssignStatement SetDelegate(LocalReference localDelegate, Reference localTarget,
 		                                    Type closedDelegateType, MethodInfo closedMethodOnTarget)
 		{
 			var delegateCreateDelegate = new MethodInvocationExpression(

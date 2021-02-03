@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class LiteralIntExpression : Expression
+	internal class LiteralIntExpression : IExpression
 	{
 		private readonly int value;
 
@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.value = value;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			switch (value)
 			{

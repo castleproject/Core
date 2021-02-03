@@ -25,9 +25,9 @@ namespace Castle.DynamicProxy.Contributors
 
 		MethodInfo GetCallbackMethod();
 
-		MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, Expression[] args,
+		MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, IExpression[] args,
 		                                                       Reference targetField, MethodEmitter invokeMethodOnTarget);
 
-		Expression[] GetConstructorInvocationArguments(Expression[] arguments, ClassEmitter proxy);
+		IExpression[] GetConstructorInvocationArguments(IExpression[] arguments, ClassEmitter proxy);
 	}
 }

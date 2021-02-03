@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class ThrowStatement : Statement
+	internal class ThrowStatement : IStatement
 	{
 		private readonly string errorMessage;
 		private readonly Type exceptionType;
@@ -29,12 +29,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.errorMessage = errorMessage;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			var ci = exceptionType.GetConstructor(new[] { typeof(string) });
 			var constRef = new ConstReference(errorMessage);
 
-			var creationStmt = new NewInstanceExpression(ci, constRef.ToExpression());
+			var creationStmt = new NewInstanceExpression(ci, constRef);
 
 			creationStmt.Emit(member, gen);
 

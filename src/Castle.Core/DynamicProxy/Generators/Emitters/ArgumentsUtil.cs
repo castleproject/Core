@@ -22,18 +22,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	internal abstract class ArgumentsUtil
 	{
-		public static Expression[] ConvertArgumentReferenceToExpression(ArgumentReference[] args)
-		{
-			var expressions = new Expression[args.Length];
-
-			for (var i = 0; i < args.Length; ++i)
-			{
-				expressions[i] = args[i].ToExpression();
-			}
-
-			return expressions;
-		}
-
 		public static ArgumentReference[] ConvertToArgumentReference(Type[] args)
 		{
 			var arguments = new ArgumentReference[args.Length];
@@ -58,13 +46,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return arguments;
 		}
 
-		public static ReferenceExpression[] ConvertToArgumentReferenceExpression(ParameterInfo[] args)
+		public static IExpression[] ConvertToArgumentReferenceExpression(ParameterInfo[] args)
 		{
-			var arguments = new ReferenceExpression[args.Length];
+			var arguments = new IExpression[args.Length];
 
 			for (var i = 0; i < args.Length; ++i)
 			{
-				arguments[i] = new ReferenceExpression(new ArgumentReference(args[i].ParameterType, i + 1));
+				arguments[i] = new ArgumentReference(args[i].ParameterType, i + 1);
 			}
 
 			return arguments;

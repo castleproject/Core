@@ -18,12 +18,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class NewInstanceExpression : Expression
+	internal class NewInstanceExpression : IExpression
 	{
-		private readonly Expression[] arguments;
+		private readonly IExpression[] arguments;
 		private ConstructorInfo constructor;
 
-		public NewInstanceExpression(ConstructorInfo constructor, params Expression[] args)
+		public NewInstanceExpression(ConstructorInfo constructor, params IExpression[] args)
 		{
 			this.constructor = constructor ?? throw new ArgumentNullException(nameof(constructor));
 			arguments = args;
@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			arguments = null;
 		}
 
-		public override void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
 			if (arguments != null)
 			{

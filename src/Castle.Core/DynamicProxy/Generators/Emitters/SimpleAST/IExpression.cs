@@ -14,10 +14,7 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
-	using System.Reflection.Emit;
-
-	internal interface IILEmitter
+	internal interface IExpression : IExpressionOrStatement
 	{
-		void Emit(IMemberEmitter member, ILGenerator gen);
 	}
 }
