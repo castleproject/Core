@@ -41,9 +41,25 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(typeof(InterfaceMethodWithoutTargetInvocation), recorder.InvocationType);
 		}
 
+		[Test]
+		public void Generic_method_of_interface_proxy_without_target__uses__InterfaceMethodWithoutTargetInvocation()
+		{
+			var recorder = new InvocationTypeRecorder();
+
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IWithGenericMethod>(recorder);
+			proxy.Method(42);
+
+			Assert.AreEqual(typeof(InterfaceMethodWithoutTargetInvocation), recorder.InvocationType);
+		}
+
 		public interface IWithNonGenericMethod
 		{
 			void Method();
+		}
+
+		public interface IWithGenericMethod
+		{
+			void Method<T>(T arg);
 		}
 
 		private sealed class InvocationTypeRecorder : IInterceptor
