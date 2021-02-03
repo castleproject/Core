@@ -56,13 +56,21 @@ namespace Castle.DynamicProxy.Contributors
 				return null;
 			}
 
+			var methodIsDirectlyAccessible = IsDirectlyAccessible(method);
+
 			if (!method.Proxyable)
 			{
-				return new MinimialisticMethodGenerator(method,
-				                                        overrideMethod);
+				if (methodIsDirectlyAccessible)
+				{
+					return new ForwardingMethodGenerator(method, overrideMethod, (c, m) => c.GetField("__target"));
+				}
+				else
+				{
+					return IndirectlyCalledMethodGenerator(method, @class, overrideMethod, skipInterceptors: true);
+				}
 			}
 
-			if (IsDirectlyAccessible(method) == false)
+			if (!methodIsDirectlyAccessible)
 			{
 				return IndirectlyCalledMethodGenerator(method, @class, overrideMethod);
 			}
@@ -137,7 +145,8 @@ namespace Castle.DynamicProxy.Contributors
 		}
 
 		private MethodGenerator IndirectlyCalledMethodGenerator(MetaMethod method, ClassEmitter proxy,
-		                                                        OverrideMethodDelegate overrideMethod)
+		                                                        OverrideMethodDelegate overrideMethod,
+		                                                        bool skipInterceptors = false)
 		{
 			var @delegate = GetDelegateType(method, proxy);
 			var contributor = GetContributor(@delegate, method);
@@ -145,7 +154,7 @@ namespace Castle.DynamicProxy.Contributors
 				.Generate(proxy, namingScope)
 				.BuildType();
 			return new MethodWithInvocationGenerator(method,
-			                                         proxy.GetField("__interceptors"),
+			                                         skipInterceptors ? NullExpression.Instance : proxy.GetField("__interceptors"),
 			                                         invocation,
 			                                         (c, m) => c.GetField("__target"),
 			                                         overrideMethod,

@@ -42,12 +42,14 @@ namespace Castle.DynamicProxy.Contributors
 				return null;
 			}
 
-			var accepted = AcceptMethod(method, true, hook);
-			if (!accepted && !method.IsAbstract)
+			var interceptable = AcceptMethodPreScreen(method, true, hook);
+			if (!interceptable)
 			{
 				//we don't need to do anything...
 				return null;
 			}
+
+			var accepted = hook.ShouldInterceptMethod(type, method);
 
 			return new MetaMethod(method, method, isStandalone, accepted, hasTarget: true);
 		}

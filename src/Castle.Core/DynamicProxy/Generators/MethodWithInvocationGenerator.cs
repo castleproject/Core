@@ -34,17 +34,17 @@ namespace Castle.DynamicProxy.Generators
 		private readonly IInvocationCreationContributor contributor;
 		private readonly GetTargetExpressionDelegate getTargetExpression;
 		private readonly GetTargetExpressionDelegate getTargetTypeExpression;
-		private readonly Reference interceptors;
+		private readonly IExpression interceptors;
 		private readonly Type invocation;
 
-		public MethodWithInvocationGenerator(MetaMethod method, Reference interceptors, Type invocation,
+		public MethodWithInvocationGenerator(MetaMethod method, IExpression interceptors, Type invocation,
 		                                     GetTargetExpressionDelegate getTargetExpression,
 		                                     OverrideMethodDelegate createMethod, IInvocationCreationContributor contributor)
 			: this(method, interceptors, invocation, getTargetExpression, null, createMethod, contributor)
 		{
 		}
 
-		public MethodWithInvocationGenerator(MetaMethod method, Reference interceptors, Type invocation,
+		public MethodWithInvocationGenerator(MetaMethod method, IExpression interceptors, Type invocation,
 		                                     GetTargetExpressionDelegate getTargetExpression,
 		                                     GetTargetExpressionDelegate getTargetTypeExpression,
 		                                     OverrideMethodDelegate createMethod, IInvocationCreationContributor contributor)

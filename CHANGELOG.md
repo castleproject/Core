@@ -4,6 +4,7 @@
 
 Enhancements:
 - .NET Standard 2.0 and 2.1 support (@lg2de, #485)
+- Non-intercepted methods on a class proxy with target are now forwarded to the target (@stakx, #571)
 
 Bugfixes:
 - Proxying certain `[Serializable]` classes produces proxy types that fail PEVerify test (@stakx, #367)
