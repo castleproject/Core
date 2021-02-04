@@ -73,7 +73,6 @@ namespace Castle.DynamicProxy.Generators
 		{
 			var invocationType = invocation;
 
-			Trace.Assert(MethodToOverride.IsGenericMethod == invocationType.IsGenericTypeDefinition);
 			var genericArguments = Type.EmptyTypes;
 
 			var constructor = invocation.GetConstructors()[0];
@@ -81,13 +80,16 @@ namespace Castle.DynamicProxy.Generators
 			IExpression proxiedMethodTokenExpression;
 			if (MethodToOverride.IsGenericMethod)
 			{
-				// bind generic method arguments to invocation's type arguments
-				genericArguments = emitter.MethodBuilder.GetGenericArguments();
-				invocationType = invocationType.MakeGenericType(genericArguments);
-				constructor = TypeBuilder.GetConstructor(invocationType, constructor);
-
 				// Not in the cache: generic method
+				genericArguments = emitter.MethodBuilder.GetGenericArguments();
 				proxiedMethodTokenExpression = new MethodTokenExpression(MethodToOverride.MakeGenericMethod(genericArguments));
+
+				if (invocationType.IsGenericTypeDefinition)
+				{
+					// bind generic method arguments to invocation's type arguments
+					invocationType = invocationType.MakeGenericType(genericArguments);
+					constructor = TypeBuilder.GetConstructor(invocationType, constructor);
+				}
 			}
 			else
 			{
