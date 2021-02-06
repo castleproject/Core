@@ -46,12 +46,6 @@ jobs:
       # Build
       # -----
 
-      # This step is a workaround for dotnet/core#5881.
-      # It was originally described in actions/setup-dotnet#155.
-      # Without it, the NuGet package restore may fail unpredictably.
-      - name: Clean
-        run: dotnet clean ./Castle.Core.sln --configuration Release && dotnet nuget locals all --clear
-
       - name: Restore NuGet packages
         run: dotnet restore
 
