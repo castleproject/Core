@@ -19,6 +19,16 @@
 		<StartupObject>Program</StartupObject>
 	</PropertyGroup>
 
+	<ItemGroup Condition="'$([MSBuild]::GetTargetFrameworkIdentifier(&quot;$(TargetFramework)&quot;))' == '.NETFramework'">
+		<None Include="config\netfx\App.config" />
+		<None Remove="config\netcoreapp\App.config" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$([MSBuild]::GetTargetFrameworkIdentifier(&quot;$(TargetFramework)&quot;))' == '.NETCoreApp'">
+		<None Remove="config\netfx\App.config" />
+		<None Include="config\netcoreapp\App.config" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<None Update="Services.Logging.Tests\log4netIntegration\log4net.xml">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
