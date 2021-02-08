@@ -1,0 +1,72 @@
+name: Build
+
+on: push
+
+env:
+  MONO_TAG: "6.0.0.334"
+
+jobs:
+
+  build-and-test:
+    name: Build and test
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Several .NET Core versions will be used during the test run.
+      # The lowest version gets installed first in order to prevent
+      # "a newer version is already installed" install errors.
+
+      - name: Install .NET Core 2.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 2.1.x
+
+      - name: Install .NET Core 3.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+
+      # Building requires an up-to-date .NET SDK.
+
+      - name: Install .NET 5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+
+      # -----
+      # Build
+      # -----
+
+      - name: Restore NuGet packages
+        run: dotnet restore
+
+      - name: Build all targets
+        run: dotnet build -c Release --no-restore
+
+      # ----
+      # Test
+      # ----
+
+      - name: Test on .NET Core 2.1
+        run: dotnet test -c Release -f netcoreapp2.1 --no-build --no-restore -l "console;verbosity=detailed"
+
+      - name: Test on .NET Core 3.1
+        run: dotnet test -c Release -f netcoreapp3.1 --no-build --no-restore -l "console;verbosity=detailed"
+
+      - name: Test on .NET Framework 4.6.1 (Windows only)
+        if: matrix.os == 'windows-latest'
+        run: dotnet test -c Release -f net461 --no-build --no-restore -l "console;verbosity=detailed"
+
+      - name: Test on .NET Framework 4.6.1 using Mono (Linux only)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          docker run --rm -v "$PWD":'/project' -w='/project' mono:$MONO_TAG bash -c 'mono ./src/Castle.Core.Tests/bin/Release/net461/Castle.Core.Tests.exe && mono ./src/Castle.Core.Tests.WeakNamed/bin/Release/net461/Castle.Core.Tests.WeakNamed.exe'
