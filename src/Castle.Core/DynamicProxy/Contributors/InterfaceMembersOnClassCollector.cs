@@ -24,7 +24,9 @@ namespace Castle.DynamicProxy.Contributors
 		private readonly InterfaceMapping map;
 		private readonly bool onlyProxyVirtual;
 
-		public InterfaceMembersOnClassCollector(Type type, bool onlyProxyVirtual, InterfaceMapping map) : base(type)
+		public InterfaceMembersOnClassCollector(ProxyGenerationContext context, Type type,
+		                                        bool onlyProxyVirtual, InterfaceMapping map)
+			: base(context, type)
 		{
 			this.onlyProxyVirtual = onlyProxyVirtual;
 			this.map = map;

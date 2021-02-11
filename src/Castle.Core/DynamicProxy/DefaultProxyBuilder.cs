@@ -65,7 +65,9 @@ namespace Castle.DynamicProxy
 			AssertValidTypes(additionalInterfacesToProxy, nameof(additionalInterfacesToProxy));
 			AssertValidMixins(options, nameof(options));
 
-			var generator = new ClassProxyGenerator(scope, classToProxy, additionalInterfacesToProxy, options) { Logger = logger };
+			var context = new ProxyGenerationContext();
+
+			var generator = new ClassProxyGenerator(context, scope, classToProxy, additionalInterfacesToProxy, options) { Logger = logger };
 			return generator.GetProxyType();
 		}
 
@@ -76,7 +78,9 @@ namespace Castle.DynamicProxy
 			AssertValidTypes(additionalInterfacesToProxy, nameof(additionalInterfacesToProxy));
 			AssertValidMixins(options, nameof(options));
 
-			var generator = new ClassProxyWithTargetGenerator(scope, classToProxy, additionalInterfacesToProxy, options)
+			var context = new ProxyGenerationContext();
+
+			var generator = new ClassProxyWithTargetGenerator(context, scope, classToProxy, additionalInterfacesToProxy, options)
 			{ Logger = logger };
 			return generator.GetProxyType();
 		}
@@ -89,7 +93,9 @@ namespace Castle.DynamicProxy
 			AssertValidTypes(additionalInterfacesToProxy, nameof(additionalInterfacesToProxy));
 			AssertValidMixins(options, nameof(options));
 
-			var generator = new InterfaceProxyWithTargetGenerator(scope, interfaceToProxy, additionalInterfacesToProxy, targetType, options) { Logger = logger };
+			var context = new ProxyGenerationContext();
+
+			var generator = new InterfaceProxyWithTargetGenerator(context, scope, interfaceToProxy, additionalInterfacesToProxy, targetType, options) { Logger = logger };
 			return generator.GetProxyType();
 		}
 
@@ -100,7 +106,9 @@ namespace Castle.DynamicProxy
 			AssertValidTypes(additionalInterfacesToProxy, nameof(additionalInterfacesToProxy));
 			AssertValidMixins(options, nameof(options));
 
-			var generator = new InterfaceProxyWithTargetInterfaceGenerator(scope, interfaceToProxy, additionalInterfacesToProxy, interfaceToProxy, options) { Logger = logger };
+			var context = new ProxyGenerationContext();
+
+			var generator = new InterfaceProxyWithTargetInterfaceGenerator(context, scope, interfaceToProxy, additionalInterfacesToProxy, interfaceToProxy, options) { Logger = logger };
 			return generator.GetProxyType();
 		}
 
@@ -111,7 +119,9 @@ namespace Castle.DynamicProxy
 			AssertValidTypes(additionalInterfacesToProxy, nameof(additionalInterfacesToProxy));
 			AssertValidMixins(options, nameof(options));
 
-			var generator = new InterfaceProxyWithoutTargetGenerator(scope, interfaceToProxy, additionalInterfacesToProxy, typeof(object), options) { Logger = logger };
+			var context = new ProxyGenerationContext();
+
+			var generator = new InterfaceProxyWithoutTargetGenerator(context, scope, interfaceToProxy, additionalInterfacesToProxy, typeof(object), options) { Logger = logger };
 			return generator.GetProxyType();
 		}
 

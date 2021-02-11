@@ -22,8 +22,8 @@ namespace Castle.DynamicProxy.Contributors
 
 	internal sealed class DelegateTypeMembersCollector : MembersCollector
 	{
-		public DelegateTypeMembersCollector(Type delegateType)
-			: base(delegateType)
+		public DelegateTypeMembersCollector(ProxyGenerationContext context, Type delegateType)
+			: base(context, delegateType)
 		{
 		}
 

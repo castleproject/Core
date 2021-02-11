@@ -28,11 +28,18 @@ namespace Castle.DynamicProxy.Contributors
 		private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 		private ILogger logger = NullLogger.Instance;
 
+		private readonly ProxyGenerationContext context;
 		protected readonly Type type;
 
-		protected MembersCollector(Type type)
+		protected MembersCollector(ProxyGenerationContext context, Type type)
 		{
+			this.context = context;
 			this.type = type;
+		}
+
+		protected ProxyGenerationContext Context
+		{
+			get { return context; }
 		}
 
 		public ILogger Logger

@@ -26,6 +26,7 @@ namespace Castle.DynamicProxy.Contributors
 
 	internal abstract class CompositeTypeContributor : ITypeContributor
 	{
+		private readonly ProxyGenerationContext context;
 		protected readonly INamingScope namingScope;
 
 		protected readonly ICollection<Type> interfaces = new HashSet<Type>();
@@ -35,8 +36,9 @@ namespace Castle.DynamicProxy.Contributors
 		private readonly List<MetaEvent> events = new List<MetaEvent>();
 		private readonly List<MetaMethod> methods = new List<MetaMethod>();
 
-		protected CompositeTypeContributor(INamingScope namingScope)
+		protected CompositeTypeContributor(ProxyGenerationContext context, INamingScope namingScope)
 		{
+			this.context = context;
 			this.namingScope = namingScope;
 		}
 
@@ -44,6 +46,11 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			get { return logger; }
 			set { logger = value; }
+		}
+
+		protected ProxyGenerationContext Context
+		{
+			get { return context; }
 		}
 
 		public void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)

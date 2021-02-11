@@ -27,8 +27,9 @@ namespace Castle.DynamicProxy.Contributors
 		private readonly GetTargetExpressionDelegate getTargetExpression;
 		protected bool canChangeTarget = false;
 
-		public InterfaceProxyWithoutTargetContributor(INamingScope namingScope, GetTargetExpressionDelegate getTarget)
-			: base(namingScope)
+		public InterfaceProxyWithoutTargetContributor(ProxyGenerationContext context, INamingScope namingScope,
+		                                              GetTargetExpressionDelegate getTarget)
+			: base(context, namingScope)
 		{
 			getTargetExpression = getTarget;
 		}
@@ -37,7 +38,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			foreach (var @interface in interfaces)
 			{
-				var item = new InterfaceMembersCollector(@interface);
+				var item = new InterfaceMembersCollector(Context, @interface);
 				yield return item;
 			}
 		}

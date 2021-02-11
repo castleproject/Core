@@ -31,9 +31,10 @@ namespace Castle.DynamicProxy.Generators
 	{
 		private FieldReference targetField;
 
-		public ClassProxyWithTargetGenerator(ModuleScope scope, Type targetType, Type[] interfaces,
+		public ClassProxyWithTargetGenerator(ProxyGenerationContext context, ModuleScope scope,
+		                                     Type targetType, Type[] interfaces,
 		                                     ProxyGenerationOptions options)
-			: base(scope, targetType, interfaces, options)
+			: base(context, scope, targetType, interfaces, options)
 		{
 		}
 
@@ -59,7 +60,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override CompositeTypeContributor GetProxyTargetContributor(INamingScope namingScope)
 		{
-			return new ClassProxyWithTargetTargetContributor(targetType, namingScope) { Logger = Logger };
+			return new ClassProxyWithTargetTargetContributor(Context, namingScope, targetType) { Logger = Logger };
 		}
 
 		protected override ProxyTargetAccessorContributor GetProxyTargetAccessorContributor()

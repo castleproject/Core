@@ -21,8 +21,8 @@ namespace Castle.DynamicProxy.Contributors
 
 	internal class InterfaceMembersCollector : MembersCollector
 	{
-		public InterfaceMembersCollector(Type @interface)
-			: base(@interface)
+		public InterfaceMembersCollector(ProxyGenerationContext context, Type @interface)
+			: base(context, @interface)
 		{
 		}
 

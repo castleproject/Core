@@ -31,8 +31,9 @@ namespace Castle.DynamicProxy.Contributors
 		private readonly IDictionary<Type, FieldReference> fields = new SortedDictionary<Type, FieldReference>(new FieldReferenceComparer());
 		private readonly GetTargetExpressionDelegate getTargetExpression;
 
-		public MixinContributor(INamingScope namingScope, bool canChangeTarget)
-			: base(namingScope)
+		public MixinContributor(ProxyGenerationContext context, INamingScope namingScope,
+		                        bool canChangeTarget)
+			: base(context, namingScope)
 		{
 			this.canChangeTarget = canChangeTarget;
 			getTargetExpression = BuildGetTargetExpression();
@@ -76,12 +77,12 @@ namespace Castle.DynamicProxy.Contributors
 				MembersCollector item;
 				if (@interface.IsInterface)
 				{
-					item = new InterfaceMembersCollector(@interface);
+					item = new InterfaceMembersCollector(Context, @interface);
 				}
 				else
 				{
 					Debug.Assert(@interface.IsDelegateType());
-					item = new DelegateTypeMembersCollector(@interface);
+					item = new DelegateTypeMembersCollector(Context, @interface);
 				}
 				yield return item;
 			}

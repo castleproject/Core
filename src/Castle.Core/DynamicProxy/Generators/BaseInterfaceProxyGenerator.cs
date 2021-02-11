@@ -33,9 +33,10 @@ namespace Castle.DynamicProxy.Generators
 
 		protected FieldReference targetField;
 
-		protected BaseInterfaceProxyGenerator(ModuleScope scope, Type targetType, Type[] interfaces,
-		                                      Type proxyTargetType, ProxyGenerationOptions options)
-			: base(scope, targetType, interfaces, options)
+		protected BaseInterfaceProxyGenerator(ProxyGenerationContext context, ModuleScope scope,
+		                                      Type targetType, Type[] interfaces, Type proxyTargetType,
+		                                      ProxyGenerationOptions options)
+			: base(context, scope, targetType, interfaces, options)
 		{
 			CheckNotGenericTypeDefinition(proxyTargetType, nameof(proxyTargetType));
 			EnsureValidBaseType(ProxyGenerationOptions.BaseTypeForInterfaceProxy);
@@ -145,7 +146,7 @@ namespace Castle.DynamicProxy.Generators
 		protected virtual InterfaceProxyWithoutTargetContributor GetContributorForAdditionalInterfaces(
 			INamingScope namingScope)
 		{
-			return new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance) { Logger = Logger };
+			return new InterfaceProxyWithoutTargetContributor(Context, namingScope, (c, m) => NullExpression.Instance) { Logger = Logger };
 		}
 
 		protected virtual IEnumerable<Type> GetTypeImplementerMapping(Type proxyTargetType,
@@ -164,7 +165,7 @@ namespace Castle.DynamicProxy.Generators
 			// 2. then mixins
 			if (ProxyGenerationOptions.HasMixins)
 			{
-				var mixinContributor = new MixinContributor(namingScope, AllowChangeTarget) { Logger = Logger };
+				var mixinContributor = new MixinContributor(Context, namingScope, AllowChangeTarget) { Logger = Logger };
 				contributorsList.Add(mixinContributor);
 
 				foreach (var mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfaces)

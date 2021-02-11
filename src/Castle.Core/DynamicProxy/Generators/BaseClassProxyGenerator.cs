@@ -25,8 +25,10 @@ namespace Castle.DynamicProxy.Generators
 
 	internal abstract class BaseClassProxyGenerator : BaseProxyGenerator
 	{
-		protected BaseClassProxyGenerator(ModuleScope scope, Type targetType, Type[] interfaces, ProxyGenerationOptions options)
-			: base(scope, targetType, interfaces, options)
+		protected BaseClassProxyGenerator(ProxyGenerationContext context, ModuleScope scope,
+		                                  Type targetType, Type[] interfaces,
+		                                  ProxyGenerationOptions options)
+			: base(context, scope, targetType, interfaces, options)
 		{
 			EnsureDoesNotImplementIProxyTargetAccessor(targetType, nameof(targetType));
 		}
@@ -122,7 +124,7 @@ namespace Castle.DynamicProxy.Generators
 			// 2. then mixins
 			if (ProxyGenerationOptions.HasMixins)
 			{
-				var mixinContributor = new MixinContributor(namingScope, false) { Logger = Logger };
+				var mixinContributor = new MixinContributor(Context, namingScope, false) { Logger = Logger };
 				contributorsList.Add(mixinContributor);
 
 				foreach (var mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfaces)
@@ -153,7 +155,7 @@ namespace Castle.DynamicProxy.Generators
 			// 3. then additional interfaces
 			if (interfaces.Length > 0)
 			{
-				var additionalInterfacesContributor = new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance) { Logger = Logger };
+				var additionalInterfacesContributor = new InterfaceProxyWithoutTargetContributor(Context, namingScope, (c, m) => NullExpression.Instance) { Logger = Logger };
 				contributorsList.Add(additionalInterfacesContributor);
 
 				foreach (var @interface in interfaces)

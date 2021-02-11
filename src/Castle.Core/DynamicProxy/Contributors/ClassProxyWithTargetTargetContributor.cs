@@ -29,20 +29,21 @@ namespace Castle.DynamicProxy.Contributors
 	{
 		private readonly Type targetType;
 
-		public ClassProxyWithTargetTargetContributor(Type targetType, INamingScope namingScope)
-			: base(namingScope)
+		public ClassProxyWithTargetTargetContributor(ProxyGenerationContext context, INamingScope namingScope,
+		                                             Type targetType)
+			: base(context, namingScope)
 		{
 			this.targetType = targetType;
 		}
 
 		protected override IEnumerable<MembersCollector> GetCollectors()
 		{
-			var targetItem = new WrappedClassMembersCollector(targetType) { Logger = Logger };
+			var targetItem = new WrappedClassMembersCollector(Context, targetType) { Logger = Logger };
 			yield return targetItem;
 
 			foreach (var @interface in interfaces)
 			{
-				var item = new InterfaceMembersOnClassCollector(@interface, true,
+				var item = new InterfaceMembersOnClassCollector(Context, @interface, true,
 					targetType.GetInterfaceMap(@interface)) { Logger = Logger };
 				yield return item;
 			}

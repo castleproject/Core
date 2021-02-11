@@ -21,9 +21,10 @@ namespace Castle.DynamicProxy.Contributors
 	{
 		private readonly GetTargetReferenceDelegate getTargetReference;
 
-		public InterfaceProxyWithOptionalTargetContributor(INamingScope namingScope, GetTargetExpressionDelegate getTarget,
+		public InterfaceProxyWithOptionalTargetContributor(ProxyGenerationContext context, INamingScope namingScope,
+		                                                   GetTargetExpressionDelegate getTarget,
 		                                                   GetTargetReferenceDelegate getTargetReference)
-			: base(namingScope, getTarget)
+			: base(context, namingScope, getTarget)
 		{
 			this.getTargetReference = getTargetReference;
 			canChangeTarget = true;

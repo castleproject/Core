@@ -20,15 +20,15 @@ namespace Castle.DynamicProxy.Contributors
 
 	internal class InterfaceProxyWithTargetInterfaceTargetContributor : InterfaceProxyTargetContributor
 	{
-		public InterfaceProxyWithTargetInterfaceTargetContributor(Type proxyTargetType, bool allowChangeTarget,
-		                                                          INamingScope namingScope)
-			: base(proxyTargetType, allowChangeTarget, namingScope)
+		public InterfaceProxyWithTargetInterfaceTargetContributor(ProxyGenerationContext context, INamingScope namingScope,
+		                                                          Type proxyTargetType, bool allowChangeTarget)
+			: base(context, namingScope, proxyTargetType, allowChangeTarget)
 		{
 		}
 
 		protected override MembersCollector GetCollectorForInterface(Type @interface)
 		{
-			return new InterfaceMembersCollector(@interface);
+			return new InterfaceMembersCollector(Context, @interface);
 		}
 	}
 }

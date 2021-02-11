@@ -27,8 +27,9 @@ namespace Castle.DynamicProxy.Contributors
 		private readonly bool canChangeTarget;
 		private readonly Type proxyTargetType;
 
-		public InterfaceProxyTargetContributor(Type proxyTargetType, bool canChangeTarget, INamingScope namingScope)
-			: base(namingScope)
+		public InterfaceProxyTargetContributor(ProxyGenerationContext context, INamingScope namingScope,
+		                                       Type proxyTargetType, bool canChangeTarget)
+			: base(context, namingScope)
 		{
 			this.proxyTargetType = proxyTargetType;
 			this.canChangeTarget = canChangeTarget;
@@ -46,7 +47,7 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected virtual MembersCollector GetCollectorForInterface(Type @interface)
 		{
-			return new InterfaceMembersOnClassCollector(@interface, false,
+			return new InterfaceMembersOnClassCollector(Context, @interface, false,
 				proxyTargetType.GetInterfaceMap(@interface));
 		}
 

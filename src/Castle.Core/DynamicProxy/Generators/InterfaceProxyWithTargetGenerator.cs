@@ -23,9 +23,10 @@ namespace Castle.DynamicProxy.Generators
 
 	internal sealed class InterfaceProxyWithTargetGenerator : BaseInterfaceProxyGenerator
 	{
-		public InterfaceProxyWithTargetGenerator(ModuleScope scope, Type targetType, Type[] interfaces,
-		                                         Type proxyTargetType, ProxyGenerationOptions options)
-			: base(scope, targetType, interfaces, proxyTargetType, options)
+		public InterfaceProxyWithTargetGenerator(ProxyGenerationContext context, ModuleScope scope,
+		                                         Type targetType, Type[] interfaces, Type proxyTargetType,
+		                                         ProxyGenerationOptions options)
+			: base(context, scope, targetType, interfaces, proxyTargetType, options)
 		{ }
 
 		protected override bool AllowChangeTarget => false;
@@ -34,7 +35,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override CompositeTypeContributor GetProxyTargetContributor(Type proxyTargetType, INamingScope namingScope)
 		{
-			return new InterfaceProxyTargetContributor(proxyTargetType, AllowChangeTarget, namingScope) { Logger = Logger };
+			return new InterfaceProxyTargetContributor(Context, namingScope, proxyTargetType, AllowChangeTarget) { Logger = Logger };
 		}
 
 		protected override ProxyTargetAccessorContributor GetProxyTargetAccessorContributor()
