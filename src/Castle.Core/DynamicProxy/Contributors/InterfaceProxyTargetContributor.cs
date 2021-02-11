@@ -40,15 +40,13 @@ namespace Castle.DynamicProxy.Contributors
 			foreach (var @interface in interfaces)
 			{
 				var item = GetCollectorForInterface(@interface);
-				item.Logger = Logger;
 				yield return item;
 			}
 		}
 
 		protected virtual MembersCollector GetCollectorForInterface(Type @interface)
 		{
-			return new InterfaceMembersOnClassCollector(Context, @interface, false,
-				proxyTargetType.GetInterfaceMap(@interface));
+			return new InterfaceMembersOnClassCollector(Context, @interface, false, proxyTargetType.GetInterfaceMap(@interface));
 		}
 
 		protected override MethodGenerator GetMethodGenerator(MetaMethod method, ClassEmitter @class,

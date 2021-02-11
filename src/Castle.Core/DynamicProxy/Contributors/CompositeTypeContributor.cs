@@ -31,7 +31,6 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected readonly ICollection<Type> interfaces = new HashSet<Type>();
 		
-		private ILogger logger = NullLogger.Instance;
 		private readonly List<MetaProperty> properties = new List<MetaProperty>();
 		private readonly List<MetaEvent> events = new List<MetaEvent>();
 		private readonly List<MetaMethod> methods = new List<MetaMethod>();
@@ -40,12 +39,6 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			this.context = context;
 			this.namingScope = namingScope;
-		}
-
-		public ILogger Logger
-		{
-			get { return logger; }
-			set { logger = value; }
 		}
 
 		protected ProxyGenerationContext Context

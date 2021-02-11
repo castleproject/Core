@@ -14,7 +14,15 @@
 
 namespace Castle.DynamicProxy
 {
+	using Castle.Core.Logging;
+
 	internal sealed class ProxyGenerationContext
 	{
+		public ProxyGenerationContext(ILogger logger = null)
+		{
+			Logger = logger ?? NullLogger.Instance;
+		}
+
+		public ILogger Logger { get; }
 	}
 }

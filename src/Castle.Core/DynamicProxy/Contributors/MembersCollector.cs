@@ -26,7 +26,6 @@ namespace Castle.DynamicProxy.Contributors
 	internal abstract class MembersCollector
 	{
 		private const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-		private ILogger logger = NullLogger.Instance;
 
 		private readonly ProxyGenerationContext context;
 		protected readonly Type type;
@@ -40,12 +39,6 @@ namespace Castle.DynamicProxy.Contributors
 		protected ProxyGenerationContext Context
 		{
 			get { return context; }
-		}
-
-		public ILogger Logger
-		{
-			get { return logger; }
-			set { logger = value; }
 		}
 
 		public virtual void CollectMembersToProxy(IProxyGenerationHook hook, IMembersCollectorSink sink)
@@ -195,8 +188,8 @@ namespace Castle.DynamicProxy.Contributors
 					method.IsGetType() == false &&
 					method.IsMemberwiseClone() == false)
 				{
-					Logger.DebugFormat("Excluded non-overridable method {0} on {1} because it cannot be intercepted.", method.Name,
-					                   method.DeclaringType.FullName);
+					Context.Logger.DebugFormat("Excluded non-overridable method {0} on {1} because it cannot be intercepted.", method.Name,
+					                           method.DeclaringType.FullName);
 					hook.NonProxyableMemberNotification(type, method);
 				}
 				return false;
@@ -205,8 +198,8 @@ namespace Castle.DynamicProxy.Contributors
 			// we can never intercept a sealed (final) method
 			if (method.IsFinal)
 			{
-				Logger.DebugFormat("Excluded sealed method {0} on {1} because it cannot be intercepted.", method.Name,
-				                   method.DeclaringType.FullName);
+				Context.Logger.DebugFormat("Excluded sealed method {0} on {1} because it cannot be intercepted.", method.Name,
+				                           method.DeclaringType.FullName);
 				return false;
 			}
 

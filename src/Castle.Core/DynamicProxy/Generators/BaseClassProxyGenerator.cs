@@ -124,7 +124,7 @@ namespace Castle.DynamicProxy.Generators
 			// 2. then mixins
 			if (ProxyGenerationOptions.HasMixins)
 			{
-				var mixinContributor = new MixinContributor(Context, namingScope, false) { Logger = Logger };
+				var mixinContributor = new MixinContributor(Context, namingScope, false);
 				contributorsList.Add(mixinContributor);
 
 				foreach (var mixinInterface in ProxyGenerationOptions.MixinData.MixinInterfaces)
@@ -155,7 +155,7 @@ namespace Castle.DynamicProxy.Generators
 			// 3. then additional interfaces
 			if (interfaces.Length > 0)
 			{
-				var additionalInterfacesContributor = new InterfaceProxyWithoutTargetContributor(Context, namingScope, (c, m) => NullExpression.Instance) { Logger = Logger };
+				var additionalInterfacesContributor = new InterfaceProxyWithoutTargetContributor(Context, namingScope, (c, m) => NullExpression.Instance);
 				contributorsList.Add(additionalInterfacesContributor);
 
 				foreach (var @interface in interfaces)

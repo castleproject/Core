@@ -40,7 +40,6 @@ namespace Castle.DynamicProxy.Generators
 		protected readonly Type[] interfaces;
 		private readonly ProxyGenerationContext context;
 		private readonly ModuleScope scope;
-		private ILogger logger = NullLogger.Instance;
 		private ProxyGenerationOptions proxyGenerationOptions;
 
 		protected BaseProxyGenerator(ProxyGenerationContext context, ModuleScope scope,
@@ -56,12 +55,6 @@ namespace Castle.DynamicProxy.Generators
 			this.interfaces = TypeUtil.GetAllInterfaces(interfaces);
 			this.proxyGenerationOptions = proxyGenerationOptions;
 			this.proxyGenerationOptions.Initialize();
-		}
-
-		public ILogger Logger
-		{
-			get { return logger; }
-			set { logger = value; }
 		}
 
 		protected ProxyGenerationContext Context
@@ -86,7 +79,7 @@ namespace Castle.DynamicProxy.Generators
 			var proxyType = Scope.TypeCache.GetOrAdd(GetCacheKey(), cacheKey =>
 			{
 				notFoundInTypeCache = true;
-				Logger.DebugFormat("No cached proxy type was found for target type {0}.", targetType.FullName);
+				Context.Logger.DebugFormat("No cached proxy type was found for target type {0}.", targetType.FullName);
 
 				EnsureOptionsOverrideEqualsAndGetHashCode();
 
@@ -96,7 +89,7 @@ namespace Castle.DynamicProxy.Generators
 
 			if (!notFoundInTypeCache)
 			{
-				Logger.DebugFormat("Found cached proxy type {0} for target type {1}.", proxyType.FullName, targetType.FullName);
+				Context.Logger.DebugFormat("Found cached proxy type {0} for target type {1}.", proxyType.FullName, targetType.FullName);
 			}
 
 			return proxyType;
@@ -209,14 +202,14 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void EnsureOptionsOverrideEqualsAndGetHashCode()
 		{
-			if (Logger.IsWarnEnabled)
+			if (Context.Logger.IsWarnEnabled)
 			{
 				// Check the proxy generation hook
 				if (!OverridesEqualsAndGetHashCode(ProxyGenerationOptions.Hook.GetType()))
 				{
-					Logger.WarnFormat("The IProxyGenerationHook type {0} does not override both Equals and GetHashCode. " +
-					                  "If these are not correctly overridden caching will fail to work causing performance problems.",
-					                  ProxyGenerationOptions.Hook.GetType().FullName);
+					Context.Logger.WarnFormat("The IProxyGenerationHook type {0} does not override both Equals and GetHashCode. " +
+					                          "If these are not correctly overridden caching will fail to work causing performance problems.",
+					                          ProxyGenerationOptions.Hook.GetType().FullName);
 				}
 
 				// Interceptor selectors no longer need to override Equals and GetHashCode

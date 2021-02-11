@@ -38,13 +38,12 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected override IEnumerable<MembersCollector> GetCollectors()
 		{
-			var targetItem = new WrappedClassMembersCollector(Context, targetType) { Logger = Logger };
+			var targetItem = new WrappedClassMembersCollector(Context, targetType);
 			yield return targetItem;
 
 			foreach (var @interface in interfaces)
 			{
-				var item = new InterfaceMembersOnClassCollector(Context, @interface, true,
-					targetType.GetInterfaceMap(@interface)) { Logger = Logger };
+				var item = new InterfaceMembersOnClassCollector(Context, @interface, true, targetType.GetInterfaceMap(@interface));
 				yield return item;
 			}
 		}
