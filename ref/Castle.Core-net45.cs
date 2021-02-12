@@ -2653,6 +2653,7 @@ namespace Castle.DynamicProxy
         public ProxyGenerationOptions() { }
         public ProxyGenerationOptions(Castle.DynamicProxy.IProxyGenerationHook hook) { }
         public System.Collections.Generic.IList<Castle.DynamicProxy.CustomAttributeInfo> AdditionalAttributes { get; }
+        public System.Collections.Generic.ISet<System.Type> AttributesToAvoidReplicating { get; }
         public System.Type BaseTypeForInterfaceProxy { get; set; }
         public bool HasMixins { get; }
         public Castle.DynamicProxy.IProxyGenerationHook Hook { get; set; }
@@ -2756,15 +2757,6 @@ namespace Castle.DynamicProxy
         protected virtual void PerformProceed(Castle.DynamicProxy.IInvocation invocation) { }
         protected virtual void PostProceed(Castle.DynamicProxy.IInvocation invocation) { }
         protected virtual void PreProceed(Castle.DynamicProxy.IInvocation invocation) { }
-    }
-}
-namespace Castle.DynamicProxy.Generators
-{
-    public static class AttributesToAvoidReplicating
-    {
-        public static void Add(System.Type attribute) { }
-        public static void Add<T>() { }
-        public static bool Contains(System.Type attribute) { }
     }
 }
 namespace Castle.DynamicProxy.Internal
