@@ -141,11 +141,11 @@ namespace Castle.DynamicProxy.Internal
 					var message =
 						string.Format(
 							"Due to limitations in CLR, DynamicProxy was unable to successfully replicate non-inheritable attribute {0} on {1}{2}. " +
-							"To avoid this error you can chose not to replicate this attribute type by calling '{3}.Add(typeof({0}))'.",
+							"To avoid this error you can chose not to replicate this attribute type by calling 'proxyGenerationOptions.{3}.Add(typeof({0}))'.",
 							attributeType.FullName,
 							member.DeclaringType.FullName,
 							(member is TypeInfo) ? "" : ("." + member.Name),
-							typeof(AttributesToAvoidReplicating).FullName);
+							nameof(ProxyGenerationOptions.AttributesToAvoidReplicating));
 					throw new NotSupportedException(message, e);
 				}
 				if (info != null)
