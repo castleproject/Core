@@ -14,6 +14,9 @@
 
 namespace Castle.DynamicProxy
 {
+	using System;
+	using System.Collections.Generic;
+
 	using Castle.Core.Logging;
 
 	internal sealed class ProxyGenerationContext
@@ -26,8 +29,12 @@ namespace Castle.DynamicProxy
 			Options = options ?? ProxyGenerationOptions.Default;
 			Options.Initialize();
 
+			AttributesToAvoidReplicating = Generators.AttributesToAvoidReplicating.AsList();
+
 			Hook = Options.Hook ?? new AllMethodsHook();
 		}
+
+		public IList<Type> AttributesToAvoidReplicating { get; }
 
 		public IProxyGenerationHook Hook { get; }
 
