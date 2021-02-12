@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using System.Reflection;
 
 	public static class AttributesToAvoidReplicating
@@ -44,14 +43,9 @@ namespace Castle.DynamicProxy.Generators
 			Add(typeof(T));
 		}
 
-		public static bool Contains(Type attribute)
+		internal static IList<Type> AsList()
 		{
-			return attributes.Contains(attribute);
-		}
-
-		internal static bool ShouldAvoid(Type attribute)
-		{
-			return attributes.Any(attr => attr.IsAssignableFrom(attribute));
+			return attributes;
 		}
 	}
 }

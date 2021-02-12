@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Tests
 		public void After_adding_attribute_must_be_listed_as_contained()
 		{
 			AttributesToAvoidReplicating.Add<string>();
-			bool contains = AttributesToAvoidReplicating.Contains(typeof(string));
+			bool contains = AttributesToAvoidReplicating.AsList().Contains(typeof(string));
 			Assert.IsTrue(contains);
 		}
 

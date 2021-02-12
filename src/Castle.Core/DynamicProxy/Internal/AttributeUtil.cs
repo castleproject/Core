@@ -204,7 +204,7 @@ namespace Castle.DynamicProxy.Internal
 				return true;
 			}
 
-			if (AttributesToAvoidReplicating.ShouldAvoid(attribute))
+			if (AttributesToAvoidReplicating.AsList().Any(a => a.IsAssignableFrom(attribute)))
 			{
 				return true;
 			}
