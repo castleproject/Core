@@ -201,11 +201,11 @@ namespace Castle.DynamicProxy.Generators
 			if (Context.Logger.IsWarnEnabled)
 			{
 				// Check the proxy generation hook
-				if (!OverridesEqualsAndGetHashCode(ProxyGenerationOptions.Hook.GetType()))
+				if (!OverridesEqualsAndGetHashCode(Context.Hook.GetType()))
 				{
 					Context.Logger.WarnFormat("The IProxyGenerationHook type {0} does not override both Equals and GetHashCode. " +
 					                          "If these are not correctly overridden caching will fail to work causing performance problems.",
-					                          ProxyGenerationOptions.Hook.GetType().FullName);
+					                          Context.Hook.GetType().FullName);
 				}
 
 				// Interceptor selectors no longer need to override Equals and GetHashCode

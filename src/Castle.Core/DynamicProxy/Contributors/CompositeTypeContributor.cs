@@ -46,16 +46,15 @@ namespace Castle.DynamicProxy.Contributors
 			get { return context; }
 		}
 
-		public void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)
+		public void CollectElementsToProxy(MetaType model)
 		{
-			Debug.Assert(hook != null);
 			Debug.Assert(model != null);
 
 			var sink = new MembersCollectorSink(model, this);
 
 			foreach (var collector in GetCollectors())
 			{
-				collector.CollectMembersToProxy(hook, sink);
+				collector.CollectMembersToProxy(sink);
 			}
 		}
 

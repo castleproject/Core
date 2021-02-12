@@ -26,14 +26,14 @@ namespace Castle.DynamicProxy.Contributors
 		{
 		}
 
-		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
+		protected override MetaMethod GetMethodToGenerate(MethodInfo method, bool isStandalone)
 		{
 			if (ProxyUtil.IsAccessibleMethod(method) == false)
 			{
 				return null;
 			}
 
-			var proxyable = AcceptMethod(method, false, hook);
+			var proxyable = AcceptMethod(method, false);
 			return new MetaMethod(method, method, isStandalone, proxyable, false);
 		}
 	}

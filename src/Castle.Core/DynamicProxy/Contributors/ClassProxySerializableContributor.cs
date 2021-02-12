@@ -41,7 +41,7 @@ namespace Castle.DynamicProxy.Contributors
 			Debug.Assert(targetType.IsSerializable, "This contributor is intended for serializable types only.");
 		}
 
-		public override void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)
+		public override void CollectElementsToProxy(MetaType model)
 		{
 			delegateToBaseGetObjectData = VerifyIfBaseImplementsGetObjectData(targetType, model, out var getObjectData);
 

@@ -41,7 +41,7 @@ namespace Castle.DynamicProxy.Contributors
 			get { return context; }
 		}
 
-		public virtual void CollectMembersToProxy(IProxyGenerationHook hook, IMembersCollectorSink sink)
+		public virtual void CollectMembersToProxy(IMembersCollectorSink sink)
 		{
 			var checkedMethods = new HashSet<MethodInfo>();
 
@@ -146,7 +146,7 @@ namespace Castle.DynamicProxy.Contributors
 					return null;
 				}
 
-				var methodToGenerate = GetMethodToGenerate(method, hook, isStandalone);
+				var methodToGenerate = GetMethodToGenerate(method, isStandalone);
 				if (methodToGenerate != null)
 				{
 					sink.Add(methodToGenerate);
@@ -156,25 +156,25 @@ namespace Castle.DynamicProxy.Contributors
 			}
 		}
 
-		protected abstract MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone);
+		protected abstract MetaMethod GetMethodToGenerate(MethodInfo method, bool isStandalone);
 
 		/// <summary>
 		///   Performs some basic screening and invokes the <see cref = "IProxyGenerationHook" />
 		///   to select methods.
 		/// </summary>
-		protected bool AcceptMethod(MethodInfo method, bool onlyVirtuals, IProxyGenerationHook hook)
+		protected bool AcceptMethod(MethodInfo method, bool onlyVirtuals)
 		{
-			return AcceptMethodPreScreen(method, onlyVirtuals, hook) && hook.ShouldInterceptMethod(type, method);
+			return AcceptMethodPreScreen(method, onlyVirtuals) && Context.Hook.ShouldInterceptMethod(type, method);
 		}
 
 		/// <summary>
 		///   Performs some basic screening to filter out non-interceptable methods.
 		/// </summary>
 		/// <remarks>
-		///   The <paramref name="hook"/> will get invoked for non-interceptable method notification only;
+		///   The <see cref="IProxyGenerationHook"/> will get invoked for non-interceptable method notification only;
 		///   it does not get asked whether or not to intercept the <paramref name="method"/>.
 		/// </remarks>
-		protected bool AcceptMethodPreScreen(MethodInfo method, bool onlyVirtuals, IProxyGenerationHook hook)
+		protected bool AcceptMethodPreScreen(MethodInfo method, bool onlyVirtuals)
 		{
 			if (IsInternalAndNotVisibleToDynamicProxy(method))
 			{
@@ -190,7 +190,7 @@ namespace Castle.DynamicProxy.Contributors
 				{
 					Context.Logger.DebugFormat("Excluded non-overridable method {0} on {1} because it cannot be intercepted.", method.Name,
 					                           method.DeclaringType.FullName);
-					hook.NonProxyableMemberNotification(type, method);
+					Context.Hook.NonProxyableMemberNotification(type, method);
 				}
 				return false;
 			}

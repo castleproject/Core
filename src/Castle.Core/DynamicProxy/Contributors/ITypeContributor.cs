@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Contributors
 	/// </summary>
 	internal interface ITypeContributor
 	{
-		void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model);
+		void CollectElementsToProxy(MetaType model);
 
 		void Generate(ClassEmitter @class);
 	}

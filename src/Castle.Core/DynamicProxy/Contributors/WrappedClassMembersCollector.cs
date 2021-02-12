@@ -29,28 +29,28 @@ namespace Castle.DynamicProxy.Contributors
 		{
 		}
 
-		public override void CollectMembersToProxy(IProxyGenerationHook hook, IMembersCollectorSink sink)
+		public override void CollectMembersToProxy(IMembersCollectorSink sink)
 		{
-			base.CollectMembersToProxy(hook, sink);
-			CollectFields(hook);
+			base.CollectMembersToProxy(sink);
+			CollectFields();
 			// TODO: perhaps we should also look for nested classes...
 		}
 
-		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
+		protected override MetaMethod GetMethodToGenerate(MethodInfo method, bool isStandalone)
 		{
 			if (ProxyUtil.IsAccessibleMethod(method) == false)
 			{
 				return null;
 			}
 
-			var interceptable = AcceptMethodPreScreen(method, true, hook);
+			var interceptable = AcceptMethodPreScreen(method, true);
 			if (!interceptable)
 			{
 				//we don't need to do anything...
 				return null;
 			}
 
-			var accepted = hook.ShouldInterceptMethod(type, method);
+			var accepted = Context.Hook.ShouldInterceptMethod(type, method);
 
 			return new MetaMethod(method, method, isStandalone, accepted, hasTarget: true);
 		}
@@ -66,7 +66,7 @@ namespace Castle.DynamicProxy.Contributors
 			return IsGeneratedByTheCompiler(field);
 		}
 
-		private void CollectFields(IProxyGenerationHook hook)
+		private void CollectFields()
 		{
 			var fields = type.GetAllFields();
 			foreach (var field in fields)
@@ -76,7 +76,7 @@ namespace Castle.DynamicProxy.Contributors
 					continue;
 				}
 
-				hook.NonProxyableMemberNotification(type, field);
+				Context.Hook.NonProxyableMemberNotification(type, field);
 			}
 		}
 	}

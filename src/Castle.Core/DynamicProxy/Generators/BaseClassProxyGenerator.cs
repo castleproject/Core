@@ -51,9 +51,9 @@ namespace Castle.DynamicProxy.Generators
 			// Collect methods
 			foreach (var contributor in contributors)
 			{
-				contributor.CollectElementsToProxy(ProxyGenerationOptions.Hook, model);
+				contributor.CollectElementsToProxy(model);
 			}
-			ProxyGenerationOptions.Hook.MethodsInspected();
+			Context.Hook.MethodsInspected();
 
 			var emitter = BuildClassEmitter(name, targetType, allInterfaces);
 

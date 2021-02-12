@@ -34,7 +34,7 @@ namespace Castle.DynamicProxy.Contributors
 			this.targetType = targetType;
 		}
 
-		public void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)
+		public void CollectElementsToProxy(MetaType model)
 		{
 		}
 

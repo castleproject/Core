@@ -144,7 +144,7 @@ namespace Castle.DynamicProxy.Contributors
 		protected abstract void CustomizeGetObjectData(CodeBuilder builder, ArgumentReference serializationInfo,
 		                                               ArgumentReference streamingContext, ClassEmitter emitter);
 
-		public virtual void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)
+		public virtual void CollectElementsToProxy(MetaType model)
 		{
 		}
 	}

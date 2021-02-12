@@ -25,7 +25,11 @@ namespace Castle.DynamicProxy
 		
 			Options = options ?? ProxyGenerationOptions.Default;
 			Options.Initialize();
+
+			Hook = Options.Hook ?? new AllMethodsHook();
 		}
+
+		public IProxyGenerationHook Hook { get; }
 
 		public ProxyGenerationOptions Options { get; }
 

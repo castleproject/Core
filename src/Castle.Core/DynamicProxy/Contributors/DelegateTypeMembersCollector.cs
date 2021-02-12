@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 		}
 
-		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
+		protected override MetaMethod GetMethodToGenerate(MethodInfo method, bool isStandalone)
 		{
 			if (method.Name == "Invoke" && method.DeclaringType.IsDelegateType())
 			{
