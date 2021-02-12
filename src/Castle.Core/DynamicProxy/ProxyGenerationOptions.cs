@@ -45,6 +45,7 @@ namespace Castle.DynamicProxy
 
 		private List<object> mixins;
 		private readonly IList<CustomAttributeInfo> additionalAttributes = new List<CustomAttributeInfo>();
+		private readonly HashSet<Type> attributesToAvoidReplicating = new HashSet<Type>();
 
 #if FEATURE_SERIALIZATION
 		[NonSerialized]
@@ -76,6 +77,7 @@ namespace Castle.DynamicProxy
 			Selector = (IInterceptorSelector)info.GetValue("selector", typeof(IInterceptorSelector));
 			mixins = (List<object>)info.GetValue("mixins", typeof(List<object>));
 			BaseTypeForInterfaceProxy = Type.GetType(info.GetString("baseTypeForInterfaceProxy.AssemblyQualifiedName"));
+			attributesToAvoidReplicating = (HashSet<Type>)info.GetValue("attributesToAvoidReplicating", typeof(HashSet<Type>));
 		}
 #endif
 
@@ -102,6 +104,7 @@ namespace Castle.DynamicProxy
 			info.AddValue("selector", Selector);
 			info.AddValue("mixins", mixins);
 			info.AddValue("baseTypeForInterfaceProxy.AssemblyQualifiedName", BaseTypeForInterfaceProxy.AssemblyQualifiedName);
+			info.AddValue("attributesToAvoidReplicating", attributesToAvoidReplicating);
 		}
 #endif
 
@@ -147,6 +150,14 @@ namespace Castle.DynamicProxy
 		public IList<CustomAttributeInfo> AdditionalAttributes
 		{
 			get { return additionalAttributes; }
+		}
+
+		/// <summary>
+		///   Gets the set of <see cref="Attribute"/> types that should not be replicated on proxies.
+		/// </summary>
+		public ISet<Type> AttributesToAvoidReplicating
+		{
+			get { return attributesToAvoidReplicating; }
 		}
 
 		public MixinData MixinData
@@ -281,6 +292,10 @@ namespace Castle.DynamicProxy
 			{
 				return false;
 			}
+			if (!AttributesToAvoidReplicating.SetEquals(proxyGenerationOptions.AttributesToAvoidReplicating))
+			{
+				return false;
+			}
 			return true;
 		}
 
@@ -294,6 +309,7 @@ namespace Castle.DynamicProxy
 			result = 29*result + MixinData.GetHashCode();
 			result = 29*result + (BaseTypeForInterfaceProxy != null ? BaseTypeForInterfaceProxy.GetHashCode() : 0);
 			result = 29*result + GetAdditionalAttributesHashCode();
+			result = 29*result + AttributesToAvoidReplicating.Count.GetHashCode();
 			return result;
 		}
 
