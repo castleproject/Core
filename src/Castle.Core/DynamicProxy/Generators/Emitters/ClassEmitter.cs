@@ -29,15 +29,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private readonly ModuleScope moduleScope;
 
-		public ClassEmitter(ModuleScope modulescope, string name, Type baseType, IEnumerable<Type> interfaces)
-			: this(modulescope, name, baseType, interfaces, DefaultAttributes, forceUnsigned: false)
+		public ClassEmitter(ProxyGenerationContext context, ModuleScope modulescope, string name, Type baseType, IEnumerable<Type> interfaces)
+			: this(context, modulescope, name, baseType, interfaces, DefaultAttributes, forceUnsigned: false)
 		{
 		}
 
-		public ClassEmitter(ModuleScope modulescope, string name, Type baseType, IEnumerable<Type> interfaces,
+		public ClassEmitter(ProxyGenerationContext context, ModuleScope modulescope, string name, Type baseType, IEnumerable<Type> interfaces,
 		                    TypeAttributes flags,
 		                    bool forceUnsigned)
-			: this(CreateTypeBuilder(modulescope, name, baseType, interfaces, flags, forceUnsigned))
+			: this(context, CreateTypeBuilder(modulescope, name, baseType, interfaces, flags, forceUnsigned))
 		{
 			interfaces = InitializeGenericArgumentsFromBases(ref baseType, interfaces);
 
@@ -60,8 +60,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			moduleScope = modulescope;
 		}
 
-		public ClassEmitter(TypeBuilder typeBuilder)
-			: base(typeBuilder)
+		public ClassEmitter(ProxyGenerationContext context, TypeBuilder typeBuilder)
+			: base(context, typeBuilder)
 		{
 		}
 

@@ -26,20 +26,27 @@ namespace Castle.DynamicProxy.Generators
 
 	internal abstract class InvocationTypeGenerator : IGenerator<AbstractTypeEmitter>
 	{
+		private readonly ProxyGenerationContext context;
 		protected readonly MetaMethod method;
 		protected readonly Type targetType;
 		private readonly MethodInfo callback;
 		private readonly bool canChangeTarget;
 		private readonly IInvocationCreationContributor contributor;
 
-		protected InvocationTypeGenerator(Type targetType, MetaMethod method, MethodInfo callback, bool canChangeTarget,
+		protected InvocationTypeGenerator(ProxyGenerationContext context, Type targetType, MetaMethod method, MethodInfo callback, bool canChangeTarget,
 		                                  IInvocationCreationContributor contributor)
 		{
+			this.context = context;
 			this.targetType = targetType;
 			this.method = method;
 			this.callback = callback;
 			this.canChangeTarget = canChangeTarget;
 			this.contributor = contributor;
+		}
+
+		protected ProxyGenerationContext Context
+		{
+			get { return context; }
 		}
 
 		/// <summary>
@@ -260,7 +267,7 @@ namespace Castle.DynamicProxy.Generators
 			var suggestedName = string.Format("Castle.Proxies.Invocations.{0}_{1}", methodInfo.DeclaringType.Name,
 			                                  methodInfo.Name);
 			var uniqueName = namingScope.ParentScope.GetUniqueName(suggestedName);
-			return new ClassEmitter(@class.ModuleScope, uniqueName, GetBaseType(), interfaces, ClassEmitter.DefaultAttributes, forceUnsigned: @class.InStrongNamedModule == false);
+			return new ClassEmitter(context, @class.ModuleScope, uniqueName, GetBaseType(), interfaces, ClassEmitter.DefaultAttributes, forceUnsigned: @class.InStrongNamedModule == false);
 		}
 
 		private void ImplemementInvokeMethodOnTarget(AbstractTypeEmitter invocation, ParameterInfo[] parameters,

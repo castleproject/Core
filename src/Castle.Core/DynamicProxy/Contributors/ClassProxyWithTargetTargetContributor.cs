@@ -89,13 +89,12 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			if (!method.HasTarget)
 			{
-				return new InheritanceInvocationTypeGenerator(targetType,
-				                                              method,
-				                                              null, null)
+				return new InheritanceInvocationTypeGenerator(Context, targetType, method, null, null)
 					.Generate(@class, namingScope)
 					.BuildType();
 			}
-			return new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
+			return new CompositionInvocationTypeGenerator(Context,
+			                                              method.Method.DeclaringType,
 			                                              method,
 			                                              method.Method,
 			                                              false,
@@ -127,7 +126,7 @@ namespace Castle.DynamicProxy.Contributors
 				null);
 
 			return scope.TypeCache.GetOrAddWithoutTakingLock(key, _ =>
-				new DelegateTypeGenerator(method, targetType)
+				new DelegateTypeGenerator(Context, method, targetType)
 				.Generate(@class, namingScope)
 				.BuildType());
 		}
@@ -150,7 +149,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			var @delegate = GetDelegateType(method, proxy);
 			var contributor = GetContributor(@delegate, method);
-			var invocation = new CompositionInvocationTypeGenerator(targetType, method, null, false, contributor)
+			var invocation = new CompositionInvocationTypeGenerator(Context, targetType, method, null, false, contributor)
 				.Generate(proxy, namingScope)
 				.BuildType();
 			return new MethodWithInvocationGenerator(method,

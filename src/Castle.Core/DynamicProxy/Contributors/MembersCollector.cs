@@ -101,7 +101,7 @@ namespace Castle.DynamicProxy.Contributors
 					return;
 				}
 
-				var nonInheritableAttributes = property.GetNonInheritableAttributes();
+				var nonInheritableAttributes = property.GetNonInheritableAttributes(Context);
 				var arguments = property.GetIndexParameters();
 
 				sink.Add(new MetaProperty(property.Name,

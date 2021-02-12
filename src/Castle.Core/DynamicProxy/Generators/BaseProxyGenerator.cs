@@ -129,7 +129,7 @@ namespace Castle.DynamicProxy.Generators
 			CheckNotGenericTypeDefinition(parentType, nameof(parentType));
 			CheckNotGenericTypeDefinitions(interfaces, nameof(interfaces));
 
-			return new ClassEmitter(Scope, typeName, parentType, interfaces);
+			return new ClassEmitter(Context, Scope, typeName, parentType, interfaces);
 		}
 
 		protected void CheckNotGenericTypeDefinition(Type type, string argumentName)
@@ -251,7 +251,7 @@ namespace Castle.DynamicProxy.Generators
 				for (int i = 0, n = baseConstructorParams.Length; i < n; ++i)
 				{
 					var parameterBuilder = constructor.ConstructorBuilder.DefineParameter(offset + i, baseConstructorParams[i].Attributes, baseConstructorParams[i].Name);
-					foreach (var attribute in baseConstructorParams[i].GetNonInheritableAttributes())
+					foreach (var attribute in baseConstructorParams[i].GetNonInheritableAttributes(Context))
 					{
 						parameterBuilder.SetCustomAttribute(attribute.Builder);
 					}

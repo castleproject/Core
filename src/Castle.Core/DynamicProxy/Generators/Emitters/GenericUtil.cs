@@ -30,21 +30,23 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,
 			TypeBuilder builder,
+			ProxyGenerationContext context,
 			Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
 		{
 			return
 				CopyGenericArguments(methodToCopyGenericsFrom, name2GenericType,
-				                     builder.DefineGenericParameters);
+				                     builder.DefineGenericParameters, context);
 		}
 
 		public static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,
 			MethodBuilder builder,
+			ProxyGenerationContext context,
 			Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
 		{
 			return
 				CopyGenericArguments(methodToCopyGenericsFrom, name2GenericType,
-				                     builder.DefineGenericParameters);
+				                     builder.DefineGenericParameters, context);
 		}
 
 		public static Type ExtractCorrectType(Type paramType, Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
@@ -185,7 +187,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,
 			Dictionary<string, GenericTypeParameterBuilder> name2GenericType,
-			ApplyGenArgs genericParameterGenerator)
+			ApplyGenArgs genericParameterGenerator,
+			ProxyGenerationContext context)
 		{
 			var originalGenericArguments = methodToCopyGenericsFrom.GetGenericArguments();
 			if (originalGenericArguments.Length == 0)
@@ -205,7 +208,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					var constraints = AdjustGenericConstraints(methodToCopyGenericsFrom, newGenericParameters, originalGenericArguments, originalGenericArguments[i].GetGenericParameterConstraints());
 
 					newGenericParameters[i].SetInterfaceConstraints(constraints);
-					CopyNonInheritableAttributes(newGenericParameters[i], originalGenericArguments[i]);
+					CopyNonInheritableAttributes(newGenericParameters[i], originalGenericArguments[i], context);
 				}
 				catch (NotSupportedException)
 				{
@@ -221,9 +224,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		}
 
 		private static void CopyNonInheritableAttributes(GenericTypeParameterBuilder newGenericParameter,
-		                                                 Type originalGenericArgument)
+		                                                 Type originalGenericArgument,
+		                                                 ProxyGenerationContext context)
 		{
-			foreach (var attribute in originalGenericArgument.GetNonInheritableAttributes())
+			foreach (var attribute in originalGenericArgument.GetNonInheritableAttributes(context))
 			{
 				newGenericParameter.SetCustomAttribute(attribute.Builder);
 			}

@@ -36,6 +36,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private readonly List<MethodEmitter> methods;
 
+		private readonly ProxyGenerationContext context;
 		private readonly Dictionary<string, GenericTypeParameterBuilder> name2GenericType;
 		private readonly List<NestedClassEmitter> nested;
 		private readonly List<PropertyEmitter> properties;
@@ -43,8 +44,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private GenericTypeParameterBuilder[] genericTypeParams;
 
-		protected AbstractTypeEmitter(TypeBuilder typeBuilder)
+		protected AbstractTypeEmitter(ProxyGenerationContext context, TypeBuilder typeBuilder)
 		{
+			this.context = context;
 			typebuilder = typeBuilder;
 			nested = new List<NestedClassEmitter>();
 			methods = new List<MethodEmitter>();
@@ -76,6 +78,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public TypeBuilder TypeBuilder
 		{
 			get { return typebuilder; }
+		}
+
+		protected ProxyGenerationContext Context
+		{
+			get { return context; }
 		}
 
 		public void AddCustomAttributes(IEnumerable<CustomAttributeInfo> additionalAttributes)
@@ -113,7 +120,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				throw new InvalidOperationException("Cannot invoke me twice");
 			}
 
-			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typebuilder, name2GenericType));
+			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typebuilder, Context, name2GenericType));
 		}
 
 		public ConstructorEmitter CreateConstructor(params ArgumentReference[] arguments)
@@ -140,7 +147,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public EventEmitter CreateEvent(string name, EventAttributes atts, Type type)
 		{
-			var eventEmitter = new EventEmitter(this, name, atts, type);
+			var eventEmitter = new EventEmitter(Context, this, name, atts, type);
 			events.Add(eventEmitter);
 			return eventEmitter;
 		}
@@ -172,7 +179,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public MethodEmitter CreateMethod(string name, MethodAttributes attrs, Type returnType, params Type[] argumentTypes)
 		{
-			var member = new MethodEmitter(this, name, attrs, returnType, argumentTypes ?? Type.EmptyTypes);
+			var member = new MethodEmitter(Context, this, name, attrs, returnType, argumentTypes ?? Type.EmptyTypes);
 			methods.Add(member);
 			return member;
 		}
@@ -189,14 +196,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public MethodEmitter CreateMethod(string name, MethodAttributes attributes, MethodInfo methodToUseAsATemplate)
 		{
-			var method = new MethodEmitter(this, name, attributes, methodToUseAsATemplate);
+			var method = new MethodEmitter(Context, this, name, attributes, methodToUseAsATemplate);
 			methods.Add(method);
 			return method;
 		}
 
 		public PropertyEmitter CreateProperty(string name, PropertyAttributes attributes, Type propertyType, Type[] arguments)
 		{
-			var propEmitter = new PropertyEmitter(this, name, attributes, propertyType, arguments);
+			var propEmitter = new PropertyEmitter(Context, this, name, attributes, propertyType, arguments);
 			properties.Add(propEmitter);
 			return propEmitter;
 		}

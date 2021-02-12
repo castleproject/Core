@@ -27,35 +27,37 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	[DebuggerDisplay("{builder.Name}")]
 	internal class MethodEmitter : IMemberEmitter
 	{
+		private readonly ProxyGenerationContext context;
 		private readonly MethodBuilder builder;
 		private readonly CodeBuilder codeBuilder;
 		private readonly GenericTypeParameterBuilder[] genericTypeParams;
 
 		private ArgumentReference[] arguments;
 
-		protected internal MethodEmitter(MethodBuilder builder)
+		protected internal MethodEmitter(ProxyGenerationContext context, MethodBuilder builder)
 		{
+			this.context = context;
 			this.builder = builder;
 			codeBuilder = new CodeBuilder();
 		}
 
-		internal MethodEmitter(AbstractTypeEmitter owner, string name, MethodAttributes attributes)
-			: this(owner.TypeBuilder.DefineMethod(name, attributes))
+		internal MethodEmitter(ProxyGenerationContext context, AbstractTypeEmitter owner, string name, MethodAttributes attributes)
+			: this(context, owner.TypeBuilder.DefineMethod(name, attributes))
 		{
 		}
 
-		internal MethodEmitter(AbstractTypeEmitter owner, string name,
+		internal MethodEmitter(ProxyGenerationContext context, AbstractTypeEmitter owner, string name,
 		                       MethodAttributes attributes, Type returnType,
 		                       params Type[] argumentTypes)
-			: this(owner, name, attributes)
+			: this(context, owner, name, attributes)
 		{
 			SetParameters(argumentTypes);
 			SetReturnType(returnType);
 		}
 
-		internal MethodEmitter(AbstractTypeEmitter owner, string name,
+		internal MethodEmitter(ProxyGenerationContext context, AbstractTypeEmitter owner, string name,
 		                       MethodAttributes attributes, MethodInfo methodToUseAsATemplate)
-			: this(owner, name, attributes)
+			: this(context, owner, name, attributes)
 		{
 			var name2GenericType = GenericUtil.GetGenericArgumentsMap(owner);
 
@@ -63,7 +65,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			var baseMethodParameters = methodToUseAsATemplate.GetParameters();
 			var parameters = GenericUtil.ExtractParametersTypes(baseMethodParameters, name2GenericType);
 
-			genericTypeParams = GenericUtil.CopyGenericArguments(methodToUseAsATemplate, builder, name2GenericType);
+			genericTypeParams = GenericUtil.CopyGenericArguments(methodToUseAsATemplate, builder, context, name2GenericType);
 			SetParameters(parameters);
 			SetReturnType(returnType);
 			SetSignature(returnType, methodToUseAsATemplate.ReturnParameter, parameters, baseMethodParameters);
@@ -145,7 +147,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			foreach (var parameter in parameters)
 			{
 				var parameterBuilder = builder.DefineParameter(parameter.Position + 1, parameter.Attributes, parameter.Name);
-				foreach (var attribute in parameter.GetNonInheritableAttributes())
+				foreach (var attribute in parameter.GetNonInheritableAttributes(context))
 				{
 					parameterBuilder.SetCustomAttribute(attribute.Builder);
 				}

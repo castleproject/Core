@@ -29,11 +29,13 @@ namespace Castle.DynamicProxy.Generators
 		                                             TypeAttributes.AnsiClass |
 		                                             TypeAttributes.AutoClass;
 
+		private readonly ProxyGenerationContext context;
 		private readonly MetaMethod method;
 		private readonly Type targetType;
 
-		public DelegateTypeGenerator(MetaMethod method, Type targetType)
+		public DelegateTypeGenerator(ProxyGenerationContext context, MetaMethod method, Type targetType)
 		{
+			this.context = context;
 			this.method = method;
 			this.targetType = targetType;
 		}
@@ -74,7 +76,8 @@ namespace Castle.DynamicProxy.Generators
 			                                  method.Method.Name);
 			var uniqueName = namingScope.ParentScope.GetUniqueName(suggestedName);
 
-			var @delegate = new ClassEmitter(@class.ModuleScope,
+			var @delegate = new ClassEmitter(context,
+			                                 @class.ModuleScope,
 			                                 uniqueName,
 			                                 typeof(MulticastDelegate),
 			                                 Type.EmptyTypes,

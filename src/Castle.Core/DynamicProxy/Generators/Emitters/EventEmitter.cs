@@ -20,13 +20,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	internal class EventEmitter : IMemberEmitter
 	{
+		private readonly ProxyGenerationContext context;
 		private readonly EventBuilder eventBuilder;
 		private readonly Type type;
 		private readonly AbstractTypeEmitter typeEmitter;
 		private MethodEmitter addMethod;
 		private MethodEmitter removeMethod;
 
-		public EventEmitter(AbstractTypeEmitter typeEmitter, string name, EventAttributes attributes, Type type)
+		public EventEmitter(ProxyGenerationContext context, AbstractTypeEmitter typeEmitter, string name, EventAttributes attributes, Type type)
 		{
 			if (name == null)
 			{
@@ -36,6 +37,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				throw new ArgumentNullException(nameof(type));
 			}
+			this.context = context;
 			this.typeEmitter = typeEmitter;
 			this.type = type;
 			eventBuilder = typeEmitter.TypeBuilder.DefineEvent(name, attributes, type);
@@ -58,7 +60,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				throw new InvalidOperationException("An add method exists");
 			}
 
-			addMethod = new MethodEmitter(typeEmitter, addMethodName, attributes, methodToOverride);
+			addMethod = new MethodEmitter(context, typeEmitter, addMethodName, attributes, methodToOverride);
 			return addMethod;
 		}
 
@@ -69,7 +71,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				throw new InvalidOperationException("A remove method exists");
 			}
-			removeMethod = new MethodEmitter(typeEmitter, removeMethodName, attributes, methodToOverride);
+			removeMethod = new MethodEmitter(context, typeEmitter, removeMethodName, attributes, methodToOverride);
 			return removeMethod;
 		}
 

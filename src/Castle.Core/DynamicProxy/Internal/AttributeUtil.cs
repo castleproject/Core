@@ -118,7 +118,7 @@ namespace Castle.DynamicProxy.Internal
 			fieldValues = fieldValuesList.ToArray();
 		}
 
-		public static IEnumerable<CustomAttributeInfo> GetNonInheritableAttributes(this MemberInfo member)
+		public static IEnumerable<CustomAttributeInfo> GetNonInheritableAttributes(this MemberInfo member, ProxyGenerationContext context)
 		{
 			Debug.Assert(member != null, "member != null");
 			var attributes = member.CustomAttributes;
@@ -126,7 +126,7 @@ namespace Castle.DynamicProxy.Internal
 			foreach (var attribute in attributes)
 			{
 				var attributeType = attribute.AttributeType;
-				if (ShouldSkipAttributeReplication(attributeType, ignoreInheritance: false))
+				if (ShouldSkipAttributeReplication(attributeType, ignoreInheritance: false, context))
 				{
 					continue;
 				}
@@ -155,7 +155,7 @@ namespace Castle.DynamicProxy.Internal
 			}
 		}
 
-		public static IEnumerable<CustomAttributeInfo> GetNonInheritableAttributes(this ParameterInfo parameter)
+		public static IEnumerable<CustomAttributeInfo> GetNonInheritableAttributes(this ParameterInfo parameter, ProxyGenerationContext context)
 		{
 			Debug.Assert(parameter != null, "parameter != null");
 
@@ -167,7 +167,7 @@ namespace Castle.DynamicProxy.Internal
 			{
 				var attributeType = attribute.AttributeType;
 
-				if (ShouldSkipAttributeReplication(attributeType, ignoreInheritance))
+				if (ShouldSkipAttributeReplication(attributeType, ignoreInheritance, context))
 				{
 					continue;
 				}
@@ -185,7 +185,7 @@ namespace Castle.DynamicProxy.Internal
 		///   but there are some special cases where the attributes means
 		///   something to the CLR, where they should be skipped.
 		/// </summary>
-		private static bool ShouldSkipAttributeReplication(Type attribute, bool ignoreInheritance)
+		private static bool ShouldSkipAttributeReplication(Type attribute, bool ignoreInheritance, ProxyGenerationContext context)
 		{
 			if (attribute.IsPublic == false)
 			{
@@ -204,7 +204,7 @@ namespace Castle.DynamicProxy.Internal
 				return true;
 			}
 
-			if (AttributesToAvoidReplicating.AsList().Any(a => a.IsAssignableFrom(attribute)))
+			if (context.AttributesToAvoidReplicating.Any(a => a.IsAssignableFrom(attribute)))
 			{
 				return true;
 			}

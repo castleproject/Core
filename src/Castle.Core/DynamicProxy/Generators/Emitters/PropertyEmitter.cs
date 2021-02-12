@@ -20,14 +20,16 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	internal class PropertyEmitter : IMemberEmitter
 	{
+		private readonly ProxyGenerationContext context;
 		private readonly PropertyBuilder builder;
 		private readonly AbstractTypeEmitter parentTypeEmitter;
 		private MethodEmitter getMethod;
 		private MethodEmitter setMethod;
 
-		public PropertyEmitter(AbstractTypeEmitter parentTypeEmitter, string name, PropertyAttributes attributes,
+		public PropertyEmitter(ProxyGenerationContext context, AbstractTypeEmitter parentTypeEmitter, string name, PropertyAttributes attributes,
 		                       Type propertyType, Type[] arguments)
 		{
+			this.context = context;
 			this.parentTypeEmitter = parentTypeEmitter;
 
 			builder = parentTypeEmitter.TypeBuilder.DefineProperty(
@@ -53,7 +55,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				throw new InvalidOperationException("A get method exists");
 			}
 
-			getMethod = new MethodEmitter(parentTypeEmitter, name, attrs, methodToOverride);
+			getMethod = new MethodEmitter(context, parentTypeEmitter, name, attrs, methodToOverride);
 			return getMethod;
 		}
 
@@ -70,7 +72,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				throw new InvalidOperationException("A set method exists");
 			}
 
-			setMethod = new MethodEmitter(parentTypeEmitter, name, attrs, methodToOverride);
+			setMethod = new MethodEmitter(context, parentTypeEmitter, name, attrs, methodToOverride);
 			return setMethod;
 		}
 

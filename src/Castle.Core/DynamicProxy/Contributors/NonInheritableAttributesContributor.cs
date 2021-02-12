@@ -25,16 +25,18 @@ namespace Castle.DynamicProxy.Contributors
 	/// </summary>
 	internal sealed class NonInheritableAttributesContributor : ITypeContributor
 	{
+		private readonly ProxyGenerationContext context;
 		private readonly Type targetType;
 
-		public NonInheritableAttributesContributor(Type targetType)
+		public NonInheritableAttributesContributor(ProxyGenerationContext context, Type targetType)
 		{
+			this.context = context;
 			this.targetType = targetType;
 		}
 
 		public void Generate(ClassEmitter emitter)
 		{
-			foreach (var attribute in targetType.GetNonInheritableAttributes())
+			foreach (var attribute in targetType.GetNonInheritableAttributes(context))
 			{
 				emitter.DefineCustomAttribute(attribute.Builder);
 			}
