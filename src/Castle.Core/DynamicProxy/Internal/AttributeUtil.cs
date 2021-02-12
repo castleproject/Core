@@ -19,6 +19,8 @@ namespace Castle.DynamicProxy.Internal
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Reflection;
+	using System.Runtime.InteropServices;
+	using System.Security.Permissions;
 
 	using Castle.DynamicProxy.Generators;
 
@@ -186,6 +188,18 @@ namespace Castle.DynamicProxy.Internal
 		private static bool ShouldSkipAttributeReplication(Type attribute, bool ignoreInheritance)
 		{
 			if (attribute.IsPublic == false)
+			{
+				return true;
+			}
+
+			if (attribute == typeof(ComImportAttribute) ||
+			    attribute == typeof(MarshalAsAttribute) ||
+			    attribute == typeof(TypeIdentifierAttribute))
+			{
+				return true;
+			}
+
+			if (attribute.IsSubclassOf(typeof(SecurityAttribute)))
 			{
 				return true;
 			}

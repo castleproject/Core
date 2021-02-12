@@ -36,14 +36,6 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void After_adding_attribute_must_still_contain_original_attributes()
-		{
-			AttributesToAvoidReplicating.Add<string>();
-			bool contains = AttributesToAvoidReplicating.Contains(typeof(System.Runtime.InteropServices.ComImportAttribute));
-			Assert.IsTrue(contains);
-		}
-
-		[Test]
 		public void NonInheritableAttribute_should_be_replicated_as_it_is_not_inherited()
 		{
 			var proxy = generator.CreateClassProxy<AttributedClass_NonInheritable>();

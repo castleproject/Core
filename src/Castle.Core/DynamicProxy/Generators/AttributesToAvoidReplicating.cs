@@ -27,13 +27,7 @@ namespace Castle.DynamicProxy.Generators
 
 		static AttributesToAvoidReplicating()
 		{
-			attributes = new List<Type>()
-			{
-				typeof(System.Runtime.InteropServices.ComImportAttribute),
-				typeof(System.Runtime.InteropServices.MarshalAsAttribute),
-				typeof(System.Runtime.InteropServices.TypeIdentifierAttribute),
-				typeof(System.Security.Permissions.SecurityAttribute),
-			};
+			attributes = new List<Type>();
 		}
 
 		public static void Add(Type attribute)
