@@ -34,9 +34,8 @@ namespace Castle.DynamicProxy.Generators
 		protected FieldReference targetField;
 
 		protected BaseInterfaceProxyGenerator(ProxyGenerationContext context, ModuleScope scope,
-		                                      Type targetType, Type[] interfaces, Type proxyTargetType,
-		                                      ProxyGenerationOptions options)
-			: base(context, scope, targetType, interfaces, options)
+		                                      Type targetType, Type[] interfaces, Type proxyTargetType)
+			: base(context, scope, targetType, interfaces)
 		{
 			CheckNotGenericTypeDefinition(proxyTargetType, nameof(proxyTargetType));
 			EnsureValidBaseType(ProxyGenerationOptions.BaseTypeForInterfaceProxy);

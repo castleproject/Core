@@ -131,8 +131,8 @@ namespace Castle.DynamicProxy.Serialization
 
 		private object RecreateClassProxyWithTarget()
 		{
-			var context = new ProxyGenerationContext();
-			var generator = new ClassProxyWithTargetGenerator(context, scope, baseType, interfaces, proxyGenerationOptions);
+			var context = new ProxyGenerationContext(proxyGenerationOptions);
+			var generator = new ClassProxyWithTargetGenerator(context, scope, baseType, interfaces);
 			var proxyType = generator.GetProxyType();
 			return InstantiateClassProxy(proxyType);
 		}
@@ -142,20 +142,20 @@ namespace Castle.DynamicProxy.Serialization
 			var @interface = DeserializeTypeFromString("__theInterface");
 			var targetType = DeserializeTypeFromString("__targetFieldType");
 
-			var context = new ProxyGenerationContext();
+			var context = new ProxyGenerationContext(proxyGenerationOptions);
 
 			BaseInterfaceProxyGenerator generator;
 			if (generatorType == ProxyTypeConstants.InterfaceWithTarget)
 			{
-				generator = new InterfaceProxyWithTargetGenerator(context, scope, @interface, interfaces, targetType, proxyGenerationOptions);
+				generator = new InterfaceProxyWithTargetGenerator(context, scope, @interface, interfaces, targetType);
 			}
 			else if (generatorType == ProxyTypeConstants.InterfaceWithoutTarget)
 			{
-				generator = new InterfaceProxyWithoutTargetGenerator(context, scope, @interface, interfaces, targetType, proxyGenerationOptions);
+				generator = new InterfaceProxyWithoutTargetGenerator(context, scope, @interface, interfaces, targetType);
 			}
 			else if (generatorType == ProxyTypeConstants.InterfaceWithTargetInterface)
 			{
-				generator = new InterfaceProxyWithTargetInterfaceGenerator(context, scope, @interface, interfaces, targetType, proxyGenerationOptions);
+				generator = new InterfaceProxyWithTargetInterfaceGenerator(context, scope, @interface, interfaces, targetType);
 			}
 			else
 			{
@@ -171,8 +171,8 @@ namespace Castle.DynamicProxy.Serialization
 
 		public object RecreateClassProxy()
 		{
-			var context = new ProxyGenerationContext();
-			var generator = new ClassProxyGenerator(context, scope, baseType, interfaces, proxyGenerationOptions);
+			var context = new ProxyGenerationContext(proxyGenerationOptions);
+			var generator = new ClassProxyGenerator(context, scope, baseType, interfaces);
 			var proxyType = generator.GetProxyType();
 			return InstantiateClassProxy(proxyType);
 		}

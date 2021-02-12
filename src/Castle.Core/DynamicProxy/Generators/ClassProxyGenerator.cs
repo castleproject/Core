@@ -25,9 +25,8 @@ namespace Castle.DynamicProxy.Generators
 	internal sealed class ClassProxyGenerator : BaseClassProxyGenerator
 	{
 		public ClassProxyGenerator(ProxyGenerationContext context, ModuleScope scope,
-		                           Type targetType, Type[] interfaces,
-		                           ProxyGenerationOptions options)
-			: base(context, scope, targetType, interfaces, options)
+		                           Type targetType, Type[] interfaces)
+			: base(context, scope, targetType, interfaces)
 		{
 		}
 

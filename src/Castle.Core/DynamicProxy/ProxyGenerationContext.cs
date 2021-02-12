@@ -18,10 +18,16 @@ namespace Castle.DynamicProxy
 
 	internal sealed class ProxyGenerationContext
 	{
-		public ProxyGenerationContext(ILogger logger = null)
+		public ProxyGenerationContext(ProxyGenerationOptions options,
+		                              ILogger logger = null)
 		{
 			Logger = logger ?? NullLogger.Instance;
+		
+			Options = options ?? ProxyGenerationOptions.Default;
+			Options.Initialize();
 		}
+
+		public ProxyGenerationOptions Options { get; }
 
 		public ILogger Logger { get; }
 	}

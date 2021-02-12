@@ -40,11 +40,9 @@ namespace Castle.DynamicProxy.Generators
 		protected readonly Type[] interfaces;
 		private readonly ProxyGenerationContext context;
 		private readonly ModuleScope scope;
-		private ProxyGenerationOptions proxyGenerationOptions;
 
 		protected BaseProxyGenerator(ProxyGenerationContext context, ModuleScope scope,
-		                             Type targetType, Type[] interfaces,
-		                             ProxyGenerationOptions proxyGenerationOptions)
+		                             Type targetType, Type[] interfaces)
 		{
 			CheckNotGenericTypeDefinition(targetType, nameof(targetType));
 			CheckNotGenericTypeDefinitions(interfaces, nameof(interfaces));
@@ -53,8 +51,6 @@ namespace Castle.DynamicProxy.Generators
 			this.scope = scope;
 			this.targetType = targetType;
 			this.interfaces = TypeUtil.GetAllInterfaces(interfaces);
-			this.proxyGenerationOptions = proxyGenerationOptions;
-			this.proxyGenerationOptions.Initialize();
 		}
 
 		protected ProxyGenerationContext Context
@@ -64,7 +60,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected ProxyGenerationOptions ProxyGenerationOptions
 		{
-			get { return proxyGenerationOptions; }
+			get { return context.Options; }
 		}
 
 		protected ModuleScope Scope
