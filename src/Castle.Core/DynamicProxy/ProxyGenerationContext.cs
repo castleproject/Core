@@ -29,12 +29,12 @@ namespace Castle.DynamicProxy
 			Options = options ?? ProxyGenerationOptions.Default;
 			Options.Initialize();
 
-			AttributesToAvoidReplicating = Generators.AttributesToAvoidReplicating.AsList();
+			AttributesToAvoidReplicating = Options.AttributesToAvoidReplicating;
 
 			Hook = Options.Hook ?? new AllMethodsHook();
 		}
 
-		public IList<Type> AttributesToAvoidReplicating { get; }
+		public ISet<Type> AttributesToAvoidReplicating { get; }
 
 		public IProxyGenerationHook Hook { get; }
 
