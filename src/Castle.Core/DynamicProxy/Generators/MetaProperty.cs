@@ -30,13 +30,11 @@ namespace Castle.DynamicProxy.Generators
 		private readonly MetaMethod setter;
 		private readonly Type type;
 		private PropertyEmitter emitter;
-		private string name;
 
 		public MetaProperty(PropertyInfo property, MetaMethod getter, MetaMethod setter,
 		                    IEnumerable<CustomAttributeBuilder> customAttributes, Type[] arguments)
 			: base(property)
 		{
-			name = property.Name;
 			type = property.PropertyType;
 			this.getter = getter;
 			this.setter = setter;

@@ -20,11 +20,13 @@ namespace Castle.DynamicProxy.Generators
 	internal abstract class MetaTypeElement
 	{
 		private readonly MemberInfo member;
+		protected string name;
 		protected readonly Type sourceType;
 
 		protected MetaTypeElement(MemberInfo member)
 		{
 			this.member = member;
+			this.name = member.Name;
 			this.sourceType = member.DeclaringType;
 		}
 

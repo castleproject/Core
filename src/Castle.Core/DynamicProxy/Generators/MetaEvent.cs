@@ -25,7 +25,6 @@ namespace Castle.DynamicProxy.Generators
 		private readonly MetaMethod remover;
 		private readonly Type type;
 		private EventEmitter emitter;
-		private string name;
 
 		/// <summary>
 		///   Initializes a new instance of the <see cref = "MetaEvent" /> class.
@@ -45,7 +44,6 @@ namespace Castle.DynamicProxy.Generators
 			{
 				throw new ArgumentNullException(nameof(remover));
 			}
-			name = @event.Name;
 			type = @event.EventHandlerType;
 			this.adder = adder;
 			this.remover = remover;
