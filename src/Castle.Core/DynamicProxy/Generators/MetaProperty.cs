@@ -28,14 +28,12 @@ namespace Castle.DynamicProxy.Generators
 		private readonly IEnumerable<CustomAttributeBuilder> customAttributes;
 		private readonly MetaMethod getter;
 		private readonly MetaMethod setter;
-		private readonly Type type;
 		private PropertyEmitter emitter;
 
 		public MetaProperty(PropertyInfo property, MetaMethod getter, MetaMethod setter,
 		                    IEnumerable<CustomAttributeBuilder> customAttributes, Type[] arguments)
 			: base(property)
 		{
-			type = property.PropertyType;
 			this.getter = getter;
 			this.setter = setter;
 			attributes = PropertyAttributes.None;
@@ -105,6 +103,11 @@ namespace Castle.DynamicProxy.Generators
 			get { return setter; }
 		}
 
+		private Type Type
+		{
+			get { return ((PropertyInfo)Member).PropertyType; }
+		}
+
 		public void BuildPropertyEmitter(ClassEmitter classEmitter)
 		{
 			if (emitter != null)
@@ -112,7 +115,7 @@ namespace Castle.DynamicProxy.Generators
 				throw new InvalidOperationException("Emitter is already created. It is illegal to invoke this method twice.");
 			}
 
-			emitter = classEmitter.CreateProperty(Name, attributes, type, arguments);
+			emitter = classEmitter.CreateProperty(Name, attributes, Type, arguments);
 			foreach (var attribute in customAttributes)
 			{
 				emitter.DefineCustomAttribute(attribute);
@@ -156,7 +159,7 @@ namespace Castle.DynamicProxy.Generators
 				return true;
 			}
 
-			if (!type.Equals(other.type))
+			if (!Type.Equals(other.Type))
 			{
 				return false;
 			}

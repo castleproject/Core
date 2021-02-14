@@ -23,7 +23,6 @@ namespace Castle.DynamicProxy.Generators
 	{
 		private readonly MetaMethod adder;
 		private readonly MetaMethod remover;
-		private readonly Type type;
 		private EventEmitter emitter;
 
 		/// <summary>
@@ -44,7 +43,6 @@ namespace Castle.DynamicProxy.Generators
 			{
 				throw new ArgumentNullException(nameof(remover));
 			}
-			type = @event.EventHandlerType;
 			this.adder = adder;
 			this.remover = remover;
 			Attributes = attributes;
@@ -76,13 +74,18 @@ namespace Castle.DynamicProxy.Generators
 			get { return remover; }
 		}
 
+		private Type Type
+		{
+			get { return ((EventInfo)Member).EventHandlerType; }
+		}
+
 		public void BuildEventEmitter(ClassEmitter classEmitter)
 		{
 			if (emitter != null)
 			{
 				throw new InvalidOperationException();
 			}
-			emitter = classEmitter.CreateEvent(Name, Attributes, type);
+			emitter = classEmitter.CreateEvent(Name, Attributes, Type);
 		}
 
 		public override bool Equals(object obj)
@@ -125,7 +128,7 @@ namespace Castle.DynamicProxy.Generators
 				return true;
 			}
 
-			if (!type.Equals(other.type))
+			if (!Type.Equals(other.Type))
 			{
 				return false;
 			}
