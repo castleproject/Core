@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Generators
 		private string name;
 
 		public MetaMethod(MethodInfo method, MethodInfo methodOnTarget, bool standalone, bool proxyable, bool hasTarget)
-			: base(method.DeclaringType)
+			: base(method)
 		{
 			Method = method;
 			name = method.Name;

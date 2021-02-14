@@ -34,7 +34,7 @@ namespace Castle.DynamicProxy.Generators
 
 		public MetaProperty(PropertyInfo property, MetaMethod getter, MetaMethod setter,
 		                    IEnumerable<CustomAttributeBuilder> customAttributes, Type[] arguments)
-			: base(property.DeclaringType)
+			: base(property)
 		{
 			name = property.Name;
 			type = property.PropertyType;

@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Generators
 		/// <param name = "remover">The remove method.</param>
 		/// <param name = "attributes">The attributes.</param>
 		public MetaEvent(EventInfo @event, MetaMethod adder, MetaMethod remover, EventAttributes attributes)
-			: base(@event.DeclaringType)
+			: base(@event)
 		{
 			if (adder == null)
 			{
