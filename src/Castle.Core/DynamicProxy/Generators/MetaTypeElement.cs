@@ -23,13 +23,11 @@ namespace Castle.DynamicProxy.Generators
 	{
 		private readonly MemberInfo member;
 		protected string name;
-		protected readonly Type sourceType;
 
 		protected MetaTypeElement(MemberInfo member)
 		{
 			this.member = member;
 			this.name = member.Name;
-			this.sourceType = member.DeclaringType;
 		}
 
 		protected MemberInfo Member
@@ -39,7 +37,7 @@ namespace Castle.DynamicProxy.Generators
 
 		internal bool CanBeImplementedExplicitly
 		{
-			get { return sourceType != null && sourceType.IsInterface; }
+			get { return member.DeclaringType?.IsInterface ?? false; }
 		}
 
 		internal abstract void SwitchToExplicitImplementation();
@@ -47,6 +45,7 @@ namespace Castle.DynamicProxy.Generators
 		protected void SwitchToExplicitImplementationName()
 		{
 			var name = member.Name;
+			var sourceType = member.DeclaringType;
 			var ns = sourceType.Namespace;
 			Debug.Assert(ns == null || ns != "");
 
