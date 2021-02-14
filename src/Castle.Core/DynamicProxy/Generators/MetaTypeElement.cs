@@ -30,6 +30,11 @@ namespace Castle.DynamicProxy.Generators
 			this.name = member.Name;
 		}
 
+		public bool CanBeImplementedExplicitly
+		{
+			get { return member.DeclaringType?.IsInterface ?? false; }
+		}
+
 		public string Name
 		{
 			get { return name; }
@@ -40,12 +45,7 @@ namespace Castle.DynamicProxy.Generators
 			get { return member; }
 		}
 
-		internal bool CanBeImplementedExplicitly
-		{
-			get { return member.DeclaringType?.IsInterface ?? false; }
-		}
-
-		internal abstract void SwitchToExplicitImplementation();
+		public abstract void SwitchToExplicitImplementation();
 
 		protected void SwitchToExplicitImplementationName()
 		{

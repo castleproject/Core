@@ -183,7 +183,7 @@ namespace Castle.DynamicProxy.Generators
 			return true;
 		}
 
-		internal override void SwitchToExplicitImplementation()
+		public override void SwitchToExplicitImplementation()
 		{
 			SwitchToExplicitImplementationName();
 			if (setter != null)
