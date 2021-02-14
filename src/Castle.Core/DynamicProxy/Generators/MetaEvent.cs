@@ -140,7 +140,7 @@ namespace Castle.DynamicProxy.Generators
 
 		internal override void SwitchToExplicitImplementation()
 		{
-			name = MetaTypeElementUtil.CreateNameForExplicitImplementation(sourceType, name);
+			SwitchToExplicitImplementationName();
 			adder.SwitchToExplicitImplementation();
 			remover.SwitchToExplicitImplementation();
 		}

@@ -182,7 +182,7 @@ namespace Castle.DynamicProxy.Generators
 
 		internal override void SwitchToExplicitImplementation()
 		{
-			name = MetaTypeElementUtil.CreateNameForExplicitImplementation(sourceType, name);
+			SwitchToExplicitImplementationName();
 			if (setter != null)
 			{
 				setter.SwitchToExplicitImplementation();
