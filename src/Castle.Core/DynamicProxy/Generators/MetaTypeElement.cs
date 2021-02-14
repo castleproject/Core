@@ -22,12 +22,17 @@ namespace Castle.DynamicProxy.Generators
 	internal abstract class MetaTypeElement
 	{
 		private readonly MemberInfo member;
-		protected string name;
+		private string name;
 
 		protected MetaTypeElement(MemberInfo member)
 		{
 			this.member = member;
 			this.name = member.Name;
+		}
+
+		public string Name
+		{
+			get { return name; }
 		}
 
 		protected MemberInfo Member

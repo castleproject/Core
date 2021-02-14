@@ -112,7 +112,7 @@ namespace Castle.DynamicProxy.Generators
 				throw new InvalidOperationException("Emitter is already created. It is illegal to invoke this method twice.");
 			}
 
-			emitter = classEmitter.CreateProperty(name, attributes, type, arguments);
+			emitter = classEmitter.CreateProperty(Name, attributes, type, arguments);
 			foreach (var attribute in customAttributes)
 			{
 				emitter.DefineCustomAttribute(attribute);
@@ -161,7 +161,7 @@ namespace Castle.DynamicProxy.Generators
 				return false;
 			}
 
-			if (!StringComparer.OrdinalIgnoreCase.Equals(name, other.name))
+			if (!StringComparer.OrdinalIgnoreCase.Equals(Name, other.Name))
 			{
 				return false;
 			}

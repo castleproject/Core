@@ -44,11 +44,6 @@ namespace Castle.DynamicProxy.Generators
 
 		public MethodInfo MethodOnTarget { get; private set; }
 
-		public string Name
-		{
-			get { return name; }
-		}
-
 		public bool Ignore { get; internal set; }
 
 		public bool Proxyable { get; private set; }
@@ -66,7 +61,7 @@ namespace Castle.DynamicProxy.Generators
 				return true;
 			}
 
-			if (!StringComparer.OrdinalIgnoreCase.Equals(name, other.name))
+			if (!StringComparer.OrdinalIgnoreCase.Equals(Name, other.Name))
 			{
 				return false;
 			}

@@ -82,7 +82,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				throw new InvalidOperationException();
 			}
-			emitter = classEmitter.CreateEvent(name, Attributes, type);
+			emitter = classEmitter.CreateEvent(Name, Attributes, type);
 		}
 
 		public override bool Equals(object obj)
@@ -130,7 +130,7 @@ namespace Castle.DynamicProxy.Generators
 				return false;
 			}
 
-			if (!StringComparer.OrdinalIgnoreCase.Equals(name, other.name))
+			if (!StringComparer.OrdinalIgnoreCase.Equals(Name, other.Name))
 			{
 				return false;
 			}
