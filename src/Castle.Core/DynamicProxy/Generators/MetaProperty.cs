@@ -32,12 +32,12 @@ namespace Castle.DynamicProxy.Generators
 		private PropertyEmitter emitter;
 		private string name;
 
-		public MetaProperty(string name, Type propertyType, Type declaringType, MetaMethod getter, MetaMethod setter,
+		public MetaProperty(PropertyInfo property, MetaMethod getter, MetaMethod setter,
 		                    IEnumerable<CustomAttributeBuilder> customAttributes, Type[] arguments)
-			: base(declaringType)
+			: base(property.DeclaringType)
 		{
-			this.name = name;
-			type = propertyType;
+			name = property.Name;
+			type = property.PropertyType;
 			this.getter = getter;
 			this.setter = setter;
 			attributes = PropertyAttributes.None;
