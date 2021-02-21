@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	internal abstract class ArgumentsUtil
+	internal static class ArgumentsUtil
 	{
 		public static ArgumentReference[] ConvertToArgumentReference(Type[] args)
 		{
@@ -58,14 +58,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return arguments;
 		}
 
-		public static void EmitLoadOwnerAndReference(Reference reference, ILGenerator il)
+		public static void EmitLoadOwnerAndReference(this Reference reference, ILGenerator il)
 		{
 			if (reference == null)
 			{
 				return;
 			}
 
-			EmitLoadOwnerAndReference(reference.OwnerReference, il);
+			reference.OwnerReference.EmitLoadOwnerAndReference(il);
 
 			reference.LoadReference(il);
 		}
