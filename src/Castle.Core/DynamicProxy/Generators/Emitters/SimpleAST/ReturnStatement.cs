@@ -39,7 +39,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 			if (reference != null)
 			{
-				reference.EmitLoadOwnerAndReference(gen);
+				reference.Emit(member, gen);
 			}
 			else if (expression != null)
 			{

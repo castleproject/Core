@@ -29,7 +29,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			arrayReference?.EmitLoadOwnerAndReference(gen);
+			arrayReference?.Emit(member, gen);
 			index.Emit(member, gen);
 			gen.Emit(OpCodes.Ldelem_Ref);
 		}

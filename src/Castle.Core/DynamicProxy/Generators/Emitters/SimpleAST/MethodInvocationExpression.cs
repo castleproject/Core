@@ -49,7 +49,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			owner?.EmitLoadOwnerAndReference(gen);
+			owner?.Emit(member, gen);
 
 			foreach (var exp in args)
 			{
