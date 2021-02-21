@@ -321,22 +321,22 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				CreateDefaultConstructor();
 			}
 
-			foreach (IMemberEmitter builder in properties)
+			foreach (var builder in properties)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
 			}
-			foreach (IMemberEmitter builder in events)
+			foreach (var builder in events)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
 			}
-			foreach (IMemberEmitter builder in constructors)
+			foreach (var builder in constructors)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();
 			}
-			foreach (IMemberEmitter builder in methods)
+			foreach (var builder in methods)
 			{
 				builder.EnsureValidCodeBlock();
 				builder.Generate();

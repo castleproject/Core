@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class PropertyEmitter : IMemberEmitter
+	internal class PropertyEmitter
 	{
 		private readonly PropertyBuilder builder;
 		private readonly AbstractTypeEmitter parentTypeEmitter;
@@ -33,16 +33,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			builder = parentTypeEmitter.TypeBuilder.DefineProperty(
 				name, attributes, CallingConventions.HasThis, propertyType,
 				null, null, arguments, null, null);
-		}
-
-		public MemberInfo Member
-		{
-			get { return null; }
-		}
-
-		public Type ReturnType
-		{
-			get { return builder.PropertyType; }
 		}
 
 		public MethodEmitter CreateGetMethod(string name, MethodAttributes attrs, MethodInfo methodToOverride,

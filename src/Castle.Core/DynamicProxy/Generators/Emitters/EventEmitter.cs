@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class EventEmitter : IMemberEmitter
+	internal class EventEmitter
 	{
 		private readonly EventBuilder eventBuilder;
 		private readonly Type type;
@@ -39,16 +39,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			this.typeEmitter = typeEmitter;
 			this.type = type;
 			eventBuilder = typeEmitter.TypeBuilder.DefineEvent(name, attributes, type);
-		}
-
-		public MemberInfo Member
-		{
-			get { return null; }
-		}
-
-		public Type ReturnType
-		{
-			get { return type; }
 		}
 
 		public MethodEmitter CreateAddMethod(string addMethodName, MethodAttributes attributes, MethodInfo methodToOverride)

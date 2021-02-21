@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	internal class ConstructorEmitter : IMemberEmitter
+	internal class ConstructorEmitter
 	{
 		private readonly ConstructorBuilder builder;
 		private readonly CodeBuilder codeBuilder;
@@ -51,16 +51,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public ConstructorBuilder ConstructorBuilder
 		{
 			get { return builder; }
-		}
-
-		public MemberInfo Member
-		{
-			get { return builder; }
-		}
-
-		public Type ReturnType
-		{
-			get { return typeof(void); }
 		}
 
 		private bool ImplementedByRuntime
