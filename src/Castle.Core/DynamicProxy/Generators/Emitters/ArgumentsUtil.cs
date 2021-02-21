@@ -60,12 +60,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static void EmitLoadOwnerAndReference(this Reference reference, ILGenerator il)
 		{
-			if (reference == null)
-			{
-				return;
-			}
-
-			reference.OwnerReference.EmitLoadOwnerAndReference(il);
+			reference.OwnerReference?.EmitLoadOwnerAndReference(il);
 
 			reference.LoadReference(il);
 		}
