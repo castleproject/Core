@@ -125,7 +125,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			if (ImplementedByRuntime == false && CodeBuilder.IsEmpty)
 			{
-				CodeBuilder.AddStatement(new ReturnStatement());
+				if (ReturnType == typeof(void))
+				{
+					CodeBuilder.AddStatement(new ReturnStatement());
+				}
+				else
+				{
+					CodeBuilder.AddStatement(new ReturnStatement(new DefaultValueExpression(ReturnType)));
+				}
 			}
 		}
 
