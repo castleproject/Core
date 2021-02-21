@@ -19,10 +19,10 @@ namespace Castle.DynamicProxy.Generators
 
 	internal class MetaType
 	{
-		private readonly ICollection<MetaEvent> events = new TypeElementCollection<MetaEvent>();
-		private readonly ICollection<MetaMethod> methods = new TypeElementCollection<MetaMethod>();
+		private readonly MetaTypeElementCollection<MetaEvent> events = new MetaTypeElementCollection<MetaEvent>();
+		private readonly MetaTypeElementCollection<MetaMethod> methods = new MetaTypeElementCollection<MetaMethod>();
 		private readonly Dictionary<MethodInfo, MetaMethod> methodsIndex = new Dictionary<MethodInfo, MetaMethod>();
-		private readonly ICollection<MetaProperty> properties = new TypeElementCollection<MetaProperty>();
+		private readonly MetaTypeElementCollection<MetaProperty> properties = new MetaTypeElementCollection<MetaProperty>();
 
 		public IEnumerable<MetaEvent> Events
 		{

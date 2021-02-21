@@ -104,9 +104,7 @@ namespace Castle.DynamicProxy.Contributors
 				var nonInheritableAttributes = property.GetNonInheritableAttributes();
 				var arguments = property.GetIndexParameters();
 
-				sink.Add(new MetaProperty(property.Name,
-				                          property.PropertyType,
-				                          property.DeclaringType,
+				sink.Add(new MetaProperty(property,
 				                          getter,
 				                          setter,
 				                          nonInheritableAttributes.Select(a => a.Builder),
@@ -135,8 +133,7 @@ namespace Castle.DynamicProxy.Contributors
 					return;
 				}
 
-				sink.Add(new MetaEvent(@event.Name,
-				                       @event.DeclaringType, @event.EventHandlerType, adder, remover, EventAttributes.None));
+				sink.Add(new MetaEvent(@event, adder, remover, EventAttributes.None));
 			}
 
 			MetaMethod AddMethod(MethodInfo method, bool isStandalone)

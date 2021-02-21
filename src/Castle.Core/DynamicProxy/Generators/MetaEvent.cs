@@ -23,22 +23,17 @@ namespace Castle.DynamicProxy.Generators
 	{
 		private readonly MetaMethod adder;
 		private readonly MetaMethod remover;
-		private readonly Type type;
 		private EventEmitter emitter;
-		private string name;
 
 		/// <summary>
 		///   Initializes a new instance of the <see cref = "MetaEvent" /> class.
 		/// </summary>
-		/// <param name = "name">The name.</param>
-		/// <param name = "declaringType">Type declaring the original event being overridden, or null.</param>
-		/// <param name = "eventDelegateType">The event delegate type.</param>
+		/// <param name = "event">The event.</param>
 		/// <param name = "adder">The add method.</param>
 		/// <param name = "remover">The remove method.</param>
 		/// <param name = "attributes">The attributes.</param>
-		public MetaEvent(string name, Type declaringType, Type eventDelegateType, MetaMethod adder, MetaMethod remover,
-		                 EventAttributes attributes)
-			: base(declaringType)
+		public MetaEvent(EventInfo @event, MetaMethod adder, MetaMethod remover, EventAttributes attributes)
+			: base(@event)
 		{
 			if (adder == null)
 			{
@@ -48,8 +43,6 @@ namespace Castle.DynamicProxy.Generators
 			{
 				throw new ArgumentNullException(nameof(remover));
 			}
-			this.name = name;
-			type = eventDelegateType;
 			this.adder = adder;
 			this.remover = remover;
 			Attributes = attributes;
@@ -81,13 +74,18 @@ namespace Castle.DynamicProxy.Generators
 			get { return remover; }
 		}
 
+		private Type Type
+		{
+			get { return ((EventInfo)Member).EventHandlerType; }
+		}
+
 		public void BuildEventEmitter(ClassEmitter classEmitter)
 		{
 			if (emitter != null)
 			{
 				throw new InvalidOperationException();
 			}
-			emitter = classEmitter.CreateEvent(name, Attributes, type);
+			emitter = classEmitter.CreateEvent(Name, Attributes, Type);
 		}
 
 		public override bool Equals(object obj)
@@ -130,12 +128,12 @@ namespace Castle.DynamicProxy.Generators
 				return true;
 			}
 
-			if (!type.Equals(other.type))
+			if (!Type.Equals(other.Type))
 			{
 				return false;
 			}
 
-			if (!StringComparer.OrdinalIgnoreCase.Equals(name, other.name))
+			if (!StringComparer.OrdinalIgnoreCase.Equals(Name, other.Name))
 			{
 				return false;
 			}
@@ -143,9 +141,9 @@ namespace Castle.DynamicProxy.Generators
 			return true;
 		}
 
-		internal override void SwitchToExplicitImplementation()
+		public override void SwitchToExplicitImplementation()
 		{
-			name = MetaTypeElementUtil.CreateNameForExplicitImplementation(sourceType, name);
+			SwitchToExplicitImplementationName();
 			adder.SwitchToExplicitImplementation();
 			remover.SwitchToExplicitImplementation();
 		}

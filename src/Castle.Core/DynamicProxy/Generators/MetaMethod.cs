@@ -27,13 +27,10 @@ namespace Castle.DynamicProxy.Generators
 		                                                                  MethodAttributes.NewSlot |
 		                                                                  MethodAttributes.Final;
 
-		private string name;
-
 		public MetaMethod(MethodInfo method, MethodInfo methodOnTarget, bool standalone, bool proxyable, bool hasTarget)
-			: base(method.DeclaringType)
+			: base(method)
 		{
 			Method = method;
-			name = method.Name;
 			MethodOnTarget = methodOnTarget;
 			Standalone = standalone;
 			Proxyable = proxyable;
@@ -46,11 +43,6 @@ namespace Castle.DynamicProxy.Generators
 		public MethodInfo Method { get; private set; }
 
 		public MethodInfo MethodOnTarget { get; private set; }
-
-		public string Name
-		{
-			get { return name; }
-		}
 
 		public bool Ignore { get; internal set; }
 
@@ -69,7 +61,7 @@ namespace Castle.DynamicProxy.Generators
 				return true;
 			}
 
-			if (!StringComparer.OrdinalIgnoreCase.Equals(name, other.name))
+			if (!StringComparer.OrdinalIgnoreCase.Equals(Name, other.Name))
 			{
 				return false;
 			}
@@ -93,7 +85,7 @@ namespace Castle.DynamicProxy.Generators
 			return true;
 		}
 
-		internal override void SwitchToExplicitImplementation()
+		public override void SwitchToExplicitImplementation()
 		{
 			Attributes = ExplicitImplementationAttributes;
 			if (Standalone == false)
@@ -101,7 +93,7 @@ namespace Castle.DynamicProxy.Generators
 				Attributes |= MethodAttributes.SpecialName;
 			}
 
-			name = MetaTypeElementUtil.CreateNameForExplicitImplementation(sourceType, Method.Name);
+			SwitchToExplicitImplementationName();
 		}
 
 		private MethodAttributes ObtainAttributes()

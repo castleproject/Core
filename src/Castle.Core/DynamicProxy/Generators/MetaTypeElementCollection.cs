@@ -18,20 +18,10 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections;
 	using System.Collections.Generic;
 
-	internal class TypeElementCollection<TElement> : ICollection<TElement>
+	internal class MetaTypeElementCollection<TElement> : IEnumerable<TElement>
 		where TElement : MetaTypeElement, IEquatable<TElement>
 	{
 		private readonly ICollection<TElement> items = new List<TElement>();
-
-		public int Count
-		{
-			get { return items.Count; }
-		}
-
-		bool ICollection<TElement>.IsReadOnly
-		{
-			get { return false; }
-		}
 
 		public void Add(TElement item)
 		{
@@ -68,21 +58,6 @@ namespace Castle.DynamicProxy.Generators
 		public IEnumerator<TElement> GetEnumerator()
 		{
 			return items.GetEnumerator();
-		}
-
-		void ICollection<TElement>.Clear()
-		{
-			throw new NotSupportedException();
-		}
-
-		void ICollection<TElement>.CopyTo(TElement[] array, int arrayIndex)
-		{
-			throw new NotSupportedException();
-		}
-
-		bool ICollection<TElement>.Remove(TElement item)
-		{
-			throw new NotSupportedException();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

@@ -154,7 +154,7 @@ namespace Castle.DynamicProxy.Contributors
 			//
 			// TL;DR: This prevents member name collisions in the generated proxy type.
 			//
-			// `MetaType` uses `TypeElementCollection`s internally, which switches members
+			// `MetaType` uses `MetaTypeElementCollection`s internally, which switches members
 			// to explicit implementation whenever a name collision with a previously added
 			// member occurs.
 			//

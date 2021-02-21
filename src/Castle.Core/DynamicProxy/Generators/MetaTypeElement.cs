@@ -15,22 +15,85 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
+	using System.Diagnostics;
 	using System.Reflection;
+	using System.Text;
 
 	internal abstract class MetaTypeElement
 	{
-		protected readonly Type sourceType;
+		private readonly MemberInfo member;
+		private string name;
 
-		protected MetaTypeElement(Type sourceType)
+		protected MetaTypeElement(MemberInfo member)
 		{
-			this.sourceType = sourceType;
+			this.member = member;
+			this.name = member.Name;
 		}
 
-		internal bool CanBeImplementedExplicitly
+		public bool CanBeImplementedExplicitly
 		{
-			get { return sourceType != null && sourceType.IsInterface; }
+			get { return member.DeclaringType?.IsInterface ?? false; }
 		}
 
-		internal abstract void SwitchToExplicitImplementation();
+		public string Name
+		{
+			get { return name; }
+		}
+
+		protected MemberInfo Member
+		{
+			get { return member; }
+		}
+
+		public abstract void SwitchToExplicitImplementation();
+
+		protected void SwitchToExplicitImplementationName()
+		{
+			var name = member.Name;
+			var sourceType = member.DeclaringType;
+			var ns = sourceType.Namespace;
+			Debug.Assert(ns == null || ns != "");
+
+			if (sourceType.IsGenericType)
+			{
+				var nameBuilder = new StringBuilder();
+				if (ns != null)
+				{
+					nameBuilder.Append(ns);
+					nameBuilder.Append('.');
+				}
+				AppendTypeName(nameBuilder, sourceType);
+				nameBuilder.Append('.');
+				nameBuilder.Append(name);
+				this.name = nameBuilder.ToString();
+			}
+			else if (ns != null)
+			{
+				this.name = string.Concat(ns, ".", sourceType.Name, ".", name);
+			}
+			else
+			{
+				this.name = string.Concat(sourceType.Name, ".", name);
+			}
+
+			static void AppendTypeName(StringBuilder nameBuilder, Type type)
+			{
+				nameBuilder.Append(type.Name);
+				if (type.IsGenericType)
+				{
+					nameBuilder.Append('[');
+					var genericTypeArguments = type.GetGenericArguments();
+					for (int i = 0, n = genericTypeArguments.Length; i < n; ++i)
+					{
+						if (i > 0)
+						{
+							nameBuilder.Append(',');
+						}
+						AppendTypeName(nameBuilder, genericTypeArguments[i]);
+					}
+					nameBuilder.Append(']');
+				}
+			}
+		}
 	}
 }
