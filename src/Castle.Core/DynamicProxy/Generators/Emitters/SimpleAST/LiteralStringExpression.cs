@@ -14,41 +14,20 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
-	using System;
-	using System.Diagnostics;
-	using System.Reflection;
 	using System.Reflection.Emit;
 
-	[DebuggerDisplay("{value}")]
-	internal class ConstReference : TypeReference
+	internal class LiteralStringExpression : IExpression
 	{
-		private readonly object value;
+		private readonly string value;
 
-		public ConstReference(object value)
-			: base(value.GetType())
+		public LiteralStringExpression(string value)
 		{
-			Debug.Assert(value.GetType().IsPrimitive || value is string, "Invalid type to ConstReference");
-
 			this.value = value;
 		}
 
-		public override void Generate(ILGenerator gen)
+		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-		}
-
-		public override void LoadAddressOfReference(ILGenerator gen)
-		{
-			throw new NotSupportedException();
-		}
-
-		public override void LoadReference(ILGenerator gen)
-		{
-			OpCodeUtil.EmitLoadOpCodeForConstantValue(gen, value);
-		}
-
-		public override void StoreReference(ILGenerator gen)
-		{
-			throw new NotImplementedException("ConstReference.StoreReference");
+			gen.Emit(OpCodes.Ldstr, value);
 		}
 	}
 }

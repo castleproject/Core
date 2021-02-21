@@ -16,22 +16,18 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class LoadRefArrayElementExpression : IExpression
+	internal class LiteralBoolExpression : IExpression
 	{
-		private readonly Reference arrayReference;
-		private readonly LiteralIntExpression index;
+		private readonly bool value;
 
-		public LoadRefArrayElementExpression(int index, Reference arrayReference)
+		public LiteralBoolExpression(bool value)
 		{
-			this.index = new LiteralIntExpression(index);
-			this.arrayReference = arrayReference;
+			this.value = value;
 		}
 
 		public void Emit(IMemberEmitter member, ILGenerator gen)
 		{
-			ArgumentsUtil.EmitLoadOwnerAndReference(arrayReference, gen);
-			index.Emit(member, gen);
-			gen.Emit(OpCodes.Ldelem_Ref);
+			gen.Emit(value ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0);
 		}
 	}
 }
