@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.type = type;
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldtoken, type);
 			gen.Emit(OpCodes.Call, TypeMethods.GetTypeFromHandle);

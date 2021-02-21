@@ -30,17 +30,17 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.ifNotNull = ifNotNull;
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
-			expression.Emit(member, gen);
+			expression.Emit(gen);
 
 			var notNull = gen.DefineLabel();
 			gen.Emit(OpCodes.Brtrue_S, notNull);
-			ifNull.Emit(member, gen);
+			ifNull.Emit(gen);
 			gen.MarkLabel(notNull);
 			if (ifNotNull != null) // yeah, I know that reads funny :)
 			{
-				ifNotNull.Emit(member, gen);
+				ifNotNull.Emit(gen);
 			}
 		}
 	}

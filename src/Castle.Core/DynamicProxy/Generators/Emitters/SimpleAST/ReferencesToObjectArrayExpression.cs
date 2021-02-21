@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.args = args;
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
 			var local = gen.DeclareLocal(typeof(object[]));
 
@@ -42,7 +42,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 				var reference = args[i];
 
-				reference?.Emit(member, gen);
+				reference?.Emit(gen);
 
 				if (reference.Type.IsByRef)
 				{

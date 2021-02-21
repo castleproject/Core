@@ -36,9 +36,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.right = right;
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
-			right.Emit(member, gen);
+			right.Emit(gen);
 
 			if (fromType == target)
 			{

@@ -45,9 +45,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
-			OwnerReference?.Emit(member, gen);
+			OwnerReference?.Emit(gen);
 			LoadReference(gen);
 		}
 	}
