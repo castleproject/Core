@@ -268,13 +268,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public Type GetClosedParameterType(Type parameter)
 		{
-			if (parameter.IsGenericTypeDefinition)
-			{
-				return parameter.GetGenericTypeDefinition().MakeGenericType(GetGenericArgumentsFor(parameter));
-			}
-
 			if (parameter.IsGenericType)
 			{
+				// ECMA-335 section II.9.4: "The CLI does not support partial instantiation
+				// of generic types. And generic types shall not appear uninstantiated any-
+				// where in metadata signature blobs." (And parameters are defined there!)
+				Debug.Assert(parameter.IsGenericTypeDefinition == false);
+
 				var arguments = parameter.GetGenericArguments();
 				if (CloseGenericParametersIfAny(arguments))
 				{
@@ -326,25 +326,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				return genericTypeParameterBuilder;
 
 			return null;
-		}
-
-		public Type[] GetGenericArgumentsFor(Type genericType)
-		{
-			var types = new List<Type>();
-
-			foreach (var genType in genericType.GetGenericArguments())
-			{
-				if (genType.IsGenericParameter)
-				{
-					types.Add(name2GenericType[genType.Name]);
-				}
-				else
-				{
-					types.Add(genType);
-				}
-			}
-
-			return types.ToArray();
 		}
 
 		public Type[] GetGenericArgumentsFor(MethodInfo genericMethod)
