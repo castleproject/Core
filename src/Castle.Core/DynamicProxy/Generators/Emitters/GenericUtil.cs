@@ -37,70 +37,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,
-			MethodBuilder builder,
-			Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
+			MethodBuilder builder)
 		{
-			return
-				CopyGenericArguments(methodToCopyGenericsFrom, name2GenericType,
-				                     builder.DefineGenericParameters);
-		}
-
-		public static Type ExtractCorrectType(Type paramType, Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
-		{
-			if (paramType.IsArray)
-			{
-				var rank = paramType.GetArrayRank();
-
-				var underlyingType = paramType.GetElementType();
-
-				if (underlyingType.IsGenericParameter)
-				{
-					GenericTypeParameterBuilder genericType;
-					if (name2GenericType.TryGetValue(underlyingType.Name, out genericType) == false)
-					{
-						return paramType;
-					}
-
-					if (rank == 1)
-					{
-						return genericType.MakeArrayType();
-					}
-					return genericType.MakeArrayType(rank);
-				}
-				if (rank == 1)
-				{
-					return underlyingType.MakeArrayType();
-				}
-				return underlyingType.MakeArrayType(rank);
-			}
-
-			if (paramType.IsGenericParameter)
-			{
-				GenericTypeParameterBuilder value;
-				if (name2GenericType.TryGetValue(paramType.Name, out value))
-				{
-					return value;
-				}
-			}
-
-			return paramType;
-		}
-
-		public static Type[] ExtractParametersTypes(
-			ParameterInfo[] baseMethodParameters,
-			Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
-		{
-			var newParameters = new Type[baseMethodParameters.Length];
-
-			for (var i = 0; i < baseMethodParameters.Length; i++)
-			{
-				var param = baseMethodParameters[i];
-				var paramType = param.ParameterType;
-
-				newParameters[i] = ExtractCorrectType(paramType, name2GenericType);
-			}
-
-			return newParameters;
+			var _ = new Dictionary<string, GenericTypeParameterBuilder>();
+			return CopyGenericArguments(methodToCopyGenericsFrom, _, builder.DefineGenericParameters);
 		}
 
 		private static Type AdjustConstraintToNewGenericParameters(

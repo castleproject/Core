@@ -62,13 +62,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			// proxy type generation code. At present, proxy types are never generic.
 			Debug.Assert(owner.GenericTypeParams == null || owner.GenericTypeParams.Length == 0);
 
-			var name2GenericType = new Dictionary<string, GenericTypeParameterBuilder>(0);
-
-			var returnType = GenericUtil.ExtractCorrectType(methodToUseAsATemplate.ReturnType, name2GenericType);
+			var returnType = methodToUseAsATemplate.ReturnType;
 			var baseMethodParameters = methodToUseAsATemplate.GetParameters();
-			var parameters = GenericUtil.ExtractParametersTypes(baseMethodParameters, name2GenericType);
+			var parameters = ArgumentsUtil.GetTypes(baseMethodParameters);
 
-			genericTypeParams = GenericUtil.CopyGenericArguments(methodToUseAsATemplate, builder, name2GenericType);
+			genericTypeParams = GenericUtil.CopyGenericArguments(methodToUseAsATemplate, builder);
 			SetParameters(parameters);
 			SetReturnType(returnType);
 			SetSignature(returnType, methodToUseAsATemplate.ReturnParameter, parameters, baseMethodParameters);
