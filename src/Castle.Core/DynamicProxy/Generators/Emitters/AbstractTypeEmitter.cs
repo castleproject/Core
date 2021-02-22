@@ -284,7 +284,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			if (parameter.IsGenericParameter)
 			{
-				return GetGenericArgument(parameter.Name);
+				return GetGenericArgument(parameter.GenericParameterPosition);
 			}
 
 			if (parameter.IsArray)
@@ -320,23 +320,18 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public Type GetGenericArgument(string genericArgumentName)
+		public Type GetGenericArgument(int position)
 		{
-			if (name2GenericType.TryGetValue(genericArgumentName, out var genericTypeParameterBuilder))
-				return genericTypeParameterBuilder;
+			Debug.Assert(0 <= position && position < genericTypeParams.Length);
 
-			return null;
+			return genericTypeParams[position];
 		}
 
 		public Type[] GetGenericArgumentsFor(MethodInfo genericMethod)
 		{
-			var types = new List<Type>();
-			foreach (var genType in genericMethod.GetGenericArguments())
-			{
-				types.Add(name2GenericType[genType.Name]);
-			}
+			Debug.Assert(genericMethod.GetGenericArguments().Length == genericTypeParams.Length);
 
-			return types.ToArray();
+			return genericTypeParams;
 		}
 
 		public void SetGenericTypeParameters(GenericTypeParameterBuilder[] genericTypeParameterBuilders)
