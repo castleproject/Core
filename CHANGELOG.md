@@ -8,6 +8,7 @@ Enhancements:
 - Significant performance improvements with proxy type generation for interface proxies without target. (Up until now, DynamicProxy generated a separate `IInvocation` implementation type for every single proxied method &ndash; it is now able to reuse a single predefined type in many cases, thereby reducing the total amount of dynamic type generation.) (@stakx, #573)
 
 Bugfixes:
+- Generic method with differently named generic arguments to parent throws `KeyNotFoundException` (@stakx, #106)
 - Proxying certain `[Serializable]` classes produces proxy types that fail PEVerify test (@stakx, #367)
 - `private protected` methods are not intercepted (@CrispyDrone, #535)
 - `System.UIntPtr` unsupported (@stakx, #546)
