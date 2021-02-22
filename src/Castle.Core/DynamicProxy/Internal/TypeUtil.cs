@@ -98,44 +98,6 @@ namespace Castle.DynamicProxy.Internal
 			return GetAllInterfaces(new[] { type });
 		}
 
-		internal static Type GetClosedParameterType(this AbstractTypeEmitter type, Type parameter)
-		{
-			if (parameter.IsGenericTypeDefinition)
-			{
-				return parameter.GetGenericTypeDefinition().MakeGenericType(type.GetGenericArgumentsFor(parameter));
-			}
-
-			if (parameter.IsGenericType)
-			{
-				var arguments = parameter.GetGenericArguments();
-				if (CloseGenericParametersIfAny(type, arguments))
-				{
-					return parameter.GetGenericTypeDefinition().MakeGenericType(arguments);
-				}
-			}
-
-			if (parameter.IsGenericParameter)
-			{
-				return type.GetGenericArgument(parameter.Name);
-			}
-
-			if (parameter.IsArray)
-			{
-				var elementType = GetClosedParameterType(type, parameter.GetElementType());
-				int rank = parameter.GetArrayRank();
-				return rank == 1
-					? elementType.MakeArrayType()
-					: elementType.MakeArrayType(rank);
-			}
-
-			if (parameter.IsByRef)
-			{
-				var elementType = GetClosedParameterType(type, parameter.GetElementType());
-				return elementType.MakeByRefType();
-			}
-
-			return parameter;
-		}
 
 		public static Type GetTypeOrNull(object target)
 		{
@@ -230,21 +192,6 @@ namespace Castle.DynamicProxy.Internal
 		internal static bool IsDelegateType(this Type type)
 		{
 			return type.BaseType == typeof(MulticastDelegate);
-		}
-
-		private static bool CloseGenericParametersIfAny(AbstractTypeEmitter emitter, Type[] arguments)
-		{
-			var hasAnyGenericParameters = false;
-			for (var i = 0; i < arguments.Length; i++)
-			{
-				var newType = GetClosedParameterType(emitter, arguments[i]);
-				if (newType != null && !ReferenceEquals(newType, arguments[i]))
-				{
-					arguments[i] = newType;
-					hasAnyGenericParameters = true;
-				}
-			}
-			return hasAnyGenericParameters;
 		}
 
 		private static Type[] Sort(ICollection<Type> types)
