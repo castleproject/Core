@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
@@ -31,16 +30,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			MethodInfo methodToCopyGenericsFrom,
 			TypeBuilder builder)
 		{
-			var _ = new Dictionary<string, GenericTypeParameterBuilder>();
-			return CopyGenericArguments(methodToCopyGenericsFrom, _, builder.DefineGenericParameters);
+			return CopyGenericArguments(methodToCopyGenericsFrom, builder.DefineGenericParameters);
 		}
 
 		public static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,
 			MethodBuilder builder)
 		{
-			var _ = new Dictionary<string, GenericTypeParameterBuilder>();
-			return CopyGenericArguments(methodToCopyGenericsFrom, _, builder.DefineGenericParameters);
+			return CopyGenericArguments(methodToCopyGenericsFrom, builder.DefineGenericParameters);
 		}
 
 		private static Type AdjustConstraintToNewGenericParameters(
@@ -107,7 +104,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,
-			Dictionary<string, GenericTypeParameterBuilder> name2GenericType,
 			ApplyGenArgs genericParameterGenerator)
 		{
 			var originalGenericArguments = methodToCopyGenericsFrom.GetGenericArguments();
@@ -136,8 +132,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 					newGenericParameters[i].SetGenericParameterAttributes(GenericParameterAttributes.None);
 				}
-
-				name2GenericType[argumentNames[i]] = newGenericParameters[i];
 			}
 
 			return newGenericParameters;
