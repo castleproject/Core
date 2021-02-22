@@ -29,12 +29,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	{
 		public static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,
-			TypeBuilder builder,
-			Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
+			TypeBuilder builder)
 		{
-			return
-				CopyGenericArguments(methodToCopyGenericsFrom, name2GenericType,
-				                     builder.DefineGenericParameters);
+			var _ = new Dictionary<string, GenericTypeParameterBuilder>();
+			return CopyGenericArguments(methodToCopyGenericsFrom, _, builder.DefineGenericParameters);
 		}
 
 		public static GenericTypeParameterBuilder[] CopyGenericArguments(

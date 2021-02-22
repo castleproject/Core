@@ -36,7 +36,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private readonly List<MethodEmitter> methods;
 
-		private readonly Dictionary<string, GenericTypeParameterBuilder> name2GenericType;
 		private readonly List<NestedClassEmitter> nested;
 		private readonly List<PropertyEmitter> properties;
 		private readonly TypeBuilder typebuilder;
@@ -51,7 +50,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			constructors = new List<ConstructorEmitter>();
 			properties = new List<PropertyEmitter>();
 			events = new List<EventEmitter>();
-			name2GenericType = new Dictionary<string, GenericTypeParameterBuilder>();
 		}
 
 		public Type BaseType
@@ -113,7 +111,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				throw new InvalidOperationException("Cannot invoke me twice");
 			}
 
-			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typebuilder, name2GenericType));
+			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typebuilder));
 		}
 
 		public ConstructorEmitter CreateConstructor(params ArgumentReference[] arguments)
