@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
+	using System.Diagnostics;
 	using System.Reflection.Emit;
 
 	internal class ReturnStatement : IStatement
@@ -47,10 +48,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else
 			{
-				if (member.ReturnType != typeof(void))
-				{
-					OpCodeUtil.EmitLoadOpCodeForDefaultValueOfType(gen, member.ReturnType);
-				}
+				Debug.Assert(member.ReturnType == typeof(void));
 			}
 
 			gen.Emit(OpCodes.Ret);
