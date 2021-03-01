@@ -126,7 +126,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			if (ImplementedByRuntime == false && CodeBuilder.IsEmpty)
 			{
 				CodeBuilder.AddStatement(new NopStatement());
-				CodeBuilder.AddStatement(new ReturnStatement());
+				if (ReturnType == typeof(void))
+				{
+					CodeBuilder.AddStatement(new ReturnStatement());
+				}
+				else
+				{
+					CodeBuilder.AddStatement(new ReturnStatement(new DefaultValueExpression(ReturnType)));
+				}
 			}
 		}
 
@@ -137,7 +144,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				return;
 			}
 
-			codeBuilder.Generate(this, builder.GetILGenerator());
+			codeBuilder.Generate(builder.GetILGenerator());
 		}
 
 		private void DefineParameters(ParameterInfo[] parameters)

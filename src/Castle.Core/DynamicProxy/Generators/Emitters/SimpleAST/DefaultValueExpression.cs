@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.type = type;
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
 			// TODO: check if this can be simplified by using more of OpCodeUtil and other existing types
 			if (IsPrimitiveOrClass(type))

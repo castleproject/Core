@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.expression = expression;
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
 			if (reference != null)
 			{
@@ -43,14 +43,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else if (expression != null)
 			{
-				expression.Emit(member, gen);
-			}
-			else
-			{
-				if (member.ReturnType != typeof(void))
-				{
-					OpCodeUtil.EmitLoadOpCodeForDefaultValueOfType(gen, member.ReturnType);
-				}
+				expression.Emit(gen);
 			}
 
 			gen.Emit(OpCodes.Ret);

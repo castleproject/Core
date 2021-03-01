@@ -52,7 +52,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return local;
 		}
 
-		internal void Generate(IMemberEmitter member, ILGenerator il)
+		internal void Generate(ILGenerator il)
 		{
 			foreach (var local in locals)
 			{
@@ -61,7 +61,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			foreach (var statement in statements)
 			{
-				statement.Emit(member, il);
+				statement.Emit(il);
 			}
 		}
 	}

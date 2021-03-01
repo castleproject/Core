@@ -47,13 +47,13 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public bool VirtualCall { get; set; }
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
 			ArgumentsUtil.EmitLoadOwnerAndReference(owner, gen);
 
 			foreach (var exp in args)
 			{
-				exp.Emit(member, gen);
+				exp.Emit(gen);
 			}
 
 			if (VirtualCall)

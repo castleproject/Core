@@ -88,7 +88,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				return;
 			}
 
-			CodeBuilder.Generate(this, builder.GetILGenerator());
+			CodeBuilder.Generate(builder.GetILGenerator());
 		}
 	}
 }

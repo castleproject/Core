@@ -35,13 +35,13 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			arguments = null;
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
 			if (arguments != null)
 			{
 				foreach (var exp in arguments)
 				{
-					exp.Emit(member, gen);
+					exp.Emit(gen);
 				}
 			}
 

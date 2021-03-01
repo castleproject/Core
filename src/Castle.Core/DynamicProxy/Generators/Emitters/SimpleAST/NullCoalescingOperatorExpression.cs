@@ -38,14 +38,14 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.@default = @default;
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
-			expression.Emit(member, gen);
+			expression.Emit(gen);
 			gen.Emit(OpCodes.Dup);
 			var label = gen.DefineLabel();
 			gen.Emit(OpCodes.Brtrue_S, label);
 			gen.Emit(OpCodes.Pop);
-			@default.Emit(member, gen);
+			@default.Emit(gen);
 			gen.MarkLabel(label);
 		}
 	}
