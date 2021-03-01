@@ -32,9 +32,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		public void Emit(ILGenerator gen)
 		{
 			var ci = exceptionType.GetConstructor(new[] { typeof(string) });
-			var constRef = new ConstReference(errorMessage);
+			var message = new LiteralStringExpression(errorMessage);
 
-			var creationStmt = new NewInstanceExpression(ci, constRef);
+			var creationStmt = new NewInstanceExpression(ci, message);
 
 			creationStmt.Emit(gen);
 

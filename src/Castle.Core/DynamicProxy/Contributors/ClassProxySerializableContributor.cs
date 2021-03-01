@@ -96,8 +96,8 @@ namespace Castle.DynamicProxy.Contributors
 				new MethodInvocationExpression(
 					serializationInfo,
 					SerializationInfoMethods.AddValue_Bool,
-					new ConstReference("__delegateToBase"),
-					new ConstReference(delegateToBaseGetObjectData)));
+					new LiteralStringExpression("__delegateToBase"),
+					new LiteralBoolExpression(delegateToBaseGetObjectData)));
 
 			if (delegateToBaseGetObjectData == false)
 			{
@@ -136,7 +136,7 @@ namespace Castle.DynamicProxy.Contributors
 			var addValue = new MethodInvocationExpression(
 				serializationInfo,
 				SerializationInfoMethods.AddValue_Object,
-				new ConstReference("__data"),
+				new LiteralStringExpression("__data"),
 				data);
 			codebuilder.AddStatement(addValue);
 		}
@@ -179,7 +179,7 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				var getValue = new MethodInvocationExpression(serializationInfo,
 				                                              SerializationInfoMethods.GetValue,
-				                                              new ConstReference(field.Reference.Name),
+				                                              new LiteralStringExpression(field.Reference.Name),
 				                                              new TypeTokenExpression(field.Reference.FieldType));
 				ctor.CodeBuilder.AddStatement(new AssignStatement(
 				                              	field,
