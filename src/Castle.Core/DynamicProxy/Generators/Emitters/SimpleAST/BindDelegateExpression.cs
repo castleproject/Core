@@ -41,9 +41,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.owner = owner;
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
-			owner.Emit(member, gen);
+			owner.Emit(gen);
 			gen.Emit(OpCodes.Dup);
 			if (methodToBindTo.IsFinal)
 			{

@@ -29,13 +29,13 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.value = value;
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator il)
+		public void Emit(ILGenerator il)
 		{
 			ArgumentsUtil.EmitLoadOwnerAndReference(targetArray, il);
 
 			il.Emit(OpCodes.Ldc_I4, targetPosition);
 
-			value.Emit(member, il);
+			value.Emit(il);
 
 			il.Emit(OpCodes.Stelem_Ref);
 		}

@@ -14,7 +14,6 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
-	using System.Diagnostics;
 	using System.Reflection.Emit;
 
 	internal class ReturnStatement : IStatement
@@ -36,7 +35,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.expression = expression;
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
 			if (reference != null)
 			{
@@ -44,11 +43,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else if (expression != null)
 			{
-				expression.Emit(member, gen);
-			}
-			else
-			{
-				Debug.Assert(member.ReturnType == typeof(void));
+				expression.Emit(gen);
 			}
 
 			gen.Emit(OpCodes.Ret);

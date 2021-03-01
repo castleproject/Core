@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.args = args;
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
 			var local = gen.DeclareLocal(typeof(object[]));
 

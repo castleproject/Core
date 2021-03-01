@@ -26,11 +26,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			statements.Add(statement);
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
 			foreach (var s in statements)
 			{
-				s.Emit(member, gen);
+				s.Emit(gen);
 			}
 		}
 	}

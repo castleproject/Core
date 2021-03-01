@@ -43,13 +43,13 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.args = args;
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldarg_0);
 
 			foreach (var exp in args)
 			{
-				exp.Emit(member, gen);
+				exp.Emit(gen);
 			}
 
 			gen.Emit(OpCodes.Call, cmethod);

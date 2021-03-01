@@ -30,7 +30,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			Debug.Assert(method.DeclaringType != null);  // DynamicProxy isn't using global methods nor `DynamicMethod`
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldtoken, method);
 			gen.Emit(OpCodes.Ldtoken, method.DeclaringType);

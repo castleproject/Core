@@ -29,14 +29,14 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.errorMessage = errorMessage;
 		}
 
-		public void Emit(IMemberEmitter member, ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
 			var ci = exceptionType.GetConstructor(new[] { typeof(string) });
 			var constRef = new ConstReference(errorMessage);
 
 			var creationStmt = new NewInstanceExpression(ci, constRef);
 
-			creationStmt.Emit(member, gen);
+			creationStmt.Emit(gen);
 
 			gen.Emit(OpCodes.Throw);
 		}

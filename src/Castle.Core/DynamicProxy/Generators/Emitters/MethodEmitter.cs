@@ -144,7 +144,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				return;
 			}
 
-			codeBuilder.Generate(this, builder.GetILGenerator());
+			codeBuilder.Generate(builder.GetILGenerator());
 		}
 
 		private void DefineParameters(ParameterInfo[] parameters)
