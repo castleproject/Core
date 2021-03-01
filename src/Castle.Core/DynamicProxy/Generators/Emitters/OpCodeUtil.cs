@@ -63,32 +63,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		}
 
 		/// <summary>
-		///   Emits a load opcode of the appropriate kind for a constant string or
-		///   primitive value.
-		/// </summary>
-		public static void EmitLoadOpCodeForConstantValue(ILGenerator gen, object value)
-		{
-			if (value is string)
-			{
-				gen.Emit(OpCodes.Ldstr, value.ToString());
-			}
-			else if (value is Int32)
-			{
-				var code = LdcOpCodesDictionary.Instance[value.GetType()];
-				gen.Emit(code, (int)value);
-			}
-			else if (value is bool)
-			{
-				var code = LdcOpCodesDictionary.Instance[value.GetType()];
-				gen.Emit(code, Convert.ToInt32(value));
-			}
-			else
-			{
-				throw new NotSupportedException();
-			}
-		}
-
-		/// <summary>
 		///   Emits a load opcode of the appropriate kind for the constant default value of a
 		///   type, such as 0 for value types and null for reference types.
 		/// </summary>
