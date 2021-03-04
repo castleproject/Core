@@ -282,6 +282,8 @@ private async Task InterceptAsync(IInvocation invocation)
    * [Castle.Core.AsyncInterceptor](https://www.nuget.org/packages/Castle.Core.AsyncInterceptor) (third-party, despite the Castle Project's package namespace)
 
    * [stakx.DynamicProxy.AsyncInterceptor](https://www.nuget.org/packages/stakx.DynamicProxy.AsyncInterceptor)
+   
+   * [Lightwind.AsyncInterceptor](https://www.nuget.org/packages/Lightwind.AsyncInterceptor/)
 
    If you are the author of a generally useful async interception helper library, and would like to add your library to the above list, feel free to submit a PR.
 
