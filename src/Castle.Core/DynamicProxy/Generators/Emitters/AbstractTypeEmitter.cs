@@ -36,7 +36,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private readonly List<MethodEmitter> methods;
 
-		private readonly Dictionary<string, GenericTypeParameterBuilder> name2GenericType;
 		private readonly List<NestedClassEmitter> nested;
 		private readonly List<PropertyEmitter> properties;
 		private readonly TypeBuilder typebuilder;
@@ -51,7 +50,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			constructors = new List<ConstructorEmitter>();
 			properties = new List<PropertyEmitter>();
 			events = new List<EventEmitter>();
-			name2GenericType = new Dictionary<string, GenericTypeParameterBuilder>();
 		}
 
 		public Type BaseType
@@ -113,7 +111,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				throw new InvalidOperationException("Cannot invoke me twice");
 			}
 
-			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typebuilder, name2GenericType));
+			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typebuilder));
 		}
 
 		public ConstructorEmitter CreateConstructor(params ArgumentReference[] arguments)
@@ -266,42 +264,72 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return value;
 		}
 
-		public Type GetGenericArgument(string genericArgumentName)
+		public Type GetClosedParameterType(Type parameter)
 		{
-			if (name2GenericType.TryGetValue(genericArgumentName, out var genericTypeParameterBuilder))
-				return genericTypeParameterBuilder;
-
-			return null;
-		}
-
-		public Type[] GetGenericArgumentsFor(Type genericType)
-		{
-			var types = new List<Type>();
-
-			foreach (var genType in genericType.GetGenericArguments())
+			if (parameter.IsGenericType)
 			{
-				if (genType.IsGenericParameter)
+				// ECMA-335 section II.9.4: "The CLI does not support partial instantiation
+				// of generic types. And generic types shall not appear uninstantiated any-
+				// where in metadata signature blobs." (And parameters are defined there!)
+				Debug.Assert(parameter.IsGenericTypeDefinition == false);
+
+				var arguments = parameter.GetGenericArguments();
+				if (CloseGenericParametersIfAny(arguments))
 				{
-					types.Add(name2GenericType[genType.Name]);
-				}
-				else
-				{
-					types.Add(genType);
+					return parameter.GetGenericTypeDefinition().MakeGenericType(arguments);
 				}
 			}
 
-			return types.ToArray();
+			if (parameter.IsGenericParameter)
+			{
+				return GetGenericArgument(parameter.GenericParameterPosition);
+			}
+
+			if (parameter.IsArray)
+			{
+				var elementType = GetClosedParameterType(parameter.GetElementType());
+				int rank = parameter.GetArrayRank();
+				return rank == 1
+					? elementType.MakeArrayType()
+					: elementType.MakeArrayType(rank);
+			}
+
+			if (parameter.IsByRef)
+			{
+				var elementType = GetClosedParameterType(parameter.GetElementType());
+				return elementType.MakeByRefType();
+			}
+
+			return parameter;
+
+			bool CloseGenericParametersIfAny(Type[] arguments)
+			{
+				var hasAnyGenericParameters = false;
+				for (var i = 0; i < arguments.Length; i++)
+				{
+					var newType = GetClosedParameterType(arguments[i]);
+					if (newType != null && !ReferenceEquals(newType, arguments[i]))
+					{
+						arguments[i] = newType;
+						hasAnyGenericParameters = true;
+					}
+				}
+				return hasAnyGenericParameters;
+			}
+		}
+
+		public Type GetGenericArgument(int position)
+		{
+			Debug.Assert(0 <= position && position < genericTypeParams.Length);
+
+			return genericTypeParams[position];
 		}
 
 		public Type[] GetGenericArgumentsFor(MethodInfo genericMethod)
 		{
-			var types = new List<Type>();
-			foreach (var genType in genericMethod.GetGenericArguments())
-			{
-				types.Add(name2GenericType[genType.Name]);
-			}
+			Debug.Assert(genericMethod.GetGenericArguments().Length == genericTypeParams.Length);
 
-			return types.ToArray();
+			return genericTypeParams;
 		}
 
 		public void SetGenericTypeParameters(GenericTypeParameterBuilder[] genericTypeParameterBuilders)

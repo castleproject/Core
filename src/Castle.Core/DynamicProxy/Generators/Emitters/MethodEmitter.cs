@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Globalization;
 	using System.Linq;
@@ -57,13 +58,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		                       MethodAttributes attributes, MethodInfo methodToUseAsATemplate)
 			: this(owner, name, attributes)
 		{
-			var name2GenericType = GenericUtil.GetGenericArgumentsMap(owner);
+			// All code paths leading up to this constructor can be traced back to
+			// proxy type generation code. At present, proxy types are never generic.
+			Debug.Assert(owner.GenericTypeParams == null || owner.GenericTypeParams.Length == 0);
 
-			var returnType = GenericUtil.ExtractCorrectType(methodToUseAsATemplate.ReturnType, name2GenericType);
+			var returnType = methodToUseAsATemplate.ReturnType;
 			var baseMethodParameters = methodToUseAsATemplate.GetParameters();
-			var parameters = GenericUtil.ExtractParametersTypes(baseMethodParameters, name2GenericType);
+			var parameters = ArgumentsUtil.GetTypes(baseMethodParameters);
 
-			genericTypeParams = GenericUtil.CopyGenericArguments(methodToUseAsATemplate, builder, name2GenericType);
+			genericTypeParams = GenericUtil.CopyGenericArguments(methodToUseAsATemplate, builder);
 			SetParameters(parameters);
 			SetReturnType(returnType);
 			SetSignature(returnType, methodToUseAsATemplate.ReturnParameter, parameters, baseMethodParameters);

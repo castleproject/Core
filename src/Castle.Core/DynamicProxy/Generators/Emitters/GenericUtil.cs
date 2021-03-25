@@ -15,7 +15,6 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
@@ -29,95 +28,16 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	{
 		public static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,
-			TypeBuilder builder,
-			Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
+			TypeBuilder builder)
 		{
-			return
-				CopyGenericArguments(methodToCopyGenericsFrom, name2GenericType,
-				                     builder.DefineGenericParameters);
+			return CopyGenericArguments(methodToCopyGenericsFrom, builder.DefineGenericParameters);
 		}
 
 		public static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,
-			MethodBuilder builder,
-			Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
+			MethodBuilder builder)
 		{
-			return
-				CopyGenericArguments(methodToCopyGenericsFrom, name2GenericType,
-				                     builder.DefineGenericParameters);
-		}
-
-		public static Type ExtractCorrectType(Type paramType, Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
-		{
-			if (paramType.IsArray)
-			{
-				var rank = paramType.GetArrayRank();
-
-				var underlyingType = paramType.GetElementType();
-
-				if (underlyingType.IsGenericParameter)
-				{
-					GenericTypeParameterBuilder genericType;
-					if (name2GenericType.TryGetValue(underlyingType.Name, out genericType) == false)
-					{
-						return paramType;
-					}
-
-					if (rank == 1)
-					{
-						return genericType.MakeArrayType();
-					}
-					return genericType.MakeArrayType(rank);
-				}
-				if (rank == 1)
-				{
-					return underlyingType.MakeArrayType();
-				}
-				return underlyingType.MakeArrayType(rank);
-			}
-
-			if (paramType.IsGenericParameter)
-			{
-				GenericTypeParameterBuilder value;
-				if (name2GenericType.TryGetValue(paramType.Name, out value))
-				{
-					return value;
-				}
-			}
-
-			return paramType;
-		}
-
-		public static Type[] ExtractParametersTypes(
-			ParameterInfo[] baseMethodParameters,
-			Dictionary<string, GenericTypeParameterBuilder> name2GenericType)
-		{
-			var newParameters = new Type[baseMethodParameters.Length];
-
-			for (var i = 0; i < baseMethodParameters.Length; i++)
-			{
-				var param = baseMethodParameters[i];
-				var paramType = param.ParameterType;
-
-				newParameters[i] = ExtractCorrectType(paramType, name2GenericType);
-			}
-
-			return newParameters;
-		}
-
-		public static Dictionary<string, GenericTypeParameterBuilder> GetGenericArgumentsMap(AbstractTypeEmitter parentEmitter)
-		{
-			if (parentEmitter.GenericTypeParams == null || parentEmitter.GenericTypeParams.Length == 0)
-			{
-				return new Dictionary<string, GenericTypeParameterBuilder>(0);
-			}
-
-			var name2GenericType = new Dictionary<string, GenericTypeParameterBuilder>(parentEmitter.GenericTypeParams.Length);
-			foreach (var genType in parentEmitter.GenericTypeParams)
-			{
-				name2GenericType.Add(genType.Name, genType);
-			}
-			return name2GenericType;
+			return CopyGenericArguments(methodToCopyGenericsFrom, builder.DefineGenericParameters);
 		}
 
 		private static Type AdjustConstraintToNewGenericParameters(
@@ -184,7 +104,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,
-			Dictionary<string, GenericTypeParameterBuilder> name2GenericType,
 			ApplyGenArgs genericParameterGenerator)
 		{
 			var originalGenericArguments = methodToCopyGenericsFrom.GetGenericArguments();
@@ -213,8 +132,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 					newGenericParameters[i].SetGenericParameterAttributes(GenericParameterAttributes.None);
 				}
-
-				name2GenericType[argumentNames[i]] = newGenericParameters[i];
 			}
 
 			return newGenericParameters;
