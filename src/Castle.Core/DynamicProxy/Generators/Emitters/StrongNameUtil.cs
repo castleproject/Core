@@ -18,10 +18,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
+	using System.Runtime.CompilerServices;
 
 	internal static class StrongNameUtil
 	{
-		private static readonly IDictionary<Assembly, bool> signedAssemblyCache = new Dictionary<Assembly, bool>();
+		private static readonly ConditionalWeakTable<Assembly, object> signedAssemblyCache = new ConditionalWeakTable<Assembly, object>();
 		private static readonly object lockObject = new object();
 
 		public static bool IsAssemblySigned(this Assembly assembly)
@@ -33,7 +34,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 					isSigned = assembly.ContainsPublicKey();
 					signedAssemblyCache.Add(assembly, isSigned);
 				}
-				return isSigned;
+				return (bool)isSigned;
 			}
 		}
 
