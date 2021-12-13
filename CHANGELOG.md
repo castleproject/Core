@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## 4.4.2 (2021-12-13)
+
+Bugfixes:
+- Update the reference for System.Net.Http (4.3.4) and System.Text.RegularExpressions (4.3.1) to patch security issues (@eskildsen)
+
 ## 4.4.1 (2020-05-06)
 
 Bugfixes:
