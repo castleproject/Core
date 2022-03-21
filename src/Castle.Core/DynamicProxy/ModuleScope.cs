@@ -335,9 +335,9 @@ namespace Castle.DynamicProxy
 			{
 #if FEATURE_APPDOMAIN
 				var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-					assemblyName, AssemblyBuilderAccess.Run);
+					assemblyName, AssemblyBuilderAccess.RunAndCollect);
 #else
-				var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+				var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.RunAndCollect);
 #endif
 
 				var module = assemblyBuilder.DefineDynamicModule(moduleName);
