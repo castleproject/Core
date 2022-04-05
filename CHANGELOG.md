@@ -13,7 +13,7 @@ Bugfixes:
 - `private protected` methods are not intercepted (@CrispyDrone, #535)
 - `System.UIntPtr` unsupported (@stakx, #546)
 - DynamicProxy generates two modules when proceeding from a class proxy's protected method to the target, causing an `InvalidOperationException` when saving the generated assembly to disk (@stakx, #569)
-- Upgrade log4net to v2.0.12 (@jonorossi, @stakx, #574)
+- Upgrade log4net to v2.0.13 (@jonorossi, @stakx, @dschwartzni, #574, #605)
 
 Deprecations:
  - Removed support for the .NET Framework < 4.5 and .NET Standard 1.x. (@stakx, #495, #496)
