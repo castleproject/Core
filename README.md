@@ -36,7 +36,7 @@ build.cmd
 
 Compilation requires a C# 9 compiler, an up-to-date .NET Core SDK, and MSBuild 15+ (which should be included in the former).
 
-Running the unit tests additionally requires the .NET Framework 4.6.1+ as well as the .NET Core 2.1 and 3.1 runtimes to be installed. (If you do not have all of those installed, you can run the tests for a specific target framework using `dotnet test -f <framework>`.)
+Running the unit tests additionally requires the .NET Framework 4.6.2+ as well as the .NET Core 2.1 and 3.1 runtimes to be installed. (If you do not have all of those installed, you can run the tests for a specific target framework using `dotnet test -f <framework>`.)
 
 These requirements should be covered by Visual Studio 2019 and the .NET 5 SDK.
 
@@ -60,14 +60,14 @@ For known Mono defects, check [our issue tracker](https://github.com/castleproje
 
 The following conditional compilation symbols (vertical) are currently defined for each of the build configurations (horizontal):
 
-Symbol                              | .NET 4.5           | .NET Standard 2.x
+Symbol                              | .NET 4.6.2         | .NET Standard 2.x
 ----------------------------------- | ------------------ | ------------------
 `FEATURE_APPDOMAIN`                 | :white_check_mark: | :no_entry_sign:
 `FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :no_entry_sign:
 `FEATURE_SERIALIZATION`             | :white_check_mark: | :no_entry_sign:
 `FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :no_entry_sign:
 ---                                 |                    |
-`DOTNET45`                          | :white_check_mark: | :no_entry_sign:
+`DOTNET462`                         | :white_check_mark: | :no_entry_sign:
 
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.
