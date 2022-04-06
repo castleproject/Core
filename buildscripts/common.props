@@ -50,20 +50,12 @@
 		<DesktopClrConstants>TRACE;FEATURE_APPDOMAIN;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_SERIALIZATION;FEATURE_SYSTEM_CONFIGURATION</DesktopClrConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net45|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);DOTNET45</DefineConstants>
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net462|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);DOTNET462</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net45|Release'">
-		<DefineConstants>$(DesktopClrConstants);DOTNET45;</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net461|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);DOTNET45</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net461|Release'">
-		<DefineConstants>$(DesktopClrConstants);DOTNET45</DefineConstants>
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net462|Release'">
+		<DefineConstants>$(DesktopClrConstants);DOTNET462</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard2.0|Debug'">
