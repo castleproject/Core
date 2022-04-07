@@ -1,27 +1,54 @@
+[assembly: System.CLSCompliant(true)]
 [assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/castleproject/Core")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.5", FrameworkDisplayName=".NET Framework 4.5")]
-namespace Castle.Services.Logging.SerilogIntegration
+[assembly: System.Runtime.InteropServices.ComVisible(false)]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.6.2", FrameworkDisplayName=".NET Framework 4.6.2")]
+namespace Castle.Services.Logging.NLogIntegration
 {
-    public class SerilogFactory : Castle.Core.Logging.AbstractLoggerFactory
+    public class ExtendedNLogFactory : Castle.Core.Logging.AbstractExtendedLoggerFactory
     {
-        public SerilogFactory() { }
-        public SerilogFactory(Serilog.ILogger logger) { }
+        public ExtendedNLogFactory() { }
+        public ExtendedNLogFactory(NLog.Config.LoggingConfiguration loggingConfiguration) { }
+        public ExtendedNLogFactory(bool configuredExternally) { }
+        public ExtendedNLogFactory(string configFile) { }
+        public override Castle.Core.Logging.IExtendedLogger Create(string name) { }
+        public override Castle.Core.Logging.IExtendedLogger Create(string name, Castle.Core.Logging.LoggerLevel level) { }
+    }
+    public class ExtendedNLogLogger : Castle.Services.Logging.NLogIntegration.NLogLogger, Castle.Core.Logging.IExtendedLogger, Castle.Core.Logging.ILogger
+    {
+        public ExtendedNLogLogger(NLog.Logger logger, Castle.Services.Logging.NLogIntegration.ExtendedNLogFactory factory) { }
+        public Castle.Core.Logging.IContextProperties GlobalProperties { get; }
+        public Castle.Core.Logging.IContextProperties ThreadProperties { get; }
+        public Castle.Core.Logging.IContextStacks ThreadStacks { get; }
+        protected new Castle.Services.Logging.NLogIntegration.ExtendedNLogFactory Factory { get; set; }
+        public override Castle.Core.Logging.ILogger CreateChildLogger(string name) { }
+        public Castle.Core.Logging.IExtendedLogger CreateExtendedChildLogger(string name) { }
+    }
+    public class GlobalContextProperties : Castle.Core.Logging.IContextProperties
+    {
+        public GlobalContextProperties() { }
+        public object this[string key] { get; set; }
+    }
+    public class NLogFactory : Castle.Core.Logging.AbstractLoggerFactory
+    {
+        public NLogFactory() { }
+        public NLogFactory(NLog.Config.LoggingConfiguration loggingConfiguration) { }
+        public NLogFactory(bool configuredExternally) { }
+        public NLogFactory(string configFile) { }
         public override Castle.Core.Logging.ILogger Create(string name) { }
         public override Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level) { }
     }
-    [System.Serializable]
-    public class SerilogLogger : Castle.Core.Logging.ILogger
+    public class NLogLogger : Castle.Core.Logging.ILogger
     {
-        public SerilogLogger(Serilog.ILogger logger, Castle.Services.Logging.SerilogIntegration.SerilogFactory factory) { }
-        protected Castle.Services.Logging.SerilogIntegration.SerilogFactory Factory { get; set; }
+        public NLogLogger(NLog.Logger logger, Castle.Services.Logging.NLogIntegration.NLogFactory factory) { }
+        protected Castle.Services.Logging.NLogIntegration.NLogFactory Factory { get; set; }
         public bool IsDebugEnabled { get; }
         public bool IsErrorEnabled { get; }
         public bool IsFatalEnabled { get; }
         public bool IsInfoEnabled { get; }
         public bool IsTraceEnabled { get; }
         public bool IsWarnEnabled { get; }
-        protected Serilog.ILogger Logger { get; set; }
-        public Castle.Core.Logging.ILogger CreateChildLogger(string loggerName) { }
+        protected NLog.Logger Logger { get; set; }
+        public virtual Castle.Core.Logging.ILogger CreateChildLogger(string name) { }
         public void Debug(System.Func<string> messageFactory) { }
         public void Debug(string message) { }
         public void Debug(string message, System.Exception exception) { }
@@ -65,5 +92,23 @@ namespace Castle.Services.Logging.SerilogIntegration
         public void WarnFormat(System.Exception exception, string format, params object[] args) { }
         public void WarnFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void WarnFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
+    }
+    public class ThreadContextProperties : Castle.Core.Logging.IContextProperties
+    {
+        public ThreadContextProperties() { }
+        public object this[string key] { get; set; }
+    }
+    public class ThreadContextStack : Castle.Core.Logging.IContextStack
+    {
+        public ThreadContextStack() { }
+        public int Count { get; }
+        public void Clear() { }
+        public string Pop() { }
+        public System.IDisposable Push(string message) { }
+    }
+    public class ThreadContextStacks : Castle.Core.Logging.IContextStacks
+    {
+        public ThreadContextStacks() { }
+        public Castle.Core.Logging.IContextStack this[string key] { get; }
     }
 }

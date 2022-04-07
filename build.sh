@@ -41,11 +41,11 @@ echo "OSNAME: $OSNAME"
 dotnet build --configuration Release || exit 1
 
 echo --------------------
-echo Running NET461 Tests
+echo Running NET462 Tests
 echo --------------------
 
-mono ./src/Castle.Core.Tests/bin/Release/net461/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3
-mono ./src/Castle.Core.Tests.WeakNamed/bin/Release/net461/Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3
+mono ./src/Castle.Core.Tests/bin/Release/net462/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3
+mono ./src/Castle.Core.Tests.WeakNamed/bin/Release/net462/Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3
 
 echo ---------------------------
 echo Running NETCOREAPP3.1 Tests

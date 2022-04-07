@@ -16,7 +16,7 @@ Bugfixes:
 - Upgrade log4net to v2.0.13 (@jonorossi, @stakx, @dschwartzni, #574, #605)
 
 Deprecations:
- - Removed support for the .NET Framework < 4.5 and .NET Standard 1.x. (@stakx, #495, #496)
+ - Removed support for the .NET Framework < 4.6.2 and .NET Standard 1.x. (@stakx, #495, #496; @Jevonius, #614)
  - Removed support for Code Access Security (CAS). (@stakx, #502)
  - Removed support for Remoting. This library no longer defines any types deriving from `MarshalByRefObject`, and `ProxyUtil.IsProxy` (which used to recognize remoting/"transparent" proxies) now tests only for DynamicProxy proxies. (@stakx, #507)
  - The following public members have been removed:

@@ -3,7 +3,7 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks>net461;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+		<TargetFrameworks>net462;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -63,7 +63,7 @@
 		<PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
 		<PackageReference Include="System.Net.Primitives" Version="4.3.0" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(TargetFramework)'=='net461'">
+	<ItemGroup Condition="'$(TargetFramework)'=='net462'">
 		<PackageReference Include="PublicApiGenerator" Version="10.1.2" />
 	</ItemGroup>
 

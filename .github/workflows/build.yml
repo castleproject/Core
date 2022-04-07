@@ -62,11 +62,11 @@ jobs:
       - name: Test on .NET Core 3.1
         run: dotnet test -c Release -f netcoreapp3.1 --no-build --no-restore -l "console;verbosity=detailed"
 
-      - name: Test on .NET Framework 4.6.1 (Windows only)
+      - name: Test on .NET Framework 4.6.2 (Windows only)
         if: matrix.os == 'windows-latest'
-        run: dotnet test -c Release -f net461 --no-build --no-restore -l "console;verbosity=detailed"
+        run: dotnet test -c Release -f net462 --no-build --no-restore -l "console;verbosity=detailed"
 
-      - name: Test on .NET Framework 4.6.1 using Mono (Linux only)
+      - name: Test on .NET Framework 4.6.2 using Mono (Linux only)
         if: matrix.os == 'ubuntu-latest'
         run: |
-          docker run --rm -v "$PWD":'/project' -w='/project' mono:$MONO_TAG bash -c 'mono ./src/Castle.Core.Tests/bin/Release/net461/Castle.Core.Tests.exe && mono ./src/Castle.Core.Tests.WeakNamed/bin/Release/net461/Castle.Core.Tests.WeakNamed.exe'
+          docker run --rm -v "$PWD":'/project' -w='/project' mono:$MONO_TAG bash -c 'mono ./src/Castle.Core.Tests/bin/Release/net462/Castle.Core.Tests.exe && mono ./src/Castle.Core.Tests.WeakNamed/bin/Release/net462/Castle.Core.Tests.WeakNamed.exe'
