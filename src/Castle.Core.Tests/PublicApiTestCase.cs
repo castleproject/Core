@@ -31,7 +31,7 @@ namespace Castle
 	///   the assertion will obviously fail if someone changes the public API without also including the change to the ref/*.cs files
 	/// </summary>
 	[TestFixture]
-	[System.Runtime.Versioning.SupportedOSPlatform("windows")]
+	[Platform(Include = "Win")]
 	public class PublicApiTestCase
 	{
 		private static readonly string[] assemblies =
