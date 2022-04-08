@@ -50,7 +50,7 @@ namespace Castle
 			bool compare = string.Equals(ci, "true", StringComparison.OrdinalIgnoreCase);
 
 			// Determine assembly locations
-			string testCodeBase = typeof(PublicApiTestCase).Assembly.CodeBase;
+			string testCodeBase = typeof(PublicApiTestCase).Assembly.Location;
 			UriBuilder testUri = new UriBuilder(new Uri(testCodeBase));
 			string testAssemblyPath = Uri.UnescapeDataString(testUri.Path);
 			string testContainingDirectory = Path.GetDirectoryName(testAssemblyPath);
