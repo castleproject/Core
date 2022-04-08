@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if DOTNET462 // PublicApiGenerator requires .NET Standard 2.0, and we only need to run it once
+#if NET6_0 // PublicApiGenerator requires .NET Standard 2.0, and we only need to run it once
 
 namespace Castle
 {
