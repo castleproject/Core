@@ -49,6 +49,10 @@
 		<PackageReference Include="System.Diagnostics.EventLog" Version="4.7.0" />
 	</ItemGroup>
 
+	<ItemGroup Condition="'$(TargetFramework)'=='net6.0'">
+		<PackageReference Include="System.Diagnostics.EventLog" Version="6.0.0" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<Folder Include="Properties\" />
 	</ItemGroup>

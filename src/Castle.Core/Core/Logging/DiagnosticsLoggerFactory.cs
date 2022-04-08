@@ -19,6 +19,9 @@ namespace Castle.Core.Logging
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
+#if NET6_0_OR_GREATER
+	[System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
 	public class DiagnosticsLoggerFactory : AbstractLoggerFactory
 	{
 		private const string DefaultLogName = "CastleDefaultLogger";
