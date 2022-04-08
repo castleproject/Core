@@ -205,6 +205,7 @@ namespace Castle.Components.DictionaryAdapter
         public System.Collections.Generic.IDictionary<string, Castle.Components.DictionaryAdapter.PropertyDescriptor> Properties { get; }
         public void AddCopyStrategy(Castle.Components.DictionaryAdapter.IDictionaryCopyStrategy copyStrategy) { }
     }
+    [System.Diagnostics.DebuggerDisplay("Type: {Type.FullName,nq}")]
     public class DictionaryAdapterMeta
     {
         public DictionaryAdapterMeta(System.Type type, System.Type implementation, object[] behaviors, Castle.Components.DictionaryAdapter.IDictionaryMetaInitializer[] metaInitializers, Castle.Components.DictionaryAdapter.IDictionaryInitializer[] initializers, System.Collections.Generic.IDictionary<string, Castle.Components.DictionaryAdapter.PropertyDescriptor> properties, Castle.Components.DictionaryAdapter.IDictionaryAdapterFactory factory, System.Func<Castle.Components.DictionaryAdapter.DictionaryAdapterInstance, Castle.Components.DictionaryAdapter.IDictionaryAdapter> creator) { }
@@ -567,6 +568,8 @@ namespace Castle.Components.DictionaryAdapter
     {
         public KeySubstitutionAttribute(string oldValue, string newValue) { }
     }
+    [System.Diagnostics.DebuggerDisplay("Count = {Count}, Adapter = {Adapter}")]
+    [System.Diagnostics.DebuggerTypeProxy(typeof(Castle.Components.DictionaryAdapter.ListProjectionDebugView<T>))]
     public class ListProjection<T> : Castle.Components.DictionaryAdapter.IBindingListSource, Castle.Components.DictionaryAdapter.IBindingList<T>, Castle.Components.DictionaryAdapter.ICollectionAdapterObserver<T>, Castle.Components.DictionaryAdapter.ICollectionProjection, System.Collections.Generic.ICollection<T>, System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IList<T>, System.Collections.ICollection, System.Collections.IEnumerable, System.Collections.IList, System.ComponentModel.IBindingList, System.ComponentModel.ICancelAddNew, System.ComponentModel.IChangeTracking, System.ComponentModel.IEditableObject, System.ComponentModel.IRaiseItemChangedEvents, System.ComponentModel.IRevertibleChangeTracking
     {
         public ListProjection(Castle.Components.DictionaryAdapter.ICollectionAdapter<T> adapter) { }
@@ -659,6 +662,7 @@ namespace Castle.Components.DictionaryAdapter
         public object NewValue { get; }
         public object OldValue { get; }
     }
+    [System.Diagnostics.DebuggerDisplay("{Property.DeclaringType.FullName,nq}.{PropertyName,nq}")]
     public class PropertyDescriptor : Castle.Components.DictionaryAdapter.IDictionaryBehavior, Castle.Components.DictionaryAdapter.IDictionaryKeyBuilder, Castle.Components.DictionaryAdapter.IDictionaryPropertyGetter, Castle.Components.DictionaryAdapter.IDictionaryPropertySetter
     {
         protected System.Collections.Generic.List<Castle.Components.DictionaryAdapter.IDictionaryBehavior> dictionaryBehaviors;
@@ -1119,7 +1123,9 @@ namespace Castle.Components.DictionaryAdapter.Xml
     }
     public static class Try
     {
+        [System.Diagnostics.DebuggerHidden]
         public static bool Failure<T>(out T result) { }
+        [System.Diagnostics.DebuggerHidden]
         public static bool Success<T>(out T result, T value) { }
     }
     public static class TypeExtensions
@@ -1978,6 +1984,7 @@ namespace Castle.Core.Logging
         public override Castle.Core.Logging.ILogger CreateChildLogger(string loggerName) { }
         protected override void Log(Castle.Core.Logging.LoggerLevel loggerLevel, string loggerName, string message, System.Exception exception) { }
     }
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public class DiagnosticsLogger : Castle.Core.Logging.LevelFilteredLogger, System.IDisposable
     {
         public DiagnosticsLogger(string logName) { }
@@ -1989,6 +1996,7 @@ namespace Castle.Core.Logging
         protected override void Finalize() { }
         protected override void Log(Castle.Core.Logging.LoggerLevel loggerLevel, string loggerName, string message, System.Exception exception) { }
     }
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
     public class DiagnosticsLoggerFactory : Castle.Core.Logging.AbstractLoggerFactory
     {
         public DiagnosticsLoggerFactory() { }
