@@ -38,6 +38,7 @@
 
 	<ItemGroup Condition="'$(TargetFramework)'=='net462'">
 		<Reference Include="System.Configuration" />
+		<PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">

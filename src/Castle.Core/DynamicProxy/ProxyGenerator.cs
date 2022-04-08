@@ -16,14 +16,12 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.InteropServices;
 	using System.Text;
 
 	using Castle.Core.Internal;
 	using Castle.Core.Logging;
-	using Castle.DynamicProxy.Generators;
 
 	/// <summary>
 	///   Provides proxy objects for classes and interfaces.
@@ -558,7 +556,7 @@ namespace Castle.DynamicProxy
 
 			if (target != null)
 			{
-				if (Marshal.IsComObject(target))
+				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Marshal.IsComObject(target))
 				{
 					var interfaceId = interfaceToProxy.GUID;
 					if (interfaceId != Guid.Empty)
