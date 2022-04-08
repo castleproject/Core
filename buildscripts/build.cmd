@@ -1,6 +1,6 @@
 @ECHO OFF
 REM ****************************************************************************
-REM Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+REM Copyright 2004-2022 Castle Project - http://www.castleproject.org/
 REM Licensed under the Apache License, Version 2.0 (the "License");
 REM you may not use this file except in compliance with the License.
 REM You may obtain a copy of the License at
@@ -46,3 +46,11 @@ echo ---------------------------
 
 dotnet .\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp3.1\Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3 || exit /b 1
 dotnet .\src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\netcoreapp3.1/Castle.Core.Tests.WeakNamed.dll --result=NetCoreClrWeakNamedTestResults.xml;format=nunit3 || exit /b 1
+
+
+echo ---------------------------
+echo Running NET6.0 Tests
+echo ---------------------------
+
+dotnet .\src\Castle.Core.Tests\bin\%Configuration%\net6.0\Castle.Core.Tests.dll --result=Net60TestResults.xml;format=nunit3 || exit /b 1
+dotnet .\src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\net6.0/Castle.Core.Tests.WeakNamed.dll --result=Net60WeakNamedTestResults.xml;format=nunit3 || exit /b 1

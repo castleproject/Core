@@ -1,5 +1,5 @@
 image:
-- Visual Studio 2019
+- Visual Studio 2022
 - Ubuntu
 
 
@@ -36,7 +36,7 @@ for:
   # -------------------
   matrix:
     only:
-    - image: Visual Studio 2019
+    - image: Visual Studio 2022
 
   # update AppVeyor build version; this matters for deployments
   init:
@@ -56,6 +56,8 @@ for:
       $wc = New-Object System.Net.WebClient
       $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "NetCoreClrTestResults.xml"))
       $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "NetCoreClrWeakNamedTestResults.xml"))
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "Net60TestResults.xml"))
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "Net60WeakNamedTestResults.xml"))
       $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "DesktopClrTestResults.xml"))
       $wc.UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "DesktopClrWeakNamedTestResults.xml"))
 
