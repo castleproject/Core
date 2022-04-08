@@ -3,7 +3,7 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks>net462;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+		<TargetFrameworks>net462;netcoreapp2.1;netcoreapp3.1;net6.0</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>

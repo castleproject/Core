@@ -3,7 +3,14 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks>net462;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+		<TargetFrameworks>net462;netcoreapp2.1;netcoreapp3.1;net6.0</TargetFrameworks>
+
+		<NoWarn>$(NoWarn);SYSLIB0003</NoWarn>
+		<!--
+			Code Access Security is not available in Core, and obsolete in net5.0+
+			This stops warnings about SYSLIB0003 (https://docs.microsoft.com/en-us/dotnet/fundamentals/syslib-diagnostics/syslib0003)
+			Depending on how these are deprecated in a future dotnet release, may need to wrap relevant code with "#if NET462_OR_GREATER" or similar at some point.
+		-->
 	</PropertyGroup>
 
 	<PropertyGroup>
