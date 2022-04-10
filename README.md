@@ -66,8 +66,6 @@ Symbol                              | .NET 4.6.2         | .NET Standard 2.x
 `FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :no_entry_sign:
 `FEATURE_SERIALIZATION`             | :white_check_mark: | :no_entry_sign:
 `FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :no_entry_sign:
----                                 |                    |
-`DOTNET462`                         | :white_check_mark: | :no_entry_sign:
 
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.
