@@ -16,7 +16,7 @@ Debugging symbols are available in symbol packages in the AppVeyor build artifac
 
 ## License
 
-Castle Core is &copy; 2004-2021 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
+Castle Core is &copy; 2004-2022 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
 
 ## Contributing
 
@@ -36,9 +36,9 @@ build.cmd
 
 Compilation requires a C# 9 compiler, an up-to-date .NET Core SDK, and MSBuild 15+ (which should be included in the former).
 
-Running the unit tests additionally requires the .NET Framework 4.6.2+ as well as the .NET Core 2.1 and 3.1 runtimes to be installed. (If you do not have all of those installed, you can run the tests for a specific target framework using `dotnet test -f <framework>`.)
+Running the unit tests additionally requires the .NET Framework 4.6.2+ as well as the .NET Core 2.1, 3.1 and 6.0 runtimes to be installed. (If you do not have all of those installed, you can run the tests for a specific target framework using `dotnet test -f <framework>`.)
 
-These requirements should be covered by Visual Studio 2019 and the .NET 5 SDK.
+These requirements should be covered by Visual Studio 2022 and the .NET 6 SDK.
 
 ### On Linux
 
@@ -48,7 +48,7 @@ These requirements should be covered by Visual Studio 2019 and the .NET 5 SDK.
 
 Compilation requires an up-to-date .NET Core SDK.
 
-Running the unit tests additionally requires the .NET Core 3.1 runtime to be installed, as well as either Docker or Mono. For the latter, we recommend Mono 5.10+, though older versions (4.6.1+) might still work as well.
+Running the unit tests additionally requires the .NET Core 3.1 and 6.0 runtimes to be installed, as well as either Docker or Mono. For the latter, we recommend Mono 5.10+, though older versions (4.6.1+) might still work as well.
 
 :information_source: **Mono runtime support:** Castle Core runs with minor limitations and defects on Mono 4.0.2+ (however 4.6.1+ is highly recommended, or 5.10+ if your code uses new C# 7.x language features such as `in` parameters).
 
