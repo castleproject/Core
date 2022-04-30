@@ -49,7 +49,12 @@ namespace Castle.Core.Logging.Tests
 
 		private void AssertAdmin()
 		{
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+#if NETCOREAPP2_0_OR_GREATER
+			bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+#else
+			bool isWindows = !RunningOnMono();
+#endif
+			if (isWindows)
 			{
 				WindowsPrincipal windowsPrincipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
 				try

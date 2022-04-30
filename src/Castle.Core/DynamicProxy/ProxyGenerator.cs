@@ -556,7 +556,13 @@ namespace Castle.DynamicProxy
 
 			if (target != null)
 			{
-				if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Marshal.IsComObject(target))
+#if NET6_0_OR_GREATER
+				bool doComHandling = OperatingSystem.IsWindows();
+#else
+				bool doComHandling = true;
+#endif
+
+				if (doComHandling && Marshal.IsComObject(target))
 				{
 					var interfaceId = interfaceToProxy.GUID;
 					if (interfaceId != Guid.Empty)
