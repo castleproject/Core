@@ -60,8 +60,8 @@ For known Mono defects, check [our issue tracker](https://github.com/castleproje
 
 The following conditional compilation symbols (vertical) are currently defined for each of the build configurations (horizontal):
 
-Symbol                              | .NET 4.6.2         | .NET Standard 2.x
------------------------------------ | ------------------ | ------------------
+Symbol                              | .NET 4.6.2         | .NET Standard 2.x and .NET 6
+----------------------------------- | ------------------ | ----------------------------
 `FEATURE_APPDOMAIN`                 | :white_check_mark: | :no_entry_sign:
 `FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :no_entry_sign:
 `FEATURE_SERIALIZATION`             | :white_check_mark: | :no_entry_sign:
