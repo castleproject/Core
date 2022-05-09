@@ -32,6 +32,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Castle Services", "Castle S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Castle.Core.Tests.WeakNamed", "src\Castle.Core.Tests.WeakNamed\Castle.Core.Tests.WeakNamed.csproj", "{14D86762-CF9B-4560-80C9-10C16DBE246C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub Actions", "GitHub Actions", "{149DB291-CBD6-4F82-A6A6-758E328DB946}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build.yml = .github\workflows\build.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +75,7 @@ Global
 		{AFD3B071-E971-499B-A95B-E98155EB66E8} = {A598EE9B-41CE-4BE8-BF93-2C91F919F97E}
 		{344D907D-6641-4A61-94C2-4980B5804FE2} = {A598EE9B-41CE-4BE8-BF93-2C91F919F97E}
 		{91B2A82F-63F6-46B1-8EDC-5D029BCF6A2B} = {A598EE9B-41CE-4BE8-BF93-2C91F919F97E}
+		{149DB291-CBD6-4F82-A6A6-758E328DB946} = {1B999D24-B7AB-4997-96E7-08FA05325694}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {682D4399-4863-4813-B495-5FEDD22496ED}

@@ -67,6 +67,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 		}
 
+#pragma warning disable SYSLIB0003
 		[Test]
 		public void SecurityPermissionAttribute_should_not_be_replicated_as_it_is_part_of_cas()
 		{
@@ -90,6 +91,7 @@ namespace Castle.DynamicProxy.Tests
 		public class AttributedClass_ReflectionPermission
 		{
 		}
+#pragma warning restore SYSLIB0003
 
 		private int AttributeCount<TAttribute>(object proxy)
 			where TAttribute : Attribute

@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2022 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,12 +16,16 @@ namespace Castle.Core.Logging.Tests
 {
 	using System;
 	using System.Diagnostics;
+	using System.Runtime.InteropServices;
 	using System.Security;
 	using System.Security.Principal;
 
 	using NUnit.Framework;
 
 	[TestFixture]
+#if NET6_0_OR_GREATER
+	[System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
 	public class DiagnosticsLoggerTestCase
 	{
 		private static bool ignore;
@@ -45,33 +49,39 @@ namespace Castle.Core.Logging.Tests
 
 		private void AssertAdmin()
 		{
-			if (RunningOnNIX((int)Environment.OSVersion.Platform))
+#if NETCOREAPP2_0_OR_GREATER
+			bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+#else
+			bool isWindows = !RunningOnMono();
+#endif
+			if (isWindows)
 			{
-				Environment.SetEnvironmentVariable("MONO_EVENTLOG_TYPE", "local:" + Environment.CurrentDirectory);
-				return;
-			}
-
-			WindowsPrincipal windowsPrincipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
-			try
-			{
-				if (windowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator) == false)
+				WindowsPrincipal windowsPrincipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
+				try
 				{
+					if (windowsPrincipal.IsInRole(WindowsBuiltInRole.Administrator) == false)
+					{
+						ignore = true;
+						Assert.Ignore("This test case only valid when running as admin");
+					}
+				}
+				catch (SecurityException)
+				{
+					// turns out, although undocumented, checking for role can throw SecurityException. Thanks Microsoft.
 					ignore = true;
 					Assert.Ignore("This test case only valid when running as admin");
 				}
 			}
-			catch(SecurityException)
+			else if (RunningOnMono())
 			{
-				// turns out, although undocumented, checking for role can throw SecurityException. Thanks Microsoft.
-				ignore = true;
-				Assert.Ignore("This test case only valid when running as admin");
+				Environment.SetEnvironmentVariable("MONO_EVENTLOG_TYPE", "local:" + Environment.CurrentDirectory);
 			}
 		}
 
-		private bool RunningOnNIX(int p)
+		private bool RunningOnMono()
 		{
 			// taken from http://www.mono-project.com/FAQ:_Technical
-			return (p == 4) || (p == 6) || (p == 128);
+			return Type.GetType("Mono.Runtime") != null;
 		}
 
 		[Test]

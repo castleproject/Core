@@ -51,11 +51,11 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net462|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants);DOTNET462</DefineConstants>
+		<DefineConstants>$(DiagnosticsConstants);$(DesktopClrConstants)</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net462|Release'">
-		<DefineConstants>$(DesktopClrConstants);DOTNET462</DefineConstants>
+		<DefineConstants>$(DesktopClrConstants)</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard2.0|Debug'">

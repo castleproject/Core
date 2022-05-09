@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2022 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,14 +16,12 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Reflection;
 	using System.Runtime.InteropServices;
 	using System.Text;
 
 	using Castle.Core.Internal;
 	using Castle.Core.Logging;
-	using Castle.DynamicProxy.Generators;
 
 	/// <summary>
 	///   Provides proxy objects for classes and interfaces.
@@ -558,7 +556,13 @@ namespace Castle.DynamicProxy
 
 			if (target != null)
 			{
-				if (Marshal.IsComObject(target))
+#if NET6_0_OR_GREATER
+				bool doComHandling = OperatingSystem.IsWindows();
+#else
+				bool doComHandling = true;
+#endif
+
+				if (doComHandling && Marshal.IsComObject(target))
 				{
 					var interfaceId = interfaceToProxy.GUID;
 					if (interfaceId != Guid.Empty)

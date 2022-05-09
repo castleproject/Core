@@ -37,10 +37,10 @@ jobs:
 
       # Building requires an up-to-date .NET SDK.
 
-      - name: Install .NET 5.0
+      - name: Install .NET 6.0
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 5.0.x
+          dotnet-version: 6.0.x
 
       # -----
       # Build
@@ -61,6 +61,9 @@ jobs:
 
       - name: Test on .NET Core 3.1
         run: dotnet test -c Release -f netcoreapp3.1 --no-build --no-restore -l "console;verbosity=detailed"
+
+      - name: Test on .NET 6.0
+        run: dotnet test -c Release -f net6.0 --no-build --no-restore -l "console;verbosity=detailed"
 
       - name: Test on .NET Framework 4.6.2 (Windows only)
         if: matrix.os == 'windows-latest'

@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2022 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if DOTNET462 // PublicApiGenerator requires .NET Standard 2.0, and we only need to run it once
+#if NET6_0 // PublicApiGenerator requires .NET Standard 2.0, and we only need to run it once
 
 namespace Castle
 {
@@ -31,6 +31,7 @@ namespace Castle
 	///   the assertion will obviously fail if someone changes the public API without also including the change to the ref/*.cs files
 	/// </summary>
 	[TestFixture]
+	[Platform(Include = "Win")]
 	public class PublicApiTestCase
 	{
 		private static readonly string[] assemblies =
@@ -50,7 +51,7 @@ namespace Castle
 			bool compare = string.Equals(ci, "true", StringComparison.OrdinalIgnoreCase);
 
 			// Determine assembly locations
-			string testCodeBase = typeof(PublicApiTestCase).Assembly.CodeBase;
+			string testCodeBase = typeof(PublicApiTestCase).Assembly.Location;
 			UriBuilder testUri = new UriBuilder(new Uri(testCodeBase));
 			string testAssemblyPath = Uri.UnescapeDataString(testUri.Path);
 			string testContainingDirectory = Path.GetDirectoryName(testAssemblyPath);
