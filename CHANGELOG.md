@@ -1,12 +1,12 @@
 # Castle Core Changelog
 
-## Unreleased
+## 5.0.0 (2022-05-10)
 
 Enhancements:
 - .NET 6.0 support (@Jevonius, #616)
 - .NET Standard 2.0 and 2.1 support (@lg2de, #485)
 - Non-intercepted methods on a class proxy with target are now forwarded to the target (@stakx, #571)
-- Significant performance improvements with proxy type generation for interface proxies without target. (Up until now, DynamicProxy generated a separate `IInvocation` implementation type for every single proxied method &ndash; it is now able to reuse a single predefined type in many cases, thereby reducing the total amount of dynamic type generation.) (@stakx, #573)
+- Significant performance improvements with proxy type generation for interface proxies without target. Up until now, DynamicProxy generated a separate `IInvocation` implementation type for every single proxied method &ndash; it is now able to reuse a single predefined type in many cases, thereby reducing the total amount of dynamic type generation. (@stakx, #573)
 
 Bugfixes:
 - Generic method with differently named generic arguments to parent throws `KeyNotFoundException` (@stakx, #106)
