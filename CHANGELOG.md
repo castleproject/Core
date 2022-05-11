@@ -1,6 +1,6 @@
 # Castle Core Changelog
 
-## 5.0.0 (2022-05-10)
+## 5.0.0 (2022-05-11)
 
 Enhancements:
 - .NET 6.0 support (@Jevonius, #616)
@@ -17,17 +17,17 @@ Bugfixes:
 - Upgrade log4net to v2.0.13 (@jonorossi, @stakx, @dschwartzni, #574, #605)
 
 Deprecations:
- - Removed support for the .NET Framework < 4.6.2 and .NET Standard 1.x. (@stakx, #495, #496; @Jevonius, #614)
- - Removed support for Code Access Security (CAS). (@stakx, #502)
- - Removed support for Remoting. This library no longer defines any types deriving from `MarshalByRefObject`, and `ProxyUtil.IsProxy` (which used to recognize remoting/"transparent" proxies) now tests only for DynamicProxy proxies. (@stakx, #507)
- - The following public members have been removed:
-    - `Castle.Core.Internal.CollectionExtensions` (class)
-    - `Castle.Core.Internal.Lock` (class) along with all related types and methods
-    - `Castle.Core.Internal.PermissionUtil.IsGranted` (method)
-    - `Castle.Core.Pair<,>` (type). Use `System.ValueTuple<,>` or `System.Tuple<,>` instead.
-    - all type members in `Castle.DynamicProxy.ModuleScope` that gave direct access to DynamicProxy's type cache and `ModuleBuilder`s. Only `SaveAssembly`, `LoadAssemblyIntoCache`, and members supporting these two facilities are left public.
-    - almost all types and type members in the `Castle.DynamicProxy.*` sub-namespaces, as most of them are intended for internal use only.
-    - DynamicProxy's custom exception types have been replaced by standard BCL exceptions (where appropriate), and by a single `DynamicProxyException` type for internal DynamicProxy errors.
+- Removed support for the .NET Framework < 4.6.2 and .NET Standard 1.x. (@stakx, #495, #496; @Jevonius, #614)
+- Removed support for Code Access Security (CAS). (@stakx, #502)
+- Removed support for Remoting. This library no longer defines any types deriving from `MarshalByRefObject`, and `ProxyUtil.IsProxy` (which used to recognize remoting/"transparent" proxies) now tests only for DynamicProxy proxies. (@stakx, #507)
+- The following public members have been removed:
+  - `Castle.Core.Internal.CollectionExtensions` (class)
+  - `Castle.Core.Internal.Lock` (class) along with all related types and methods
+  - `Castle.Core.Internal.PermissionUtil.IsGranted` (method)
+  - `Castle.Core.Pair<,>` (type). Use `System.ValueTuple<,>` or `System.Tuple<,>` instead.
+  - all type members in `Castle.DynamicProxy.ModuleScope` that gave direct access to DynamicProxy's type cache and `ModuleBuilder`s. Only `SaveAssembly`, `LoadAssemblyIntoCache`, and members supporting these two facilities are left public.
+  - almost all types and type members in the `Castle.DynamicProxy.*` sub-namespaces, as most of them are intended for internal use only.
+  - DynamicProxy's custom exception types have been replaced by standard BCL exceptions (where appropriate), and by a single `DynamicProxyException` type for internal DynamicProxy errors.
 
 ## 4.4.1 (2020-05-06)
 
