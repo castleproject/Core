@@ -128,11 +128,6 @@ namespace Castle.DynamicProxy.Generators
 				return true;
 			}
 
-			if (!Type.Equals(other.Type))
-			{
-				return false;
-			}
-
 			if (!StringComparer.OrdinalIgnoreCase.Equals(Name, other.Name))
 			{
 				return false;
