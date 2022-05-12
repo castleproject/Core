@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Bugfixes:
+- DynamicProxy emits invalid metadata for redeclared event (@stakx, #590)
+
 ## 5.0.0 (2022-05-11)
 
 Enhancements:
