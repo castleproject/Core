@@ -12,25 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Castle.DynamicProxy.Tests.Records;
-
-using NUnit.Framework;
-
-namespace Castle.DynamicProxy.Tests
+namespace Castle.DynamicProxy.Tests.Records
 {
-	[TestFixture]
-	public class RecordsTestCase : BasePEVerifyTestCase
+	public record DerivedEmptyRecord : EmptyRecord
 	{
-		[Test]
-		public void Can_proxy_empty_record()
-		{
-			_ = generator.CreateClassProxy<EmptyRecord>(new StandardInterceptor());
-		}
-
-		[Test]
-		public void Can_proxy_derived_empty_record()
-		{
-			_ = generator.CreateClassProxy<DerivedEmptyRecord>(new StandardInterceptor());
-		}
 	}
 }
