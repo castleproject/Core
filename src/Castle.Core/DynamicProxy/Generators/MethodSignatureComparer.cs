@@ -22,6 +22,8 @@ namespace Castle.DynamicProxy.Generators
 	{
 		public static readonly MethodSignatureComparer Instance = new MethodSignatureComparer();
 
+		private static readonly Type preserveBaseOverridesAttribute = Type.GetType("System.Runtime.CompilerServices.PreserveBaseOverridesAttribute", throwOnError: false);
+
 		public bool EqualGenericParameters(MethodInfo x, MethodInfo y)
 		{
 			if (x.IsGenericMethod != y.IsGenericMethod)
@@ -77,7 +79,7 @@ namespace Castle.DynamicProxy.Generators
 			return true;
 		}
 
-		public bool EqualSignatureTypes(Type x, Type y, bool precise = true)
+		public bool EqualSignatureTypes(Type x, Type y, MethodInfo xm = null)
 		{
 			if (x.IsGenericParameter != y.IsGenericParameter)
 			{
@@ -122,9 +124,12 @@ namespace Castle.DynamicProxy.Generators
 			{
 				if (!x.Equals(y))
 				{
-					if (!precise && y.IsAssignableFrom(x))  // .NET 5+ covariant returns
+					// This enables covariant method returns for .NET 5 and newer.
+					// No need to check for runtime support, since such methods are marked with a custom attribute;
+					// see https://github.com/dotnet/runtime/blob/main/docs/design/features/covariant-return-methods.md.
+					if (xm != null && preserveBaseOverridesAttribute != null && xm.IsDefined(preserveBaseOverridesAttribute, inherit: false))
 					{
-						return true;
+						return y.IsAssignableFrom(x);
 					}
 
 					return false;
@@ -147,7 +152,7 @@ namespace Castle.DynamicProxy.Generators
 
 			return EqualNames(x, y) &&
 				   EqualGenericParameters(x, y) &&
-				   EqualSignatureTypes(x.ReturnType, y.ReturnType, precise: false) &&
+				   EqualSignatureTypes(x.ReturnType, y.ReturnType, x) &&
 				   EqualParameters(x, y);
 		}
 
