@@ -67,7 +67,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			var comparer = MethodSignatureComparer.Instance;
-			if (!comparer.EqualSignatureTypes(Method.ReturnType, other.Method.ReturnType))
+			if (!comparer.EqualReturnTypes(Method, other.Method))
 			{
 				return false;
 			}

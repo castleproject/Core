@@ -79,7 +79,12 @@ namespace Castle.DynamicProxy.Generators
 			return true;
 		}
 
-		public bool EqualSignatureTypes(Type x, Type y, MethodInfo xm = null, MethodInfo ym = null)
+		public bool EqualReturnTypes(MethodInfo x, MethodInfo y)
+		{
+			return EqualSignatureTypes(x.ReturnType, y.ReturnType, x, y);
+		}
+
+		private bool EqualSignatureTypes(Type x, Type y, MethodInfo xm = null, MethodInfo ym = null)
 		{
 			if (x.IsGenericParameter != y.IsGenericParameter)
 			{
@@ -153,7 +158,7 @@ namespace Castle.DynamicProxy.Generators
 
 			return EqualNames(x, y) &&
 				   EqualGenericParameters(x, y) &&
-				   EqualSignatureTypes(x.ReturnType, y.ReturnType, x, y) &&
+				   EqualReturnTypes(x, y) &&
 				   EqualParameters(x, y);
 		}
 
