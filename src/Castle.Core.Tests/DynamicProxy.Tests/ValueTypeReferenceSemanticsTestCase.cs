@@ -60,7 +60,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+#if !NET6_0_OR_GREATER  // bug got fixed in .NET 6, so run the test there (by omitting [Platform] because it doesn't support version specs for .NET Core)
 		[Platform(Exclude = "Net,NetCore", Reason = "Fails with a MissingMethodException due to a bug in System.Reflection.Emit. See https://github.com/dotnet/corefx/issues/29254.")]
+#endif
 		public void Can_proxy_method_in_generic_type_having_valuetyped_parameter_with_in_modifier()
 		{
 			var proxy = this.generator.CreateInterfaceProxyWithoutTarget<IGenericTypeWithInModifier<bool>>(new DoNothingInterceptor());
@@ -69,7 +71,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+#if !NET6_0_OR_GREATER  // as above
 		[Platform(Exclude = "Net,NetCore", Reason = "Fails with a MissingMethodException due to a bug in System.Reflection.Emit. See https://github.com/dotnet/corefx/issues/29254.")]
+#endif
 		public void Can_proxy_generic_method_in_nongeneric_type_having_valuetyped_parameter_with_in_modifier()
 		{
 			var proxy = this.generator.CreateInterfaceProxyWithoutTarget<IGenericMethodWithInModifier>(new DoNothingInterceptor());
@@ -78,7 +82,9 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+#if !NET6_0_OR_GREATER  // as above
 		[Platform(Exclude = "Net,NetCore", Reason = "Fails with a MissingMethodException due to a bug in System.Reflection.Emit. See https://github.com/dotnet/corefx/issues/29254.")]
+#endif
 		public void Can_proxy_generic_method_in_generic_type_having_valuetyped_parameter_with_in_modifier()
 		{
 			var proxy = this.generator.CreateInterfaceProxyWithoutTarget<IGenericTypeAndMethodWithInModifier<bool>>(new DoNothingInterceptor());
