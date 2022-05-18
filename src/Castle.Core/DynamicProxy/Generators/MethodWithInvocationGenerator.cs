@@ -113,7 +113,7 @@ namespace Castle.DynamicProxy.Generators
 
 			if (MethodToOverride.ContainsGenericParameters)
 			{
-				EmitLoadGenricMethodArguments(emitter, MethodToOverride.MakeGenericMethod(genericArguments), invocationLocal);
+				EmitLoadGenericMethodArguments(emitter, MethodToOverride.MakeGenericMethod(genericArguments), invocationLocal);
 			}
 
 			if (hasByRefArguments)
@@ -195,7 +195,7 @@ namespace Castle.DynamicProxy.Generators
 			return methodInterceptorsField;
 		}
 
-		private void EmitLoadGenricMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Reference invocationLocal)
+		private void EmitLoadGenericMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Reference invocationLocal)
 		{
 			var genericParameters = Array.FindAll(method.GetGenericArguments(), t => t.IsGenericParameter);
 			var genericParamsArrayLocal = methodEmitter.CodeBuilder.DeclareLocal(typeof(Type[]));

@@ -77,7 +77,7 @@ namespace Castle.DynamicProxy.Generators
 				ImplementChangeProxyTargetInterface(@class, invocation, targetField);
 			}
 
-			ImplemementInvokeMethodOnTarget(invocation, methodInfo.GetParameters(), targetField, callback);
+			ImplementInvokeMethodOnTarget(invocation, methodInfo.GetParameters(), targetField, callback);
 
 #if FEATURE_SERIALIZATION
 			invocation.DefineCustomAttribute<SerializableAttribute>();
@@ -263,8 +263,8 @@ namespace Castle.DynamicProxy.Generators
 			return new ClassEmitter(@class.ModuleScope, uniqueName, GetBaseType(), interfaces, ClassEmitter.DefaultAttributes, forceUnsigned: @class.InStrongNamedModule == false);
 		}
 
-		private void ImplemementInvokeMethodOnTarget(AbstractTypeEmitter invocation, ParameterInfo[] parameters,
-		                                             FieldReference targetField, MethodInfo callbackMethod)
+		private void ImplementInvokeMethodOnTarget(AbstractTypeEmitter invocation, ParameterInfo[] parameters,
+		                                           FieldReference targetField, MethodInfo callbackMethod)
 		{
 			var invokeMethodOnTarget = invocation.CreateMethod("InvokeMethodOnTarget", typeof(void));
 			ImplementInvokeMethodOnTarget(invocation, parameters, invokeMethodOnTarget, targetField);
