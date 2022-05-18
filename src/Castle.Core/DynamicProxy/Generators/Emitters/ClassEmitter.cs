@@ -29,15 +29,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private readonly ModuleScope moduleScope;
 
-		public ClassEmitter(ModuleScope modulescope, string name, Type baseType, IEnumerable<Type> interfaces)
-			: this(modulescope, name, baseType, interfaces, DefaultAttributes, forceUnsigned: false)
+		public ClassEmitter(ModuleScope moduleScope, string name, Type baseType, IEnumerable<Type> interfaces)
+			: this(moduleScope, name, baseType, interfaces, DefaultAttributes, forceUnsigned: false)
 		{
 		}
 
-		public ClassEmitter(ModuleScope modulescope, string name, Type baseType, IEnumerable<Type> interfaces,
+		public ClassEmitter(ModuleScope moduleScope, string name, Type baseType, IEnumerable<Type> interfaces,
 		                    TypeAttributes flags,
 		                    bool forceUnsigned)
-			: this(CreateTypeBuilder(modulescope, name, baseType, interfaces, flags, forceUnsigned))
+			: this(CreateTypeBuilder(moduleScope, name, baseType, interfaces, flags, forceUnsigned))
 		{
 			interfaces = InitializeGenericArgumentsFromBases(ref baseType, interfaces);
 
@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 
 			TypeBuilder.SetParent(baseType);
-			moduleScope = modulescope;
+			this.moduleScope = moduleScope;
 		}
 
 		public ClassEmitter(TypeBuilder typeBuilder)
@@ -98,12 +98,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return interfaces;
 		}
 
-		private static TypeBuilder CreateTypeBuilder(ModuleScope modulescope, string name, Type baseType,
+		private static TypeBuilder CreateTypeBuilder(ModuleScope moduleScope, string name, Type baseType,
 		                                             IEnumerable<Type> interfaces,
 		                                             TypeAttributes flags, bool forceUnsigned)
 		{
 			var isAssemblySigned = !forceUnsigned && !StrongNameUtil.IsAnyTypeFromUnsignedAssembly(baseType, interfaces);
-			return modulescope.DefineType(isAssemblySigned, name, flags);
+			return moduleScope.DefineType(isAssemblySigned, name, flags);
 		}
 	}
 }

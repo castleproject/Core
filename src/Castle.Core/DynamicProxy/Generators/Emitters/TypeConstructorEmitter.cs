@@ -18,8 +18,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	internal class TypeConstructorEmitter : ConstructorEmitter
 	{
-		internal TypeConstructorEmitter(AbstractTypeEmitter maintype)
-			: base(maintype, maintype.TypeBuilder.DefineTypeInitializer())
+		internal TypeConstructorEmitter(AbstractTypeEmitter mainType)
+			: base(mainType, mainType.TypeBuilder.DefineTypeInitializer())
 		{
 		}
 

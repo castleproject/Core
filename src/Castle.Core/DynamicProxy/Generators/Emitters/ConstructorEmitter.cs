@@ -24,22 +24,22 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	{
 		private readonly ConstructorBuilder builder;
 		private readonly CodeBuilder codeBuilder;
-		private readonly AbstractTypeEmitter maintype;
+		private readonly AbstractTypeEmitter mainType;
 
-		protected internal ConstructorEmitter(AbstractTypeEmitter maintype, ConstructorBuilder builder)
+		protected internal ConstructorEmitter(AbstractTypeEmitter mainType, ConstructorBuilder builder)
 		{
-			this.maintype = maintype;
+			this.mainType = mainType;
 			this.builder = builder;
 			codeBuilder = new CodeBuilder();
 		}
 
-		internal ConstructorEmitter(AbstractTypeEmitter maintype, params ArgumentReference[] arguments)
+		internal ConstructorEmitter(AbstractTypeEmitter mainType, params ArgumentReference[] arguments)
 		{
-			this.maintype = maintype;
+			this.mainType = mainType;
 
 			var args = ArgumentsUtil.InitializeAndConvert(arguments);
 
-			builder = maintype.TypeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, args);
+			builder = mainType.TypeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, args);
 			codeBuilder = new CodeBuilder();
 		}
 
@@ -76,7 +76,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			if (ImplementedByRuntime == false && CodeBuilder.IsEmpty)
 			{
-				CodeBuilder.AddStatement(new ConstructorInvocationStatement(maintype.BaseType));
+				CodeBuilder.AddStatement(new ConstructorInvocationStatement(mainType.BaseType));
 				CodeBuilder.AddStatement(new ReturnStatement());
 			}
 		}

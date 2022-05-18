@@ -55,7 +55,7 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				dynProxySetTarget.CodeBuilder.AddStatement(
 					new AssignStatement(targetField,
-						new ConvertExpression(targetField.Fieldbuilder.FieldType, dynProxySetTarget.Arguments[0])));
+						new ConvertExpression(targetField.FieldBuilder.FieldType, dynProxySetTarget.Arguments[0])));
 			}
 			else
 			{

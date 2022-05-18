@@ -38,13 +38,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private readonly List<NestedClassEmitter> nested;
 		private readonly List<PropertyEmitter> properties;
-		private readonly TypeBuilder typebuilder;
+		private readonly TypeBuilder typeBuilder;
 
 		private GenericTypeParameterBuilder[] genericTypeParams;
 
 		protected AbstractTypeEmitter(TypeBuilder typeBuilder)
 		{
-			typebuilder = typeBuilder;
+			this.typeBuilder = typeBuilder;
 			nested = new List<NestedClassEmitter>();
 			methods = new List<MethodEmitter>();
 			constructors = new List<ConstructorEmitter>();
@@ -73,14 +73,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public TypeBuilder TypeBuilder
 		{
-			get { return typebuilder; }
+			get { return typeBuilder; }
 		}
 
 		public void AddCustomAttributes(IEnumerable<CustomAttributeInfo> additionalAttributes)
 		{
 			foreach (var attribute in additionalAttributes)
 			{
-				typebuilder.SetCustomAttribute(attribute.Builder);
+				typeBuilder.SetCustomAttribute(attribute.Builder);
 			}
 		}
 
@@ -93,7 +93,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 			EnsureBuildersAreInAValidState();
 
-			var type = CreateType(typebuilder);
+			var type = CreateType(typeBuilder);
 
 			foreach (var builder in nested)
 			{
@@ -111,7 +111,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				throw new InvalidOperationException("Cannot invoke me twice");
 			}
 
-			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typebuilder));
+			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typeBuilder));
 		}
 
 		public ConstructorEmitter CreateConstructor(params ArgumentReference[] arguments)
@@ -162,7 +162,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public FieldReference CreateField(string name, Type fieldType, FieldAttributes atts)
 		{
-			var fieldBuilder = typebuilder.DefineField(name, fieldType, atts);
+			var fieldBuilder = typeBuilder.DefineField(name, fieldType, atts);
 			var reference = new FieldReference(fieldBuilder);
 			fields[name] = reference;
 			return reference;
@@ -220,31 +220,31 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public void DefineCustomAttribute(CustomAttributeBuilder attribute)
 		{
-			typebuilder.SetCustomAttribute(attribute);
+			typeBuilder.SetCustomAttribute(attribute);
 		}
 
 		public void DefineCustomAttribute<TAttribute>(object[] constructorArguments) where TAttribute : Attribute
 		{
 			var customAttributeInfo = AttributeUtil.CreateInfo(typeof(TAttribute), constructorArguments);
-			typebuilder.SetCustomAttribute(customAttributeInfo.Builder);
+			typeBuilder.SetCustomAttribute(customAttributeInfo.Builder);
 		}
 
 		public void DefineCustomAttribute<TAttribute>() where TAttribute : Attribute, new()
 		{
 			var customAttributeInfo = AttributeUtil.CreateInfo<TAttribute>();
-			typebuilder.SetCustomAttribute(customAttributeInfo.Builder);
+			typeBuilder.SetCustomAttribute(customAttributeInfo.Builder);
 		}
 
 		public void DefineCustomAttributeFor<TAttribute>(FieldReference field) where TAttribute : Attribute, new()
 		{
 			var customAttributeInfo = AttributeUtil.CreateInfo<TAttribute>();
-			var fieldbuilder = field.Fieldbuilder;
-			if (fieldbuilder == null)
+			var fieldBuilder = field.FieldBuilder;
+			if (fieldBuilder == null)
 			{
 				throw new ArgumentException(
 					"Invalid field reference.This reference does not point to field on type being generated", nameof(field));
 			}
-			fieldbuilder.SetCustomAttribute(customAttributeInfo.Builder);
+			fieldBuilder.SetCustomAttribute(customAttributeInfo.Builder);
 		}
 
 		public IEnumerable<FieldReference> GetAllFields()
@@ -344,7 +344,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		protected virtual void EnsureBuildersAreInAValidState()
 		{
-			if (!typebuilder.IsInterface && constructors.Count == 0)
+			if (!typeBuilder.IsInterface && constructors.Count == 0)
 			{
 				CreateDefaultConstructor();
 			}
