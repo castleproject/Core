@@ -60,8 +60,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (!method.Proxyable)
 			{
-				return new MinimialisticMethodGenerator(method,
-				                                        overrideMethod);
+				return new MinimalisticMethodGenerator(method, overrideMethod);
 			}
 
 			if (ExplicitlyImplementedInterfaceMethod(method))
