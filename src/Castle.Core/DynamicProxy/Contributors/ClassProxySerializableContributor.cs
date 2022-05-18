@@ -89,10 +89,10 @@ namespace Castle.DynamicProxy.Contributors
 			base.AddAddValueInvocation(serializationInfo, getObjectData, field);
 		}
 
-		protected override void CustomizeGetObjectData(CodeBuilder codebuilder, ArgumentReference serializationInfo,
+		protected override void CustomizeGetObjectData(CodeBuilder codeBuilder, ArgumentReference serializationInfo,
 		                                               ArgumentReference streamingContext, ClassEmitter emitter)
 		{
-			codebuilder.AddStatement(
+			codeBuilder.AddStatement(
 				new MethodInvocationExpression(
 					serializationInfo,
 					SerializationInfoMethods.AddValue_Bool,
@@ -101,53 +101,53 @@ namespace Castle.DynamicProxy.Contributors
 
 			if (delegateToBaseGetObjectData == false)
 			{
-				EmitCustomGetObjectData(codebuilder, serializationInfo);
+				EmitCustomGetObjectData(codeBuilder, serializationInfo);
 				return;
 			}
 
-			EmitCallToBaseGetObjectData(codebuilder, serializationInfo, streamingContext);
+			EmitCallToBaseGetObjectData(codeBuilder, serializationInfo, streamingContext);
 		}
 
-		private void EmitCustomGetObjectData(CodeBuilder codebuilder, ArgumentReference serializationInfo)
+		private void EmitCustomGetObjectData(CodeBuilder codeBuilder, ArgumentReference serializationInfo)
 		{
-			var members = codebuilder.DeclareLocal(typeof(MemberInfo[]));
-			var data = codebuilder.DeclareLocal(typeof(object[]));
+			var members = codeBuilder.DeclareLocal(typeof(MemberInfo[]));
+			var data = codeBuilder.DeclareLocal(typeof(object[]));
 
 			var getSerializableMembers = new MethodInvocationExpression(
 				null,
 				FormatterServicesMethods.GetSerializableMembers,
 				new TypeTokenExpression(targetType));
-			codebuilder.AddStatement(new AssignStatement(members, getSerializableMembers));
+			codeBuilder.AddStatement(new AssignStatement(members, getSerializableMembers));
 
 			// Sort to keep order on both serialize and deserialize side the same, c.f DYNPROXY-ISSUE-127
 			var callSort = new MethodInvocationExpression(
 				null,
 				TypeUtilMethods.Sort,
 				members);
-			codebuilder.AddStatement(new AssignStatement(members, callSort));
+			codeBuilder.AddStatement(new AssignStatement(members, callSort));
 
 			var getObjectData = new MethodInvocationExpression(
 				null,
 				FormatterServicesMethods.GetObjectData,
 				SelfReference.Self,
 				members);
-			codebuilder.AddStatement(new AssignStatement(data, getObjectData));
+			codeBuilder.AddStatement(new AssignStatement(data, getObjectData));
 
 			var addValue = new MethodInvocationExpression(
 				serializationInfo,
 				SerializationInfoMethods.AddValue_Object,
 				new LiteralStringExpression("__data"),
 				data);
-			codebuilder.AddStatement(addValue);
+			codeBuilder.AddStatement(addValue);
 		}
 
-		private void EmitCallToBaseGetObjectData(CodeBuilder codebuilder, ArgumentReference serializationInfo,
+		private void EmitCallToBaseGetObjectData(CodeBuilder codeBuilder, ArgumentReference serializationInfo,
 		                                         ArgumentReference streamingContext)
 		{
 			var baseGetObjectData = targetType.GetMethod("GetObjectData",
 			                                             new[] { typeof(SerializationInfo), typeof(StreamingContext) });
 
-			codebuilder.AddStatement(
+			codeBuilder.AddStatement(
 				new MethodInvocationExpression(
 					baseGetObjectData,
 					serializationInfo,

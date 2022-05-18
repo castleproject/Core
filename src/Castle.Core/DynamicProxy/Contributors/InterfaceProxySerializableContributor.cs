@@ -29,19 +29,19 @@ namespace Castle.DynamicProxy.Contributors
 		{
 		}
 
-		protected override void CustomizeGetObjectData(CodeBuilder codebuilder, ArgumentReference serializationInfo,
+		protected override void CustomizeGetObjectData(CodeBuilder codeBuilder, ArgumentReference serializationInfo,
 		                                               ArgumentReference streamingContext, ClassEmitter emitter)
 		{
 			var targetField = emitter.GetField("__target");
 
-			codebuilder.AddStatement(
+			codeBuilder.AddStatement(
 				new MethodInvocationExpression(
 					serializationInfo,
 					SerializationInfoMethods.AddValue_Object,
 					new LiteralStringExpression("__targetFieldType"),
 					new LiteralStringExpression(targetField.Reference.FieldType.AssemblyQualifiedName)));
 
-			codebuilder.AddStatement(
+			codeBuilder.AddStatement(
 				new MethodInvocationExpression(
 					serializationInfo,
 					SerializationInfoMethods.AddValue_Object,
