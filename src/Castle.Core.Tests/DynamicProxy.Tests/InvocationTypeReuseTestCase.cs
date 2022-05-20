@@ -52,6 +52,94 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(typeof(InterfaceMethodWithoutTargetInvocation), recorder.InvocationType);
 		}
 
+		[Test]
+		public void Non_generic_abstract_method_of_class_proxy__uses__InheritanceInvocationWithoutTarget()
+		{
+			var recorder = new InvocationTypeRecorder();
+
+			var proxy = generator.CreateClassProxy<WithNonGenericAbstractMethod>(recorder);
+			proxy.Method();
+
+			Assert.AreEqual(typeof(InheritanceInvocationWithoutTarget), recorder.InvocationType);
+		}
+
+		[Test]
+		public void Non_generic_protected_abstract_method_of_class_proxy__uses__InheritanceInvocationWithoutTarget()
+		{
+			var recorder = new InvocationTypeRecorder();
+
+			var proxy = generator.CreateClassProxy<WithNonGenericProtectedAbstractMethod>(recorder);
+			proxy.InvokeMethod();
+
+			Assert.AreEqual(typeof(InheritanceInvocationWithoutTarget), recorder.InvocationType);
+		}
+
+		[Test]
+		public void Non_generic_virtual_method_of_class_proxy__does_not_use__InheritanceInvocationWithoutTarget()
+		{
+			var recorder = new InvocationTypeRecorder();
+
+			var proxy = generator.CreateClassProxy<WithNonGenericVirtualMethod>(recorder);
+			proxy.Method();
+
+			Assert.AreNotEqual(typeof(InheritanceInvocationWithoutTarget), recorder.InvocationType);
+		}
+
+		[Test]
+		public void Non_generic_protected_virtual_method_of_class_proxy__does_not_use__InheritanceInvocationWithoutTarget()
+		{
+			var recorder = new InvocationTypeRecorder();
+
+			var proxy = generator.CreateClassProxy<WithNonGenericProtectedVirtualMethod>(recorder);
+			proxy.InvokeMethod();
+
+			Assert.AreNotEqual(typeof(InheritanceInvocationWithoutTarget), recorder.InvocationType);
+		}
+
+		[Test]
+		public void Generic_abstract_method_of_class_proxy__uses__InheritanceInvocationWithoutTarget()
+		{
+			var recorder = new InvocationTypeRecorder();
+
+			var proxy = generator.CreateClassProxy<WithGenericAbstractMethod>(recorder);
+			proxy.Method(42);
+
+			Assert.AreEqual(typeof(InheritanceInvocationWithoutTarget), recorder.InvocationType);
+		}
+
+		[Test]
+		public void Generic_protected_abstract_method_of_class_proxy__uses__InheritanceInvocationWithoutTarget()
+		{
+			var recorder = new InvocationTypeRecorder();
+
+			var proxy = generator.CreateClassProxy<WithGenericProtectedAbstractMethod>(recorder);
+			proxy.InvokeMethod(42);
+
+			Assert.AreEqual(typeof(InheritanceInvocationWithoutTarget), recorder.InvocationType);
+		}
+
+		[Test]
+		public void Generic_virtual_method_of_class_proxy__does_not_use__InheritanceInvocationWithoutTarget()
+		{
+			var recorder = new InvocationTypeRecorder();
+
+			var proxy = generator.CreateClassProxy<WithGenericVirtualMethod>(recorder);
+			proxy.Method(42);
+
+			Assert.AreNotEqual(typeof(InheritanceInvocationWithoutTarget), recorder.InvocationType);
+		}
+
+		[Test]
+		public void Generic_protected_virtual_method_of_class_proxy__does_not_use__InheritanceInvocationWithoutTarget()
+		{
+			var recorder = new InvocationTypeRecorder();
+
+			var proxy = generator.CreateClassProxy<WithGenericProtectedVirtualMethod>(recorder);
+			proxy.InvokeMethod(42);
+
+			Assert.AreNotEqual(typeof(InheritanceInvocationWithoutTarget), recorder.InvocationType);
+		}
+
 		public interface IWithNonGenericMethod
 		{
 			void Method();
@@ -60,6 +148,50 @@ namespace Castle.DynamicProxy.Tests
 		public interface IWithGenericMethod
 		{
 			void Method<T>(T arg);
+		}
+
+		public abstract class WithNonGenericAbstractMethod
+		{
+			public abstract void Method();
+		}
+
+		public abstract class WithNonGenericProtectedAbstractMethod
+		{
+			protected abstract void Method();
+			public void InvokeMethod() => Method();
+		}
+
+		public class WithNonGenericVirtualMethod
+		{
+			public virtual void Method() { }
+		}
+
+		public class WithNonGenericProtectedVirtualMethod
+		{
+			protected virtual void Method() { }
+			public void InvokeMethod() => Method();
+		}
+
+		public abstract class WithGenericAbstractMethod
+		{
+			public abstract void Method<T>(T arg);
+		}
+
+		public abstract class WithGenericProtectedAbstractMethod
+		{
+			protected abstract void Method<T>(T arg);
+			public void InvokeMethod<T>(T arg) => Method(arg);
+		}
+
+		public class WithGenericVirtualMethod
+		{
+			public virtual void Method<T>(T arg) { }
+		}
+
+		public class WithGenericProtectedVirtualMethod
+		{
+			protected virtual void Method<T>(T arg) { }
+			public void InvokeMethod<T>(T arg) => Method(arg);
 		}
 
 		private sealed class InvocationTypeRecorder : IInterceptor
