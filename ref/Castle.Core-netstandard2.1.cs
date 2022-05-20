@@ -2740,6 +2740,11 @@ namespace Castle.DynamicProxy.Internal
         public override System.Type TargetType { get; }
         protected abstract override void InvokeMethodOnTarget() { }
     }
+    public sealed class InheritanceInvocationWithoutTarget : Castle.DynamicProxy.Internal.InheritanceInvocation
+    {
+        public InheritanceInvocationWithoutTarget(System.Type targetType, object proxy, Castle.DynamicProxy.IInterceptor[] interceptors, System.Reflection.MethodInfo proxiedMethod, object[] arguments) { }
+        protected override void InvokeMethodOnTarget() { }
+    }
     public sealed class InterfaceMethodWithoutTargetInvocation : Castle.DynamicProxy.AbstractInvocation
     {
         public InterfaceMethodWithoutTargetInvocation(object target, object proxy, Castle.DynamicProxy.IInterceptor[] interceptors, System.Reflection.MethodInfo proxiedMethod, object[] arguments) { }
