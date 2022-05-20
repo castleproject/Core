@@ -172,6 +172,13 @@ namespace Castle.DynamicProxy.Contributors
 
 		private Type GetInvocationType(MetaMethod method, ClassEmitter @class)
 		{
+			if (!method.HasTarget)
+			{
+				// We do not need to generate a custom invocation type because no custom implementation
+				// for `InvokeMethodOnTarget` will be needed (proceeding to target isn't possible here):
+				return typeof(InheritanceInvocationWithoutTarget);
+			}
+
 			// NOTE: No caching since invocation is tied to this specific proxy type via its invocation method
 			return BuildInvocationType(method, @class);
 		}
