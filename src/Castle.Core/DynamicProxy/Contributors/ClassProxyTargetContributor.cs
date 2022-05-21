@@ -42,6 +42,11 @@ namespace Castle.DynamicProxy.Contributors
 			var targetItem = new ClassMembersCollector(targetType) { Logger = Logger };
 			yield return targetItem;
 
+			foreach (var @interface in targetType.GetAllInterfaces())
+			{
+				yield return new InterfaceMembersWithDefaultImplementationCollector(@interface, targetType);
+			}
+
 			foreach (var @interface in interfaces)
 			{
 				var item = new InterfaceMembersOnClassCollector(@interface, true,
