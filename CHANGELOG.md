@@ -2,8 +2,12 @@
 
 ## Unreleased
 
+Enhancements:
+- Support for covariant method returns (@stakx, #619)
+
 Bugfixes:
 - DynamicProxy emits invalid metadata for redeclared event (@stakx, #590)
+- Proxies using records with a base class broken using .NET 6 compiler (@ajcvickers, #601)
 
 ## 5.0.0 (2022-05-11)
 
