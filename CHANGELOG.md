@@ -9,6 +9,7 @@ Enhancements:
 Bugfixes:
 - DynamicProxy emits invalid metadata for redeclared event (@stakx, #590)
 - Proxies using records with a base class broken using .NET 6 compiler (@ajcvickers, #601)
+- `MissingMethodException` when proxying interfaces containing sealed methods (@stakx, #621)
 
 ## 5.0.0 (2022-05-11)
 
