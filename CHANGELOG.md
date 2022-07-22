@@ -4,6 +4,7 @@
 
 Enhancements:
 - Support for covariant method returns (@stakx, #619)
+- Performance improvement with proxy type generation for class proxies (without target). Abstract class methods now reuse a predefined invocation type (like methods of interface proxies without target; see explanation below at version 5.0.0 enhancements) (@stakx, #626)
 
 Bugfixes:
 - DynamicProxy emits invalid metadata for redeclared event (@stakx, #590)
