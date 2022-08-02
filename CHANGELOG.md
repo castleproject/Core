@@ -1,6 +1,6 @@
 # Castle Core Changelog
 
-## Unreleased
+## 5.1.0 (2022-08-02)
 
 Enhancements:
 - Support for covariant method returns (@stakx, #619)
