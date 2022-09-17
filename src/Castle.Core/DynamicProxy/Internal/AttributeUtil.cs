@@ -185,7 +185,7 @@ namespace Castle.DynamicProxy.Internal
 			{
 				return false;
 			}
-			
+
 			if (!ignoreInheritance)
 			{
 				var attrs = attribute.GetCustomAttributes<AttributeUsageAttribute>(true).ToArray();
