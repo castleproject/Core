@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Bugfixes:
+- Nested custom attribute types do not get replicated (@stakx, #638)
+
 ## 5.1.0 (2022-08-02)
 
 Enhancements:

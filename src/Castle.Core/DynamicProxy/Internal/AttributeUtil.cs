@@ -185,7 +185,7 @@ namespace Castle.DynamicProxy.Internal
 		/// </summary>
 		private static bool ShouldSkipAttributeReplication(Type attribute, bool ignoreInheritance)
 		{
-			if (attribute.IsPublic == false)
+			if (attribute.IsPublic == false && attribute.IsNestedPublic == false)
 			{
 				return true;
 			}
