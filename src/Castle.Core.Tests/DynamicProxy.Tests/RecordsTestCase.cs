@@ -38,5 +38,11 @@ namespace Castle.DynamicProxy.Tests
 		{
 			_ = generator.CreateClassProxy<EmptyGenericRecord<object>>(new StandardInterceptor());
 		}
+
+		[Test]
+		public void Can_proxy_derived_empty_generic_record()
+		{
+			_ = generator.CreateClassProxy<DerivedEmptyGenericRecord>(new StandardInterceptor());
+		}
 	}
 }
