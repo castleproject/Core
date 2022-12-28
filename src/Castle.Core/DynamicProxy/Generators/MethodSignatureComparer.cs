@@ -121,9 +121,12 @@ namespace Castle.DynamicProxy.Generators
 					return false;
 				}
 
-				for (var i = 0; i < xArgs.Length; ++i)
+				if (IsCovariantReturnTypes(x, y, xm, ym) == false)
 				{
-					 if(!EqualSignatureTypes(xArgs[i], yArgs[i])) return false;
+					for (var i = 0; i < xArgs.Length; ++i)
+					{
+						 if(!EqualSignatureTypes(xArgs[i], yArgs[i])) return false;
+					}
 				}
 			}
 			else
