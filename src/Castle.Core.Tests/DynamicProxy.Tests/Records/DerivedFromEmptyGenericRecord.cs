@@ -14,7 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests.Records
 {
-	public record DerivedEmptyRecord : EmptyRecord
+	public record DerivedFromEmptyGenericRecord : EmptyGenericRecord<object>
 	{
 	}
 }
