@@ -3,6 +3,7 @@
 ## Unreleased
 
 Bugfixes:
+- Proxies using records derived from a base generic record broken using .NET 6 compiler (@CesarD, #632)
 - Failure proxying type that has a non-inheritable custom attribute type applied where `null` argument is given for array parameter  (@stakx, #637)
 - Nested custom attribute types do not get replicated (@stakx, #638)
 
