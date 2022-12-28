@@ -3,6 +3,7 @@
 ## Unreleased
 
 Bugfixes:
+- Failure proxying type that has a non-inheritable custom attribute type applied where `null` argument is given for array parameter  (@stakx, #637)
 - Nested custom attribute types do not get replicated (@stakx, #638)
 
 ## 5.1.0 (2022-08-02)
