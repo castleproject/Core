@@ -28,12 +28,7 @@ namespace Castle.DynamicProxy.Internal
 		{
 			Debug.Assert(attribute != null, "attribute != null");
 
-			// .NET Core does not provide CustomAttributeData.Constructor, so we'll implement it
-			// by finding a constructor ourselves
-			Type[] constructorArgTypes;
-			object[] constructorArgs;
-			GetArguments(attribute.ConstructorArguments, out constructorArgTypes, out constructorArgs);
-			var constructor = attribute.AttributeType.GetConstructor(constructorArgTypes);
+			object[] constructorArgs = GetArguments(attribute.ConstructorArguments);
 
 			PropertyInfo[] properties;
 			object[] propertyValues;
@@ -43,24 +38,12 @@ namespace Castle.DynamicProxy.Internal
 				attribute.AttributeType,
 				attribute.NamedArguments, out properties, out propertyValues, out fields, out fieldValues);
 
-			return new CustomAttributeInfo(constructor,
+			return new CustomAttributeInfo(attribute.Constructor,
 			                               constructorArgs,
 			                               properties,
 			                               propertyValues,
 			                               fields,
 			                               fieldValues);
-		}
-
-		private static void GetArguments(IList<CustomAttributeTypedArgument> constructorArguments,
-			out Type[] constructorArgTypes, out object[] constructorArgs)
-		{
-			constructorArgTypes = new Type[constructorArguments.Count];
-			constructorArgs = new object[constructorArguments.Count];
-			for (var i = 0; i < constructorArguments.Count; i++)
-			{
-				constructorArgTypes[i] = constructorArguments[i].ArgumentType;
-				constructorArgs[i] = ReadAttributeValue(constructorArguments[i]);
-			}
 		}
 
 		private static object[] GetArguments(IList<CustomAttributeTypedArgument> constructorArguments)
