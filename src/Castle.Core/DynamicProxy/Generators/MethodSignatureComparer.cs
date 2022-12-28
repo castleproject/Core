@@ -16,6 +16,7 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Reflection;
 
 	internal class MethodSignatureComparer : IEqualityComparer<MethodInfo>
@@ -136,6 +137,9 @@ namespace Castle.DynamicProxy.Generators
 
 			static bool IsCovariantReturnTypes(Type x, Type y, MethodInfo xm, MethodInfo ym)
 			{
+				Debug.Assert((xm == null && ym == null)
+				          || (xm != null && ym != null && x == xm.ReturnType && y == ym.ReturnType));
+
 				// This enables covariant method returns for .NET 5 and newer.
 				// No need to check for runtime support, since such methods are marked with a custom attribute;
 				// see https://github.com/dotnet/runtime/blob/main/docs/design/features/covariant-return-methods.md.
