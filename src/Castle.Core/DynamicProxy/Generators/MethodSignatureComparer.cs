@@ -92,7 +92,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 			else if (x.IsGenericType != y.IsGenericType)
 			{
-				return false;
+				return IsCovariantReturnTypes(x, y, xm, ym);
 			}
 
 			if (x.IsGenericParameter)
@@ -129,19 +129,24 @@ namespace Castle.DynamicProxy.Generators
 			{
 				if (!x.Equals(y))
 				{
-					// This enables covariant method returns for .NET 5 and newer.
-					// No need to check for runtime support, since such methods are marked with a custom attribute;
-					// see https://github.com/dotnet/runtime/blob/main/docs/design/features/covariant-return-methods.md.
-					if (preserveBaseOverridesAttribute != null)
-					{
-						return (xm != null && xm.IsDefined(preserveBaseOverridesAttribute, inherit: false) && y.IsAssignableFrom(x))
-						    || (ym != null && ym.IsDefined(preserveBaseOverridesAttribute, inherit: false) && x.IsAssignableFrom(y));
-					}
-
-					return false;
+					return IsCovariantReturnTypes(x, y, xm, ym);
 				}
 			}
 			return true;
+
+			static bool IsCovariantReturnTypes(Type x, Type y, MethodInfo xm, MethodInfo ym)
+			{
+				// This enables covariant method returns for .NET 5 and newer.
+				// No need to check for runtime support, since such methods are marked with a custom attribute;
+				// see https://github.com/dotnet/runtime/blob/main/docs/design/features/covariant-return-methods.md.
+				if (preserveBaseOverridesAttribute != null)
+				{
+					return (xm != null && xm.IsDefined(preserveBaseOverridesAttribute, inherit: false) && y.IsAssignableFrom(x))
+					    || (ym != null && ym.IsDefined(preserveBaseOverridesAttribute, inherit: false) && x.IsAssignableFrom(y));
+				}
+
+				return false;
+			}
 		}
 
 		public bool Equals(MethodInfo x, MethodInfo y)
