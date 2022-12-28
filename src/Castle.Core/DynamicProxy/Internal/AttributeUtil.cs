@@ -60,15 +60,18 @@ namespace Castle.DynamicProxy.Internal
 		private static object ReadAttributeValue(CustomAttributeTypedArgument argument)
 		{
 			var value = argument.Value;
-			if (argument.ArgumentType.IsArray == false)
+
+			if (argument.ArgumentType.IsArray && value is IList<CustomAttributeTypedArgument> values)
 			{
-				return value;
+				// `CustomAttributeInfo` represents array values as `ReadOnlyCollection<CustomAttributeTypedArgument>`,
+				// but `CustomAttributeBuilder` will require plain arrays, so we need a (recursive) conversion:
+				var arguments = GetArguments(values);
+				var array = new object[arguments.Length];
+				arguments.CopyTo(array, 0);
+				return array;
 			}
-			//special case for handling arrays in attributes
-			var arguments = GetArguments((IList<CustomAttributeTypedArgument>)value);
-			var array = new object[arguments.Length];
-			arguments.CopyTo(array, 0);
-			return array;
+
+			return value;
 		}
 
 		private static void GetSettersAndFields(Type attributeType, IEnumerable<CustomAttributeNamedArgument> namedArguments,
