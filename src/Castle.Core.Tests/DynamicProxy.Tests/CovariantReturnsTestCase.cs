@@ -52,6 +52,7 @@ namespace Castle.DynamicProxy.Tests
 		[TestCase(typeof(DerivedClassWithStringInsteadOfObject))]
 		[TestCase(typeof(DerivedClassWithStringInsteadOfInterface))]
 		[TestCase(typeof(DerivedClassWithStringInsteadOfGenericArg))]
+		[TestCase(typeof(BottleOfWater))]
 		public void Can_proxy_type_having_method_with_covariant_return(Type classToProxy)
 		{
 			_ = generator.CreateClassProxy(classToProxy, new StandardInterceptor());
@@ -62,6 +63,7 @@ namespace Castle.DynamicProxy.Tests
 		[TestCase(typeof(DerivedClassWithStringInsteadOfObject), typeof(string))]
 		[TestCase(typeof(DerivedClassWithStringInsteadOfInterface), typeof(string))]
 		[TestCase(typeof(DerivedClassWithStringInsteadOfGenericArg), typeof(string))]
+		[TestCase(typeof(BottleOfWater), typeof(Glass<Water>))]
 		public void Proxied_method_has_correct_return_type(Type classToProxy, Type expectedMethodReturnType)
 		{
 			var proxy = generator.CreateClassProxy(classToProxy, new StandardInterceptor());
@@ -115,6 +117,22 @@ namespace Castle.DynamicProxy.Tests
 		public class DerivedClassWithStringInsteadOfGenericArg : BaseClassWithGenericArg<IComparable>
 		{
 			public override string Method() => nameof(DerivedClassWithStringInsteadOfGenericArg);
+		}
+
+		public interface Glass<out T> { }
+
+		public class Liquid { }
+
+		public class Water : Liquid { }
+
+		public class BottleOfLiquid
+		{
+			public virtual Glass<Liquid> Method() => default(Glass<Liquid>);
+		}
+
+		public class BottleOfWater : BottleOfLiquid
+		{
+			public override Glass<Water> Method() => default(Glass<Water>);
 		}
 	}
 }
