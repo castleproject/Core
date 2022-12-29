@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Generators
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Reflection;
 
 	internal class MethodSignatureComparer : IEqualityComparer<MethodInfo>
@@ -82,10 +81,27 @@ namespace Castle.DynamicProxy.Generators
 
 		public bool EqualReturnTypes(MethodInfo x, MethodInfo y)
 		{
-			return EqualSignatureTypes(x.ReturnType, y.ReturnType, x, y);
+			var xr = x.ReturnType;
+			var yr = y.ReturnType;
+
+			if (EqualSignatureTypes(xr, yr))
+			{
+				return true;
+			}
+
+			// This enables covariant method returns for .NET 5 and newer.
+			// No need to check for runtime support, since such methods are marked with a custom attribute;
+			// see https://github.com/dotnet/runtime/blob/main/docs/design/features/covariant-return-methods.md.
+			if (preserveBaseOverridesAttribute != null)
+			{
+				return (x.IsDefined(preserveBaseOverridesAttribute, inherit: false) && yr.IsAssignableFrom(xr))
+				    || (y.IsDefined(preserveBaseOverridesAttribute, inherit: false) && xr.IsAssignableFrom(yr));
+			}
+
+			return false;
 		}
 
-		private bool EqualSignatureTypes(Type x, Type y, MethodInfo xm = null, MethodInfo ym = null)
+		private bool EqualSignatureTypes(Type x, Type y)
 		{
 			if (x.IsGenericParameter != y.IsGenericParameter)
 			{
@@ -93,7 +109,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 			else if (x.IsGenericType != y.IsGenericType)
 			{
-				return IsCovariantReturnTypes(x, y, xm, ym);
+				return false;
 			}
 
 			if (x.IsGenericParameter)
@@ -121,39 +137,19 @@ namespace Castle.DynamicProxy.Generators
 					return false;
 				}
 
-				if (IsCovariantReturnTypes(x, y, xm, ym) == false)
+				for (var i = 0; i < xArgs.Length; ++i)
 				{
-					for (var i = 0; i < xArgs.Length; ++i)
-					{
-						 if(!EqualSignatureTypes(xArgs[i], yArgs[i])) return false;
-					}
+					if(!EqualSignatureTypes(xArgs[i], yArgs[i])) return false;
 				}
 			}
 			else
 			{
 				if (!x.Equals(y))
 				{
-					return IsCovariantReturnTypes(x, y, xm, ym);
+					return false;
 				}
 			}
 			return true;
-
-			static bool IsCovariantReturnTypes(Type x, Type y, MethodInfo xm, MethodInfo ym)
-			{
-				Debug.Assert((xm == null && ym == null)
-				          || (xm != null && ym != null && x == xm.ReturnType && y == ym.ReturnType));
-
-				// This enables covariant method returns for .NET 5 and newer.
-				// No need to check for runtime support, since such methods are marked with a custom attribute;
-				// see https://github.com/dotnet/runtime/blob/main/docs/design/features/covariant-return-methods.md.
-				if (preserveBaseOverridesAttribute != null)
-				{
-					return (xm != null && xm.IsDefined(preserveBaseOverridesAttribute, inherit: false) && y.IsAssignableFrom(x))
-					    || (ym != null && ym.IsDefined(preserveBaseOverridesAttribute, inherit: false) && x.IsAssignableFrom(y));
-				}
-
-				return false;
-			}
 		}
 
 		public bool Equals(MethodInfo x, MethodInfo y)
