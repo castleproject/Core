@@ -28,12 +28,7 @@ namespace Castle.DynamicProxy.Internal
 		{
 			Debug.Assert(attribute != null, "attribute != null");
 
-			// .NET Core does not provide CustomAttributeData.Constructor, so we'll implement it
-			// by finding a constructor ourselves
-			Type[] constructorArgTypes;
-			object[] constructorArgs;
-			GetArguments(attribute.ConstructorArguments, out constructorArgTypes, out constructorArgs);
-			var constructor = attribute.AttributeType.GetConstructor(constructorArgTypes);
+			object[] constructorArgs = GetArguments(attribute.ConstructorArguments);
 
 			PropertyInfo[] properties;
 			object[] propertyValues;
@@ -43,24 +38,12 @@ namespace Castle.DynamicProxy.Internal
 				attribute.AttributeType,
 				attribute.NamedArguments, out properties, out propertyValues, out fields, out fieldValues);
 
-			return new CustomAttributeInfo(constructor,
+			return new CustomAttributeInfo(attribute.Constructor,
 			                               constructorArgs,
 			                               properties,
 			                               propertyValues,
 			                               fields,
 			                               fieldValues);
-		}
-
-		private static void GetArguments(IList<CustomAttributeTypedArgument> constructorArguments,
-			out Type[] constructorArgTypes, out object[] constructorArgs)
-		{
-			constructorArgTypes = new Type[constructorArguments.Count];
-			constructorArgs = new object[constructorArguments.Count];
-			for (var i = 0; i < constructorArguments.Count; i++)
-			{
-				constructorArgTypes[i] = constructorArguments[i].ArgumentType;
-				constructorArgs[i] = ReadAttributeValue(constructorArguments[i]);
-			}
 		}
 
 		private static object[] GetArguments(IList<CustomAttributeTypedArgument> constructorArguments)
@@ -77,15 +60,18 @@ namespace Castle.DynamicProxy.Internal
 		private static object ReadAttributeValue(CustomAttributeTypedArgument argument)
 		{
 			var value = argument.Value;
-			if (argument.ArgumentType.IsArray == false)
+
+			if (argument.ArgumentType.IsArray && value is IList<CustomAttributeTypedArgument> values)
 			{
-				return value;
+				// `CustomAttributeInfo` represents array values as `ReadOnlyCollection<CustomAttributeTypedArgument>`,
+				// but `CustomAttributeBuilder` will require plain arrays, so we need a (recursive) conversion:
+				var arguments = GetArguments(values);
+				var array = new object[arguments.Length];
+				arguments.CopyTo(array, 0);
+				return array;
 			}
-			//special case for handling arrays in attributes
-			var arguments = GetArguments((IList<CustomAttributeTypedArgument>)value);
-			var array = new object[arguments.Length];
-			arguments.CopyTo(array, 0);
-			return array;
+
+			return value;
 		}
 
 		private static void GetSettersAndFields(Type attributeType, IEnumerable<CustomAttributeNamedArgument> namedArguments,

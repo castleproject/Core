@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
 	using System.IO;
 	using System.Linq;
 	using System.Reflection;
@@ -178,5 +179,22 @@ namespace Castle.DynamicProxy.Tests
 				.Cast<NonInheritableWithArray2Attribute>().Single();
 			CollectionAssert.AreEqual(attribute.Values, new[] { "1", "2", "3" });
 		}
+
+		[TestCase(typeof(HasAttributeWithNullAsPositionalArgument))]
+		[TestCase(typeof(HasAttributeWithEmptyArrayAsPositionalArgument))]
+		[TestCase(typeof(HasAttributeWithNullInArrayAsPositionalArgument))]
+		public void Can_proxy_type_with_attribute_with_positional_array_parameter(Type classType)
+		{
+			_ = generator.CreateClassProxy(classType);
+		}
+
+		[NonInheritableAttributeWithPositionalArrayParameter(null)]
+		public class HasAttributeWithNullAsPositionalArgument{ }
+
+		[NonInheritableAttributeWithPositionalArrayParameter(new object[0])]
+		public class HasAttributeWithEmptyArrayAsPositionalArgument { }
+
+		[NonInheritableAttributeWithPositionalArrayParameter(new object[1] { null })]
+		public class HasAttributeWithNullInArrayAsPositionalArgument { }
 	}
 }
