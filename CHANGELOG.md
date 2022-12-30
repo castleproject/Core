@@ -1,6 +1,6 @@
 # Castle Core Changelog
 
-## Unreleased
+## 5.1.1 (2022-12-30)
 
 Bugfixes:
 - Proxies using records derived from a base generic record broken using .NET 6 compiler (@CesarD, #632)
