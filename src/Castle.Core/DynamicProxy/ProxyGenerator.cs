@@ -1202,6 +1202,7 @@ namespace Castle.DynamicProxy
 		///   Creates proxy object intercepting calls to virtual members of type <typeparamref name = "TClass" /> on newly created instance of that type with given <paramref
 		///    name = "interceptors" />.
 		/// </summary>
+		/// <typeparam name = "TClass">Type of class which will be proxied.</typeparam>
 		/// <param name = "options">The proxy generation options used to influence generated proxy type and object.</param>
 		/// <param name = "constructorArguments">Arguments of constructor of type <typeparamref name = "TClass" /> which should be used to create a new instance of that type.</param>
 		/// <param name = "interceptors">The interceptors called during the invocation of proxied methods.</param>
@@ -1228,6 +1229,7 @@ namespace Castle.DynamicProxy
 		///   Creates proxy object intercepting calls to virtual members of type <typeparamref name = "TClass" /> on newly created instance of that type with given <paramref
 		///    name = "interceptors" />.
 		/// </summary>
+		/// <typeparam name = "TClass">Type of class which will be proxied.</typeparam>
 		/// <param name = "constructorArguments">Arguments of constructor of type <typeparamref name = "TClass" /> which should be used to create a new instance of that type.</param>
 		/// <param name = "interceptors">The interceptors called during the invocation of proxied methods.</param>
 		/// <returns>
