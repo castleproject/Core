@@ -2568,6 +2568,10 @@ namespace Castle.DynamicProxy
             where TClass :  class;
         TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class;
+        TClass CreateClassProxy<TClass>(object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
+            where TClass :  class;
+        TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
+            where TClass :  class;
         object CreateClassProxyWithTarget(System.Type classToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
         object CreateClassProxyWithTarget(System.Type classToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
         object CreateClassProxyWithTarget(System.Type classToProxy, object target, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
