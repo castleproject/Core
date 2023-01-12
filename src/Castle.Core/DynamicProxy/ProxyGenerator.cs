@@ -1199,6 +1199,59 @@ namespace Castle.DynamicProxy
 		}
 
 		/// <summary>
+		///   Creates proxy object intercepting calls to virtual members of type <typeparamref name = "TClass" /> on newly created instance of that type with given <paramref
+		///    name = "interceptors" />.
+		/// </summary>
+		/// <typeparam name = "TClass">Type of class which will be proxied.</typeparam>
+		/// <param name = "options">The proxy generation options used to influence generated proxy type and object.</param>
+		/// <param name = "constructorArguments">Arguments of constructor of type <typeparamref name = "TClass" /> which should be used to create a new instance of that type.</param>
+		/// <param name = "interceptors">The interceptors called during the invocation of proxied methods.</param>
+		/// <returns>
+		///   New object of type <typeparamref name = "TClass" /> proxying calls to virtual members of <typeparamref name = "TClass" /> type.
+		/// </returns>
+		/// <exception cref = "ArgumentNullException">Thrown when given <typeparamref name = "TClass" /> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref = "ArgumentException">Thrown when given <typeparamref name = "TClass" /> is a generic type definition.</exception>
+		/// <exception cref = "ArgumentException">Thrown when given <typeparamref name = "TClass" /> is not a class type.</exception>
+		/// <exception cref = "ArgumentException">Thrown when no constructor exists on type <typeparamref name = "TClass" /> with parameters matching <paramref
+		///    name = "constructorArguments" />.</exception>
+		/// <exception cref = "TargetInvocationException">Thrown when constructor of type <typeparamref name = "TClass" /> throws an exception.</exception>
+		/// <remarks>
+		///   This method uses <see cref = "IProxyBuilder" /> implementation to generate a proxy type.
+		///   As such caller should expect any type of exception that given <see cref = "IProxyBuilder" /> implementation may throw.
+		/// </remarks>
+		public TClass CreateClassProxy<TClass>(ProxyGenerationOptions options, object[] constructorArguments, params IInterceptor[] interceptors)
+			where TClass : class
+		{
+			return (TClass)CreateClassProxy(typeof(TClass), options, constructorArguments, interceptors);
+		}
+
+		/// <summary>
+		///   Creates proxy object intercepting calls to virtual members of type <typeparamref name = "TClass" /> on newly created instance of that type with given <paramref
+		///    name = "interceptors" />.
+		/// </summary>
+		/// <typeparam name = "TClass">Type of class which will be proxied.</typeparam>
+		/// <param name = "constructorArguments">Arguments of constructor of type <typeparamref name = "TClass" /> which should be used to create a new instance of that type.</param>
+		/// <param name = "interceptors">The interceptors called during the invocation of proxied methods.</param>
+		/// <returns>
+		///   New object of type <typeparamref name = "TClass" /> proxying calls to virtual members of <typeparamref name = "TClass" /> type.
+		/// </returns>
+		/// <exception cref = "ArgumentNullException">Thrown when given <typeparamref name = "TClass" /> object is a null reference (Nothing in Visual Basic).</exception>
+		/// <exception cref = "ArgumentException">Thrown when given <typeparamref name = "TClass" /> is a generic type definition.</exception>
+		/// <exception cref = "ArgumentException">Thrown when given <typeparamref name = "TClass" /> is not a class type.</exception>
+		/// <exception cref = "ArgumentException">Thrown when no constructor exists on type <typeparamref name = "TClass" /> with parameters matching <paramref
+		///    name = "constructorArguments" />.</exception>
+		/// <exception cref = "TargetInvocationException">Thrown when constructor of type <typeparamref name = "TClass" /> throws an exception.</exception>
+		/// <remarks>
+		///   This method uses <see cref = "IProxyBuilder" /> implementation to generate a proxy type.
+		///   As such caller should expect any type of exception that given <see cref = "IProxyBuilder" /> implementation may throw.
+		/// </remarks>
+		public TClass CreateClassProxy<TClass>(object[] constructorArguments, params IInterceptor[] interceptors)
+			where TClass : class
+		{
+			return (TClass)CreateClassProxy(typeof(TClass), constructorArguments, interceptors);
+		}
+
+		/// <summary>
 		///   Creates proxy object intercepting calls to virtual members of type <paramref name = "classToProxy" /> on newly created instance of that type with given <paramref
 		///    name = "interceptors" />.
 		/// </summary>

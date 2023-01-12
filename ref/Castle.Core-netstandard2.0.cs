@@ -2534,6 +2534,10 @@ namespace Castle.DynamicProxy
             where TClass :  class;
         TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class;
+        TClass CreateClassProxy<TClass>(object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
+            where TClass :  class;
+        TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
+            where TClass :  class;
         object CreateClassProxyWithTarget(System.Type classToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
         object CreateClassProxyWithTarget(System.Type classToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
         object CreateClassProxyWithTarget(System.Type classToProxy, object target, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
@@ -2643,6 +2647,10 @@ namespace Castle.DynamicProxy
         public TClass CreateClassProxy<TClass>(params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class { }
         public TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
+            where TClass :  class { }
+        public TClass CreateClassProxy<TClass>(object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
+            where TClass :  class { }
+        public TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class { }
         protected object CreateClassProxyInstance(System.Type proxyType, System.Collections.Generic.List<object> proxyArguments, System.Type classToProxy, object[] constructorArguments) { }
         protected System.Type CreateClassProxyType(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
