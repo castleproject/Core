@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Enhancements:
+- Two new generic method overloads `proxyGenerator.CreateClassProxy<TClass>([options], constructorArguments, interceptors)` (@backstromjoel, #636)
+
 ## 5.1.1 (2022-12-30)
 
 Bugfixes:
