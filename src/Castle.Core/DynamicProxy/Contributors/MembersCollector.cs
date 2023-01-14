@@ -72,7 +72,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			void CollectMethods()
 			{
-				var methodsFound = MethodFinder.GetAllInstanceMethods(type);
+				var methodsFound = type.GetAllInstanceMethods();
 				foreach (var method in methodsFound)
 				{
 					AddMethod(method, true);

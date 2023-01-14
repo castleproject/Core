@@ -17,13 +17,17 @@ namespace Castle.DynamicProxy.Internal
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Linq;
 	using System.Reflection;
 	using System.Reflection.Emit;
 
+	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 
 	public static class TypeUtil
 	{
+		private static readonly Dictionary<Type, MethodInfo[]> instanceMethodsCache = new Dictionary<Type, MethodInfo[]>();
+
 		internal static bool IsNullableType(this Type type)
 		{
 			return type.IsGenericType &&
@@ -53,6 +57,28 @@ namespace Castle.DynamicProxy.Internal
 			}
 
 			return fields.ToArray();
+		}
+
+		/// <summary>
+		///   Returns the methods implemented by a type. Use this instead of Type.GetMethods to filter out duplicate MethodInfos
+		///   sometimes reported by the latter. The test suite documents cases where such duplicates may occur.
+		/// </summary>
+		internal static MethodInfo[] GetAllInstanceMethods(this Type type)
+		{
+			MethodInfo[] methodsInCache;
+
+			lock (instanceMethodsCache)
+			{
+				if (!instanceMethodsCache.TryGetValue(type, out methodsInCache))
+				{
+					methodsInCache = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+					                     .Distinct(MethodSignatureComparer.Instance)
+					                     .ToArray();
+					instanceMethodsCache.Add(type, methodsInCache);
+				}
+			}
+
+			return methodsInCache;
 		}
 
 		/// <summary>

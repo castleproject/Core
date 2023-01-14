@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Collections.Generic;
 
-	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tests.GenInterfaces;
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.Interfaces;
@@ -414,16 +414,17 @@ namespace Castle.DynamicProxy.Tests
 		[Test(Description =
 			"There is a strange CLR bug resulting from our loading the tokens of methods in generic types. " +
 			"This test ensures we correctly work around it.")]
-		public void MethodFinderIsStable()
+		public void GetAllInstanceMethodsIsStable()
 		{
 			ProxyWithGenInterfaceWithBase();
-			Assert.AreEqual(4, MethodFinder.GetAllInstanceMethods(typeof(IGenInterfaceHierarchyBase<int>)).Length);
+			Assert.AreEqual(4, typeof(IGenInterfaceHierarchyBase<int>).GetAllInstanceMethods().Length);
 		}
 
 #if FEATURE_APPDOMAIN
 		[Test(Description =
 			"There is a strange CLR bug resulting from our loading the tokens of methods in generic types. " +
-			"This test ensures we do not trigger it across AppDomains. If we do, MethodFinder must provide a cross-AppDomain workaround.")]
+			"This test ensures we do not trigger it across AppDomains. " +
+			"If we do, GetAllInstanceMethods must provide a cross-AppDomain workaround.")]
 		public void TypeGetMethodsIsStableInDifferentAppDomains()
 		{
 			ProxyWithGenInterfaceWithBase();

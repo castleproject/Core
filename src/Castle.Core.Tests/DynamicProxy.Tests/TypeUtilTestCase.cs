@@ -17,35 +17,35 @@ namespace Castle.DynamicProxy.Tests
 	using System.Linq;
 	using System.Reflection;
 
-	using Castle.DynamicProxy.Generators;
+	using Castle.DynamicProxy.Internal;
 
 	using NUnit.Framework;
 
 	[TestFixture]
-	public class MethodFinderTestCase
+	public class TypeUtilTestCase
 	{
 		[Test]
-		public void GetMethodsForPublicAndNonPublic()
+		public void GetAllInstanceMethods_GetsPublicAndNonPublicMethods()
 		{
 			MethodInfo[] methods =
-				MethodFinder.GetAllInstanceMethods(typeof(object));
+				typeof(object).GetAllInstanceMethods();
 			MethodInfo[] realMethods =
 				typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 			CollectionAssert.AreEquivalent(realMethods, methods);
 		}
 
-		// The test above suggests that `MethodFinder.GetAllInstanceMethods` and `Type.GetMethods`
+		// The test above suggests that `TypeUtil.GetAllInstanceMethods` and `Type.GetMethods`
 		// can be used interchangeably, but this is not always the case. See the test(s) below and
-		// `GenericInterfaceProxyTestCase.MethodFinderIsStable` for cases where the two methods
+		// `GenericInterfaceProxyTestCase.GetAllInstanceMethodsIsStable` for cases where the two methods
 		// may produce different results.
 
 #if NET5_0_OR_GREATER
 
 		[Test]
-		public void NoDuplicatesForMethodWithCovariantReturnType()
+		public void GetAllInstanceMethods_NoDuplicatesForMethodWithCovariantReturnType()
 		{
 			MethodInfo[] methods =
-				MethodFinder.GetAllInstanceMethods(typeof(Derived));
+				typeof(Derived).GetAllInstanceMethods();
 			MethodInfo[] realMethods =
 				typeof(Derived).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 			CollectionAssert.AreNotEquivalent(realMethods, methods);
