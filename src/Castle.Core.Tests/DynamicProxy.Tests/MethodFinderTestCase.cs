@@ -14,9 +14,6 @@
 
 namespace Castle.DynamicProxy.Tests
 {
-	using System;
-	using System.Collections;
-	using System.Collections.Generic;
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators;
@@ -27,50 +24,13 @@ namespace Castle.DynamicProxy.Tests
 	public class MethodFinderTestCase
 	{
 		[Test]
-		public void GetMethodsForPublic()
-		{
-			MethodInfo[] methods =
-				MethodFinder.GetAllInstanceMethods(typeof(object), BindingFlags.Instance | BindingFlags.Public);
-			MethodInfo[] realMethods = typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.Public);
-			CollectionAssert.AreEquivalent(realMethods, methods);
-		}
-
-		[Test]
-		public void GetMethodsForNonPublic()
-		{
-			MethodInfo[] methods =
-				MethodFinder.GetAllInstanceMethods(typeof(object), BindingFlags.Instance | BindingFlags.NonPublic);
-			MethodInfo[] realMethods = typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic);
-			CollectionAssert.AreEquivalent(realMethods, methods);
-		}
-
-		[Test]
 		public void GetMethodsForPublicAndNonPublic()
 		{
 			MethodInfo[] methods =
-				MethodFinder.GetAllInstanceMethods(typeof(object),
-												   BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+				MethodFinder.GetAllInstanceMethods(typeof(object));
 			MethodInfo[] realMethods =
 				typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 			CollectionAssert.AreEquivalent(realMethods, methods);
-		}
-
-		[Test]
-		public void GetMethodsThrowsOnStatic()
-		{
-			Assert.Throws<ArgumentException>(() =>
-				MethodFinder.GetAllInstanceMethods(typeof(object),
-					BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
-			);
-		}
-
-		[Test]
-		public void GetMethodsThrowsOnOtherFlags()
-		{
-			Assert.Throws<ArgumentException>(() =>
-				MethodFinder.GetAllInstanceMethods(typeof(object),
-					BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly)
-			);
 		}
 	}
 }

@@ -28,20 +28,14 @@ namespace Castle.DynamicProxy.Generators
 		private static readonly Dictionary<Type, MethodInfo[]> cachedMethodInfosByType = new Dictionary<Type, MethodInfo[]>();
 		private static readonly object lockObject = new object();
 
-		public static MethodInfo[] GetAllInstanceMethods(Type type, BindingFlags flags)
+		public static MethodInfo[] GetAllInstanceMethods(Type type)
 		{
-			if ((flags & ~(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) != 0)
-			{
-				throw new ArgumentException("MethodFinder only supports the Public, NonPublic, and Instance binding flags.", nameof(flags));
-			}
-
 			MethodInfo[] methodsInCache;
 
 			lock (lockObject)
 			{
 				if (!cachedMethodInfosByType.TryGetValue(type, out methodsInCache))
 				{
-					// We always load all instance methods into the cache, we will filter them later
 					methodsInCache = type.GetMethods(
 							BindingFlags.Public | BindingFlags.NonPublic
 						    | BindingFlags.Instance)
@@ -52,32 +46,7 @@ namespace Castle.DynamicProxy.Generators
 						methodsInCache);
 				}
 			}
-			return MakeFilteredCopy(methodsInCache, flags & (BindingFlags.Public | BindingFlags.NonPublic));
+			return methodsInCache;
 		}
-
-		private static MethodInfo[] MakeFilteredCopy(MethodInfo[] methodsInCache, BindingFlags visibilityFlags)
-		{
-			if ((visibilityFlags & ~(BindingFlags.Public | BindingFlags.NonPublic)) != 0)
-			{
-				throw new ArgumentException("Only supports BindingFlags.Public and NonPublic.", nameof(visibilityFlags));
-			}
-
-			var includePublic = (visibilityFlags & BindingFlags.Public) == BindingFlags.Public;
-			var includeNonPublic = (visibilityFlags & BindingFlags.NonPublic) == BindingFlags.NonPublic;
-
-			// Return a copy of the cached array, only returning the public methods unless requested otherwise
-			var result = new List<MethodInfo>(methodsInCache.Length);
-
-			foreach (var method in methodsInCache)
-			{
-				if ((method.IsPublic && includePublic) || (!method.IsPublic && includeNonPublic))
-				{
-					result.Add(method);
-				}
-			}
-
-			return result.ToArray();
-		}
-
 	}
 }

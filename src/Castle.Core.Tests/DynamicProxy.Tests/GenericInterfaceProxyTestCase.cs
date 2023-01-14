@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Tests
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Tests.GenInterfaces;
@@ -418,8 +417,7 @@ namespace Castle.DynamicProxy.Tests
 		public void MethodFinderIsStable()
 		{
 			ProxyWithGenInterfaceWithBase();
-			Assert.AreEqual(4, MethodFinder.GetAllInstanceMethods(
-				typeof(IGenInterfaceHierarchyBase<int>), BindingFlags.Public | BindingFlags.Instance).Length);
+			Assert.AreEqual(4, MethodFinder.GetAllInstanceMethods(typeof(IGenInterfaceHierarchyBase<int>)).Length);
 		}
 
 #if FEATURE_APPDOMAIN
