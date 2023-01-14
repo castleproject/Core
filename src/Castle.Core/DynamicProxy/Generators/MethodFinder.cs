@@ -20,8 +20,8 @@ namespace Castle.DynamicProxy.Generators
 	using System.Reflection;
 
 	/// <summary>
-	///   Returns the methods implemented by a type. Use this instead of Type.GetMethods() to work around a CLR issue
-	///   where duplicate MethodInfos are returned by Type.GetMethods() after a token of a generic type's method was loaded.
+	///   Returns the methods implemented by a type. Use this instead of Type.GetMethods to filter out duplicate MethodInfos
+	///   sometimes reported by the latter. The test suite documents cases where such duplicates may occur.
 	/// </summary>
 	internal class MethodFinder
 	{

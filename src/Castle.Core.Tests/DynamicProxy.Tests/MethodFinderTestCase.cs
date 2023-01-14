@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System.Linq;
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators;
@@ -32,5 +33,37 @@ namespace Castle.DynamicProxy.Tests
 				typeof(object).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
 			CollectionAssert.AreEquivalent(realMethods, methods);
 		}
+
+		// The test above suggests that `MethodFinder.GetAllInstanceMethods` and `Type.GetMethods`
+		// can be used interchangeably, but this is not always the case. See the test(s) below and
+		// `GenericInterfaceProxyTestCase.MethodFinderIsStable` for cases where the two methods
+		// may produce different results.
+
+#if NET5_0_OR_GREATER
+
+		[Test]
+		public void NoDuplicatesForMethodWithCovariantReturnType()
+		{
+			MethodInfo[] methods =
+				MethodFinder.GetAllInstanceMethods(typeof(Derived));
+			MethodInfo[] realMethods =
+				typeof(Derived).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+			CollectionAssert.AreNotEquivalent(realMethods, methods);
+			CollectionAssert.IsSubsetOf(subset: methods, superset: realMethods);
+			Assert.AreEqual(2, realMethods.Where(m => m.Name == nameof(Derived.Method)).Count());
+			Assert.AreEqual(1, methods.Where(m => m.Name == nameof(Derived.Method)).Count());
+		}
+
+		public abstract class Base
+		{
+			public abstract Base Method();
+		}
+
+		public abstract class Derived : Base
+		{
+			public override abstract Derived Method();
+		}
+
+#endif
 	}
 }
