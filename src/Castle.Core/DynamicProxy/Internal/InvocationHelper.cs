@@ -73,7 +73,7 @@ namespace Castle.DynamicProxy.Internal
 			else
 			{
 				// NOTE: this implementation sucks, feel free to improve it.
-				var methods = MethodFinder.GetAllInstanceMethods(type, BindingFlags.Public | BindingFlags.NonPublic);
+				var methods = type.GetAllInstanceMethods();
 				foreach (var method in methods)
 				{
 					if (MethodSignatureComparer.Instance.Equals(method.GetBaseDefinition(), proxiedMethod))
