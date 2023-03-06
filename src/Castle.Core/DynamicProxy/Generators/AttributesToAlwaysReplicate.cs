@@ -53,7 +53,7 @@ namespace Castle.DynamicProxy.Generators
 
 		internal static bool ShouldAdd(Type attribute)
 		{
-			return attributes.Any(attr => attr == attribute);
+			return attributes.Any(attr => attr.IsAssignableFrom(attribute));
 		}
 	}
 }
