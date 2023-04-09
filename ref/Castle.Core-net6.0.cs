@@ -2723,6 +2723,12 @@ namespace Castle.DynamicProxy
 }
 namespace Castle.DynamicProxy.Generators
 {
+    public static class AttributesToAlwaysReplicate
+    {
+        public static void Add(System.Type attribute) { }
+        public static void Add<T>() { }
+        public static bool Contains(System.Type attribute) { }
+    }
     public static class AttributesToAvoidReplicating
     {
         public static void Add(System.Type attribute) { }
