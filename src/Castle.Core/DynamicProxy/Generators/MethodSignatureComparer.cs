@@ -103,6 +103,17 @@ namespace Castle.DynamicProxy.Generators
 
 		private bool EqualSignatureTypes(Type x, Type y)
 		{
+			if (x.IsByRef != y.IsByRef)
+			{
+				return false;
+			}
+			else if (x.IsByRef)
+			{
+				// If `x` or `y` are by-ref generic types or type parameters (think `ref T` or `out T`),
+				// the tests below would report false, so we need to erase by-ref-ness first:
+				return EqualSignatureTypes(x.GetElementType(), y.GetElementType());
+			}
+
 			if (x.IsGenericParameter != y.IsGenericParameter)
 			{
 				return false;
