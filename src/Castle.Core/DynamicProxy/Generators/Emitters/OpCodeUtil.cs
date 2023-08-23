@@ -27,12 +27,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// </summary>
 		public static void EmitLoadIndirectOpCodeForType(ILGenerator gen, Type type)
 		{
-			if (type.IsEnum && !type.IsGenericParameter)
-			{
-				EmitLoadIndirectOpCodeForType(gen, GetUnderlyingTypeOfEnum(type));
-				return;
-			}
-
 			if (type.IsByRef)
 			{
 				throw new NotSupportedException("Cannot load ByRef values");
@@ -48,13 +42,20 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 				gen.Emit(opCode);
 			}
-			else if (type.IsValueType)
-			{
-				gen.Emit(OpCodes.Ldobj, type);
-			}
 			else if (type.IsGenericParameter)
 			{
 				gen.Emit(OpCodes.Ldobj, type);
+			}
+			else if (type.IsValueType)
+			{
+				if (type.IsEnum)
+				{
+					EmitLoadIndirectOpCodeForType(gen, GetUnderlyingTypeOfEnum(type));
+				}
+				else
+				{
+					gen.Emit(OpCodes.Ldobj, type);
+				}
 			}
 			else
 			{
@@ -107,12 +108,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// </summary>
 		public static void EmitStoreIndirectOpCodeForType(ILGenerator gen, Type type)
 		{
-			if (type.IsEnum && !type.IsGenericParameter)
-			{
-				EmitStoreIndirectOpCodeForType(gen, GetUnderlyingTypeOfEnum(type));
-				return;
-			}
-
 			if (type.IsByRef)
 			{
 				throw new NotSupportedException("Cannot store ByRef values");
@@ -128,13 +123,20 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 				gen.Emit(opCode);
 			}
-			else if (type.IsValueType)
-			{
-				gen.Emit(OpCodes.Stobj, type);
-			}
 			else if (type.IsGenericParameter)
 			{
 				gen.Emit(OpCodes.Stobj, type);
+			}
+			else if (type.IsValueType)
+			{
+				if (type.IsEnum)
+				{
+					EmitStoreIndirectOpCodeForType(gen, GetUnderlyingTypeOfEnum(type));
+				}
+				else
+				{
+					gen.Emit(OpCodes.Stobj, type);
+				}
 			}
 			else
 			{
