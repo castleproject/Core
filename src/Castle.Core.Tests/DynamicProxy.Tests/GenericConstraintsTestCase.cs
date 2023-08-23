@@ -33,6 +33,12 @@ namespace Castle.DynamicProxy.Tests
 			CreateProxyFor<IConstraint_Method1IsTypeStructAndMethod2<object>>();
 		}
 
+		[Test]
+		public void Non_generic_type_generic_method_with_by_ref_parameter_type_constrained_to_Enum()
+		{
+			CreateProxyFor<IHaveGenericMethodWithEnumConstraint>();
+		}
+
 
 		private T CreateProxyFor<T>(params IInterceptor[] interceptors) where T : class
 		{
