@@ -27,7 +27,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// </summary>
 		public static void EmitLoadIndirectOpCodeForType(ILGenerator gen, Type type)
 		{
-			if (type.IsEnum)
+			if (type.IsEnum && !type.IsGenericParameter)
 			{
 				EmitLoadIndirectOpCodeForType(gen, GetUnderlyingTypeOfEnum(type));
 				return;
@@ -107,7 +107,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		/// </summary>
 		public static void EmitStoreIndirectOpCodeForType(ILGenerator gen, Type type)
 		{
-			if (type.IsEnum)
+			if (type.IsEnum && !type.IsGenericParameter)
 			{
 				EmitStoreIndirectOpCodeForType(gen, GetUnderlyingTypeOfEnum(type));
 				return;
