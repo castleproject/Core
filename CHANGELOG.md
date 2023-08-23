@@ -8,6 +8,7 @@ Enhancements:
 
 Bugfixes:
 - `ArgumentException`: "Could not find method overriding method" with overridden class method having generic by-ref parameter (@stakx, #657)
+- `ArgumentException`: "Cannot create an instance of `TEnum` because `Type.ContainsGenericParameters` is true" caused by `Enum` constraint on method `out` parameter (@stakx, #658)
 
 ## 5.1.1 (2022-12-30)
 
