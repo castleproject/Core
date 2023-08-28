@@ -3,7 +3,7 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks>net462;netcoreapp2.1;netcoreapp3.1;net6.0</TargetFrameworks>
+		<TargetFrameworks>net462;net6.0</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -23,18 +23,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-		<PackageReference Include="NUnit.Console" Version="3.11.1" />
-		<PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
+		<PackageReference Include="NUnit.Console" Version="3.16.3" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
 		<PackageReference Include="NUnitLite" Version="3.13.3" />
 		<ProjectReference Include="..\Castle.Core\Castle.Core.csproj" />
 		<ProjectReference Include="..\Castle.Core.Tests\Castle.Core.Tests.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.SerilogIntegration\Castle.Services.Logging.SerilogIntegration.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
 	</ItemGroup>
 
 </Project>
