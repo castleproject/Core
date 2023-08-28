@@ -92,6 +92,17 @@ namespace Castle.DynamicProxy.Tests
 			}
 		}
 
+		public class Factory
+		{
+			public virtual void Create<T>(out T result) => result = default(T);
+		}
+
+		public class DerivedFactory : Factory
+		{
+			public override void Create<T>(out T result) => result = default(T);
+
+		}
+
 		[Test]
 		public void CanAffectValueOfOutParameter()
 		{
@@ -352,6 +363,14 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(1, retVal);
 			Assert.AreEqual(23, param1);
 			Assert.AreEqual("23", param2);
+		}
+
+		[Test]
+		public void Can_query_MethodInvocationTarget_for_overridden_class_method_having_a_generic_by_ref_parameter()
+		{
+			var interceptor = new WithCallbackInterceptor(invocation => _ = invocation.MethodInvocationTarget);
+			var proxy = generator.CreateClassProxy<DerivedFactory>(interceptor);
+			proxy.Create<object>(out _);
 		}
 	}
 }
