@@ -48,13 +48,6 @@ mono ./src/Castle.Core.Tests/bin/Release/net462/Castle.Core.Tests.exe --result=D
 mono ./src/Castle.Core.Tests.WeakNamed/bin/Release/net462/Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3
 
 echo ---------------------------
-echo Running NETCOREAPP3.1 Tests
-echo ---------------------------
-
-dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp3.1/Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3
-dotnet ./src/Castle.Core.Tests.WeakNamed/bin/Release/netcoreapp3.1/Castle.Core.Tests.WeakNamed.dll --result=NetCoreClrWeakNamedTestResults.xml;format=nunit3
-
-echo ---------------------------
 echo Running NET6.0 Tests
 echo ---------------------------
 
