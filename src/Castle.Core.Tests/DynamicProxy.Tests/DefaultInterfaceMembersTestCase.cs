@@ -16,6 +16,8 @@
 
 using System.Reflection;
 
+using Castle.DynamicProxy.Tests.Interceptors;
+
 using NUnit.Framework;
 
 namespace Castle.DynamicProxy.Tests
@@ -23,6 +25,78 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class DefaultInterfaceMembersTestCase : BasePEVerifyTestCase
 	{
+		[Test]
+		public void Can_proxy_class_that_inherits_method_with_default_implementation_from_interface()
+		{
+			_ = generator.CreateClassProxy<InheritsMethodWithDefaultImplementation>();
+		}
+
+		[Test]
+		public void Can_proxy_interface_with_method_with_default_implementation()
+		{
+			_ = generator.CreateInterfaceProxyWithoutTarget<IHaveMethodWithDefaultImplementation>();
+		}
+
+		[Test]
+		public void Default_implementation_gets_called_when_method_not_intercepted_in_proxied_class()
+		{
+			var options = new ProxyGenerationOptions(new ProxyNothingHook());
+			var proxy = generator.CreateClassProxy<InheritsMethodWithDefaultImplementation>(options);
+			var expected = "default implementation";
+			var actual = ((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Default_implementation_gets_called_when_method_not_intercepted_in_proxied_interface()
+		{
+			var options = new ProxyGenerationOptions(new ProxyNothingHook());
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHaveMethodWithDefaultImplementation>(options);
+			var expected = "default implementation";
+			var actual = proxy.MethodWithDefaultImplementation();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_intercept_method_with_default_implementation_in_proxied_class()
+		{
+			var expected = "intercepted";
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.ReturnValue = expected);
+			var proxy = generator.CreateClassProxy<InheritsMethodWithDefaultImplementation>(interceptor);
+			var actual = ((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_intercept_method_with_default_implementation_in_proxied_interface()
+		{
+			var expected = "intercepted";
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.ReturnValue = expected);
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHaveMethodWithDefaultImplementation>(interceptor);
+			var actual = proxy.MethodWithDefaultImplementation();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_proceed_to_default_implementation_in_proxied_class()
+		{
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.Proceed());
+			var proxy = generator.CreateClassProxy<InheritsMethodWithDefaultImplementation>(interceptor);
+			var expected = "default implementation";
+			var actual = ((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_proceed_to_default_implementation_in_proxied_interface()
+		{
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.Proceed());
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHaveMethodWithDefaultImplementation>(interceptor);
+			var expected = "default implementation";
+			var actual = proxy.MethodWithDefaultImplementation();
+			Assert.AreEqual(expected, actual);
+		}
+
 		[Test]
 		public void Can_proxy_interface_with_sealed_method()
 		{
@@ -38,6 +112,14 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
+		public interface IHaveMethodWithDefaultImplementation
+		{
+			string MethodWithDefaultImplementation()
+			{
+				return "default implementation";
+			}
+		}
+
 		public interface IHaveSealedMethod
 		{
 			sealed string SealedMethod()
@@ -45,6 +127,8 @@ namespace Castle.DynamicProxy.Tests
 				return "default implementation";
 			}
 		}
+
+		public class InheritsMethodWithDefaultImplementation : IHaveMethodWithDefaultImplementation { }
 	}
 }
 
