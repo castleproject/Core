@@ -17,9 +17,11 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
+	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
+	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 
 	internal class InterfaceProxyWithoutTargetContributor : CompositeTypeContributor
@@ -70,6 +72,16 @@ namespace Castle.DynamicProxy.Contributors
 				return typeof(InterfaceMethodWithoutTargetInvocation);
 			}
 
+			if (canChangeTarget == false && methodInfo.IsAbstract == false)
+			{
+				// This allows proceeding to a interface method's default implementation.
+				// The code has been copied over from `ClassProxyTargetContributor`.
+				var callback = CreateCallbackMethod(emitter, methodInfo, method.MethodOnTarget);
+				return new InheritanceInvocationTypeGenerator(callback.DeclaringType, method, callback, null)
+				       .Generate(emitter, namingScope)
+				       .BuildType();
+			}
+
 			var scope = emitter.ModuleScope;
 			Type[] invocationInterfaces;
 			if (canChangeTarget)
@@ -92,6 +104,25 @@ namespace Castle.DynamicProxy.Contributors
 				                                       null)
 				.Generate(emitter, namingScope)
 				.BuildType());
+		}
+
+		private MethodInfo CreateCallbackMethod(ClassEmitter emitter, MethodInfo methodInfo, MethodInfo methodOnTarget)
+		{
+			var targetMethod = methodOnTarget ?? methodInfo;
+			var callBackMethod = emitter.CreateMethod(namingScope.GetUniqueName(methodInfo.Name + "_callback"), targetMethod);
+
+			if (targetMethod.IsGenericMethod)
+			{
+				targetMethod = targetMethod.MakeGenericMethod(callBackMethod.GenericTypeParams.AsTypeArray());
+			}
+
+			// invocation on base interface
+
+			callBackMethod.CodeBuilder.AddStatement(
+				new ReturnStatement(
+					new MethodInvocationExpression(SelfReference.Self, targetMethod, callBackMethod.Arguments)));
+
+			return callBackMethod.MethodBuilder;
 		}
 	}
 }
