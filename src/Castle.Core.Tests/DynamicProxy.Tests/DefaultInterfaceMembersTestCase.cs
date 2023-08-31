@@ -33,15 +33,16 @@ namespace Castle.DynamicProxy.Tests
 		public void Can_invoke_sealed_method_in_proxied_interface()
 		{
 			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHaveSealedMethod>();
-			var invokedMethod = proxy.SealedMethod();
-			Assert.AreEqual(typeof(IHaveSealedMethod).GetMethod(nameof(IHaveSealedMethod.SealedMethod)), invokedMethod);
+			var expected = "default implementation";
+			var actual = proxy.SealedMethod();
+			Assert.AreEqual(expected, actual);
 		}
 
 		public interface IHaveSealedMethod
 		{
-			sealed MethodBase SealedMethod()
+			sealed string SealedMethod()
 			{
-				return MethodBase.GetCurrentMethod();
+				return "default implementation";
 			}
 		}
 	}
