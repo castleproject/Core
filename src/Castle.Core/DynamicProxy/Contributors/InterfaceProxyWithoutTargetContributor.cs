@@ -65,33 +65,32 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			var methodInfo = method.Method;
 
-			if (canChangeTarget == false && methodInfo.IsAbstract)
+			if (canChangeTarget == false)
 			{
-				// We do not need to generate a custom invocation type because no custom implementation
-				// for `InvokeMethodOnTarget` will be needed (proceeding to target isn't possible here):
-				return typeof(InterfaceMethodWithoutTargetInvocation);
+				if (!method.HasTarget)
+				{
+					// We do not need to generate a custom invocation type because no custom implementation
+					// for `InvokeMethodOnTarget` will be needed (proceeding to target isn't possible here):
+					return typeof(InterfaceMethodWithoutTargetInvocation);
+				}
+				else
+				{
+					// We end up here for interface methods with a default implementation:
+					Debug.Assert(methodInfo.DeclaringType.IsInterface && methodInfo.IsAbstract == false);
+
+					// This allows proceeding to a interface method's default implementation.
+					// The code has been copied over from `ClassProxyTargetContributor`.
+					var callback = CreateCallbackMethod(emitter, methodInfo, method.MethodOnTarget);
+					return new InheritanceInvocationTypeGenerator(callback.DeclaringType, method, callback, null)
+					       .Generate(emitter, namingScope)
+					       .BuildType();
+				}
 			}
 
-			if (canChangeTarget == false && methodInfo.IsAbstract == false)
-			{
-				// This allows proceeding to a interface method's default implementation.
-				// The code has been copied over from `ClassProxyTargetContributor`.
-				var callback = CreateCallbackMethod(emitter, methodInfo, method.MethodOnTarget);
-				return new InheritanceInvocationTypeGenerator(callback.DeclaringType, method, callback, null)
-				       .Generate(emitter, namingScope)
-				       .BuildType();
-			}
+			Debug.Assert(canChangeTarget);
 
 			var scope = emitter.ModuleScope;
-			Type[] invocationInterfaces;
-			if (canChangeTarget)
-			{
-				invocationInterfaces = new[] { typeof(IInvocation), typeof(IChangeProxyTarget) };
-			}
-			else
-			{
-				invocationInterfaces = new[] { typeof(IInvocation) };
-			}
+			Type[] invocationInterfaces = new[] { typeof(IInvocation), typeof(IChangeProxyTarget) };
 			var key = new CacheKey(methodInfo, CompositionInvocationTypeGenerator.BaseType, invocationInterfaces, null);
 
 			// no locking required as we're already within a lock
