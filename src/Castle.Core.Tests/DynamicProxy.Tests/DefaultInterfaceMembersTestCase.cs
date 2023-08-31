@@ -78,7 +78,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void Can_proceed_to_default_implementation_in_proxied_class()
+		public void Can_proceed_to_method_default_implementation_in_proxied_class()
 		{
 			var interceptor = new WithCallbackInterceptor(invocation => invocation.Proceed());
 			var proxy = generator.CreateClassProxy<InheritsMethodWithDefaultImplementation>(interceptor);
@@ -88,12 +88,84 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
-		public void Can_proceed_to_default_implementation_in_proxied_interface()
+		public void Can_proceed_to_method_default_implementation_in_proxied_interface()
 		{
 			var interceptor = new WithCallbackInterceptor(invocation => invocation.Proceed());
 			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHaveMethodWithDefaultImplementation>(interceptor);
 			var expected = "default implementation";
 			var actual = proxy.MethodWithDefaultImplementation();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_proxy_class_that_inherits_property_with_default_implementation_from_interface()
+		{
+			_ = generator.CreateClassProxy<InheritsPropertyWithDefaultImplementation>();
+		}
+
+		[Test]
+		public void Can_proxy_interface_with_property_with_default_implementation()
+		{
+			_ = generator.CreateInterfaceProxyWithoutTarget<IHavePropertyWithDefaultImplementation>();
+		}
+
+		[Test]
+		public void Default_implementation_gets_called_when_property_not_intercepted_in_proxied_class()
+		{
+			var options = new ProxyGenerationOptions(new ProxyNothingHook());
+			var proxy = generator.CreateClassProxy<InheritsPropertyWithDefaultImplementation>(options);
+			var expected = "default implementation";
+			var actual = ((IHavePropertyWithDefaultImplementation)proxy).PropertyWithDefaultImplementation;
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Default_implementation_gets_called_when_property_not_intercepted_in_proxied_interface()
+		{
+			var options = new ProxyGenerationOptions(new ProxyNothingHook());
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHavePropertyWithDefaultImplementation>(options);
+			var expected = "default implementation";
+			var actual = proxy.PropertyWithDefaultImplementation;
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_intercept_property_with_default_implementation_in_proxied_class()
+		{
+			var expected = "intercepted";
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.ReturnValue = expected);
+			var proxy = generator.CreateClassProxy<InheritsPropertyWithDefaultImplementation>(interceptor);
+			var actual = ((IHavePropertyWithDefaultImplementation)proxy).PropertyWithDefaultImplementation;
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_intercept_property_with_default_implementation_in_proxied_interface()
+		{
+			var expected = "intercepted";
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.ReturnValue = expected);
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHavePropertyWithDefaultImplementation>(interceptor);
+			var actual = proxy.PropertyWithDefaultImplementation;
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_proceed_to_property_default_implementation_in_proxied_class()
+		{
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.Proceed());
+			var proxy = generator.CreateClassProxy<InheritsPropertyWithDefaultImplementation>(interceptor);
+			var expected = "default implementation";
+			var actual = ((IHavePropertyWithDefaultImplementation)proxy).PropertyWithDefaultImplementation;
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_proceed_to_property_default_implementation_in_proxied_interface()
+		{
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.Proceed());
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHavePropertyWithDefaultImplementation>(interceptor);
+			var expected = "default implementation";
+			var actual = proxy.PropertyWithDefaultImplementation;
 			Assert.AreEqual(expected, actual);
 		}
 
@@ -120,6 +192,17 @@ namespace Castle.DynamicProxy.Tests
 			}
 		}
 
+		public interface IHavePropertyWithDefaultImplementation
+		{
+			string PropertyWithDefaultImplementation
+			{
+				get
+				{
+					return "default implementation";
+				}
+			}
+		}
+
 		public interface IHaveSealedMethod
 		{
 			sealed string SealedMethod()
@@ -129,6 +212,8 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		public class InheritsMethodWithDefaultImplementation : IHaveMethodWithDefaultImplementation { }
+
+		public class InheritsPropertyWithDefaultImplementation : IHavePropertyWithDefaultImplementation { }
 	}
 }
 
