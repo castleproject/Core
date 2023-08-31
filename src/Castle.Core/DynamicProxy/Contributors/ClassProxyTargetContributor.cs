@@ -44,6 +44,11 @@ namespace Castle.DynamicProxy.Contributors
 
 			foreach (var @interface in targetType.GetAllInterfaces())
 			{
+				if (@interface.HasAnyOverridableDefaultImplementations() == false)
+				{
+					continue;
+				}
+
 				yield return new InterfaceMembersWithDefaultImplementationCollector(@interface, targetType);
 			}
 
