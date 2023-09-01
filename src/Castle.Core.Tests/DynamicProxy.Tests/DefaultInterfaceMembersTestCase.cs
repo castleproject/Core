@@ -26,6 +26,8 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class DefaultInterfaceMembersTestCase : BasePEVerifyTestCase
 	{
+		#region Methods with default implementation
+
 		[Test]
 		public void Can_proxy_class_that_inherits_method_with_default_implementation_from_interface()
 		{
@@ -98,6 +100,10 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
+		#endregion
+
+		#region Generic methods with default implementation
+
 		[Test]
 		public void Can_proceed_to_generic_method_default_implementation_in_proxied_interface()
 		{
@@ -110,6 +116,10 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
+		#endregion
+
+		#region Methods with "overridden" default implementation
+
 		[Test]
 		public void Can_intercept_method_with_overridden_default_implementation_in_proxied_class()
 		{
@@ -119,6 +129,10 @@ namespace Castle.DynamicProxy.Tests
 			var actual = ((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
 			Assert.AreEqual(expected, actual);
 		}
+
+		#endregion
+
+		#region Siblings of methods with default implementation
 
 		[Test]
 		public void Can_intercept_method_that_is_sibling_of_method_with_default_implementation_in_proxied_class()
@@ -149,6 +163,10 @@ namespace Castle.DynamicProxy.Tests
 			var actual = proxy.Method();
 			Assert.AreEqual(expected, actual);
 		}
+
+		#endregion
+
+		#region Properties with default implementation
 
 		[Test]
 		public void Can_proxy_class_that_inherits_property_with_default_implementation_from_interface()
@@ -222,6 +240,10 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
+		#endregion
+
+		#region Methods with default implementation in additional interfaces
+
 		[Test]
 		public void Can_proxy_class_that_inherits_method_with_default_implementation_from_additional_interface()
 		{
@@ -274,6 +296,10 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
+		#endregion
+
+		#region Sealed members
+
 		[Test]
 		public void Can_proxy_interface_with_sealed_method()
 		{
@@ -289,6 +315,10 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
+		#endregion
+
+		#region Static members
+
 		[Test]
 		public void Can_proxy_interface_with_static_method()
 		{
@@ -303,6 +333,8 @@ namespace Castle.DynamicProxy.Tests
 			_ = generator.CreateInterfaceProxyWithoutTarget<IHaveStaticAbstractMethod>();
 		}
 #endif
+
+		#endregion
 
 		public interface IHaveGenericMethodWithDefaultImplementation
 		{
