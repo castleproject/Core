@@ -98,6 +98,46 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void Can_intercept_method_with_overridden_default_implementation_in_proxied_class()
+		{
+			var expected = "intercepted";
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.ReturnValue = expected);
+			var proxy = generator.CreateClassProxy<OverridesMethodWithDefaultImplementation>(interceptor);
+			var actual = ((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_intercept_method_that_is_sibling_of_method_with_default_implementation_in_proxied_class()
+		{
+			var expected = "intercepted";
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.ReturnValue = expected);
+			var proxy = generator.CreateClassProxy<InheritsMethodWithDefaultImplementationAmongOtherThings>(interceptor);
+			var actual = proxy.Method();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_intercept_method_that_is_sibling_of_method_with_default_implementation_in_proxied_interface()
+		{
+			var expected = "intercepted";
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.ReturnValue = expected);
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHaveMethodWithDefaultImplementationAmongOtherThings>(interceptor);
+			var actual = proxy.Method();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_proceed_to_base_implementation_of_method_that_is_sibling_of_method_with_default_implementation_in_proxied_class()
+		{
+			var expected = "class implementation";
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.Proceed());
+			var proxy = generator.CreateClassProxy<InheritsMethodWithDefaultImplementationAmongOtherThings>(interceptor);
+			var actual = proxy.Method();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
 		public void Can_proxy_class_that_inherits_property_with_default_implementation_from_interface()
 		{
 			_ = generator.CreateClassProxy<InheritsPropertyWithDefaultImplementation>();
@@ -192,6 +232,11 @@ namespace Castle.DynamicProxy.Tests
 			}
 		}
 
+		public interface IHaveMethodWithDefaultImplementationAmongOtherThings : IHaveMethodWithDefaultImplementation
+		{
+			string Method();
+		}
+
 		public interface IHavePropertyWithDefaultImplementation
 		{
 			string PropertyWithDefaultImplementation
@@ -213,7 +258,23 @@ namespace Castle.DynamicProxy.Tests
 
 		public class InheritsMethodWithDefaultImplementation : IHaveMethodWithDefaultImplementation { }
 
+		public class InheritsMethodWithDefaultImplementationAmongOtherThings : IHaveMethodWithDefaultImplementationAmongOtherThings
+		{
+			public virtual string Method()
+			{
+				return "class implementation";
+			}
+		}
+
 		public class InheritsPropertyWithDefaultImplementation : IHavePropertyWithDefaultImplementation { }
+
+		public class OverridesMethodWithDefaultImplementation : IHaveMethodWithDefaultImplementation
+		{
+			public virtual string MethodWithDefaultImplementation()
+			{
+				return "class implementation";
+			}
+		}
 	}
 }
 
