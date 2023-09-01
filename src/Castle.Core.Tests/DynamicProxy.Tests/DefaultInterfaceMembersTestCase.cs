@@ -236,6 +236,21 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
+		[Test]
+		public void Can_proxy_interface_with_static_method()
+		{
+			_ = generator.CreateInterfaceProxyWithoutTarget<IHaveStaticMethod>();
+		}
+
+#if NET7_0_OR_GREATER
+		[Test]
+		[Ignore("Support for static abstract interface members has not yet been implemented.")]
+		public void Can_proxy_interface_with_static_abstract_method()
+		{
+			_ = generator.CreateInterfaceProxyWithoutTarget<IHaveStaticAbstractMethod>();
+		}
+#endif
+
 		public interface IHaveGenericMethodWithDefaultImplementation
 		{
 			string GenericMethodWithDefaultImplementation<T>()
@@ -275,6 +290,21 @@ namespace Castle.DynamicProxy.Tests
 				return "default implementation";
 			}
 		}
+
+		public interface IHaveStaticMethod
+		{
+			static string StaticMethod()
+			{
+				return "default implementation";
+			}
+		}
+
+#if NET7_0_OR_GREATER
+		public interface IHaveStaticAbstractMethod
+		{
+			static abstract string StaticAbstractMethod();
+		}
+#endif
 
 		public class InheritsMethodWithDefaultImplementation : IHaveMethodWithDefaultImplementation { }
 
