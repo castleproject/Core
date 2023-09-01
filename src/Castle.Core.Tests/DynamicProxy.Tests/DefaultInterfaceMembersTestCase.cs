@@ -98,6 +98,18 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Test]
+		public void Can_proceed_to_generic_method_default_implementation_in_proxied_interface()
+		{
+			// (This test targets the code regarding generics inside `InterfaceProxyWithoutTargetContributor.CreateCallbackMethod`.)
+
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.Proceed());
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHaveGenericMethodWithDefaultImplementation>(interceptor);
+			var expected = "default implementation for Int32";
+			var actual = proxy.GenericMethodWithDefaultImplementation<int>();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
 		public void Can_intercept_method_with_overridden_default_implementation_in_proxied_class()
 		{
 			var expected = "intercepted";
@@ -222,6 +234,14 @@ namespace Castle.DynamicProxy.Tests
 			var expected = "default implementation";
 			var actual = proxy.SealedMethod();
 			Assert.AreEqual(expected, actual);
+		}
+
+		public interface IHaveGenericMethodWithDefaultImplementation
+		{
+			string GenericMethodWithDefaultImplementation<T>()
+			{
+				return "default implementation for " + typeof(T).Name;
+			}
 		}
 
 		public interface IHaveMethodWithDefaultImplementation
