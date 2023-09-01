@@ -407,6 +407,57 @@ namespace Castle.DynamicProxy.Tests
 
 		#endregion
 
+		#region Mixins
+
+		[Test]
+		public void Can_intercept_method_with_default_implementation_from_mixin_in_proxied_class()
+		{
+			var options = new ProxyGenerationOptions();
+			options.AddMixinInstance(new InheritsMethodWithDefaultImplementation());
+			var expected = "intercepted";
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.ReturnValue = expected);
+			var proxy = generator.CreateClassProxy(typeof(object), options, interceptor);
+			var actual = ((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_intercept_method_with_default_implementation_from_mixin_in_proxied_interface()
+		{
+			var options = new ProxyGenerationOptions();
+			options.AddMixinInstance(new InheritsMethodWithDefaultImplementation());
+			var expected = "intercepted";
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.ReturnValue = expected);
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(IEmpty), options, interceptor);
+			var actual = ((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_proceed_to_method_default_implementation_from_mixin_in_proxied_class()
+		{
+			var options = new ProxyGenerationOptions();
+			options.AddMixinInstance(new InheritsMethodWithDefaultImplementation());
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.Proceed());
+			var proxy = generator.CreateClassProxy(typeof(object), options, interceptor);
+			var expected = "default implementation";
+			var actual = ((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
+			Assert.AreEqual(expected, actual);
+		}
+
+		[Test]
+		public void Can_proceed_to_method_default_implementation_from_mixin_in_proxied_interface()
+		{
+			var options = new ProxyGenerationOptions();
+			options.AddMixinInstance(new InheritsMethodWithDefaultImplementation());
+			var interceptor = new WithCallbackInterceptor(invocation => invocation.Proceed());
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(IEmpty), options, interceptor);
+			var expected = "default implementation";
+			var actual = ((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
+			Assert.AreEqual(expected, actual);
+		}
+		#endregion
+
 		public interface IHaveGenericMethodWithDefaultImplementation
 		{
 			string GenericMethodWithDefaultImplementation<T>()
