@@ -38,10 +38,13 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
 		{
-			if (method.IsAbstract)
+			if (method.IsAbstract || method.IsFinal || method.IsVirtual == false)
 			{
-				// This collector is only interested in methods with default implementations.
+				// This collector is only interested in overridable methods with default implementations.
 				// All other interface methods should be dealt with in other contributors.
+				//
+				// (Note this is the opposite check of that in `TypeUtil.HasAnyOverridableDefaultImplementations`,
+				// which is the method used to filter out whole interfaces before this collector gets run for them.)
 				return null;
 			}
 
