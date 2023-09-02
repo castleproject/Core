@@ -2467,6 +2467,10 @@ namespace Castle.DynamicProxy
     }
     [System.Serializable]
     public sealed class DynamicProxyException : System.Exception { }
+    public interface IByRefLikeConverterSelector
+    {
+        System.Type SelectConverterType(System.Reflection.MethodInfo method, int parameterPosition, System.Type parameterType);
+    }
     public interface IChangeProxyTarget
     {
         void ChangeInvocationTarget(object target);
@@ -2613,6 +2617,7 @@ namespace Castle.DynamicProxy
         public ProxyGenerationOptions(Castle.DynamicProxy.IProxyGenerationHook hook) { }
         public System.Collections.Generic.IList<Castle.DynamicProxy.CustomAttributeInfo> AdditionalAttributes { get; }
         public System.Type BaseTypeForInterfaceProxy { get; set; }
+        public Castle.DynamicProxy.IByRefLikeConverterSelector ByRefLikeConverterSelector { get; set; }
         public bool HasMixins { get; }
         public Castle.DynamicProxy.IProxyGenerationHook Hook { get; set; }
         public Castle.DynamicProxy.MixinData MixinData { get; }
