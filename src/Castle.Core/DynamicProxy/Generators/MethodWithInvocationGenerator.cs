@@ -221,7 +221,11 @@ namespace Castle.DynamicProxy.Generators
 				SelfReference.Self,
 				methodInterceptors ?? interceptors,
 				proxiedMethodTokenExpression,
+#if FEATURE_BYREFLIKE
+				new ReferencesToObjectArrayExpression(MethodToOverride, @class.ByRefLikeConverterSelector, dereferencedArguments)
+#else
 				new ReferencesToObjectArrayExpression(dereferencedArguments)
+#endif
 			};
 		}
 
