@@ -46,7 +46,7 @@
 	<PropertyGroup>
 		<DiagnosticsConstants>DEBUG</DiagnosticsConstants>
 		<NetStandard20Constants>TRACE</NetStandard20Constants>
-		<NetStandard21Constants>TRACE</NetStandard21Constants>
+		<NetStandard21Constants>TRACE;FEATURE_BYREFLIKE</NetStandard21Constants>
 		<DesktopClrConstants>TRACE;FEATURE_APPDOMAIN;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_SERIALIZATION;FEATURE_SYSTEM_CONFIGURATION</DesktopClrConstants>
 	</PropertyGroup>
 
@@ -89,7 +89,15 @@
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp3.1|Release'">
 		<DefineConstants>$(NetStandard21Constants)</DefineConstants>
 	</PropertyGroup>
-	
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net6.0|Debug'">
+		<DefineConstants>$(DiagnosticsConstants);$(NetStandard21Constants)</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net6.0|Release'">
+		<DefineConstants>$(NetStandard21Constants)</DefineConstants>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<None Include="$(SolutionDir)docs\images\castle-logo.png" Pack="true" PackagePath=""/>
 	</ItemGroup>
