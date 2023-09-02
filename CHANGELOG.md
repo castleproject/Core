@@ -5,6 +5,7 @@
 Enhancements:
 - Two new generic method overloads `proxyGenerator.CreateClassProxy<TClass>([options], constructorArguments, interceptors)` (@backstromjoel, #636)
 - Allow specifying which attributes should always be copied to proxy class by adding attribute type to `AttributesToAlwaysReplicate`. Previously only non-inherited, with `Inherited=false`, attributes were copied. (@shoaibshakeel381, #633)
+- Support by-ref-like (`ref struct`) parameter types such as `Span<T>` and `ReadOnlySpan<T>` (@stakx, #664) 
 
 Bugfixes:
 - `ArgumentException`: "Could not find method overriding method" with overridden class method having generic by-ref parameter (@stakx, #657)
