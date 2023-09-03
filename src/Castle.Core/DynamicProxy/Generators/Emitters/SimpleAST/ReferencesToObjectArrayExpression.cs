@@ -18,6 +18,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
+	using Castle.DynamicProxy.Internal;
+
 	internal class ReferencesToObjectArrayExpression : IExpression
 	{
 		private readonly TypeReference[] args;
@@ -43,7 +45,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				var reference = args[i];
 
 #if FEATURE_BYREFLIKE
-				if (reference.Type.IsByRefLike)
+				if (reference.Type.IsByRefLikeSafe())
 				{
 					// The by-ref-like argument value cannot be put into the `object[]` array,
 					// because it cannot be boxed. We need to replace it with some other value.
