@@ -50,14 +50,16 @@ build.cmd
 
 The following conditional compilation symbols (vertical) are currently defined for each of the build configurations (horizontal):
 
-Symbol                              | .NET 4.6.2         | .NET Standard 2.x and .NET 8+
------------------------------------ | ------------------ | -----------------------------
-`FEATURE_APPDOMAIN`                 | :white_check_mark: | :no_entry_sign:
-`FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :no_entry_sign:
-`FEATURE_SERIALIZATION`             | :white_check_mark: | :no_entry_sign:
-`FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :no_entry_sign:
+Symbol                              | .NET 4.6.2         | .NET Standard 2.0 | .NET 8
+----------------------------------- | ------------------ | ----------------- | ------------------
+`FEATURE_APPDOMAIN`                 | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:
+`FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:
+`FEATURE_BYREFLIKE`                 | :no_entry_sign:    | :no_entry_sign:   | :white_check_mark:
+`FEATURE_SERIALIZATION`             | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:
+`FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:
 
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.
+* `FEATURE_BYREFLIKE` - enables support for by-ref-like (`ref struct`) types such as `Span<T>` and `ReadOnlySpan<T>`.
 * `FEATURE_SERIALIZATION` - enables support for serialization of dynamic proxies and other types.
 * `FEATURE_SYSTEM_CONFIGURATION` - enables features that use System.Configuration and the ConfigurationManager.
