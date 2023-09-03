@@ -141,7 +141,7 @@ namespace Castle.DynamicProxy.Generators
 				IExpression retVal;
 
 #if FEATURE_BYREFLIKE
-				if (emitter.ReturnType.IsByRefLike)
+				if (emitter.ReturnType.IsByRefLikeSafe())
 				{
 					// The return value in the `ReturnValue` property is an `object`
 					// and cannot be converted back to the original by-ref-like return type.

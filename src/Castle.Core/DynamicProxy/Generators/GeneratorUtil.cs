@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy.Generators
 
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
 	internal static class GeneratorUtil
@@ -43,7 +44,7 @@ namespace Castle.DynamicProxy.Generators
 
 #if FEATURE_BYREFLIKE
 					var dereferencedParameterType = parameters[i].ParameterType.GetElementType();
-					if (dereferencedParameterType.IsByRefLike)
+					if (dereferencedParameterType.IsByRefLikeSafe())
 					{
 						// The argument value in the invocation `Arguments` array is an `object`
 						// and cannot be converted back to its original by-ref-like type.

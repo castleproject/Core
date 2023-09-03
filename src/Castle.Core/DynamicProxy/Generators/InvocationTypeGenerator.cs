@@ -130,7 +130,7 @@ namespace Castle.DynamicProxy.Generators
 					IExpression localValue;
 
 #if FEATURE_BYREFLIKE
-					if (paramType.GetElementType().IsByRefLike)
+					if (paramType.GetElementType().IsByRefLikeSafe())
 					{
 						// The argument value in the invocation `Arguments` array is an `object`
 						// and cannot be converted back to its original by-ref-like type.
@@ -156,7 +156,7 @@ namespace Castle.DynamicProxy.Generators
 				else
 				{
 #if FEATURE_BYREFLIKE
-					if (paramType.IsByRefLike)
+					if (paramType.IsByRefLikeSafe())
 					{
 						// The argument value in the invocation `Arguments` array is an `object`
 						// and cannot be converted back to its original by-ref-like type.
@@ -203,7 +203,7 @@ namespace Castle.DynamicProxy.Generators
 				IExpression retVal;
 
 #if FEATURE_BYREFLIKE
-				if (returnValue.Type.IsByRefLike)
+				if (returnValue.Type.IsByRefLikeSafe())
 				{
 					// The by-ref-like return value cannot be put into the `ReturnValue` property,
 					// because it cannot be boxed. We need to replace it with some other value.
@@ -243,7 +243,7 @@ namespace Castle.DynamicProxy.Generators
 				IExpression localValue;
 
 #if FEATURE_BYREFLIKE
-				if (localReference.Type.IsByRefLike)
+				if (localReference.Type.IsByRefLikeSafe())
 				{
 					// The by-ref-like value in the local buffer variable cannot be put back
 					// into the invocation `Arguments` array, because it cannot be boxed.

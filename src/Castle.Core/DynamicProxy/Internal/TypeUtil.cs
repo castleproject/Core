@@ -172,6 +172,22 @@ namespace Castle.DynamicProxy.Internal
 			return types;
 		}
 
+#if FEATURE_BYREFLIKE
+		internal static bool IsByRefLikeSafe(this Type type)
+		{
+			try
+			{
+				return type.IsByRefLike;
+			}
+			catch (NotSupportedException)
+			{
+				// Certain System.Reflection.Emit implementations of `Type.IsByRefLike` throw this exception
+				// with the message "Derived classes must provide an implementation." This might be a bug in the runtime.
+				return false;
+			}
+		}
+#endif
+
 		internal static bool IsFinalizer(this MethodInfo methodInfo)
 		{
 			return string.Equals("Finalize", methodInfo.Name) && methodInfo.GetBaseDefinition().DeclaringType == typeof(object);
