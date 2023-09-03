@@ -5,8 +5,10 @@
 Enhancements:
 - Two new generic method overloads `proxyGenerator.CreateClassProxy<TClass>([options], constructorArguments, interceptors)` (@backstromjoel, #636)
 - Allow specifying which attributes should always be copied to proxy class by adding attribute type to `AttributesToAlwaysReplicate`. Previously only non-inherited, with `Inherited=false`, attributes were copied. (@shoaibshakeel381, #633)
+- Minimally improved support for methods having `ref struct` parameter and return types such as `Span<T>`: Intercepting such methods caused the runtime to throw `InvalidProgramException` and `NullReferenceException` due to forbidden conversions of `ref struct` values when transferring them into & out of `IInvocation` instances. To prevent these exceptions from being thrown, such values now get replaced with `null` in `IInvocation`, and with `default` values in return values and `out` arguments. (@stakx, #665)
 
 Bugfixes:
+- `InvalidProgramException` when proxying `MemoryStream` with .NET 7 (@stakx, #651)
 - `ArgumentException`: "Could not find method overriding method" with overridden class method having generic by-ref parameter (@stakx, #657)
 - `ArgumentException`: "Cannot create an instance of `TEnum` because `Type.ContainsGenericParameters` is true" caused by `Enum` constraint on method `out` parameter (@stakx, #658)
 
