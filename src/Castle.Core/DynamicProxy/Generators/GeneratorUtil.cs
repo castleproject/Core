@@ -41,7 +41,22 @@ namespace Castle.DynamicProxy.Generators
 						arguments = StoreInvocationArgumentsInLocal(emitter, invocation);
 					}
 
-					emitter.CodeBuilder.AddStatement(AssignArgument(dereferencedArguments, i, arguments));
+#if FEATURE_BYREFLIKE
+					var dereferencedParameterType = parameters[i].ParameterType.GetElementType();
+					if (dereferencedParameterType.IsByRefLike)
+					{
+						// The argument value in the invocation `Arguments` array is an `object`
+						// and cannot be converted back to its original by-ref-like type.
+						// We need to replace it with some other value.
+
+						// For now, we just substitute the by-ref-like type's default value:
+						emitter.CodeBuilder.AddStatement(new AssignStatement(dereferencedArguments[i], new DefaultValueExpression(dereferencedParameterType)));
+					}
+					else
+#endif
+					{
+						emitter.CodeBuilder.AddStatement(AssignArgument(dereferencedArguments, i, arguments));
+					}
 				}
 			}
 
