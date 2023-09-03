@@ -127,24 +127,53 @@ namespace Castle.DynamicProxy.Generators
 				if (paramType.IsByRef)
 				{
 					var localReference = invokeMethodOnTarget.CodeBuilder.DeclareLocal(paramType.GetElementType());
-					invokeMethodOnTarget.CodeBuilder
-						.AddStatement(
-							new AssignStatement(localReference,
-							                    new ConvertExpression(paramType.GetElementType(),
-							                                          new MethodInvocationExpression(SelfReference.Self,
-							                                                                         InvocationMethods.GetArgumentValue,
-							                                                                         new LiteralIntExpression(i)))));
+					IExpression localValue;
+
+#if FEATURE_BYREFLIKE
+					if (paramType.GetElementType().IsByRefLike)
+					{
+						// The argument value in the invocation `Arguments` array is an `object`
+						// and cannot be converted back to its original by-ref-like type.
+						// We need to replace it with some other value.
+
+						// For now, we just substitute the by-ref-like type's default value:
+						localValue = new DefaultValueExpression(localReference.Type);
+					}
+					else
+#endif
+					{
+						localValue = new ConvertExpression(paramType.GetElementType(),
+						                               new MethodInvocationExpression(SelfReference.Self,
+						                                                              InvocationMethods.GetArgumentValue,
+						                                                              new LiteralIntExpression(i)));
+					}
+
+					invokeMethodOnTarget.CodeBuilder.AddStatement(new AssignStatement(localReference, localValue));
 					var byRefReference = new ByRefReference(localReference);
 					args[i] = byRefReference;
 					byRefArguments[i] = localReference;
 				}
 				else
 				{
-					args[i] =
-						new ConvertExpression(paramType,
-						                      new MethodInvocationExpression(SelfReference.Self,
-						                                                     InvocationMethods.GetArgumentValue,
-						                                                     new LiteralIntExpression(i)));
+#if FEATURE_BYREFLIKE
+					if (paramType.IsByRefLike)
+					{
+						// The argument value in the invocation `Arguments` array is an `object`
+						// and cannot be converted back to its original by-ref-like type.
+						// We need to replace it with some other value.
+
+						// For now, we just substitute the by-ref-like type's default value:
+						args[i] = new DefaultValueExpression(paramType);
+					}
+					else
+#endif
+					{
+						args[i] =
+							new ConvertExpression(paramType,
+							                      new MethodInvocationExpression(SelfReference.Self,
+							                                                     InvocationMethods.GetArgumentValue,
+							                                                     new LiteralIntExpression(i)));
+					}
 				}
 			}
 
@@ -171,10 +200,27 @@ namespace Castle.DynamicProxy.Generators
 
 			if (callbackMethod.ReturnType != typeof(void))
 			{
+				IExpression retVal;
+
+#if FEATURE_BYREFLIKE
+				if (returnValue.Type.IsByRefLike)
+				{
+					// The by-ref-like return value cannot be put into the `ReturnValue` property,
+					// because it cannot be boxed. We need to replace it with some other value.
+
+					// For now, we just erase it by substituting `null`:
+					retVal = NullExpression.Instance;
+				}
+				else
+#endif
+				{
+					retVal = new ConvertExpression(typeof(object), returnValue.Type, returnValue);
+				}
+
 				var setRetVal =
 					new MethodInvocationExpression(SelfReference.Self,
 					                               InvocationMethods.SetReturnValue,
-					                               new ConvertExpression(typeof(object), returnValue.Type, returnValue));
+					                               retVal);
 
 				invokeMethodOnTarget.CodeBuilder.AddStatement(setRetVal);
 			}
@@ -194,15 +240,30 @@ namespace Castle.DynamicProxy.Generators
 			{
 				var index = byRefArgument.Key;
 				var localReference = byRefArgument.Value;
+				IExpression localValue;
+
+#if FEATURE_BYREFLIKE
+				if (localReference.Type.IsByRefLike)
+				{
+					// The by-ref-like value in the local buffer variable cannot be put back
+					// into the invocation `Arguments` array, because it cannot be boxed.
+					// We need to replace it with some other value.
+
+					// For now, we just erase it by substituting `null`:
+					localValue = NullExpression.Instance;
+				}
+				else
+#endif
+				{
+					localValue = new ConvertExpression(typeof(object), localReference.Type, localReference);
+				}
+
 				invokeMethodOnTarget.CodeBuilder.AddStatement(
 					new MethodInvocationExpression(
 						SelfReference.Self,
 						InvocationMethods.SetArgumentValue,
 						new LiteralIntExpression(index),
-						new ConvertExpression(
-							typeof(object),
-							localReference.Type,
-							localReference)));
+						localValue));
 			}
 			invokeMethodOnTarget.CodeBuilder.AddStatement(new EndExceptionBlockStatement());
 		}
