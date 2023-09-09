@@ -28,11 +28,6 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
 		{
-			if (ProxyUtil.IsAccessibleMethod(method) == false)
-			{
-				return null;
-			}
-
 			var accepted = AcceptMethod(method, true, hook);
 			if (!accepted && !method.IsAbstract)
 			{

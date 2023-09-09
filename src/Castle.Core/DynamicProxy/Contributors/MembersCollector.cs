@@ -143,6 +143,11 @@ namespace Castle.DynamicProxy.Contributors
 					return null;
 				}
 
+				if (ProxyUtil.IsAccessibleMethod(method) == false)
+				{
+					return null;
+				}
+
 				var methodToGenerate = GetMethodToGenerate(method, hook, isStandalone);
 				if (methodToGenerate != null)
 				{
