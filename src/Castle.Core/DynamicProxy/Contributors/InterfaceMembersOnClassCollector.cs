@@ -32,12 +32,35 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
 		{
-			if (onlyProxyVirtual && IsVirtuallyImplementedInterfaceMethod(method))
-			{
-				return null;
-			}
-
 			var methodOnTarget = GetMethodOnTarget(method);
+
+			if (onlyProxyVirtual)
+			{
+				// The (somewhat confusingly named) `onlyProxyVirtual` flag may need some explaining.
+				//
+				// This collector type is used in two distinct scenarios:
+				//
+				//  1. When generating a class proxy for some class `T` which implements interface `I`,
+				//     and `I` is again specified as an additional interface to add to the proxy type.
+				//     In this case, this collector gets invoked for `I` and `onlyProxyVirtual == true`,
+				//     and below logic prevents `I` methods from being implemented a second time when
+				//     the main "target" contributor already took care of them (which happens when they
+				//     are overridable, or more specifically, when they are implicitly implemented and
+				//     marked as `virtual`).
+				//
+				//  2. When generating an interface proxy with target for some interface `I` and target
+				//     type `T`. In this case, `onlyProxyVirtual == false`, which forces members of `I`
+				//     to get implemented. Unlike in (1), the target of such proxies will be separate
+				//     objects, so it doesn't matter if & how they implement members of `I` or not;
+				//     those `I` members still need to be implemented on the proxy type regardless.
+
+				var isVirtuallyImplementedInterfaceMethod = methodOnTarget != null && methodOnTarget.IsFinal == false;
+
+				if (isVirtuallyImplementedInterfaceMethod)
+				{
+					return null;
+				}
+			}
 
 			var proxyable = AcceptMethod(method, onlyProxyVirtual, hook);
 			return new MetaMethod(method, methodOnTarget, isStandalone, proxyable, methodOnTarget.IsPrivate == false);
@@ -52,12 +75,6 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			return map.TargetMethods[index];
-		}
-
-		private bool IsVirtuallyImplementedInterfaceMethod(MethodInfo method)
-		{
-			var info = GetMethodOnTarget(method);
-			return info != null && info.IsFinal == false;
 		}
 	}
 }
