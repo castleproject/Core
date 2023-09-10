@@ -32,9 +32,15 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
 		{
-			if (onlyProxyVirtual && IsVirtuallyImplementedInterfaceMethod(method))
+			if (onlyProxyVirtual)
 			{
-				return null;
+				var info = GetMethodOnTarget(method);
+				var isVirtuallyImplementedInterfaceMethod = info != null && info.IsFinal == false;
+
+				if (isVirtuallyImplementedInterfaceMethod)
+				{
+					return null;
+				}
 			}
 
 			var methodOnTarget = GetMethodOnTarget(method);
@@ -52,12 +58,6 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			return map.TargetMethods[index];
-		}
-
-		private bool IsVirtuallyImplementedInterfaceMethod(MethodInfo method)
-		{
-			var info = GetMethodOnTarget(method);
-			return info != null && info.IsFinal == false;
 		}
 	}
 }
