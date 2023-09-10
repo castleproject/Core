@@ -32,18 +32,17 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected override MetaMethod GetMethodToGenerate(MethodInfo method, IProxyGenerationHook hook, bool isStandalone)
 		{
+			var methodOnTarget = GetMethodOnTarget(method);
+
 			if (onlyProxyVirtual)
 			{
-				var info = GetMethodOnTarget(method);
-				var isVirtuallyImplementedInterfaceMethod = info != null && info.IsFinal == false;
+				var isVirtuallyImplementedInterfaceMethod = methodOnTarget != null && methodOnTarget.IsFinal == false;
 
 				if (isVirtuallyImplementedInterfaceMethod)
 				{
 					return null;
 				}
 			}
-
-			var methodOnTarget = GetMethodOnTarget(method);
 
 			var proxyable = AcceptMethod(method, onlyProxyVirtual, hook);
 			return new MetaMethod(method, methodOnTarget, isStandalone, proxyable, methodOnTarget.IsPrivate == false);
