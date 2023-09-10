@@ -143,6 +143,11 @@ namespace Castle.DynamicProxy.Contributors
 					return null;
 				}
 
+				if (ProxyUtil.IsAccessibleMethod(method) == false)
+				{
+					return null;
+				}
+
 				var methodToGenerate = GetMethodToGenerate(method, hook, isStandalone);
 				if (methodToGenerate != null)
 				{
@@ -173,10 +178,7 @@ namespace Castle.DynamicProxy.Contributors
 		/// </remarks>
 		protected bool AcceptMethodPreScreen(MethodInfo method, bool onlyVirtuals, IProxyGenerationHook hook)
 		{
-			if (IsInternalAndNotVisibleToDynamicProxy(method))
-			{
-				return false;
-			}
+			// NOTE: at this point, the method's accessibility should already have been checked (see `AddMethod` above)
 
 			var isOverridable = method.IsVirtual && !method.IsFinal;
 			if (onlyVirtuals && !isOverridable)
@@ -200,12 +202,6 @@ namespace Castle.DynamicProxy.Contributors
 				return false;
 			}
 
-			//can only proxy methods that are public or protected (or internals that have already been checked above)
-			if ((method.IsPublic || method.IsFamily || method.IsAssembly || method.IsFamilyOrAssembly || method.IsFamilyAndAssembly) == false)
-			{
-				return false;
-			}
-
 			if (method.DeclaringType == typeof(MarshalByRefObject))
 			{
 				return false;
@@ -217,12 +213,6 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			return true;
-		}
-
-		private static bool IsInternalAndNotVisibleToDynamicProxy(MethodInfo method)
-		{
-			return ProxyUtil.IsInternal(method) &&
-				   ProxyUtil.AreInternalsVisibleToDynamicProxy(method.DeclaringType.Assembly) == false;
 		}
 	}
 }

@@ -194,17 +194,20 @@ namespace Castle.DynamicProxy
 		/// <returns><c>true</c> if the method is accessible to DynamicProxy, <c>false</c> otherwise.</returns>
 		internal static bool IsAccessibleMethod(MethodBase method)
 		{
-			if (method.IsPublic || method.IsFamily || method.IsFamilyOrAssembly)
+			switch (method.Attributes & MethodAttributes.MemberAccessMask)
 			{
-				return true;
-			}
+				case MethodAttributes.Assembly:
+				case MethodAttributes.FamANDAssem:
+					return AreInternalsVisibleToDynamicProxy(method.DeclaringType.Assembly);
 
-			if (method.IsAssembly || method.IsFamilyAndAssembly)
-			{
-				return AreInternalsVisibleToDynamicProxy(method.DeclaringType.Assembly);
-			}
+				case MethodAttributes.Family:
+				case MethodAttributes.FamORAssem:
+				case MethodAttributes.Public:
+					return true;
 
-			return false;
+				default:  // `MethodAttributes.Private` or `MethodAttributes.PrivateScope`
+					return false;
+			}
 		}
 
 		/// <summary>
