@@ -6,6 +6,7 @@ Enhancements:
 - Two new generic method overloads `proxyGenerator.CreateClassProxy<TClass>([options], constructorArguments, interceptors)` (@backstromjoel, #636)
 - Allow specifying which attributes should always be copied to proxy class by adding attribute type to `AttributesToAlwaysReplicate`. Previously only non-inherited, with `Inherited=false`, attributes were copied. (@shoaibshakeel381, #633)
 - Support for C# 8+ [default interface methods](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/default-interface-methods) in interface and class proxies without target (@stakx, #661)
+- DynamicProxy's public API has been augmented with nullable reference type annotations (@stakx, #668)
 
 Bugfixes:
 - `ArgumentException`: "Could not find method overriding method" with overridden class method having generic by-ref parameter (@stakx, #657)
