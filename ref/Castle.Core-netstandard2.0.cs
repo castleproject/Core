@@ -2413,30 +2413,31 @@ namespace Castle.DynamicProxy
     public abstract class AbstractInvocation : Castle.DynamicProxy.IInvocation
     {
         protected readonly object proxyObject;
-        protected AbstractInvocation(object proxy, Castle.DynamicProxy.IInterceptor[] interceptors, System.Reflection.MethodInfo proxiedMethod, object[] arguments) { }
-        public object[] Arguments { get; }
-        public System.Type[] GenericArguments { get; }
-        public abstract object InvocationTarget { get; }
+        protected AbstractInvocation(object proxy, Castle.DynamicProxy.IInterceptor[] interceptors, System.Reflection.MethodInfo proxiedMethod, object?[] arguments) { }
+        public object?[] Arguments { get; }
+        public System.Type[]? GenericArguments { get; }
+        public abstract object? InvocationTarget { get; }
         public System.Reflection.MethodInfo Method { get; }
-        public abstract System.Reflection.MethodInfo MethodInvocationTarget { get; }
+        public abstract System.Reflection.MethodInfo? MethodInvocationTarget { get; }
         public object Proxy { get; }
-        public object ReturnValue { get; set; }
-        public abstract System.Type TargetType { get; }
+        public object? ReturnValue { get; set; }
+        public abstract System.Type? TargetType { get; }
         public Castle.DynamicProxy.IInvocationProceedInfo CaptureProceedInfo() { }
-        public object GetArgumentValue(int index) { }
+        public object? GetArgumentValue(int index) { }
         public System.Reflection.MethodInfo GetConcreteMethod() { }
-        public System.Reflection.MethodInfo GetConcreteMethodInvocationTarget() { }
+        public System.Reflection.MethodInfo? GetConcreteMethodInvocationTarget() { }
         protected abstract void InvokeMethodOnTarget();
         public void Proceed() { }
-        public void SetArgumentValue(int index, object value) { }
+        public void SetArgumentValue(int index, object? value) { }
         public void SetGenericMethodArguments(System.Type[] arguments) { }
+        [System.Diagnostics.CodeAnalysis.DoesNotReturn]
         protected void ThrowOnNoTarget() { }
     }
     public class AllMethodsHook : Castle.DynamicProxy.IProxyGenerationHook
     {
         protected static readonly System.Collections.Generic.ICollection<System.Type> SkippedTypes;
         public AllMethodsHook() { }
-        public override bool Equals(object obj) { }
+        public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
         public virtual void MethodsInspected() { }
         public virtual void NonProxyableMemberNotification(System.Type type, System.Reflection.MemberInfo memberInfo) { }
@@ -2444,12 +2445,12 @@ namespace Castle.DynamicProxy
     }
     public class CustomAttributeInfo : System.IEquatable<Castle.DynamicProxy.CustomAttributeInfo>
     {
-        public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object[] constructorArgs) { }
-        public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object[] constructorArgs, System.Reflection.FieldInfo[] namedFields, object[] fieldValues) { }
-        public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object[] constructorArgs, System.Reflection.PropertyInfo[] namedProperties, object[] propertyValues) { }
-        public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object[] constructorArgs, System.Reflection.PropertyInfo[] namedProperties, object[] propertyValues, System.Reflection.FieldInfo[] namedFields, object[] fieldValues) { }
-        public bool Equals(Castle.DynamicProxy.CustomAttributeInfo other) { }
-        public override bool Equals(object obj) { }
+        public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object?[] constructorArgs) { }
+        public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object?[] constructorArgs, System.Reflection.FieldInfo[] namedFields, object?[] fieldValues) { }
+        public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object?[] constructorArgs, System.Reflection.PropertyInfo[] namedProperties, object?[] propertyValues) { }
+        public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object?[] constructorArgs, System.Reflection.PropertyInfo[] namedProperties, object?[] propertyValues, System.Reflection.FieldInfo[] namedFields, object?[] fieldValues) { }
+        public bool Equals(Castle.DynamicProxy.CustomAttributeInfo? other) { }
+        public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
         public static Castle.DynamicProxy.CustomAttributeInfo FromExpression(System.Linq.Expressions.Expression<System.Func<System.Attribute>> expression) { }
     }
@@ -2459,19 +2460,19 @@ namespace Castle.DynamicProxy
         public DefaultProxyBuilder(Castle.DynamicProxy.ModuleScope scope) { }
         public Castle.Core.Logging.ILogger Logger { get; set; }
         public Castle.DynamicProxy.ModuleScope ModuleScope { get; }
-        public System.Type CreateClassProxyType(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
-        public System.Type CreateClassProxyTypeWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
-        public System.Type CreateInterfaceProxyTypeWithTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, System.Type targetType, Castle.DynamicProxy.ProxyGenerationOptions options) { }
-        public System.Type CreateInterfaceProxyTypeWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
-        public System.Type CreateInterfaceProxyTypeWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        public System.Type CreateClassProxyType(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        public System.Type CreateClassProxyTypeWithTarget(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        public System.Type CreateInterfaceProxyTypeWithTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, System.Type targetType, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        public System.Type CreateInterfaceProxyTypeWithTargetInterface(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        public System.Type CreateInterfaceProxyTypeWithoutTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
     }
     [System.Serializable]
     public sealed class DynamicProxyException : System.Exception { }
     public interface IChangeProxyTarget
     {
-        void ChangeInvocationTarget(object target);
+        void ChangeInvocationTarget(object? target);
         [System.Obsolete("Use ((IProxyTargetAccessor)invocation.Proxy).DynProxySetTarget(target) instead.")]
-        void ChangeProxyTarget(object target);
+        void ChangeProxyTarget(object? target);
     }
     public interface IInterceptor
     {
@@ -2479,24 +2480,24 @@ namespace Castle.DynamicProxy
     }
     public interface IInterceptorSelector
     {
-        Castle.DynamicProxy.IInterceptor[] SelectInterceptors(System.Type type, System.Reflection.MethodInfo method, Castle.DynamicProxy.IInterceptor[] interceptors);
+        Castle.DynamicProxy.IInterceptor[]? SelectInterceptors(System.Type type, System.Reflection.MethodInfo method, Castle.DynamicProxy.IInterceptor[] interceptors);
     }
     public interface IInvocation
     {
-        object[] Arguments { get; }
-        System.Type[] GenericArguments { get; }
-        object InvocationTarget { get; }
+        object?[] Arguments { get; }
+        System.Type[]? GenericArguments { get; }
+        object? InvocationTarget { get; }
         System.Reflection.MethodInfo Method { get; }
-        System.Reflection.MethodInfo MethodInvocationTarget { get; }
+        System.Reflection.MethodInfo? MethodInvocationTarget { get; }
         object Proxy { get; }
-        object ReturnValue { get; set; }
-        System.Type TargetType { get; }
+        object? ReturnValue { get; set; }
+        System.Type? TargetType { get; }
         Castle.DynamicProxy.IInvocationProceedInfo CaptureProceedInfo();
-        object GetArgumentValue(int index);
+        object? GetArgumentValue(int index);
         System.Reflection.MethodInfo GetConcreteMethod();
-        System.Reflection.MethodInfo GetConcreteMethodInvocationTarget();
+        System.Reflection.MethodInfo? GetConcreteMethodInvocationTarget();
         void Proceed();
-        void SetArgumentValue(int index, object value);
+        void SetArgumentValue(int index, object? value);
     }
     public interface IInvocationProceedInfo
     {
@@ -2506,11 +2507,11 @@ namespace Castle.DynamicProxy
     {
         Castle.Core.Logging.ILogger Logger { get; set; }
         Castle.DynamicProxy.ModuleScope ModuleScope { get; }
-        System.Type CreateClassProxyType(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options);
-        System.Type CreateClassProxyTypeWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options);
-        System.Type CreateInterfaceProxyTypeWithTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, System.Type targetType, Castle.DynamicProxy.ProxyGenerationOptions options);
-        System.Type CreateInterfaceProxyTypeWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options);
-        System.Type CreateInterfaceProxyTypeWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options);
+        System.Type CreateClassProxyType(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options);
+        System.Type CreateClassProxyTypeWithTarget(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options);
+        System.Type CreateInterfaceProxyTypeWithTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, System.Type targetType, Castle.DynamicProxy.ProxyGenerationOptions options);
+        System.Type CreateInterfaceProxyTypeWithTargetInterface(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options);
+        System.Type CreateInterfaceProxyTypeWithoutTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options);
     }
     public interface IProxyGenerationHook
     {
@@ -2525,51 +2526,51 @@ namespace Castle.DynamicProxy
         Castle.DynamicProxy.IProxyBuilder ProxyBuilder { get; }
         object CreateClassProxy(System.Type classToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors);
         object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxy(System.Type classToProxy, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxy(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxy(System.Type classToProxy, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxy(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxy(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
         TClass CreateClassProxy<TClass>(params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class;
         TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class;
-        TClass CreateClassProxy<TClass>(object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
+        TClass CreateClassProxy<TClass>(object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class;
-        TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
+        TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class;
-        object CreateClassProxyWithTarget(System.Type classToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxyWithTarget(System.Type classToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxyWithTarget(System.Type classToProxy, object target, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxyWithTarget(System.Type classToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        TClass CreateClassProxyWithTarget<TClass>(TClass target, params Castle.DynamicProxy.IInterceptor[] interceptors)
+        object CreateClassProxyWithTarget(System.Type classToProxy, object? target, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, object? target, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxyWithTarget(System.Type classToProxy, object? target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxyWithTarget(System.Type classToProxy, object? target, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, object? target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxyWithTarget(System.Type classToProxy, object? target, Castle.DynamicProxy.ProxyGenerationOptions options, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, object? target, Castle.DynamicProxy.ProxyGenerationOptions options, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        TClass CreateClassProxyWithTarget<TClass>(TClass? target, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class;
-        TClass CreateClassProxyWithTarget<TClass>(TClass target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
+        TClass CreateClassProxyWithTarget<TClass>(TClass? target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class;
         object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
         object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
         TInterface CreateInterfaceProxyWithTarget<TInterface>(TInterface target, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class;
         TInterface CreateInterfaceProxyWithTarget<TInterface>(TInterface target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class;
-        object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        TInterface CreateInterfaceProxyWithTargetInterface<TInterface>(TInterface target, params Castle.DynamicProxy.IInterceptor[] interceptors)
+        object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object? target, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, object? target, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object? target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, object? target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        TInterface CreateInterfaceProxyWithTargetInterface<TInterface>(TInterface? target, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class;
-        TInterface CreateInterfaceProxyWithTargetInterface<TInterface>(TInterface target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
+        TInterface CreateInterfaceProxyWithTargetInterface<TInterface>(TInterface? target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class;
         object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, Castle.DynamicProxy.IInterceptor interceptor);
         object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors);
         object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors);
-        object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors);
+        object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors);
         TInterface CreateInterfaceProxyWithoutTarget<TInterface>(Castle.DynamicProxy.IInterceptor interceptor)
             where TInterface :  class;
         TInterface CreateInterfaceProxyWithoutTarget<TInterface>(params Castle.DynamicProxy.IInterceptor[] interceptors)
@@ -2579,19 +2580,19 @@ namespace Castle.DynamicProxy
     }
     public interface IProxyTargetAccessor
     {
-        object DynProxyGetTarget();
-        void DynProxySetTarget(object target);
+        object? DynProxyGetTarget();
+        void DynProxySetTarget(object? target);
         Castle.DynamicProxy.IInterceptor[] GetInterceptors();
     }
     public class MixinData
     {
-        public MixinData(System.Collections.Generic.IEnumerable<object> mixinInstances) { }
+        public MixinData(System.Collections.Generic.IEnumerable<object>? mixinInstances) { }
         public System.Collections.Generic.IEnumerable<System.Type> MixinInterfaces { get; }
-        public System.Collections.Generic.IEnumerable<object> Mixins { get; }
+        public System.Collections.Generic.IEnumerable<object?> Mixins { get; }
         public bool ContainsMixin(System.Type mixinInterfaceType) { }
-        public override bool Equals(object obj) { }
+        public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
-        public object GetMixinInstance(System.Type mixinInterfaceType) { }
+        public object? GetMixinInstance(System.Type mixinInterfaceType) { }
         public int GetMixinPosition(System.Type mixinInterfaceType) { }
     }
     public class ModuleScope
@@ -2616,11 +2617,11 @@ namespace Castle.DynamicProxy
         public bool HasMixins { get; }
         public Castle.DynamicProxy.IProxyGenerationHook Hook { get; set; }
         public Castle.DynamicProxy.MixinData MixinData { get; }
-        public Castle.DynamicProxy.IInterceptorSelector Selector { get; set; }
+        public Castle.DynamicProxy.IInterceptorSelector? Selector { get; set; }
         public void AddDelegateMixin(System.Delegate @delegate) { }
         public void AddDelegateTypeMixin(System.Type delegateType) { }
         public void AddMixinInstance(object instance) { }
-        public override bool Equals(object obj) { }
+        public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
         public void Initialize() { }
         public object[] MixinsAsArray() { }
@@ -2633,81 +2634,81 @@ namespace Castle.DynamicProxy
         public ProxyGenerator(bool disableSignedModule) { }
         public Castle.Core.Logging.ILogger Logger { get; set; }
         public Castle.DynamicProxy.IProxyBuilder ProxyBuilder { get; }
-        protected System.Collections.Generic.List<object> BuildArgumentListForClassProxy(Castle.DynamicProxy.ProxyGenerationOptions options, Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        protected System.Collections.Generic.List<object> BuildArgumentListForClassProxyWithTarget(object target, Castle.DynamicProxy.ProxyGenerationOptions options, Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        protected System.Collections.Generic.List<object?> BuildArgumentListForClassProxy(Castle.DynamicProxy.ProxyGenerationOptions options, Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        protected System.Collections.Generic.List<object?> BuildArgumentListForClassProxyWithTarget(object? target, Castle.DynamicProxy.ProxyGenerationOptions options, Castle.DynamicProxy.IInterceptor[] interceptors) { }
         protected void CheckNotGenericTypeDefinition(System.Type type, string argumentName) { }
-        protected void CheckNotGenericTypeDefinitions(System.Collections.Generic.IEnumerable<System.Type> types, string argumentName) { }
+        protected void CheckNotGenericTypeDefinitions(System.Collections.Generic.IEnumerable<System.Type>? types, string argumentName) { }
         public object CreateClassProxy(System.Type classToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxy(System.Type classToProxy, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public virtual object CreateClassProxy(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxy(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxy(System.Type classToProxy, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxy(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public virtual object CreateClassProxy(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public TClass CreateClassProxy<TClass>(params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class { }
         public TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class { }
-        public TClass CreateClassProxy<TClass>(object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
+        public TClass CreateClassProxy<TClass>(object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class { }
-        public TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
+        public TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class { }
-        protected object CreateClassProxyInstance(System.Type proxyType, System.Collections.Generic.List<object> proxyArguments, System.Type classToProxy, object[] constructorArguments) { }
-        protected System.Type CreateClassProxyType(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
-        protected System.Type CreateClassProxyTypeWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
-        public object CreateClassProxyWithTarget(System.Type classToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxyWithTarget(System.Type classToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxyWithTarget(System.Type classToProxy, object target, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxyWithTarget(System.Type classToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public virtual object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, object[] constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public TClass CreateClassProxyWithTarget<TClass>(TClass target, params Castle.DynamicProxy.IInterceptor[] interceptors)
+        protected object CreateClassProxyInstance(System.Type proxyType, System.Collections.Generic.List<object?> proxyArguments, System.Type classToProxy, object?[]? constructorArguments) { }
+        protected System.Type CreateClassProxyType(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        protected System.Type CreateClassProxyTypeWithTarget(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        public object CreateClassProxyWithTarget(System.Type classToProxy, object? target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, object? target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxyWithTarget(System.Type classToProxy, object? target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxyWithTarget(System.Type classToProxy, object? target, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, object? target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateClassProxyWithTarget(System.Type classToProxy, object? target, Castle.DynamicProxy.ProxyGenerationOptions options, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public virtual object CreateClassProxyWithTarget(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, object? target, Castle.DynamicProxy.ProxyGenerationOptions options, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public TClass CreateClassProxyWithTarget<TClass>(TClass? target, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class { }
-        public TClass CreateClassProxyWithTarget<TClass>(TClass target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
+        public TClass CreateClassProxyWithTarget<TClass>(TClass? target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class { }
-        protected System.Type CreateInterfaceProxyTypeWithTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, System.Type targetType, Castle.DynamicProxy.ProxyGenerationOptions options) { }
-        protected System.Type CreateInterfaceProxyTypeWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
-        protected System.Type CreateInterfaceProxyTypeWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        protected System.Type CreateInterfaceProxyTypeWithTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, System.Type targetType, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        protected System.Type CreateInterfaceProxyTypeWithTargetInterface(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        protected System.Type CreateInterfaceProxyTypeWithoutTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         public object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public virtual object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public virtual object CreateInterfaceProxyWithTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public TInterface CreateInterfaceProxyWithTarget<TInterface>(TInterface target, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class { }
         public TInterface CreateInterfaceProxyWithTarget<TInterface>(TInterface target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class { }
-        public object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public virtual object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, object target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public TInterface CreateInterfaceProxyWithTargetInterface<TInterface>(TInterface target, params Castle.DynamicProxy.IInterceptor[] interceptors)
+        public object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object? target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, object? target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, object? target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public virtual object CreateInterfaceProxyWithTargetInterface(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, object? target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public TInterface CreateInterfaceProxyWithTargetInterface<TInterface>(TInterface? target, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class { }
-        public TInterface CreateInterfaceProxyWithTargetInterface<TInterface>(TInterface target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
+        public TInterface CreateInterfaceProxyWithTargetInterface<TInterface>(TInterface? target, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class { }
         public object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, Castle.DynamicProxy.IInterceptor interceptor) { }
         public object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        public virtual object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[] additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        public virtual object CreateInterfaceProxyWithoutTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public TInterface CreateInterfaceProxyWithoutTarget<TInterface>(Castle.DynamicProxy.IInterceptor interceptor)
             where TInterface :  class { }
         public TInterface CreateInterfaceProxyWithoutTarget<TInterface>(params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class { }
         public TInterface CreateInterfaceProxyWithoutTarget<TInterface>(Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class { }
-        protected System.Collections.Generic.List<object> GetConstructorArguments(object target, Castle.DynamicProxy.IInterceptor[] interceptors, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        protected System.Collections.Generic.List<object?> GetConstructorArguments(object? target, Castle.DynamicProxy.IInterceptor[] interceptors, Castle.DynamicProxy.ProxyGenerationOptions options) { }
     }
     public static class ProxyUtil
     {
         public static System.Delegate CreateDelegateToMixin(object proxy, System.Type delegateType) { }
         public static TDelegate CreateDelegateToMixin<TDelegate>(object proxy) { }
-        public static object GetUnproxiedInstance(object instance) { }
+        public static object? GetUnproxiedInstance(object instance) { }
         public static System.Type GetUnproxiedType(object instance) { }
         public static bool IsAccessible(System.Reflection.MethodBase method) { }
         public static bool IsAccessible(System.Type type) { }
-        public static bool IsAccessible(System.Reflection.MethodBase method, out string message) { }
-        public static bool IsProxy(object instance) { }
+        public static bool IsAccessible(System.Reflection.MethodBase method, [System.Diagnostics.CodeAnalysis.NotNullWhen(false)] out string? message) { }
+        public static bool IsProxy(object? instance) { }
         public static bool IsProxyType(System.Type type) { }
     }
     public class StandardInterceptor : Castle.DynamicProxy.IInterceptor
@@ -2738,17 +2739,17 @@ namespace Castle.DynamicProxy.Internal
 {
     public abstract class CompositionInvocation : Castle.DynamicProxy.AbstractInvocation
     {
-        protected object target;
-        protected CompositionInvocation(object target, object proxy, Castle.DynamicProxy.IInterceptor[] interceptors, System.Reflection.MethodInfo proxiedMethod, object[] arguments) { }
-        public override object InvocationTarget { get; }
-        public override System.Reflection.MethodInfo MethodInvocationTarget { get; }
-        public override System.Type TargetType { get; }
+        protected object? target;
+        protected CompositionInvocation(object? target, object proxy, Castle.DynamicProxy.IInterceptor[] interceptors, System.Reflection.MethodInfo proxiedMethod, object?[] arguments) { }
+        public override object? InvocationTarget { get; }
+        public override System.Reflection.MethodInfo? MethodInvocationTarget { get; }
+        public override System.Type? TargetType { get; }
         protected void EnsureValidProxyTarget(object newTarget) { }
         protected void EnsureValidTarget() { }
     }
     public abstract class InheritanceInvocation : Castle.DynamicProxy.AbstractInvocation
     {
-        protected InheritanceInvocation(System.Type targetType, object proxy, Castle.DynamicProxy.IInterceptor[] interceptors, System.Reflection.MethodInfo proxiedMethod, object[] arguments) { }
+        protected InheritanceInvocation(System.Type targetType, object proxy, Castle.DynamicProxy.IInterceptor[] interceptors, System.Reflection.MethodInfo proxiedMethod, object?[] arguments) { }
         public override object InvocationTarget { get; }
         public override System.Reflection.MethodInfo MethodInvocationTarget { get; }
         public override System.Type TargetType { get; }
@@ -2761,16 +2762,16 @@ namespace Castle.DynamicProxy.Internal
     }
     public sealed class InterfaceMethodWithoutTargetInvocation : Castle.DynamicProxy.AbstractInvocation
     {
-        public InterfaceMethodWithoutTargetInvocation(object target, object proxy, Castle.DynamicProxy.IInterceptor[] interceptors, System.Reflection.MethodInfo proxiedMethod, object[] arguments) { }
-        public override object InvocationTarget { get; }
-        public override System.Reflection.MethodInfo MethodInvocationTarget { get; }
-        public override System.Type TargetType { get; }
+        public InterfaceMethodWithoutTargetInvocation(object? target, object proxy, Castle.DynamicProxy.IInterceptor[] interceptors, System.Reflection.MethodInfo proxiedMethod, object?[] arguments) { }
+        public override object? InvocationTarget { get; }
+        public override System.Reflection.MethodInfo? MethodInvocationTarget { get; }
+        public override System.Type? TargetType { get; }
         protected override void InvokeMethodOnTarget() { }
     }
     public static class TypeUtil
     {
         public static System.Type[] GetAllInterfaces(this System.Type type) { }
-        public static System.Type GetTypeOrNull(object target) { }
+        public static System.Type? GetTypeOrNull(object? target) { }
         public static System.Reflection.MemberInfo[] Sort(System.Reflection.MemberInfo[] members) { }
     }
 }
