@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy
 {
 	/// <summary>
@@ -23,13 +25,13 @@ namespace Castle.DynamicProxy
 		/// <summary>
 		///   Get the proxy target (note that null is a valid target!)
 		/// </summary>
-		object DynProxyGetTarget();
+		object? DynProxyGetTarget();
 
 		/// <summary>
 		///   Set the proxy target.
 		/// </summary>
 		/// <param name="target">New proxy target.</param>
-		void DynProxySetTarget(object target);
+		void DynProxySetTarget(object? target);
 
 		/// <summary>
 		///   Gets the interceptors for the proxy

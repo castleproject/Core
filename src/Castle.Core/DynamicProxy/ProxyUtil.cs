@@ -12,10 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
@@ -79,11 +82,11 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		public static object GetUnproxiedInstance(object instance)
+		public static object? GetUnproxiedInstance(object instance)
 		{
 			if (instance is IProxyTargetAccessor accessor)
 			{
-				instance = accessor.DynProxyGetTarget();
+				return accessor.DynProxyGetTarget();
 			}
 
 			return instance;
@@ -98,7 +101,7 @@ namespace Castle.DynamicProxy
 				{
 					if (ReferenceEquals(target, instance))
 					{
-						return instance.GetType().BaseType;
+						return instance.GetType().BaseType!;
 					}
 
 					instance = target;
@@ -108,7 +111,7 @@ namespace Castle.DynamicProxy
 			return instance.GetType();
 		}
 
-		public static bool IsProxy(object instance)
+		public static bool IsProxy(object? instance)
 		{
 			return instance is IProxyTargetAccessor;
 		}
@@ -124,7 +127,7 @@ namespace Castle.DynamicProxy
 		/// <returns><c>true</c> if the method is accessible to DynamicProxy, <c>false</c> otherwise.</returns>
 		public static bool IsAccessible(MethodBase method)
 		{
-			return IsAccessibleMethod(method) && IsAccessibleType(method.DeclaringType);
+			return IsAccessibleMethod(method) && IsAccessibleType(method.DeclaringType!);
 		}
 
 		/// <summary>
@@ -132,7 +135,7 @@ namespace Castle.DynamicProxy
 		/// <param name="method">The method to check.</param>
 		/// <param name="message">If the method is accessible to DynamicProxy, <c>null</c>; otherwise, an explanation of why the method is not accessible.</param>
 		/// <returns><c>true</c> if the method is accessible to DynamicProxy, <c>false</c> otherwise.</returns>
-		public static bool IsAccessible(MethodBase method, out string message)
+		public static bool IsAccessible(MethodBase method, [NotNullWhen(false)] out string? message)
 		{
 			if (IsAccessible(method))
 			{
@@ -198,7 +201,7 @@ namespace Castle.DynamicProxy
 			{
 				case MethodAttributes.Assembly:
 				case MethodAttributes.FamANDAssem:
-					return AreInternalsVisibleToDynamicProxy(method.DeclaringType.Assembly);
+					return AreInternalsVisibleToDynamicProxy(method.DeclaringType!.Assembly);
 
 				case MethodAttributes.Family:
 				case MethodAttributes.FamORAssem:
@@ -224,7 +227,7 @@ namespace Castle.DynamicProxy
 
 		private static string CreateMessageForInaccessibleMethod(MethodBase inaccessibleMethod)
 		{
-			var containingType = inaccessibleMethod.DeclaringType;
+			var containingType = inaccessibleMethod.DeclaringType!;
 			var targetAssembly = containingType.Assembly;
 
 			var messageFormat = "Can not create proxy for method {0} because it or its declaring type is not accessible. ";

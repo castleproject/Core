@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy.Internal
 {
 	using System;
@@ -25,7 +27,7 @@ namespace Castle.DynamicProxy.Internal
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public sealed class InterfaceMethodWithoutTargetInvocation : AbstractInvocation
 	{
-		public InterfaceMethodWithoutTargetInvocation(object target, object proxy, IInterceptor[] interceptors, MethodInfo proxiedMethod, object[] arguments)
+		public InterfaceMethodWithoutTargetInvocation(object? target, object proxy, IInterceptor[] interceptors, MethodInfo proxiedMethod, object?[] arguments)
 			: base(proxy, interceptors, proxiedMethod, arguments)
 		{
 			// This invocation type is suitable for interface method invocations that cannot proceed
@@ -50,11 +52,11 @@ namespace Castle.DynamicProxy.Internal
 		// (This is why this type's name starts with `Interface`.) A similar type could be written
 		// for class proxies without target, but the values returned here would be different.
 
-		public override object InvocationTarget => null;
+		public override object? InvocationTarget => null;
 
-		public override MethodInfo MethodInvocationTarget => null;
+		public override MethodInfo? MethodInvocationTarget => null;
 
-		public override Type TargetType => null;
+		public override Type? TargetType => null;
 
 		protected override void InvokeMethodOnTarget() => ThrowOnNoTarget();
 	}
