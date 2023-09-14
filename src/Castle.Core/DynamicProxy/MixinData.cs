@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -26,7 +28,7 @@ namespace Castle.DynamicProxy
 	public class MixinData
 	{
 		private readonly Dictionary<Type, int> mixinPositions = new Dictionary<Type, int>();
-		private readonly List<object> mixinsImpl = new List<object>();
+		private readonly List<object?> mixinsImpl = new List<object?>();
 		private int delegateMixinCount = 0;
 
 		/// <summary>
@@ -38,18 +40,18 @@ namespace Castle.DynamicProxy
 		/// The idea is to have reproducible behavior for the case that mixins are registered in different orders.
 		/// This method is here because it is required 
 		/// </summary>
-		public MixinData(IEnumerable<object> mixinInstances)
+		public MixinData(IEnumerable<object>? mixinInstances)
 		{
 			if (mixinInstances != null)
 			{
 				var sortedMixedInterfaceTypes = new List<Type>();
-				var interface2Mixin = new Dictionary<Type, object>();
+				var interface2Mixin = new Dictionary<Type, object?>();
 				delegateMixinCount = 0;
 
 				foreach (var mixin in mixinInstances)
 				{
 					Type[] mixinInterfaces;
-					object target;
+					object? target;
 					if (mixin is Delegate)
 					{
 						++delegateMixinCount;
@@ -105,7 +107,7 @@ namespace Castle.DynamicProxy
 					{
 						if (mixedInType.IsDelegateType())
 						{
-							var invokeMethod = mixedInType.GetMethod("Invoke");
+							var invokeMethod = mixedInType.GetMethod("Invoke")!;
 							if (invokeMethods.Contains(invokeMethod, MethodSignatureComparer.Instance))
 							{
 								throw new ArgumentException("The list of mixins contains at least two delegate mixins for the same delegate signature.", nameof(mixinInstances));
@@ -133,7 +135,7 @@ namespace Castle.DynamicProxy
 			get { return mixinPositions.Keys; }
 		}
 
-		public IEnumerable<object> Mixins
+		public IEnumerable<object?> Mixins
 		{
 			get { return mixinsImpl; }
 		}
@@ -144,7 +146,7 @@ namespace Castle.DynamicProxy
 		}
 
 		// For two MixinData objects being regarded equal, only the sorted mixin types are considered, not the actual instances.
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (ReferenceEquals(this, obj))
 			{
@@ -197,7 +199,7 @@ namespace Castle.DynamicProxy
 			return hashCode;
 		}
 
-		public object GetMixinInstance(Type mixinInterfaceType)
+		public object? GetMixinInstance(Type mixinInterfaceType)
 		{
 			return mixinsImpl[mixinPositions[mixinInterfaceType]];
 		}

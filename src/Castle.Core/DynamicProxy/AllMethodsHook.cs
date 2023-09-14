@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -32,7 +34,7 @@ namespace Castle.DynamicProxy
 
 		public virtual bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
 		{
-			return SkippedTypes.Contains(methodInfo.DeclaringType) == false;
+			return SkippedTypes.Contains(methodInfo.DeclaringType!) == false;
 		}
 
 		public virtual void NonProxyableMemberNotification(Type type, MemberInfo memberInfo)
@@ -43,7 +45,7 @@ namespace Castle.DynamicProxy
 		{
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return obj != null && obj.GetType() == GetType();
 		}

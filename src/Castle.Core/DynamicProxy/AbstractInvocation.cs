@@ -12,18 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Diagnostics;
+	using System.Diagnostics.CodeAnalysis;
 	using System.Reflection;
 
 	public abstract class AbstractInvocation : IInvocation
 	{
 		private readonly IInterceptor[] interceptors;
-		private readonly object[] arguments;
+		private readonly object?[] arguments;
 		private int currentInterceptorIndex = -1;
-		private Type[] genericMethodArguments;
+		private Type[]? genericMethodArguments;
 		private readonly MethodInfo proxiedMethod;
 		protected readonly object proxyObject;
 
@@ -31,9 +34,8 @@ namespace Castle.DynamicProxy
 			object proxy,
 			IInterceptor[] interceptors,
 			MethodInfo proxiedMethod,
-			object[] arguments)
+			object?[] arguments)
 		{
-			Debug.Assert(proxiedMethod != null);
 			proxyObject = proxy;
 			this.interceptors = interceptors;
 			this.proxiedMethod = proxiedMethod;
@@ -45,13 +47,13 @@ namespace Castle.DynamicProxy
 			genericMethodArguments = arguments;
 		}
 
-		public abstract object InvocationTarget { get; }
+		public abstract object? InvocationTarget { get; }
 
-		public abstract Type TargetType { get; }
+		public abstract Type? TargetType { get; }
 
-		public abstract MethodInfo MethodInvocationTarget { get; }
+		public abstract MethodInfo? MethodInvocationTarget { get; }
 
-		public Type[] GenericArguments
+		public Type[]? GenericArguments
 		{
 			get { return genericMethodArguments; }
 		}
@@ -71,7 +73,7 @@ namespace Castle.DynamicProxy
 			return EnsureClosedMethod(Method);
 		}
 
-		public MethodInfo GetConcreteMethodInvocationTarget()
+		public MethodInfo? GetConcreteMethodInvocationTarget()
 		{
 			// it is ensured by the InvocationHelper that method will be closed
 			var method = MethodInvocationTarget;
@@ -80,19 +82,19 @@ namespace Castle.DynamicProxy
 			return method;
 		}
 
-		public object ReturnValue { get; set; }
+		public object? ReturnValue { get; set; }
 
-		public object[] Arguments
+		public object?[] Arguments
 		{
 			get { return arguments; }
 		}
 
-		public void SetArgumentValue(int index, object value)
+		public void SetArgumentValue(int index, object? value)
 		{
 			arguments[index] = value;
 		}
 
-		public object GetArgumentValue(int index)
+		public object? GetArgumentValue(int index)
 		{
 			return arguments[index];
 		}
@@ -137,6 +139,7 @@ namespace Castle.DynamicProxy
 
 		protected abstract void InvokeMethodOnTarget();
 
+		[DoesNotReturn]
 		protected void ThrowOnNoTarget()
 		{
 			// let's try to build as friendly message as we can
@@ -152,7 +155,7 @@ namespace Castle.DynamicProxy
 
 			string methodKindIs;
 			string methodKindDescription;
-			if (Method.DeclaringType.IsClass && Method.IsAbstract)
+			if (Method.DeclaringType!.IsClass && Method.IsAbstract)
 			{
 				methodKindIs = "is abstract";
 				methodKindDescription = "an abstract method";
