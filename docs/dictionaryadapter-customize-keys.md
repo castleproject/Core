@@ -84,6 +84,8 @@ If we had more properties on the interface, they'd all get prefixed.
 If you would like to prefix all keys in dictionary with full name of the interface use `TypeKeyPrefixAttribute`. This is especially useful when you have multiple adapters over common dictionary and you want to avoid one overriding another.
 
 ```csharp
+namespace Acme.Crm;
+
 [TypeKeyPrefix]
 public interface IPerson
 {
