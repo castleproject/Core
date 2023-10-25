@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Contributors
 				return null;
 			}
 
-			return new MetaMethod(method, method, isStandalone, proxyable, false);
+			return new MetaMethod(method, method, isStandalone, proxyable, hasTarget: !method.IsAbstract);
 		}
 	}
 }
