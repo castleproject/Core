@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -36,7 +38,7 @@ namespace Castle.DynamicProxy
 		///    cref = "InvalidOperationException" /> will be throws.
 		/// </remarks>
 		/// <exception cref = "InvalidCastException">Thrown when <paramref name = "target" /> is not assignable to the proxied type.</exception>
-		void ChangeInvocationTarget(object target);
+		void ChangeInvocationTarget(object? target);
 
 		/// <summary>
 		///   Permanently changes the target object of the proxy. This does not affect target of the current invocation.
@@ -54,6 +56,6 @@ namespace Castle.DynamicProxy
 		/// </remarks>
 		/// <exception cref = "InvalidCastException">Thrown when <paramref name = "target" /> is not assignable to the proxied type.</exception>
 		[Obsolete("Use ((IProxyTargetAccessor)invocation.Proxy).DynProxySetTarget(target) instead.")]
-		void ChangeProxyTarget(object target);
+		void ChangeProxyTarget(object? target);
 	}
 }

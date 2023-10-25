@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy.Internal
 {
 	using System;
@@ -19,30 +21,30 @@ namespace Castle.DynamicProxy.Internal
 
 	public abstract class CompositionInvocation : AbstractInvocation
 	{
-		protected object target;
+		protected object? target;
 
 		protected CompositionInvocation(
-			object target,
+			object? target,
 			object proxy,
 			IInterceptor[] interceptors,
 			MethodInfo proxiedMethod,
-			object[] arguments)
+			object?[] arguments)
 			: base(proxy, interceptors, proxiedMethod, arguments)
 		{
 			this.target = target;
 		}
 
-		public override object InvocationTarget
+		public override object? InvocationTarget
 		{
 			get { return target; }
 		}
 
-		public override MethodInfo MethodInvocationTarget
+		public override MethodInfo? MethodInvocationTarget
 		{
 			get { return InvocationHelper.GetMethodOnObject(target, Method); }
 		}
 
-		public override Type TargetType
+		public override Type? TargetType
 		{
 			get { return TypeUtil.GetTypeOrNull(target); }
 		}

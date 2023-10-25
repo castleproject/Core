@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -59,7 +61,7 @@ namespace Castle.DynamicProxy
 			get { return scope; }
 		}
 
-		public Type CreateClassProxyType(Type classToProxy, Type[] additionalInterfacesToProxy, ProxyGenerationOptions options)
+		public Type CreateClassProxyType(Type classToProxy, Type[]? additionalInterfacesToProxy, ProxyGenerationOptions options)
 		{
 			AssertValidType(classToProxy, nameof(classToProxy));
 			AssertValidTypes(additionalInterfacesToProxy, nameof(additionalInterfacesToProxy));
@@ -69,7 +71,7 @@ namespace Castle.DynamicProxy
 			return generator.GetProxyType();
 		}
 
-		public Type CreateClassProxyTypeWithTarget(Type classToProxy, Type[] additionalInterfacesToProxy,
+		public Type CreateClassProxyTypeWithTarget(Type classToProxy, Type[]? additionalInterfacesToProxy,
 		                                           ProxyGenerationOptions options)
 		{
 			AssertValidType(classToProxy, nameof(classToProxy));
@@ -81,7 +83,7 @@ namespace Castle.DynamicProxy
 			return generator.GetProxyType();
 		}
 
-		public Type CreateInterfaceProxyTypeWithTarget(Type interfaceToProxy, Type[] additionalInterfacesToProxy,
+		public Type CreateInterfaceProxyTypeWithTarget(Type interfaceToProxy, Type[]? additionalInterfacesToProxy,
 		                                               Type targetType,
 		                                               ProxyGenerationOptions options)
 		{
@@ -93,7 +95,7 @@ namespace Castle.DynamicProxy
 			return generator.GetProxyType();
 		}
 
-		public Type CreateInterfaceProxyTypeWithTargetInterface(Type interfaceToProxy, Type[] additionalInterfacesToProxy,
+		public Type CreateInterfaceProxyTypeWithTargetInterface(Type interfaceToProxy, Type[]? additionalInterfacesToProxy,
 		                                                        ProxyGenerationOptions options)
 		{
 			AssertValidType(interfaceToProxy, nameof(interfaceToProxy));
@@ -104,7 +106,7 @@ namespace Castle.DynamicProxy
 			return generator.GetProxyType();
 		}
 
-		public Type CreateInterfaceProxyTypeWithoutTarget(Type interfaceToProxy, Type[] additionalInterfacesToProxy,
+		public Type CreateInterfaceProxyTypeWithoutTarget(Type interfaceToProxy, Type[]? additionalInterfacesToProxy,
 		                                                  ProxyGenerationOptions options)
 		{
 			AssertValidType(interfaceToProxy, nameof(interfaceToProxy));
@@ -150,7 +152,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		private void AssertValidTypes(IEnumerable<Type> targetTypes, string paramName)
+		private void AssertValidTypes(IEnumerable<Type>? targetTypes, string paramName)
 		{
 			if (targetTypes != null)
 			{

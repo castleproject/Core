@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -34,26 +36,26 @@ namespace Castle.DynamicProxy
 		// Cached empty arrays to avoid unnecessary allocations
 		private static readonly PropertyInfo[] EmptyProperties = new PropertyInfo[0];
 		private static readonly FieldInfo[] EmptyFields = new FieldInfo[0];
-		private static readonly object[] EmptyValues = new object[0];
+		private static readonly object?[] EmptyValues = new object?[0];
 
-		private static readonly IEqualityComparer<object> ValueComparer = new AttributeArgumentValueEqualityComparer();
+		private static readonly AttributeArgumentValueEqualityComparer ValueComparer = new AttributeArgumentValueEqualityComparer();
 
 		private readonly CustomAttributeBuilder builder;
 		private readonly ConstructorInfo constructor;
-		private readonly object[] constructorArgs;
-		private readonly IDictionary<string, object> properties;
-		private readonly IDictionary<string, object> fields;
+		private readonly object?[] constructorArgs;
+		private readonly IDictionary<string, object?> properties;
+		private readonly IDictionary<string, object?> fields;
 
 		public CustomAttributeInfo(
 			ConstructorInfo constructor,
-			object[] constructorArgs,
+			object?[] constructorArgs,
 			PropertyInfo[] namedProperties,
-			object[] propertyValues,
+			object?[] propertyValues,
 			FieldInfo[] namedFields,
-			object[] fieldValues)
+			object?[] fieldValues)
 		{
 			// Will take care of validating the arguments
-			this.builder = new CustomAttributeBuilder(constructor, constructorArgs, namedProperties, propertyValues, namedFields, fieldValues);
+			this.builder = new CustomAttributeBuilder(constructor, constructorArgs, namedProperties, propertyValues!, namedFields, fieldValues!);
 
 			this.constructor = constructor;
 			this.constructorArgs = constructorArgs.Length == 0 ? EmptyValues : constructorArgs.ToArray();
@@ -63,25 +65,25 @@ namespace Castle.DynamicProxy
 
 		public CustomAttributeInfo(
 			ConstructorInfo constructor,
-			object[] constructorArgs,
+			object?[] constructorArgs,
 			PropertyInfo[] namedProperties,
-			object[] propertyValues)
+			object?[] propertyValues)
 			: this(constructor, constructorArgs, namedProperties, propertyValues, EmptyFields, EmptyValues)
 		{			
 		}
 
 		public CustomAttributeInfo(
 			ConstructorInfo constructor,
-			object[] constructorArgs,
+			object?[] constructorArgs,
 			FieldInfo[] namedFields,
-			object[] fieldValues)
+			object?[] fieldValues)
 			: this(constructor, constructorArgs, EmptyProperties, EmptyValues, namedFields, fieldValues)
 		{
 		}
 
 		public CustomAttributeInfo(
 			ConstructorInfo constructor,
-			object[] constructorArgs)
+			object?[] constructorArgs)
 			: this(constructor, constructorArgs, EmptyProperties, EmptyValues, EmptyFields, EmptyValues)
 		{
 		}
@@ -89,9 +91,9 @@ namespace Castle.DynamicProxy
 		public static CustomAttributeInfo FromExpression(Expression<Func<Attribute>> expression)
 		{
 			var namedProperties = new List<PropertyInfo>();
-			var propertyValues = new List<object>();
+			var propertyValues = new List<object?>();
 			var namedFields = new List<FieldInfo>();
-			var fieldValues = new List<object>();
+			var fieldValues = new List<object?>();
 
 			var body = UnwrapBody(expression.Body);
 
@@ -114,7 +116,7 @@ namespace Castle.DynamicProxy
 						throw new ArgumentException("Only assignment bindings are supported");
 					}
 
-					object value = GetAttributeArgumentValue(assignment.Expression, allowArray: true);
+					object? value = GetAttributeArgumentValue(assignment.Expression, allowArray: true);
 
 					var property = assignment.Member as PropertyInfo;
 					if (property != null)
@@ -138,15 +140,15 @@ namespace Castle.DynamicProxy
 				}
 			}
 
-			var ctorArguments = new List<object>();
+			var ctorArguments = new List<object?>();
 			foreach (var arg in newExpression.Arguments)
 			{
-				object value = GetAttributeArgumentValue(arg, allowArray: true);
+				object? value = GetAttributeArgumentValue(arg, allowArray: true);
 				ctorArguments.Add(value);
 			}
 
 			return new CustomAttributeInfo(
-				newExpression.Constructor,
+				newExpression.Constructor!,
 				ctorArguments.ToArray(),
 				namedProperties.ToArray(),
 				propertyValues.ToArray(),
@@ -168,7 +170,7 @@ namespace Castle.DynamicProxy
 			return body;
 		}
 
-		private static object GetAttributeArgumentValue(Expression arg, bool allowArray)
+		private static object? GetAttributeArgumentValue(Expression arg, bool allowArray)
 		{
 			switch (arg.NodeType)
 			{
@@ -190,11 +192,11 @@ namespace Castle.DynamicProxy
 					if (allowArray)
 					{
 						var newArrayExpr = (NewArrayExpression) arg;
-						var array = Array.CreateInstance(newArrayExpr.Type.GetElementType(), newArrayExpr.Expressions.Count);
+						var array = Array.CreateInstance(newArrayExpr.Type.GetElementType()!, newArrayExpr.Expressions.Count);
 						int index = 0;
 						foreach (var expr in newArrayExpr.Expressions)
 						{
-							object value = GetAttributeArgumentValue(expr, allowArray: false);
+							object? value = GetAttributeArgumentValue(expr, allowArray: false);
 							array.SetValue(value, index);
 							index++;
 						}
@@ -216,7 +218,7 @@ namespace Castle.DynamicProxy
 			get { return builder; }
 		}
 
-		public bool Equals(CustomAttributeInfo other)
+		public bool Equals(CustomAttributeInfo? other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
@@ -226,7 +228,7 @@ namespace Castle.DynamicProxy
 				AreMembersEquivalent(fields, other.fields);
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
@@ -246,14 +248,14 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		private static bool AreMembersEquivalent(IDictionary<string, object> x, IDictionary<string, object> y)
+		private static bool AreMembersEquivalent(IDictionary<string, object?> x, IDictionary<string, object?> y)
 		{
 			if (x.Count != y.Count)
 				return false;
 
 			foreach (var kvp in x)
 			{
-				object value;
+				object? value;
 				if (!y.TryGetValue(kvp.Key, out value))
 					return false;
 				if (!ValueComparer.Equals(kvp.Value, value))
@@ -262,12 +264,12 @@ namespace Castle.DynamicProxy
 			return true;
 		}
 
-		private static int CombineHashCodes(IEnumerable<object> values)
+		private static int CombineHashCodes(IEnumerable<object?> values)
 		{
 			unchecked
 			{
 				int hashCode = 173;
-				foreach (object value in values)
+				foreach (object? value in values)
 				{
 					hashCode = (hashCode*397) ^ ValueComparer.GetHashCode(value);
 				}
@@ -275,7 +277,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		private static int CombineMemberHashCodes(IDictionary<string, object> dict)
+		private static int CombineMemberHashCodes(IDictionary<string, object?> dict)
 		{
 			unchecked
 			{
@@ -293,10 +295,10 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		private IDictionary<string, object> MakeNameValueDictionary<T>(T[] members, object[] values)
+		private IDictionary<string, object?> MakeNameValueDictionary<T>(T[] members, object?[] values)
 			where T : MemberInfo
 		{
-			var dict = new Dictionary<string, object>();
+			var dict = new Dictionary<string, object?>();
 			for (int i = 0; i < members.Length; i++)
 			{
 				dict.Add(members[i].Name, values[i]);
@@ -304,9 +306,9 @@ namespace Castle.DynamicProxy
 			return dict;
 		}
 
-		private class AttributeArgumentValueEqualityComparer : IEqualityComparer<object>
+		private class AttributeArgumentValueEqualityComparer : IEqualityComparer<object?>
 		{
-			bool IEqualityComparer<object>.Equals(object x, object y)
+			new public bool Equals(object? x, object? y)
 			{
 				if (ReferenceEquals(x, y))
 					return true;
@@ -323,7 +325,7 @@ namespace Castle.DynamicProxy
 				return x.Equals(y);
 			}
 
-			int IEqualityComparer<object>.GetHashCode(object obj)
+			public int GetHashCode(object? obj)
 			{
 				if (obj == null)
 					return 0;
@@ -334,13 +336,13 @@ namespace Castle.DynamicProxy
 				return obj.GetHashCode();
 			}
 
-			private static IEnumerable<object> AsObjectEnumerable(object array)
+			private static IEnumerable<object?> AsObjectEnumerable(object array)
 			{
 				// Covariance doesn't work for value types
-				if (array.GetType().GetElementType().IsValueType)
-					return ((Array)array).Cast<object>();
+				if (array.GetType().GetElementType()!.IsValueType)
+					return ((Array)array).Cast<object?>();
 
-				return (IEnumerable<object>)array;
+				return (IEnumerable<object?>)array;
 			}
 		}
 	}

@@ -14,6 +14,8 @@
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE
 
+#nullable enable
+
 namespace Castle.DynamicProxy
 {
 	/// <summary>
@@ -39,7 +41,7 @@ namespace Castle.DynamicProxy
 		///   This method does not support saving multiple files. If both a signed and an unsigned module have been generated, use the 
 		///   respective methods of the <see cref = "ModuleScope" />.
 		/// </remarks>
-		public string SaveAssembly()
+		public string? SaveAssembly()
 		{
 			return ModuleScope.SaveAssembly();
 		}
