@@ -131,7 +131,11 @@ namespace Castle.DynamicProxy.Generators
 			CheckNotGenericTypeDefinition(parentType, nameof(parentType));
 			CheckNotGenericTypeDefinitions(interfaces, nameof(interfaces));
 
+#if FEATURE_BYREFLIKE
+			return new ClassEmitter(Scope, typeName, parentType, interfaces) { ByRefLikeConverterSelector = ProxyGenerationOptions.ByRefLikeConverterSelector };
+#else
 			return new ClassEmitter(Scope, typeName, parentType, interfaces);
+#endif
 		}
 
 		protected void CheckNotGenericTypeDefinition(Type type, string argumentName)

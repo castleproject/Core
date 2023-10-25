@@ -126,6 +126,21 @@ namespace Castle.DynamicProxy
 		/// </summary>
 		public IInterceptorSelector Selector { get; set; }
 
+#if FEATURE_BYREFLIKE
+		/// <summary>
+		///   Gets or sets the <see cref="IByRefLikeConverterSelector"/> that should be used by created proxies
+		///   to determine how to convert argument values of by-ref-like types when transferring them
+		///   into &amp; out of the <see cref="IInvocation.Arguments"/> array during interception.
+		///   If set to <see langword="null"/> (which is the default), created proxies will represent by-ref-like
+		///   arguments as <see langword="null"/> in <see cref="IInvocation.Arguments"/>.
+		///   <para>
+		///     You should not modify this property once this <see cref="ProxyGenerationOptions"/> instance
+		///     has been used to create a proxy.
+		///   </para>
+		/// </summary>
+		public IByRefLikeConverterSelector ByRefLikeConverterSelector { get; set; }
+#endif
+
 		/// <summary>
 		///   Gets or sets the class type from which generated interface proxy types will be derived.
 		///   Defaults to <c><see langword="typeof"/>(<see langword="object"/>)</c>.
@@ -269,6 +284,12 @@ namespace Castle.DynamicProxy
 			{
 				return false;
 			}
+#if FEATURE_BYREFLIKE
+			if (!Equals(ByRefLikeConverterSelector == null, proxyGenerationOptions.ByRefLikeConverterSelector == null))
+			{
+				return false;
+			}
+#endif
 			if (!Equals(MixinData, proxyGenerationOptions.MixinData))
 			{
 				return false;
@@ -291,6 +312,9 @@ namespace Castle.DynamicProxy
 
 			var result = Hook != null ? Hook.GetType().GetHashCode() : 0;
 			result = 29*result + (Selector != null ? 1 : 0);
+#if FEATURE_BYREFLIKE
+			result = 29*result + (ByRefLikeConverterSelector != null ? 1 : 0);
+#endif
 			result = 29*result + MixinData.GetHashCode();
 			result = 29*result + (BaseTypeForInterfaceProxy != null ? BaseTypeForInterfaceProxy.GetHashCode() : 0);
 			result = 29*result + GetAdditionalAttributesHashCode();

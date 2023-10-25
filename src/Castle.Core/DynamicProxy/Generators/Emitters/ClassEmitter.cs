@@ -65,6 +65,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		{
 		}
 
+#if FEATURE_BYREFLIKE
+		public IByRefLikeConverterSelector ByRefLikeConverterSelector { get; set; }
+#endif
+
 		public ModuleScope ModuleScope
 		{
 			get { return moduleScope; }
