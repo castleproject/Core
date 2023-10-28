@@ -18,7 +18,21 @@
 		<SignAssembly>True</SignAssembly>
 		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
 		<PackageTags>castle logging log4net</PackageTags>
+	  <RepositoryUrl>https://github.com/castleproject/Core</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
+
+  <PropertyGroup Condition="'$(CI)' == 'True'">
+    <!--Deterministic Build and Source Link settings -->
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+  </ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="Properties\" />
