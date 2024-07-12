@@ -27,6 +27,7 @@ namespace Castle.Components.DictionaryAdapter
 
 	using Castle.Components.DictionaryAdapter.Xml;
 	using Castle.Core.Internal;
+	using Castle.DynamicProxy;
 
 	/// <summary>
 	/// Uses Reflection.Emit to expose the properties of a dictionary
