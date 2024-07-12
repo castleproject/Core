@@ -16,6 +16,11 @@ namespace Castle
 		static readonly AssemblyBuilderAccess _automatic = AssemblyBuilderAccess.Run;
 #endif
 		static AssemblyBuilderAccess? _override;
+
+		/// <summary>
+		/// Get or set the default <see cref="System.Reflection.Emit.AssemblyBuilderAccess"/> to use when creating dynamic assemblies.
+		/// On .Net Core, the default is <see cref="System.Reflection.Emit.AssemblyBuilderAccess.RunAndCollect"/> if Castle.Core is loaded in a collectible AssemblyLoadContext.
+		/// </summary>
 		public static AssemblyBuilderAccess Default
 		{
 			get => _override ?? _automatic;
