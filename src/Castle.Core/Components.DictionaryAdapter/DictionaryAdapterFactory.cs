@@ -148,7 +148,7 @@ namespace Castle.Components.DictionaryAdapter
 		private static TypeBuilder CreateTypeBuilder(Type type)
 		{
 			var assemblyName = new AssemblyName("CastleDictionaryAdapterAssembly");
-			var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+			var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccessDefaults.Default);
 			var moduleBuilder = assemblyBuilder.DefineDynamicModule("CastleDictionaryAdapterModule");
 			return CreateAdapterType(type, moduleBuilder);
 		}
