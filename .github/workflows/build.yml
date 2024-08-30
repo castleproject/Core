@@ -12,38 +12,45 @@ jobs:
 
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ ubuntu-latest, windows-latest, macos-13 ]
+
+        # NOTE: If we wanted to use `macos-latest` we would have to move the .NET Core 2.1 and 3.1 builds and test runs
+        # to a separate job. This is because `macos-14` and newer are ARM-only and those target frameworks don't support
+        # that architecture, causing `dotnet` to want to fall back to X64. However, once we install .NET 6 or newer,
+        # we get a toolchain that only has ARM support and no X64 support, so that fallback will no longer work.
+        # Using `macos-13` is (for the time being, while still available) the simpler solution as it is not ARM-based yet,
+        # so there won't be any architecture mismatch in the first place.
 
     runs-on: ${{ matrix.os }}
 
     steps:
 
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       # Several .NET Core versions will be used during the test run.
       # The lowest version gets installed first in order to prevent
       # "a newer version is already installed" install errors.
 
       - name: Install .NET Core 2.1
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 2.1.x
 
       - name: Install .NET Core 3.1
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 3.1.x
 
       - name: Install .NET 6.0
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 6.0.x
 
       # Building requires an up-to-date .NET SDK.
 
       - name: Install .NET 7.0
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 7.0.x
 
