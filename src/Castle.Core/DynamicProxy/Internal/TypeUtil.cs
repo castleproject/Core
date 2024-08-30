@@ -27,6 +27,7 @@ namespace Castle.DynamicProxy.Internal
 	public static class TypeUtil
 	{
 		private static readonly Dictionary<Type, MethodInfo[]> instanceMethodsCache = new Dictionary<Type, MethodInfo[]>();
+		private static readonly Dictionary<Type, bool> hasAnyOverridableDefaultImplementationsCache = new Dictionary<Type, bool>();
 
 		internal static bool IsNullableType(this Type type)
 		{
@@ -132,6 +133,32 @@ namespace Castle.DynamicProxy.Internal
 				return null;
 			}
 			return target.GetType();
+		}
+
+		internal static bool HasAnyOverridableDefaultImplementations(this Type interfaceType)
+		{
+			Debug.Assert(interfaceType != null);
+			Debug.Assert(interfaceType.IsInterface);
+
+			var cache = hasAnyOverridableDefaultImplementationsCache;
+			lock (cache)
+			{
+				if (!cache.TryGetValue(interfaceType, out var result))
+				{
+					foreach (var method in interfaceType.GetAllInstanceMethods())
+					{
+						if (method.IsAbstract == false && method.IsFinal == false && method.IsVirtual)
+						{
+							result = true;
+							break;
+						}
+					}
+
+					cache[interfaceType] = result;
+				}
+
+				return result;
+			}
 		}
 
 		internal static Type[] AsTypeArray(this GenericTypeParameterBuilder[] typeInfos)
