@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -57,9 +59,9 @@ namespace Castle.DynamicProxy
 		///    cref = "InternalsVisibleToAttribute" /> 
 		///   pointing to Castle Dynamic Proxy assembly, in assembly containing that type, if this is appropriate.</exception>
 		/// <seealso cref = "ClassProxyGenerator" />
-		Type CreateClassProxyType(Type classToProxy, Type[] additionalInterfacesToProxy, ProxyGenerationOptions options);
+		Type CreateClassProxyType(Type classToProxy, Type[]? additionalInterfacesToProxy, ProxyGenerationOptions options);
 
-		Type CreateClassProxyTypeWithTarget(Type classToProxy, Type[] additionalInterfacesToProxy,
+		Type CreateClassProxyTypeWithTarget(Type classToProxy, Type[]? additionalInterfacesToProxy,
 		                                    ProxyGenerationOptions options);
 
 		/// <summary>
@@ -85,7 +87,7 @@ namespace Castle.DynamicProxy
 		///    cref = "InternalsVisibleToAttribute" /> 
 		///   pointing to Castle Dynamic Proxy assembly, in assembly containing that type, if this is appropriate.</exception>
 		/// <seealso cref = "InterfaceProxyWithTargetGenerator" />
-		Type CreateInterfaceProxyTypeWithTarget(Type interfaceToProxy, Type[] additionalInterfacesToProxy, Type targetType,
+		Type CreateInterfaceProxyTypeWithTarget(Type interfaceToProxy, Type[]? additionalInterfacesToProxy, Type targetType,
 		                                        ProxyGenerationOptions options);
 
 		/// <summary>
@@ -110,7 +112,7 @@ namespace Castle.DynamicProxy
 		///    cref = "InternalsVisibleToAttribute" /> 
 		///   pointing to Castle Dynamic Proxy assembly, in assembly containing that type, if this is appropriate.</exception>
 		/// <seealso cref = "InterfaceProxyWithTargetInterfaceGenerator" />
-		Type CreateInterfaceProxyTypeWithTargetInterface(Type interfaceToProxy, Type[] additionalInterfacesToProxy,
+		Type CreateInterfaceProxyTypeWithTargetInterface(Type interfaceToProxy, Type[]? additionalInterfacesToProxy,
 		                                                 ProxyGenerationOptions options);
 
 		/// <summary>
@@ -131,7 +133,7 @@ namespace Castle.DynamicProxy
 		///    cref = "InternalsVisibleToAttribute" /> 
 		///   pointing to Castle Dynamic Proxy assembly, in assembly containing that type, if this is appropriate.</exception>
 		/// <seealso cref = "InterfaceProxyWithoutTargetGenerator" />
-		Type CreateInterfaceProxyTypeWithoutTarget(Type interfaceToProxy, Type[] additionalInterfacesToProxy,
+		Type CreateInterfaceProxyTypeWithoutTarget(Type interfaceToProxy, Type[]? additionalInterfacesToProxy,
 		                                           ProxyGenerationOptions options);
 	}
 }

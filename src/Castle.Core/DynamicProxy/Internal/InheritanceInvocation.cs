@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy.Internal
 {
 	using System;
@@ -26,7 +28,7 @@ namespace Castle.DynamicProxy.Internal
 			object proxy,
 			IInterceptor[] interceptors,
 			MethodInfo proxiedMethod,
-			object[] arguments)
+			object?[] arguments)
 			: base(proxy, interceptors, proxiedMethod, arguments)
 		{
 			this.targetType = targetType;

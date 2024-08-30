@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy
 {
 	using System;
@@ -37,6 +39,6 @@ namespace Castle.DynamicProxy
 		///   legal to return other <see cref = "IInterceptor" /> implementations than these provided in
 		///   <paramref name = "interceptors" />.
 		/// </remarks>
-		IInterceptor[] SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors);
+		IInterceptor[]? SelectInterceptors(Type type, MethodInfo method, IInterceptor[] interceptors);
 	}
 }

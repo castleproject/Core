@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy.Internal
 {
 	using System;
@@ -51,10 +53,9 @@ namespace Castle.DynamicProxy.Internal
 			var currentType = type;
 			while (currentType != typeof(object))
 			{
-				Debug.Assert(currentType != null);
 				var currentFields = currentType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 				fields.AddRange(currentFields);
-				currentType = currentType.BaseType;
+				currentType = currentType.BaseType!;
 			}
 
 			return fields.ToArray();
@@ -66,7 +67,7 @@ namespace Castle.DynamicProxy.Internal
 		/// </summary>
 		internal static MethodInfo[] GetAllInstanceMethods(this Type type)
 		{
-			MethodInfo[] methodsInCache;
+			MethodInfo[]? methodsInCache;
 
 			lock (instanceMethodsCache)
 			{
@@ -85,7 +86,7 @@ namespace Castle.DynamicProxy.Internal
 		/// <summary>
 		///   Returns list of all unique interfaces implemented given types, including their base interfaces.
 		/// </summary>
-		internal static Type[] GetAllInterfaces(params Type[] types)
+		internal static Type[] GetAllInterfaces(params Type[]? types)
 		{
 			if (types == null)
 			{
@@ -126,7 +127,7 @@ namespace Castle.DynamicProxy.Internal
 		}
 
 
-		public static Type GetTypeOrNull(object target)
+		public static Type? GetTypeOrNull(object? target)
 		{
 			if (target == null)
 			{
@@ -186,11 +187,11 @@ namespace Castle.DynamicProxy.Internal
 			return methodInfo.DeclaringType == typeof(object) && string.Equals("MemberwiseClone", methodInfo.Name, StringComparison.OrdinalIgnoreCase);
 		}
 
-		internal static void SetStaticField(this Type type, string fieldName, BindingFlags additionalFlags, object value)
+		internal static void SetStaticField(this Type type, string fieldName, BindingFlags additionalFlags, object? value)
 		{
 			var flags = additionalFlags | BindingFlags.Static;
 
-			FieldInfo field = type.GetField(fieldName, flags);
+			FieldInfo? field = type.GetField(fieldName, flags);
 			if (field == null)
 			{
 				throw new DynamicProxyException(string.Format(
@@ -264,13 +265,13 @@ namespace Castle.DynamicProxy.Internal
 		{
 			public static readonly TypeNameComparer Instance = new TypeNameComparer();
 
-			public int Compare(Type x, Type y)
+			public int Compare(Type? x, Type? y)
 			{
 				// Comparing by `type.AssemblyQualifiedName` would give the same result,
 				// but it performs a hidden concatenation (and therefore string allocation)
 				// of `type.FullName` and `type.Assembly.FullName`. We can avoid this
 				// overhead by comparing the two properties separately.
-				int result = string.CompareOrdinal(x.FullName, y.FullName);
+				int result = string.CompareOrdinal(x!.FullName, y!.FullName);
 				return result != 0 ? result : string.CompareOrdinal(x.Assembly.FullName, y.Assembly.FullName);
 			}
 		}

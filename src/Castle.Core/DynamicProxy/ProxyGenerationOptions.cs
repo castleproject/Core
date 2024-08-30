@@ -12,10 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
 	using System.Reflection;
 	using System.Reflection.Emit;
@@ -43,13 +46,13 @@ namespace Castle.DynamicProxy
 	{
 		public static readonly ProxyGenerationOptions Default = new ProxyGenerationOptions();
 
-		private List<object> mixins;
+		private List<object>? mixins;
 		private readonly IList<CustomAttributeInfo> additionalAttributes = new List<CustomAttributeInfo>();
 
 #if FEATURE_SERIALIZATION
 		[NonSerialized]
 #endif
-		private MixinData mixinData; // this is calculated dynamically on proxy type creation
+		private MixinData? mixinData; // this is calculated dynamically on proxy type creation
 
 		/// <summary>
 		///   Initializes a new instance of the <see cref = "ProxyGenerationOptions" /> class.
@@ -79,6 +82,7 @@ namespace Castle.DynamicProxy
 		}
 #endif
 
+		[MemberNotNull(nameof(mixinData))]
 		public void Initialize()
 		{
 			if (mixinData == null)
@@ -124,7 +128,7 @@ namespace Castle.DynamicProxy
 		///     has been used to create a proxy.
 		///   </para>
 		/// </summary>
-		public IInterceptorSelector Selector { get; set; }
+		public IInterceptorSelector? Selector { get; set; }
 
 		/// <summary>
 		///   Gets or sets the class type from which generated interface proxy types will be derived.
@@ -218,6 +222,7 @@ namespace Castle.DynamicProxy
 			AddMixinImpl(instance);
 		}
 
+		[MemberNotNull(nameof(mixins))]
 		private void AddMixinImpl(object instanceOrType)
 		{
 			if (mixins == null)
@@ -244,7 +249,7 @@ namespace Castle.DynamicProxy
 			get { return mixins != null && mixins.Count != 0; }
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (ReferenceEquals(this, obj))
 			{
