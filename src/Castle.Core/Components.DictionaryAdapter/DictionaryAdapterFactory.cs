@@ -27,6 +27,7 @@ namespace Castle.Components.DictionaryAdapter
 
 	using Castle.Components.DictionaryAdapter.Xml;
 	using Castle.Core.Internal;
+	using Castle.DynamicProxy;
 
 	/// <summary>
 	/// Uses Reflection.Emit to expose the properties of a dictionary
@@ -148,7 +149,7 @@ namespace Castle.Components.DictionaryAdapter
 		private static TypeBuilder CreateTypeBuilder(Type type)
 		{
 			var assemblyName = new AssemblyName("CastleDictionaryAdapterAssembly");
-			var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+			var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccessDefaults.Default);
 			var moduleBuilder = assemblyBuilder.DefineDynamicModule("CastleDictionaryAdapterModule");
 			return CreateAdapterType(type, moduleBuilder);
 		}
