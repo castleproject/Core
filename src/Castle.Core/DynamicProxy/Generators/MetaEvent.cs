@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators
 
 	using Castle.DynamicProxy.Generators.Emitters;
 
-	internal class MetaEvent : MetaTypeElement, IEquatable<MetaEvent>
+	internal sealed class MetaEvent : MetaTypeElement, IEquatable<MetaEvent>
 	{
 		private readonly MetaMethod adder;
 		private readonly MetaMethod remover;

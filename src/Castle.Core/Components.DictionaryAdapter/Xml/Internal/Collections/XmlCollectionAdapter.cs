@@ -17,7 +17,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
     using System;
     using System.Collections.Generic;
 
-	internal class XmlCollectionAdapter<T> : ICollectionAdapter<T>, IXmlNodeSource
+	internal sealed class XmlCollectionAdapter<T> : ICollectionAdapter<T>, IXmlNodeSource
     {
         private List<XmlCollectionItem<T>>  items;
         private List<XmlCollectionItem<T>>  snapshot;

@@ -17,7 +17,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System.Xml.XPath;
 	using System.Xml.Xsl;
 
-	internal class XPathContext : XsltContext
+	internal sealed class XPathContext : XsltContext
 	{
 		private readonly XsltContext context;
 

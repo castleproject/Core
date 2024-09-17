@@ -14,7 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	internal class XmlNodeSet<T> : SetProjection<T>, IXmlNodeSource
+	internal sealed class XmlNodeSet<T> : SetProjection<T>, IXmlNodeSource
 	{
 		public XmlNodeSet
 		(

@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
-	internal class CompositionInvocationTypeGenerator : InvocationTypeGenerator
+	internal sealed class CompositionInvocationTypeGenerator : InvocationTypeGenerator
 	{
 		public static readonly Type BaseType = typeof(CompositionInvocation);
 

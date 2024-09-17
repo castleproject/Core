@@ -33,7 +33,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		public override bool Contains(object key)
 		{
-			return dictionary.Keys.Contains(GetKey(key));
+			return dictionary.ContainsKey(GetKey(key));
 		}
 
 		public override object this[object key]

@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class FinallyStatement : IStatement
+	internal sealed class FinallyStatement : IStatement
 	{
 		public void Emit(ILGenerator gen)
 		{

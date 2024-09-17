@@ -84,7 +84,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		}
 
 		private static readonly IList<CompiledXPathNode>
-			NoDependencies = Array.AsReadOnly(new CompiledXPathNode[0]);
+			NoDependencies = Array.AsReadOnly(Array.Empty<CompiledXPathNode>());
 
 		private bool HasNoRealDependencies()
 		{

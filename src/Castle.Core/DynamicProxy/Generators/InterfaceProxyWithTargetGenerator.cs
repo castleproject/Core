@@ -60,7 +60,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		private bool ImplementedByTarget(ICollection<Type> targetInterfaces, Type @interface)
+		private static bool ImplementedByTarget(ICollection<Type> targetInterfaces, Type @interface)
 		{
 			return targetInterfaces.Contains(@interface);
 		}

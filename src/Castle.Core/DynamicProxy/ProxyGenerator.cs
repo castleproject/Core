@@ -321,7 +321,7 @@ namespace Castle.DynamicProxy
 			return Activator.CreateInstance(generatedType, arguments.ToArray())!;
 		}
 
-		protected List<object?> GetConstructorArguments(object? target, IInterceptor[] interceptors,
+		protected static List<object?> GetConstructorArguments(object? target, IInterceptor[] interceptors,
 		                                                ProxyGenerationOptions options)
 		{
 			// create constructor arguments (initialized with mixin implementations, interceptors and target type constructor arguments)
@@ -858,7 +858,7 @@ namespace Castle.DynamicProxy
 			                                          Type.EmptyTypes,
 			                                          target,
 			                                          ProxyGenerationOptions.Default,
-			                                          new object[0],
+			                                          Array.Empty<object>(),
 			                                          interceptors);
 		}
 
@@ -888,7 +888,7 @@ namespace Castle.DynamicProxy
 			                                          Type.EmptyTypes,
 			                                          target,
 			                                          options,
-			                                          new object[0],
+			                                          Array.Empty<object>(),
 			                                          interceptors);
 		}
 
@@ -921,7 +921,7 @@ namespace Castle.DynamicProxy
 			                                  additionalInterfacesToProxy,
 			                                  target,
 			                                  ProxyGenerationOptions.Default,
-			                                  new object[0],
+			                                  Array.Empty<object>(),
 			                                  interceptors);
 		}
 
@@ -1019,7 +1019,7 @@ namespace Castle.DynamicProxy
 			                                  Type.EmptyTypes,
 			                                  target,
 			                                  ProxyGenerationOptions.Default,
-			                                  new object[0],
+			                                  Array.Empty<object>(),
 			                                  interceptors);
 		}
 
@@ -1052,7 +1052,7 @@ namespace Castle.DynamicProxy
 			                                  Type.EmptyTypes,
 			                                  target,
 			                                  options,
-			                                  new object[0],
+			                                  Array.Empty<object>(),
 			                                  interceptors);
 		}
 
@@ -1087,7 +1087,7 @@ namespace Castle.DynamicProxy
 			                                  additionalInterfacesToProxy,
 			                                  target,
 			                                  options,
-			                                  new object[0],
+			                                  Array.Empty<object>(),
 			                                  interceptors);
 		}
 
@@ -1465,7 +1465,7 @@ namespace Castle.DynamicProxy
 			return CreateClassProxyInstance(proxyType, arguments, classToProxy, constructorArguments);
 		}
 
-		protected object CreateClassProxyInstance(Type proxyType, List<object?> proxyArguments, Type classToProxy,
+		protected static object CreateClassProxyInstance(Type proxyType, List<object?> proxyArguments, Type classToProxy,
 		                                          object?[]? constructorArguments)
 		{
 			try
@@ -1495,7 +1495,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		protected void CheckNotGenericTypeDefinition(Type type, string argumentName)
+		protected static void CheckNotGenericTypeDefinition(Type type, string argumentName)
 		{
 			if (type != null && type.IsGenericTypeDefinition)
 			{
@@ -1505,7 +1505,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		protected void CheckNotGenericTypeDefinitions(IEnumerable<Type>? types, string argumentName)
+		protected static void CheckNotGenericTypeDefinitions(IEnumerable<Type>? types, string argumentName)
 		{
 			if (types == null)
 			{
@@ -1517,7 +1517,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		protected List<object?> BuildArgumentListForClassProxyWithTarget(object? target, ProxyGenerationOptions options,
+		protected static List<object?> BuildArgumentListForClassProxyWithTarget(object? target, ProxyGenerationOptions options,
 		                                                                 IInterceptor[] interceptors)
 		{
 			var arguments = new List<object?>();
@@ -1531,7 +1531,7 @@ namespace Castle.DynamicProxy
 			return arguments;
 		}
 
-		protected List<object?> BuildArgumentListForClassProxy(ProxyGenerationOptions options, IInterceptor[] interceptors)
+		protected static List<object?> BuildArgumentListForClassProxy(ProxyGenerationOptions options, IInterceptor[] interceptors)
 		{
 			var arguments = new List<object?>(options.MixinData.Mixins) { interceptors };
 			if (options.Selector != null)

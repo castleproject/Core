@@ -17,10 +17,8 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Reflection;
-	using System.Xml.Serialization;
 
-	internal class XmlTypeSerializerCache : SingletonDispenser<Type, XmlTypeSerializer>
+	internal sealed class XmlTypeSerializerCache : SingletonDispenser<Type, XmlTypeSerializer>
 	{
 		public static readonly XmlTypeSerializerCache
 			Instance = new XmlTypeSerializerCache();

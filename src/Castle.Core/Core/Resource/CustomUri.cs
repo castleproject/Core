@@ -39,7 +39,7 @@ namespace Castle.Core.Resource
 			{
 				throw new ArgumentNullException(nameof(resourceIdentifier));
 			}
-			if (resourceIdentifier == string.Empty)
+			if (resourceIdentifier.Length == 0)
 			{
 				throw new ArgumentException("Empty resource identifier is not allowed", nameof(resourceIdentifier));
 			}

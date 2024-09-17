@@ -29,7 +29,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		private new Type Condition { get; set; }
 
-		class RemoveIfEmptyCondition : ICondition
+		sealed class RemoveIfEmptyCondition : ICondition
 		{
 			public static readonly RemoveIfEmptyCondition Instance = new RemoveIfEmptyCondition();
 

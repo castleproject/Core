@@ -17,14 +17,13 @@ namespace Castle.DynamicProxy.Contributors
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics;
-	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 
-	internal class MixinContributor : CompositeTypeContributor
+	internal sealed class MixinContributor : CompositeTypeContributor
 	{
 		private readonly bool canChangeTarget;
 		private readonly IList<Type> empty = new List<Type>();

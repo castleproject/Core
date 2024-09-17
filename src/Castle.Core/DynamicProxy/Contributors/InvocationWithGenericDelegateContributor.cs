@@ -16,7 +16,6 @@ namespace Castle.DynamicProxy.Contributors
 {
 	using System;
 	using System.Diagnostics;
-	using System.Linq;
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators;
@@ -25,7 +24,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
-	internal class InvocationWithGenericDelegateContributor : IInvocationCreationContributor
+	internal sealed class InvocationWithGenericDelegateContributor : IInvocationCreationContributor
 	{
 		private readonly Type delegateType;
 		private readonly MetaMethod method;
@@ -73,7 +72,7 @@ namespace Castle.DynamicProxy.Contributors
 			return localReference;
 		}
 
-		private AssignStatement SetDelegate(LocalReference localDelegate, Reference localTarget,
+		private static AssignStatement SetDelegate(LocalReference localDelegate, Reference localTarget,
 		                                    Type closedDelegateType, MethodInfo closedMethodOnTarget)
 		{
 			var delegateCreateDelegate = new MethodInvocationExpression(

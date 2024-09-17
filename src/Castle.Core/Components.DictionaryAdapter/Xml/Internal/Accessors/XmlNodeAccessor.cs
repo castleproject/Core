@@ -33,7 +33,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		{
 			if (name == null)
 				throw Error.ArgumentNull(nameof(name));
-			if (name == string.Empty)
+			if (name.Length == 0)
 				throw Error.InvalidLocalName();
 
 			localName    = XmlConvert.EncodeLocalName(name);

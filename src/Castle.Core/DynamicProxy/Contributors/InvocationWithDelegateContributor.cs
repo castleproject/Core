@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
 
-	internal class InvocationWithDelegateContributor : IInvocationCreationContributor
+	internal sealed class InvocationWithDelegateContributor : IInvocationCreationContributor
 	{
 		private readonly Type delegateType;
 		private readonly MetaMethod method;

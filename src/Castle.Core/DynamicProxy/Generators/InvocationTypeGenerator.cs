@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			var methodInfo = method.Method;
 
-			var interfaces = new Type[0];
+			var interfaces = Type.EmptyTypes;
 
 			if (canChangeTarget)
 			{
@@ -182,7 +182,7 @@ namespace Castle.DynamicProxy.Generators
 			invokeMethodOnTarget.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		private void AssignBackByRefArguments(MethodEmitter invokeMethodOnTarget, Dictionary<int, LocalReference> byRefArguments)
+		private static void AssignBackByRefArguments(MethodEmitter invokeMethodOnTarget, Dictionary<int, LocalReference> byRefArguments)
 		{
 			if (byRefArguments.Count == 0)
 			{
@@ -226,7 +226,7 @@ namespace Castle.DynamicProxy.Generators
 			return contributor.CreateConstructor(baseCtorArguments, invocation);
 		}
 
-		private void EmitCallThrowOnNoTarget(MethodEmitter invokeMethodOnTarget)
+		private static void EmitCallThrowOnNoTarget(MethodEmitter invokeMethodOnTarget)
 		{
 			var throwOnNoTarget = new MethodInvocationExpression(InvocationMethods.ThrowOnNoTarget);
 

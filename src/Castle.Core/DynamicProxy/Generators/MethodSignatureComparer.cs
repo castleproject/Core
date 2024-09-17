@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Reflection;
 
-	internal class MethodSignatureComparer : IEqualityComparer<MethodInfo>
+	internal sealed class MethodSignatureComparer : IEqualityComparer<MethodInfo>
 	{
 		public static readonly MethodSignatureComparer Instance = new MethodSignatureComparer();
 
@@ -101,7 +101,7 @@ namespace Castle.DynamicProxy.Generators
 			return false;
 		}
 
-		private bool EqualSignatureTypes(Type x, Type y)
+		private static bool EqualSignatureTypes(Type x, Type y)
 		{
 			if (x.IsByRef != y.IsByRef)
 			{
@@ -186,7 +186,7 @@ namespace Castle.DynamicProxy.Generators
 			return obj.Name.GetHashCode() ^ obj.GetParameters().Length; // everything else would be too cumbersome
 		}
 
-		private bool EqualNames(MethodInfo x, MethodInfo y)
+		private static bool EqualNames(MethodInfo x, MethodInfo y)
 		{
 			return x.Name == y.Name;
 		}

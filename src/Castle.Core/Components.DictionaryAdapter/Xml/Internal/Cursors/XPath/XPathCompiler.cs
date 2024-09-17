@@ -310,7 +310,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			Error
 		}
 
-		private class Tokenizer
+		private sealed class Tokenizer
 		{
 			private readonly string input;
 

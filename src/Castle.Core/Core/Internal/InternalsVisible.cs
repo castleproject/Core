@@ -14,7 +14,7 @@
 
 namespace Castle.Core.Internal
 {
-	public class InternalsVisible
+	public static class InternalsVisible
 	{
 		/// <summary>
 		///   Constant to use when making assembly internals visible to Castle.Core 

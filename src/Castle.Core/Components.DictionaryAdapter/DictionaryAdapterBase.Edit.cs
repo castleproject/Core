@@ -18,7 +18,6 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Linq;
-	using System.Reflection;
 
 	public abstract partial class DictionaryAdapterBase
 	{
@@ -223,7 +222,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region Nested Class: SuppressEditingScope
 
-		class SuppressEditingScope : IDisposable
+		sealed class SuppressEditingScope : IDisposable
 		{
 			private readonly DictionaryAdapterBase adapter;
 

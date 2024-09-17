@@ -39,7 +39,7 @@ namespace Castle.Core.Logging
 			return InternalCreate(name);
 		}
 
-		private ILogger InternalCreate(string name)
+		private static ILogger InternalCreate(string name)
 		{
 			return new TraceLogger(name);
 		}
@@ -49,7 +49,7 @@ namespace Castle.Core.Logging
 			return InternalCreate(name, level);
 		}
 
-		private ILogger InternalCreate(string name, LoggerLevel level)
+		private static ILogger InternalCreate(string name, LoggerLevel level)
 		{
 			return new TraceLogger(name, level);
 		}

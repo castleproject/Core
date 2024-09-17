@@ -16,11 +16,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class NullExpression : IExpression
+	internal sealed class NullExpression : IExpression
 	{
 		public static readonly NullExpression Instance = new NullExpression();
 
-		protected NullExpression()
+		private NullExpression()
 		{
 		}
 

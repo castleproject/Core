@@ -17,7 +17,6 @@ namespace Castle.Components.DictionaryAdapter
 	using System;
 	using System.Linq;
 	using System.Collections;
-	using System.Reflection;
 
 	/// <summary>
 	/// Removes a property if matches value.
@@ -83,7 +82,7 @@ namespace Castle.Components.DictionaryAdapter
 				var constructor = type.GetConstructor(Type.EmptyTypes);
 				if (constructor != null)
 				{
-					return (TBase)constructor.Invoke(new object[0]);
+					return (TBase)constructor.Invoke(Array.Empty<object>());
 				}
 			}
 
@@ -94,7 +93,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region Nested Class: ValueCondition
 
-		class ValueCondition : ICondition
+		sealed class ValueCondition : ICondition
 		{
 			private readonly object[] values;
 			private readonly IEqualityComparer comparer;
