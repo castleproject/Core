@@ -1939,10 +1939,11 @@ namespace Castle.Core.Internal
             where T : System.Attribute { }
         public static System.Type GetTypeConverter(System.Reflection.MemberInfo member) { }
     }
-    public static class InternalsVisible
+    public class InternalsVisible
     {
         public const string ToCastleCore = @"Castle.Core, PublicKey=002400000480000094000000060200000024000052534131000400000100010077F5E87030DADCCCE6902C6ADAB7A987BD69CB5819991531F560785EACFC89B6FCDDF6BB2A00743A7194E454C0273447FC6EEC36474BA8E5A3823147D214298E4F9A631B1AFEE1A51FFEAE4672D498F14B000E3D321453CDD8AC064DE7E1CF4D222B7E81F54D4FD46725370D702A05B48738CC29D09228F1AA722AE1A9CA02FB";
         public const string ToDynamicProxyGenAssembly2 = @"DynamicProxyGenAssembly2, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753cc297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7";
+        public InternalsVisible() { }
     }
 }
 namespace Castle.Core.Logging
@@ -2636,6 +2637,10 @@ namespace Castle.DynamicProxy
         public ProxyGenerator(bool disableSignedModule) { }
         public Castle.Core.Logging.ILogger Logger { get; set; }
         public Castle.DynamicProxy.IProxyBuilder ProxyBuilder { get; }
+        protected System.Collections.Generic.List<object?> BuildArgumentListForClassProxy(Castle.DynamicProxy.ProxyGenerationOptions options, Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        protected System.Collections.Generic.List<object?> BuildArgumentListForClassProxyWithTarget(object? target, Castle.DynamicProxy.ProxyGenerationOptions options, Castle.DynamicProxy.IInterceptor[] interceptors) { }
+        protected void CheckNotGenericTypeDefinition(System.Type type, string argumentName) { }
+        protected void CheckNotGenericTypeDefinitions(System.Collections.Generic.IEnumerable<System.Type>? types, string argumentName) { }
         public object CreateClassProxy(System.Type classToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public object CreateClassProxy(System.Type classToProxy, Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
         public object CreateClassProxy(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
@@ -2651,6 +2656,7 @@ namespace Castle.DynamicProxy
             where TClass :  class { }
         public TClass CreateClassProxy<TClass>(Castle.DynamicProxy.ProxyGenerationOptions options, object?[]? constructorArguments, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TClass :  class { }
+        protected object CreateClassProxyInstance(System.Type proxyType, System.Collections.Generic.List<object?> proxyArguments, System.Type classToProxy, object?[]? constructorArguments) { }
         protected System.Type CreateClassProxyType(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         protected System.Type CreateClassProxyTypeWithTarget(System.Type classToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         public object CreateClassProxyWithTarget(System.Type classToProxy, object? target, params Castle.DynamicProxy.IInterceptor[] interceptors) { }
@@ -2694,12 +2700,7 @@ namespace Castle.DynamicProxy
             where TInterface :  class { }
         public TInterface CreateInterfaceProxyWithoutTarget<TInterface>(Castle.DynamicProxy.ProxyGenerationOptions options, params Castle.DynamicProxy.IInterceptor[] interceptors)
             where TInterface :  class { }
-        protected static System.Collections.Generic.List<object?> BuildArgumentListForClassProxy(Castle.DynamicProxy.ProxyGenerationOptions options, Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        protected static System.Collections.Generic.List<object?> BuildArgumentListForClassProxyWithTarget(object? target, Castle.DynamicProxy.ProxyGenerationOptions options, Castle.DynamicProxy.IInterceptor[] interceptors) { }
-        protected static void CheckNotGenericTypeDefinition(System.Type type, string argumentName) { }
-        protected static void CheckNotGenericTypeDefinitions(System.Collections.Generic.IEnumerable<System.Type>? types, string argumentName) { }
-        protected static object CreateClassProxyInstance(System.Type proxyType, System.Collections.Generic.List<object?> proxyArguments, System.Type classToProxy, object?[]? constructorArguments) { }
-        protected static System.Collections.Generic.List<object?> GetConstructorArguments(object? target, Castle.DynamicProxy.IInterceptor[] interceptors, Castle.DynamicProxy.ProxyGenerationOptions options) { }
+        protected System.Collections.Generic.List<object?> GetConstructorArguments(object? target, Castle.DynamicProxy.IInterceptor[] interceptors, Castle.DynamicProxy.ProxyGenerationOptions options) { }
     }
     public static class ProxyUtil
     {

@@ -134,7 +134,7 @@ namespace Castle.DynamicProxy.Generators
 			return new ClassEmitter(Scope, typeName, parentType, interfaces);
 		}
 
-		protected static void CheckNotGenericTypeDefinition(Type type, string argumentName)
+		protected void CheckNotGenericTypeDefinition(Type type, string argumentName)
 		{
 			if (type != null && type.IsGenericTypeDefinition)
 			{
@@ -142,7 +142,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		protected static void CheckNotGenericTypeDefinitions(IEnumerable<Type> types, string argumentName)
+		protected void CheckNotGenericTypeDefinitions(IEnumerable<Type> types, string argumentName)
 		{
 			if (types == null)
 			{
