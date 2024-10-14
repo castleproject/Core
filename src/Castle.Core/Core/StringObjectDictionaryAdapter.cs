@@ -181,7 +181,7 @@ namespace Castle.Core
 		internal class EnumeratorAdapter : IEnumerator<KeyValuePair<string, object>>
 		{
 			private readonly StringObjectDictionaryAdapter adapter;
-			private IEnumerator<string> keyEnumerator;
+			private readonly IEnumerator<string> keyEnumerator;
 			private string currentKey;
 			private object currentValue;
 

@@ -34,9 +34,9 @@ namespace Castle.DynamicProxy
 	public class CustomAttributeInfo : IEquatable<CustomAttributeInfo>
 	{
 		// Cached empty arrays to avoid unnecessary allocations
-		private static readonly PropertyInfo[] EmptyProperties = new PropertyInfo[0];
-		private static readonly FieldInfo[] EmptyFields = new FieldInfo[0];
-		private static readonly object?[] EmptyValues = new object?[0];
+		private static readonly PropertyInfo[] EmptyProperties = Array.Empty<PropertyInfo>();
+		private static readonly FieldInfo[] EmptyFields = Array.Empty<FieldInfo>();
+		private static readonly object?[] EmptyValues = Array.Empty<object?>();
 
 		private static readonly AttributeArgumentValueEqualityComparer ValueComparer = new AttributeArgumentValueEqualityComparer();
 

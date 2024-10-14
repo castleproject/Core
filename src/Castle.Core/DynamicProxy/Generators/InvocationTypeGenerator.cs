@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			var methodInfo = method.Method;
 
-			var interfaces = new Type[0];
+			var interfaces = Type.EmptyTypes;
 
 			if (canChangeTarget)
 			{
