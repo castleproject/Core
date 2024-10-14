@@ -137,6 +137,19 @@ namespace Castle.DynamicProxy.Contributors
 			}
 		}
 
+		protected static Type[] GetCacheKeyTypes(MetaMethod method)
+		{
+			Type[] argumentTypes = ArgumentsUtil.GetTypes(method.MethodOnTarget.GetParameters());
+			if (argumentTypes.Length < 1)
+			{
+				return new[] { method.MethodOnTarget.ReturnType };
+			}
+			var types = new Type[argumentTypes.Length + 1];
+			types[0] = method.MethodOnTarget.ReturnType;
+			argumentTypes.CopyTo(types, 1);
+			return types;
+		}
+
 		private sealed class MembersCollectorSink : IMembersCollectorSink
 		{
 			private readonly MetaType model;

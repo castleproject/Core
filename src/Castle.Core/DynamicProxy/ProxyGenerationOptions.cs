@@ -238,7 +238,7 @@ namespace Castle.DynamicProxy
 		{
 			if (mixins == null)
 			{
-				return new object[0];
+				return Array.Empty<object>();
 			}
 
 			return mixins.ToArray();

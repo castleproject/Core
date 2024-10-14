@@ -858,7 +858,7 @@ namespace Castle.DynamicProxy
 			                                          Type.EmptyTypes,
 			                                          target,
 			                                          ProxyGenerationOptions.Default,
-			                                          new object[0],
+			                                          Array.Empty<object>(),
 			                                          interceptors);
 		}
 
@@ -888,7 +888,7 @@ namespace Castle.DynamicProxy
 			                                          Type.EmptyTypes,
 			                                          target,
 			                                          options,
-			                                          new object[0],
+			                                          Array.Empty<object>(),
 			                                          interceptors);
 		}
 
@@ -921,7 +921,7 @@ namespace Castle.DynamicProxy
 			                                  additionalInterfacesToProxy,
 			                                  target,
 			                                  ProxyGenerationOptions.Default,
-			                                  new object[0],
+			                                  Array.Empty<object>(),
 			                                  interceptors);
 		}
 
@@ -1019,7 +1019,7 @@ namespace Castle.DynamicProxy
 			                                  Type.EmptyTypes,
 			                                  target,
 			                                  ProxyGenerationOptions.Default,
-			                                  new object[0],
+			                                  Array.Empty<object>(),
 			                                  interceptors);
 		}
 
@@ -1052,7 +1052,7 @@ namespace Castle.DynamicProxy
 			                                  Type.EmptyTypes,
 			                                  target,
 			                                  options,
-			                                  new object[0],
+			                                  Array.Empty<object>(),
 			                                  interceptors);
 		}
 
@@ -1087,7 +1087,7 @@ namespace Castle.DynamicProxy
 			                                  additionalInterfacesToProxy,
 			                                  target,
 			                                  options,
-			                                  new object[0],
+			                                  Array.Empty<object>(),
 			                                  interceptors);
 		}
 

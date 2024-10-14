@@ -205,7 +205,7 @@ namespace Castle.DynamicProxy.Internal
 			var constructor = typeof(TAttribute).GetConstructor(Type.EmptyTypes);
 			Debug.Assert(constructor != null, "constructor != null");
 
-			return new CustomAttributeInfo(constructor, new object[0]);
+			return new CustomAttributeInfo(constructor, Array.Empty<object>());
 		}
 
 		public static CustomAttributeInfo CreateInfo(Type attribute, object[] constructorArguments)
