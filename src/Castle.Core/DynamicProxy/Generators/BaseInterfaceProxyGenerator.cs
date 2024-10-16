@@ -259,7 +259,7 @@ namespace Castle.DynamicProxy.Generators
 #endif
 		}
 
-		private void EnsureValidBaseType(Type type)
+		private static void EnsureValidBaseType(Type type)
 		{
 			if (type == null)
 			{
@@ -286,7 +286,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		private void ThrowInvalidBaseType(Type type, string doesNotHaveAccessibleParameterlessConstructor)
+		private static void ThrowInvalidBaseType(Type type, string doesNotHaveAccessibleParameterlessConstructor)
 		{
 			var format =
 				"Type {0} is not valid base type for interface proxy, because {1}. Only a non-sealed class with non-private default constructor can be used as base type for interface proxy. Please use some other valid type.";

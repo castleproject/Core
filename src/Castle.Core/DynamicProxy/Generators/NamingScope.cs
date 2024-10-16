@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Diagnostics;
 
-	internal class NamingScope : INamingScope
+	internal sealed class NamingScope : INamingScope
 	{
 		private readonly IDictionary<string, int> names = new Dictionary<string, int>();
 		private readonly INamingScope parentScope;

@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class LoadRefArrayElementExpression : IExpression
+	internal sealed class LoadRefArrayElementExpression : IExpression
 	{
 		private readonly Reference arrayReference;
 		private readonly LiteralIntExpression index;
