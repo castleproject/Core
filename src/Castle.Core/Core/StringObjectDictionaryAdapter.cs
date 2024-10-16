@@ -220,6 +220,7 @@ namespace Castle.Core
 
 			public void Dispose()
 			{
+				keyEnumerator.Dispose();
 				GC.SuppressFinalize(this);
 			}
 		}
