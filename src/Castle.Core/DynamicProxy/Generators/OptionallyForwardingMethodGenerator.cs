@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	internal class OptionallyForwardingMethodGenerator : MethodGenerator
+	internal sealed class OptionallyForwardingMethodGenerator : MethodGenerator
 	{
 		// TODO: This class largely duplicates code from Forwarding and Minimalistic generators. Should be refactored to change that
 		private readonly GetTargetReferenceDelegate getTargetReference;
@@ -76,7 +76,7 @@ namespace Castle.DynamicProxy.Generators
 			return statements;
 		}
 
-		private void InitOutParameters(BlockStatement statements, ParameterInfo[] parameters)
+		private static void InitOutParameters(BlockStatement statements, ParameterInfo[] parameters)
 		{
 			for (var index = 0; index < parameters.Length; index++)
 			{

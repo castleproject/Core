@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Collections.Generic;
 	using System.Reflection.Emit;
 
-	internal class BlockStatement : IStatement
+	internal sealed class BlockStatement : IStatement
 	{
 		private readonly List<IStatement> statements = new List<IStatement>();
 

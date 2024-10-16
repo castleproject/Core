@@ -19,11 +19,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection.Emit;
 
 	[DebuggerDisplay("this")]
-	internal class SelfReference : Reference
+	internal sealed class SelfReference : Reference
 	{
 		public static readonly SelfReference Self = new SelfReference();
 
-		protected SelfReference() : base(null)
+		private SelfReference() : base(null)
 		{
 		}
 

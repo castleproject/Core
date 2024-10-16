@@ -295,7 +295,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		private IDictionary<string, object?> MakeNameValueDictionary<T>(T[] members, object?[] values)
+		private static IDictionary<string, object?> MakeNameValueDictionary<T>(T[] members, object?[] values)
 			where T : MemberInfo
 		{
 			var dict = new Dictionary<string, object?>();
@@ -306,7 +306,7 @@ namespace Castle.DynamicProxy
 			return dict;
 		}
 
-		private class AttributeArgumentValueEqualityComparer : IEqualityComparer<object?>
+		private sealed class AttributeArgumentValueEqualityComparer : IEqualityComparer<object?>
 		{
 			new public bool Equals(object? x, object? y)
 			{

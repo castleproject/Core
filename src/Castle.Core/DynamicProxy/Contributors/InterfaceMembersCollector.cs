@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Contributors
 
 	using Castle.DynamicProxy.Generators;
 
-	internal class InterfaceMembersCollector : MembersCollector
+	internal sealed class InterfaceMembersCollector : MembersCollector
 	{
 		public InterfaceMembersCollector(Type @interface)
 			: base(@interface)

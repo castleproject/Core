@@ -248,7 +248,7 @@ namespace Castle.Core
 			return property.CanRead && property.GetIndexParameters().Length == 0;
 		}
 
-		private class DictionaryEntryEnumeratorAdapter : IDictionaryEnumerator
+		private sealed class DictionaryEntryEnumeratorAdapter : IDictionaryEnumerator
 		{
 			private readonly IDictionaryEnumerator enumerator;
 			private KeyValuePair<string, object> current;

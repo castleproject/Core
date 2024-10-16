@@ -203,7 +203,7 @@ namespace Castle.DynamicProxy.Generators
 			return typeImplementerMapping.Keys;
 		}
 
-		private void EnsureDoesNotImplementIProxyTargetAccessor(Type type, string name)
+		private static void EnsureDoesNotImplementIProxyTargetAccessor(Type type, string name)
 		{
 			if (!typeof(IProxyTargetAccessor).IsAssignableFrom(type))
 			{

@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class NestedClassEmitter : AbstractTypeEmitter
+	internal sealed class NestedClassEmitter : AbstractTypeEmitter
 	{
 		public NestedClassEmitter(AbstractTypeEmitter mainType, string name, Type baseType, Type[] interfaces)
 			: this(

@@ -65,7 +65,7 @@ namespace Castle.Core.Internal
 			results    = new List<object>();
 		}
 
-		private Aged<Type>[] CollectTypes(Type derivedType, Type[] baseTypes)
+		private static Aged<Type>[] CollectTypes(Type derivedType, Type[] baseTypes)
 		{
 			var ages = new Dictionary<Type, int>();
 			int age;

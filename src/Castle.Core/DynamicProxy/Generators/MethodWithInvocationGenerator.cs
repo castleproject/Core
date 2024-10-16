@@ -15,21 +15,19 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
-	using System.Diagnostics;
 	using System.Reflection;
 	using System.Reflection.Emit;
 #if FEATURE_SERIALIZATION
 	using System.Xml.Serialization;
 #endif
 
-	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
-	internal class MethodWithInvocationGenerator : MethodGenerator
+	internal sealed class MethodWithInvocationGenerator : MethodGenerator
 	{
 		private readonly IInvocationCreationContributor contributor;
 		private readonly GetTargetExpressionDelegate getTargetExpression;
@@ -57,7 +55,7 @@ namespace Castle.DynamicProxy.Generators
 			this.contributor = contributor;
 		}
 
-		protected FieldReference BuildMethodInterceptorsField(ClassEmitter @class, MethodInfo method, INamingScope namingScope)
+		private static FieldReference BuildMethodInterceptorsField(ClassEmitter @class, MethodInfo method, INamingScope namingScope)
 		{
 			var methodInterceptors = @class.CreateField(
 				namingScope.GetUniqueName(string.Format("interceptors_{0}", method.Name)),
@@ -195,7 +193,7 @@ namespace Castle.DynamicProxy.Generators
 			return methodInterceptorsField;
 		}
 
-		private void EmitLoadGenericMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Reference invocationLocal)
+		private static void EmitLoadGenericMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Reference invocationLocal)
 		{
 			var genericParameters = Array.FindAll(method.GetGenericArguments(), t => t.IsGenericParameter);
 			var genericParamsArrayLocal = methodEmitter.CodeBuilder.DeclareLocal(typeof(Type[]));
@@ -235,7 +233,7 @@ namespace Castle.DynamicProxy.Generators
 			return contributor.GetConstructorInvocationArguments(arguments, @class);
 		}
 
-		private bool HasByRefArguments(ArgumentReference[] arguments)
+		private static bool HasByRefArguments(ArgumentReference[] arguments)
 		{
 			for (int i = 0; i < arguments.Length; i++ )
 			{

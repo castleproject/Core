@@ -17,11 +17,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class MethodInvocationExpression : IExpression, IStatement
+	internal sealed class MethodInvocationExpression : IExpression, IStatement
 	{
-		protected readonly IExpression[] args;
-		protected readonly MethodInfo method;
-		protected readonly Reference owner;
+		private readonly IExpression[] args;
+		private readonly MethodInfo method;
+		private readonly Reference owner;
 
 		public MethodInvocationExpression(MethodInfo method, params IExpression[] args) :
 			this(SelfReference.Self, method, args)

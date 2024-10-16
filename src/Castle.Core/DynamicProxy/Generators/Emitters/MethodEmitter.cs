@@ -15,10 +15,8 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Globalization;
-	using System.Linq;
 	using System.Reflection;
 	using System.Reflection.Emit;
 
@@ -26,7 +24,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using Castle.DynamicProxy.Internal;
 
 	[DebuggerDisplay("{builder.Name}")]
-	internal class MethodEmitter : IMemberEmitter
+	internal sealed class MethodEmitter : IMemberEmitter
 	{
 		private readonly MethodBuilder builder;
 		private readonly CodeBuilder codeBuilder;
@@ -34,7 +32,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private ArgumentReference[] arguments;
 
-		protected internal MethodEmitter(MethodBuilder builder)
+		private MethodEmitter(MethodBuilder builder)
 		{
 			this.builder = builder;
 			codeBuilder = new CodeBuilder();
@@ -124,7 +122,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			ArgumentsUtil.InitializeArgumentsByPosition(arguments, MethodBuilder.IsStatic);
 		}
 
-		public virtual void EnsureValidCodeBlock()
+		public void EnsureValidCodeBlock()
 		{
 			if (ImplementedByRuntime == false && CodeBuilder.IsEmpty)
 			{
@@ -139,7 +137,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public virtual void Generate()
+		public void Generate()
 		{
 			if (ImplementedByRuntime)
 			{
@@ -186,7 +184,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		private void CopyDefaultValueConstant(ParameterInfo from, ParameterBuilder to)
+		private static void CopyDefaultValueConstant(ParameterInfo from, ParameterBuilder to)
 		{
 			Debug.Assert(from != null);
 			Debug.Assert(to != null);
