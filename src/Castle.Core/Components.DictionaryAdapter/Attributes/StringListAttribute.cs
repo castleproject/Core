@@ -18,7 +18,6 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.ComponentModel;
-	using System.Reflection;
 	using System.Text;
 
 	/// <summary>
@@ -109,7 +108,7 @@ namespace Castle.Components.DictionaryAdapter
 
 		#region Nested Class: StringList
 
-		class StringListWrapper<T> : IList<T>
+		sealed class StringListWrapper<T> : IList<T>
 		{
 			private readonly string key;
 			private readonly char separator;

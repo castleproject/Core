@@ -19,9 +19,8 @@ namespace Castle.DynamicProxy.Generators
 
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Castle.DynamicProxy.Internal;
 
-	internal class DelegateTypeGenerator : IGenerator<AbstractTypeEmitter>
+	internal sealed class DelegateTypeGenerator : IGenerator<AbstractTypeEmitter>
 	{
 		private const TypeAttributes DelegateFlags = TypeAttributes.Class |
 		                                             TypeAttributes.Public |
@@ -46,7 +45,7 @@ namespace Castle.DynamicProxy.Generators
 			return emitter;
 		}
 
-		private void BuildConstructor(AbstractTypeEmitter emitter)
+		private static void BuildConstructor(AbstractTypeEmitter emitter)
 		{
 			var constructor = emitter.CreateConstructor(new ArgumentReference(typeof(object)),
 			                                            new ArgumentReference(typeof(IntPtr)));

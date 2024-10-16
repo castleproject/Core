@@ -180,7 +180,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				: includedTypes.TryGet(clrType, out includedType);
 		}
 
-		private class DefaultAccessor : XPathBehaviorAccessor
+		private sealed class DefaultAccessor : XPathBehaviorAccessor
 		{
 			private readonly XPathBehaviorAccessor parent;
 
@@ -200,7 +200,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
 		}
 
-		private class ItemAccessor : XPathBehaviorAccessor
+		private sealed class ItemAccessor : XPathBehaviorAccessor
 		{
 			public ItemAccessor(XPathBehaviorAccessor parent)
 				: base(parent.ClrType.GetCollectionItemType(), parent.Context)

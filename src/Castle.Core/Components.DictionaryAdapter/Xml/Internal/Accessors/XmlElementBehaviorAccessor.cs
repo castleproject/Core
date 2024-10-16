@@ -96,7 +96,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return attribute.Type;
 		}
 
-		private class ItemAccessor : XmlNodeAccessor
+		private sealed class ItemAccessor : XmlNodeAccessor
 		{
 			public ItemAccessor(XmlNodeAccessor parent)
 				: base(parent.ClrType.GetCollectionItemType(), parent.Context)

@@ -56,7 +56,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			}
         }
 
-        private void DisposeWriter(ref XmlWriter writer)
+        private static void DisposeWriter(ref XmlWriter writer)
         {
             var value = Interlocked.Exchange(ref writer, null);
             if (null != value) value.Close();

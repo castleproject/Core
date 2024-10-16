@@ -64,7 +64,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return node.SelectChildren(this, Context, PropertyFlags.MutableIf(mutable));
 		}
 
-		private class ItemAccessor : XmlNodeAccessor,
+		private sealed class ItemAccessor : XmlNodeAccessor,
 			IConfigurable<XmlArrayItemAttribute>,
 			IXmlBehaviorSemantics <XmlArrayItemAttribute>
 		{

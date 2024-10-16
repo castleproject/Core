@@ -389,14 +389,14 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			OnRealized();
 		}
 
-		private void AttachObservers(object value, IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
+		private static void AttachObservers(object value, IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
 		{
 			var bindingList = value as IBindingList;
 			if (bindingList != null)
 				bindingList.ListChanged += (s,e) => HandleListChanged(s, e, dictionaryAdapter, property);
 		}
 
-		private void HandleListChanged(object value, ListChangedEventArgs args, IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
+		private static void HandleListChanged(object value, ListChangedEventArgs args, IDictionaryAdapter dictionaryAdapter, PropertyDescriptor property)
 		{
 			var change = args.ListChangedType;
 			var changed

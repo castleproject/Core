@@ -17,7 +17,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Reflection;
 
-	internal class MetaType
+	internal sealed class MetaType
 	{
 		private readonly MetaTypeElementCollection<MetaEvent> events = new MetaTypeElementCollection<MetaEvent>();
 		private readonly MetaTypeElementCollection<MetaMethod> methods = new MetaTypeElementCollection<MetaMethod>();

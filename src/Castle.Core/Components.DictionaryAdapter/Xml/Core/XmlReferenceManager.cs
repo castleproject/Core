@@ -16,8 +16,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
-	using System.Reflection;
 
 	using Castle.Core;
 	using Castle.Core.Internal;
@@ -372,7 +370,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 			return true;
 		}
 
-		private bool TryGetCompatibleValue(Entry entry, Type type, ref object value)
+		private static bool TryGetCompatibleValue(Entry entry, Type type, ref object value)
 		{
 			var values = entry.Values;
 			if (values == null)
@@ -391,8 +389,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 					continue;
 
 				if (type.IsAssignableFrom(item.Type))
-					if (null != candidate)
-						return Try.Success(out value, candidate);
+					return Try.Success(out value, candidate);
 
 				if (dictionaryAdapter == null)
 					dictionaryAdapter = candidate as IDictionaryAdapter;
@@ -483,7 +480,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		private static readonly object
 			CreateEntryToken = new object();
 
-		private class Entry
+		private sealed class Entry
 		{
 			public int Id;
 			public IXmlNode  Node;

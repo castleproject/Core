@@ -31,7 +31,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 		public virtual int Minargs { get { return ArgTypes.Length; } }
 
 		public static readonly XPathResultType[]
-			NoArgs = new XPathResultType[0];
+			NoArgs = Array.Empty<XPathResultType>();
 
 		public abstract object Invoke(XsltContext context, object[] args, XPathNavigator node);
 	}

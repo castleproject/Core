@@ -14,7 +14,7 @@
 
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	internal class XmlNodeList<T> : ListProjection<T>, IXmlNodeSource
+	internal sealed class XmlNodeList<T> : ListProjection<T>, IXmlNodeSource
 	{
 		public XmlNodeList
 		(

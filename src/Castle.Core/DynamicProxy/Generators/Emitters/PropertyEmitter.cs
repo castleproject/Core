@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class PropertyEmitter : IMemberEmitter
+	internal sealed class PropertyEmitter : IMemberEmitter
 	{
 		private readonly PropertyBuilder builder;
 		private readonly AbstractTypeEmitter parentTypeEmitter;

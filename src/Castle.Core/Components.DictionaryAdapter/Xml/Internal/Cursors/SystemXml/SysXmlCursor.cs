@@ -15,7 +15,6 @@
 namespace Castle.Components.DictionaryAdapter.Xml
 {
 	using System;
-	using System.Xml.XPath;
 	using System.Xml;
 
 	public class SysXmlCursor : SysXmlNode, IXmlCursor
@@ -478,7 +477,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				throw Error.CannotSetAttribute(this);
 		}
 
-		private XmlName GetEffectiveName(IXmlKnownType knownType, XmlNode parent)
+		private static XmlName GetEffectiveName(IXmlKnownType knownType, XmlNode parent)
 		{
 			var name = knownType.Name;
 
@@ -518,12 +517,12 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				RemoveAttribute(removedNode);
 		}
 
-		private void RemoveElement(XmlNode node)
+		private static void RemoveElement(XmlNode node)
 		{
 			node.ParentNode.RemoveChild(node);
 		}
 
-		private void RemoveAttribute(XmlNode node)
+		private static void RemoveAttribute(XmlNode node)
 		{
 			var attribute = (XmlAttribute) node;
 			attribute.OwnerElement.Attributes.Remove(attribute);

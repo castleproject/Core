@@ -106,7 +106,7 @@ namespace Castle.Components.DictionaryAdapter
 			return readOnlyTrackingScope = new TrackPropertyChangeScope(this);
 		}
 
-		private class NotificationSuppressionScope : IDisposable
+		private sealed class NotificationSuppressionScope : IDisposable
 		{
 			private readonly DictionaryAdapterBase adapter;
 
@@ -127,7 +127,7 @@ namespace Castle.Components.DictionaryAdapter
 			private readonly DictionaryAdapterBase adapter;
 			private readonly PropertyDescriptor property;
 			private readonly object existingValue;
-			private Dictionary<PropertyDescriptor, object> readOnlyProperties;
+			private readonly Dictionary<PropertyDescriptor, object> readOnlyProperties;
 
 			public TrackPropertyChangeScope(DictionaryAdapterBase adapter)
 			{

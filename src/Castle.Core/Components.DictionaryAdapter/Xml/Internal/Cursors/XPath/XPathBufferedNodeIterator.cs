@@ -14,11 +14,10 @@
 
 namespace Castle.Components.DictionaryAdapter.Xml
 {
-	using System;
 	using System.Collections.Generic;
 	using System.Xml.XPath;
 
-	internal class XPathBufferedNodeIterator : XPathNodeIterator
+	internal sealed class XPathBufferedNodeIterator : XPathNodeIterator
 	{
 		private readonly IList<XPathNavigator> items;
 		private int index;

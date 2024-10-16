@@ -19,7 +19,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection.Emit;
 
 	[DebuggerDisplay("{fieldBuilder.Name} ({fieldBuilder.FieldType})")]
-	internal class FieldReference : Reference
+	internal sealed class FieldReference : Reference
 	{
 		private readonly FieldInfo field;
 		private readonly FieldBuilder fieldBuilder;

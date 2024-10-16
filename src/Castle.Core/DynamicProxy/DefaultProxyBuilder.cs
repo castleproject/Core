@@ -117,7 +117,7 @@ namespace Castle.DynamicProxy
 			return generator.GetProxyType();
 		}
 
-		private void AssertValidMixins(ProxyGenerationOptions options, string paramName)
+		private static void AssertValidMixins(ProxyGenerationOptions options, string paramName)
 		{
 			try
 			{
@@ -129,12 +129,12 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		private void AssertValidType(Type target, string paramName)
+		private static void AssertValidType(Type target, string paramName)
 		{
 			AssertValidTypeForTarget(target, target, paramName);
 		}
 
-		private void AssertValidTypeForTarget(Type type, Type target, string paramName)
+		private static void AssertValidTypeForTarget(Type type, Type target, string paramName)
 		{
 			if (type.IsGenericTypeDefinition)
 			{
@@ -152,7 +152,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		private void AssertValidTypes(IEnumerable<Type>? targetTypes, string paramName)
+		private static void AssertValidTypes(IEnumerable<Type>? targetTypes, string paramName)
 		{
 			if (targetTypes != null)
 			{

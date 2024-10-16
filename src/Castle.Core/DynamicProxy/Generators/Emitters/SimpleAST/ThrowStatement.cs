@@ -15,10 +15,9 @@
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
-	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class ThrowStatement : IStatement
+	internal sealed class ThrowStatement : IStatement
 	{
 		private readonly string errorMessage;
 		private readonly Type exceptionType;

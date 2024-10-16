@@ -178,7 +178,7 @@ namespace Castle.Core
 			return ((IEnumerable) dictionary).GetEnumerator();
 		}
 
-		internal class EnumeratorAdapter : IEnumerator<KeyValuePair<string, object>>
+		internal sealed class EnumeratorAdapter : IEnumerator<KeyValuePair<string, object>>
 		{
 			private readonly StringObjectDictionaryAdapter adapter;
 			private readonly IEnumerator<string> keyEnumerator;
@@ -220,6 +220,7 @@ namespace Castle.Core
 
 			public void Dispose()
 			{
+				keyEnumerator.Dispose();
 				GC.SuppressFinalize(this);
 			}
 		}

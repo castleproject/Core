@@ -21,7 +21,7 @@ namespace Castle.Components.DictionaryAdapter
 	public class MemberwiseEqualityHashCodeStrategy : DictionaryBehaviorAttribute,
 		IDictionaryEqualityHashCodeStrategy, IDictionaryInitializer, IEqualityComparer<IDictionaryAdapter>
 	{
-		class HashCodeVisitor : AbstractDictionaryAdapterVisitor
+		sealed class HashCodeVisitor : AbstractDictionaryAdapterVisitor
 		{
 			private int hashCode;
 

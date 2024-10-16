@@ -149,6 +149,6 @@ namespace Castle.Components.DictionaryAdapter
 		}
 
 		private static readonly IDictionaryInitializer[]
-			NoInitializers = { };
+			NoInitializers = Array.Empty<IDictionaryInitializer>();
 	}
 }

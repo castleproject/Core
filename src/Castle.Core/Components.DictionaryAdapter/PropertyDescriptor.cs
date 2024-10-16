@@ -33,7 +33,7 @@ namespace Castle.Components.DictionaryAdapter
 		private Dictionary<object, object> extendedProperties;
 		protected List<IDictionaryBehavior> dictionaryBehaviors;
 
-		private static readonly object[] NoAnnotations = new object[0];
+		private static readonly object[] NoAnnotations = Array.Empty<object>();
 
 		/// <summary>
 		/// Initializes an empty <see cref="PropertyDescriptor"/> class.

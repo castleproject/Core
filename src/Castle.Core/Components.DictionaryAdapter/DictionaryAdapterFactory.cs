@@ -22,7 +22,6 @@ namespace Castle.Components.DictionaryAdapter
 	using System.Linq;
 	using System.Reflection;
 	using System.Reflection.Emit;
-	using System.Threading;
 	using System.Diagnostics;
 
 	using Castle.Components.DictionaryAdapter.Xml;

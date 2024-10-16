@@ -17,7 +17,6 @@ namespace Castle.Components.DictionaryAdapter.Xml
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Reflection;
 	using System.Xml;
 	using System.Xml.Serialization;
 
@@ -350,7 +349,7 @@ namespace Castle.Components.DictionaryAdapter.Xml
 				.GetXmlMeta();
 		}
 
-		private string GetDefaultTypeLocalName(Type clrType)
+		private static string GetDefaultTypeLocalName(Type clrType)
 		{
 			var name = clrType.Name;
 			return IsInterfaceName(name)

@@ -93,7 +93,7 @@ namespace Castle.Components.DictionaryAdapter
 			};
 		}
 
-		class SuppressListChangedEvents : IDisposable
+		sealed class SuppressListChangedEvents : IDisposable
 		{
 			private readonly bool raiseEvents;
 			private readonly System.ComponentModel.BindingList<T> bindingList;
