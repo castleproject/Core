@@ -1,5 +1,10 @@
 # Castle Core Changelog
 
+## Unreleased
+
+Enhancements:
+- Support for collectible assemblies via new `CollectibleProxyBuilder` (@stakx, #685)
+
 ## 5.2.0 (2024-08-30)
 
 Enhancements:
