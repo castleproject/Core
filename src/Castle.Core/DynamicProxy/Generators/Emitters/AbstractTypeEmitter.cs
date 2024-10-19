@@ -337,7 +337,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			genericTypeParams = genericTypeParameterBuilders;
 		}
 
-		protected Type CreateType(TypeBuilder type)
+		protected static Type CreateType(TypeBuilder type)
 		{
 			return type.CreateTypeInfo();
 		}

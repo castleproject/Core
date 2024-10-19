@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
-	internal class InheritanceInvocationTypeGenerator : InvocationTypeGenerator
+	internal sealed class InheritanceInvocationTypeGenerator : InvocationTypeGenerator
 	{
 		public static readonly Type BaseType = typeof(InheritanceInvocation);
 

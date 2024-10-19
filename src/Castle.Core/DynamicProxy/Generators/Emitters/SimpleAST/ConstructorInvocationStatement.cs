@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class ConstructorInvocationStatement : IStatement
+	internal sealed class ConstructorInvocationStatement : IStatement
 	{
 		private readonly IExpression[] args;
 		private readonly ConstructorInfo cmethod;

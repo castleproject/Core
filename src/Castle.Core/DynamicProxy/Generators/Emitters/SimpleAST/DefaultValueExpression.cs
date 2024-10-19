@@ -15,10 +15,9 @@
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
-	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class DefaultValueExpression : IExpression
+	internal sealed class DefaultValueExpression : IExpression
 	{
 		private readonly Type type;
 
@@ -70,7 +69,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 		}
 
-		private bool IsPrimitiveOrClass(Type type)
+		private static bool IsPrimitiveOrClass(Type type)
 		{
 			if (type.IsPrimitive && type != typeof(IntPtr) && type != typeof(UIntPtr))
 			{

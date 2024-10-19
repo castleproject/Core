@@ -479,7 +479,7 @@ namespace Castle.Core.Logging
 		{
 		}
 
-		private class NullContextProperties : IContextProperties
+		private sealed class NullContextProperties : IContextProperties
 		{
 			public static readonly NullContextProperties Instance = new NullContextProperties();
 
@@ -490,7 +490,7 @@ namespace Castle.Core.Logging
 			}
 		}
 
-		private class NullContextStack : IContextStack, IDisposable
+		private sealed class NullContextStack : IContextStack, IDisposable
 		{
 			public static readonly NullContextStack Instance = new NullContextStack();
 
@@ -519,7 +519,7 @@ namespace Castle.Core.Logging
 			}
 		}
 
-		private class NullContextStacks : IContextStacks
+		private sealed class NullContextStacks : IContextStacks
 		{
 			public static readonly NullContextStacks Instance = new NullContextStacks();
 

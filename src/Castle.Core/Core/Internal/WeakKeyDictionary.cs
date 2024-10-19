@@ -18,7 +18,7 @@ namespace Castle.Core.Internal
 	using System.Collections;
 	using System.Collections.Generic;
 
-	internal class WeakKeyDictionary<TKey, TValue> : IDictionary<TKey, TValue>
+	internal sealed class WeakKeyDictionary<TKey, TValue> : IDictionary<TKey, TValue>
 		where TKey : class
 	{
 		private readonly Dictionary<object, TValue> dictionary;
@@ -177,7 +177,7 @@ namespace Castle.Core.Internal
 					dictionary.Remove(key);
 		}
 
-		private class KeyCollection : ICollection<TKey>
+		private sealed class KeyCollection : ICollection<TKey>
 		{
 			private readonly ICollection<object> keys;
 

@@ -97,7 +97,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected abstract Type GenerateType(string name, INamingScope namingScope);
 
-		protected void AddMapping(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)
+		protected static void AddMapping(Type @interface, ITypeContributor implementer, IDictionary<Type, ITypeContributor> mapping)
 		{
 			Debug.Assert(implementer != null, "implementer != null");
 			Debug.Assert(@interface != null, "@interface != null");
@@ -120,7 +120,7 @@ namespace Castle.DynamicProxy.Generators
 		/// <summary>
 		///   It is safe to add mapping (no mapping for the interface exists)
 		/// </summary>
-		protected void AddMappingNoCheck(Type @interface, ITypeContributor implementer,
+		protected static void AddMappingNoCheck(Type @interface, ITypeContributor implementer,
 		                                 IDictionary<Type, ITypeContributor> mapping)
 		{
 			mapping.Add(@interface, implementer);
@@ -154,7 +154,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		protected void CompleteInitCacheMethod(CodeBuilder constCodeBuilder)
+		protected static void CompleteInitCacheMethod(CodeBuilder constCodeBuilder)
 		{
 			constCodeBuilder.AddStatement(new ReturnStatement());
 		}
@@ -166,7 +166,7 @@ namespace Castle.DynamicProxy.Generators
 			CreateInterceptorsField(emitter);
 		}
 
-		protected void CreateInterceptorsField(ClassEmitter emitter)
+		protected static void CreateInterceptorsField(ClassEmitter emitter)
 		{
 			var interceptorsField = emitter.CreateField("__interceptors", typeof(IInterceptor[]));
 
@@ -175,7 +175,7 @@ namespace Castle.DynamicProxy.Generators
 #endif
 		}
 
-		protected FieldReference CreateOptionsField(ClassEmitter emitter)
+		protected static FieldReference CreateOptionsField(ClassEmitter emitter)
 		{
 			return emitter.CreateStaticField("proxyGenerationOptions", typeof(ProxyGenerationOptions));
 		}
@@ -214,7 +214,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		protected void GenerateConstructor(ClassEmitter emitter, ConstructorInfo baseConstructor,
+		protected static void GenerateConstructor(ClassEmitter emitter, ConstructorInfo baseConstructor,
 		                                   params FieldReference[] fields)
 		{
 			ArgumentReference[] args;
@@ -284,7 +284,7 @@ namespace Castle.DynamicProxy.Generators
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		protected void GenerateConstructors(ClassEmitter emitter, Type baseType, params FieldReference[] fields)
+		protected static void GenerateConstructors(ClassEmitter emitter, Type baseType, params FieldReference[] fields)
 		{
 			var constructors =
 				baseType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -307,7 +307,7 @@ namespace Castle.DynamicProxy.Generators
 		///     This constructor is important to allow proxies to be XML serializable
 		///   </para>
 		/// </summary>
-		protected void GenerateParameterlessConstructor(ClassEmitter emitter, Type baseClass, FieldReference interceptorField)
+		protected static void GenerateParameterlessConstructor(ClassEmitter emitter, Type baseClass, FieldReference interceptorField)
 		{
 			// Check if the type actually has a default constructor
 			var defaultConstructor = baseClass.GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, Type.EmptyTypes,
@@ -340,7 +340,7 @@ namespace Castle.DynamicProxy.Generators
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		protected ConstructorEmitter GenerateStaticConstructor(ClassEmitter emitter)
+		protected static ConstructorEmitter GenerateStaticConstructor(ClassEmitter emitter)
 		{
 			return emitter.CreateTypeConstructor();
 		}
@@ -389,7 +389,7 @@ namespace Castle.DynamicProxy.Generators
 			builtType.SetStaticField("proxyGenerationOptions", BindingFlags.NonPublic, ProxyGenerationOptions);
 		}
 
-		private bool OverridesEqualsAndGetHashCode(Type type)
+		private static bool OverridesEqualsAndGetHashCode(Type type)
 		{
 			var equalsMethod = type.GetMethod("Equals", BindingFlags.Public | BindingFlags.Instance);
 			if (equalsMethod == null || equalsMethod.DeclaringType == typeof(object) || equalsMethod.IsAbstract)
