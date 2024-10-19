@@ -2477,6 +2477,10 @@ namespace Castle.DynamicProxy
         public virtual void NonProxyableMemberNotification(System.Type type, System.Reflection.MemberInfo memberInfo) { }
         public virtual bool ShouldInterceptMethod(System.Type type, System.Reflection.MethodInfo methodInfo) { }
     }
+    public class CollectibleProxyBuilder : Castle.DynamicProxy.DefaultProxyBuilder
+    {
+        public CollectibleProxyBuilder() { }
+    }
     public class CustomAttributeInfo : System.IEquatable<Castle.DynamicProxy.CustomAttributeInfo>
     {
         public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object?[] constructorArgs) { }
