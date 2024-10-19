@@ -60,7 +60,7 @@ namespace Castle.DynamicProxy
 		private readonly object moduleLocker = new object();
 
 		// Specified whether the generated assemblies are intended to be saved
-		private readonly bool savePhysicalAssembly;
+		private readonly AssemblyBuilderAccess assemblyBuilderAccess;
 		private readonly bool disableSignedModule;
 		private readonly INamingScope namingScope;
 
@@ -78,6 +78,16 @@ namespace Castle.DynamicProxy
 		/// <param name = "savePhysicalAssembly">If set to <c>true</c> saves the generated module.</param>
 		public ModuleScope(bool savePhysicalAssembly)
 			: this(savePhysicalAssembly, false)
+		{
+		}
+
+		/// <summary>
+		///   Initializes a new instance of the <see cref="ModuleScope" /> class,
+		///   using the specified <see cref="AssemblyBuilderAccess" /> for generated assemblies.
+		/// </summary>
+		/// <param name = "assemblyBuilderAccess">The desired <see cref="AssemblyBuilderAccess" /> to be used for generated assemblies.</param>
+		internal ModuleScope(AssemblyBuilderAccess assemblyBuilderAccess)
+			: this(assemblyBuilderAccess, disableSignedModule: false, new NamingScope(), DEFAULT_ASSEMBLY_NAME, DEFAULT_FILE_NAME, DEFAULT_ASSEMBLY_NAME, DEFAULT_FILE_NAME)
 		{
 		}
 
@@ -133,8 +143,21 @@ namespace Castle.DynamicProxy
 		internal ModuleScope(bool savePhysicalAssembly, bool disableSignedModule, INamingScope namingScope,
 		                     string strongAssemblyName, string strongModulePath,
 		                     string weakAssemblyName, string weakModulePath)
+			: this(
+#if FEATURE_ASSEMBLYBUILDER_SAVE
+				  assemblyBuilderAccess: savePhysicalAssembly ? AssemblyBuilderAccess.RunAndSave : AssemblyBuilderAccess.Run,
+#else
+				  assemblyBuilderAccess: AssemblyBuilderAccess.Run,
+#endif
+				  disableSignedModule, namingScope, strongAssemblyName, strongModulePath, weakAssemblyName, weakModulePath)
 		{
-			this.savePhysicalAssembly = savePhysicalAssembly;
+		}
+
+		internal ModuleScope(AssemblyBuilderAccess assemblyBuilderAccess, bool disableSignedModule, INamingScope namingScope,
+					 string strongAssemblyName, string strongModulePath,
+					 string weakAssemblyName, string weakModulePath)
+		{
+			this.assemblyBuilderAccess = assemblyBuilderAccess;
 			this.disableSignedModule = disableSignedModule;
 			this.namingScope = namingScope;
 			this.strongAssemblyName = strongAssemblyName;
@@ -309,14 +332,14 @@ namespace Castle.DynamicProxy
 		{
 			var assemblyName = GetAssemblyName(signStrongName);
 			var moduleName = signStrongName ? StrongNamedModuleName : WeakNamedModuleName;
-#if FEATURE_APPDOMAIN
-			if (savePhysicalAssembly)
+#if FEATURE_APPDOMAIN && FEATURE_ASSEMBLYBUILDER_SAVE
+			if ((assemblyBuilderAccess & AssemblyBuilderAccess.Save) != 0)
 			{
 				AssemblyBuilder assemblyBuilder;
 				try
 				{
 					assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-						assemblyName, AssemblyBuilderAccess.RunAndSave, signStrongName ? StrongNamedModuleDirectory : WeakNamedModuleDirectory);
+						assemblyName, assemblyBuilderAccess, signStrongName ? StrongNamedModuleDirectory : WeakNamedModuleDirectory);
 				}
 				catch (ArgumentException e)
 				{
@@ -339,10 +362,9 @@ namespace Castle.DynamicProxy
 #endif
 			{
 #if FEATURE_APPDOMAIN
-				var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-					assemblyName, AssemblyBuilderAccess.Run);
+				var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, assemblyBuilderAccess);
 #else
-				var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+				var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, assemblyBuilderAccess);
 #endif
 
 				var module = assemblyBuilder.DefineDynamicModule(moduleName);
@@ -387,7 +409,7 @@ namespace Castle.DynamicProxy
 		/// <returns>The path of the generated assembly file, or null if no file has been generated.</returns>
 		public string? SaveAssembly()
 		{
-			if (!savePhysicalAssembly)
+			if ((assemblyBuilderAccess & AssemblyBuilderAccess.Save) == 0)
 			{
 				return null;
 			}
@@ -433,7 +455,7 @@ namespace Castle.DynamicProxy
 		/// <returns>The path of the generated assembly file, or null if no file has been generated.</returns>
 		public string? SaveAssembly(bool strongNamed)
 		{
-			if (!savePhysicalAssembly)
+			if ((assemblyBuilderAccess & AssemblyBuilderAccess.Save) == 0)
 			{
 				return null;
 			}
