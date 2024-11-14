@@ -62,23 +62,30 @@ namespace Castle.DynamicProxy.Generators
 					nameBuilder.Append(ns);
 					nameBuilder.Append('.');
 				}
-				AppendTypeName(nameBuilder, sourceType);
+				AppendTypeName(nameBuilder, sourceType, true);
 				nameBuilder.Append('.');
 				nameBuilder.Append(name);
 				this.name = nameBuilder.ToString();
 			}
 			else if (ns != null)
 			{
-				this.name = string.Concat(ns, ".", sourceType.Name, ".", name);
+				this.name = string.Concat(ns, ".", GetFullTypeName(sourceType), ".", name);
 			}
 			else
 			{
-				this.name = string.Concat(sourceType.Name, ".", name);
+				this.name = string.Concat(GetFullTypeName(sourceType), ".", name);
 			}
 
-			static void AppendTypeName(StringBuilder nameBuilder, Type type)
+			static void AppendTypeName(StringBuilder nameBuilder, Type type, bool fullName = false)
 			{
+				if (fullName)
+				{
+					AppendFullTypeName(nameBuilder, type);
+					return;
+				}
+
 				nameBuilder.Append(type.Name);
+
 				if (type.IsGenericType)
 				{
 					nameBuilder.Append('[');
@@ -92,6 +99,31 @@ namespace Castle.DynamicProxy.Generators
 						AppendTypeName(nameBuilder, genericTypeArguments[i]);
 					}
 					nameBuilder.Append(']');
+				}
+			}
+
+			static string GetFullTypeName(Type type)
+			{
+				var nameBuilder = new StringBuilder();
+				AppendFullTypeName(nameBuilder, type);
+				return nameBuilder.ToString();
+			}
+
+			static void AppendFullTypeName(StringBuilder nameBuilder, Type type)
+			{
+				if (type.IsNested)
+				{
+					AppendFullTypeName(nameBuilder, type.DeclaringType);
+					nameBuilder.Append('.');
+				}
+
+				if (type.IsGenericType)
+				{
+					AppendTypeName(nameBuilder, type);
+				}
+				else
+				{
+					nameBuilder.Append(type.Name);
 				}
 			}
 		}
