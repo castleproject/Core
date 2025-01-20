@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Internal
 
 			var cacheKey = new CacheKey(proxiedMethod, type);
 
-			return cache.GetOrAdd(cacheKey, ck => ObtainMethod(proxiedMethod, type));
+			return cache.GetOrAdd(cacheKey, static ck => ObtainMethod(ck.Method, ck.Type));
 		}
 
 		private static MethodInfo ObtainMethod(MethodInfo proxiedMethod, Type type)
