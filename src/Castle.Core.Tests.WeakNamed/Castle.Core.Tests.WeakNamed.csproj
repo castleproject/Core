@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
@@ -25,6 +25,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Castle.Core\Castle.Core.csproj" />
 		<ProjectReference Include="..\Castle.Core.Tests\Castle.Core.Tests.csproj" />
+		<ProjectReference Include="..\Castle.Services.Logging.EventLogIntegration\Castle.Services.Logging.EventLogIntegration.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.SerilogIntegration\Castle.Services.Logging.SerilogIntegration.csproj" />

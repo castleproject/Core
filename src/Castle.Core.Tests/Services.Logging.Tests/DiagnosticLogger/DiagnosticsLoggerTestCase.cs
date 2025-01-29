@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Castle.Core.Logging.Tests
+namespace Castle.Services.Logging.Tests
 {
 	using System;
 	using System.Diagnostics;
