@@ -51,15 +51,18 @@
 		<PackageReference Include="Serilog" Version="2.0.0" />
 		<PackageReference Include="Serilog.Sinks.TextWriter" Version="2.0.0" />
 		<ProjectReference Include="..\Castle.Core\Castle.Core.csproj" />
+		<ProjectReference Include="..\Castle.Services.Logging.EventLogIntegration\Castle.Services.Logging.EventLogIntegration.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.log4netIntegration\Castle.Services.Logging.log4netIntegration.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.NLogIntegration\Castle.Services.Logging.NLogIntegration.csproj" />
 		<ProjectReference Include="..\Castle.Services.Logging.SerilogIntegration\Castle.Services.Logging.SerilogIntegration.csproj" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'OR'$(TargetFramework)'=='netcoreapp3.1'">
 		<PackageReference Include="System.Security.Permissions" Version="4.7.0" />
+		<PackageReference Include="System.Diagnostics.EventLog" Version="4.7.0" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='net6.0'">
 		<PackageReference Include="System.Security.Permissions" Version="6.0.0" />
+		<PackageReference Include="System.Diagnostics.EventLog" Version="6.0.0" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
 		<PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
