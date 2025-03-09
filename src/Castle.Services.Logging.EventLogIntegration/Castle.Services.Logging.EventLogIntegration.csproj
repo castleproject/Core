@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\buildscripts\common.props"></Import>
+
+	<PropertyGroup>
+		<TargetFrameworks>net462;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Castle.Core-DiagnosticsLogger</PackageId>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageOutputPath>../../build/</PackageOutputPath>
+		<AssemblyName>Castle.Services.Logging.EventLogIntegration</AssemblyName>
+		<RootNamespace>Castle.Services.Logging</RootNamespace>
+		<AssemblyTitle>Castle.Services.Logging.EventLogIntegration</AssemblyTitle>
+		<Description>Castle Services DiagnosticsLogger for Windows EventLog</Description>
+		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
+		<SignAssembly>True</SignAssembly>
+		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
+		<PackageTags>castle logging eventlog</PackageTags>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="Properties\" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0' OR '$(TargetFramework)'=='netstandard2.1'">
+		<PackageReference Include="System.Diagnostics.EventLog" Version="4.7.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='net6.0'">
+		<PackageReference Include="System.Diagnostics.EventLog" Version="6.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Castle.Core\Castle.Core.csproj" />
+	</ItemGroup>
+
+</Project>

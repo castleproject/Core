@@ -48,13 +48,6 @@ mono ./src/Castle.Core.Tests/bin/Release/net462/Castle.Core.Tests.exe --result=D
 mono ./src/Castle.Core.Tests.WeakNamed/bin/Release/net462/Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3
 
 echo ---------------------------
-echo Running NETCOREAPP3.1 Tests
-echo ---------------------------
-
-dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp3.1/Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3
-dotnet ./src/Castle.Core.Tests.WeakNamed/bin/Release/netcoreapp3.1/Castle.Core.Tests.WeakNamed.dll --result=NetCoreClrWeakNamedTestResults.xml;format=nunit3
-
-echo ---------------------------
 echo Running NET6.0 Tests
 echo ---------------------------
 
@@ -62,9 +55,7 @@ dotnet ./src/Castle.Core.Tests/bin/Release/net6.0/Castle.Core.Tests.dll --result
 dotnet ./src/Castle.Core.Tests.WeakNamed/bin/Release/net6.0/Castle.Core.Tests.WeakNamed.dll --result=Net60WeakNamedTestResults.xml;format=nunit3
 
 # Ensure that all test runs produced a protocol file:
-if [[ !( -f NetCoreClrTestResults.xml &&
-         -f NetCoreClrWeakNamedTestResults.xml &&
-         -f Net60TestResults.xml &&
+if [[ !( -f Net60TestResults.xml &&
          -f Net60WeakNamedTestResults.xml &&
          -f DesktopClrTestResults.xml &&
          -f DesktopClrWeakNamedTestResults.xml ) ]]; then
@@ -73,12 +64,6 @@ if [[ !( -f NetCoreClrTestResults.xml &&
 fi
 
 # Unit test failure
-NETCORE_FAILCOUNT=$(grep -F "One or more child tests had errors" NetCoreClrTestResults.xml NetCoreClrWeakNamedTestResults.xml | wc -l)
-if [ $NETCORE_FAILCOUNT -ne 0 ]
-then
-    echo "NetCore Tests have failed, failing the build"
-    exit 1
-fi
 
 NET60_FAILCOUNT=$(grep -F "One or more child tests had errors" Net60TestResults.xml Net60WeakNamedTestResults.xml | wc -l)
 if [ $NET60_FAILCOUNT -ne 0 ]
