@@ -18,7 +18,7 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections;
 	using System.Collections.Generic;
 
-	internal class MetaTypeElementCollection<TElement> : IEnumerable<TElement>
+	internal sealed class MetaTypeElementCollection<TElement> : IEnumerable<TElement>
 		where TElement : MetaTypeElement, IEquatable<TElement>
 	{
 		private readonly ICollection<TElement> items = new List<TElement>();

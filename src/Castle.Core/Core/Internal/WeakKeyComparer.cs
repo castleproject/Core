@@ -17,7 +17,7 @@ namespace Castle.Core.Internal
 	using System;
 	using System.Collections.Generic;
 
-	internal class WeakKeyComparer<TKey> : IEqualityComparer<object>
+	internal sealed class WeakKeyComparer<TKey> : IEqualityComparer<object>
 		where TKey : class
 	{
 		public static readonly WeakKeyComparer<TKey>
