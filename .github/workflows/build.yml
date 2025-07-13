@@ -2,9 +2,6 @@ name: Build
 
 on: [ push, pull_request ]
 
-env:
-  MONO_TAG: "6.0.0.334"
-
 jobs:
 
   build-and-test:
@@ -28,31 +25,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Several .NET Core versions will be used during the test run.
-      # The lowest version gets installed first in order to prevent
-      # "a newer version is already installed" install errors.
+      # -----
+      # Setup .NET sdk
+      # -----
 
-      - name: Install .NET Core 2.1
+      - name: Install dotntet sdk
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 2.1.x
-
-      - name: Install .NET Core 3.1
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 3.1.x
-
-      - name: Install .NET 6.0
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 6.0.x
-
-      # Building requires an up-to-date .NET SDK.
-
-      - name: Install .NET 7.0
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 7.0.x
+          dotnet-version: |
+            8.0.x
+            9.0.x
 
       # -----
       # Build
@@ -68,20 +50,12 @@ jobs:
       # Test
       # ----
 
-      - name: Test on .NET Core 2.1
-        run: dotnet test -c Release -f netcoreapp2.1 --no-build --no-restore -l "console;verbosity=detailed"
+      - name: Test on .NET 8.0
+        run: dotnet test -c Release -f net8.0 --no-build --no-restore -l "console;verbosity=detailed"
 
-      - name: Test on .NET Core 3.1
-        run: dotnet test -c Release -f netcoreapp3.1 --no-build --no-restore -l "console;verbosity=detailed"
-
-      - name: Test on .NET 6.0
-        run: dotnet test -c Release -f net6.0 --no-build --no-restore -l "console;verbosity=detailed"
+      - name: Test on .NET 9.0
+        run: dotnet test -c Release -f net9.0 --no-build --no-restore -l "console;verbosity=detailed"
 
       - name: Test on .NET Framework 4.6.2 (Windows only)
         if: matrix.os == 'windows-latest'
         run: dotnet test -c Release -f net462 --no-build --no-restore -l "console;verbosity=detailed"
-
-      - name: Test on .NET Framework 4.6.2 using Mono (Linux only)
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          docker run --rm -v "$PWD":'/project' -w='/project' mono:$MONO_TAG bash -c 'mono ./src/Castle.Core.Tests/bin/Release/net462/Castle.Core.Tests.exe && mono ./src/Castle.Core.Tests.WeakNamed/bin/Release/net462/Castle.Core.Tests.WeakNamed.exe'

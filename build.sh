@@ -15,81 +15,31 @@
 # ****************************************************************************
 shopt -s expand_aliases
 
-DOTNETPATH=$(which dotnet)
-if [ ! -f "$DOTNETPATH" ]; then
-	echo "Please install Microsoft/netcore from: https://www.microsoft.com/net/core"
-	exit 1
-fi
-
-DOCKERPATH=$(which docker)
-if [ -f "$DOCKERPATH" ]; then
-	alias mono="$PWD/buildscripts/docker-run-mono.sh"
-else
-	MONOPATH=$(which mono)
-	if [ ! -f "$MONOPATH" ]; then
-		echo "Please install either Docker, or Xamarin/Mono from http://www.mono-project.com/docs/getting-started/install/"
-		exit 1
-	fi
-fi
-
-mono --version
-
-# Linux/Darwin
-OSNAME=$(uname -s)
-echo "OSNAME: $OSNAME"
-
-dotnet build --configuration Release || exit 1
-
-echo --------------------
-echo Running NET462 Tests
-echo --------------------
-
-mono ./src/Castle.Core.Tests/bin/Release/net462/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3
-mono ./src/Castle.Core.Tests.WeakNamed/bin/Release/net462/Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3
+dotnet --list-sdks
 
 echo ---------------------------
-echo Running NETCOREAPP3.1 Tests
+echo Build
 echo ---------------------------
 
-dotnet ./src/Castle.Core.Tests/bin/Release/netcoreapp3.1/Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3
-dotnet ./src/Castle.Core.Tests.WeakNamed/bin/Release/netcoreapp3.1/Castle.Core.Tests.WeakNamed.dll --result=NetCoreClrWeakNamedTestResults.xml;format=nunit3
+dotnet build ./Castle.Core.sln --configuration Release --tl:off
 
 echo ---------------------------
-echo Running NET6.0 Tests
+echo Running NET8.0 Tests
 echo ---------------------------
 
-dotnet ./src/Castle.Core.Tests/bin/Release/net6.0/Castle.Core.Tests.dll --result=Net60TestResults.xml;format=nunit3
-dotnet ./src/Castle.Core.Tests.WeakNamed/bin/Release/net6.0/Castle.Core.Tests.WeakNamed.dll --result=Net60WeakNamedTestResults.xml;format=nunit3
+dotnet ./src/Castle.Core.Tests/bin/Release/net8.0/Castle.Core.Tests.dll --result=Net80TestResults.xml;format=nunit3
+dotnet ./src/Castle.Core.Tests.WeakNamed/bin/Release/net8.0/Castle.Core.Tests.WeakNamed.dll --result=Net80WeakNamedTestResults.xml;format=nunit3
 
 # Ensure that all test runs produced a protocol file:
-if [[ !( -f NetCoreClrTestResults.xml &&
-         -f NetCoreClrWeakNamedTestResults.xml &&
-         -f Net60TestResults.xml &&
-         -f Net60WeakNamedTestResults.xml &&
-         -f DesktopClrTestResults.xml &&
-         -f DesktopClrWeakNamedTestResults.xml ) ]]; then
+if [[ !( -f Net80TestResults.xml &&
+         -f Net80WeakNamedTestResults.xml ) ]]; then
     echo "Incomplete test results. Some test runs might not have terminated properly. Failing the build."
     exit 1
 fi
 
-# Unit test failure
-NETCORE_FAILCOUNT=$(grep -F "One or more child tests had errors" NetCoreClrTestResults.xml NetCoreClrWeakNamedTestResults.xml | wc -l)
-if [ $NETCORE_FAILCOUNT -ne 0 ]
+NET80_FAILCOUNT=$(grep -F "One or more child tests had errors" Net80TestResults.xml Net80WeakNamedTestResults.xml | wc -l)
+if [ $NET80_FAILCOUNT -ne 0 ]
 then
-    echo "NetCore Tests have failed, failing the build"
-    exit 1
-fi
-
-NET60_FAILCOUNT=$(grep -F "One or more child tests had errors" Net60TestResults.xml Net60WeakNamedTestResults.xml | wc -l)
-if [ $NET60_FAILCOUNT -ne 0 ]
-then
-    echo "Net6.0 Tests have failed, failing the build"
-    exit 1
-fi
-
-MONO_FAILCOUNT=$(grep -F "One or more child tests had errors" DesktopClrTestResults.xml DesktopClrWeakNamedTestResults.xml | wc -l)
-if [ $MONO_FAILCOUNT -ne 0 ]
-then
-    echo "DesktopClr Tests have failed, failing the build"
+    echo "Net8.0 Tests have failed, failing the build"
     exit 1
 fi

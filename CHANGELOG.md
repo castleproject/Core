@@ -1,5 +1,13 @@
 # Castle Core Changelog
 
+## Next
+
+Enhancements:
+- Now target frameworks are: .NET 8, .NET Framework 4.6.2, .NET Standard 2.0
+- Tests platforms now are: .NET Framework 4.6.2, .NET 8, .NET 9
+- Lang version now is 13
+- Dependencies were updated
+
 ## 5.2.1 (2025-03-09)
 
 (Note: Version 5.2.0 was skipped due to issues with the automated CI release process.)

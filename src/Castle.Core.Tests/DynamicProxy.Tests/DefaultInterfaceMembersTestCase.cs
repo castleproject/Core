@@ -261,7 +261,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var expected = "intercepted";
 			var interceptor = new WithCallbackInterceptor(invocation => invocation.ReturnValue = expected);
-			var proxy = generator.CreateClassProxy(typeof(object), new[] { typeof(IHaveMethodWithDefaultImplementation) },interceptor);
+			var proxy = generator.CreateClassProxy(typeof(object), new[] { typeof(IHaveMethodWithDefaultImplementation) }, interceptor);
 			var actual = ((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
 			Assert.AreEqual(expected, actual);
 		}
@@ -271,7 +271,7 @@ namespace Castle.DynamicProxy.Tests
 		{
 			var expected = "intercepted";
 			var interceptor = new WithCallbackInterceptor(invocation => invocation.ReturnValue = expected);
-			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(IEmpty), new[] { typeof(IHaveMethodWithDefaultImplementation) },interceptor);
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(IEmpty), new[] { typeof(IHaveMethodWithDefaultImplementation) }, interceptor);
 			var actual = ((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
 			Assert.AreEqual(expected, actual);
 		}
@@ -397,12 +397,12 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 #if NET7_0_OR_GREATER
-		[Test]
-		[Ignore("Support for static abstract interface members has not yet been implemented.")]
-		public void Can_proxy_interface_with_static_abstract_method()
-		{
-			_ = generator.CreateInterfaceProxyWithoutTarget<IHaveStaticAbstractMethod>();
-		}
+		//[Test]
+		//[Ignore("Support for static abstract interface members has not yet been implemented.")]
+		//public void Can_proxy_interface_with_static_abstract_method()
+		//{
+		//	_ = generator.CreateInterfaceProxyWithoutTarget<IHaveStaticAbstractMethod>();
+		//}
 #endif
 
 		#endregion
