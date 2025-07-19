@@ -15,10 +15,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using Ionic.Zip;
 
 namespace Explicit.NuGet.Versions
 {
@@ -37,10 +37,12 @@ namespace Explicit.NuGet.Versions
 		{
 			foreach (var packageFile in packageMetaData.ToList())
 			{
-				using (var zipFile = ZipFile.Read(packageFile.Key))
+				using (var zipFile = ZipFile.Open(packageFile.Key, ZipArchiveMode.Update))
 				{
-					zipFile.UpdateEntry(packageFile.Value.EntryName, packageFile.Value.Contents);
-					zipFile.Save();
+					using (var stream = new StreamWriter(zipFile.CreateEntry(packageFile.Value.EntryName).Open()))
+					{
+						stream.Write(packageFile.Value.Contents);
+					}
 				}
 			}
 		}
@@ -68,7 +70,8 @@ namespace Explicit.NuGet.Versions
 
 		private static void SetPackageDepencyVersionsToBeExplicitForXmlDocument(XmlDocument nuspecXmlDocument, string nugetIdFilter)
 		{
-			WalkDocumentNodes(nuspecXmlDocument.ChildNodes, node => {
+			WalkDocumentNodes(nuspecXmlDocument.ChildNodes, node =>
+			{
 				if (node.Name.ToLowerInvariant() == "dependency" && !string.IsNullOrEmpty(node.Attributes["id"].Value) && node.Attributes["id"].Value.ToLowerInvariant().StartsWith(nugetIdFilter))
 				{
 					var currentVersion = node.Attributes["version"].Value;
@@ -91,18 +94,19 @@ namespace Explicit.NuGet.Versions
 			var packageNuspecDictionary = new Dictionary<string, NuspecContentEntry>();
 			foreach (var packageFilePath in packageDiscoverDirectoryInfo.GetFiles("*.nupkg", SearchOption.AllDirectories))
 			{
-				using (var zipFile = ZipFile.Read(packageFilePath.FullName))
+				using (var zipFile = ZipFile.OpenRead(packageFilePath.FullName))
 				{
 					foreach (var zipEntry in zipFile.Entries)
 					{
-						if (zipEntry.FileName.ToLowerInvariant().EndsWith(".nuspec"))
+						if (zipEntry.Name.ToLowerInvariant().EndsWith(".nuspec"))
 						{
-							using (var zipEntryReader = new StreamReader(zipEntry.OpenReader()))
+							using (var zipEntryReader = new StreamReader(zipEntry.Open()))
 							{
 								var nuspecXml = zipEntryReader.ReadToEnd();
-								packageNuspecDictionary[packageFilePath.FullName] = new NuspecContentEntry {
+								packageNuspecDictionary[packageFilePath.FullName] = new NuspecContentEntry
+								{
 									Contents = nuspecXml,
-									EntryName = zipEntry.FileName
+									EntryName = zipEntry.Name
 								};
 								break;
 							}

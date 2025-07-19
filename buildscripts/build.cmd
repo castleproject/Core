@@ -37,8 +37,8 @@ echo --------------------
 echo Running NET462 Tests
 echo --------------------
 
-%UserProfile%\.nuget\packages\nunit.consolerunner\3.11.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net462/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3 || exit /b 1
-%UserProfile%\.nuget\packages\nunit.consolerunner\3.11.1\tools\nunit3-console.exe src/Castle.Core.Tests.WeakNamed/bin/%Configuration%/net462/Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3 || exit /b 1
+src\Castle.Core.Tests\bin\%Configuration%\net462\Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3 || exit /b 1
+src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\net462\Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3 || exit /b 1
 
 echo ---------------------------
 echo Running NET8.0 Tests

@@ -1,15 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net462</TargetFramework>
+		<TargetFramework>net48</TargetFramework>
 		<OutputPath>build\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<AssemblyName>nev</AssemblyName>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DotNetZip" Version="1.11.0" />
+	  <Reference Include="System.IO.Compression" />
 	</ItemGroup>
 
 </Project>

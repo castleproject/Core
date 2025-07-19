@@ -43,10 +43,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-		<PackageReference Include="NUnit.Console" Version="3.11.1" />
 		<PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
-		<PackageReference Include="NUnitLite" Version="3.13.3" />
-		<PackageReference Include="Serilog.Sinks.TextWriter" Version="2.0.0" />
+		<PackageReference Include="NUnitLite" Version="3.14.0" />
+		<PackageReference Include="Serilog.Sinks.TextWriter" Version="2.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
