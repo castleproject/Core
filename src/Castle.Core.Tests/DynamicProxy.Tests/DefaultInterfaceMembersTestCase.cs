@@ -397,12 +397,13 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 #if NET7_0_OR_GREATER
-		//[Test]
-		//[Ignore("Support for static abstract interface members has not yet been implemented.")]
-		//public void Can_proxy_interface_with_static_abstract_method()
-		//{
-		//	_ = generator.CreateInterfaceProxyWithoutTarget<IHaveStaticAbstractMethod>();
-		//}
+		[Test]
+		[Ignore("Support for static abstract interface members has not yet been implemented.")]
+		public void Can_proxy_interface_with_static_abstract_method()
+		{
+			// NOTE: uncommented because of compilation error CS8920, to be reviewed when we implement support for static abstract interface members
+			// _ = generator.CreateInterfaceProxyWithoutTarget<IHaveStaticAbstractMethod>();
+		}
 #endif
 
 		#endregion
