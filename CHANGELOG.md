@@ -5,8 +5,11 @@
 Enhancements:
 - Now target frameworks are: .NET 8, .NET Framework 4.6.2, .NET Standard 2.0
 - Tests platforms now are: .NET Framework 4.6.2, .NET 8, .NET 9
-- Lang version now is 13
 - Dependencies were updated
+
+Deprecations:
+- .NET Core 2.1, .NET Core 3.1, .NET 6, and mono tests
+- .NET Standard 2.1 tfm
 
 ## 5.2.1 (2025-03-09)
 
