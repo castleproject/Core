@@ -1,7 +1,7 @@
 <Project>
 
 	<PropertyGroup>
-		<LangVersion>11.0</LangVersion>
+		<LangVersion>13.0</LangVersion>
 		<NoWarn>$(NoWarn);CS1591;CS3014;CS3003;CS3001;CS3021</NoWarn>
 		<NoWarn>$(NoWarn);CS0612;CS0618</NoWarn> <!-- TODO: Remove this line once `[Obsolete]` members have been dealt with. -->
 		<RepositoryType>git</RepositoryType>
@@ -40,7 +40,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
 	</ItemGroup>
 
 	<PropertyGroup>
@@ -66,30 +66,6 @@
 		<DefineConstants>$(NetStandard20Constants)</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard2.1|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(NetStandard21Constants)</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netstandard2.1|Release'">
-		<DefineConstants>$(NetStandard21Constants)</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp2.1|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(NetStandard20Constants)</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp2.1|Release'">
-		<DefineConstants>$(NetStandard20Constants)</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp3.1|Debug'">
-		<DefineConstants>$(DiagnosticsConstants);$(NetStandard21Constants)</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='netcoreapp3.1|Release'">
-		<DefineConstants>$(NetStandard21Constants)</DefineConstants>
-	</PropertyGroup>
-	
 	<ItemGroup>
 		<None Include="$(SolutionDir)docs\images\castle-logo.png" Pack="true" PackagePath=""/>
 	</ItemGroup>

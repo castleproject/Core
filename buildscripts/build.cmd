@@ -37,20 +37,12 @@ echo --------------------
 echo Running NET462 Tests
 echo --------------------
 
-%UserProfile%\.nuget\packages\nunit.consolerunner\3.11.1\tools\nunit3-console.exe src/Castle.Core.Tests/bin/%Configuration%/net462/Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3 || exit /b 1
-%UserProfile%\.nuget\packages\nunit.consolerunner\3.11.1\tools\nunit3-console.exe src/Castle.Core.Tests.WeakNamed/bin/%Configuration%/net462/Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3 || exit /b 1
+src\Castle.Core.Tests\bin\%Configuration%\net462\Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3 || exit /b 1
+src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\net462\Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3 || exit /b 1
 
 echo ---------------------------
-echo Running NETCOREAPP3.1 Tests
+echo Running NET8.0 Tests
 echo ---------------------------
 
-dotnet .\src\Castle.Core.Tests\bin\%Configuration%\netcoreapp3.1\Castle.Core.Tests.dll --result=NetCoreClrTestResults.xml;format=nunit3 || exit /b 1
-dotnet .\src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\netcoreapp3.1/Castle.Core.Tests.WeakNamed.dll --result=NetCoreClrWeakNamedTestResults.xml;format=nunit3 || exit /b 1
-
-
-echo ---------------------------
-echo Running NET6.0 Tests
-echo ---------------------------
-
-dotnet .\src\Castle.Core.Tests\bin\%Configuration%\net6.0\Castle.Core.Tests.dll --result=Net60TestResults.xml;format=nunit3 || exit /b 1
-dotnet .\src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\net6.0/Castle.Core.Tests.WeakNamed.dll --result=Net60WeakNamedTestResults.xml;format=nunit3 || exit /b 1
+dotnet .\src\Castle.Core.Tests\bin\%Configuration%\net8.0\Castle.Core.Tests.dll --result=Net80TestResults.xml;format=nunit3 || exit /b 1
+dotnet .\src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\net8.0/Castle.Core.Tests.WeakNamed.dll --result=Net80WeakNamedTestResults.xml;format=nunit3 || exit /b 1

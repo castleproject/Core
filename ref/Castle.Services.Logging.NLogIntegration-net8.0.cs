@@ -1,7 +1,7 @@
 [assembly: System.CLSCompliant(true)]
 [assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/castleproject/Core")]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v6.0", FrameworkDisplayName=".NET 6.0")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v8.0", FrameworkDisplayName=".NET 8.0")]
 namespace Castle.Services.Logging.NLogIntegration
 {
     public class ExtendedNLogFactory : Castle.Core.Logging.AbstractExtendedLoggerFactory
@@ -16,10 +16,10 @@ namespace Castle.Services.Logging.NLogIntegration
     public class ExtendedNLogLogger : Castle.Services.Logging.NLogIntegration.NLogLogger, Castle.Core.Logging.IExtendedLogger, Castle.Core.Logging.ILogger
     {
         public ExtendedNLogLogger(NLog.Logger logger, Castle.Services.Logging.NLogIntegration.ExtendedNLogFactory factory) { }
+        protected new Castle.Services.Logging.NLogIntegration.ExtendedNLogFactory Factory { get; set; }
         public Castle.Core.Logging.IContextProperties GlobalProperties { get; }
         public Castle.Core.Logging.IContextProperties ThreadProperties { get; }
         public Castle.Core.Logging.IContextStacks ThreadStacks { get; }
-        protected new Castle.Services.Logging.NLogIntegration.ExtendedNLogFactory Factory { get; set; }
         public override Castle.Core.Logging.ILogger CreateChildLogger(string name) { }
         public Castle.Core.Logging.IExtendedLogger CreateExtendedChildLogger(string name) { }
     }

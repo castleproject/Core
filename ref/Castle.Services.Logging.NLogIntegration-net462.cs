@@ -16,10 +16,10 @@ namespace Castle.Services.Logging.NLogIntegration
     public class ExtendedNLogLogger : Castle.Services.Logging.NLogIntegration.NLogLogger, Castle.Core.Logging.IExtendedLogger, Castle.Core.Logging.ILogger
     {
         public ExtendedNLogLogger(NLog.Logger logger, Castle.Services.Logging.NLogIntegration.ExtendedNLogFactory factory) { }
+        protected new Castle.Services.Logging.NLogIntegration.ExtendedNLogFactory Factory { get; set; }
         public Castle.Core.Logging.IContextProperties GlobalProperties { get; }
         public Castle.Core.Logging.IContextProperties ThreadProperties { get; }
         public Castle.Core.Logging.IContextStacks ThreadStacks { get; }
-        protected new Castle.Services.Logging.NLogIntegration.ExtendedNLogFactory Factory { get; set; }
         public override Castle.Core.Logging.ILogger CreateChildLogger(string name) { }
         public Castle.Core.Logging.IExtendedLogger CreateExtendedChildLogger(string name) { }
     }

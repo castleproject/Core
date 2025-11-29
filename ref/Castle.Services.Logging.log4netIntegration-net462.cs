@@ -7,8 +7,8 @@ namespace Castle.Services.Logging.Log4netIntegration
     public class ExtendedLog4netFactory : Castle.Core.Logging.AbstractExtendedLoggerFactory
     {
         public ExtendedLog4netFactory() { }
-        public ExtendedLog4netFactory(bool configuredExternally) { }
         public ExtendedLog4netFactory(System.IO.Stream config) { }
+        public ExtendedLog4netFactory(bool configuredExternally) { }
         public ExtendedLog4netFactory(string configFile) { }
         public override Castle.Core.Logging.IExtendedLogger Create(string name) { }
         public override Castle.Core.Logging.IExtendedLogger Create(string name, Castle.Core.Logging.LoggerLevel level) { }
@@ -17,10 +17,10 @@ namespace Castle.Services.Logging.Log4netIntegration
     {
         public ExtendedLog4netLogger(log4net.Core.ILogger logger, Castle.Services.Logging.Log4netIntegration.ExtendedLog4netFactory factory) { }
         public ExtendedLog4netLogger(log4net.ILog log, Castle.Services.Logging.Log4netIntegration.ExtendedLog4netFactory factory) { }
+        protected new Castle.Services.Logging.Log4netIntegration.ExtendedLog4netFactory Factory { get; set; }
         public Castle.Core.Logging.IContextProperties GlobalProperties { get; }
         public Castle.Core.Logging.IContextProperties ThreadProperties { get; }
         public Castle.Core.Logging.IContextStacks ThreadStacks { get; }
-        protected new Castle.Services.Logging.Log4netIntegration.ExtendedLog4netFactory Factory { get; set; }
         public override Castle.Core.Logging.ILogger CreateChildLogger(string name) { }
         public Castle.Core.Logging.IExtendedLogger CreateExtendedChildLogger(string name) { }
     }
@@ -32,8 +32,8 @@ namespace Castle.Services.Logging.Log4netIntegration
     public class Log4netFactory : Castle.Core.Logging.AbstractLoggerFactory
     {
         public Log4netFactory() { }
-        public Log4netFactory(bool configuredExternally) { }
         public Log4netFactory(System.IO.Stream config) { }
+        public Log4netFactory(bool configuredExternally) { }
         public Log4netFactory(string configFile) { }
         public override Castle.Core.Logging.ILogger Create(string name) { }
         public override Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level) { }
