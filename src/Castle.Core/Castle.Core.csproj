@@ -8,8 +8,6 @@
 
 	<PropertyGroup>
 		<PackageId>Castle.Core</PackageId>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<PackageOutputPath>../../build/</PackageOutputPath>
 		<AssemblyName>Castle.Core</AssemblyName>
 		<RootNamespace>Castle</RootNamespace>
 		<AssemblyTitle>Castle Core</AssemblyTitle>

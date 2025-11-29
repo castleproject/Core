@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-13 ]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
 
         # NOTE: If we wanted to use `macos-latest` we would have to move the .NET Core 2.1 and 3.1 builds and test runs
         # to a separate job. This is because `macos-14` and newer are ARM-only and those target frameworks don't support
@@ -23,14 +23,14 @@ jobs:
     steps:
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # -----
       # Setup .NET sdk
       # -----
 
       - name: Install .NET SDKs
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
             8.0.x

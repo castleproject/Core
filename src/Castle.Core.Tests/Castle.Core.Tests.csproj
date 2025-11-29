@@ -17,6 +17,7 @@
 		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
 		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
 		<StartupObject>Program</StartupObject>
+		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$([MSBuild]::GetTargetFrameworkIdentifier(&quot;$(TargetFramework)&quot;))' == '.NETFramework'">
