@@ -16,6 +16,7 @@
 		<SignAssembly>False</SignAssembly>
 		<PublicSign Condition="'$(OS)'=='Unix'">false</PublicSign>
 		<StartupObject>Program</StartupObject>
+		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>
