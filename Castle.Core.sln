@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30011.22
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Castle Build", "Castle Build", "{1B999D24-B7AB-4997-96E7-08FA05325694}"
 	ProjectSection(SolutionItems) = preProject
@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub Actions", "GitHub Ac
 		.github\workflows\build.yml = .github\workflows\build.yml
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Castle.Services.Logging.EventLogIntegration", "src\Castle.Services.Logging.EventLogIntegration\Castle.Services.Logging.EventLogIntegration.csproj", "{93E71739-D2F2-4CE4-8F9F-0C564CBE6B21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{14D86762-CF9B-4560-80C9-10C16DBE246C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14D86762-CF9B-4560-80C9-10C16DBE246C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14D86762-CF9B-4560-80C9-10C16DBE246C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93E71739-D2F2-4CE4-8F9F-0C564CBE6B21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93E71739-D2F2-4CE4-8F9F-0C564CBE6B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93E71739-D2F2-4CE4-8F9F-0C564CBE6B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93E71739-D2F2-4CE4-8F9F-0C564CBE6B21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{344D907D-6641-4A61-94C2-4980B5804FE2} = {A598EE9B-41CE-4BE8-BF93-2C91F919F97E}
 		{91B2A82F-63F6-46B1-8EDC-5D029BCF6A2B} = {A598EE9B-41CE-4BE8-BF93-2C91F919F97E}
 		{149DB291-CBD6-4F82-A6A6-758E328DB946} = {1B999D24-B7AB-4997-96E7-08FA05325694}
+		{93E71739-D2F2-4CE4-8F9F-0C564CBE6B21} = {A598EE9B-41CE-4BE8-BF93-2C91F919F97E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {682D4399-4863-4813-B495-5FEDD22496ED}
