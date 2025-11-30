@@ -37,10 +37,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Properties\" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs" />
 	</ItemGroup>
 
