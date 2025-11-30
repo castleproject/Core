@@ -19,12 +19,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Internal;
 
 	internal delegate GenericTypeParameterBuilder[] ApplyGenArgs(string[] argumentNames);
 
-	internal class GenericUtil
+	internal sealed class GenericUtil
 	{
 		public static GenericTypeParameterBuilder[] CopyGenericArguments(
 			MethodInfo methodToCopyGenericsFrom,

@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	using Castle.DynamicProxy.Internal;
 
-	internal class ClassEmitter : AbstractTypeEmitter
+	internal sealed class ClassEmitter : AbstractTypeEmitter
 	{
 		internal const TypeAttributes DefaultAttributes =
 			TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable;
@@ -75,7 +75,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return StrongNameUtil.IsAssemblySigned(TypeBuilder.Assembly); }
 		}
 
-		protected virtual IEnumerable<Type> InitializeGenericArgumentsFromBases(ref Type baseType,
+		private static IEnumerable<Type> InitializeGenericArgumentsFromBases(ref Type baseType,
 		                                                                        IEnumerable<Type> interfaces)
 		{
 			if (baseType != null && baseType.IsGenericTypeDefinition)

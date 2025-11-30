@@ -22,7 +22,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Tokens;
 
-	internal class ClassProxyWithTargetTargetContributor : CompositeTypeContributor
+	internal sealed class ClassProxyWithTargetTargetContributor : CompositeTypeContributor
 	{
 		private readonly Type targetType;
 
@@ -156,7 +156,7 @@ namespace Castle.DynamicProxy.Contributors
 			                                         contributor);
 		}
 
-		private bool IsDirectlyAccessible(MetaMethod method)
+		private static bool IsDirectlyAccessible(MetaMethod method)
 		{
 			return method.MethodOnTarget.IsPublic;
 		}

@@ -113,14 +113,14 @@ namespace Castle.Core.Resource
 			return nameFound;
 		}
 
-		private string ConvertToResourceName(string assembly, string resource)
+		private static string ConvertToResourceName(string assembly, string resource)
 		{
 			assembly = GetSimpleName(assembly);
 			// TODO: use path for relative name construction
 			return string.Format(CultureInfo.CurrentCulture, "{0}{1}", assembly, resource.Replace('/', '.'));
 		}
 
-		private string GetSimpleName(string assembly)
+		private static string GetSimpleName(string assembly)
 		{
 			int indexOfComma = assembly.IndexOf(',');
 			if(indexOfComma<0)
@@ -130,7 +130,7 @@ namespace Castle.Core.Resource
 			return assembly.Substring(0, indexOfComma);
 		}
 
-		private string ConvertToPath(string resource)
+		private static string ConvertToPath(string resource)
 		{
 			string path = resource.Replace('.', '/');
 			if (path[0] != '/')

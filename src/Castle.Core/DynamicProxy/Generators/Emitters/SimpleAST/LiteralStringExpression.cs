@@ -16,7 +16,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class LiteralStringExpression : IExpression
+	internal sealed class LiteralStringExpression : IExpression
 	{
 		private readonly string value;
 

@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Contributors
 	using Castle.DynamicProxy.Internal;
 	using Castle.DynamicProxy.Tokens;
 
-	internal class ClassProxyTargetContributor : CompositeTypeContributor
+	internal sealed class ClassProxyTargetContributor : CompositeTypeContributor
 	{
 		private readonly Type targetType;
 
@@ -129,7 +129,7 @@ namespace Castle.DynamicProxy.Contributors
 			return callBackMethod.MethodBuilder;
 		}
 
-		private bool ExplicitlyImplementedInterfaceMethod(MetaMethod method)
+		private static bool ExplicitlyImplementedInterfaceMethod(MetaMethod method)
 		{
 			return method.MethodOnTarget.IsPrivate;
 		}
