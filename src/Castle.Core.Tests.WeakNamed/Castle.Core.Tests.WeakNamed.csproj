@@ -22,7 +22,11 @@
 	<ItemGroup>
 	  <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\StrongNameUtil.cs" Link="DynamicProxy.Tests\StrongNameUtil.cs" />
 	</ItemGroup>
-
+	
+	<ItemGroup>
+		<PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<ProjectReference Include="..\Castle.Core\Castle.Core.csproj" />
 		<ProjectReference Include="..\Castle.Core.Tests\Castle.Core.Tests.csproj" />
