@@ -12,12 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_ASSEMBLYBUILDER_SAVE
+#if FEATURE_ASSEMBLYBUILDER_SAVE || NET9_0_OR_GREATER
 
 #nullable enable
 
 namespace Castle.DynamicProxy
 {
+#if NET9_0_OR_GREATER
+	using System.IO;
+#endif
+
 	/// <summary>
 	///   ProxyBuilder that persists the generated type.
 	/// </summary>
@@ -43,7 +47,17 @@ namespace Castle.DynamicProxy
 		/// </remarks>
 		public string? SaveAssembly()
 		{
+#if NET9_0_OR_GREATER
+			var assemblyPath = lastScope.WeakNamedModule != null ? lastScope.WeakNamedModuleName : lastScope.StrongNamedModuleName;
+			using var file = File.Create(assemblyPath);
+			lastAssemblyGenerated.Seek(0, SeekOrigin.Begin);
+			lastAssemblyGenerated.CopyTo(file);
+			file.Flush();
+			file.Close();
+			return assemblyPath;
+#else
 			return ModuleScope.SaveAssembly();
+#endif
 		}
 	}
 }
