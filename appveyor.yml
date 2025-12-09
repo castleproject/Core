@@ -18,6 +18,12 @@ for:
     only:
     - image: Ubuntu2204
 
+  # install .NET 10 SDK
+  install:
+  - curl -L https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
+  - chmod +x ./dotnet-install.sh
+  - sudo ./dotnet-install.sh --channel 10.0 --install-dir /usr/share/dotnet
+
   # build and run tests
   build_script:
   - uname -a
@@ -45,6 +51,10 @@ for:
       {
           Update-AppveyorBuild -Version ($env:APPVEYOR_REPO_TAG_NAME).TrimStart("v")
       }
+
+  # install .NET 10 SDK
+  install:
+  - cmd: choco install dotnet-10.0-sdk
 
   # build and run tests
   build_script:
