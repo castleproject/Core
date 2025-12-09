@@ -53,7 +53,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public FieldInfo Reference
 		{
-			get { return field; }
+			get { return @field; }
 		}
 
 		public override void LoadAddressOfReference(ILGenerator gen)
