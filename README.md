@@ -24,6 +24,10 @@ Browse the [contributing section](https://github.com/castleproject/Home#its-comm
 
 ## Building
 
+Compilation requires the .NET 10 SDK.
+
+Running the unit tests additionally requires the .NET Framework 4.6.2+ and the .NET 8 and 9 runtimes to be installed. (If you do not have all of those installed, you can run the tests for a specific target framework using `dotnet test -f <framework>`.)
+
 | Platforms       | NuGet Feed |
 |-----------------|------------|
 | Windows & Linux | [Preview Feed](https://ci.appveyor.com/nuget/core-0mhe40ifodk8)
@@ -33,10 +37,6 @@ Browse the [contributing section](https://github.com/castleproject/Home#its-comm
 ```
 build.cmd
 ```
-
-Compilation requires the .NET 10 SDK.
-
-Running the unit tests additionally requires the .NET Framework 4.6.2+ and the .NET 8 and 9 runtimes to be installed. (If you do not have all of those installed, you can run the tests for a specific target framework using `dotnet test -f <framework>`.)
 
 ### On Linux
 
