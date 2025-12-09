@@ -150,7 +150,7 @@ namespace Castle.DynamicProxy.Tests
 
 			var modopts = this.generatedTypes[typeName].GetMethod("Foo").GetParameters()[0].GetOptionalCustomModifiers();
 
-			CollectionAssert.AreEqual(expected: CustomModifiersTestCase.customModifiers[typeNameWithoutSuffix].Reverse(), actual: modopts);
+			CollectionAssert.AreEqual(expected: Enumerable.Reverse(CustomModifiersTestCase.customModifiers[typeNameWithoutSuffix]), actual: modopts);
 			// ^ The emission of custom modifiers performed by DynamicProxy is currently geared towards
 			//   the CLR, which reports custom modifiers in reverse order. On Mono, before version 5.16,
 			//   Reflection would not report custom modifiers at all; this has now changed. But unlike the
@@ -183,7 +183,7 @@ namespace Castle.DynamicProxy.Tests
 			var modreqs = this.generatedTypes[typeName].GetMethod("Foo").GetParameters()[0].GetRequiredCustomModifiers();
 			Assume.That(modreqs.Length > 0); // If this fails on mono/linux we have to revisit the commits and issues for IL method custom modifiers. https://github.com/castleproject/Core/issues/277
 
-			CollectionAssert.AreEqual(expected: CustomModifiersTestCase.customModifiers[typeNameWithoutSuffix].Reverse(), actual: modreqs);
+			CollectionAssert.AreEqual(expected: Enumerable.Reverse(CustomModifiersTestCase.customModifiers[typeNameWithoutSuffix]), actual: modreqs);
 			// ^ see comment about `.Reverse()` above.
 		}
 
@@ -205,7 +205,7 @@ namespace Castle.DynamicProxy.Tests
 			var modopts = this.generatedTypes[typeName].GetMethod("Foo").ReturnParameter.GetOptionalCustomModifiers();
 			Assume.That(modopts.Length > 0); // If this fails on mono/linux we have to revisit the commits and issues for IL method custom modifiers. https://github.com/castleproject/Core/issues/277
 
-			CollectionAssert.AreEqual(expected: CustomModifiersTestCase.customModifiers[typeNameWithoutSuffix].Reverse(), actual: modopts);
+			CollectionAssert.AreEqual(expected: Enumerable.Reverse(CustomModifiersTestCase.customModifiers[typeNameWithoutSuffix]), actual: modopts);
 			// ^ see comment about `.Reverse()` above.
 		}
 
@@ -227,7 +227,7 @@ namespace Castle.DynamicProxy.Tests
 			var modreqs = this.generatedTypes[typeName].GetMethod("Foo").ReturnParameter.GetRequiredCustomModifiers();
 			Assume.That(modreqs.Length > 0); // If this fails on mono/linux we have to revisit the commits and issues for IL method custom modifiers. https://github.com/castleproject/Core/issues/277
 
-			CollectionAssert.AreEqual(expected: CustomModifiersTestCase.customModifiers[typeNameWithoutSuffix].Reverse(), actual: modreqs);
+			CollectionAssert.AreEqual(expected: Enumerable.Reverse(CustomModifiersTestCase.customModifiers[typeNameWithoutSuffix]), actual: modreqs);
 			// ^ see comment about `.Reverse()` above.
 		}
 
