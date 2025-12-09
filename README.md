@@ -34,11 +34,9 @@ Browse the [contributing section](https://github.com/castleproject/Home#its-comm
 build.cmd
 ```
 
-Compilation requires a C# 9 compiler, an up-to-date .NET Core SDK, and MSBuild 15+ (which should be included in the former).
+Compilation requires the .NET 10 SDK.
 
-Running the unit tests additionally requires the .NET Framework 4.6.2+ as well as the .NET Core 2.1, 3.1 and 6.0 runtimes to be installed. (If you do not have all of those installed, you can run the tests for a specific target framework using `dotnet test -f <framework>`.)
-
-These requirements should be covered by Visual Studio 2022 and the .NET 6 SDK.
+Running the unit tests additionally requires the .NET Framework 4.6.2+ and the .NET 8 and 9 runtimes to be installed. (If you do not have all of those installed, you can run the tests for a specific target framework using `dotnet test -f <framework>`.)
 
 ### On Linux
 
@@ -46,22 +44,14 @@ These requirements should be covered by Visual Studio 2022 and the .NET 6 SDK.
 ./build.sh
 ```
 
-Compilation requires an up-to-date .NET Core SDK.
-
-Running the unit tests additionally requires the .NET Core 3.1 and 6.0 runtimes to be installed, as well as either Docker or Mono. For the latter, we recommend Mono 5.10+, though older versions (4.6.1+) might still work as well.
-
-:information_source: **Mono runtime support:** Castle Core runs with minor limitations and defects on Mono 4.0.2+ (however 4.6.1+ is highly recommended, or 5.10+ if your code uses new C# 7.x language features such as `in` parameters).
-
-We test against up-to-date Mono versions in order to fix known defects as soon as possible. Because of this, if you are using an older Mono version than our Continuous Integration (CI) build, you might see some unit tests fail.
-
-For known Mono defects, check [our issue tracker](https://github.com/castleproject/Core/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20mono), as well as unit tests marked with `[Platform(Exclude = "Mono", ...)]` in the source code.
+:information_source: **Mono runtime support:** We used to run tests on the Mono 6.0 runtime, but stopped doing so as the project has been deprecated. See the official announcement on [the Mono homepage](https://www.mono-project.com/).
 
 ### Conditional Compilation Symbols
 
 The following conditional compilation symbols (vertical) are currently defined for each of the build configurations (horizontal):
 
-Symbol                              | .NET 4.6.2         | .NET Standard 2.x and .NET 6
------------------------------------ | ------------------ | ----------------------------
+Symbol                              | .NET 4.6.2         | .NET Standard 2.x and .NET 8+
+----------------------------------- | ------------------ | -----------------------------
 `FEATURE_APPDOMAIN`                 | :white_check_mark: | :no_entry_sign:
 `FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :no_entry_sign:
 `FEATURE_SERIALIZATION`             | :white_check_mark: | :no_entry_sign:
