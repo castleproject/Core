@@ -384,7 +384,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		protected void InitializeStaticFields(Type builtType)
+		internal void InitializeStaticFields(Type builtType)
 		{
 			builtType.SetStaticField("proxyGenerationOptions", BindingFlags.NonPublic, ProxyGenerationOptions);
 		}
