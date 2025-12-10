@@ -27,7 +27,14 @@ namespace Castle.Components.DictionaryAdapter.Tests
 			if (expected == null) throw new ArgumentNullException("expected");
 			if (actual == null) throw new ArgumentNullException("actual");
 
-			Assert.True(Matches(expected, actual));
+			if (Matches(expected, actual))
+			{
+				Assert.Pass();
+			}
+			else
+			{
+				Assert.Fail("XmlElements are not equivalent.\nExpected: `{0}`\nActual:   `{1}`", expected.OuterXml, actual.OuterXml);
+			}
 		}
 
 		public static void AreXmlEquivalent(string expected, XmlElement actual)
