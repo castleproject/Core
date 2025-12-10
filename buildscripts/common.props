@@ -66,6 +66,10 @@
 		<DefineConstants>$(NetStandard20Constants)</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0' Or '$(TargetFramework)'=='net9.0'">
+		<DefineConstants>$(DefineConstants);FEATURE_BYREFLIKE</DefineConstants>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<None Include="$(SolutionDir)docs\images\castle-logo.png" Pack="true" PackagePath=""/>
 	</ItemGroup>
