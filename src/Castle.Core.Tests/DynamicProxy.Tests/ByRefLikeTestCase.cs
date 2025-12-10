@@ -14,6 +14,8 @@
 
 #if FEATURE_BYREFLIKE
 
+#nullable enable
+
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
@@ -37,6 +39,8 @@ namespace Castle.DynamicProxy.Tests
 		{
 			_ = generator.CreateInterfaceProxyWithoutTarget(interfaceType);
 		}
+
+		#region Can methods with by-ref-like parameters be intercepted without crashing?
 
 		[Test]
 		public void Can_invoke_method_with_by_ref_like_parameter()
@@ -75,6 +79,10 @@ namespace Castle.DynamicProxy.Tests
 			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHaveMethodWithByRefLikeReturnType>(new DoNothingInterceptor());
 			_ = proxy.Method();
 		}
+
+		#endregion
+
+		#region Can methods with by-ref-like parameters be proceeded to without crashing?
 
 		[Test]
 		public void Can_proceed_to_target_method_with_by_ref_like_parameter()
@@ -118,6 +126,8 @@ namespace Castle.DynamicProxy.Tests
 			var proxy = generator.CreateInterfaceProxyWithTarget<IHaveMethodWithByRefLikeReturnType>(target, new StandardInterceptor());
 			_ = proxy.Method();
 		}
+
+		#endregion
 
 		public ref struct ByRefLike
 		{
@@ -182,6 +192,227 @@ namespace Castle.DynamicProxy.Tests
 			public virtual ByRefLike Method()
 			{
 				return default;
+			}
+		}
+
+		#region What values do interceptors see for by-ref-like arguments?
+
+		[Test]
+		public void By_ref_like_arguments_are_replaced_with_null_in_invocation()
+		{
+			var interceptor = new ObservingInterceptor();
+			var proxy = generator.CreateClassProxy<HasMethodWithSpanParameter>(interceptor);
+			var arg = "original".AsSpan();
+			proxy.Method(arg);
+			Assert.IsNull(interceptor.ObservedArg);
+		}
+
+		[Test]
+		public void By_ref_like_in_arguments_are_replaced_with_null_in_invocation()
+		{
+			var interceptor = new ObservingInterceptor();
+			var proxy = generator.CreateClassProxy<HasMethodWithSpanInParameter>(interceptor);
+			var arg = "original".AsSpan();
+			proxy.Method(in arg);
+			Assert.IsNull(interceptor.ObservedArg);
+		}
+
+		[Test]
+		public void By_ref_like_ref_arguments_are_replaced_with_null_in_invocation()
+		{
+			var interceptor = new ObservingInterceptor();
+			var proxy = generator.CreateClassProxy<HasMethodWithSpanRefParameter>(interceptor);
+			var arg = "original".AsSpan();
+			proxy.Method(ref arg);
+			Assert.IsNull(interceptor.ObservedArg);
+		}
+
+		// Note the somewhat weird semantics of this test: DynamicProxy allows you to read the incoming values
+		// of `out` arguments, which would be illegal in plain C# ("use of unassigned out parameter").
+		// DynamicProxy does not distinguish between `ref` and `out` in this regard.
+		[Test]
+		public void By_ref_like_out_arguments_are_replaced_with_null_in_invocation()
+		{
+			var interceptor = new ObservingInterceptor();
+			var proxy = generator.CreateClassProxy<HasMethodWithSpanOutParameter>(interceptor);
+			var arg = "original".AsSpan();
+			proxy.Method(out arg);
+			Assert.IsNull(interceptor.ObservedArg);
+		}
+
+		#endregion
+
+		#region What values do proceeded-to targets see for by-ref-like arguments?
+
+		// This test merely describes the status quo, and not the behavior we'd ideally want.
+		[Test]
+		public void By_ref_like_arguments_arrive_reset_to_default_value_at_target()
+		{
+			var target = new HasMethodWithSpanParameter();
+			var proxy = generator.CreateClassProxyWithTarget(target, new StandardInterceptor());
+			var arg = "original".AsSpan();
+			proxy.Method(arg);
+			Assert.AreEqual("", target.RecordedArg);
+		}
+
+		// This test merely describes the status quo, and not the behavior we'd ideally want.
+		[Test]
+		public void By_ref_like_in_arguments_arrive_reset_to_default_value_at_target()
+		{
+			var target = new HasMethodWithSpanInParameter();
+			var proxy = generator.CreateClassProxyWithTarget(target, new StandardInterceptor());
+			var arg = "original".AsSpan();
+			proxy.Method(in arg);
+			Assert.AreEqual("", target.RecordedArg);
+		}
+
+		// This test merely describes the status quo, and not the behavior we'd ideally want.
+		[Test]
+		public void By_ref_like_ref_arguments_arrive_reset_to_default_value_at_target()
+		{
+			var target = new HasMethodWithSpanRefParameter();
+			var proxy = generator.CreateClassProxyWithTarget(target, new StandardInterceptor());
+			var arg = "original".AsSpan();
+			proxy.Method(ref arg);
+			Assert.AreEqual("", target.RecordedArg);
+		}
+
+		#endregion
+
+		#region How are by-ref-like by-ref arguments changed by interception?
+
+		[Test]
+		public void By_ref_like_in_arguments_are_left_unchanged()
+		{
+			var proxy = generator.CreateClassProxy<HasMethodWithSpanInParameter>(new DoNothingInterceptor());
+			var arg = "original".AsSpan();
+			proxy.Method(in arg);
+			Assert.AreEqual("original", arg.ToString());
+		}
+
+		[Test]
+		public void By_ref_like_in_arguments_are_left_unchanged_if_interception_includes_proceed_to_target()
+		{
+			var target = new HasMethodWithSpanInParameter();
+			var proxy = generator.CreateClassProxyWithTarget(target, new StandardInterceptor());
+			var arg = "original".AsSpan();
+			proxy.Method(in arg);
+			Assert.AreEqual("original", arg.ToString());
+		}
+
+		[Test]
+		public void By_ref_like_ref_arguments_are_left_unchanged()
+		{
+			var proxy = generator.CreateClassProxy<HasMethodWithSpanRefParameter>(new DoNothingInterceptor());
+			var arg = "original".AsSpan();
+			proxy.Method(ref arg);
+			Assert.AreEqual("original", arg.ToString());
+		}
+
+		[Test]
+		public void By_ref_like_ref_arguments_are_left_unchanged_if_interception_includes_proceed_to_target()
+		{
+			var target = new HasMethodWithSpanRefParameter();
+			var proxy = generator.CreateClassProxyWithTarget(target, new DoNothingInterceptor());
+			var arg = "original".AsSpan();
+			proxy.Method(ref arg);
+			Assert.AreEqual("original", arg.ToString());
+		}
+
+		// This test merely describes the status quo, and not the behavior we'd ideally want:
+		// DynamicProxy records the initial values of all by-ref arguments in `IInvocation.Arguments` and,
+		// unless changed during interception, writes out the final value for both `ref` and `out` parameters
+		// from there... meaning all non-by-ref-like by-ref arguments are by default left unchanged.
+		// This cannot work for by-ref-likes, since their initial value cannot be preserved in `Arguments`.
+		// To honor the semantics of `out` parameters DynamicProxy *does* write a value (unlike with `ref`,
+		// above, where it is free to choose not to).
+		[Test]
+		public void By_ref_like_out_arguments_are_reset_to_default_value()
+		{
+			var proxy = generator.CreateClassProxy<HasMethodWithSpanOutParameter>(new DoNothingInterceptor());
+			var arg = "original".AsSpan();
+			proxy.Method(out arg);
+			Assert.AreEqual("", arg.ToString());
+		}
+
+		// Once we manage to change the implementation so that `out` arguments aren't reset,
+		// and the above test is replaced with an `are_left_unchanged` version, then we should also add
+		// an additional `are_left_unchanged_if_interception_includes_proceed_to_target` test variant.
+
+		#endregion
+
+		#region Can interception targets set by-ref-like by-ref arguments?
+
+		// This test merely describes the status quo, and not the behavior we'd ideally want.
+		[Test]
+		public void By_ref_like_ref_arguments_cannot_be_set_by_target()
+		{
+			var target = new HasMethodWithSpanRefParameter();
+			var proxy = generator.CreateClassProxyWithTarget(target, new StandardInterceptor());
+			var arg = "original".AsSpan();
+			proxy.Method(ref arg);
+			Assert.AreEqual("original", arg.ToString());  // ideally, would be equal to "set"
+		}
+
+		// This test merely describes the status quo, and not the behavior we'd ideally want.
+		[Test]
+		public void By_ref_like_out_arguments_cannot_be_set_by_target()
+		{
+			var target = new HasMethodWithSpanOutParameter();
+			var proxy = generator.CreateClassProxyWithTarget(target, new StandardInterceptor());
+			var arg = "original".AsSpan();
+			proxy.Method(out arg);
+			Assert.AreEqual("", arg.ToString());  // ideally, would be equal to "set"
+		}
+
+		#endregion
+
+		public class HasMethodWithSpanParameter
+		{
+			public string? RecordedArg;
+
+			public virtual void Method(ReadOnlySpan<char> arg)
+			{
+				RecordedArg = arg.ToString();
+			}
+		}
+
+		public class HasMethodWithSpanInParameter
+		{
+			public string? RecordedArg;
+
+			public virtual void Method(in ReadOnlySpan<char> arg)
+			{
+				RecordedArg = arg.ToString();
+			}
+		}
+
+		public class HasMethodWithSpanRefParameter
+		{
+			public string? RecordedArg;
+
+			public virtual void Method(ref ReadOnlySpan<char> arg)
+			{
+				RecordedArg = arg.ToString();
+				arg = "set".AsSpan();
+			}
+		}
+
+		public class HasMethodWithSpanOutParameter
+		{
+			public virtual void Method(out ReadOnlySpan<char> arg)
+			{
+				arg = "set".AsSpan();
+			}
+		}
+
+		public class ObservingInterceptor : IInterceptor
+		{
+			public object? ObservedArg;
+
+			public void Intercept(IInvocation invocation)
+			{
+				ObservedArg = invocation.Arguments[0];
 			}
 		}
 	}

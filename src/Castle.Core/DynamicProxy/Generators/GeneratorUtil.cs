@@ -51,7 +51,17 @@ namespace Castle.DynamicProxy.Generators
 						// We need to replace it with some other value.
 
 						// For now, we just substitute the by-ref-like type's default value:
-						emitter.CodeBuilder.AddStatement(new AssignStatement(dereferencedArguments[i], new DefaultValueExpression(dereferencedParameterType)));
+						if (parameters[i].IsOut)
+						{
+							emitter.CodeBuilder.AddStatement(new AssignStatement(dereferencedArguments[i], new DefaultValueExpression(dereferencedParameterType)));
+						}
+						else
+						{
+							// ... except when we're dealing with a `ref` parameter. Unlike with `out`,
+							// where we would be expected to definitely assign to it, we are free to leave
+							// the original incoming value untouched. For now, that's likely the better
+							// interim solution than unconditionally resetting.
+						}
 					}
 					else
 #endif
