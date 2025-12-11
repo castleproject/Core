@@ -78,6 +78,7 @@ for:
           nuget push ".\build\Castle.Core-log4net.${env:APPVEYOR_BUILD_VERSION}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
           nuget push ".\build\Castle.Core-NLog.${env:APPVEYOR_BUILD_VERSION}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
           nuget push ".\build\Castle.Core-Serilog.${env:APPVEYOR_BUILD_VERSION}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
+          nuget push ".\build\Castle.Core-DiagnosticsLogger.${env:APPVEYOR_BUILD_VERSION}.nupkg" -ApiKey $env:NUGET_API_KEY -Source https://api.nuget.org/v3/index.json
       }
 
   # upload packages to AppVeyor
