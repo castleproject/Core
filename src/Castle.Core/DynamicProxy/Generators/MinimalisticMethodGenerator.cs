@@ -52,8 +52,10 @@ namespace Castle.DynamicProxy.Generators
 				if (parameter.IsOut)
 				{
 					emitter.CodeBuilder.AddStatement(
-						new AssignArgumentStatement(new ArgumentReference(parameter.ParameterType, index + 1),
-						                            new DefaultValueExpression(parameter.ParameterType)));
+						new AssignStatement(
+							new IndirectReference(
+								new ArgumentReference(parameter.ParameterType, index + 1)),
+							new DefaultValueExpression(parameter.ParameterType.GetElementType())));
 				}
 			}
 		}

@@ -42,31 +42,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				gen.Emit(OpCodes.Initobj, type);
 				gen.Emit(OpCodes.Ldloc, local);
 			}
-			else if (type.IsByRef)
-			{
-				EmitByRef(gen);
-			}
 			else
 			{
 				throw new NotImplementedException("Can't emit default value for type " + type);
-			}
-		}
-
-		private void EmitByRef(ILGenerator gen)
-		{
-			var elementType = type.GetElementType();
-			if (IsPrimitiveOrClass(elementType))
-			{
-				OpCodeUtil.EmitLoadOpCodeForDefaultValueOfType(gen, elementType);
-				OpCodeUtil.EmitStoreIndirectOpCodeForType(gen, elementType);
-			}
-			else if (elementType.IsGenericParameter || elementType.IsValueType)
-			{
-				gen.Emit(OpCodes.Initobj, elementType);
-			}
-			else
-			{
-				throw new NotImplementedException("Can't emit default value for reference of type " + elementType);
 			}
 		}
 
