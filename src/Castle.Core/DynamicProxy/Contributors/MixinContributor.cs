@@ -114,7 +114,7 @@ namespace Castle.DynamicProxy.Contributors
 			}
 
 			return (c, m) => new NullCoalescingOperatorExpression(
-			                 	new AsTypeReference(c.GetField("__target"), m.DeclaringType),
+			                 	new AsTypeExpression(c.GetField("__target"), m.DeclaringType),
 			                 	fields[m.DeclaringType]);
 		}
 

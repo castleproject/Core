@@ -18,47 +18,30 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Diagnostics;
 	using System.Reflection.Emit;
 
-	[DebuggerDisplay("{reference} as {type}")]
-	internal class AsTypeReference : Reference
+	[DebuggerDisplay("{expression} as {type}")]
+	internal class AsTypeExpression : IExpression
 	{
-		private readonly Reference reference;
+		private readonly IExpression expression;
 		private readonly Type type;
 
-		public AsTypeReference(Reference reference, Type type)
-			: base(SelfReference.Self)
+		public AsTypeExpression(IExpression expression, Type type)
 		{
-			if (reference == null)
+			if (expression == null)
 			{
-				throw new ArgumentNullException(nameof(reference));
+				throw new ArgumentNullException(nameof(AsTypeExpression.expression));
 			}
 			if (type == null)
 			{
 				throw new ArgumentNullException(nameof(type));
 			}
-			this.reference = reference;
+			this.expression = expression;
 			this.type = type;
-			if (reference == OwnerReference)
-			{
-				OwnerReference = null;
-			}
 		}
 
-		public override void LoadAddressOfReference(ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
-			// NOTE: Or maybe throw new NotSupportedException() ?
-			reference.LoadAddressOfReference(gen);
-		}
-
-		public override void LoadReference(ILGenerator gen)
-		{
-			reference.LoadReference(gen);
+			expression.Emit(gen);
 			gen.Emit(OpCodes.Isinst, type);
-		}
-
-		public override void StoreReference(ILGenerator gen)
-		{
-			// NOTE: Or maybe throw new NotSupportedException() ?
-			reference.StoreReference(gen);
 		}
 	}
 }
