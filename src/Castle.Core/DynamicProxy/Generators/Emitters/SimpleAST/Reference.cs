@@ -12,24 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
 	internal abstract class Reference : IExpression
 	{
-		protected Reference owner = SelfReference.Self;
+		protected Reference? owner;
 
-		protected Reference()
-		{
-		}
-
-		protected Reference(Reference owner)
+		protected Reference(Reference? owner)
 		{
 			this.owner = owner;
 		}
 
-		public Reference OwnerReference
+		public Reference? OwnerReference
 		{
 			get { return owner; }
 			set { owner = value; }
