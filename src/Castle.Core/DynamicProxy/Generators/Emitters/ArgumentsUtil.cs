@@ -65,7 +65,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				return;
 			}
 
-			EmitLoadOwnerAndReference(reference.OwnerReference, il);
+			reference.Owner?.Emit(il);
 
 			reference.LoadReference(il);
 		}

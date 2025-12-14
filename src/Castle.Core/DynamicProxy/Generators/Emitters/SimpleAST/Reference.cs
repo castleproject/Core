@@ -20,14 +20,14 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	internal abstract class Reference : IExpression
 	{
-		protected Reference? owner;
+		protected IExpression? owner;
 
-		protected Reference(Reference? owner)
+		protected Reference(IExpression? owner)
 		{
 			this.owner = owner;
 		}
 
-		public Reference? OwnerReference
+		public IExpression? Owner
 		{
 			get { return owner; }
 			set { owner = value; }
