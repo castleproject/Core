@@ -40,7 +40,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			localReference.LoadAddressOfReference(gen);
 		}
 
-		public override void StoreReference(ILGenerator gen)
+		public override void StoreReference(IExpression expression, ILGenerator gen)
 		{
 			throw new NotImplementedException();
 		}

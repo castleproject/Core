@@ -66,12 +66,15 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 		}
 
-		public override void StoreReference(ILGenerator gen)
+		public override void StoreReference(IExpression expression, ILGenerator gen)
 		{
 			if (Position == -1)
 			{
 				throw new InvalidOperationException("ArgumentReference uninitialized");
 			}
+
+			Debug.Assert(owner == null);
+			expression.Emit(gen);
 			gen.Emit(OpCodes.Starg, Position);
 		}
 	}

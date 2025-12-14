@@ -45,7 +45,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public abstract void LoadReference(ILGenerator gen);
 
-		public abstract void StoreReference(ILGenerator gen);
+		public abstract void StoreReference(IExpression expression, ILGenerator gen);
 
 		public virtual void Generate(ILGenerator gen)
 		{

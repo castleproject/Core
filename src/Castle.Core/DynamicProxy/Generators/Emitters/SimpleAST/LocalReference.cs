@@ -43,8 +43,10 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			gen.Emit(OpCodes.Ldloc, localBuilder);
 		}
 
-		public override void StoreReference(ILGenerator gen)
+		public override void StoreReference(IExpression expression, ILGenerator gen)
 		{
+			Debug.Assert(owner == null);
+			expression.Emit(gen);
 			gen.Emit(OpCodes.Stloc, localBuilder);
 		}
 	}

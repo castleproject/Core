@@ -47,8 +47,10 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			OpCodeUtil.EmitLoadIndirectOpCodeForType(gen, Type);
 		}
 
-		public override void StoreReference(ILGenerator gen)
+		public override void StoreReference(IExpression expression, ILGenerator gen)
 		{
+			owner?.Emit(gen);
+			expression.Emit(gen);
 			OpCodeUtil.EmitStoreIndirectOpCodeForType(gen, Type);
 		}
 
