@@ -29,13 +29,13 @@ namespace Castle.DynamicProxy.Contributors
 		private readonly bool canChangeTarget;
 		private readonly IList<Type> empty = new List<Type>();
 		private readonly IDictionary<Type, FieldReference> fields = new SortedDictionary<Type, FieldReference>(new FieldReferenceComparer());
-		private readonly GetTargetExpressionDelegate getTargetExpression;
+		private readonly GetTargetExpressionDelegate getTarget;
 
 		public MixinContributor(INamingScope namingScope, bool canChangeTarget)
 			: base(namingScope)
 		{
 			this.canChangeTarget = canChangeTarget;
-			getTargetExpression = BuildGetTargetExpression();
+			getTarget = BuildGetTargetExpression();
 		}
 
 		public IEnumerable<FieldReference> Fields
@@ -101,7 +101,7 @@ namespace Castle.DynamicProxy.Contributors
 			return new MethodWithInvocationGenerator(method,
 			                                         @class.GetField("__interceptors"),
 			                                         invocation,
-			                                         getTargetExpression,
+			                                         getTarget,
 			                                         overrideMethod,
 			                                         null);
 		}

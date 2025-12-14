@@ -29,14 +29,14 @@ namespace Castle.DynamicProxy.Contributors
 	{
 		private readonly Type delegateType;
 		private readonly MetaMethod method;
-		private readonly Reference targetReference;
+		private readonly IExpression target;
 
-		public InvocationWithGenericDelegateContributor(Type delegateType, MetaMethod method, Reference targetReference)
+		public InvocationWithGenericDelegateContributor(Type delegateType, MetaMethod method, IExpression target)
 		{
 			Debug.Assert(delegateType.IsGenericType, "delegateType.IsGenericType");
 			this.delegateType = delegateType;
 			this.method = method;
-			this.targetReference = targetReference;
+			this.target = target;
 		}
 
 		public ConstructorEmitter CreateConstructor(ArgumentReference[] baseCtorArguments, AbstractTypeEmitter invocation)
@@ -69,18 +69,18 @@ namespace Castle.DynamicProxy.Contributors
 			var localReference = invokeMethodOnTarget.CodeBuilder.DeclareLocal(closedDelegateType);
 			var closedMethodOnTarget = method.MethodOnTarget.MakeGenericMethod(genericTypeParameters);
 			invokeMethodOnTarget.CodeBuilder.AddStatement(
-				SetDelegate(localReference, targetReference, closedDelegateType, closedMethodOnTarget));
+				SetDelegate(localReference, target, closedDelegateType, closedMethodOnTarget));
 			return localReference;
 		}
 
-		private AssignStatement SetDelegate(LocalReference localDelegate, Reference localTarget,
+		private AssignStatement SetDelegate(LocalReference localDelegate, IExpression target,
 		                                    Type closedDelegateType, MethodInfo closedMethodOnTarget)
 		{
 			var delegateCreateDelegate = new MethodInvocationExpression(
 				null,
 				DelegateMethods.CreateDelegate,
 				new TypeTokenExpression(closedDelegateType),
-				localTarget,
+				target,
 				new MethodTokenExpression(closedMethodOnTarget));
 			return new AssignStatement(localDelegate, new ConvertExpression(closedDelegateType, delegateCreateDelegate));
 		}

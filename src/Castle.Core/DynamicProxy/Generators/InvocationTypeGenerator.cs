@@ -51,7 +51,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected abstract Type GetBaseType();
 
-		protected abstract FieldReference GetTargetReference();
+		protected abstract FieldReference GetTargetField();
 
 		public AbstractTypeEmitter Generate(ClassEmitter @class, INamingScope namingScope)
 		{
@@ -71,7 +71,7 @@ namespace Castle.DynamicProxy.Generators
 
 			CreateConstructor(invocation);
 
-			var targetField = GetTargetReference();
+			var targetField = GetTargetField();
 			if (canChangeTarget)
 			{
 				ImplementChangeProxyTargetInterface(@class, invocation, targetField);

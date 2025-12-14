@@ -24,37 +24,37 @@ namespace Castle.DynamicProxy.Generators
 	internal class OptionallyForwardingMethodGenerator : MethodGenerator
 	{
 		// TODO: This class largely duplicates code from Forwarding and Minimalistic generators. Should be refactored to change that
-		private readonly GetTargetReferenceDelegate getTargetReference;
+		private readonly GetTargetExpressionDelegate getTarget;
 
 		public OptionallyForwardingMethodGenerator(MetaMethod method, OverrideMethodDelegate overrideMethod,
-		                                           GetTargetReferenceDelegate getTargetReference)
+		                                           GetTargetExpressionDelegate getTarget)
 			: base(method, overrideMethod)
 		{
-			this.getTargetReference = getTargetReference;
+			this.getTarget = getTarget;
 		}
 
 		protected override MethodEmitter BuildProxiedMethodBody(MethodEmitter emitter, ClassEmitter @class,
 		                                                        INamingScope namingScope)
 		{
-			var targetReference = getTargetReference(@class, MethodToOverride);
+			var target = getTarget(@class, MethodToOverride);
 
 			emitter.CodeBuilder.AddStatement(
 				new IfNullExpression(
-					targetReference,
+					target,
 					IfNull(emitter.ReturnType),
-					IfNotNull(targetReference)));
+					IfNotNull(target)));
 
 			return emitter;
 		}
 
-		private IStatement IfNotNull(Reference targetReference)
+		private IStatement IfNotNull(IExpression target)
 		{
 			var statements = new BlockStatement();
 			var arguments = ArgumentsUtil.ConvertToArgumentReferenceExpression(MethodToOverride.GetParameters());
 
 			statements.AddStatement(new ReturnStatement(
 			                        	new MethodInvocationExpression(
-			                        		targetReference,
+			                        		target,
 			                        		MethodToOverride,
 			                        		arguments) { VirtualCall = true }));
 			return statements;

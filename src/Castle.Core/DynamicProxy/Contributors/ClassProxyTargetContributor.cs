@@ -78,13 +78,13 @@ namespace Castle.DynamicProxy.Contributors
 
 			var invocation = GetInvocationType(method, @class);
 
-			GetTargetExpressionDelegate getTargetTypeExpression = (c, m) => new TypeTokenExpression(targetType);
+			GetTargetExpressionDelegate getTargetType = (c, m) => new TypeTokenExpression(targetType);
 
 			return new MethodWithInvocationGenerator(method,
 			                                         @class.GetField("__interceptors"),
 			                                         invocation,
-			                                         getTargetTypeExpression,
-			                                         getTargetTypeExpression,
+			                                         getTargetType,
+			                                         getTargetType,
 			                                         overrideMethod,
 			                                         null);
 		}

@@ -32,27 +32,27 @@ namespace Castle.DynamicProxy.Generators
 	internal class MethodWithInvocationGenerator : MethodGenerator
 	{
 		private readonly IInvocationCreationContributor contributor;
-		private readonly GetTargetExpressionDelegate getTargetExpression;
-		private readonly GetTargetExpressionDelegate getTargetTypeExpression;
+		private readonly GetTargetExpressionDelegate getTarget;
+		private readonly GetTargetExpressionDelegate getTargetType;
 		private readonly IExpression interceptors;
 		private readonly Type invocation;
 
 		public MethodWithInvocationGenerator(MetaMethod method, IExpression interceptors, Type invocation,
-		                                     GetTargetExpressionDelegate getTargetExpression,
+		                                     GetTargetExpressionDelegate getTarget,
 		                                     OverrideMethodDelegate createMethod, IInvocationCreationContributor contributor)
-			: this(method, interceptors, invocation, getTargetExpression, null, createMethod, contributor)
+			: this(method, interceptors, invocation, getTarget, null, createMethod, contributor)
 		{
 		}
 
 		public MethodWithInvocationGenerator(MetaMethod method, IExpression interceptors, Type invocation,
-		                                     GetTargetExpressionDelegate getTargetExpression,
-		                                     GetTargetExpressionDelegate getTargetTypeExpression,
+		                                     GetTargetExpressionDelegate getTarget,
+		                                     GetTargetExpressionDelegate getTargetType,
 		                                     OverrideMethodDelegate createMethod, IInvocationCreationContributor contributor)
 			: base(method, createMethod)
 		{
 			this.invocation = invocation;
-			this.getTargetExpression = getTargetExpression;
-			this.getTargetTypeExpression = getTargetTypeExpression;
+			this.getTarget = getTarget;
+			this.getTargetType = getTargetType;
 			this.interceptors = interceptors;
 			this.contributor = contributor;
 		}
@@ -189,13 +189,13 @@ namespace Castle.DynamicProxy.Generators
 			var methodInterceptorsField = BuildMethodInterceptorsField(@class, MethodToOverride, namingScope);
 
 			IExpression targetTypeExpression;
-			if (getTargetTypeExpression != null)
+			if (getTargetType != null)
 			{
-				targetTypeExpression = getTargetTypeExpression(@class, MethodToOverride);
+				targetTypeExpression = getTargetType(@class, MethodToOverride);
 			}
 			else
 			{
-				targetTypeExpression = new MethodInvocationExpression(null, TypeUtilMethods.GetTypeOrNull, getTargetExpression(@class, MethodToOverride));
+				targetTypeExpression = new MethodInvocationExpression(null, TypeUtilMethods.GetTypeOrNull, getTarget(@class, MethodToOverride));
 			}
 
 			var emptyInterceptors = new NewArrayExpression(0, typeof(IInterceptor));
@@ -234,7 +234,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			return new[]
 			{
-				getTargetExpression(@class, MethodToOverride),
+				getTarget(@class, MethodToOverride),
 				SelfReference.Self,
 				methodInterceptors ?? interceptors,
 				proxiedMethodTokenExpression,

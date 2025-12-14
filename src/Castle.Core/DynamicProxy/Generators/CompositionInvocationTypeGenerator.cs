@@ -52,7 +52,7 @@ namespace Castle.DynamicProxy.Generators
 			return BaseType;
 		}
 
-		protected override FieldReference GetTargetReference()
+		protected override FieldReference GetTargetField()
 		{
 			return new FieldReference(InvocationMethods.CompositionInvocationTarget);
 		}

@@ -19,13 +19,9 @@ namespace Castle.DynamicProxy.Contributors
 
 	internal class InterfaceProxyWithOptionalTargetContributor : InterfaceProxyWithoutTargetContributor
 	{
-		private readonly GetTargetReferenceDelegate getTargetReference;
-
-		public InterfaceProxyWithOptionalTargetContributor(INamingScope namingScope, GetTargetExpressionDelegate getTarget,
-		                                                   GetTargetReferenceDelegate getTargetReference)
+		public InterfaceProxyWithOptionalTargetContributor(INamingScope namingScope, GetTargetExpressionDelegate getTarget)
 			: base(namingScope, getTarget)
 		{
-			this.getTargetReference = getTargetReference;
 			canChangeTarget = true;
 		}
 
@@ -34,7 +30,7 @@ namespace Castle.DynamicProxy.Contributors
 		{
 			if (!method.Proxyable)
 			{
-				return new OptionallyForwardingMethodGenerator(method, overrideMethod, getTargetReference);
+				return new OptionallyForwardingMethodGenerator(method, overrideMethod, getTarget);
 			}
 
 			return base.GetMethodGenerator(method, @class, overrideMethod);

@@ -65,7 +65,7 @@ namespace Castle.DynamicProxy.Generators
 		protected override ProxyTargetAccessorContributor GetProxyTargetAccessorContributor()
 		{
 			return new ProxyTargetAccessorContributor(
-				getTargetReference: () => targetField,
+				getTarget: () => targetField,
 				targetType);
 		}
 
