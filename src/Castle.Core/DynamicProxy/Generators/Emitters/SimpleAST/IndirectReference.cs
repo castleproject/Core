@@ -23,16 +23,20 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	///   Wraps a reference that is passed 
 	///   ByRef and provides indirect load/store support.
 	/// </summary>
-	[DebuggerDisplay("&{OwnerReference}")]
+	[DebuggerDisplay("&{owner}")]
 	internal class IndirectReference : Reference
 	{
+		private readonly Reference owner;
+
 		public IndirectReference(Reference byRefReference) :
-			base(byRefReference, byRefReference.Type.GetElementType())
+			base(byRefReference.Type.GetElementType())
 		{
 			if (!byRefReference.Type.IsByRef)
 			{
 				throw new ArgumentException("Expected an IsByRef reference", nameof(byRefReference));
 			}
+
+			owner = byRefReference;
 		}
 
 		public override void LoadAddressOfReference(ILGenerator gen)
@@ -44,13 +48,13 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void LoadReference(ILGenerator gen)
 		{
-			Owner?.Emit(gen);
+			owner.Emit(gen);
 			OpCodeUtil.EmitLoadIndirectOpCodeForType(gen, Type);
 		}
 
 		public override void StoreReference(IExpression expression, ILGenerator gen)
 		{
-			owner?.Emit(gen);
+			owner.Emit(gen);
 			expression.Emit(gen);
 			OpCodeUtil.EmitStoreIndirectOpCodeForType(gen, Type);
 		}

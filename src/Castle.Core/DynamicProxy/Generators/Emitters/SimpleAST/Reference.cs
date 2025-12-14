@@ -21,19 +21,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	internal abstract class Reference : IExpression
 	{
-		protected IExpression? owner;
 		protected readonly Type type;
 
-		protected Reference(IExpression? owner, Type type)
+		protected Reference(Type type)
 		{
-			this.owner = owner;
 			this.type = type;
-		}
-
-		public IExpression? Owner
-		{
-			get { return owner; }
-			set { owner = value; }
 		}
 
 		public Type Type
