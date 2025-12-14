@@ -23,7 +23,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	{
 		private LocalBuilder localBuilder;
 
-		public LocalReference(Type type) : base(type)
+		public LocalReference(Type type)
+			: base(null, type)
 		{
 		}
 

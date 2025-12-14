@@ -22,13 +22,13 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	internal class ArgumentReference : TypeReference
 	{
 		public ArgumentReference(Type argumentType)
-			: base(argumentType)
+			: base(null, argumentType)
 		{
 			Position = -1;
 		}
 
 		public ArgumentReference(Type argumentType, int position)
-			: base(argumentType)
+			: base(null, argumentType)
 		{
 			Position = position;
 		}
