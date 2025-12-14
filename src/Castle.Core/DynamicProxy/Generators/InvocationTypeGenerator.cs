@@ -289,7 +289,7 @@ namespace Castle.DynamicProxy.Generators
 
 		private void EmitCallThrowOnNoTarget(MethodEmitter invokeMethodOnTarget)
 		{
-			var throwOnNoTarget = new MethodInvocationExpression(InvocationMethods.ThrowOnNoTarget);
+			var throwOnNoTarget = new MethodInvocationExpression(SelfReference.Self, InvocationMethods.ThrowOnNoTarget);
 
 			invokeMethodOnTarget.CodeBuilder.AddStatement(throwOnNoTarget);
 			invokeMethodOnTarget.CodeBuilder.AddStatement(new ReturnStatement());

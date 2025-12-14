@@ -149,6 +149,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			codeBuilder.AddStatement(
 				new MethodInvocationExpression(
+					SelfReference.Self,
 					baseGetObjectData,
 					serializationInfo,
 					streamingContext));

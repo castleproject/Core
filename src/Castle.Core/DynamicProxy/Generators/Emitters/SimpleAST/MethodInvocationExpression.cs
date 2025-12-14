@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection;
@@ -21,24 +23,14 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	{
 		protected readonly IExpression[] args;
 		protected readonly MethodInfo method;
-		protected readonly Reference owner;
+		protected readonly Reference? owner;
 
-		public MethodInvocationExpression(MethodInfo method, params IExpression[] args) :
-			this(SelfReference.Self, method, args)
-		{
-		}
-
-		public MethodInvocationExpression(MethodEmitter method, params IExpression[] args) :
-			this(SelfReference.Self, method.MethodBuilder, args)
-		{
-		}
-
-		public MethodInvocationExpression(Reference owner, MethodEmitter method, params IExpression[] args) :
+		public MethodInvocationExpression(Reference? owner, MethodEmitter method, params IExpression[] args) :
 			this(owner, method.MethodBuilder, args)
 		{
 		}
 
-		public MethodInvocationExpression(Reference owner, MethodInfo method, params IExpression[] args)
+		public MethodInvocationExpression(Reference? owner, MethodInfo method, params IExpression[] args)
 		{
 			this.owner = owner;
 			this.method = method;
