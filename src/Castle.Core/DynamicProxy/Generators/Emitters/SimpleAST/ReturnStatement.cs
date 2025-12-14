@@ -18,34 +18,20 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	internal class ReturnStatement : IStatement
 	{
-		private readonly IExpression expression;
-		private readonly Reference reference;
+		private readonly IExpression value;
 
 		public ReturnStatement()
 		{
 		}
 
-		public ReturnStatement(Reference reference)
+		public ReturnStatement(IExpression value)
 		{
-			this.reference = reference;
-		}
-
-		public ReturnStatement(IExpression expression)
-		{
-			this.expression = expression;
+			this.value = value;
 		}
 
 		public void Emit(ILGenerator gen)
 		{
-			if (reference != null)
-			{
-				reference.Emit(gen);
-			}
-			else if (expression != null)
-			{
-				expression.Emit(gen);
-			}
-
+			value?.Emit(gen);
 			gen.Emit(OpCodes.Ret);
 		}
 	}
