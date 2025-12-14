@@ -129,7 +129,7 @@ namespace Castle.DynamicProxy.Contributors
 			var getObjectData = new MethodInvocationExpression(
 				null,
 				FormatterServicesMethods.GetObjectData,
-				SelfReference.Self,
+				ThisExpression.Instance,
 				members);
 			codeBuilder.AddStatement(new AssignStatement(data, getObjectData));
 
@@ -149,7 +149,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			codeBuilder.AddStatement(
 				new MethodInvocationExpression(
-					SelfReference.Self,
+					ThisExpression.Instance,
 					baseGetObjectData,
 					serializationInfo,
 					streamingContext));

@@ -122,7 +122,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			callBackMethod.CodeBuilder.AddStatement(
 				new ReturnStatement(
-					new MethodInvocationExpression(SelfReference.Self,
+					new MethodInvocationExpression(ThisExpression.Instance,
 					                               targetMethod,
 					                               callBackMethod.Arguments)));
 

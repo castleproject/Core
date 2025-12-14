@@ -143,7 +143,7 @@ namespace Castle.DynamicProxy.Generators
 #endif
 					{
 						localValue = new ConvertExpression(paramType.GetElementType(),
-						                               new MethodInvocationExpression(SelfReference.Self,
+						                               new MethodInvocationExpression(ThisExpression.Instance,
 						                                                              InvocationMethods.GetArgumentValue,
 						                                                              new LiteralIntExpression(i)));
 					}
@@ -170,7 +170,7 @@ namespace Castle.DynamicProxy.Generators
 					{
 						args[i] =
 							new ConvertExpression(paramType,
-							                      new MethodInvocationExpression(SelfReference.Self,
+							                      new MethodInvocationExpression(ThisExpression.Instance,
 							                                                     InvocationMethods.GetArgumentValue,
 							                                                     new LiteralIntExpression(i)));
 					}
@@ -218,7 +218,7 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 				var setRetVal =
-					new MethodInvocationExpression(SelfReference.Self,
+					new MethodInvocationExpression(ThisExpression.Instance,
 					                               InvocationMethods.SetReturnValue,
 					                               retVal);
 
@@ -260,7 +260,7 @@ namespace Castle.DynamicProxy.Generators
 
 				invokeMethodOnTarget.CodeBuilder.AddStatement(
 					new MethodInvocationExpression(
-						SelfReference.Self,
+						ThisExpression.Instance,
 						InvocationMethods.SetArgumentValue,
 						new LiteralIntExpression(index),
 						localValue));
@@ -289,7 +289,7 @@ namespace Castle.DynamicProxy.Generators
 
 		private void EmitCallThrowOnNoTarget(MethodEmitter invokeMethodOnTarget)
 		{
-			var throwOnNoTarget = new MethodInvocationExpression(SelfReference.Self, InvocationMethods.ThrowOnNoTarget);
+			var throwOnNoTarget = new MethodInvocationExpression(ThisExpression.Instance, InvocationMethods.ThrowOnNoTarget);
 
 			invokeMethodOnTarget.CodeBuilder.AddStatement(throwOnNoTarget);
 			invokeMethodOnTarget.CodeBuilder.AddStatement(new ReturnStatement());

@@ -235,7 +235,7 @@ namespace Castle.DynamicProxy.Generators
 			return new[]
 			{
 				getTarget(@class, MethodToOverride),
-				SelfReference.Self,
+				ThisExpression.Instance,
 				methodInterceptors ?? interceptors,
 				proxiedMethodTokenExpression,
 				new ReferencesToObjectArrayExpression(dereferencedArguments)
