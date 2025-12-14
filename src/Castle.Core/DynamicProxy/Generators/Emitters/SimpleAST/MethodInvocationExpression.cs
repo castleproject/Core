@@ -25,11 +25,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		protected readonly MethodInfo method;
 		protected readonly Reference? owner;
 
-		public MethodInvocationExpression(Reference? owner, MethodEmitter method, params IExpression[] args) :
-			this(owner, method.MethodBuilder, args)
-		{
-		}
-
 		public MethodInvocationExpression(Reference? owner, MethodInfo method, params IExpression[] args)
 		{
 			this.owner = owner;
