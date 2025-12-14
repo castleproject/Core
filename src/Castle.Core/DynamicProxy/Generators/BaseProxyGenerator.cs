@@ -331,7 +331,9 @@ namespace Castle.DynamicProxy.Generators
 			constructor.CodeBuilder.AddStatement(new AssignStatement(interceptorField,
 			                                                         new NewArrayExpression(1, typeof(IInterceptor))));
 			constructor.CodeBuilder.AddStatement(
-				new AssignArrayStatement(interceptorField, 0, new NewInstanceExpression(typeof(StandardInterceptor))));
+				new AssignStatement(
+					new ArrayElementReference(interceptorField, 0),
+					new NewInstanceExpression(typeof(StandardInterceptor))));
 
 			// Invoke base constructor
 

@@ -25,7 +25,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.value = value;
 		}
 
-		public void Emit(ILGenerator gen)
+		public void Emit(ILGenerator gen) => Emit(value, gen);
+
+		internal static void Emit(int value, ILGenerator gen)
 		{
 			switch (value)
 			{

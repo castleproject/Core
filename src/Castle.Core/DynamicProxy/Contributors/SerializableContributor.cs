@@ -90,9 +90,8 @@ namespace Castle.DynamicProxy.Contributors
 			for (var i = 0; i < interfaces.Length; i++)
 			{
 				getObjectData.CodeBuilder.AddStatement(
-					new AssignArrayStatement(
-						interfacesLocal,
-						i,
+					new AssignStatement(
+						new ArrayElementReference(interfacesLocal, i),
 						new LiteralStringExpression(interfaces[i].AssemblyQualifiedName)));
 			}
 
