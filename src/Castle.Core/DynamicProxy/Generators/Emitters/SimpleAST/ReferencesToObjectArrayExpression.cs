@@ -22,9 +22,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	internal class ReferencesToObjectArrayExpression : IExpression
 	{
-		private readonly TypeReference[] args;
+		private readonly Reference[] args;
 
-		public ReferencesToObjectArrayExpression(params TypeReference[] args)
+		public ReferencesToObjectArrayExpression(params Reference[] args)
 		{
 			this.args = args;
 		}

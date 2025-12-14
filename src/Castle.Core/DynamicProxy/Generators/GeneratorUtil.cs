@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Generators
 
 	internal static class GeneratorUtil
 	{
-		public static void CopyOutAndRefParameters(TypeReference[] dereferencedArguments, LocalReference invocation,
+		public static void CopyOutAndRefParameters(Reference[] dereferencedArguments, LocalReference invocation,
 		                                           MethodInfo method, MethodEmitter emitter)
 		{
 			var parameters = method.GetParameters();
@@ -131,12 +131,12 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		private static ConvertExpression Argument(int i, LocalReference invocationArgs, TypeReference[] arguments)
+		private static ConvertExpression Argument(int i, LocalReference invocationArgs, Reference[] arguments)
 		{
 			return new ConvertExpression(arguments[i].Type, new LoadRefArrayElementExpression(i, invocationArgs));
 		}
 
-		private static AssignStatement AssignArgument(TypeReference[] dereferencedArguments, int i,
+		private static AssignStatement AssignArgument(Reference[] dereferencedArguments, int i,
 		                                              LocalReference invocationArgs)
 		{
 			return new AssignStatement(dereferencedArguments[i], Argument(i, invocationArgs, dereferencedArguments));

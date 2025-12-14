@@ -24,9 +24,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	///   ByRef and provides indirect load/store support.
 	/// </summary>
 	[DebuggerDisplay("&{OwnerReference}")]
-	internal class IndirectReference : TypeReference
+	internal class IndirectReference : Reference
 	{
-		public IndirectReference(TypeReference byRefReference) :
+		public IndirectReference(Reference byRefReference) :
 			base(byRefReference, byRefReference.Type.GetElementType())
 		{
 			if (!byRefReference.Type.IsByRef)
@@ -52,15 +52,15 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			OpCodeUtil.EmitStoreIndirectOpCodeForType(gen, Type);
 		}
 
-		public static TypeReference WrapIfByRef(TypeReference reference)
+		public static Reference WrapIfByRef(Reference reference)
 		{
 			return reference.Type.IsByRef ? new IndirectReference(reference) : reference;
 		}
 
 		// TODO: Better name
-		public static TypeReference[] WrapIfByRef(TypeReference[] references)
+		public static Reference[] WrapIfByRef(Reference[] references)
 		{
-			var result = new TypeReference[references.Length];
+			var result = new Reference[references.Length];
 
 			for (var i = 0; i < references.Length; i++)
 			{
