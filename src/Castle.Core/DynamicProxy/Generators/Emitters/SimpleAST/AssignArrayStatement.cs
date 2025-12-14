@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public void Emit(ILGenerator il)
 		{
-			ArgumentsUtil.EmitLoadOwnerAndReference(targetArray, il);
+			targetArray.Emit(il);
 
 			il.Emit(OpCodes.Ldc_I4, targetPosition);
 

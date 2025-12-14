@@ -58,7 +58,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				}
 #endif
 
-				ArgumentsUtil.EmitLoadOwnerAndReference(reference, gen);
+				reference.Emit(gen);
 
 				if (reference.Type.IsByRef)
 				{

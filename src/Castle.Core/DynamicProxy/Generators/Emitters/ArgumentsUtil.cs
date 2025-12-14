@@ -58,18 +58,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return arguments;
 		}
 
-		public static void EmitLoadOwnerAndReference(Reference reference, ILGenerator il)
-		{
-			if (reference == null)
-			{
-				return;
-			}
-
-			reference.Owner?.Emit(il);
-
-			reference.LoadReference(il);
-		}
-
 		public static Type[] GetTypes(ParameterInfo[] parameters)
 		{
 			var types = new Type[parameters.Length];
