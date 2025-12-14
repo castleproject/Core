@@ -72,6 +72,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void LoadReference(ILGenerator gen)
 		{
+			Owner?.Emit(gen);
 			if (isStatic)
 			{
 				gen.Emit(OpCodes.Ldsfld, Reference);

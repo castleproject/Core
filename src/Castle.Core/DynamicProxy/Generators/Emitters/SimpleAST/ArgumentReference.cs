@@ -42,6 +42,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void LoadReference(ILGenerator gen)
 		{
+			Owner?.Emit(gen);
 			if (Position == -1)
 			{
 				throw new InvalidOperationException("ArgumentReference uninitialized");
