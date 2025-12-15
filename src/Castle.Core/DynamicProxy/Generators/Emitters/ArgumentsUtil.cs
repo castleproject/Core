@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -56,18 +56,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 
 			return arguments;
-		}
-
-		public static void EmitLoadOwnerAndReference(Reference reference, ILGenerator il)
-		{
-			if (reference == null)
-			{
-				return;
-			}
-
-			EmitLoadOwnerAndReference(reference.OwnerReference, il);
-
-			reference.LoadReference(il);
 		}
 
 		public static Type[] GetTypes(ParameterInfo[] parameters)

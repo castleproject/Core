@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+#nullable enable
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
@@ -29,7 +31,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public void Emit(ILGenerator gen)
 		{
-			ArgumentsUtil.EmitLoadOwnerAndReference(target.OwnerReference, gen);
+			target.OwnerReference?.Emit(gen);
 			expression.Emit(gen);
 			target.StoreReference(gen);
 		}
