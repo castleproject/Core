@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
@@ -21,7 +23,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	[DebuggerDisplay("local {Type}")]
 	internal class LocalReference : TypeReference
 	{
-		private LocalBuilder localBuilder;
+		private LocalBuilder? localBuilder;
 
 		public LocalReference(Type type) : base(type)
 		{
@@ -34,17 +36,19 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void LoadAddressOfReference(ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Ldloca, localBuilder);
+			gen.Emit(OpCodes.Ldloca, localBuilder!);
 		}
 
 		public override void LoadReference(ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Ldloc, localBuilder);
+			gen.Emit(OpCodes.Ldloc, localBuilder!);
 		}
 
-		public override void StoreReference(ILGenerator gen)
+		public override void StoreReference(IExpression value, ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Stloc, localBuilder);
+			OwnerReference?.Emit(gen);
+			value.Emit(gen);
+			gen.Emit(OpCodes.Stloc, localBuilder!);
 		}
 	}
 }

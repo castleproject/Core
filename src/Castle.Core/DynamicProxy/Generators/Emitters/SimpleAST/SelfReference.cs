@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+#nullable enable
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
@@ -37,9 +39,10 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			gen.Emit(OpCodes.Ldarg_0);
 		}
 
-		public override void StoreReference(ILGenerator gen)
+		public override void StoreReference(IExpression value, ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Ldarg_0);
+			// It does not make sense to assign a value to the this pointer.
+			throw new NotSupportedException();
 		}
 	}
 }

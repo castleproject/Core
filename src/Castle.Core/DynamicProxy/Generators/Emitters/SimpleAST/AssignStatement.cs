@@ -20,20 +20,18 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	internal class AssignStatement : IStatement
 	{
-		private readonly IExpression expression;
 		private readonly Reference target;
+		private readonly IExpression value;
 
-		public AssignStatement(Reference target, IExpression expression)
+		public AssignStatement(Reference target, IExpression value)
 		{
 			this.target = target;
-			this.expression = expression;
+			this.value = value;
 		}
 
 		public void Emit(ILGenerator gen)
 		{
-			target.OwnerReference?.Emit(gen);
-			expression.Emit(gen);
-			target.StoreReference(gen);
+			target.StoreReference(value, gen);
 		}
 	}
 }

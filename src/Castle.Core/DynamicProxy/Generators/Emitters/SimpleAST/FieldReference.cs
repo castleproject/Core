@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Diagnostics;
@@ -22,7 +24,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	internal class FieldReference : Reference
 	{
 		private readonly FieldInfo field;
-		private readonly FieldBuilder fieldBuilder;
+		private readonly FieldBuilder? fieldBuilder;
 		private readonly bool isStatic;
 
 		public FieldReference(FieldInfo field)
@@ -46,7 +48,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 		}
 
-		public FieldBuilder FieldBuilder
+		public FieldBuilder? FieldBuilder
 		{
 			get { return fieldBuilder; }
 		}
@@ -80,8 +82,10 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 		}
 
-		public override void StoreReference(ILGenerator gen)
+		public override void StoreReference(IExpression value, ILGenerator gen)
 		{
+			OwnerReference?.Emit(gen);
+			value.Emit(gen);
 			if (isStatic)
 			{
 				gen.Emit(OpCodes.Stsfld, Reference);
