@@ -20,19 +20,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	internal abstract class Reference : IExpression
 	{
-		protected Reference? owner;
-
-		protected Reference(Reference? owner)
-		{
-			this.owner = owner;
-		}
-
-		public Reference? OwnerReference
-		{
-			get { return owner; }
-			set { owner = value; }
-		}
-
 		public abstract void LoadAddressOfReference(ILGenerator gen);
 
 		public abstract void LoadReference(ILGenerator gen);
@@ -45,7 +32,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public void Emit(ILGenerator gen)
 		{
-			OwnerReference?.Emit(gen);
 			LoadReference(gen);
 		}
 	}

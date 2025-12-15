@@ -25,7 +25,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	{
 		public static readonly SelfReference Self = new SelfReference();
 
-		protected SelfReference() : base(null)
+		protected SelfReference()
 		{
 		}
 

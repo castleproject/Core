@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		private LocalBuilder? localBuilder;
 
 		public LocalReference(Type type)
-			: base(null, type)
+			: base(type)
 		{
 		}
 
@@ -47,7 +47,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void StoreReference(IExpression value, ILGenerator gen)
 		{
-			OwnerReference?.Emit(gen);
 			value.Emit(gen);
 			gen.Emit(OpCodes.Stloc, localBuilder!);
 		}

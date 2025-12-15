@@ -24,13 +24,13 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	internal class ArgumentReference : TypeReference
 	{
 		public ArgumentReference(Type argumentType)
-			: base(null, argumentType)
+			: base(argumentType)
 		{
 			Position = -1;
 		}
 
 		public ArgumentReference(Type argumentType, int position)
-			: base(null, argumentType)
+			: base(argumentType)
 		{
 			Position = position;
 		}
@@ -75,7 +75,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				throw new InvalidOperationException("ArgumentReference uninitialized");
 			}
 
-			OwnerReference?.Emit(gen);
 			value.Emit(gen);
 			gen.Emit(OpCodes.Starg, Position);
 		}

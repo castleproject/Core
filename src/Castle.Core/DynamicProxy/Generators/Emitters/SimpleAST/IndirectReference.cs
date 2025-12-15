@@ -28,30 +28,35 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	[DebuggerDisplay("&{OwnerReference}")]
 	internal class IndirectReference : TypeReference
 	{
-		public IndirectReference(TypeReference byRefReference) :
-			base(byRefReference, byRefReference.Type.GetElementType())
+		private readonly TypeReference byRefReference;
+
+		public IndirectReference(TypeReference byRefReference)
+			: base(byRefReference.Type.GetElementType())
 		{
 			if (!byRefReference.Type.IsByRef)
 			{
 				throw new ArgumentException("Expected an IsByRef reference", nameof(byRefReference));
 			}
+
+			this.byRefReference = byRefReference;
 		}
 
 		public override void LoadAddressOfReference(ILGenerator gen)
 		{
-			// Load of owner reference takes care of this.
+			byRefReference.Emit(gen);
 		}
 
 		// TODO: Better name
 
 		public override void LoadReference(ILGenerator gen)
 		{
+			byRefReference.Emit(gen);
 			OpCodeUtil.EmitLoadIndirectOpCodeForType(gen, Type);
 		}
 
 		public override void StoreReference(IExpression value, ILGenerator gen)
 		{
-			OwnerReference?.Emit(gen);
+			byRefReference.Emit(gen);
 			value.Emit(gen);
 			OpCodeUtil.EmitStoreIndirectOpCodeForType(gen, Type);
 		}
