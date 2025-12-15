@@ -21,9 +21,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	internal sealed class ArgumentsToObjectArrayExpression : IExpression
 	{
-		private readonly Reference[] args;
+		private readonly Location[] args;
 
-		public ArgumentsToObjectArrayExpression(params Reference[] args)
+		public ArgumentsToObjectArrayExpression(params Location[] args)
 		{
 			this.args = args;
 		}

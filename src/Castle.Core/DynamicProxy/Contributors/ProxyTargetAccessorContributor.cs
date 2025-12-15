@@ -51,7 +51,7 @@ namespace Castle.DynamicProxy.Contributors
 			var dynProxySetTarget = emitter.CreateMethod(nameof(IProxyTargetAccessor.DynProxySetTarget), typeof(void), typeof(object));
 
 			// we can only change the target of the interface proxy
-			if (target is FieldReference targetField)
+			if (target is FieldLocation targetField)
 			{
 				dynProxySetTarget.CodeBuilder.AddStatement(
 					new AssignStatement(targetField,

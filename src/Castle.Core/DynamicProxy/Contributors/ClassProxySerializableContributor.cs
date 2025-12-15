@@ -33,7 +33,7 @@ namespace Castle.DynamicProxy.Contributors
 	{
 		private bool delegateToBaseGetObjectData;
 		private ConstructorInfo serializationConstructor;
-		private readonly IList<FieldReference> serializedFields = new List<FieldReference>();
+		private readonly IList<FieldLocation> serializedFields = new List<FieldLocation>();
 
 		public ClassProxySerializableContributor(Type targetType, Type[] interfaces, string typeId)
 			: base(targetType, interfaces, typeId)
@@ -82,15 +82,15 @@ namespace Castle.DynamicProxy.Contributors
 			Constructor(@class);
 		}
 
-		protected override void AddAddValueInvocation(ArgumentReference serializationInfo, MethodEmitter getObjectData,
-		                                              FieldReference field)
+		protected override void AddAddValueInvocation(ArgumentLocation serializationInfo, MethodEmitter getObjectData,
+		                                              FieldLocation field)
 		{
 			serializedFields.Add(field);
 			base.AddAddValueInvocation(serializationInfo, getObjectData, field);
 		}
 
-		protected override void CustomizeGetObjectData(CodeBuilder codeBuilder, ArgumentReference serializationInfo,
-		                                               ArgumentReference streamingContext, ClassEmitter emitter)
+		protected override void CustomizeGetObjectData(CodeBuilder codeBuilder, ArgumentLocation serializationInfo,
+		                                               ArgumentLocation streamingContext, ClassEmitter emitter)
 		{
 			codeBuilder.AddStatement(
 				new MethodInvocationExpression(
@@ -108,7 +108,7 @@ namespace Castle.DynamicProxy.Contributors
 			EmitCallToBaseGetObjectData(codeBuilder, serializationInfo, streamingContext);
 		}
 
-		private void EmitCustomGetObjectData(CodeBuilder codeBuilder, ArgumentReference serializationInfo)
+		private void EmitCustomGetObjectData(CodeBuilder codeBuilder, ArgumentLocation serializationInfo)
 		{
 			var members = codeBuilder.DeclareLocal(typeof(MemberInfo[]));
 			var data = codeBuilder.DeclareLocal(typeof(object[]));
@@ -141,8 +141,8 @@ namespace Castle.DynamicProxy.Contributors
 			codeBuilder.AddStatement(addValue);
 		}
 
-		private void EmitCallToBaseGetObjectData(CodeBuilder codeBuilder, ArgumentReference serializationInfo,
-		                                         ArgumentReference streamingContext)
+		private void EmitCallToBaseGetObjectData(CodeBuilder codeBuilder, ArgumentLocation serializationInfo,
+		                                         ArgumentLocation streamingContext)
 		{
 			var baseGetObjectData = targetType.GetMethod("GetObjectData",
 			                                             new[] { typeof(SerializationInfo), typeof(StreamingContext) });
@@ -166,8 +166,8 @@ namespace Castle.DynamicProxy.Contributors
 
 		private void GenerateSerializationConstructor(ClassEmitter emitter)
 		{
-			var serializationInfo = new ArgumentReference(typeof(SerializationInfo));
-			var streamingContext = new ArgumentReference(typeof(StreamingContext));
+			var serializationInfo = new ArgumentLocation(typeof(SerializationInfo));
+			var streamingContext = new ArgumentLocation(typeof(StreamingContext));
 
 			var ctor = emitter.CreateConstructor(serializationInfo, streamingContext);
 

@@ -22,14 +22,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	internal sealed class CodeBuilder
 	{
-		private readonly List<LocalReference> locals;
+		private readonly List<LocalLocation> locals;
 		private readonly List<IStatement> statements;
 		private bool isEmpty;
 
 		public CodeBuilder()
 		{
 			statements = new List<IStatement>();
-			locals = new List<LocalReference>();
+			locals = new List<LocalLocation>();
 			isEmpty = true;
 		}
 
@@ -45,9 +45,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return this;
 		}
 
-		public LocalReference DeclareLocal(Type type)
+		public LocalLocation DeclareLocal(Type type)
 		{
-			var local = new LocalReference(type);
+			var local = new LocalLocation(type);
 			locals.Add(local);
 			return local;
 		}

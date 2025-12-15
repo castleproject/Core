@@ -22,25 +22,25 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	internal abstract class ArgumentsUtil
 	{
-		public static ArgumentReference[] ConvertToArgumentReference(Type[] args)
+		public static ArgumentLocation[] ConvertToArgumentReference(Type[] args)
 		{
-			var arguments = new ArgumentReference[args.Length];
+			var arguments = new ArgumentLocation[args.Length];
 
 			for (var i = 0; i < args.Length; ++i)
 			{
-				arguments[i] = new ArgumentReference(args[i]);
+				arguments[i] = new ArgumentLocation(args[i]);
 			}
 
 			return arguments;
 		}
 
-		public static ArgumentReference[] ConvertToArgumentReference(ParameterInfo[] args)
+		public static ArgumentLocation[] ConvertToArgumentReference(ParameterInfo[] args)
 		{
-			var arguments = new ArgumentReference[args.Length];
+			var arguments = new ArgumentLocation[args.Length];
 
 			for (var i = 0; i < args.Length; ++i)
 			{
-				arguments[i] = new ArgumentReference(args[i].ParameterType);
+				arguments[i] = new ArgumentLocation(args[i].ParameterType);
 			}
 
 			return arguments;
@@ -52,7 +52,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			for (var i = 0; i < args.Length; ++i)
 			{
-				arguments[i] = new ArgumentReference(args[i].ParameterType, i + 1);
+				arguments[i] = new ArgumentLocation(args[i].ParameterType, i + 1);
 			}
 
 			return arguments;
@@ -68,7 +68,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return types;
 		}
 
-		public static Type[] InitializeAndConvert(ArgumentReference[] args)
+		public static Type[] InitializeAndConvert(ArgumentLocation[] args)
 		{
 			var types = new Type[args.Length];
 
@@ -81,7 +81,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return types;
 		}
 
-		public static void InitializeArgumentsByPosition(ArgumentReference[] args, bool isStatic)
+		public static void InitializeArgumentsByPosition(ArgumentLocation[] args, bool isStatic)
 		{
 			var offset = isStatic ? 0 : 1;
 			for (var i = 0; i < args.Length; ++i)

@@ -29,7 +29,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
-		protected override FieldReference TargetField => null;
+		protected override FieldLocation TargetField => null;
 
 		protected override CacheKey GetCacheKey()
 		{

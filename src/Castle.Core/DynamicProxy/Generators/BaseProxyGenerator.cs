@@ -175,7 +175,7 @@ namespace Castle.DynamicProxy.Generators
 #endif
 		}
 
-		protected FieldReference CreateOptionsField(ClassEmitter emitter)
+		protected FieldLocation CreateOptionsField(ClassEmitter emitter)
 		{
 			return emitter.CreateStaticField("proxyGenerationOptions", typeof(ProxyGenerationOptions));
 		}
@@ -215,9 +215,9 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		protected void GenerateConstructor(ClassEmitter emitter, ConstructorInfo baseConstructor,
-		                                   params FieldReference[] fields)
+		                                   params FieldLocation[] fields)
 		{
-			ArgumentReference[] args;
+			ArgumentLocation[] args;
 			ParameterInfo[] baseConstructorParams = null;
 
 			if (baseConstructor != null)
@@ -227,23 +227,23 @@ namespace Castle.DynamicProxy.Generators
 
 			if (baseConstructorParams != null && baseConstructorParams.Length != 0)
 			{
-				args = new ArgumentReference[fields.Length + baseConstructorParams.Length];
+				args = new ArgumentLocation[fields.Length + baseConstructorParams.Length];
 
 				var offset = fields.Length;
 				for (var i = offset; i < offset + baseConstructorParams.Length; i++)
 				{
 					var paramInfo = baseConstructorParams[i - offset];
-					args[i] = new ArgumentReference(paramInfo.ParameterType);
+					args[i] = new ArgumentLocation(paramInfo.ParameterType);
 				}
 			}
 			else
 			{
-				args = new ArgumentReference[fields.Length];
+				args = new ArgumentLocation[fields.Length];
 			}
 
 			for (var i = 0; i < fields.Length; i++)
 			{
-				args[i] = new ArgumentReference(fields[i].Reference.FieldType);
+				args[i] = new ArgumentLocation(fields[i].Reference.FieldType);
 			}
 
 			var constructor = emitter.CreateConstructor(args);
@@ -271,7 +271,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				Debug.Assert(baseConstructorParams != null);
 
-				var slice = new ArgumentReference[baseConstructorParams.Length];
+				var slice = new ArgumentLocation[baseConstructorParams.Length];
 				Array.Copy(args, fields.Length, slice, 0, baseConstructorParams.Length);
 
 				constructor.CodeBuilder.AddStatement(new ConstructorInvocationStatement(baseConstructor, slice));
@@ -284,7 +284,7 @@ namespace Castle.DynamicProxy.Generators
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		protected void GenerateConstructors(ClassEmitter emitter, Type baseType, params FieldReference[] fields)
+		protected void GenerateConstructors(ClassEmitter emitter, Type baseType, params FieldLocation[] fields)
 		{
 			var constructors =
 				baseType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -307,7 +307,7 @@ namespace Castle.DynamicProxy.Generators
 		///     This constructor is important to allow proxies to be XML serializable
 		///   </para>
 		/// </summary>
-		protected void GenerateParameterlessConstructor(ClassEmitter emitter, Type baseClass, FieldReference interceptorField)
+		protected void GenerateParameterlessConstructor(ClassEmitter emitter, Type baseClass, FieldLocation interceptorField)
 		{
 			// Check if the type actually has a default constructor
 			var defaultConstructor = baseClass.GetConstructor(BindingFlags.Public | BindingFlags.Instance, null, Type.EmptyTypes,
@@ -332,7 +332,7 @@ namespace Castle.DynamicProxy.Generators
 			                                                         new NewArrayExpression(1, typeof(IInterceptor))));
 			constructor.CodeBuilder.AddStatement(
 				new AssignStatement(
-					new ArrayElementReference(interceptorField, 0),
+					new ArrayElementLocation(interceptorField, 0),
 					new NewInstanceExpression(typeof(StandardInterceptor))));
 
 			// Invoke base constructor

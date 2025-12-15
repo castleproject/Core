@@ -53,8 +53,8 @@ namespace Castle.DynamicProxy.Generators
 				{
 					emitter.CodeBuilder.AddStatement(
 						new AssignStatement(
-							new IndirectReference(
-								new ArgumentReference(parameter.ParameterType, index + 1)),
+							new IndirectLocation(
+								new ArgumentLocation(parameter.ParameterType, index + 1)),
 							new DefaultValueExpression(parameter.ParameterType.GetElementType())));
 				}
 			}

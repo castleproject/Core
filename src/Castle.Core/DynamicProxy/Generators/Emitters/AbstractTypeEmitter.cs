@@ -31,8 +31,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private readonly List<ConstructorEmitter> constructors;
 		private readonly List<EventEmitter> events;
 
-		private readonly IDictionary<string, FieldReference> fields =
-			new Dictionary<string, FieldReference>(StringComparer.OrdinalIgnoreCase);
+		private readonly IDictionary<string, FieldLocation> fields =
+			new Dictionary<string, FieldLocation>(StringComparer.OrdinalIgnoreCase);
 
 		private readonly List<MethodEmitter> methods;
 
@@ -114,7 +114,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			SetGenericTypeParameters(GenericUtil.CopyGenericArguments(methodToCopyGenericsFrom, typeBuilder));
 		}
 
-		public ConstructorEmitter CreateConstructor(params ArgumentReference[] arguments)
+		public ConstructorEmitter CreateConstructor(params ArgumentLocation[] arguments)
 		{
 			if (TypeBuilder.IsInterface)
 			{
@@ -143,12 +143,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return eventEmitter;
 		}
 
-		public FieldReference CreateField(string name, Type fieldType)
+		public FieldLocation CreateField(string name, Type fieldType)
 		{
 			return CreateField(name, fieldType, true);
 		}
 
-		public FieldReference CreateField(string name, Type fieldType, bool serializable)
+		public FieldLocation CreateField(string name, Type fieldType, bool serializable)
 		{
 			var atts = FieldAttributes.Private;
 
@@ -160,10 +160,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return CreateField(name, fieldType, atts);
 		}
 
-		public FieldReference CreateField(string name, Type fieldType, FieldAttributes atts)
+		public FieldLocation CreateField(string name, Type fieldType, FieldAttributes atts)
 		{
 			var fieldBuilder = typeBuilder.DefineField(name, fieldType, atts);
-			var reference = new FieldReference(fieldBuilder);
+			var reference = new FieldLocation(fieldBuilder);
 			fields[name] = reference;
 			return reference;
 		}
@@ -199,12 +199,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return propEmitter;
 		}
 
-		public FieldReference CreateStaticField(string name, Type fieldType)
+		public FieldLocation CreateStaticField(string name, Type fieldType)
 		{
 			return CreateStaticField(name, fieldType, FieldAttributes.Private);
 		}
 
-		public FieldReference CreateStaticField(string name, Type fieldType, FieldAttributes atts)
+		public FieldLocation CreateStaticField(string name, Type fieldType, FieldAttributes atts)
 		{
 			atts |= FieldAttributes.Static;
 			return CreateField(name, fieldType, atts);
@@ -235,7 +235,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			typeBuilder.SetCustomAttribute(customAttributeInfo.Builder);
 		}
 
-		public void DefineCustomAttributeFor<TAttribute>(FieldReference field) where TAttribute : Attribute, new()
+		public void DefineCustomAttributeFor<TAttribute>(FieldLocation field) where TAttribute : Attribute, new()
 		{
 			var customAttributeInfo = AttributeUtil.CreateInfo<TAttribute>();
 			var fieldBuilder = field.FieldBuilder;
@@ -247,19 +247,19 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			fieldBuilder.SetCustomAttribute(customAttributeInfo.Builder);
 		}
 
-		public IEnumerable<FieldReference> GetAllFields()
+		public IEnumerable<FieldLocation> GetAllFields()
 		{
 			return fields.Values;
 		}
 
-		public FieldReference GetField(string name)
+		public FieldLocation GetField(string name)
 		{
 			if (string.IsNullOrEmpty(name))
 			{
 				return null;
 			}
 
-			FieldReference value;
+			FieldLocation value;
 			fields.TryGetValue(name, out value);
 			return value;
 		}

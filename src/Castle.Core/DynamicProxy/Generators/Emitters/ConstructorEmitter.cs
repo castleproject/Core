@@ -33,7 +33,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			codeBuilder = new CodeBuilder();
 		}
 
-		internal ConstructorEmitter(AbstractTypeEmitter mainType, params ArgumentReference[] arguments)
+		internal ConstructorEmitter(AbstractTypeEmitter mainType, params ArgumentLocation[] arguments)
 		{
 			this.mainType = mainType;
 

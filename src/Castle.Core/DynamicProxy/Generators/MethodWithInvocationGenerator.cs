@@ -57,7 +57,7 @@ namespace Castle.DynamicProxy.Generators
 			this.contributor = contributor;
 		}
 
-		protected FieldReference BuildMethodInterceptorsField(ClassEmitter @class, MethodInfo method, INamingScope namingScope)
+		protected FieldLocation BuildMethodInterceptorsField(ClassEmitter @class, MethodInfo method, INamingScope namingScope)
 		{
 			var methodInterceptors = @class.CreateField(
 				namingScope.GetUniqueName(string.Format("interceptors_{0}", method.Name)),
@@ -101,7 +101,7 @@ namespace Castle.DynamicProxy.Generators
 
 			var methodInterceptors = SetMethodInterceptors(@class, namingScope, emitter, proxiedMethodTokenExpression);
 
-			var dereferencedArguments = IndirectReference.WrapIfByRef(emitter.Arguments);
+			var dereferencedArguments = IndirectLocation.WrapIfByRef(emitter.Arguments);
 			var hasByRefArguments = HasByRefArguments(emitter.Arguments);
 
 			var arguments = GetCtorArguments(@class, proxiedMethodTokenExpression, dereferencedArguments, methodInterceptors);
@@ -158,7 +158,7 @@ namespace Castle.DynamicProxy.Generators
 					// Emit code to ensure a value type return type is not null, otherwise the cast will cause a null-deref
 					if (emitter.ReturnType.IsValueType && !emitter.ReturnType.IsNullableType())
 					{
-						LocalReference returnValue = emitter.CodeBuilder.DeclareLocal(typeof(object));
+						LocalLocation returnValue = emitter.CodeBuilder.DeclareLocal(typeof(object));
 						emitter.CodeBuilder.AddStatement(new AssignStatement(returnValue, retVal));
 
 						emitter.CodeBuilder.AddStatement(new IfNullExpression(returnValue, new ThrowStatement(typeof(InvalidOperationException),
@@ -212,7 +212,7 @@ namespace Castle.DynamicProxy.Generators
 			return methodInterceptorsField;
 		}
 
-		private void EmitLoadGenericMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Reference invocationLocal)
+		private void EmitLoadGenericMethodArguments(MethodEmitter methodEmitter, MethodInfo method, Location invocationLocal)
 		{
 			var genericParameters = Array.FindAll(method.GetGenericArguments(), t => t.IsGenericParameter);
 			var genericParamsArrayLocal = methodEmitter.CodeBuilder.DeclareLocal(typeof(Type[]));
@@ -223,7 +223,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				methodEmitter.CodeBuilder.AddStatement(
 					new AssignStatement(
-						new ArrayElementReference(genericParamsArrayLocal, i),
+						new ArrayElementLocation(genericParamsArrayLocal, i),
 						new TypeTokenExpression(genericParameters[i])));
 			}
 			methodEmitter.CodeBuilder.AddStatement(
@@ -232,7 +232,7 @@ namespace Castle.DynamicProxy.Generators
 				                               genericParamsArrayLocal));
 		}
 
-		private IExpression[] GetCtorArguments(ClassEmitter @class, IExpression proxiedMethodTokenExpression, Reference[] dereferencedArguments, IExpression methodInterceptors)
+		private IExpression[] GetCtorArguments(ClassEmitter @class, IExpression proxiedMethodTokenExpression, Location[] dereferencedArguments, IExpression methodInterceptors)
 		{
 			return new[]
 			{
@@ -254,7 +254,7 @@ namespace Castle.DynamicProxy.Generators
 			return contributor.GetConstructorInvocationArguments(arguments, @class);
 		}
 
-		private bool HasByRefArguments(ArgumentReference[] arguments)
+		private bool HasByRefArguments(ArgumentLocation[] arguments)
 		{
 			for (int i = 0; i < arguments.Length; i++ )
 			{

@@ -17,12 +17,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Diagnostics;
 	using System.Reflection.Emit;
 
-	internal sealed class ArrayElementReference : Reference
+	internal sealed class ArrayElementLocation : Location
 	{
-		private readonly Reference array;
+		private readonly Location array;
 		private readonly int index;
 
-		public ArrayElementReference(Reference array, int index)
+		public ArrayElementLocation(Location array, int index)
 			: base(array.Type.GetElementType())
 		{
 			Debug.Assert(array.Type.IsArray);
@@ -32,14 +32,14 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.index = index;
 		}
 
-		public override void LoadAddressOfReference(ILGenerator gen)
+		public override void EmitLoadAddress(ILGenerator gen)
 		{
 			array.Emit(gen);
 			LiteralIntExpression.Emit(index, gen);
 			gen.Emit(OpCodes.Ldelema);
 		}
 
-		public override void LoadReference(ILGenerator gen)
+		public override void EmitLoad(ILGenerator gen)
 		{
 			array.Emit(gen);
 			LiteralIntExpression.Emit(index, gen);
@@ -58,7 +58,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			// | classes and interfaces                       | ldelem.ref
 		}
 
-		public override void StoreReference(IExpression expression, ILGenerator gen)
+		public override void EmitStore(IExpression expression, ILGenerator gen)
 		{
 			array.Emit(gen);
 			LiteralIntExpression.Emit(index, gen);

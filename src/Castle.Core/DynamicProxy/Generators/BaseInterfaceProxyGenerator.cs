@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Generators
 	{
 		protected readonly Type proxyTargetType;
 
-		protected FieldReference targetField;
+		protected FieldLocation targetField;
 
 		protected BaseInterfaceProxyGenerator(ModuleScope scope, Type targetType, Type[] interfaces,
 		                                      Type proxyTargetType, ProxyGenerationOptions options)
@@ -99,13 +99,13 @@ namespace Castle.DynamicProxy.Generators
 			ProxyGenerationOptions.Hook.MethodsInspected();
 
 			ClassEmitter emitter;
-			FieldReference interceptorsField;
+			FieldLocation interceptorsField;
 			var baseType = Init(typeName, out emitter, proxyTargetType, out interceptorsField, allInterfaces);
 
 			// Constructor
 
 			var cctor = GenerateStaticConstructor(emitter);
-			var ctorArguments = new List<FieldReference>();
+			var ctorArguments = new List<FieldLocation>();
 
 			foreach (var contributor in contributors)
 			{
@@ -237,7 +237,7 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		protected virtual Type Init(string typeName, out ClassEmitter emitter, Type proxyTargetType,
-		                            out FieldReference interceptorsField, IEnumerable<Type> allInterfaces)
+		                            out FieldLocation interceptorsField, IEnumerable<Type> allInterfaces)
 		{
 			var baseType = ProxyGenerationOptions.BaseTypeForInterfaceProxy;
 

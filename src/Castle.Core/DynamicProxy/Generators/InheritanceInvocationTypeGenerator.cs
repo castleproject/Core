@@ -32,17 +32,17 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
-		protected override ArgumentReference[] GetBaseCtorArguments(Type targetFieldType,
+		protected override ArgumentLocation[] GetBaseCtorArguments(Type targetFieldType,
 		                                                            out ConstructorInfo baseConstructor)
 		{
 			baseConstructor = InvocationMethods.InheritanceInvocationConstructor;
 			return new[]
 			{
-				new ArgumentReference(typeof(Type)),
-				new ArgumentReference(typeof(object)),
-				new ArgumentReference(typeof(IInterceptor[])),
-				new ArgumentReference(typeof(MethodInfo)),
-				new ArgumentReference(typeof(object[]))
+				new ArgumentLocation(typeof(Type)),
+				new ArgumentLocation(typeof(object)),
+				new ArgumentLocation(typeof(IInterceptor[])),
+				new ArgumentLocation(typeof(MethodInfo)),
+				new ArgumentLocation(typeof(object[]))
 			};
 		}
 
@@ -51,9 +51,9 @@ namespace Castle.DynamicProxy.Generators
 			return BaseType;
 		}
 
-		protected override FieldReference GetTargetField()
+		protected override FieldLocation GetTargetField()
 		{
-			return new FieldReference(InvocationMethods.ProxyObject);
+			return new FieldLocation(InvocationMethods.ProxyObject);
 		}
 	}
 }

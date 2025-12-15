@@ -39,7 +39,7 @@ namespace Castle.DynamicProxy.Contributors
 			this.target = target;
 		}
 
-		public ConstructorEmitter CreateConstructor(ArgumentReference[] baseCtorArguments, AbstractTypeEmitter invocation)
+		public ConstructorEmitter CreateConstructor(ArgumentLocation[] baseCtorArguments, AbstractTypeEmitter invocation)
 		{
 			return invocation.CreateConstructor(baseCtorArguments);
 		}
@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Contributors
 		}
 
 		public MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, IExpression[] args,
-		                                                              Reference targetField,
+		                                                              Location targetField,
 		                                                              MethodEmitter invokeMethodOnTarget)
 		{
 			var @delegate = GetDelegate(invocation, invokeMethodOnTarget);
@@ -62,7 +62,7 @@ namespace Castle.DynamicProxy.Contributors
 			return arguments;
 		}
 
-		private Reference GetDelegate(AbstractTypeEmitter invocation, MethodEmitter invokeMethodOnTarget)
+		private Location GetDelegate(AbstractTypeEmitter invocation, MethodEmitter invokeMethodOnTarget)
 		{
 			var genericTypeParameters = invocation.GenericTypeParams.AsTypeArray();
 			var closedDelegateType = delegateType.MakeGenericType(genericTypeParameters);
@@ -73,7 +73,7 @@ namespace Castle.DynamicProxy.Contributors
 			return localReference;
 		}
 
-		private AssignStatement SetDelegate(LocalReference localDelegate, IExpression target,
+		private AssignStatement SetDelegate(LocalLocation localDelegate, IExpression target,
 		                                    Type closedDelegateType, MethodInfo closedMethodOnTarget)
 		{
 			var delegateCreateDelegate = new MethodInvocationExpression(

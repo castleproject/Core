@@ -31,7 +31,7 @@ namespace Castle.DynamicProxy.Generators
 			EnsureDoesNotImplementIProxyTargetAccessor(targetType, nameof(targetType));
 		}
 
-		protected abstract FieldReference TargetField { get; }
+		protected abstract FieldLocation TargetField { get; }
 
 #if FEATURE_SERIALIZATION
 		protected abstract SerializableContributor GetSerializableContributor();
@@ -62,7 +62,7 @@ namespace Castle.DynamicProxy.Generators
 			// Constructor
 			var cctor = GenerateStaticConstructor(emitter);
 
-			var constructorArguments = new List<FieldReference>();
+			var constructorArguments = new List<FieldLocation>();
 
 			if (TargetField is { } targetField)
 			{

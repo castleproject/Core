@@ -46,12 +46,12 @@ namespace Castle.DynamicProxy.Generators
 		///   Generates the constructor for the class that extends
 		///   <see cref = "AbstractInvocation" />
 		/// </summary>
-		protected abstract ArgumentReference[] GetBaseCtorArguments(Type targetFieldType,
+		protected abstract ArgumentLocation[] GetBaseCtorArguments(Type targetFieldType,
 		                                                            out ConstructorInfo baseConstructor);
 
 		protected abstract Type GetBaseType();
 
-		protected abstract FieldReference GetTargetField();
+		protected abstract FieldLocation GetTargetField();
 
 		public AbstractTypeEmitter Generate(ClassEmitter @class, INamingScope namingScope)
 		{
@@ -88,7 +88,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected virtual MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation,
 		                                                                         IExpression[] args, MethodInfo callbackMethod,
-		                                                                         Reference targetField,
+		                                                                         Location targetField,
 		                                                                         MethodEmitter invokeMethodOnTarget)
 		{
 			if (contributor != null)
@@ -104,7 +104,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected virtual void ImplementInvokeMethodOnTarget(AbstractTypeEmitter invocation, ParameterInfo[] parameters,
 		                                                     MethodEmitter invokeMethodOnTarget,
-		                                                     Reference targetField)
+		                                                     Location targetField)
 		{
 			var callbackMethod = GetCallbackMethod(invocation);
 			if (callbackMethod == null)
@@ -117,7 +117,7 @@ namespace Castle.DynamicProxy.Generators
 
 			// Idea: instead of grab parameters one by one
 			// we should grab an array
-			var byRefArguments = new Dictionary<int, LocalReference>();
+			var byRefArguments = new Dictionary<int, LocalLocation>();
 
 			for (var i = 0; i < parameters.Length; i++)
 			{
@@ -184,7 +184,7 @@ namespace Castle.DynamicProxy.Generators
 
 			var methodOnTargetInvocationExpression = GetCallbackMethodInvocation(invocation, args, callbackMethod, targetField, invokeMethodOnTarget);
 
-			LocalReference returnValue = null;
+			LocalLocation returnValue = null;
 			if (callbackMethod.ReturnType != typeof(void))
 			{
 				var returnType = invocation.GetClosedParameterType(callbackMethod.ReturnType);
@@ -228,7 +228,7 @@ namespace Castle.DynamicProxy.Generators
 			invokeMethodOnTarget.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		private void AssignBackByRefArguments(MethodEmitter invokeMethodOnTarget, Dictionary<int, LocalReference> byRefArguments)
+		private void AssignBackByRefArguments(MethodEmitter invokeMethodOnTarget, Dictionary<int, LocalLocation> byRefArguments)
 		{
 			if (byRefArguments.Count == 0)
 			{
@@ -278,7 +278,7 @@ namespace Castle.DynamicProxy.Generators
 			constructor.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		private ConstructorEmitter CreateConstructor(AbstractTypeEmitter invocation, ArgumentReference[] baseCtorArguments)
+		private ConstructorEmitter CreateConstructor(AbstractTypeEmitter invocation, ArgumentLocation[] baseCtorArguments)
 		{
 			if (contributor == null)
 			{
@@ -325,13 +325,13 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		private void ImplementInvokeMethodOnTarget(AbstractTypeEmitter invocation, ParameterInfo[] parameters,
-		                                           FieldReference targetField, MethodInfo callbackMethod)
+		                                           FieldLocation targetField, MethodInfo callbackMethod)
 		{
 			var invokeMethodOnTarget = invocation.CreateMethod("InvokeMethodOnTarget", typeof(void));
 			ImplementInvokeMethodOnTarget(invocation, parameters, invokeMethodOnTarget, targetField);
 		}
 
-		private void ImplementChangeInvocationTarget(AbstractTypeEmitter invocation, FieldReference targetField)
+		private void ImplementChangeInvocationTarget(AbstractTypeEmitter invocation, FieldLocation targetField)
 		{
 			var changeInvocationTarget = invocation.CreateMethod("ChangeInvocationTarget", typeof(void), new[] { typeof(object) });
 			changeInvocationTarget.CodeBuilder.AddStatement(
@@ -344,7 +344,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 			var changeProxyTarget = invocation.CreateMethod("ChangeProxyTarget", typeof(void), new[] { typeof(object) });
 
-			var proxyObject = new FieldReference(InvocationMethods.ProxyObject);
+			var proxyObject = new FieldLocation(InvocationMethods.ProxyObject);
 			var localProxy = changeProxyTarget.CodeBuilder.DeclareLocal(typeof(IProxyTargetAccessor));
 			changeProxyTarget.CodeBuilder.AddStatement(
 				new AssignStatement(localProxy,
@@ -362,7 +362,7 @@ namespace Castle.DynamicProxy.Generators
 		}
 
 		private void ImplementChangeProxyTargetInterface(ClassEmitter @class, AbstractTypeEmitter invocation,
-		                                                 FieldReference targetField)
+		                                                 FieldLocation targetField)
 		{
 			ImplementChangeInvocationTarget(invocation, targetField);
 

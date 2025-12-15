@@ -19,13 +19,13 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection.Emit;
 
 	[DebuggerDisplay("{field.Name} ({field.FieldType})")]
-	internal class FieldReference : Reference
+	internal class FieldLocation : Location
 	{
 		private readonly FieldInfo field;
 		private readonly FieldBuilder fieldBuilder;
 		private readonly bool isStatic;
 
-		public FieldReference(FieldInfo field)
+		public FieldLocation(FieldInfo field)
 			: base(field.FieldType)
 		{
 			this.field = field;
@@ -35,7 +35,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 		}
 
-		public FieldReference(FieldBuilder fieldBuilder)
+		public FieldLocation(FieldBuilder fieldBuilder)
 			: base(fieldBuilder.FieldType)
 		{
 			this.fieldBuilder = fieldBuilder;
@@ -56,7 +56,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			get { return @field; }
 		}
 
-		public override void LoadAddressOfReference(ILGenerator gen)
+		public override void EmitLoadAddress(ILGenerator gen)
 		{
 			if (isStatic)
 			{
@@ -68,7 +68,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 		}
 
-		public override void LoadReference(ILGenerator gen)
+		public override void EmitLoad(ILGenerator gen)
 		{
 			var owner = isStatic ? null : ThisExpression.Instance;
 			owner?.Emit(gen);
@@ -82,7 +82,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 		}
 
-		public override void StoreReference(IExpression expression, ILGenerator gen)
+		public override void EmitStore(IExpression expression, ILGenerator gen)
 		{
 			var owner = isStatic ? null : ThisExpression.Instance;
 			owner?.Emit(gen);

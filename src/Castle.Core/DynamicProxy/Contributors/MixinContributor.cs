@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy.Contributors
 	{
 		private readonly bool canChangeTarget;
 		private readonly IList<Type> empty = new List<Type>();
-		private readonly IDictionary<Type, FieldReference> fields = new SortedDictionary<Type, FieldReference>(new FieldReferenceComparer());
+		private readonly IDictionary<Type, FieldLocation> fields = new SortedDictionary<Type, FieldLocation>(new FieldReferenceComparer());
 		private readonly GetTargetExpressionDelegate getTarget;
 
 		public MixinContributor(INamingScope namingScope, bool canChangeTarget)
@@ -38,7 +38,7 @@ namespace Castle.DynamicProxy.Contributors
 			getTarget = BuildGetTargetExpression();
 		}
 
-		public IEnumerable<FieldReference> Fields
+		public IEnumerable<FieldLocation> Fields
 		{
 			get { return fields.Values; }
 		}
@@ -118,7 +118,7 @@ namespace Castle.DynamicProxy.Contributors
 			                 	fields[m.DeclaringType]);
 		}
 
-		private FieldReference BuildTargetField(ClassEmitter @class, Type type)
+		private FieldLocation BuildTargetField(ClassEmitter @class, Type type)
 		{
 			var name = "__mixin_" + type.FullName.Replace(".", "_");
 			return @class.CreateField(namingScope.GetUniqueName(name), type);

@@ -158,7 +158,7 @@ namespace Castle.DynamicProxy.Contributors
 			}
 			return new InvocationWithGenericDelegateContributor(@delegate,
 			                                                    method,
-			                                                    new FieldReference(InvocationMethods.ProxyObject));
+			                                                    new FieldLocation(InvocationMethods.ProxyObject));
 		}
 
 		private Type GetDelegateType(MetaMethod method, ClassEmitter @class)

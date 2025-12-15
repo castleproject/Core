@@ -91,7 +91,7 @@ namespace Castle.DynamicProxy.Contributors
 			{
 				getObjectData.CodeBuilder.AddStatement(
 					new AssignStatement(
-						new ArrayElementReference(interfacesLocal, i),
+						new ArrayElementLocation(interfacesLocal, i),
 						new LiteralStringExpression(interfaces[i].AssemblyQualifiedName)));
 			}
 
@@ -128,8 +128,8 @@ namespace Castle.DynamicProxy.Contributors
 			getObjectData.CodeBuilder.AddStatement(new ReturnStatement());
 		}
 
-		protected virtual void AddAddValueInvocation(ArgumentReference serializationInfo, MethodEmitter getObjectData,
-		                                             FieldReference field)
+		protected virtual void AddAddValueInvocation(ArgumentLocation serializationInfo, MethodEmitter getObjectData,
+		                                             FieldLocation field)
 		{
 			getObjectData.CodeBuilder.AddStatement(
 				new MethodInvocationExpression(
@@ -140,8 +140,8 @@ namespace Castle.DynamicProxy.Contributors
 			return;
 		}
 
-		protected abstract void CustomizeGetObjectData(CodeBuilder builder, ArgumentReference serializationInfo,
-		                                               ArgumentReference streamingContext, ClassEmitter emitter);
+		protected abstract void CustomizeGetObjectData(CodeBuilder builder, ArgumentLocation serializationInfo,
+		                                               ArgumentLocation streamingContext, ClassEmitter emitter);
 
 		public virtual void CollectElementsToProxy(IProxyGenerationHook hook, MetaType model)
 		{

@@ -40,7 +40,7 @@ namespace Castle.DynamicProxy.Contributors
 			this.namingScope = namingScope;
 		}
 
-		public ConstructorEmitter CreateConstructor(ArgumentReference[] baseCtorArguments, AbstractTypeEmitter invocation)
+		public ConstructorEmitter CreateConstructor(ArgumentLocation[] baseCtorArguments, AbstractTypeEmitter invocation)
 		{
 			var arguments = GetArguments(baseCtorArguments);
 			var constructor = invocation.CreateConstructor(arguments);
@@ -56,11 +56,11 @@ namespace Castle.DynamicProxy.Contributors
 		}
 
 		public MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, IExpression[] args,
-		                                                              Reference targetField,
+		                                                              Location targetField,
 		                                                              MethodEmitter invokeMethodOnTarget)
 		{
 			var allArgs = GetAllArgs(args, targetField);
-			var @delegate = (Reference)invocation.GetField("delegate");
+			var @delegate = (Location)invocation.GetField("delegate");
 
 			return new MethodInvocationExpression(@delegate, GetCallbackMethod(), allArgs);
 		}
@@ -73,7 +73,7 @@ namespace Castle.DynamicProxy.Contributors
 			return allArguments;
 		}
 
-		private FieldReference BuildDelegateToken(ClassEmitter proxy)
+		private FieldLocation BuildDelegateToken(ClassEmitter proxy)
 		{
 			var callback = proxy.CreateStaticField(namingScope.GetUniqueName("callback_" + method.Method.Name), delegateType);
 			var createDelegate = new MethodInvocationExpression(
@@ -88,7 +88,7 @@ namespace Castle.DynamicProxy.Contributors
 			return callback;
 		}
 
-		private IExpression[] GetAllArgs(IExpression[] args, Reference targetField)
+		private IExpression[] GetAllArgs(IExpression[] args, Location targetField)
 		{
 			var allArgs = new IExpression[args.Length + 1];
 			args.CopyTo(allArgs, 1);
@@ -96,10 +96,10 @@ namespace Castle.DynamicProxy.Contributors
 			return allArgs;
 		}
 
-		private ArgumentReference[] GetArguments(ArgumentReference[] baseCtorArguments)
+		private ArgumentLocation[] GetArguments(ArgumentLocation[] baseCtorArguments)
 		{
-			var arguments = new ArgumentReference[baseCtorArguments.Length + 1];
-			arguments[0] = new ArgumentReference(delegateType);
+			var arguments = new ArgumentLocation[baseCtorArguments.Length + 1];
+			arguments[0] = new ArgumentLocation(delegateType);
 			baseCtorArguments.CopyTo(arguments, 1);
 			return arguments;
 		}

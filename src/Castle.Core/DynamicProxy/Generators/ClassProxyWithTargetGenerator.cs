@@ -29,7 +29,7 @@ namespace Castle.DynamicProxy.Generators
 
 	internal sealed class ClassProxyWithTargetGenerator : BaseClassProxyGenerator
 	{
-		private FieldReference targetField;
+		private FieldLocation targetField;
 
 		public ClassProxyWithTargetGenerator(ModuleScope scope, Type targetType, Type[] interfaces,
 		                                     ProxyGenerationOptions options)
@@ -37,7 +37,7 @@ namespace Castle.DynamicProxy.Generators
 		{
 		}
 
-		protected override FieldReference TargetField => targetField;
+		protected override FieldLocation TargetField => targetField;
 
 		protected override CacheKey GetCacheKey()
 		{

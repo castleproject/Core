@@ -25,13 +25,13 @@ namespace Castle.DynamicProxy.Generators
 
 	internal static class GeneratorUtil
 	{
-		public static void CopyOutAndRefParameters(Reference[] dereferencedArguments, LocalReference invocation,
+		public static void CopyOutAndRefParameters(Location[] dereferencedArguments, LocalLocation invocation,
 		                                           MethodInfo method, MethodEmitter emitter)
 		{
 			var parameters = method.GetParameters();
 
 			// Create it only if there are byref writable arguments.
-			LocalReference arguments = null;
+			LocalLocation arguments = null;
 
 			for (var i = 0; i < parameters.Length; i++)
 			{
@@ -131,23 +131,23 @@ namespace Castle.DynamicProxy.Generators
 			}
 		}
 
-		private static ConvertExpression Argument(int i, LocalReference invocationArgs, Reference[] arguments)
+		private static ConvertExpression Argument(int i, LocalLocation invocationArgs, Location[] arguments)
 		{
-			return new ConvertExpression(arguments[i].Type, new ArrayElementReference(invocationArgs, i));
+			return new ConvertExpression(arguments[i].Type, new ArrayElementLocation(invocationArgs, i));
 		}
 
-		private static AssignStatement AssignArgument(Reference[] dereferencedArguments, int i,
-		                                              LocalReference invocationArgs)
+		private static AssignStatement AssignArgument(Location[] dereferencedArguments, int i,
+		                                              LocalLocation invocationArgs)
 		{
 			return new AssignStatement(dereferencedArguments[i], Argument(i, invocationArgs, dereferencedArguments));
 		}
 
-		private static AssignStatement GetArguments(LocalReference invocationArgs, LocalReference invocation)
+		private static AssignStatement GetArguments(LocalLocation invocationArgs, LocalLocation invocation)
 		{
 			return new AssignStatement(invocationArgs, new MethodInvocationExpression(invocation, InvocationMethods.GetArguments));
 		}
 
-		private static LocalReference StoreInvocationArgumentsInLocal(MethodEmitter emitter, LocalReference invocation)
+		private static LocalLocation StoreInvocationArgumentsInLocal(MethodEmitter emitter, LocalLocation invocation)
 		{
 			var invocationArgs = emitter.CodeBuilder.DeclareLocal(typeof(object[]));
 			emitter.CodeBuilder.AddStatement(GetArguments(invocationArgs, invocation));

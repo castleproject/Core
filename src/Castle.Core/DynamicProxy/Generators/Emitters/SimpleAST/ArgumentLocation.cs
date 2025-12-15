@@ -19,28 +19,28 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection.Emit;
 
 	[DebuggerDisplay("argument {Type}")]
-	internal class ArgumentReference : Reference
+	internal class ArgumentLocation : Location
 	{
-		public ArgumentReference(Type argumentType)
-			: base(argumentType)
+		public ArgumentLocation(Type type)
+			: base(type)
 		{
 			Position = -1;
 		}
 
-		public ArgumentReference(Type argumentType, int position)
-			: base(argumentType)
+		public ArgumentLocation(Type type, int position)
+			: base(type)
 		{
 			Position = position;
 		}
 
 		internal int Position { get; set; }
 
-		public override void LoadAddressOfReference(ILGenerator gen)
+		public override void EmitLoadAddress(ILGenerator gen)
 		{
 			throw new NotSupportedException();
 		}
 
-		public override void LoadReference(ILGenerator gen)
+		public override void EmitLoad(ILGenerator gen)
 		{
 			if (Position == -1)
 			{
@@ -66,7 +66,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 		}
 
-		public override void StoreReference(IExpression expression, ILGenerator gen)
+		public override void EmitStore(IExpression expression, ILGenerator gen)
 		{
 			if (Position == -1)
 			{

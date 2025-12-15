@@ -32,7 +32,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private readonly CodeBuilder codeBuilder;
 		private readonly GenericTypeParameterBuilder[] genericTypeParams;
 
-		private ArgumentReference[] arguments;
+		private ArgumentLocation[] arguments;
 
 		protected internal MethodEmitter(MethodBuilder builder)
 		{
@@ -73,7 +73,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			DefineParameters(baseMethodParameters);
 		}
 
-		public ArgumentReference[] Arguments
+		public ArgumentLocation[] Arguments
 		{
 			get { return arguments; }
 		}

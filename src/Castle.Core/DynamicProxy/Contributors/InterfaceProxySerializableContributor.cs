@@ -29,8 +29,8 @@ namespace Castle.DynamicProxy.Contributors
 		{
 		}
 
-		protected override void CustomizeGetObjectData(CodeBuilder codeBuilder, ArgumentReference serializationInfo,
-		                                               ArgumentReference streamingContext, ClassEmitter emitter)
+		protected override void CustomizeGetObjectData(CodeBuilder codeBuilder, ArgumentLocation serializationInfo,
+		                                               ArgumentLocation streamingContext, ClassEmitter emitter)
 		{
 			var targetField = emitter.GetField("__target");
 

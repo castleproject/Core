@@ -48,8 +48,8 @@ namespace Castle.DynamicProxy.Generators
 
 		private void BuildConstructor(AbstractTypeEmitter emitter)
 		{
-			var constructor = emitter.CreateConstructor(new ArgumentReference(typeof(object)),
-			                                            new ArgumentReference(typeof(IntPtr)));
+			var constructor = emitter.CreateConstructor(new ArgumentLocation(typeof(object)),
+			                                            new ArgumentLocation(typeof(IntPtr)));
 			constructor.ConstructorBuilder.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
 		}
 

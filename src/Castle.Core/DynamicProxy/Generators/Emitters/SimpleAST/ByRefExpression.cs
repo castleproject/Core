@@ -20,16 +20,16 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	[DebuggerDisplay("&{reference}")]
 	internal class ByRefExpression : IExpression
 	{
-		private readonly Reference reference;
+		private readonly Location location;
 
-		public ByRefExpression(Reference reference)
+		public ByRefExpression(Location location)
 		{
-			this.reference = reference;
+			this.location = location;
 		}
 
 		public void Emit(ILGenerator gen)
 		{
-			reference.LoadAddressOfReference(gen);
+			location.EmitLoadAddress(gen);
 		}
 	}
 }

@@ -24,11 +24,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	///   ByRef and provides indirect load/store support.
 	/// </summary>
 	[DebuggerDisplay("*{owner}")]
-	internal class IndirectReference : Reference
+	internal class IndirectLocation : Location
 	{
-		private readonly Reference owner;
+		private readonly Location owner;
 
-		public IndirectReference(Reference byRefReference) :
+		public IndirectLocation(Location byRefReference) :
 			base(byRefReference.Type.GetElementType())
 		{
 			if (!byRefReference.Type.IsByRef)
@@ -39,35 +39,35 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			owner = byRefReference;
 		}
 
-		public override void LoadAddressOfReference(ILGenerator gen)
+		public override void EmitLoadAddress(ILGenerator gen)
 		{
 			// Load of owner reference takes care of this.
 		}
 
 		// TODO: Better name
 
-		public override void LoadReference(ILGenerator gen)
+		public override void EmitLoad(ILGenerator gen)
 		{
 			owner.Emit(gen);
 			OpCodeUtil.EmitLoadIndirectOpCodeForType(gen, Type);
 		}
 
-		public override void StoreReference(IExpression expression, ILGenerator gen)
+		public override void EmitStore(IExpression expression, ILGenerator gen)
 		{
 			owner.Emit(gen);
 			expression.Emit(gen);
 			OpCodeUtil.EmitStoreIndirectOpCodeForType(gen, Type);
 		}
 
-		public static Reference WrapIfByRef(Reference reference)
+		public static Location WrapIfByRef(Location reference)
 		{
-			return reference.Type.IsByRef ? new IndirectReference(reference) : reference;
+			return reference.Type.IsByRef ? new IndirectLocation(reference) : reference;
 		}
 
 		// TODO: Better name
-		public static Reference[] WrapIfByRef(Reference[] references)
+		public static Location[] WrapIfByRef(Location[] references)
 		{
-			var result = new Reference[references.Length];
+			var result = new Location[references.Length];
 
 			for (var i = 0; i < references.Length; i++)
 			{
