@@ -15,8 +15,10 @@
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
+	using System.Diagnostics;
 	using System.Reflection.Emit;
 
+	[DebuggerDisplay("{expression} ?? {default}")]
 	internal class NullCoalescingOperatorExpression : IExpression
 	{
 		private readonly IExpression @default;

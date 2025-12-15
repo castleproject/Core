@@ -23,7 +23,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	///   Wraps a reference that is passed 
 	///   ByRef and provides indirect load/store support.
 	/// </summary>
-	[DebuggerDisplay("&{owner}")]
+	[DebuggerDisplay("*{owner}")]
 	internal class IndirectReference : Reference
 	{
 		private readonly Reference owner;

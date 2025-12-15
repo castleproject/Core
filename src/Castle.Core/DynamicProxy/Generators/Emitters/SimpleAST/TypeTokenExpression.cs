@@ -15,10 +15,12 @@
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
+	using System.Diagnostics;
 	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Tokens;
 
+	[DebuggerDisplay("typeof {type}")]
 	internal class TypeTokenExpression : IExpression
 	{
 		private readonly Type type;
