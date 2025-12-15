@@ -133,7 +133,7 @@ namespace Castle.DynamicProxy.Generators
 
 		private static ConvertExpression Argument(int i, LocalReference invocationArgs, Reference[] arguments)
 		{
-			return new ConvertExpression(arguments[i].Type, new LoadRefArrayElementExpression(i, invocationArgs));
+			return new ConvertExpression(arguments[i].Type, new ArrayElementReference(invocationArgs, i));
 		}
 
 		private static AssignStatement AssignArgument(Reference[] dereferencedArguments, int i,
