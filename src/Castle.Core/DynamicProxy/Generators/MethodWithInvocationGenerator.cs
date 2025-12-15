@@ -240,7 +240,7 @@ namespace Castle.DynamicProxy.Generators
 				ThisExpression.Instance,
 				methodInterceptors ?? interceptors,
 				proxiedMethodTokenExpression,
-				new ReferencesToObjectArrayExpression(dereferencedArguments)
+				new ArgumentsToObjectArrayExpression(dereferencedArguments)
 			};
 		}
 

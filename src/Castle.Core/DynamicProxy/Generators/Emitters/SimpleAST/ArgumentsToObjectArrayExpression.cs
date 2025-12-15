@@ -15,16 +15,15 @@
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
-	using System.Reflection;
 	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Internal;
 
-	internal class ReferencesToObjectArrayExpression : IExpression
+	internal sealed class ArgumentsToObjectArrayExpression : IExpression
 	{
 		private readonly Reference[] args;
 
-		public ReferencesToObjectArrayExpression(params Reference[] args)
+		public ArgumentsToObjectArrayExpression(params Reference[] args)
 		{
 			this.args = args;
 		}
@@ -42,10 +41,10 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				gen.Emit(OpCodes.Ldloc, local);
 				gen.Emit(OpCodes.Ldc_I4, i);
 
-				var reference = args[i];
+				var arg = args[i];
 
 #if FEATURE_BYREFLIKE
-				if (reference.Type.IsByRefLikeSafe())
+				if (arg.Type.IsByRefLikeSafe())
 				{
 					// The by-ref-like argument value cannot be put into the `object[]` array,
 					// because it cannot be boxed. We need to replace it with some other value.
@@ -58,20 +57,20 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				}
 #endif
 
-				reference.Emit(gen);
+				arg.Emit(gen);
 
-				if (reference.Type.IsByRef)
+				if (arg.Type.IsByRef)
 				{
 					throw new NotSupportedException();
 				}
 
-				if (reference.Type.IsValueType)
+				if (arg.Type.IsValueType)
 				{
-					gen.Emit(OpCodes.Box, reference.Type);
+					gen.Emit(OpCodes.Box, arg.Type);
 				}
-				else if (reference.Type.IsGenericParameter)
+				else if (arg.Type.IsGenericParameter)
 				{
-					gen.Emit(OpCodes.Box, reference.Type);
+					gen.Emit(OpCodes.Box, arg.Type);
 				}
 
 				gen.Emit(OpCodes.Stelem_Ref);
