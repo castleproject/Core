@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+#nullable enable
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
@@ -26,29 +28,34 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	[DebuggerDisplay("&{OwnerReference}")]
 	internal class IndirectReference : TypeReference
 	{
-		public IndirectReference(TypeReference byRefReference) :
-			base(byRefReference, byRefReference.Type.GetElementType())
+		private readonly TypeReference byRefReference;
+
+		public IndirectReference(TypeReference byRefReference)
+			: base(byRefReference.Type.GetElementType())
 		{
 			if (!byRefReference.Type.IsByRef)
 			{
 				throw new ArgumentException("Expected an IsByRef reference", nameof(byRefReference));
 			}
+
+			this.byRefReference = byRefReference;
 		}
 
-		public override void LoadAddressOfReference(ILGenerator gen)
+		public override void EmitAddress(ILGenerator gen)
 		{
-			// Load of owner reference takes care of this.
+			byRefReference.Emit(gen);
 		}
 
-		// TODO: Better name
-
-		public override void LoadReference(ILGenerator gen)
+		public override void Emit(ILGenerator gen)
 		{
+			byRefReference.Emit(gen);
 			OpCodeUtil.EmitLoadIndirectOpCodeForType(gen, Type);
 		}
 
-		public override void StoreReference(ILGenerator gen)
+		public override void EmitStore(IExpression value, ILGenerator gen)
 		{
+			byRefReference.Emit(gen);
+			value.Emit(gen);
 			OpCodeUtil.EmitStoreIndirectOpCodeForType(gen, Type);
 		}
 

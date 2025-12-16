@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+#nullable enable
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
@@ -26,38 +28,28 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public AsTypeReference(Reference reference, Type type)
 		{
-			if (reference == null)
-			{
-				throw new ArgumentNullException(nameof(reference));
-			}
-			if (type == null)
-			{
-				throw new ArgumentNullException(nameof(type));
-			}
 			this.reference = reference;
 			this.type = type;
-			if (reference == OwnerReference)
-			{
-				OwnerReference = null;
-			}
 		}
 
-		public override void LoadAddressOfReference(ILGenerator gen)
+		public override void EmitAddress(ILGenerator gen)
 		{
-			// NOTE: Or maybe throw new NotSupportedException() ?
-			reference.LoadAddressOfReference(gen);
+			// It does not make sense to take the address of a cast expression.
+			// The C# language would also forbid address-taking of the form `&(x as T)`.
+			throw new NotSupportedException();
 		}
 
-		public override void LoadReference(ILGenerator gen)
+		public override void Emit(ILGenerator gen)
 		{
-			reference.LoadReference(gen);
+			reference.Emit(gen);
 			gen.Emit(OpCodes.Isinst, type);
 		}
 
-		public override void StoreReference(ILGenerator gen)
+		public override void EmitStore(IExpression value, ILGenerator gen)
 		{
-			// NOTE: Or maybe throw new NotSupportedException() ?
-			reference.StoreReference(gen);
+			// It does not make sense to assign a value to the result of a cast expression.
+			// The C# language would also forbid assignments of the form `(x as T) = y`.
+			throw new NotSupportedException();
 		}
 	}
 }
