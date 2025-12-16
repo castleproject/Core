@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,12 +25,12 @@ namespace Castle.DynamicProxy.Contributors
 	/// </summary>
 	internal sealed class ProxyTargetAccessorContributor : ITypeContributor
 	{
-		private readonly Func<Reference> getTargetReference;
+		private readonly Func<IExpression> getTarget;
 		private readonly Type targetType;
 
-		public ProxyTargetAccessorContributor(Func<Reference> getTargetReference, Type targetType)
+		public ProxyTargetAccessorContributor(Func<IExpression> getTarget, Type targetType)
 		{
-			this.getTargetReference = getTargetReference;
+			this.getTarget = getTarget;
 			this.targetType = targetType;
 		}
 
@@ -41,17 +41,17 @@ namespace Castle.DynamicProxy.Contributors
 		public void Generate(ClassEmitter emitter)
 		{
 			var interceptorsField = emitter.GetField("__interceptors");
-			var targetReference = getTargetReference();
+			var target = getTarget();
 
 			var dynProxyGetTarget = emitter.CreateMethod(nameof(IProxyTargetAccessor.DynProxyGetTarget), typeof(object));
 
 			dynProxyGetTarget.CodeBuilder.AddStatement(
-				new ReturnStatement(new ConvertExpression(typeof(object), targetType, targetReference)));
+				new ReturnStatement(new ConvertExpression(typeof(object), targetType, target)));
 
 			var dynProxySetTarget = emitter.CreateMethod(nameof(IProxyTargetAccessor.DynProxySetTarget), typeof(void), typeof(object));
 
 			// we can only change the target of the interface proxy
-			if (targetReference is FieldReference targetField)
+			if (target is FieldReference targetField)
 			{
 				dynProxySetTarget.CodeBuilder.AddStatement(
 					new AssignStatement(targetField,
