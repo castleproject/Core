@@ -56,7 +56,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			get { return @field; }
 		}
 
-		public override void LoadAddressOfReference(ILGenerator gen)
+		public override void EmitAddress(ILGenerator gen)
 		{
 			if (isStatic)
 			{
@@ -69,7 +69,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 		}
 
-		public override void LoadReference(ILGenerator gen)
+		public override void Emit(ILGenerator gen)
 		{
 			if (isStatic)
 			{
@@ -82,7 +82,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 		}
 
-		public override void StoreReference(IExpression value, ILGenerator gen)
+		public override void EmitStore(IExpression value, ILGenerator gen)
 		{
 			if (isStatic)
 			{

@@ -20,19 +20,14 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	internal abstract class Reference : IExpression
 	{
-		public abstract void LoadAddressOfReference(ILGenerator gen);
+		public abstract void EmitAddress(ILGenerator gen);
 
-		public abstract void LoadReference(ILGenerator gen);
+		public abstract void Emit(ILGenerator gen);
 
-		public abstract void StoreReference(IExpression value, ILGenerator gen);
+		public abstract void EmitStore(IExpression value, ILGenerator gen);
 
 		public virtual void Generate(ILGenerator gen)
 		{
-		}
-
-		public void Emit(ILGenerator gen)
-		{
-			LoadReference(gen);
 		}
 	}
 }

@@ -41,20 +41,18 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.byRefReference = byRefReference;
 		}
 
-		public override void LoadAddressOfReference(ILGenerator gen)
+		public override void EmitAddress(ILGenerator gen)
 		{
 			byRefReference.Emit(gen);
 		}
 
-		// TODO: Better name
-
-		public override void LoadReference(ILGenerator gen)
+		public override void Emit(ILGenerator gen)
 		{
 			byRefReference.Emit(gen);
 			OpCodeUtil.EmitLoadIndirectOpCodeForType(gen, Type);
 		}
 
-		public override void StoreReference(IExpression value, ILGenerator gen)
+		public override void EmitStore(IExpression value, ILGenerator gen)
 		{
 			byRefReference.Emit(gen);
 			value.Emit(gen);

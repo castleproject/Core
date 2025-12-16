@@ -29,17 +29,17 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		{
 		}
 
-		public override void LoadAddressOfReference(ILGenerator gen)
+		public override void EmitAddress(ILGenerator gen)
 		{
 			throw new NotSupportedException();
 		}
 
-		public override void LoadReference(ILGenerator gen)
+		public override void Emit(ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldarg_0);
 		}
 
-		public override void StoreReference(IExpression value, ILGenerator gen)
+		public override void EmitStore(IExpression value, ILGenerator gen)
 		{
 			// It does not make sense to assign a value to the this pointer.
 			throw new NotSupportedException();

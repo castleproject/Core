@@ -37,12 +37,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		internal int Position { get; set; }
 
-		public override void LoadAddressOfReference(ILGenerator gen)
+		public override void EmitAddress(ILGenerator gen)
 		{
 			throw new NotSupportedException();
 		}
 
-		public override void LoadReference(ILGenerator gen)
+		public override void Emit(ILGenerator gen)
 		{
 			if (Position == -1)
 			{
@@ -68,7 +68,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 		}
 
-		public override void StoreReference(IExpression value, ILGenerator gen)
+		public override void EmitStore(IExpression value, ILGenerator gen)
 		{
 			if (Position == -1)
 			{

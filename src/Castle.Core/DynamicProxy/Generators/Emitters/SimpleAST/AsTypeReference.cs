@@ -32,20 +32,20 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			this.type = type;
 		}
 
-		public override void LoadAddressOfReference(ILGenerator gen)
+		public override void EmitAddress(ILGenerator gen)
 		{
 			// It does not make sense to take the address of a cast expression.
 			// The C# language would also forbid address-taking of the form `&(x as T)`.
 			throw new NotSupportedException();
 		}
 
-		public override void LoadReference(ILGenerator gen)
+		public override void Emit(ILGenerator gen)
 		{
-			reference.LoadReference(gen);
+			reference.Emit(gen);
 			gen.Emit(OpCodes.Isinst, type);
 		}
 
-		public override void StoreReference(IExpression value, ILGenerator gen)
+		public override void EmitStore(IExpression value, ILGenerator gen)
 		{
 			// It does not make sense to assign a value to the result of a cast expression.
 			// The C# language would also forbid assignments of the form `(x as T) = y`.

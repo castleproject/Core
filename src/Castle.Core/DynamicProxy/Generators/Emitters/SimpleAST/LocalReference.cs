@@ -35,17 +35,17 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			localBuilder = gen.DeclareLocal(base.Type);
 		}
 
-		public override void LoadAddressOfReference(ILGenerator gen)
+		public override void EmitAddress(ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldloca, localBuilder!);
 		}
 
-		public override void LoadReference(ILGenerator gen)
+		public override void Emit(ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldloc, localBuilder!);
 		}
 
-		public override void StoreReference(IExpression value, ILGenerator gen)
+		public override void EmitStore(IExpression value, ILGenerator gen)
 		{
 			value.Emit(gen);
 			gen.Emit(OpCodes.Stloc, localBuilder!);
