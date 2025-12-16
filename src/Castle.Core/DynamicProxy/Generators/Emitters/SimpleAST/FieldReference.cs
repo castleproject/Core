@@ -64,7 +64,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else
 			{
-				SelfReference.Self.Emit(gen);
+				ThisExpression.Instance.Emit(gen);
 				gen.Emit(OpCodes.Ldflda, Reference);
 			}
 		}
@@ -77,7 +77,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else
 			{
-				SelfReference.Self.Emit(gen);
+				ThisExpression.Instance.Emit(gen);
 				gen.Emit(OpCodes.Ldfld, Reference);
 			}
 		}
@@ -91,7 +91,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else
 			{
-				SelfReference.Self.Emit(gen);
+				ThisExpression.Instance.Emit(gen);
 				value.Emit(gen);
 				gen.Emit(OpCodes.Stfld, Reference);
 			}

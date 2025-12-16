@@ -26,12 +26,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		protected readonly IExpression? instance;
 
 		public MethodInvocationExpression(MethodInfo method, params IExpression[] args) :
-			this(SelfReference.Self, method, args)
+			this(ThisExpression.Instance, method, args)
 		{
 		}
 
 		public MethodInvocationExpression(MethodEmitter method, params IExpression[] args) :
-			this(SelfReference.Self, method.MethodBuilder, args)
+			this(ThisExpression.Instance, method.MethodBuilder, args)
 		{
 		}
 

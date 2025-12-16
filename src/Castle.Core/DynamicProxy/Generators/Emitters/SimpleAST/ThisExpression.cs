@@ -21,28 +21,17 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection.Emit;
 
 	[DebuggerDisplay("this")]
-	internal class SelfReference : Reference
+	internal class ThisExpression : IExpression
 	{
-		public static readonly SelfReference Self = new SelfReference();
+		public static readonly ThisExpression Instance = new ThisExpression();
 
-		protected SelfReference()
+		protected ThisExpression()
 		{
 		}
 
-		public override void EmitAddress(ILGenerator gen)
-		{
-			throw new NotSupportedException();
-		}
-
-		public override void Emit(ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldarg_0);
-		}
-
-		public override void EmitStore(IExpression value, ILGenerator gen)
-		{
-			// It does not make sense to assign a value to the this pointer.
-			throw new NotSupportedException();
 		}
 	}
 }
