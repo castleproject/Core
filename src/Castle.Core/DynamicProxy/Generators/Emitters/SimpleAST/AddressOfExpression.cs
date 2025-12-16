@@ -16,35 +16,22 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
-	using System;
 	using System.Diagnostics;
 	using System.Reflection.Emit;
 
-
-	[DebuggerDisplay("&{localReference}")]
-	internal class ByRefReference : Reference
+	[DebuggerDisplay("&{reference}")]
+	internal class AddressOfExpression : IExpression
 	{
-		private readonly LocalReference localReference;
+		private readonly Reference reference;
 
-		public ByRefReference(LocalReference localReference)
-			: base(localReference.Type)
+		public AddressOfExpression(Reference reference)
 		{
-			this.localReference = localReference;
+			this.reference = reference;
 		}
 
-		public override void EmitAddress(ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
-			localReference.EmitAddress(gen);
-		}
-
-		public override void Emit(ILGenerator gen)
-		{
-			localReference.EmitAddress(gen);
-		}
-
-		public override void EmitStore(IExpression value, ILGenerator gen)
-		{
-			throw new NotImplementedException();
+			reference.EmitAddress(gen);
 		}
 	}
 }

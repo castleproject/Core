@@ -149,8 +149,8 @@ namespace Castle.DynamicProxy.Generators
 					}
 
 					invokeMethodOnTarget.CodeBuilder.AddStatement(new AssignStatement(localReference, localValue));
-					var byRefReference = new ByRefReference(localReference);
-					args[i] = byRefReference;
+					var localByRef = new AddressOfExpression(localReference);
+					args[i] = localByRef;
 					byRefArguments[i] = localReference;
 				}
 				else
