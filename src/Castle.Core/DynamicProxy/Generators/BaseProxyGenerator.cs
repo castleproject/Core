@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -331,7 +331,9 @@ namespace Castle.DynamicProxy.Generators
 			constructor.CodeBuilder.AddStatement(new AssignStatement(interceptorField,
 			                                                         new NewArrayExpression(1, typeof(IInterceptor))));
 			constructor.CodeBuilder.AddStatement(
-				new AssignArrayStatement(interceptorField, 0, new NewInstanceExpression(typeof(StandardInterceptor))));
+				new AssignStatement(
+					new ArrayElementReference(interceptorField, 0),
+					new NewInstanceExpression(typeof(StandardInterceptor))));
 
 			// Invoke base constructor
 
