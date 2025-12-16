@@ -27,6 +27,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		private readonly Type type;
 
 		public AsTypeReference(Reference reference, Type type)
+			: base(type)
 		{
 			this.reference = reference;
 			this.type = type;
