@@ -26,13 +26,13 @@ namespace Castle.DynamicProxy.Contributors
 
 	internal class InterfaceProxyWithoutTargetContributor : CompositeTypeContributor
 	{
-		private readonly GetTargetExpressionDelegate getTargetExpression;
+		protected readonly GetTargetExpressionDelegate getTarget;
 		protected bool canChangeTarget = false;
 
 		public InterfaceProxyWithoutTargetContributor(INamingScope namingScope, GetTargetExpressionDelegate getTarget)
 			: base(namingScope)
 		{
-			getTargetExpression = getTarget;
+			this.getTarget = getTarget;
 		}
 
 		protected override IEnumerable<MembersCollector> GetCollectors()
@@ -56,7 +56,7 @@ namespace Castle.DynamicProxy.Contributors
 			return new MethodWithInvocationGenerator(method,
 			                                         @class.GetField("__interceptors"),
 			                                         invocation,
-			                                         getTargetExpression,
+			                                         getTarget,
 			                                         overrideMethod,
 			                                         null);
 		}

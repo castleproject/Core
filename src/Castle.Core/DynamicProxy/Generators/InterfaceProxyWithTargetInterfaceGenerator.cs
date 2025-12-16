@@ -57,18 +57,13 @@ namespace Castle.DynamicProxy.Generators
 		protected override InterfaceProxyWithoutTargetContributor GetContributorForAdditionalInterfaces(
 			INamingScope namingScope)
 		{
-			return new InterfaceProxyWithOptionalTargetContributor(namingScope, GetTargetExpression, GetTarget)
+			return new InterfaceProxyWithOptionalTargetContributor(namingScope, GetTarget)
 			{ Logger = Logger };
 		}
 
-		private Reference GetTarget(ClassEmitter @class, MethodInfo method)
+		private IExpression GetTarget(ClassEmitter @class, MethodInfo method)
 		{
 			return new AsTypeReference(@class.GetField("__target"), method.DeclaringType);
-		}
-
-		private IExpression GetTargetExpression(ClassEmitter @class, MethodInfo method)
-		{
-			return GetTarget(@class, method);
 		}
 	}
 }

@@ -23,6 +23,4 @@ namespace Castle.DynamicProxy.Contributors
 		string name, MethodAttributes attributes, MethodInfo methodToOverride);
 
 	internal delegate IExpression GetTargetExpressionDelegate(ClassEmitter @class, MethodInfo method);
-
-	internal delegate Reference GetTargetReferenceDelegate(ClassEmitter @class, MethodInfo method);
 }
