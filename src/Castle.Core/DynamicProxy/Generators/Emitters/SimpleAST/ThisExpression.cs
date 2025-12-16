@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,22 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System;
+	using System.Diagnostics;
+	using System.Reflection.Emit;
 
-	internal abstract class TypeReference : Reference
+	[DebuggerDisplay("this")]
+	internal class ThisExpression : IExpression
 	{
-		private readonly Type type;
+		public static readonly ThisExpression Instance = new ThisExpression();
 
-		protected TypeReference(Type type)
+		protected ThisExpression()
 		{
-			this.type = type;
 		}
 
-		public Type Type
+		public void Emit(ILGenerator gen)
 		{
-			get { return type; }
+			gen.Emit(OpCodes.Ldarg_0);
 		}
 	}
 }

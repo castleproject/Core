@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -119,7 +119,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			callBackMethod.CodeBuilder.AddStatement(
 				new ReturnStatement(
-					new MethodInvocationExpression(SelfReference.Self, targetMethod, callBackMethod.Arguments)));
+					new MethodInvocationExpression(ThisExpression.Instance, targetMethod, callBackMethod.Arguments)));
 
 			return callBackMethod.MethodBuilder;
 		}

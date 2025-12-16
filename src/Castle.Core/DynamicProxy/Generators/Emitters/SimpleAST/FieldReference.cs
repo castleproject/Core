@@ -28,6 +28,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		private readonly bool isStatic;
 
 		public FieldReference(FieldInfo field)
+			: base(field.FieldType)
 		{
 			this.field = field;
 			if ((field.Attributes & FieldAttributes.Static) != 0)
@@ -37,6 +38,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		}
 
 		public FieldReference(FieldBuilder fieldBuilder)
+			: base(fieldBuilder.FieldType)
 		{
 			this.fieldBuilder = fieldBuilder;
 			field = fieldBuilder;
@@ -64,7 +66,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else
 			{
-				SelfReference.Self.Emit(gen);
+				ThisExpression.Instance.Emit(gen);
 				gen.Emit(OpCodes.Ldflda, Reference);
 			}
 		}
@@ -77,7 +79,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else
 			{
-				SelfReference.Self.Emit(gen);
+				ThisExpression.Instance.Emit(gen);
 				gen.Emit(OpCodes.Ldfld, Reference);
 			}
 		}
@@ -91,7 +93,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			}
 			else
 			{
-				SelfReference.Self.Emit(gen);
+				ThisExpression.Instance.Emit(gen);
 				value.Emit(gen);
 				gen.Emit(OpCodes.Stfld, Reference);
 			}

@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -143,7 +143,7 @@ namespace Castle.DynamicProxy.Generators
 #endif
 					{
 						localValue = new ConvertExpression(paramType.GetElementType(),
-						                               new MethodInvocationExpression(SelfReference.Self,
+						                               new MethodInvocationExpression(ThisExpression.Instance,
 						                                                              InvocationMethods.GetArgumentValue,
 						                                                              new LiteralIntExpression(i)));
 					}
@@ -170,7 +170,7 @@ namespace Castle.DynamicProxy.Generators
 					{
 						args[i] =
 							new ConvertExpression(paramType,
-							                      new MethodInvocationExpression(SelfReference.Self,
+							                      new MethodInvocationExpression(ThisExpression.Instance,
 							                                                     InvocationMethods.GetArgumentValue,
 							                                                     new LiteralIntExpression(i)));
 					}
@@ -218,7 +218,7 @@ namespace Castle.DynamicProxy.Generators
 				}
 
 				var setRetVal =
-					new MethodInvocationExpression(SelfReference.Self,
+					new MethodInvocationExpression(ThisExpression.Instance,
 					                               InvocationMethods.SetReturnValue,
 					                               retVal);
 
@@ -260,7 +260,7 @@ namespace Castle.DynamicProxy.Generators
 
 				invokeMethodOnTarget.CodeBuilder.AddStatement(
 					new MethodInvocationExpression(
-						SelfReference.Self,
+						ThisExpression.Instance,
 						InvocationMethods.SetArgumentValue,
 						new LiteralIntExpression(index),
 						localValue));

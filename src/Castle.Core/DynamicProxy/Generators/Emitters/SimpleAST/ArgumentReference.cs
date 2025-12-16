@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection.Emit;
 
 	[DebuggerDisplay("argument {Type}")]
-	internal class ArgumentReference : TypeReference
+	internal class ArgumentReference : Reference
 	{
 		public ArgumentReference(Type argumentType)
 			: base(argumentType)
