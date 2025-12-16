@@ -96,7 +96,7 @@ namespace Castle.DynamicProxy.Generators
 				return contributor.GetCallbackMethodInvocation(invocation, args, targetField, invokeMethodOnTarget);
 			}
 			var methodOnTargetInvocationExpression = new MethodInvocationExpression(
-				new AsTypeReference(targetField, callbackMethod.DeclaringType),
+				new AsTypeExpression(targetField, callbackMethod.DeclaringType),
 				callbackMethod,
 				args) { VirtualCall = true };
 			return methodOnTargetInvocationExpression;

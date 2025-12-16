@@ -21,36 +21,21 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection.Emit;
 
 	[DebuggerDisplay("{reference} as {type}")]
-	internal class AsTypeReference : Reference
+	internal class AsTypeExpression : IExpression
 	{
 		private readonly Reference reference;
 		private readonly Type type;
 
-		public AsTypeReference(Reference reference, Type type)
-			: base(type)
+		public AsTypeExpression(Reference reference, Type type)
 		{
 			this.reference = reference;
 			this.type = type;
 		}
 
-		public override void EmitAddress(ILGenerator gen)
-		{
-			// It does not make sense to take the address of a cast expression.
-			// The C# language would also forbid address-taking of the form `&(x as T)`.
-			throw new NotSupportedException();
-		}
-
-		public override void Emit(ILGenerator gen)
+		public void Emit(ILGenerator gen)
 		{
 			reference.Emit(gen);
 			gen.Emit(OpCodes.Isinst, type);
-		}
-
-		public override void EmitStore(IExpression value, ILGenerator gen)
-		{
-			// It does not make sense to assign a value to the result of a cast expression.
-			// The C# language would also forbid assignments of the form `(x as T) = y`.
-			throw new NotSupportedException();
 		}
 	}
 }
