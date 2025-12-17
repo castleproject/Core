@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -52,8 +52,10 @@ namespace Castle.DynamicProxy.Generators
 				if (parameter.IsOut)
 				{
 					emitter.CodeBuilder.AddStatement(
-						new AssignArgumentStatement(new ArgumentReference(parameter.ParameterType, index + 1),
-						                            new DefaultValueExpression(parameter.ParameterType)));
+						new AssignStatement(
+							new IndirectReference(
+								new ArgumentReference(parameter.ParameterType, index + 1)),
+							new DefaultValueExpression(parameter.ParameterType.GetElementType())));
 				}
 			}
 		}
