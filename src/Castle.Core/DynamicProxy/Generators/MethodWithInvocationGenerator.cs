@@ -222,7 +222,9 @@ namespace Castle.DynamicProxy.Generators
 			for (var i = 0; i < genericParameters.Length; ++i)
 			{
 				methodEmitter.CodeBuilder.AddStatement(
-					new AssignArrayStatement(genericParamsArrayLocal, i, new TypeTokenExpression(genericParameters[i])));
+					new AssignStatement(
+						new ArrayElementReference(genericParamsArrayLocal, i),
+						new TypeTokenExpression(genericParameters[i])));
 			}
 			methodEmitter.CodeBuilder.AddStatement(
 				new MethodInvocationExpression(invocationLocal,

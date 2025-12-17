@@ -96,7 +96,7 @@ namespace Castle.DynamicProxy.Generators
 				return contributor.GetCallbackMethodInvocation(invocation, args, targetField, invokeMethodOnTarget);
 			}
 			var methodOnTargetInvocationExpression = new MethodInvocationExpression(
-				new AsTypeReference(targetField, callbackMethod.DeclaringType),
+				new AsTypeExpression(targetField, callbackMethod.DeclaringType),
 				callbackMethod,
 				args) { VirtualCall = true };
 			return methodOnTargetInvocationExpression;
@@ -149,8 +149,8 @@ namespace Castle.DynamicProxy.Generators
 					}
 
 					invokeMethodOnTarget.CodeBuilder.AddStatement(new AssignStatement(localReference, localValue));
-					var byRefReference = new ByRefReference(localReference);
-					args[i] = byRefReference;
+					var localByRef = new AddressOfExpression(localReference);
+					args[i] = localByRef;
 					byRefArguments[i] = localReference;
 				}
 				else
