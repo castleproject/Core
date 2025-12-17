@@ -20,21 +20,21 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Diagnostics;
 	using System.Reflection.Emit;
 
-	[DebuggerDisplay("{reference} as {type}")]
+	[DebuggerDisplay("{expression} as {type}")]
 	internal class AsTypeExpression : IExpression
 	{
-		private readonly Reference reference;
+		private readonly IExpression expression;
 		private readonly Type type;
 
-		public AsTypeExpression(Reference reference, Type type)
+		public AsTypeExpression(IExpression expression, Type type)
 		{
-			this.reference = reference;
+			this.expression = expression;
 			this.type = type;
 		}
 
 		public void Emit(ILGenerator gen)
 		{
-			reference.Emit(gen);
+			expression.Emit(gen);
 			gen.Emit(OpCodes.Isinst, type);
 		}
 	}
