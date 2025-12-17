@@ -22,10 +22,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Reflection.Emit;
 
 	/// <summary>
-	///   Wraps a reference that is passed 
-	///   ByRef and provides indirect load/store support.
+	///   Represents the storage location <c>X</c> referenced by a <see cref="Reference"/>
+	///   holding a managed pointer ("by-ref") <c>&amp;X</c> to it.
+	///   It essentially has the same function as the pointer indirection / dereferencing operator <c>*</c>.
 	/// </summary>
-	[DebuggerDisplay("&{OwnerReference}")]
+	[DebuggerDisplay("*{byRefReference}")]
 	internal class IndirectReference : Reference
 	{
 		private readonly Reference byRefReference;
