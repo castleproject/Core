@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,19 +19,19 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	internal class NewArrayExpression : IExpression
 	{
-		private readonly Type arrayType;
+		private readonly Type elementType;
 		private readonly int size;
 
-		public NewArrayExpression(int size, Type arrayType)
+		public NewArrayExpression(int size, Type elementType)
 		{
 			this.size = size;
-			this.arrayType = arrayType;
+			this.elementType = elementType;
 		}
 
 		public void Emit(ILGenerator gen)
 		{
 			gen.Emit(OpCodes.Ldc_I4, size);
-			gen.Emit(OpCodes.Newarr, arrayType);
+			gen.Emit(OpCodes.Newarr, elementType);
 		}
 	}
 }
