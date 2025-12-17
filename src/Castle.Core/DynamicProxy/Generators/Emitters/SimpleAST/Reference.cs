@@ -38,9 +38,5 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		public abstract void Emit(ILGenerator gen);
 
 		public abstract void EmitStore(IExpression value, ILGenerator gen);
-
-		public virtual void Generate(ILGenerator gen)
-		{
-		}
 	}
 }

@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,14 +22,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	internal sealed class CodeBuilder
 	{
-		private readonly List<LocalReference> locals;
 		private readonly List<IStatement> statements;
 		private bool isEmpty;
 
 		public CodeBuilder()
 		{
 			statements = new List<IStatement>();
-			locals = new List<LocalReference>();
 			isEmpty = true;
 		}
 
@@ -47,18 +45,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public LocalReference DeclareLocal(Type type)
 		{
-			var local = new LocalReference(type);
-			locals.Add(local);
-			return local;
+			return new LocalReference(type);
 		}
 
 		internal void Generate(ILGenerator il)
 		{
-			foreach (var local in locals)
-			{
-				local.Generate(il);
-			}
-
 			foreach (var statement in statements)
 			{
 				statement.Emit(il);
