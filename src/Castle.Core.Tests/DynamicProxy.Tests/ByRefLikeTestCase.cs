@@ -15,6 +15,7 @@
 #if FEATURE_BYREFLIKE
 
 #nullable enable
+#pragma warning disable CS8500
 
 namespace Castle.DynamicProxy.Tests
 {
@@ -198,46 +199,99 @@ namespace Castle.DynamicProxy.Tests
 		#region What values do interceptors see for by-ref-like arguments?
 
 		[Test]
-		public void By_ref_like_arguments_are_replaced_with_null_in_invocation()
+		public void By_ref_like_arguments_are_wrapped_as_ByRefLikeArgument_in_invocation()
 		{
 			var interceptor = new ObservingInterceptor();
 			var proxy = generator.CreateClassProxy<HasMethodWithSpanParameter>(interceptor);
 			var arg = "original".AsSpan();
 			proxy.Method(arg);
-			Assert.IsNull(interceptor.ObservedArg);
+			Assert.IsInstanceOf<ByRefLikeArgument>(interceptor.ObservedArg);
 		}
 
 		[Test]
-		public void By_ref_like_in_arguments_are_replaced_with_null_in_invocation()
+		public unsafe void By_ref_like_arguments_can_be_restored_from_ByRefLikeArgument_GetPointer_in_invocation()
+		{
+			var interceptor = new ObservingInterceptor();
+			var proxy = generator.CreateClassProxy<HasMethodWithSpanParameter>(interceptor);
+			var arg = "original".AsSpan();
+			proxy.Method(arg);
+			Assume.That(interceptor.ObservedArg is ByRefLikeArgument);
+			var wrappedArg = (ByRefLikeArgument)interceptor.ObservedArg!;
+			var unwrappedArg = *(ReadOnlySpan<char>*)wrappedArg.GetPointer();
+			Assert.AreEqual("original", unwrappedArg.ToString());
+		}
+
+		[Test]
+		public void By_ref_like_in_arguments_are_wrapped_as_ByRefLikeArgument_in_invocation()
 		{
 			var interceptor = new ObservingInterceptor();
 			var proxy = generator.CreateClassProxy<HasMethodWithSpanInParameter>(interceptor);
 			var arg = "original".AsSpan();
 			proxy.Method(in arg);
-			Assert.IsNull(interceptor.ObservedArg);
+			Assert.IsInstanceOf<ByRefLikeArgument>(interceptor.ObservedArg);
 		}
 
 		[Test]
-		public void By_ref_like_ref_arguments_are_replaced_with_null_in_invocation()
+		public unsafe void By_ref_like_in_arguments_can_be_restored_from_ByRefLikeArgument_GetPointer_in_invocation()
+		{
+			var interceptor = new ObservingInterceptor();
+			var proxy = generator.CreateClassProxy<HasMethodWithSpanInParameter>(interceptor);
+			var arg = "original".AsSpan();
+			proxy.Method(in arg);
+			Assume.That(interceptor.ObservedArg is ByRefLikeArgument);
+			var wrappedArg = (ByRefLikeArgument)interceptor.ObservedArg!;
+			var unwrappedArg = *(ReadOnlySpan<char>*)wrappedArg.GetPointer();
+			Assert.AreEqual("original", unwrappedArg.ToString());
+		}
+
+		[Test]
+		public void By_ref_like_ref_arguments_are_wrapped_as_ByRefLikeArgument_in_invocation()
 		{
 			var interceptor = new ObservingInterceptor();
 			var proxy = generator.CreateClassProxy<HasMethodWithSpanRefParameter>(interceptor);
 			var arg = "original".AsSpan();
 			proxy.Method(ref arg);
-			Assert.IsNull(interceptor.ObservedArg);
+			Assert.IsInstanceOf<ByRefLikeArgument>(interceptor.ObservedArg);
+		}
+
+		[Test]
+		public unsafe void By_ref_like_ref_arguments_can_be_restored_from_ByRefLikeArgument_GetPointer_in_invocation()
+		{
+			var interceptor = new ObservingInterceptor();
+			var proxy = generator.CreateClassProxy<HasMethodWithSpanRefParameter>(interceptor);
+			var arg = "original".AsSpan();
+			proxy.Method(ref arg);
+			Assume.That(interceptor.ObservedArg is ByRefLikeArgument);
+			var wrappedArg = (ByRefLikeArgument)interceptor.ObservedArg!;
+			var unwrappedArg = *(ReadOnlySpan<char>*)wrappedArg.GetPointer();
+			Assert.AreEqual("original", unwrappedArg.ToString());
 		}
 
 		// Note the somewhat weird semantics of this test: DynamicProxy allows you to read the incoming values
 		// of `out` arguments, which would be illegal in plain C# ("use of unassigned out parameter").
 		// DynamicProxy does not distinguish between `ref` and `out` in this regard.
 		[Test]
-		public void By_ref_like_out_arguments_are_replaced_with_null_in_invocation()
+		public void By_ref_like_out_arguments_are_wrapped_as_ByRefLikeArgument_in_invocation()
 		{
 			var interceptor = new ObservingInterceptor();
 			var proxy = generator.CreateClassProxy<HasMethodWithSpanOutParameter>(interceptor);
 			var arg = "original".AsSpan();
 			proxy.Method(out arg);
-			Assert.IsNull(interceptor.ObservedArg);
+			Assert.IsInstanceOf<ByRefLikeArgument>(interceptor.ObservedArg);
+		}
+
+		// as above
+		[Test]
+		public unsafe void By_ref_like_out_arguments_can_be_restored_from_ByRefLikeArgument_GetPointer_in_invocation()
+		{
+			var interceptor = new ObservingInterceptor();
+			var proxy = generator.CreateClassProxy<HasMethodWithSpanOutParameter>(interceptor);
+			var arg = "original".AsSpan();
+			proxy.Method(out arg);
+			Assume.That(interceptor.ObservedArg is ByRefLikeArgument);
+			var wrappedArg = (ByRefLikeArgument)interceptor.ObservedArg!;
+			var unwrappedArg = *(ReadOnlySpan<char>*)wrappedArg.GetPointer();
+			Assert.AreEqual("original", unwrappedArg.ToString());
 		}
 
 		#endregion
@@ -417,5 +471,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 	}
 }
+
+#pragma warning restore CS8500
 
 #endif
