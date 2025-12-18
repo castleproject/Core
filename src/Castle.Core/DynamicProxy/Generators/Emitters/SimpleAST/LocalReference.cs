@@ -23,32 +23,32 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	[DebuggerDisplay("local {Type}")]
 	internal class LocalReference : Reference
 	{
-		private LocalBuilder? localBuilder;
+		private LocalBuilder? local;
 
 		public LocalReference(Type type)
 			: base(type)
 		{
 		}
 
-		public override void Generate(ILGenerator gen)
-		{
-			localBuilder = gen.DeclareLocal(base.Type);
-		}
-
 		public override void EmitAddress(ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Ldloca, localBuilder!);
+			gen.Emit(OpCodes.Ldloca, GetInitializedLocal(gen));
 		}
 
 		public override void Emit(ILGenerator gen)
 		{
-			gen.Emit(OpCodes.Ldloc, localBuilder!);
+			gen.Emit(OpCodes.Ldloc, GetInitializedLocal(gen));
 		}
 
 		public override void EmitStore(IExpression value, ILGenerator gen)
 		{
 			value.Emit(gen);
-			gen.Emit(OpCodes.Stloc, localBuilder!);
+			gen.Emit(OpCodes.Stloc, GetInitializedLocal(gen));
+		}
+
+		private LocalBuilder GetInitializedLocal(ILGenerator gen)
+		{
+			return local ??= gen.DeclareLocal(Type);
 		}
 	}
 }

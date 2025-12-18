@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -42,31 +42,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				gen.Emit(OpCodes.Initobj, type);
 				gen.Emit(OpCodes.Ldloc, local);
 			}
-			else if (type.IsByRef)
-			{
-				EmitByRef(gen);
-			}
 			else
 			{
 				throw new NotImplementedException("Can't emit default value for type " + type);
-			}
-		}
-
-		private void EmitByRef(ILGenerator gen)
-		{
-			var elementType = type.GetElementType();
-			if (IsPrimitiveOrClass(elementType))
-			{
-				OpCodeUtil.EmitLoadOpCodeForDefaultValueOfType(gen, elementType);
-				OpCodeUtil.EmitStoreIndirectOpCodeForType(gen, elementType);
-			}
-			else if (elementType.IsGenericParameter || elementType.IsValueType)
-			{
-				gen.Emit(OpCodes.Initobj, elementType);
-			}
-			else
-			{
-				throw new NotImplementedException("Can't emit default value for reference of type " + elementType);
 			}
 		}
 

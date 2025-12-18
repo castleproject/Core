@@ -23,15 +23,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	{
 		private readonly IExpressionOrStatement ifNotNull;
 		private readonly IExpressionOrStatement ifNull;
-		private readonly Reference? reference;
-		private readonly IExpression? expression;
-
-		public IfNullExpression(Reference reference, IExpressionOrStatement ifNull, IExpressionOrStatement ifNotNull = null)
-		{
-			this.reference = reference ?? throw new ArgumentNullException(nameof(reference));
-			this.ifNull = ifNull;
-			this.ifNotNull = ifNotNull;
-		}
+		private readonly IExpression expression;
 
 		public IfNullExpression(IExpression expression, IExpressionOrStatement ifNull, IExpressionOrStatement ifNotNull = null)
 		{
@@ -42,15 +34,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public void Emit(ILGenerator gen)
 		{
-			if (reference != null)
-			{
-				reference.Emit(gen);
-			}
-			else if (expression != null)
-			{
-				expression.Emit(gen);
-			}
-
+			expression.Emit(gen);
 			var notNull = gen.DefineLabel();
 			gen.Emit(OpCodes.Brtrue_S, notNull);
 			ifNull.Emit(gen);
