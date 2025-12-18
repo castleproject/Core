@@ -39,7 +39,12 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void EmitAddress(ILGenerator gen)
 		{
-			throw new NotSupportedException();
+			if (Position == -1)
+			{
+				throw new InvalidOperationException("ArgumentReference uninitialized");
+			}
+
+			gen.Emit(OpCodes.Ldarga_S, Position);
 		}
 
 		public override void Emit(ILGenerator gen)
