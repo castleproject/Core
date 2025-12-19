@@ -78,6 +78,23 @@ namespace Castle.DynamicProxy
 		/// <summary>
 		///   Gets an unmanaged pointer to the byref-like (<c>ref struct</c>) argument.
 		/// </summary>
+		/// <remarks>
+		///   <para>
+		///     You may only use the returned pointer during the first run through the interception pipeline.
+		///     After that, it will be invalid, because the argument that it referred to will be gone
+		///     from the evaluation stack.
+		///   </para>
+		///   <para>
+		///     In particular, if you intercept an <see langword="async"/> method and make use of
+		///     <see cref="IInvocationProceedInfo"/> to proceed through the pipeline again
+		///     after an <see langword="await"/>, you may no longer access any byref-like arguments.
+		///     (.NET compilers would forbid any such attempts, too.)
+		///   </para>
+		///   <para>
+		///     Using the returned pointer beyond the lifetime of the byref-like argument
+		///     will cause undefined behavior, or an <see cref="AccessViolationException"/> at best.
+		///   </para>
+		/// </remarks>
 		[CLSCompliant(false)]
 		[EditorBrowsable(EditorBrowsableState.Advanced)]
 		public void* GetPointer()

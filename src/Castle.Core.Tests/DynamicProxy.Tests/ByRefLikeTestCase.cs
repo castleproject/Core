@@ -500,6 +500,43 @@ namespace Castle.DynamicProxy.Tests
 
 		#endregion
 
+		#region Memory safety
+
+		// Byref-like arguments live exclusively on the evaluation stack.
+		// We need to make sure that references to them (such as those in `IInvocation.Arguments`)
+		// do not have a longer lifetime than the arguments themselves.
+
+		[Test]
+		public unsafe void Cannot_use_ByRefLikeArgument_GetPointer_after_invocation()
+		{
+			var interceptor = new ObservingInterceptor();
+			var proxy = generator.CreateClassProxy<HasMethodWithSpanParameter>(interceptor);
+			proxy.Method(default);
+			var byRefLikeArg = (ByRefLikeArgument)interceptor.ObservedArg!;
+			Assert.Throws<ObjectDisposedException>(() => _ = byRefLikeArg.GetPointer());
+		}
+
+		[Test]
+		public void Cannot_use_ByRefLikeArgument_Get_after_invocation()
+		{
+			var interceptor = new ObservingInterceptor();
+			var proxy = generator.CreateClassProxy<HasMethodWithSpanParameter>(interceptor);
+			proxy.Method(default);
+			var byRefLikeArg = (ReadOnlySpanArgument<char>)interceptor.ObservedArg!;
+			Assert.Throws<ObjectDisposedException>(() => _ = byRefLikeArg.Get());
+		}
+
+		[Test]
+		public void ByRefLikeArguments_are_erased_from_invocation_Arguments_after_invocation()
+		{
+			var interceptor = new ObservingInterceptor();
+			var proxy = generator.CreateClassProxy<HasMethodWithSpanParameter>(interceptor);
+			proxy.Method(default);
+			Assert.IsNull(interceptor.AllArguments![0]);
+		}
+
+		#endregion
+
 		public class HasMethodWithSpanParameter
 		{
 			public string? RecordedArg;
@@ -541,10 +578,12 @@ namespace Castle.DynamicProxy.Tests
 
 		public class ObservingInterceptor : IInterceptor
 		{
+			public object?[]? AllArguments;
 			public object? ObservedArg;
 
 			public void Intercept(IInvocation invocation)
 			{
+				AllArguments = invocation.Arguments;
 				ObservedArg = invocation.Arguments[0];
 			}
 		}
