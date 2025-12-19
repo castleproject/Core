@@ -20,6 +20,7 @@ namespace Castle.DynamicProxy
 {
 	using System;
 	using System.ComponentModel;
+	using System.Runtime.CompilerServices;
 
 	/// <summary>
 	///   Wraps a byref-like (<c>ref struct</c>) method argument
@@ -49,6 +50,36 @@ namespace Castle.DynamicProxy
 			return ptr;
 		}
 	}
+
+#if FEATURE_ALLOWS_REF_STRUCT_ANTI_CONSTRAINT
+
+	/// <summary>
+	///   Wraps a byref-like (<c>ref struct</c>) method argument
+	///   such that it can be placed in the <see cref="IInvocation.Arguments"/> array during interception.
+	/// </summary>
+	public unsafe class ByRefLikeArgument<TByRefLike> : ByRefLikeArgument where TByRefLike : allows ref struct
+	{
+		/// <summary>
+		///   Do not use this! Only generated proxies should construct instances this type.
+		/// </summary>
+		[CLSCompliant(false)]
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public ByRefLikeArgument(void* ptr)
+			: base(ptr)
+		{
+		}
+
+		/// <summary>
+		///   Gets the byref-like (<c>ref struct</c>) argument.
+		/// </summary>
+		public ref TByRefLike Get()
+		{
+			return ref Unsafe.AsRef<TByRefLike>(ptr);
+		}
+	}
+
+#endif
+
 }
 
 #endif

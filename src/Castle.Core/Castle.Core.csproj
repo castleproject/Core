@@ -3,7 +3,7 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0;net462;netstandard2.0</TargetFrameworks>
+		<TargetFrameworks>net9.0;net8.0;net462;netstandard2.0</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -37,7 +37,7 @@
 		<PackageReference Include="System.Diagnostics.EventLog" Version="8.0.2" />
 	</ItemGroup>
 	
-	<ItemGroup Condition="'$(TargetFramework)'=='net8.0'">
+	<ItemGroup Condition="'$(TargetFramework)'=='net8.0' Or '$(TargetFramework)'=='net9.0'">
 		<PackageReference Include="System.Diagnostics.EventLog" Version="8.0.2" />
 	</ItemGroup>
 

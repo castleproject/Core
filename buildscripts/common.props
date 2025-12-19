@@ -71,6 +71,10 @@
 		<DefineConstants>$(DefineConstants);FEATURE_BYREFLIKE</DefineConstants>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)'=='net9.0'">
+		<DefineConstants>$(DefineConstants);FEATURE_ALLOWS_REF_STRUCT_ANTI_CONSTRAINT</DefineConstants>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<None Include="$(SolutionDir)docs\images\castle-logo.png" Pack="true" PackagePath=""/>
 	</ItemGroup>
