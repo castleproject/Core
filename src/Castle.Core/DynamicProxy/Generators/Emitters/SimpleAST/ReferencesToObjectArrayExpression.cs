@@ -53,7 +53,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 					// We cannot box a byref-like argument directly, so we wrap it as
 					// `BoxedByRefLikeArgument` instead (which references it using a pointer).
 					reference.EmitAddress(gen);
-					gen.Emit(OpCodes.Newobj, ByRefLikeArgumentMethods.Constructor);
+					gen.Emit(OpCodes.Newobj, ByRefLikeArgument.GetConstructorFor(reference.Type));
 					gen.Emit(OpCodes.Stelem_Ref);
 					continue;
 				}

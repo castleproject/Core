@@ -19,7 +19,9 @@
 namespace Castle.DynamicProxy
 {
 	using System;
+	using System.Collections.Concurrent;
 	using System.ComponentModel;
+	using System.Reflection;
 	using System.Runtime.CompilerServices;
 
 	/// <summary>
@@ -28,6 +30,27 @@ namespace Castle.DynamicProxy
 	/// </summary>
 	public unsafe class ByRefLikeArgument
 	{
+#if FEATURE_ALLOWS_REF_STRUCT_ANTI_CONSTRAINT
+		private static readonly ConcurrentDictionary<Type, ConstructorInfo> constructorMap = new();
+
+		internal static ConstructorInfo GetConstructorFor(Type byRefLikeType)
+		{
+			return constructorMap.GetOrAdd(byRefLikeType, static byRefLikeType =>
+			{
+				var type = typeof(ByRefLikeArgument<>).MakeGenericType(byRefLikeType);
+				return type.GetConstructor([ typeof(void*) ])!;
+			});
+		}
+#else
+		private static readonly ConstructorInfo constructor =
+			typeof(ByRefLikeArgument).GetConstructor([ typeof(void*) ])!;
+
+		internal static ConstructorInfo GetConstructorFor(Type byRefLikeType)
+		{
+			return constructor;
+		}
+#endif
+
 		protected void* ptr;
 
 		/// <summary>
