@@ -30,26 +30,38 @@ namespace Castle.DynamicProxy
 	/// </summary>
 	public unsafe class ByRefLikeArgument
 	{
-#if FEATURE_ALLOWS_REF_STRUCT_ANTI_CONSTRAINT
 		private static readonly ConcurrentDictionary<Type, ConstructorInfo> constructorMap = new();
 
 		internal static ConstructorInfo GetConstructorFor(Type byRefLikeType)
 		{
 			return constructorMap.GetOrAdd(byRefLikeType, static byRefLikeType =>
 			{
-				var type = typeof(ByRefLikeArgument<>).MakeGenericType(byRefLikeType);
+				Type? type = null;
+
+				if  (byRefLikeType.IsConstructedGenericType)
+				{
+					var typeDef = byRefLikeType.GetGenericTypeDefinition();
+					if (typeDef == typeof(Span<>))
+					{
+						var typeArg = byRefLikeType.GetGenericArguments()[0];
+						type = typeof(SpanArgument<>).MakeGenericType(typeArg);
+					}
+					else if (typeDef == typeof(ReadOnlySpan<>))
+					{
+						var typeArg = byRefLikeType.GetGenericArguments()[0];
+						type = typeof(ReadOnlySpanArgument<>).MakeGenericType(typeArg);
+					}
+				}
+
+#if FEATURE_ALLOWS_REF_STRUCT_ANTI_CONSTRAINT
+				type ??= typeof(ByRefLikeArgument<>).MakeGenericType(byRefLikeType);
+#else
+				type ??= typeof(ByRefLikeArgument);
+#endif
+
 				return type.GetConstructor([ typeof(void*) ])!;
 			});
 		}
-#else
-		private static readonly ConstructorInfo constructor =
-			typeof(ByRefLikeArgument).GetConstructor([ typeof(void*) ])!;
-
-		internal static ConstructorInfo GetConstructorFor(Type byRefLikeType)
-		{
-			return constructor;
-		}
-#endif
 
 		protected void* ptr;
 
@@ -103,6 +115,81 @@ namespace Castle.DynamicProxy
 
 #endif
 
+	// The following two specializations for `Span<T>` and `ReadOnlySpan<T>` are provided
+	// because those two types have become so common in the Framework Class Library, and
+	// dealing with them through unmanaged pointers all the time would be cumbersome.
+	// We can provide a type-safe wrapper for them even on .NET 8. And we keep the types
+	// for .NET 9 (even though they're redundant) so downstream code can expect to always
+	// encounter a `[ReadOnly]SpanArgument<>` for `[ReadOnly]Span<>` regardless of
+	// whether they target .NET 8 or 9.
+
+	/// <summary>
+	///   Wraps a <see cref="ReadOnlySpan{T}"/> method argument
+	///   such that it can be placed in the <see cref="IInvocation.Arguments"/> array during interception.
+	/// </summary>
+	public unsafe class ReadOnlySpanArgument<T>
+#if FEATURE_ALLOWS_REF_STRUCT_ANTI_CONSTRAINT
+		: ByRefLikeArgument<ReadOnlySpan<T>>
+#else
+		: ByRefLikeArgument
+#endif
+	{
+		/// <summary>
+		///   Do not use this! Only generated proxies should construct instances this type.
+		/// </summary>
+		[CLSCompliant(false)]
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public ReadOnlySpanArgument(void* ptr)
+			: base(ptr)
+		{
+		}
+
+#if !FEATURE_ALLOWS_REF_STRUCT_ANTI_CONSTRAINT
+		/// <summary>
+		///   Gets the byref-like (<c>ref struct</c>) argument.
+		/// </summary>
+		public ref ReadOnlySpan<T> Get()
+		{
+#pragma warning disable CS8500
+			return ref *(ReadOnlySpan<T>*)ptr;
+#pragma warning restore CS8500
+		}
+#endif
+	}
+
+	/// <summary>
+	///   Wraps a <see cref="Span{T}"/> method argument
+	///   such that it can be placed in the <see cref="IInvocation.Arguments"/> array during interception.
+	/// </summary>
+	public unsafe class SpanArgument<T>
+#if FEATURE_ALLOWS_REF_STRUCT_ANTI_CONSTRAINT
+		: ByRefLikeArgument<Span<T>>
+#else
+		: ByRefLikeArgument
+#endif
+	{
+		/// <summary>
+		///   Do not use this! Only generated proxies should construct instances this type.
+		/// </summary>
+		[CLSCompliant(false)]
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public SpanArgument(void* ptr)
+			: base(ptr)
+		{
+		}
+
+#if !FEATURE_ALLOWS_REF_STRUCT_ANTI_CONSTRAINT
+		/// <summary>
+		///   Gets the byref-like (<c>ref struct</c>) argument.
+		/// </summary>
+		public ref Span<T> Get()
+		{
+#pragma warning disable CS8500
+			return ref *(Span<T>*)ptr;
+#pragma warning restore CS8500
+		}
+#endif
+	}
 }
 
 #endif

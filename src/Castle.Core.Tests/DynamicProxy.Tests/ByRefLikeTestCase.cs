@@ -206,6 +206,10 @@ namespace Castle.DynamicProxy.Tests
 			var arg = "original".AsSpan();
 			proxy.Method(arg);
 			Assert.IsInstanceOf<ByRefLikeArgument>(interceptor.ObservedArg);
+			Assert.IsInstanceOf<ReadOnlySpanArgument<char>>(interceptor.ObservedArg);
+#if FEATURE_ALLOWS_REF_STRUCT_ANTI_CONSTRAINT
+			Assert.IsInstanceOf<ByRefLikeArgument<ReadOnlySpan<char>>>(interceptor.ObservedArg);
+#endif
 		}
 
 		[Test]
@@ -244,6 +248,10 @@ namespace Castle.DynamicProxy.Tests
 			var arg = "original".AsSpan();
 			proxy.Method(in arg);
 			Assert.IsInstanceOf<ByRefLikeArgument>(interceptor.ObservedArg);
+			Assert.IsInstanceOf<ReadOnlySpanArgument<char>>(interceptor.ObservedArg);
+#if FEATURE_ALLOWS_REF_STRUCT_ANTI_CONSTRAINT
+			Assert.IsInstanceOf<ByRefLikeArgument<ReadOnlySpan<char>>>(interceptor.ObservedArg);
+#endif
 		}
 
 		[Test]
@@ -282,6 +290,10 @@ namespace Castle.DynamicProxy.Tests
 			var arg = "original".AsSpan();
 			proxy.Method(ref arg);
 			Assert.IsInstanceOf<ByRefLikeArgument>(interceptor.ObservedArg);
+			Assert.IsInstanceOf<ReadOnlySpanArgument<char>>(interceptor.ObservedArg);
+#if FEATURE_ALLOWS_REF_STRUCT_ANTI_CONSTRAINT
+			Assert.IsInstanceOf<ByRefLikeArgument<ReadOnlySpan<char>>>(interceptor.ObservedArg);
+#endif
 		}
 
 		[Test]
@@ -323,6 +335,10 @@ namespace Castle.DynamicProxy.Tests
 			var arg = "original".AsSpan();
 			proxy.Method(out arg);
 			Assert.IsInstanceOf<ByRefLikeArgument>(interceptor.ObservedArg);
+			Assert.IsInstanceOf<ReadOnlySpanArgument<char>>(interceptor.ObservedArg);
+#if FEATURE_ALLOWS_REF_STRUCT_ANTI_CONSTRAINT
+			Assert.IsInstanceOf<ByRefLikeArgument<ReadOnlySpan<char>>>(interceptor.ObservedArg);
+#endif
 		}
 
 		// Should theoretically be as above (read comment there), but isn't. To be revisited later!
