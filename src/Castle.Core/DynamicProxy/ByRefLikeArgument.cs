@@ -28,7 +28,7 @@ namespace Castle.DynamicProxy
 	///   Wraps a byref-like (<c>ref struct</c>) method argument
 	///   such that it can be placed in the <see cref="IInvocation.Arguments"/> array during interception.
 	/// </summary>
-	public unsafe class ByRefLikeArgument
+	public unsafe class ByRefLikeArgument : IDisposable
 	{
 		private static readonly ConcurrentDictionary<Type, ConstructorInfo> constructorMap = new();
 
@@ -95,11 +95,30 @@ namespace Castle.DynamicProxy
 		///     will cause undefined behavior, or an <see cref="AccessViolationException"/> at best.
 		///   </para>
 		/// </remarks>
+		/// <exception cref="ObjectDisposedException" />
 		[CLSCompliant(false)]
 		[EditorBrowsable(EditorBrowsableState.Advanced)]
 		public void* GetPointer()
 		{
+			EnsureNotDisposed();
+
 			return ptr;
+		}
+
+		public void Dispose()
+		{
+			ptr = null;
+		}
+
+		protected void EnsureNotDisposed()
+		{
+			if (ptr == null)
+			{
+				throw new ObjectDisposedException(
+					message: "Byref-like method arguments are only available during the method call. "
+					       + "This reference has been invalidated to prevent potentially unsafe access.",
+					objectName: null);
+			}
 		}
 	}
 
@@ -124,8 +143,11 @@ namespace Castle.DynamicProxy
 		/// <summary>
 		///   Gets the byref-like (<c>ref struct</c>) argument.
 		/// </summary>
+		/// <exception cref="ObjectDisposedException" />
 		public ref TByRefLike Get()
 		{
+			EnsureNotDisposed();
+
 			return ref Unsafe.AsRef<TByRefLike>(ptr);
 		}
 	}
@@ -165,8 +187,11 @@ namespace Castle.DynamicProxy
 		/// <summary>
 		///   Gets the byref-like (<c>ref struct</c>) argument.
 		/// </summary>
+		/// <exception cref="ObjectDisposedException" />
 		public ref ReadOnlySpan<T> Get()
 		{
+			EnsureNotDisposed();
+
 #pragma warning disable CS8500
 			return ref *(ReadOnlySpan<T>*)ptr;
 #pragma warning restore CS8500
@@ -199,8 +224,11 @@ namespace Castle.DynamicProxy
 		/// <summary>
 		///   Gets the byref-like (<c>ref struct</c>) argument.
 		/// </summary>
+		/// <exception cref="ObjectDisposedException" />
 		public ref Span<T> Get()
 		{
+			EnsureNotDisposed();
+
 #pragma warning disable CS8500
 			return ref *(Span<T>*)ptr;
 #pragma warning restore CS8500
