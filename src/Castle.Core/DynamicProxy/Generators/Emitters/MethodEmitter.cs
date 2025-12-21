@@ -124,9 +124,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			ArgumentsUtil.InitializeArgumentsByPosition(arguments, MethodBuilder.IsStatic);
 		}
 
-		public virtual void EnsureValidCodeBlock()
+		public virtual void Generate()
 		{
-			if (ImplementedByRuntime == false && CodeBuilder.IsEmpty)
+			if (ImplementedByRuntime)
+			{
+				return;
+			}
+
+			if (CodeBuilder.IsEmpty)
 			{
 				if (ReturnType == typeof(void))
 				{
@@ -136,16 +141,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				{
 					CodeBuilder.AddStatement(new ReturnStatement(new DefaultValueExpression(ReturnType)));
 				}
-			}
-		}
-
-		public virtual void Generate()
-		{
-			EnsureValidCodeBlock();
-
-			if (ImplementedByRuntime)
-			{
-				return;
 			}
 
 			codeBuilder.Generate(builder.GetILGenerator());

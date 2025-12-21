@@ -72,22 +72,21 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public virtual void EnsureValidCodeBlock()
-		{
-			if (ImplementedByRuntime == false && CodeBuilder.IsEmpty)
-			{
-				CodeBuilder.AddStatement(new ConstructorInvocationStatement(mainType.BaseType));
-				CodeBuilder.AddStatement(new ReturnStatement());
-			}
-		}
-
 		public virtual void Generate()
 		{
-			EnsureValidCodeBlock();
-
 			if (ImplementedByRuntime)
 			{
 				return;
+			}
+
+			if (CodeBuilder.IsEmpty)
+			{
+				if (builder.IsStatic == false)
+				{
+					CodeBuilder.AddStatement(new ConstructorInvocationStatement(mainType.BaseType));
+				}
+
+				CodeBuilder.AddStatement(new ReturnStatement());
 			}
 
 			CodeBuilder.Generate(builder.GetILGenerator());

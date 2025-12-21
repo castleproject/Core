@@ -73,14 +73,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return removeMethod;
 		}
 
-		public void EnsureValidCodeBlock()
-		{
-		}
-
 		public void Generate()
 		{
-			EnsureValidCodeBlock();
-
 			if (addMethod == null)
 			{
 				throw new InvalidOperationException("Event add method was not created");

@@ -85,14 +85,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			builder.SetCustomAttribute(attribute);
 		}
 
-		public void EnsureValidCodeBlock()
-		{
-		}
-
 		public void Generate()
 		{
-			EnsureValidCodeBlock();
-
 			if (setMethod != null)
 			{
 				setMethod.Generate();

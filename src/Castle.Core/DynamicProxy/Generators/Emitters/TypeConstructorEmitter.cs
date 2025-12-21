@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,21 +14,11 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters
 {
-	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-
 	internal class TypeConstructorEmitter : ConstructorEmitter
 	{
 		internal TypeConstructorEmitter(AbstractTypeEmitter mainType)
 			: base(mainType, mainType.TypeBuilder.DefineTypeInitializer())
 		{
-		}
-
-		public override void EnsureValidCodeBlock()
-		{
-			if (CodeBuilder.IsEmpty)
-			{
-				CodeBuilder.AddStatement(new ReturnStatement());
-			}
 		}
 	}
 }
