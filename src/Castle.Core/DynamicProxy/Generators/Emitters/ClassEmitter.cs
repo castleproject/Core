@@ -154,15 +154,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public Type BuildType()
-		{
-			EnsureBuildersAreInAValidState();
-
-			var type = CreateType(typeBuilder);
-
-			return type;
-		}
-
 		public void CopyGenericParametersFromMethod(MethodInfo methodToCopyGenericsFrom)
 		{
 			// big sanity check
@@ -387,12 +378,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			genericTypeParams = genericTypeParameterBuilders;
 		}
 
-		public Type CreateType(TypeBuilder type)
-		{
-			return type.CreateTypeInfo();
-		}
-
-		protected void EnsureBuildersAreInAValidState()
+		public Type BuildType()
 		{
 			if (constructors.Count == 0)
 			{
@@ -415,6 +401,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				builder.Generate();
 			}
+
+			var type = typeBuilder.CreateTypeInfo();
+
+			return type;
 		}
 	}
 }
