@@ -26,7 +26,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using Castle.DynamicProxy.Internal;
 
 	[DebuggerDisplay("{builder.Name}")]
-	internal class MethodEmitter : IMemberEmitter
+	internal class MethodEmitter
 	{
 		private readonly MethodBuilder builder;
 		private readonly CodeBuilder codeBuilder;
