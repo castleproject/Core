@@ -36,7 +36,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private readonly List<MethodEmitter> methods;
 
-		private readonly List<NestedClassEmitter> nested;
 		private readonly List<PropertyEmitter> properties;
 		private readonly TypeBuilder typeBuilder;
 
@@ -45,7 +44,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		protected AbstractTypeEmitter(TypeBuilder typeBuilder)
 		{
 			this.typeBuilder = typeBuilder;
-			nested = new List<NestedClassEmitter>();
 			methods = new List<MethodEmitter>();
 			constructors = new List<ConstructorEmitter>();
 			properties = new List<PropertyEmitter>();
@@ -84,21 +82,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public void AddNestedClass(NestedClassEmitter nestedClass)
-		{
-			nested.Add(nestedClass);
-		}
-
 		public virtual Type BuildType()
 		{
 			EnsureBuildersAreInAValidState();
 
 			var type = CreateType(typeBuilder);
-
-			foreach (var builder in nested)
-			{
-				builder.BuildType();
-			}
 
 			return type;
 		}

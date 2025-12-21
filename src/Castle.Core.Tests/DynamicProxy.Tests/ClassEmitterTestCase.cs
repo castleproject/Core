@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -156,23 +156,6 @@ namespace Castle.DynamicProxy.Tests
 			Assert.Throws<InvalidOperationException>(delegate {
 				emitter.CreateConstructor();
 			});
-		}
-
-		[Test]
-		public void NestedInterface()
-		{
-			ClassEmitter outerEmitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IOuter", null, Type.EmptyTypes, 
-				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
-			NestedClassEmitter innerEmitter = new NestedClassEmitter(outerEmitter, "IInner", 
-				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.NestedPublic, null, Type.EmptyTypes);
-			innerEmitter.CreateMethod("MyMethod", MethodAttributes.Public | MethodAttributes.Abstract | MethodAttributes.Virtual,
-			                          typeof(void), Type.EmptyTypes);
-			Type inner = innerEmitter.BuildType();
-			Type outer = outerEmitter.BuildType();
-			Assert.IsTrue(inner.IsInterface);
-			MethodInfo method = inner.GetMethod("MyMethod");
-			Assert.IsNotNull(method);
-			Assert.AreSame(inner, outer.GetNestedType("IInner", BindingFlags.Public));
 		}
 	}
 }
