@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,20 +20,20 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	internal class ConstructorEmitter : IMemberEmitter
+	internal class ConstructorEmitter
 	{
 		private readonly ConstructorBuilder builder;
 		private readonly CodeBuilder codeBuilder;
-		private readonly AbstractTypeEmitter mainType;
+		private readonly ClassEmitter mainType;
 
-		protected internal ConstructorEmitter(AbstractTypeEmitter mainType, ConstructorBuilder builder)
+		protected internal ConstructorEmitter(ClassEmitter mainType, ConstructorBuilder builder)
 		{
 			this.mainType = mainType;
 			this.builder = builder;
 			codeBuilder = new CodeBuilder();
 		}
 
-		internal ConstructorEmitter(AbstractTypeEmitter mainType, params ArgumentReference[] arguments)
+		internal ConstructorEmitter(ClassEmitter mainType, params ArgumentReference[] arguments)
 		{
 			this.mainType = mainType;
 
@@ -53,16 +53,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return builder; }
 		}
 
-		public MemberInfo Member
-		{
-			get { return builder; }
-		}
-
-		public Type ReturnType
-		{
-			get { return typeof(void); }
-		}
-
 		private bool ImplementedByRuntime
 		{
 			get
@@ -72,20 +62,21 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public virtual void EnsureValidCodeBlock()
-		{
-			if (ImplementedByRuntime == false && CodeBuilder.IsEmpty)
-			{
-				CodeBuilder.AddStatement(new ConstructorInvocationStatement(mainType.BaseType));
-				CodeBuilder.AddStatement(new ReturnStatement());
-			}
-		}
-
 		public virtual void Generate()
 		{
 			if (ImplementedByRuntime)
 			{
 				return;
+			}
+
+			if (CodeBuilder.IsEmpty)
+			{
+				if (builder.IsStatic == false)
+				{
+					CodeBuilder.AddStatement(new ConstructorInvocationStatement(mainType.BaseType));
+				}
+
+				CodeBuilder.AddStatement(new ReturnStatement());
 			}
 
 			CodeBuilder.Generate(builder.GetILGenerator());

@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,14 +18,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class PropertyEmitter : IMemberEmitter
+	internal class PropertyEmitter
 	{
 		private readonly PropertyBuilder builder;
-		private readonly AbstractTypeEmitter parentTypeEmitter;
+		private readonly ClassEmitter parentTypeEmitter;
 		private MethodEmitter getMethod;
 		private MethodEmitter setMethod;
 
-		public PropertyEmitter(AbstractTypeEmitter parentTypeEmitter, string name, PropertyAttributes attributes,
+		public PropertyEmitter(ClassEmitter parentTypeEmitter, string name, PropertyAttributes attributes,
 		                       Type propertyType, Type[] arguments)
 		{
 			this.parentTypeEmitter = parentTypeEmitter;
@@ -33,16 +33,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			builder = parentTypeEmitter.TypeBuilder.DefineProperty(
 				name, attributes, CallingConventions.HasThis, propertyType,
 				null, null, arguments, null, null);
-		}
-
-		public MemberInfo Member
-		{
-			get { return null; }
-		}
-
-		public Type ReturnType
-		{
-			get { return builder.PropertyType; }
 		}
 
 		public MethodEmitter CreateGetMethod(string name, MethodAttributes attrs, MethodInfo methodToOverride,
@@ -83,19 +73,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public void DefineCustomAttribute(CustomAttributeBuilder attribute)
 		{
 			builder.SetCustomAttribute(attribute);
-		}
-
-		public void EnsureValidCodeBlock()
-		{
-			if (setMethod != null)
-			{
-				setMethod.EnsureValidCodeBlock();
-			}
-
-			if (getMethod != null)
-			{
-				getMethod.EnsureValidCodeBlock();
-			}
 		}
 
 		public void Generate()

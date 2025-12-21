@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ namespace Castle.DynamicProxy.Contributors
 			this.namingScope = namingScope;
 		}
 
-		public ConstructorEmitter CreateConstructor(ArgumentReference[] baseCtorArguments, AbstractTypeEmitter invocation)
+		public ConstructorEmitter CreateConstructor(ArgumentReference[] baseCtorArguments, ClassEmitter invocation)
 		{
 			var arguments = GetArguments(baseCtorArguments);
 			var constructor = invocation.CreateConstructor(arguments);
@@ -55,7 +55,7 @@ namespace Castle.DynamicProxy.Contributors
 			return delegateType.GetMethod("Invoke");
 		}
 
-		public MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, IExpression[] args,
+		public MethodInvocationExpression GetCallbackMethodInvocation(ClassEmitter invocation, IExpression[] args,
 		                                                              Reference targetField,
 		                                                              MethodEmitter invokeMethodOnTarget)
 		{

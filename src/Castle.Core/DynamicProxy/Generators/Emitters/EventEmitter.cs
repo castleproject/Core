@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,15 +18,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	using System.Reflection;
 	using System.Reflection.Emit;
 
-	internal class EventEmitter : IMemberEmitter
+	internal class EventEmitter
 	{
 		private readonly EventBuilder eventBuilder;
-		private readonly Type type;
-		private readonly AbstractTypeEmitter typeEmitter;
+		private readonly ClassEmitter typeEmitter;
 		private MethodEmitter addMethod;
 		private MethodEmitter removeMethod;
 
-		public EventEmitter(AbstractTypeEmitter typeEmitter, string name, EventAttributes attributes, Type type)
+		public EventEmitter(ClassEmitter typeEmitter, string name, EventAttributes attributes, Type type)
 		{
 			if (name == null)
 			{
@@ -37,18 +36,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				throw new ArgumentNullException(nameof(type));
 			}
 			this.typeEmitter = typeEmitter;
-			this.type = type;
 			eventBuilder = typeEmitter.TypeBuilder.DefineEvent(name, attributes, type);
-		}
-
-		public MemberInfo Member
-		{
-			get { return null; }
-		}
-
-		public Type ReturnType
-		{
-			get { return type; }
 		}
 
 		public MethodEmitter CreateAddMethod(string addMethodName, MethodAttributes attributes, MethodInfo methodToOverride)
@@ -71,12 +59,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 			removeMethod = new MethodEmitter(typeEmitter, removeMethodName, attributes, methodToOverride);
 			return removeMethod;
-		}
-
-		public void EnsureValidCodeBlock()
-		{
-			addMethod.EnsureValidCodeBlock();
-			removeMethod.EnsureValidCodeBlock();
 		}
 
 		public void Generate()

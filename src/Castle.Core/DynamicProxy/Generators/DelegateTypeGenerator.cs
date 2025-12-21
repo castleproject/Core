@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
 
-	internal class DelegateTypeGenerator : IGenerator<AbstractTypeEmitter>
+	internal class DelegateTypeGenerator : IGenerator<ClassEmitter>
 	{
 		private const TypeAttributes DelegateFlags = TypeAttributes.Class |
 		                                             TypeAttributes.Public |
@@ -38,7 +38,7 @@ namespace Castle.DynamicProxy.Generators
 			this.targetType = targetType;
 		}
 
-		public AbstractTypeEmitter Generate(ClassEmitter @class, INamingScope namingScope)
+		public ClassEmitter Generate(ClassEmitter @class, INamingScope namingScope)
 		{
 			var emitter = GetEmitter(@class, namingScope);
 			BuildConstructor(emitter);
@@ -46,14 +46,14 @@ namespace Castle.DynamicProxy.Generators
 			return emitter;
 		}
 
-		private void BuildConstructor(AbstractTypeEmitter emitter)
+		private void BuildConstructor(ClassEmitter emitter)
 		{
 			var constructor = emitter.CreateConstructor(new ArgumentReference(typeof(object)),
 			                                            new ArgumentReference(typeof(IntPtr)));
 			constructor.ConstructorBuilder.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
 		}
 
-		private void BuildInvokeMethod(AbstractTypeEmitter @delegate)
+		private void BuildInvokeMethod(ClassEmitter @delegate)
 		{
 			var paramTypes = GetParamTypes(@delegate);
 			var invoke = @delegate.CreateMethod("Invoke",
@@ -66,7 +66,7 @@ namespace Castle.DynamicProxy.Generators
 			invoke.MethodBuilder.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
 		}
 
-		private AbstractTypeEmitter GetEmitter(ClassEmitter @class, INamingScope namingScope)
+		private ClassEmitter GetEmitter(ClassEmitter @class, INamingScope namingScope)
 		{
 			var methodInfo = method.MethodOnTarget;
 			var suggestedName = string.Format("Castle.Proxies.Delegates.{0}_{1}",
@@ -84,7 +84,7 @@ namespace Castle.DynamicProxy.Generators
 			return @delegate;
 		}
 
-		private Type[] GetParamTypes(AbstractTypeEmitter @delegate)
+		private Type[] GetParamTypes(ClassEmitter @delegate)
 		{
 			var parameters = method.MethodOnTarget.GetParameters();
 			if (@delegate.TypeBuilder.IsGenericType)

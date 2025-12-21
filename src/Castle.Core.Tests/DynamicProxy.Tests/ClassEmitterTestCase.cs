@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -105,74 +105,6 @@ namespace Castle.DynamicProxy.Tests
 			FieldInfo field = t.GetField("myField", BindingFlags.NonPublic | BindingFlags.Static);
 			Assert.IsNotNull(field);
 			Assert.AreEqual(FieldAttributes.Static | FieldAttributes.FamANDAssem | FieldAttributes.InitOnly, field.Attributes);
-		}
-
-		[Test]
-		public void UsingClassEmitterForInterfaces()
-		{
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes, 
-				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
-			emitter.CreateMethod("MyMethod", MethodAttributes.Public | MethodAttributes.Abstract | MethodAttributes.Virtual,
-			                     typeof(void), Type.EmptyTypes);
-			Type t = emitter.BuildType();
-			Assert.IsTrue(t.IsInterface);
-			MethodInfo method = t.GetMethod("MyMethod");
-			Assert.IsNotNull(method);
-		}
-
-		[Test]
-		public void NoBaseTypeForInterfaces()
-		{
-			DisableVerification();
-			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
-				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
-
-			Assert.Throws<InvalidOperationException>(delegate {
-#pragma warning disable 219
-				Type t = emitter.BaseType;
-#pragma warning restore 219
-			});
-		}
-
-		[Test]
-		public void NoDefaultCtorForInterfaces()
-		{
-			DisableVerification();
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
-				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
-
-			Assert.Throws<InvalidOperationException>(delegate {
-				emitter.CreateDefaultConstructor();
-			});
-		}
-
-		[Test]
-		public void NoCustomCtorForInterfaces()
-		{
-			DisableVerification();
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
-				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
-
-			Assert.Throws<InvalidOperationException>(delegate {
-				emitter.CreateConstructor();
-			});
-		}
-
-		[Test]
-		public void NestedInterface()
-		{
-			ClassEmitter outerEmitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IOuter", null, Type.EmptyTypes, 
-				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
-			NestedClassEmitter innerEmitter = new NestedClassEmitter(outerEmitter, "IInner", 
-				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.NestedPublic, null, Type.EmptyTypes);
-			innerEmitter.CreateMethod("MyMethod", MethodAttributes.Public | MethodAttributes.Abstract | MethodAttributes.Virtual,
-			                          typeof(void), Type.EmptyTypes);
-			Type inner = innerEmitter.BuildType();
-			Type outer = outerEmitter.BuildType();
-			Assert.IsTrue(inner.IsInterface);
-			MethodInfo method = inner.GetMethod("MyMethod");
-			Assert.IsNotNull(method);
-			Assert.AreSame(inner, outer.GetNestedType("IInner", BindingFlags.Public));
 		}
 	}
 }
