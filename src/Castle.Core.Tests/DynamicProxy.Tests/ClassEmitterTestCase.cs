@@ -106,56 +106,5 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsNotNull(field);
 			Assert.AreEqual(FieldAttributes.Static | FieldAttributes.FamANDAssem | FieldAttributes.InitOnly, field.Attributes);
 		}
-
-		[Test]
-		public void UsingClassEmitterForInterfaces()
-		{
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes, 
-				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
-			emitter.CreateMethod("MyMethod", MethodAttributes.Public | MethodAttributes.Abstract | MethodAttributes.Virtual,
-			                     typeof(void), Type.EmptyTypes);
-			Type t = emitter.BuildType();
-			Assert.IsTrue(t.IsInterface);
-			MethodInfo method = t.GetMethod("MyMethod");
-			Assert.IsNotNull(method);
-		}
-
-		[Test]
-		public void NoBaseTypeForInterfaces()
-		{
-			DisableVerification();
-			ClassEmitter emitter = new ClassEmitter (generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
-				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
-
-			Assert.Throws<InvalidOperationException>(delegate {
-#pragma warning disable 219
-				Type t = emitter.BaseType;
-#pragma warning restore 219
-			});
-		}
-
-		[Test]
-		public void NoDefaultCtorForInterfaces()
-		{
-			DisableVerification();
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
-				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
-
-			Assert.Throws<InvalidOperationException>(delegate {
-				emitter.CreateDefaultConstructor();
-			});
-		}
-
-		[Test]
-		public void NoCustomCtorForInterfaces()
-		{
-			DisableVerification();
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "IFoo", null, Type.EmptyTypes,
-				TypeAttributes.Interface | TypeAttributes.Abstract | TypeAttributes.Public, false);
-
-			Assert.Throws<InvalidOperationException>(delegate {
-				emitter.CreateConstructor();
-			});
-		}
 	}
 }

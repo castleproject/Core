@@ -21,11 +21,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	internal class PropertyEmitter
 	{
 		private readonly PropertyBuilder builder;
-		private readonly AbstractTypeEmitter parentTypeEmitter;
+		private readonly ClassEmitter parentTypeEmitter;
 		private MethodEmitter getMethod;
 		private MethodEmitter setMethod;
 
-		public PropertyEmitter(AbstractTypeEmitter parentTypeEmitter, string name, PropertyAttributes attributes,
+		public PropertyEmitter(ClassEmitter parentTypeEmitter, string name, PropertyAttributes attributes,
 		                       Type propertyType, Type[] arguments)
 		{
 			this.parentTypeEmitter = parentTypeEmitter;

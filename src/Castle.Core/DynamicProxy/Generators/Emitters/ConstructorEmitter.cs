@@ -24,16 +24,16 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	{
 		private readonly ConstructorBuilder builder;
 		private readonly CodeBuilder codeBuilder;
-		private readonly AbstractTypeEmitter mainType;
+		private readonly ClassEmitter mainType;
 
-		protected internal ConstructorEmitter(AbstractTypeEmitter mainType, ConstructorBuilder builder)
+		protected internal ConstructorEmitter(ClassEmitter mainType, ConstructorBuilder builder)
 		{
 			this.mainType = mainType;
 			this.builder = builder;
 			codeBuilder = new CodeBuilder();
 		}
 
-		internal ConstructorEmitter(AbstractTypeEmitter mainType, params ArgumentReference[] arguments)
+		internal ConstructorEmitter(ClassEmitter mainType, params ArgumentReference[] arguments)
 		{
 			this.mainType = mainType;
 

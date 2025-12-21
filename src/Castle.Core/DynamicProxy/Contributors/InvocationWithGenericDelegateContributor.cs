@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ namespace Castle.DynamicProxy.Contributors
 			this.targetReference = targetReference;
 		}
 
-		public ConstructorEmitter CreateConstructor(ArgumentReference[] baseCtorArguments, AbstractTypeEmitter invocation)
+		public ConstructorEmitter CreateConstructor(ArgumentReference[] baseCtorArguments, ClassEmitter invocation)
 		{
 			return invocation.CreateConstructor(baseCtorArguments);
 		}
@@ -49,7 +49,7 @@ namespace Castle.DynamicProxy.Contributors
 			return delegateType.GetMethod("Invoke");
 		}
 
-		public MethodInvocationExpression GetCallbackMethodInvocation(AbstractTypeEmitter invocation, IExpression[] args,
+		public MethodInvocationExpression GetCallbackMethodInvocation(ClassEmitter invocation, IExpression[] args,
 		                                                              Reference targetField,
 		                                                              MethodEmitter invokeMethodOnTarget)
 		{
@@ -62,7 +62,7 @@ namespace Castle.DynamicProxy.Contributors
 			return arguments;
 		}
 
-		private Reference GetDelegate(AbstractTypeEmitter invocation, MethodEmitter invokeMethodOnTarget)
+		private Reference GetDelegate(ClassEmitter invocation, MethodEmitter invokeMethodOnTarget)
 		{
 			var genericTypeParameters = invocation.GenericTypeParams.AsTypeArray();
 			var closedDelegateType = delegateType.MakeGenericType(genericTypeParameters);

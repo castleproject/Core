@@ -21,11 +21,11 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	internal class EventEmitter
 	{
 		private readonly EventBuilder eventBuilder;
-		private readonly AbstractTypeEmitter typeEmitter;
+		private readonly ClassEmitter typeEmitter;
 		private MethodEmitter addMethod;
 		private MethodEmitter removeMethod;
 
-		public EventEmitter(AbstractTypeEmitter typeEmitter, string name, EventAttributes attributes, Type type)
+		public EventEmitter(ClassEmitter typeEmitter, string name, EventAttributes attributes, Type type)
 		{
 			if (name == null)
 			{
