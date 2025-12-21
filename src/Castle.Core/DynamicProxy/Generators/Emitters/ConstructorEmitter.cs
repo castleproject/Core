@@ -58,11 +58,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return builder; }
 		}
 
-		public Type ReturnType
-		{
-			get { return typeof(void); }
-		}
-
 		private bool ImplementedByRuntime
 		{
 			get

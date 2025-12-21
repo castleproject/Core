@@ -21,7 +21,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	internal class EventEmitter : IMemberEmitter
 	{
 		private readonly EventBuilder eventBuilder;
-		private readonly Type type;
 		private readonly AbstractTypeEmitter typeEmitter;
 		private MethodEmitter addMethod;
 		private MethodEmitter removeMethod;
@@ -37,18 +36,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				throw new ArgumentNullException(nameof(type));
 			}
 			this.typeEmitter = typeEmitter;
-			this.type = type;
 			eventBuilder = typeEmitter.TypeBuilder.DefineEvent(name, attributes, type);
 		}
 
 		public MemberInfo Member
 		{
 			get { return null; }
-		}
-
-		public Type ReturnType
-		{
-			get { return type; }
 		}
 
 		public MethodEmitter CreateAddMethod(string addMethodName, MethodAttributes attributes, MethodInfo methodToOverride)
