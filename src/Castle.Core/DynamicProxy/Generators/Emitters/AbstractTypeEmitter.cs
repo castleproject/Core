@@ -64,7 +64,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 		}
 
-		public TypeConstructorEmitter ClassConstructor { get; private set; }
+		public ConstructorEmitter ClassConstructor { get; private set; }
 
 		public GenericTypeParameterBuilder[] GenericTypeParams
 		{
@@ -212,7 +212,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public ConstructorEmitter CreateTypeConstructor()
 		{
-			var member = new TypeConstructorEmitter(this);
+			var member = new ConstructorEmitter(this, TypeBuilder.DefineTypeInitializer());
 			constructors.Add(member);
 			ClassConstructor = member;
 			return member;
