@@ -53,11 +53,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return builder; }
 		}
 
-		public MemberInfo Member
-		{
-			get { return builder; }
-		}
-
 		private bool ImplementedByRuntime
 		{
 			get

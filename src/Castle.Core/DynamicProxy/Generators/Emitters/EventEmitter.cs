@@ -39,11 +39,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			eventBuilder = typeEmitter.TypeBuilder.DefineEvent(name, attributes, type);
 		}
 
-		public MemberInfo Member
-		{
-			get { return null; }
-		}
-
 		public MethodEmitter CreateAddMethod(string addMethodName, MethodAttributes attributes, MethodInfo methodToOverride)
 		{
 			if (addMethod != null)

@@ -35,11 +35,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 				null, null, arguments, null, null);
 		}
 
-		public MemberInfo Member
-		{
-			get { return null; }
-		}
-
 		public MethodEmitter CreateGetMethod(string name, MethodAttributes attrs, MethodInfo methodToOverride,
 		                                     params Type[] parameters)
 		{

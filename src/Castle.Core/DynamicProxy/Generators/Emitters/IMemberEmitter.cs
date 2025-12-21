@@ -14,12 +14,8 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters
 {
-	using System.Reflection;
-
 	internal interface IMemberEmitter
 	{
-		MemberInfo Member { get; }
-
 		void Generate();
 	}
 }

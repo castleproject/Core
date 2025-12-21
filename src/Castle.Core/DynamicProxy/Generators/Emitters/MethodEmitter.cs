@@ -93,11 +93,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			get { return builder; }
 		}
 
-		public MemberInfo Member
-		{
-			get { return builder; }
-		}
-
 		public Type ReturnType
 		{
 			get { return builder.ReturnType; }
