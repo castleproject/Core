@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if !NET9_0_OR_GREATER
+
 namespace Castle.Core.Logging.Tests
 {
 	using System;
@@ -101,3 +103,5 @@ namespace Castle.Core.Logging.Tests
 		}
 	}
 }
+
+#endif

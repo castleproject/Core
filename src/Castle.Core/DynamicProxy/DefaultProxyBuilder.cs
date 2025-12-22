@@ -20,6 +20,11 @@ namespace Castle.DynamicProxy
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
+#if NET9_0_OR_GREATER
+	using System.IO;
+	using System.Reflection.Emit;
+	using System.Runtime.Loader;
+#endif
 
 	using Castle.Core.Internal;
 	using Castle.Core.Logging;
@@ -30,8 +35,13 @@ namespace Castle.DynamicProxy
 	/// </summary>
 	public class DefaultProxyBuilder : IProxyBuilder
 	{
-		private readonly ModuleScope scope;
+		private ModuleScope scope;
 		private ILogger logger = NullLogger.Instance;
+
+#if NET9_0_OR_GREATER
+		protected ModuleScope lastScope;
+		protected MemoryStream lastAssemblyGenerated;
+#endif
 
 		/// <summary>
 		///   Initializes a new instance of the <see cref = "DefaultProxyBuilder" /> class with new <see cref = "ModuleScope" />.
@@ -68,7 +78,7 @@ namespace Castle.DynamicProxy
 			AssertValidMixins(options, nameof(options));
 
 			var generator = new ClassProxyGenerator(scope, classToProxy, additionalInterfacesToProxy, options) { Logger = logger };
-			return generator.GetProxyType();
+			return ToInstantiableType(generator.GetProxyType(), generator);
 		}
 
 		public Type CreateClassProxyTypeWithTarget(Type classToProxy, Type[]? additionalInterfacesToProxy,
@@ -80,7 +90,7 @@ namespace Castle.DynamicProxy
 
 			var generator = new ClassProxyWithTargetGenerator(scope, classToProxy, additionalInterfacesToProxy, options)
 			{ Logger = logger };
-			return generator.GetProxyType();
+			return ToInstantiableType(generator.GetProxyType(), generator);
 		}
 
 		public Type CreateInterfaceProxyTypeWithTarget(Type interfaceToProxy, Type[]? additionalInterfacesToProxy,
@@ -92,7 +102,7 @@ namespace Castle.DynamicProxy
 			AssertValidMixins(options, nameof(options));
 
 			var generator = new InterfaceProxyWithTargetGenerator(scope, interfaceToProxy, additionalInterfacesToProxy, targetType, options) { Logger = logger };
-			return generator.GetProxyType();
+			return ToInstantiableType(generator.GetProxyType(), generator);
 		}
 
 		public Type CreateInterfaceProxyTypeWithTargetInterface(Type interfaceToProxy, Type[]? additionalInterfacesToProxy,
@@ -103,7 +113,7 @@ namespace Castle.DynamicProxy
 			AssertValidMixins(options, nameof(options));
 
 			var generator = new InterfaceProxyWithTargetInterfaceGenerator(scope, interfaceToProxy, additionalInterfacesToProxy, interfaceToProxy, options) { Logger = logger };
-			return generator.GetProxyType();
+			return ToInstantiableType(generator.GetProxyType(), generator);
 		}
 
 		public Type CreateInterfaceProxyTypeWithoutTarget(Type interfaceToProxy, Type[]? additionalInterfacesToProxy,
@@ -114,7 +124,28 @@ namespace Castle.DynamicProxy
 			AssertValidMixins(options, nameof(options));
 
 			var generator = new InterfaceProxyWithoutTargetGenerator(scope, interfaceToProxy, additionalInterfacesToProxy, typeof(object), options) { Logger = logger };
-			return generator.GetProxyType();
+			return ToInstantiableType(generator.GetProxyType(), generator);
+		}
+
+		private Type ToInstantiableType(Type type, BaseProxyGenerator generator)
+		{
+#if NET9_0_OR_GREATER
+			if (type.Assembly is PersistedAssemblyBuilder persistedAssemblyBuilder)
+			{
+				lastAssemblyGenerated?.Dispose();
+				var stream = new MemoryStream();
+				persistedAssemblyBuilder.Save(stream);
+				stream.Seek(0, SeekOrigin.Begin);
+				var assembly = AssemblyLoadContext.Default.LoadFromStream(stream);
+				type = assembly.GetType(type.FullName!)!;
+				lastAssemblyGenerated = stream;
+				lastScope = scope;
+				scope = scope.Recycle();
+			}
+
+			generator.InitializeStaticFields(type);
+#endif
+			return type;
 		}
 
 		private void AssertValidMixins(ProxyGenerationOptions options, string paramName)
