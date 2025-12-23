@@ -129,6 +129,26 @@ namespace Castle.DynamicProxy
 			finally
 			{
 				currentInterceptorIndex--;
+
+#if FEATURE_BYREFLIKE
+				if (currentInterceptorIndex < 0)
+				{
+					// TODO: This will require further optimization;
+					// we should not iterate through the arguments array on a hot code path!
+					for (int i = 0; i < arguments.Length; ++i)
+					{
+						if (arguments[i] is ByRefLikeArgument byRefLikeArg)
+						{
+							// Invalidate the `ByRefLikeArgument` in case someone copied it away
+							// (i. e. let it escape the lifetime of the invocation and its arguments on the stack):
+							byRefLikeArg.Dispose();
+
+							// Reset the argument so the `ByRefLikeArgument` becomes eligible for GC sooner:
+							arguments[i] = null;
+						}
+					}
+				}
+#endif
 			}
 		}
 
