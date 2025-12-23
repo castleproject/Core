@@ -11,6 +11,7 @@ Enhancements:
 Bugfixes:
 - `InvalidProgramException` when proxying `MemoryStream` with .NET 7 (@stakx, #651)
 - `invocation.MethodInvocationTarget` throws `ArgumentNullException` for default interface method (@stakx, #684)
+- `DynamicProxyException` ("duplicate element") when type to proxy contains members whose names differ only in case (@stakx, #691)
 
 Deprecations:
 - .NET Core 2.1, .NET Core 3.1, .NET 6, and mono tests
