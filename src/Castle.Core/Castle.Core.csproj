@@ -34,11 +34,6 @@
 
 	<ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
 		<PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
-		<PackageReference Include="System.Diagnostics.EventLog" Version="8.0.2" />
-	</ItemGroup>
-	
-	<ItemGroup Condition="'$(TargetFramework)'=='net8.0'">
-		<PackageReference Include="System.Diagnostics.EventLog" Version="8.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>

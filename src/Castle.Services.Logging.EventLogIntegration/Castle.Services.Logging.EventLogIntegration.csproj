@@ -7,33 +7,29 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<PackageId>Castle.Core-NLog</PackageId>
+		<PackageId>Castle.Core-DiagnosticsLogger</PackageId>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageOutputPath>../../build/</PackageOutputPath>
-		<AssemblyName>Castle.Services.Logging.NLogIntegration</AssemblyName>
-		<RootNamespace>Castle.Services.Logging.NLogIntegration</RootNamespace>
-		<AssemblyTitle>Castle NLog integration</AssemblyTitle>
-		<Description>Castle NLog integration, flexible and free open-source logging for .NET</Description>
+		<AssemblyName>Castle.Services.Logging.EventLogIntegration</AssemblyName>
+		<RootNamespace>Castle.Services.Logging</RootNamespace>
+		<AssemblyTitle>Castle.Services.Logging.EventLogIntegration</AssemblyTitle>
+		<Description>Castle Services DiagnosticsLogger for Windows EventLog</Description>
 		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
 		<SignAssembly>True</SignAssembly>
 		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
-		<PackageTags>castle logging NLog</PackageTags>
+		<PackageTags>castle logging eventlog</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<Folder Include="Properties\" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="NLog" Version="4.7.15" />
+	<ItemGroup Condition=" '$(TargetFrameworkIdentifier)' != '.NETFramework' ">
+		<PackageReference Include="System.Diagnostics.EventLog" Version="8.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Castle.Core\Castle.Core.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Include="..\..\buildscripts\CommonAssemblyInfo.cs" />
 	</ItemGroup>
 
 </Project>
