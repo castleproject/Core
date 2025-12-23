@@ -145,7 +145,11 @@ namespace Castle.DynamicProxy.Generators
 		protected virtual InterfaceProxyWithoutTargetContributor GetContributorForAdditionalInterfaces(
 			INamingScope namingScope)
 		{
-			return new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance) { Logger = Logger };
+			// this is explained in `InterfaceProxyWithoutTargetGenerator.GetProxyTargetContributor`:
+			GetTargetExpressionDelegate getTargetType =
+				(c, m) => m.IsAbstract ? NullExpression.Instance
+				                       : new TypeTokenExpression(m.DeclaringType);
+			return new InterfaceProxyWithoutTargetContributor(namingScope, getTargetType) { Logger = Logger };
 		}
 
 		protected virtual IEnumerable<Type> GetTypeImplementerMapping(Type proxyTargetType,

@@ -100,6 +100,28 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
+		[Test]
+		public void Invocation_InvocationTarget_is_proxy_for_intercepted_method_with_default_implementation()
+		{
+			var interceptor = new KeepDataInterceptor();
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHaveMethodWithDefaultImplementation>(interceptor);
+			proxy.MethodWithDefaultImplementation();
+			Assert.AreSame(
+				expected: proxy,
+				actual: interceptor.Invocation.InvocationTarget);
+		}
+
+		[Test]
+		public void Invocation_MethodInvocationTarget_is_intercepted_method_with_default_implementation()
+		{
+			var interceptor = new KeepDataInterceptor();
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<IHaveMethodWithDefaultImplementation>(interceptor);
+			proxy.MethodWithDefaultImplementation();
+			Assert.AreSame(
+				expected: typeof(IHaveMethodWithDefaultImplementation).GetMethod(nameof(IHaveMethodWithDefaultImplementation.MethodWithDefaultImplementation)),
+				actual: interceptor.Invocation.MethodInvocationTarget);
+		}
+
 		#endregion
 
 		#region Generic methods with default implementation
@@ -296,6 +318,28 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual(expected, actual);
 		}
 
+		[Test]
+		public void Invocation_InvocationTarget_is_proxy_for_intercepted_method_with_default_implementation_from_additional_interface()
+		{
+			var interceptor = new KeepDataInterceptor();
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(IEmpty), new[] { typeof(IHaveMethodWithDefaultImplementation) }, interceptor);
+			((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
+			Assert.AreSame(
+				expected: proxy,
+				actual: interceptor.Invocation.InvocationTarget);
+		}
+
+		[Test]
+		public void Invocation_MethodInvocationTarget_is_intercepted_method_with_default_implementation_from_additional_interface()
+		{
+			var interceptor = new KeepDataInterceptor();
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(IEmpty), new[] { typeof(IHaveMethodWithDefaultImplementation) }, interceptor);
+			((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
+			Assert.AreSame(
+				expected: typeof(IHaveMethodWithDefaultImplementation).GetMethod(nameof(IHaveMethodWithDefaultImplementation.MethodWithDefaultImplementation)),
+				actual: interceptor.Invocation.MethodInvocationTarget);
+		}
+
 		#endregion
 
 		#region Non-public methods with default implementation
@@ -457,6 +501,34 @@ namespace Castle.DynamicProxy.Tests
 			var actual = ((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
 			Assert.AreEqual(expected, actual);
 		}
+
+		[Test]
+		public void Invocation_InvocationTarget_is_mixin_for_intercepted_method_with_default_implementation_from_mixin()
+		{
+			var options = new ProxyGenerationOptions();
+			var mixin = new InheritsMethodWithDefaultImplementation();
+			options.AddMixinInstance(mixin);
+			var interceptor = new KeepDataInterceptor();
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(IEmpty), options, interceptor);
+			((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
+			Assert.AreSame(
+				expected: mixin,
+				actual: interceptor.Invocation.InvocationTarget);
+		}
+
+		[Test]
+		public void Invocation_MethodInvocationTarget_is_intercepted_method_with_default_implementation_from_mixin()
+		{
+			var options = new ProxyGenerationOptions();
+			options.AddMixinInstance(new InheritsMethodWithDefaultImplementation());
+			var interceptor = new KeepDataInterceptor();
+			var proxy = generator.CreateInterfaceProxyWithoutTarget(typeof(IEmpty), options, interceptor);
+			((IHaveMethodWithDefaultImplementation)proxy).MethodWithDefaultImplementation();
+			Assert.AreSame(
+				expected: typeof(IHaveMethodWithDefaultImplementation).GetMethod(nameof(IHaveMethodWithDefaultImplementation.MethodWithDefaultImplementation)),
+				actual: interceptor.Invocation.MethodInvocationTarget);
+		}
+
 		#endregion
 
 		public interface IHaveGenericMethodWithDefaultImplementation

@@ -10,6 +10,7 @@ Enhancements:
 
 Bugfixes:
 - `InvalidProgramException` when proxying `MemoryStream` with .NET 7 (@stakx, #651)
+- `invocation.MethodInvocationTarget` throws `ArgumentNullException` for default interface method (@stakx, #684)
 
 Deprecations:
 - .NET Core 2.1, .NET Core 3.1, .NET 6, and mono tests
