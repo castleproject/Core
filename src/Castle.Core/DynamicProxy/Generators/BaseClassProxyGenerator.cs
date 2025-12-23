@@ -153,7 +153,11 @@ namespace Castle.DynamicProxy.Generators
 			// 3. then additional interfaces
 			if (interfaces.Length > 0)
 			{
-				var additionalInterfacesContributor = new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance) { Logger = Logger };
+				// this is explained in `InterfaceProxyWithoutTargetGenerator.GetProxyTargetContributor`:
+				GetTargetExpressionDelegate getTargetType =
+					(c, m) => m.IsAbstract ? NullExpression.Instance
+										   : new TypeTokenExpression(m.DeclaringType);
+				var additionalInterfacesContributor = new InterfaceProxyWithoutTargetContributor(namingScope, getTargetType) { Logger = Logger };
 				contributorsList.Add(additionalInterfacesContributor);
 
 				foreach (var @interface in interfaces)

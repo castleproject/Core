@@ -76,10 +76,16 @@ namespace Castle.DynamicProxy.Contributors
 				return ExplicitlyImplementedInterfaceMethodGenerator(method, @class, overrideMethod);
 			}
 
+			// since this contributor is used for class proxies without target,
+			// the invocation type will be derived from `InheritanceInvocation`:
 			var invocation = GetInvocationType(method, @class);
 
 			GetTargetExpressionDelegate getTargetTypeExpression = (c, m) => new TypeTokenExpression(targetType);
 
+			// `MethodWithInvocationGenerator` uses its `getTargetExpression` argument
+			// to determine the first argument to be passed to the received invocation type;
+			// and since `InheritanceInvocation`s' first ctor param is `targetType`,
+			// we pass `getTargetTypeExpression` here:
 			return new MethodWithInvocationGenerator(method,
 			                                         @class.GetField("__interceptors"),
 			                                         invocation,

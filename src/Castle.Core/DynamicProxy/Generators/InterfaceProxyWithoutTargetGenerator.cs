@@ -35,7 +35,16 @@ namespace Castle.DynamicProxy.Generators
 
 		protected override CompositeTypeContributor GetProxyTargetContributor(Type proxyTargetType, INamingScope namingScope)
 		{
-			return new InterfaceProxyWithoutTargetContributor(namingScope, (c, m) => NullExpression.Instance) { Logger = Logger };
+			// The type of contributor instantiated below will use an inheritance-based invocation type.
+			// Those expect a target type, not a target instance (see first ctor param of `InheritanceInvocation`).
+			// For interface proxies without target, there typically isn't a target at all...
+			// except when an interface method has a default implementation (i.e. isn't abstract).
+			// Then the target type is the method's declaring interface itself.
+			// (Similar scenario: class proxies w/o target inherit method impls from the proxied class.)
+			GetTargetExpressionDelegate getTargetType =
+				(c, m) => m.IsAbstract ? NullExpression.Instance
+				                       : new TypeTokenExpression(m.DeclaringType);
+			return new InterfaceProxyWithoutTargetContributor(namingScope, getTargetType) { Logger = Logger };
 		}
 
 		protected override ProxyTargetAccessorContributor GetProxyTargetAccessorContributor()
