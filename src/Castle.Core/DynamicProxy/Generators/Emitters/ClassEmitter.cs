@@ -34,7 +34,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		private readonly List<EventEmitter> events;
 
 		private readonly IDictionary<string, FieldReference> fields =
-			new Dictionary<string, FieldReference>(StringComparer.OrdinalIgnoreCase);
+			new Dictionary<string, FieldReference>(StringComparer.Ordinal);
 
 		private readonly List<MethodEmitter> methods;
 

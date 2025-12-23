@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -195,12 +195,12 @@ namespace Castle.DynamicProxy.Internal
 
 		internal static bool IsGetType(this MethodInfo methodInfo)
 		{
-			return methodInfo.DeclaringType == typeof(object) && string.Equals("GetType", methodInfo.Name, StringComparison.OrdinalIgnoreCase);
+			return methodInfo.DeclaringType == typeof(object) && string.Equals("GetType", methodInfo.Name, StringComparison.Ordinal);
 		}
 
 		internal static bool IsMemberwiseClone(this MethodInfo methodInfo)
 		{
-			return methodInfo.DeclaringType == typeof(object) && string.Equals("MemberwiseClone", methodInfo.Name, StringComparison.OrdinalIgnoreCase);
+			return methodInfo.DeclaringType == typeof(object) && string.Equals("MemberwiseClone", methodInfo.Name, StringComparison.Ordinal);
 		}
 
 		internal static void SetStaticField(this Type type, string fieldName, BindingFlags additionalFlags, object? value)
@@ -252,7 +252,7 @@ namespace Castle.DynamicProxy.Internal
 		{
 			var sortedMembers = new MemberInfo[members.Length];
 			Array.Copy(members, sortedMembers, members.Length);
-			Array.Sort(sortedMembers, (l, r) => string.Compare(l.Name, r.Name, StringComparison.OrdinalIgnoreCase));
+			Array.Sort(sortedMembers, (l, r) => string.Compare(l.Name, r.Name, StringComparison.Ordinal));
 			return sortedMembers;
 		}
 
