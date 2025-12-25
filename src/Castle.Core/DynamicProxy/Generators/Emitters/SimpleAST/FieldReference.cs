@@ -25,26 +25,28 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	{
 		private readonly FieldInfo field;
 		private readonly FieldBuilder? fieldBuilder;
-		private readonly bool isStatic;
+		private readonly IExpression? instance;
 
-		public FieldReference(FieldInfo field)
+		public FieldReference(FieldInfo field, IExpression? instance = null)
 			: base(field.FieldType)
 		{
 			this.field = field;
+			this.instance = instance ?? ThisExpression.Instance;
 			if ((field.Attributes & FieldAttributes.Static) != 0)
 			{
-				isStatic = true;
+				this.instance = null;
 			}
 		}
 
-		public FieldReference(FieldBuilder fieldBuilder)
+		public FieldReference(FieldBuilder fieldBuilder, IExpression? instance = null)
 			: base(fieldBuilder.FieldType)
 		{
 			this.fieldBuilder = fieldBuilder;
 			field = fieldBuilder;
+			this.instance = instance ?? ThisExpression.Instance;
 			if ((fieldBuilder.Attributes & FieldAttributes.Static) != 0)
 			{
-				isStatic = true;
+				this.instance = null;
 			}
 		}
 
@@ -60,40 +62,40 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 		public override void EmitAddress(ILGenerator gen)
 		{
-			if (isStatic)
+			if (instance == null)
 			{
 				gen.Emit(OpCodes.Ldsflda, Reference);
 			}
 			else
 			{
-				ThisExpression.Instance.Emit(gen);
+				instance.Emit(gen);
 				gen.Emit(OpCodes.Ldflda, Reference);
 			}
 		}
 
 		public override void Emit(ILGenerator gen)
 		{
-			if (isStatic)
+			if (instance == null)
 			{
 				gen.Emit(OpCodes.Ldsfld, Reference);
 			}
 			else
 			{
-				ThisExpression.Instance.Emit(gen);
+				instance.Emit(gen);
 				gen.Emit(OpCodes.Ldfld, Reference);
 			}
 		}
 
 		public override void EmitStore(IExpression value, ILGenerator gen)
 		{
-			if (isStatic)
+			if (instance == null)
 			{
 				value.Emit(gen);
 				gen.Emit(OpCodes.Stsfld, Reference);
 			}
 			else
 			{
-				ThisExpression.Instance.Emit(gen);
+				instance.Emit(gen);
 				value.Emit(gen);
 				gen.Emit(OpCodes.Stfld, Reference);
 			}
