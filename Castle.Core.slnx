@@ -1,0 +1,26 @@
+<Solution>
+  <Folder Name="/Castle Build/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="appveyor.yml" />
+    <File Path="build.cmd" />
+    <File Path="build.sh" />
+    <File Path="buildscripts/common.props" />
+    <File Path="CHANGELOG.md" />
+    <File Path="CONTRIBUTING.md" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Castle Build/GitHub Actions/">
+    <File Path=".github/workflows/build.yml" />
+  </Folder>
+  <Folder Name="/Castle Services/">
+    <Project Path="src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration.csproj" />
+    <Project Path="src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration.csproj" />
+    <Project Path="src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration.csproj" />
+  </Folder>
+  <Project Path="src/Castle.Core.Tests.WeakNamed/Castle.Core.Tests.WeakNamed.csproj" />
+  <Project Path="src/Castle.Core.Tests/Castle.Core.Tests.csproj" />
+  <Project Path="src/Castle.Core/Castle.Core.csproj" />
+</Solution>

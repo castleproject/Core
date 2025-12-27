@@ -26,7 +26,7 @@ SET Configuration=Release
 GOTO build
 
 :build
-dotnet build ./tools/Explicit.NuGet.Versions/Explicit.NuGet.Versions.sln
+dotnet build ./tools/Explicit.NuGet.Versions/Explicit.NuGet.Versions.slnx
 dotnet build --configuration %Configuration% || exit /b 1
 .\tools\Explicit.NuGet.Versions\build\nev.exe ".\build" "castle."
 GOTO test

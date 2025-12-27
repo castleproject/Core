@@ -21,7 +21,7 @@ echo ---------------------------
 echo Build
 echo ---------------------------
 
-dotnet build ./Castle.Core.sln --configuration Release --tl:off
+dotnet build ./Castle.Core.slnx --configuration Release --tl:off
 
 echo ---------------------------
 echo Running NET8.0 Tests
