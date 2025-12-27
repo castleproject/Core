@@ -39,6 +39,7 @@ namespace Explicit.NuGet.Versions
 			{
 				using (var zipFile = ZipFile.Open(packageFile.Key, ZipArchiveMode.Update))
 				{
+					zipFile.GetEntry(packageFile.Value.EntryName).Delete();
 					using (var stream = new StreamWriter(zipFile.CreateEntry(packageFile.Value.EntryName).Open()))
 					{
 						stream.Write(packageFile.Value.Contents);
