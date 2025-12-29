@@ -55,11 +55,13 @@ Symbol                              | .NET 4.6.2         | .NET Standard 2.0 | .
 `FEATURE_APPDOMAIN`                 | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:
 `FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:
 `FEATURE_BYREFLIKE`                 | :no_entry_sign:    | :no_entry_sign:   | :white_check_mark:
+`FEATURE_EVENTCOUNTER`              | :no_entry_sign:    | :no_entry_sign:   | :white_check_mark:
 `FEATURE_SERIALIZATION`             | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:
 `FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:
 
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.
 * `FEATURE_BYREFLIKE` - enables support for by-ref-like (`ref struct`) types such as `Span<T>` and `ReadOnlySpan<T>`.
+* `FEATURE_EVENTCOUNTER` - enables support for emitting `EventCounter`-based metrics to an `EventSource` named **Castle.DynamicProxy**.
 * `FEATURE_SERIALIZATION` - enables support for serialization of dynamic proxies and other types.
 * `FEATURE_SYSTEM_CONFIGURATION` - enables features that use System.Configuration and the ConfigurationManager.

@@ -78,6 +78,7 @@ namespace Castle.DynamicProxy.Generators
 			{
 				notFoundInTypeCache = true;
 				Logger.DebugFormat("No cached proxy type was found for target type {0}.", targetType.FullName);
+				DynamicProxyEventSource.Log.TypeCacheMiss();
 
 				EnsureOptionsOverrideEqualsAndGetHashCode();
 
@@ -88,6 +89,7 @@ namespace Castle.DynamicProxy.Generators
 			if (!notFoundInTypeCache)
 			{
 				Logger.DebugFormat("Found cached proxy type {0} for target type {1}.", proxyType.FullName, targetType.FullName);
+				DynamicProxyEventSource.Log.TypeCacheHit();
 			}
 
 			return proxyType;
