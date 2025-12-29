@@ -16,6 +16,7 @@
     <File Path=".github/workflows/build.yml" />
   </Folder>
   <Folder Name="/Castle Services/">
+    <Project Path="src/Castle.Services.Logging.EventLogIntegration/Castle.Services.Logging.EventLogIntegration.csproj" />
     <Project Path="src/Castle.Services.Logging.log4netIntegration/Castle.Services.Logging.log4netIntegration.csproj" />
     <Project Path="src/Castle.Services.Logging.NLogIntegration/Castle.Services.Logging.NLogIntegration.csproj" />
     <Project Path="src/Castle.Services.Logging.SerilogIntegration/Castle.Services.Logging.SerilogIntegration.csproj" />
