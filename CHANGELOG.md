@@ -2,9 +2,11 @@
 
 ## Next
 
+Breaking Changes:
+- Updated target frameworks to .NET 8 (`net8.0`), .NET Standard 2.0 (`netstandard2.0`), and .NET Framework 4.6.2 (`net462`). Tests are being run on .NET 8, .NET 9, and on the .NET Framework. We no longer run tests on earlier frameworks nor on Mono. (@Romfos, #696)
+- Moved `Castle.Core.Logging.DiagnosticsLogger` into a separate NuGet package `Castle.Core-DiagnosticsLogger`, which renders the main package dependency-free for .NET 8+ (@snakefoot, #694)
+
 Enhancements:
-- Now target frameworks are: .NET 8, .NET Framework 4.6.2, .NET Standard 2.0
-- Tests platforms now are: .NET Framework 4.6.2, .NET 8, .NET 9
 - Minimally improved support for methods having `ref struct` parameter and return types, such as `Span<T>`: Intercepting such methods caused the runtime to throw `InvalidProgramException` and `NullReferenceException` due to forbidden conversions of `ref struct` values when transferring them into & out of `IInvocation` instances. To prevent these exceptions from being thrown, such values now get replaced with `null` in `IInvocation`, and with `default` values in return values and `out` arguments. When proceeding to a target, the target methods likewise receive such nullified values. (@stakx, #665)
 - Dependencies were updated
 
@@ -12,10 +14,6 @@ Bugfixes:
 - `InvalidProgramException` when proxying `MemoryStream` with .NET 7 (@stakx, #651)
 - `invocation.MethodInvocationTarget` throws `ArgumentNullException` for default interface method (@stakx, #684)
 - `DynamicProxyException` ("duplicate element") when type to proxy contains members whose names differ only in case (@stakx, #691)
-
-Deprecations:
-- .NET Core 2.1, .NET Core 3.1, .NET 6, and mono tests
-- .NET Standard 2.1 tfm
 
 ## 5.2.1 (2025-03-09)
 
