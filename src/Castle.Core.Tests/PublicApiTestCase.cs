@@ -40,6 +40,7 @@ namespace Castle
 			"Castle.Services.Logging.log4netIntegration",
 			"Castle.Services.Logging.NLogIntegration",
 			"Castle.Services.Logging.SerilogIntegration",
+			"Castle.Services.Logging.EventLogIntegration",
 		};
 
 		[Test]
