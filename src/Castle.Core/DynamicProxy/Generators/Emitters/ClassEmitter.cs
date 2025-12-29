@@ -403,7 +403,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 
 			var type = typeBuilder.CreateTypeInfo();
-			DynamicProxyEventSource.Log.TypeGenerated();
+			DynamicProxyEventSource.Log.TypeGenerated(type);
 
 			return type;
 		}

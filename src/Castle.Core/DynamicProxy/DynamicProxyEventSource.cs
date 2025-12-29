@@ -37,28 +37,69 @@ namespace Castle.DynamicProxy
 		{
 		}
 
+		private enum EventId
+		{
+			None,
+			TypeCacheHit,
+			TypeCacheMiss,
+			TypeGenerated,
+		}
+
 		[NonEvent]
-		public void TypeCacheHit()
+		public void TypeCacheHit(Type requested, Type cached)
 		{
 #if FEATURE_EVENTCOUNTER
 			Interlocked.Increment(ref typeCacheHitCount);
 #endif
+
+			if (IsEnabled())
+			{
+				TypeCacheHit(requested.FullName!, cached.FullName!);
+			}
+		}
+
+		[Event((int)EventId.TypeCacheHit)]
+		private void TypeCacheHit(string requested, string cached)
+		{
+			WriteEvent((int)EventId.TypeCacheHit, requested, cached);
 		}
 
 		[NonEvent]
-		public void TypeCacheMiss()
+		public void TypeCacheMiss(Type requested)
 		{
 #if FEATURE_EVENTCOUNTER
 			Interlocked.Increment(ref typeCacheMissCount);
 #endif
+
+			if (IsEnabled())
+			{
+				TypeCacheMiss(requested.FullName!);
+			}
+		}
+
+		[Event((int)EventId.TypeCacheMiss)]
+		private void TypeCacheMiss(string requested)
+		{
+			WriteEvent((int)EventId.TypeCacheMiss, requested);
 		}
 
 		[NonEvent]
-		public void TypeGenerated()
+		public void TypeGenerated(Type type)
 		{
 #if FEATURE_EVENTCOUNTER
 			Interlocked.Increment(ref typeGeneratedCount);
 #endif
+
+			if (IsEnabled())
+			{
+				TypeGenerated(type.FullName!);
+			}
+		}
+
+		[Event((int)EventId.TypeGenerated)]
+		private void TypeGenerated(string type)
+		{
+			WriteEvent((int)EventId.TypeGenerated, type);
 		}
 
 #if FEATURE_EVENTCOUNTER
