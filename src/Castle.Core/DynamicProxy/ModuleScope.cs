@@ -327,7 +327,7 @@ namespace Castle.DynamicProxy
 #endif
 		}
 
-		private AssemblyBuilder CreateAssembly(bool signStrongName)
+		internal virtual AssemblyBuilder CreateAssembly(bool signStrongName)
 		{
 			var assemblyName = GetAssemblyName(signStrongName);
 			try
@@ -363,7 +363,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		private AssemblyName GetAssemblyName(bool signStrongName)
+		internal AssemblyName GetAssemblyName(bool signStrongName)
 		{
 			var assemblyName = new AssemblyName {
 				Name = signStrongName ? strongAssemblyName : weakAssemblyName
@@ -548,13 +548,13 @@ namespace Castle.DynamicProxy
 		}
 #endif
 
-		internal TypeBuilder DefineType(bool inSignedModulePreferably, string name, TypeAttributes flags)
+		internal virtual TypeBuilder DefineType(bool inSignedModulePreferably, string name, TypeAttributes flags)
 		{
 			var module = ObtainDynamicModule(disableSignedModule == false && inSignedModulePreferably);
 			return module.DefineType(name, flags);
 		}
 
-		internal Type BuildType(TypeBuilder typeBuilder)
+		internal virtual Type BuildType(TypeBuilder typeBuilder)
 		{
 			return typeBuilder.CreateTypeInfo()!;
 		}
