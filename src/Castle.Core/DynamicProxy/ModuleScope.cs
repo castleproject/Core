@@ -553,5 +553,10 @@ namespace Castle.DynamicProxy
 			var module = ObtainDynamicModule(disableSignedModule == false && inSignedModulePreferably);
 			return module.DefineType(name, flags);
 		}
+
+		internal Type BuildType(TypeBuilder typeBuilder)
+		{
+			return typeBuilder.CreateTypeInfo()!;
+		}
 	}
 }
