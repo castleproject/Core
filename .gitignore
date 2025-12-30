@@ -12,7 +12,6 @@ obj/
 
 # Unit test scratch file (for DictionaryAdapter tests) and test runner results
 /out.xml
-/NetCoreClrTestResults.xml
+/Net*TestResults.xml
 /DesktopClrTestResults.xml
 /DesktopClrWeakNamedTestResults.xml
-/NetCoreClrWeakNamedTestResults.xml

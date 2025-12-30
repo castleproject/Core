@@ -1,6 +1,6 @@
 #!/bin/bash
 # ****************************************************************************
-# Copyright 2004-2022 Castle Project - http://www.castleproject.org/
+# Copyright 2004-2025 Castle Project - http://www.castleproject.org/
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -41,5 +41,26 @@ NET80_FAILCOUNT=$(grep -F "One or more child tests had errors" Net80TestResults.
 if [ $NET80_FAILCOUNT -ne 0 ]
 then
     echo "Net8.0 Tests have failed, failing the build"
+    exit 1
+fi
+
+echo ---------------------------
+echo Running NET9.0 Tests
+echo ---------------------------
+
+dotnet ./src/Castle.Core.Tests/bin/Release/net9.0/Castle.Core.Tests.dll --result=Net90TestResults.xml;format=nunit3
+dotnet ./src/Castle.Core.Tests.WeakNamed/bin/Release/net9.0/Castle.Core.Tests.WeakNamed.dll --result=Net90WeakNamedTestResults.xml;format=nunit3
+
+# Ensure that all test runs produced a protocol file:
+if [[ !( -f Net90TestResults.xml &&
+         -f Net90WeakNamedTestResults.xml ) ]]; then
+    echo "Incomplete test results. Some test runs might not have terminated properly. Failing the build."
+    exit 1
+fi
+
+NET90_FAILCOUNT=$(grep -F "One or more child tests had errors" Net90TestResults.xml Net90WeakNamedTestResults.xml | wc -l)
+if [ $NET90_FAILCOUNT -ne 0 ]
+then
+    echo "Net9.0 Tests have failed, failing the build"
     exit 1
 fi
