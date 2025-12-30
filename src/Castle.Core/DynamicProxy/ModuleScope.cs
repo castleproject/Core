@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -311,8 +311,25 @@ namespace Castle.DynamicProxy
 
 		private ModuleBuilder CreateModule(bool signStrongName)
 		{
-			var assemblyName = GetAssemblyName(signStrongName);
+			var assemblyBuilder = CreateAssembly(signStrongName);
 			var moduleName = signStrongName ? StrongNamedModuleName : WeakNamedModuleName;
+#if FEATURE_APPDOMAIN
+			if (savePhysicalAssembly)
+			{
+				var module = assemblyBuilder.DefineDynamicModule(moduleName, moduleName, false);
+				return module;
+			}
+			else
+#endif
+			{
+				var module = assemblyBuilder.DefineDynamicModule(moduleName);
+				return module;
+			}
+		}
+
+		private AssemblyBuilder CreateAssembly(bool signStrongName)
+		{
+			var assemblyName = GetAssemblyName(signStrongName);
 #if FEATURE_APPDOMAIN
 			if (savePhysicalAssembly)
 			{
@@ -336,8 +353,7 @@ namespace Castle.DynamicProxy
 						GetType());
 					throw new ArgumentException(message, e);
 				}
-				var module = assemblyBuilder.DefineDynamicModule(moduleName, moduleName, false);
-				return module;
+				return assemblyBuilder;
 			}
 			else
 #endif
@@ -349,8 +365,7 @@ namespace Castle.DynamicProxy
 				var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
 #endif
 
-				var module = assemblyBuilder.DefineDynamicModule(moduleName);
-				return module;
+				return assemblyBuilder;
 			}
 		}
 
