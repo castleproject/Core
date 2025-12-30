@@ -313,59 +313,53 @@ namespace Castle.DynamicProxy
 		{
 			var assemblyBuilder = CreateAssembly(signStrongName);
 			var moduleName = signStrongName ? StrongNamedModuleName : WeakNamedModuleName;
-#if FEATURE_APPDOMAIN
+#if NET462_OR_GREATER
 			if (savePhysicalAssembly)
 			{
-				var module = assemblyBuilder.DefineDynamicModule(moduleName, moduleName, false);
-				return module;
+				return assemblyBuilder.DefineDynamicModule(moduleName, moduleName, false);
 			}
 			else
-#endif
 			{
-				var module = assemblyBuilder.DefineDynamicModule(moduleName);
-				return module;
+				return assemblyBuilder.DefineDynamicModule(moduleName);
 			}
+#else
+			return assemblyBuilder.DefineDynamicModule(moduleName);
+#endif
 		}
 
 		private AssemblyBuilder CreateAssembly(bool signStrongName)
 		{
 			var assemblyName = GetAssemblyName(signStrongName);
-#if FEATURE_APPDOMAIN
-			if (savePhysicalAssembly)
+			try
 			{
-				AssemblyBuilder assemblyBuilder;
-				try
+#if NET462_OR_GREATER
+				if (savePhysicalAssembly)
 				{
-					assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-						assemblyName, AssemblyBuilderAccess.RunAndSave, signStrongName ? StrongNamedModuleDirectory : WeakNamedModuleDirectory);
+					return AppDomain.CurrentDomain.DefineDynamicAssembly(
+						assemblyName,
+						AssemblyBuilderAccess.RunAndSave,
+						signStrongName ? StrongNamedModuleDirectory : WeakNamedModuleDirectory);
 				}
-				catch (ArgumentException e)
+				else
 				{
-					if (signStrongName == false && e.StackTrace.Contains("ComputePublicKey") == false)
-					{
-						// I have no idea what that could be
-						throw;
-					}
-					var message = string.Format(
-						"There was an error creating dynamic assembly for your proxies - you don't have permissions " +
-						"required to sign the assembly. To workaround it you can enforce generating non-signed assembly " +
-						"only when creating {0}. Alternatively ensure that your account has all the required permissions.",
-						GetType());
-					throw new ArgumentException(message, e);
+					return AppDomain.CurrentDomain.DefineDynamicAssembly(
+						assemblyName,
+						AssemblyBuilderAccess.Run);
 				}
-				return assemblyBuilder;
-			}
-			else
-#endif
-			{
-#if FEATURE_APPDOMAIN
-				var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-					assemblyName, AssemblyBuilderAccess.Run);
 #else
-				var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+				return AssemblyBuilder.DefineDynamicAssembly(
+					assemblyName,
+					AssemblyBuilderAccess.Run);
 #endif
-
-				return assemblyBuilder;
+			}
+			catch (ArgumentException e) when (signStrongName || e.StackTrace?.Contains("ComputePublicKey") == true)
+			{
+				var message = string.Format(
+					"There was an error creating dynamic assembly for your proxies - you don't have permissions " +
+					"required to sign the assembly. To workaround it you can enforce generating non-signed assembly " +
+					"only when creating {0}. Alternatively ensure that your account has all the required permissions.",
+					GetType());
+				throw new ArgumentException(message, e);
 			}
 		}
 
