@@ -2585,6 +2585,16 @@ namespace Castle.DynamicProxy
         public string WeakNamedModuleName { get; }
         public static byte[] GetKeyPair() { }
     }
+    public sealed class PersistentProxyBuilder : Castle.DynamicProxy.DefaultProxyBuilder
+    {
+        public PersistentProxyBuilder() { }
+        public event System.EventHandler<Castle.DynamicProxy.PersistentProxyBuilderAssemblyEventArgs>? AssemblyCreated;
+    }
+    public sealed class PersistentProxyBuilderAssemblyEventArgs : System.EventArgs
+    {
+        public System.Reflection.Assembly Assembly { get; }
+        public byte[] AssemblyBytes { get; }
+    }
     public class ProxyGenerationOptions
     {
         public static readonly Castle.DynamicProxy.ProxyGenerationOptions Default;
