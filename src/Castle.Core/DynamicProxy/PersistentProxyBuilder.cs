@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,12 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_ASSEMBLYBUILDER_SAVE
-
 #nullable enable
 
 namespace Castle.DynamicProxy
 {
+	using System;
+	using System.Reflection;
+
+#if NET462_OR_GREATER
+
 	/// <summary>
 	///   ProxyBuilder that persists the generated type.
 	/// </summary>
@@ -46,6 +49,40 @@ namespace Castle.DynamicProxy
 			return ModuleScope.SaveAssembly();
 		}
 	}
-}
+
+#elif NET9_0_OR_GREATER
+
+	/// <summary>
+	///   <see cref="IProxyBuilder"/> that allows you to persist proxy types.
+	///   Each generated proxy type will be placed in its own separate assembly.
+	/// </summary>
+	public sealed class PersistentProxyBuilder : DefaultProxyBuilder
+	{
+		/// <summary>
+		///   Initializes a new instance of the <see cref = "PersistentProxyBuilder" /> class.
+		/// </summary>
+		public PersistentProxyBuilder()
+			: this(new PersistentProxyBuilderModuleScope())
+		{
+		}
+
+		private PersistentProxyBuilder(PersistentProxyBuilderModuleScope scope)
+			: base(scope)
+		{
+			scope.AssemblyCreated += OnAssemblyCreated;
+		}
+
+		/// <summary>
+		///   Raised when a new proxy type assembly has been created and loaded into the runtime.
+		/// </summary>
+		public event EventHandler<PersistentProxyBuilderAssemblyEventArgs>? AssemblyCreated;
+
+		private void OnAssemblyCreated(Assembly assembly, byte[] assemblyBytes)
+		{
+			AssemblyCreated?.Invoke(this, new PersistentProxyBuilderAssemblyEventArgs(assembly, assemblyBytes));
+		}
+	}
 
 #endif
+
+}

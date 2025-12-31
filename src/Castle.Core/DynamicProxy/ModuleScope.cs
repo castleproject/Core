@@ -381,6 +381,15 @@ namespace Castle.DynamicProxy
 			return assemblyName;
 		}
 
+		internal void ResetModules()
+		{
+			lock (moduleLocker)
+			{
+				moduleBuilder = null;
+				moduleBuilderWithStrongName = null;
+			}
+		}
+
 #if FEATURE_ASSEMBLYBUILDER_SAVE
 		/// <summary>
 		///   Saves the generated assembly with the name and directory information given when this <see cref = "ModuleScope" /> instance was created (or with
