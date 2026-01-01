@@ -33,6 +33,21 @@ namespace Castle.DynamicProxy.Tests
 #if FEATURE_SERIALIZATION
 		[Serializable]
 #endif
+		public class EquatableHook : IProxyGenerationHook, IEquatable<EquatableHook>
+		{
+			public override bool Equals(object obj) => Equals(obj as EquatableHook);
+			public override int GetHashCode() => GetType().GetHashCode();
+
+			public bool Equals(EquatableHook other) => other is EquatableHook;
+
+			public void MethodsInspected() { }
+			public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo) { }
+			public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo) => false;
+		}
+
+#if FEATURE_SERIALIZATION
+		[Serializable]
+#endif
 		public record class RecordClassHook : IProxyGenerationHook
 		{
 			public RecordClassHook(string id)
@@ -45,6 +60,15 @@ namespace Castle.DynamicProxy.Tests
 			public void MethodsInspected() { }
 			public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo) { }
 			public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo) => false;
+		}
+
+		// `IEquatable<>` can lead to there being more than one `Equals` method.
+		// This is relevant for hook classes because DynamicProxy checks whether they
+		// override the inherited `Equals` method for proper equality semantics.
+		[Test]
+		public void Can_use_hook_that_implements_IEquatable()
+		{
+			_ = CreateProxyWithHook<EquatableHook>();
 		}
 
 		[Test]
