@@ -15,6 +15,7 @@
 namespace Castle.DynamicProxy.Tests
 {
 	using System;
+	using System.Reflection;
 
 	using Castle.DynamicProxy.Tests.Interceptors;
 	using Castle.DynamicProxy.Tests.Interfaces;
@@ -28,6 +29,23 @@ namespace Castle.DynamicProxy.Tests
 		[Serializable]
 #endif
 		public class CustomHook : AllMethodsHook { }
+
+#if FEATURE_SERIALIZATION
+		[Serializable]
+#endif
+		public record class RecordClassHook : IProxyGenerationHook
+		{
+			public RecordClassHook(string id)
+			{
+				Id = id;
+			}
+
+			public string Id { get; }
+
+			public void MethodsInspected() { }
+			public void NonProxyableMemberNotification(Type type, MemberInfo memberInfo) { }
+			public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo) => false;
+		}
 
 		[Test]
 		public void Proxies_with_same_hook_will_use_cached_proxy_type()
@@ -45,9 +63,42 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreNotEqual(first.GetType(), second.GetType());
 		}
 
+		[Test]
+		public void Proxies_with_different_but_equal_record_class_hooks_will_use_cached_proxy_type()
+		{
+			var firstHook = new RecordClassHook("1");
+			var secondHook = new RecordClassHook("1");
+			Assume.That(firstHook, Is.Not.SameAs(secondHook));
+			Assume.That(firstHook, Is.EqualTo(secondHook));
+
+			var first = CreateProxyWithHook(firstHook);
+			var second = CreateProxyWithHook(secondHook);
+
+			Assert.AreEqual(first.GetType(), second.GetType());
+		}
+
+		[Test]
+		public void Proxies_with_different_and_unequal_record_class_hooks_will_use_different_proxy_types()
+		{
+			var firstHook = new RecordClassHook("1");
+			var secondHook = new RecordClassHook("2");
+			Assume.That(firstHook, Is.Not.SameAs(secondHook));
+			Assume.That(firstHook, Is.Not.EqualTo(secondHook));
+
+			var first = CreateProxyWithHook(firstHook);
+			var second = CreateProxyWithHook(secondHook);
+
+			Assert.AreNotEqual(first.GetType(), second.GetType());
+		}
+
 		private object CreateProxyWithHook<THook>() where THook : IProxyGenerationHook, new()
 		{
-			return generator.CreateInterfaceProxyWithoutTarget(typeof(IEmpty), new ProxyGenerationOptions(new THook()), new DoNothingInterceptor());
+			return CreateProxyWithHook(new THook());
+		}
+
+		private object CreateProxyWithHook(IProxyGenerationHook hook)
+		{
+			return generator.CreateInterfaceProxyWithoutTarget(typeof(IEmpty), new ProxyGenerationOptions(hook), new DoNothingInterceptor());
 		}
 	}
 }
