@@ -393,7 +393,7 @@ namespace Castle.DynamicProxy.Generators
 
 		private bool OverridesEqualsAndGetHashCode(Type type)
 		{
-			var equalsMethod = type.GetMethod("Equals", BindingFlags.Public | BindingFlags.Instance);
+			var equalsMethod = type.GetMethod("Equals", BindingFlags.Public | BindingFlags.Instance, null, [ typeof(object) ], null);
 			if (equalsMethod == null || equalsMethod.DeclaringType == typeof(object) || equalsMethod.IsAbstract)
 			{
 				return false;
