@@ -16,7 +16,7 @@ Debugging symbols are available in symbol packages in the AppVeyor build artifac
 
 ## License
 
-Castle Core is &copy; 2004-2022 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
+Castle Core is &copy; 2004-2025 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
 
 ## Contributing
 
@@ -50,13 +50,13 @@ build.cmd
 
 The following conditional compilation symbols (vertical) are currently defined for each of the build configurations (horizontal):
 
-Symbol                              | .NET 4.6.2         | .NET Standard 2.0 | .NET 8
------------------------------------ | ------------------ | ----------------- | ------------------
-`FEATURE_APPDOMAIN`                 | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:
-`FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:
-`FEATURE_BYREFLIKE`                 | :no_entry_sign:    | :no_entry_sign:   | :white_check_mark:
-`FEATURE_SERIALIZATION`             | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:
-`FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:
+Symbol                              | .NET 4.6.2         | .NET Standard 2.0 | .NET 8             | .NET 9
+----------------------------------- | ------------------ | ----------------- | ------------------ | ------------------
+`FEATURE_APPDOMAIN`                 | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:    | :no_entry_sign:
+`FEATURE_ASSEMBLYBUILDER_SAVE`      | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:    | :no_entry_sign:
+`FEATURE_BYREFLIKE`                 | :no_entry_sign:    | :no_entry_sign:   | :white_check_mark: | :white_check_mark:
+`FEATURE_SERIALIZATION`             | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:    | :no_entry_sign:
+`FEATURE_SYSTEM_CONFIGURATION`      | :white_check_mark: | :no_entry_sign:   | :no_entry_sign:    | :no_entry_sign:
 
 * `FEATURE_APPDOMAIN` - enables support for features that make use of an AppDomain in the host.
 * `FEATURE_ASSEMBLYBUILDER_SAVE` - enabled support for saving the dynamically generated proxy assembly.
