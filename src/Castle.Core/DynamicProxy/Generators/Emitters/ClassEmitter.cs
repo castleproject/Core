@@ -43,8 +43,15 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		private GenericTypeParameterBuilder[] genericTypeParams;
 
+		// TODO: reconsider the following warning suppression once we have made a decision
+		// regarding DynamicProxy's future support for serialization. For now, we tolerate
+		// the `[Serializable]` attribute on types a little longer, because it is not just
+		// for `BinaryFormatter`'s sake, but also for e.g. the non-obsolete `DataContract-
+		// erializer` which recognizes it.
+#pragma warning disable SYSLIB0050
 		internal const TypeAttributes DefaultTypeAttributes =
 			TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable;
+#pragma warning restore SYSLIB0050
 
 		public ClassEmitter(TypeBuilder typeBuilder)
 		{
@@ -195,7 +202,10 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			if (!serializable)
 			{
+				// TODO: as above, see explanation there (at `DefaultTypeAttributes`'s declaration site)
+#pragma warning disable SYSLIB0050
 				atts |= FieldAttributes.NotSerialized;
+#pragma warning restore CS0001
 			}
 
 			return CreateField(name, fieldType, atts);
