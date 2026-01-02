@@ -2131,12 +2131,10 @@ namespace Castle.Core.Logging
         public void WarnFormat(System.IFormatProvider formatProvider, string format, params object[] args) { }
         public void WarnFormat(System.Exception exception, System.IFormatProvider formatProvider, string format, params object[] args) { }
     }
-    [System.Serializable]
     public class LoggerException : System.Exception
     {
         public LoggerException() { }
         public LoggerException(string message) { }
-        protected LoggerException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public LoggerException(string message, System.Exception innerException) { }
     }
     public enum LoggerLevel
@@ -2331,12 +2329,10 @@ namespace Castle.Core.Resource
         Castle.Core.Resource.IResource Create(Castle.Core.Resource.CustomUri uri);
         Castle.Core.Resource.IResource Create(Castle.Core.Resource.CustomUri uri, string basePath);
     }
-    [System.Serializable]
     public class ResourceException : System.Exception
     {
         public ResourceException() { }
         public ResourceException(string message) { }
-        protected ResourceException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public ResourceException(string message, System.Exception innerException) { }
     }
     public class StaticContentResource : Castle.Core.Resource.AbstractResource
@@ -2449,7 +2445,6 @@ namespace Castle.DynamicProxy
         public System.Type CreateInterfaceProxyTypeWithTargetInterface(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
         public System.Type CreateInterfaceProxyTypeWithoutTarget(System.Type interfaceToProxy, System.Type[]? additionalInterfacesToProxy, Castle.DynamicProxy.ProxyGenerationOptions options) { }
     }
-    [System.Serializable]
     public sealed class DynamicProxyException : System.Exception { }
     public interface IChangeProxyTarget
     {

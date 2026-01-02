@@ -565,7 +565,14 @@ namespace Castle.DynamicProxy
 					{
 						var iUnknown = Marshal.GetIUnknownForObject(target); // Increment the reference count
 						var interfacePointer = IntPtr.Zero;
-						var result = Marshal.QueryInterface(iUnknown, ref interfaceId, out interfacePointer); // Increment the reference count
+						var result = Marshal.QueryInterface(
+							iUnknown,
+#if NET9_0_OR_GREATER
+							in interfaceId,
+#else
+							ref interfaceId,
+#endif
+							out interfacePointer); // Increment the reference count
 						var isInterfacePointerNull = interfacePointer == IntPtr.Zero;
 						Marshal.Release(iUnknown); // Decrement the reference count
 						if (!isInterfacePointerNull)

@@ -165,7 +165,11 @@ namespace Castle.DynamicProxy
 
 				var length = (int)stream.Length;
 				var keyPair = new byte[length];
-				stream.Read(keyPair, 0, length);
+				var bytesRead = stream.Read(keyPair, 0, length);
+				if (bytesRead != length)
+				{
+					throw new IOException("Failed to read entire key pair from embedded resource.");
+				}
 				return keyPair;
 			}
 		}
