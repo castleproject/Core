@@ -21,11 +21,11 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 	internal class IfNullExpression : IExpression, IStatement
 	{
-		private readonly IExpressionOrStatement ifNotNull;
+		private readonly IExpressionOrStatement? ifNotNull;
 		private readonly IExpressionOrStatement ifNull;
 		private readonly IExpression expression;
 
-		public IfNullExpression(IExpression expression, IExpressionOrStatement ifNull, IExpressionOrStatement ifNotNull = null)
+		public IfNullExpression(IExpression expression, IExpressionOrStatement ifNull, IExpressionOrStatement? ifNotNull = null)
 		{
 			this.expression = expression ?? throw new ArgumentNullException(nameof(expression));
 			this.ifNull = ifNull;
@@ -39,10 +39,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			gen.Emit(OpCodes.Brtrue_S, notNull);
 			ifNull.Emit(gen);
 			gen.MarkLabel(notNull);
-			if (ifNotNull != null) // yeah, I know that reads funny :)
-			{
-				ifNotNull.Emit(gen);
-			}
+			ifNotNull?.Emit(gen);
 		}
 	}
 }

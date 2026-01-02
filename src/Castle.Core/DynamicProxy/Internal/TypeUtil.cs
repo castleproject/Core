@@ -138,7 +138,6 @@ namespace Castle.DynamicProxy.Internal
 
 		internal static bool HasAnyOverridableDefaultImplementations(this Type interfaceType)
 		{
-			Debug.Assert(interfaceType != null);
 			Debug.Assert(interfaceType.IsInterface);
 
 			var cache = hasAnyOverridableDefaultImplementationsCache;
