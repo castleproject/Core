@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<OutputType>Exe</OutputType>
 		<Authors>Castle Contributors</Authors>
 		<AssemblyName>Castle.Core.Tests.WeakNamed</AssemblyName>
 		<RootNamespace>Castle</RootNamespace>
@@ -15,13 +14,18 @@
 		<AssemblyVersion>0.0.0.0</AssemblyVersion>
 		<SignAssembly>False</SignAssembly>
 		<PublicSign Condition="'$(OS)'=='Unix'">false</PublicSign>
-		<StartupObject>Program</StartupObject>
+		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup>
 	  <Compile Include="..\Castle.Core\DynamicProxy\Generators\Emitters\StrongNameUtil.cs" Link="DynamicProxy.Tests\StrongNameUtil.cs" />
 	</ItemGroup>
-
+	
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+		<PackageReference Include="NUnit3TestAdapter" Version="6.0.1" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<ProjectReference Include="..\Castle.Core\Castle.Core.csproj" />
 		<ProjectReference Include="..\Castle.Core.Tests\Castle.Core.Tests.csproj" />

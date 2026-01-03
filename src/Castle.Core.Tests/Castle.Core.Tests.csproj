@@ -7,7 +7,6 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<OutputType>Exe</OutputType>
 		<Authors>Castle Contributors</Authors>
 		<AssemblyName>Castle.Core.Tests</AssemblyName>
 		<RootNamespace>Castle</RootNamespace>
@@ -16,7 +15,7 @@
 		<SignAssembly>True</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\buildscripts\CastleKey.snk</AssemblyOriginatorKeyFile>
 		<PublicSign Condition="'$(OS)'=='Unix'">true</PublicSign>
-		<StartupObject>Program</StartupObject>
+		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$([MSBuild]::GetTargetFrameworkIdentifier(&quot;$(TargetFramework)&quot;))' == '.NETFramework'">
@@ -42,9 +41,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-		<PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
-		<PackageReference Include="NUnitLite" Version="3.14.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+		<PackageReference Include="NUnit3TestAdapter" Version="6.0.1" />
+		<PackageReference Include="NUnit" Version="3.14.0" />
 		<PackageReference Include="Serilog.Sinks.TextWriter" Version="2.1.0" />
 	</ItemGroup>
 
@@ -59,7 +58,7 @@
 	<ItemGroup Condition=" '$(TargetFrameworkIdentifier)' != '.NETFramework' ">
     <PackageReference Include="System.Diagnostics.EventLog" Version="8.0.2" />
 		<PackageReference Include="System.Security.Permissions" Version="8.0.0" />
-		<PackageReference Include="PublicApiGenerator" Version="11.4.6" />
+		<PackageReference Include="PublicApiGenerator" Version="11.5.4" />
 	</ItemGroup>
 
 </Project>

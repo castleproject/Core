@@ -86,4 +86,6 @@ for:
   # upload packages to AppVeyor
   artifacts:
   - path: build\*.nupkg
-    name: core
+    name: library
+  - path: build\*.snupkg
+    name: symbols

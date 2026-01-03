@@ -37,19 +37,19 @@ echo --------------------
 echo Running NET462 Tests
 echo --------------------
 
-src\Castle.Core.Tests\bin\%Configuration%\net462\Castle.Core.Tests.exe --result=DesktopClrTestResults.xml;format=nunit3 || exit /b 1
-src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\net462\Castle.Core.Tests.WeakNamed.exe --result=DesktopClrWeakNamedTestResults.xml;format=nunit3 || exit /b 1
+dotnet test src\Castle.Core.Tests           -f net462 -c %Configuration% --no-build -- NUnit.TestOutputXml="%CD%" NUnit.TestOutputXmlFileName="DesktopClrTestResults"          || exit /b 1
+dotnet test src\Castle.Core.Tests.WeakNamed -f net462 -c %Configuration% --no-build -- NUnit.TestOutputXml="%CD%" NUnit.TestOutputXmlFileName="DesktopClrWeakNamedTestResults" || exit /b 1
 
 echo ---------------------------
 echo Running NET8.0 Tests
 echo ---------------------------
 
-dotnet .\src\Castle.Core.Tests\bin\%Configuration%\net8.0\Castle.Core.Tests.dll --result=Net80TestResults.xml;format=nunit3 || exit /b 1
-dotnet .\src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\net8.0/Castle.Core.Tests.WeakNamed.dll --result=Net80WeakNamedTestResults.xml;format=nunit3 || exit /b 1
+dotnet test src\Castle.Core.Tests           -f net8.0 -c %Configuration% --no-build -- NUnit.TestOutputXml="%CD%" NUnit.TestOutputXmlFileName="Net80TestResults"               || exit /b 1
+dotnet test src\Castle.Core.Tests.WeakNamed -f net8.0 -c %Configuration% --no-build -- NUnit.TestOutputXml="%CD%" NUnit.TestOutputXmlFileName="Net80WeakNamedTestResults"      || exit /b 1
 
 echo ---------------------------
 echo Running NET9.0 Tests
 echo ---------------------------
 
-dotnet .\src\Castle.Core.Tests\bin\%Configuration%\net9.0\Castle.Core.Tests.dll --result=Net90TestResults.xml;format=nunit3 || exit /b 1
-dotnet .\src\Castle.Core.Tests.WeakNamed\bin\%Configuration%\net9.0/Castle.Core.Tests.WeakNamed.dll --result=Net90WeakNamedTestResults.xml;format=nunit3 || exit /b 1
+dotnet test src\Castle.Core.Tests           -f net9.0 -c %Configuration% --no-build -- NUnit.TestOutputXml="%CD%" NUnit.TestOutputXmlFileName="Net90TestResults"               || exit /b 1
+dotnet test src\Castle.Core.Tests.WeakNamed -f net9.0 -c %Configuration% --no-build -- NUnit.TestOutputXml="%CD%" NUnit.TestOutputXmlFileName="Net90WeakNamedTestResults"      || exit /b 1

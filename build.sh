@@ -27,9 +27,9 @@ echo ---------------------------
 echo Running NET8.0 Tests
 echo ---------------------------
 
-dotnet ./src/Castle.Core.Tests/bin/Release/net8.0/Castle.Core.Tests.dll --result=Net80TestResults.xml;format=nunit3
-dotnet ./src/Castle.Core.Tests.WeakNamed/bin/Release/net8.0/Castle.Core.Tests.WeakNamed.dll --result=Net80WeakNamedTestResults.xml;format=nunit3
-
+dotnet test ./src/Castle.Core.Tests           -f net8.0 -c Release --no-build -- NUnit.TestOutputXml="$PWD" NUnit.TestOutputXmlFileName="Net80TestResults"
+dotnet test ./src/Castle.Core.Tests.WeakNamed -f net8.0 -c Release --no-build -- NUnit.TestOutputXml="$PWD" NUnit.TestOutputXmlFileName="Net80WeakNamedTestResults"
+ 
 # Ensure that all test runs produced a protocol file:
 if [[ !( -f Net80TestResults.xml &&
          -f Net80WeakNamedTestResults.xml ) ]]; then
@@ -48,8 +48,8 @@ echo ---------------------------
 echo Running NET9.0 Tests
 echo ---------------------------
 
-dotnet ./src/Castle.Core.Tests/bin/Release/net9.0/Castle.Core.Tests.dll --result=Net90TestResults.xml;format=nunit3
-dotnet ./src/Castle.Core.Tests.WeakNamed/bin/Release/net9.0/Castle.Core.Tests.WeakNamed.dll --result=Net90WeakNamedTestResults.xml;format=nunit3
+dotnet test ./src/Castle.Core.Tests           -f net9.0 -c Release --no-build -- NUnit.TestOutputXml="$PWD" NUnit.TestOutputXmlFileName="Net90TestResults"
+dotnet test ./src/Castle.Core.Tests.WeakNamed -f net9.0 -c Release --no-build -- NUnit.TestOutputXml="$PWD" NUnit.TestOutputXmlFileName="Net90WeakNamedTestResults"
 
 # Ensure that all test runs produced a protocol file:
 if [[ !( -f Net90TestResults.xml &&
