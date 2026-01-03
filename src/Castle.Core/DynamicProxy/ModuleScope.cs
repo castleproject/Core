@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -311,50 +311,59 @@ namespace Castle.DynamicProxy
 
 		private ModuleBuilder CreateModule(bool signStrongName)
 		{
-			var assemblyName = GetAssemblyName(signStrongName);
+			var assemblyBuilder = CreateAssembly(signStrongName);
 			var moduleName = signStrongName ? StrongNamedModuleName : WeakNamedModuleName;
-#if FEATURE_APPDOMAIN
+#if NET462_OR_GREATER
 			if (savePhysicalAssembly)
 			{
-				AssemblyBuilder assemblyBuilder;
-				try
-				{
-					assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-						assemblyName, AssemblyBuilderAccess.RunAndSave, signStrongName ? StrongNamedModuleDirectory : WeakNamedModuleDirectory);
-				}
-				catch (ArgumentException e)
-				{
-					if (signStrongName == false && e.StackTrace.Contains("ComputePublicKey") == false)
-					{
-						// I have no idea what that could be
-						throw;
-					}
-					var message = string.Format(
-						"There was an error creating dynamic assembly for your proxies - you don't have permissions " +
-						"required to sign the assembly. To workaround it you can enforce generating non-signed assembly " +
-						"only when creating {0}. Alternatively ensure that your account has all the required permissions.",
-						GetType());
-					throw new ArgumentException(message, e);
-				}
-				var module = assemblyBuilder.DefineDynamicModule(moduleName, moduleName, false);
-				return module;
+				return assemblyBuilder.DefineDynamicModule(moduleName, moduleName, false);
 			}
 			else
-#endif
 			{
-#if FEATURE_APPDOMAIN
-				var assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(
-					assemblyName, AssemblyBuilderAccess.Run);
+				return assemblyBuilder.DefineDynamicModule(moduleName);
+			}
 #else
-				var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
+			return assemblyBuilder.DefineDynamicModule(moduleName);
 #endif
+		}
 
-				var module = assemblyBuilder.DefineDynamicModule(moduleName);
-				return module;
+		internal virtual AssemblyBuilder CreateAssembly(bool signStrongName)
+		{
+			var assemblyName = GetAssemblyName(signStrongName);
+			try
+			{
+#if NET462_OR_GREATER
+				if (savePhysicalAssembly)
+				{
+					return AppDomain.CurrentDomain.DefineDynamicAssembly(
+						assemblyName,
+						AssemblyBuilderAccess.RunAndSave,
+						signStrongName ? StrongNamedModuleDirectory : WeakNamedModuleDirectory);
+				}
+				else
+				{
+					return AppDomain.CurrentDomain.DefineDynamicAssembly(
+						assemblyName,
+						AssemblyBuilderAccess.Run);
+				}
+#else
+				return AssemblyBuilder.DefineDynamicAssembly(
+					assemblyName,
+					AssemblyBuilderAccess.Run);
+#endif
+			}
+			catch (ArgumentException e) when (signStrongName || e.StackTrace?.Contains("ComputePublicKey") == true)
+			{
+				var message = string.Format(
+					"There was an error creating dynamic assembly for your proxies - you don't have permissions " +
+					"required to sign the assembly. To workaround it you can enforce generating non-signed assembly " +
+					"only when creating {0}. Alternatively ensure that your account has all the required permissions.",
+					GetType());
+				throw new ArgumentException(message, e);
 			}
 		}
 
-		private AssemblyName GetAssemblyName(bool signStrongName)
+		internal AssemblyName GetAssemblyName(bool signStrongName)
 		{
 			var assemblyName = new AssemblyName {
 				Name = signStrongName ? strongAssemblyName : weakAssemblyName
@@ -370,6 +379,15 @@ namespace Castle.DynamicProxy
 			}
 
 			return assemblyName;
+		}
+
+		internal void ResetModules()
+		{
+			lock (moduleLocker)
+			{
+				moduleBuilder = null;
+				moduleBuilderWithStrongName = null;
+			}
 		}
 
 #if FEATURE_ASSEMBLYBUILDER_SAVE
@@ -539,10 +557,15 @@ namespace Castle.DynamicProxy
 		}
 #endif
 
-		internal TypeBuilder DefineType(bool inSignedModulePreferably, string name, TypeAttributes flags)
+		internal virtual TypeBuilder DefineType(bool inSignedModulePreferably, string name, TypeAttributes flags)
 		{
 			var module = ObtainDynamicModule(disableSignedModule == false && inSignedModulePreferably);
 			return module.DefineType(name, flags);
+		}
+
+		internal virtual Type BuildType(TypeBuilder typeBuilder)
+		{
+			return typeBuilder.CreateTypeInfo()!;
 		}
 	}
 }

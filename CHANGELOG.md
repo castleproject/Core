@@ -8,6 +8,7 @@ Breaking Changes:
 
 Enhancements:
 - Minimally improved support for methods having `ref struct` parameter and return types, such as `Span<T>`: Intercepting such methods caused the runtime to throw `InvalidProgramException` and `NullReferenceException` due to forbidden conversions of `ref struct` values when transferring them into & out of `IInvocation` instances. To prevent these exceptions from being thrown, such values now get replaced with `null` in `IInvocation`, and with `default` values in return values and `out` arguments. When proceeding to a target, the target methods likewise receive such nullified values. (@stakx, #665)
+- Restore ability on .NET 9 and later to save dynamic assemblies to disk using `PersistentProxyBuilder` (@stakx, #718)
 - Dependencies were updated
 
 Bugfixes:
