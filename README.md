@@ -16,7 +16,7 @@ Debugging symbols are available in symbol packages in the AppVeyor build artifac
 
 ## License
 
-Castle Core is &copy; 2004-2025 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
+Castle Core is &copy; 2004-2026 Castle Project. It is free software, and may be redistributed under the terms of the [Apache 2.0](http://opensource.org/licenses/Apache-2.0) license.
 
 ## Contributing
 
@@ -26,7 +26,7 @@ Browse the [contributing section](https://github.com/castleproject/Home#its-comm
 
 Compilation requires the .NET 10 SDK.
 
-Running the unit tests additionally requires the .NET Framework 4.6.2+ and the .NET 8 and 9 runtimes to be installed. (If you do not have all of those installed, you can run the tests for a specific target framework using `dotnet test -f <framework>`.)
+Running the unit tests additionally requires the .NET Framework 4.6.2+ and the .NET 8, 9, and 10 runtimes to be installed. (If you do not have all of those installed, you can run the tests for a specific target framework using `dotnet test -f <framework>`.)
 
 | Platforms       | NuGet Feed |
 |-----------------|------------|
