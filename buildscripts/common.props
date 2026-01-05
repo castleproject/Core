@@ -28,6 +28,7 @@
 		<PackageIcon>castle-logo.png</PackageIcon>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageVersion>$(BuildVersion)</PackageVersion>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<IncludeSymbols>true</IncludeSymbols>
 		<IncludeSource>false</IncludeSource>
 		<CurrentYear>$([System.DateTime]::Now.ToString("yyyy"))</CurrentYear>
@@ -45,7 +46,7 @@
 		<Content Include="..\..\CHANGELOG.md" />
 		<Content Include="..\..\LICENSE" Pack="True" PackagePath="" />
 		<Content Include="..\..\buildscripts\ASL - Apache Software Foundation License.txt" />
-		<Content Include="..\..\buildscripts\readme.txt" />
+		<None Include="..\..\buildscripts\README.md" Pack="True" PackagePath="\" />
 	</ItemGroup>
 
 	<ItemGroup>
