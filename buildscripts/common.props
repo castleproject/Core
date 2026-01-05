@@ -12,6 +12,8 @@
 		<BuildVersionMajor>$(BuildVersion.Split('.')[0])</BuildVersionMajor>
 		<BuildVersionNoSuffix>$(BuildVersion.Split('-')[0])</BuildVersionNoSuffix>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -37,8 +39,6 @@
 		<!--Deterministic Build and Source Link settings -->
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
 
 	<ItemGroup>

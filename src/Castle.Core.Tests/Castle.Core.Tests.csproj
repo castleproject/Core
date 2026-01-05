@@ -56,7 +56,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFrameworkIdentifier)' != '.NETFramework' ">
-    <PackageReference Include="System.Diagnostics.EventLog" Version="8.0.2" />
+		<PackageReference Include="System.Diagnostics.EventLog" Version="8.0.2" />
 		<PackageReference Include="System.Security.Permissions" Version="8.0.0" />
 		<PackageReference Include="PublicApiGenerator" Version="11.5.4" />
 	</ItemGroup>
