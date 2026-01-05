@@ -16,6 +16,7 @@ Bugfixes:
 - `InvalidProgramException` when proxying `MemoryStream` with .NET 7 (@stakx, #651)
 - `invocation.MethodInvocationTarget` throws `ArgumentNullException` for default interface method (@stakx, #684)
 - `DynamicProxyException` ("duplicate element") when type to proxy contains members whose names differ only in case (@stakx, #691)
+- `DynamicProxyException` ("duplicate element") due to DynamicProxy not accounting for outer type names of nested types (@JelleKerkstra, #692)
 - `AmbiguousMatchException` when using a proxy generation hook that is implemented as a `record class` (@stakx, #720)
 
 ## 5.2.1 (2025-03-09)
