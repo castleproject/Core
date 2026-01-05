@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -64,8 +64,8 @@ namespace Castle.DynamicProxy.Tests
 			// If all of the above conditions are met, we expect the methods from the interfaces
 			// to be implemented explicitly. For our purposes, this means that they follow the
 			// naming scheme `<namespace>.<parent types>.<type>.M`:
-			Assert.NotNull(implementingType.GetMethod($"{b.Namespace}.{b.DeclaringType.DeclaringType.Name}.{b.DeclaringType.Name}.{b.Name}.M", bindingFlags));
-			Assert.NotNull(implementingType.GetMethod($"{c.Namespace}.{b.DeclaringType.DeclaringType.Name}.{b.DeclaringType.Name}.{c.Name}.M", bindingFlags));
+			Assert.NotNull(implementingType.GetMethod($"{b.Namespace}.{b.DeclaringType.DeclaringType.Name}+{b.DeclaringType.Name}+{b.Name}.M", bindingFlags));
+			Assert.NotNull(implementingType.GetMethod($"{c.Namespace}.{b.DeclaringType.DeclaringType.Name}+{b.DeclaringType.Name}+{c.Name}.M", bindingFlags));
 		}
 	}
 }
