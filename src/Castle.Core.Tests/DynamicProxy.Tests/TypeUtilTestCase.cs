@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,8 +14,11 @@
 
 namespace Castle.DynamicProxy.Tests
 {
+	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
+	using System.Text;
 
 	using Castle.DynamicProxy.Internal;
 
@@ -24,6 +27,22 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class TypeUtilTestCase
 	{
+		[TestCase(typeof(object), "System.Object")]
+		[TestCase(typeof(List<>), "System.Collections.Generic.List`1")]
+		[TestCase(typeof(List<object>), "System.Collections.Generic.List`1[System.Object]")]
+		[TestCase(typeof(List<object>.Enumerator), "System.Collections.Generic.List`1+Enumerator[System.Object]")]
+		[TestCase(typeof(Dictionary<,>), "System.Collections.Generic.Dictionary`2")]
+		[TestCase(typeof(Dictionary<object, bool>), "System.Collections.Generic.Dictionary`2[System.Object,System.Boolean]")]
+		public void AppendNamespaceQualifiedNameOf(Type type, string expected)
+		{
+			var builder = new StringBuilder();
+
+			builder.AppendNamespaceQualifiedNameOf(type);
+
+			var actual = builder.ToString();
+			Assert.AreEqual(expected, actual);
+		}
+
 		[Test]
 		public void GetAllInstanceMethods_GetsPublicAndNonPublicMethods()
 		{

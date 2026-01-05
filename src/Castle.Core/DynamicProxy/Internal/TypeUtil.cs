@@ -1,4 +1,4 @@
-// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ namespace Castle.DynamicProxy.Internal
 	using System.Linq;
 	using System.Reflection;
 	using System.Reflection.Emit;
+	using System.Text;
 
 	using Castle.DynamicProxy.Generators;
 	using Castle.DynamicProxy.Generators.Emitters;
@@ -30,6 +31,47 @@ namespace Castle.DynamicProxy.Internal
 	{
 		private static readonly Dictionary<Type, MethodInfo[]> instanceMethodsCache = new Dictionary<Type, MethodInfo[]>();
 		private static readonly Dictionary<Type, bool> hasAnyOverridableDefaultImplementationsCache = new Dictionary<Type, bool>();
+
+		internal static StringBuilder AppendNamespaceQualifiedNameOf(this StringBuilder builder, Type type)
+		{
+			if (type.IsGenericParameter == false)
+			{
+				if (type.IsNested)
+				{
+					builder.AppendNamespaceQualifiedNameOf(type.DeclaringType!).Append('+');
+				}
+				else
+				{
+					var ns = type.Namespace;
+					if (string.IsNullOrEmpty(ns) == false)
+					{
+						builder.Append(ns).Append('.');
+					}
+				}
+			}
+
+			builder.Append(type.Name);
+
+			if (type.IsConstructedGenericType)
+			{
+				builder.Append('[');
+
+				var typeArgs = type.GetGenericArguments();
+				for (int i = 0, n = typeArgs.Length; i < n; ++i)
+				{
+					if (i > 0)
+					{
+						builder.Append(',');
+					}
+
+					builder.AppendNamespaceQualifiedNameOf(typeArgs[i]);
+				}
+
+				builder.Append(']');
+			}
+
+			return builder;
+		}
 
 		internal static bool IsNullableType(this Type type)
 		{
