@@ -8,7 +8,7 @@
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/castleproject/Core</RepositoryUrl>
 		<BuildVersion>0.0.0</BuildVersion>
-		<BuildVersion Condition="'$(APPVEYOR_BUILD_VERSION)'!=''">$(APPVEYOR_BUILD_VERSION)</BuildVersion>
+		<BuildVersion Condition="'$(Version)'!=''">$(Version)</BuildVersion>
 		<BuildVersionMajor>$(BuildVersion.Split('.')[0])</BuildVersionMajor>
 		<BuildVersionNoSuffix>$(BuildVersion.Split('-')[0])</BuildVersionNoSuffix>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -27,9 +27,6 @@
 		<PackageIconUrl>http://www.castleproject.org/img/castle-logo.png</PackageIconUrl>
 		<PackageIcon>castle-logo.png</PackageIcon>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-		<PackageVersion>$(BuildVersion)</PackageVersion>
-		<IncludeSymbols>true</IncludeSymbols>
-		<IncludeSource>false</IncludeSource>
 		<CurrentYear>$([System.DateTime]::Now.ToString("yyyy"))</CurrentYear>
 		<Copyright>Copyright (c) 2004-$(CurrentYear) Castle Project - http://www.castleproject.org/ </Copyright>
 		<ContentTargetFolders>.</ContentTargetFolders>
@@ -39,6 +36,8 @@
 		<!--Deterministic Build and Source Link settings -->
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
 
 	<ItemGroup>

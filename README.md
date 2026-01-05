@@ -32,16 +32,10 @@ Running the unit tests additionally requires the .NET Framework 4.6.2+ and the .
 |-----------------|------------|
 | Windows & Linux | [Preview Feed](https://ci.appveyor.com/nuget/core-0mhe40ifodk8)
 
-### On Windows
+### On Windows/linux/macOS
 
 ```
-build.cmd
-```
-
-### On Linux
-
-```
-./build.sh
+dotnet build Castle.Core.slnx
 ```
 
 :information_source: **Mono runtime support:** We used to run tests on the Mono 6.0 runtime, but stopped doing so as the project has been deprecated. See the official announcement on [the Mono homepage](https://www.mono-project.com/).
