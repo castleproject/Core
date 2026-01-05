@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ namespace Castle.DynamicProxy.Generators
 	using System.Diagnostics;
 	using System.Reflection;
 	using System.Text;
+
+	using Castle.DynamicProxy.Internal;
 
 	internal abstract class MetaTypeElement
 	{
@@ -50,48 +52,24 @@ namespace Castle.DynamicProxy.Generators
 		protected void SwitchToExplicitImplementationName()
 		{
 			var name = member.Name;
-			var sourceType = member.DeclaringType;
-			var ns = sourceType.Namespace;
-			Debug.Assert(ns == null || ns != "");
+			var declaringType = member.DeclaringType;
 
-			if (sourceType.IsGenericType)
+			if (declaringType.IsGenericType || declaringType.IsNested)
 			{
-				var nameBuilder = new StringBuilder();
-				if (ns != null)
-				{
-					nameBuilder.Append(ns);
-					nameBuilder.Append('.');
-				}
-				AppendTypeName(nameBuilder, sourceType);
-				nameBuilder.Append('.');
-				nameBuilder.Append(name);
-				this.name = nameBuilder.ToString();
-			}
-			else if (ns != null)
-			{
-				this.name = string.Concat(ns, ".", sourceType.Name, ".", name);
+				var builder = new StringBuilder();
+				builder.AppendNamespaceQualifiedNameOf(declaringType).Append('.').Append(name);
+				this.name = builder.ToString();
 			}
 			else
 			{
-				this.name = string.Concat(sourceType.Name, ".", name);
-			}
-
-			static void AppendTypeName(StringBuilder nameBuilder, Type type)
-			{
-				nameBuilder.Append(type.Name);
-				if (type.IsGenericType)
+				var ns = declaringType.Namespace;
+				if (string.IsNullOrEmpty(ns))
 				{
-					nameBuilder.Append('[');
-					var genericTypeArguments = type.GetGenericArguments();
-					for (int i = 0, n = genericTypeArguments.Length; i < n; ++i)
-					{
-						if (i > 0)
-						{
-							nameBuilder.Append(',');
-						}
-						AppendTypeName(nameBuilder, genericTypeArguments[i]);
-					}
-					nameBuilder.Append(']');
+					this.name = string.Concat(declaringType.Name, ".", name);
+				}
+				else
+				{
+					this.name = string.Concat(ns, ".", declaringType.Name, ".", name);
 				}
 			}
 		}

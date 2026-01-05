@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -231,10 +231,10 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("SomeMethod", boolMethod.Name);
 
 			var intMethod = type.GetInterfaceMap(intInterfaceType).TargetMethods[0];
-			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithNonGenericMethod`1[Int32].SomeMethod", intMethod.Name);
+			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithNonGenericMethod`1[System.Int32].SomeMethod", intMethod.Name);
 
 			var nestedGenericBoolMethod = type.GetInterfaceMap(nestedGenericBoolInterfaceType).TargetMethods[0];
-			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithNonGenericMethod`1[IGenericWithNonGenericMethod`1[Boolean]].SomeMethod", nestedGenericBoolMethod.Name);
+			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithNonGenericMethod`1[Castle.DynamicProxy.Tests.Interfaces.IGenericWithNonGenericMethod`1[System.Boolean]].SomeMethod", nestedGenericBoolMethod.Name);
 		}
 
 		[Test]
@@ -257,13 +257,13 @@ namespace Castle.DynamicProxy.Tests
 
 			var intGetter = type.GetInterfaceMap(intInterfaceType).TargetMethods[0];
 			var intSetter = type.GetInterfaceMap(intInterfaceType).TargetMethods[1];
-			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithProperty`1[Int32].get_SomeProperty", intGetter.Name);
-			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithProperty`1[Int32].set_SomeProperty", intSetter.Name);
+			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithProperty`1[System.Int32].get_SomeProperty", intGetter.Name);
+			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithProperty`1[System.Int32].set_SomeProperty", intSetter.Name);
 
 			var nestedGenericBoolGetter = type.GetInterfaceMap(nestedGenericBoolInterfaceType).TargetMethods[0];
 			var nestedGenericBoolSetter = type.GetInterfaceMap(nestedGenericBoolInterfaceType).TargetMethods[1];
-			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithProperty`1[IGenericWithProperty`1[Boolean]].get_SomeProperty", nestedGenericBoolGetter.Name);
-			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithProperty`1[IGenericWithProperty`1[Boolean]].set_SomeProperty", nestedGenericBoolSetter.Name);
+			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithProperty`1[Castle.DynamicProxy.Tests.Interfaces.IGenericWithProperty`1[System.Boolean]].get_SomeProperty", nestedGenericBoolGetter.Name);
+			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithProperty`1[Castle.DynamicProxy.Tests.Interfaces.IGenericWithProperty`1[System.Boolean]].set_SomeProperty", nestedGenericBoolSetter.Name);
 		}
 
 		[Test]
@@ -286,13 +286,13 @@ namespace Castle.DynamicProxy.Tests
 
 			var intAdder = type.GetInterfaceMap(intInterfaceType).TargetMethods[0];
 			var intRemover = type.GetInterfaceMap(intInterfaceType).TargetMethods[1];
-			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithEvent`1[Int32].add_SomeEvent", intAdder.Name);
-			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithEvent`1[Int32].remove_SomeEvent", intRemover.Name);
+			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithEvent`1[System.Int32].add_SomeEvent", intAdder.Name);
+			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithEvent`1[System.Int32].remove_SomeEvent", intRemover.Name);
 
 			var nestedGenericBoolAdder = type.GetInterfaceMap(nestedGenericBoolInterfaceType).TargetMethods[0];
 			var nestedGenericBoolRemover = type.GetInterfaceMap(nestedGenericBoolInterfaceType).TargetMethods[1];
-			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithEvent`1[IGenericWithEvent`1[Boolean]].add_SomeEvent", nestedGenericBoolAdder.Name);
-			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithEvent`1[IGenericWithEvent`1[Boolean]].remove_SomeEvent", nestedGenericBoolRemover.Name);
+			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithEvent`1[Castle.DynamicProxy.Tests.Interfaces.IGenericWithEvent`1[System.Boolean]].add_SomeEvent", nestedGenericBoolAdder.Name);
+			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithEvent`1[Castle.DynamicProxy.Tests.Interfaces.IGenericWithEvent`1[System.Boolean]].remove_SomeEvent", nestedGenericBoolRemover.Name);
 		}
 
 		[Test]
@@ -312,10 +312,10 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreEqual("SomeMethod", boolIntMethod.Name);
 
 			var intBoolMethod = type.GetInterfaceMap(intBoolInterfaceType).TargetMethods[0];
-			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithNonGenericMethod`2[Int32,Boolean].SomeMethod", intBoolMethod.Name);
+			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithNonGenericMethod`2[System.Int32,System.Boolean].SomeMethod", intBoolMethod.Name);
 
 			var intNestedGenericBoolMethod = type.GetInterfaceMap(intNestedGenericBoolInterfaceType).TargetMethods[0];
-			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithNonGenericMethod`2[Int32,IGenericWithNonGenericMethod`1[Boolean]].SomeMethod", intNestedGenericBoolMethod.Name);
+			Assert.AreEqual("Castle.DynamicProxy.Tests.Interfaces.IGenericWithNonGenericMethod`2[System.Int32,Castle.DynamicProxy.Tests.Interfaces.IGenericWithNonGenericMethod`1[System.Boolean]].SomeMethod", intNestedGenericBoolMethod.Name);
 		}
 
 		[Test]
