@@ -3,7 +3,7 @@
 	<Import Project="..\..\buildscripts\common.props"></Import>
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0;net9.0;net462</TargetFrameworks>
+		<TargetFrameworks>net10.0;net8.0;net9.0;net462</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>

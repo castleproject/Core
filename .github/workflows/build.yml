@@ -44,11 +44,14 @@ jobs:
       # Test
       # ----
 
-      - name: Test on .NET 8.0
+      - name: Test on .NET 8
         run: dotnet test -c Release -f net8.0 --no-build --no-restore -l "console;verbosity=detailed"
 
-      - name: Test on .NET 9.0
+      - name: Test on .NET 9
         run: dotnet test -c Release -f net9.0 --no-build --no-restore -l "console;verbosity=detailed"
+
+      - name: Test on .NET 10
+        run: dotnet test -c Release -f net10.0 --no-build --no-restore -l "console;verbosity=detailed"
 
       - name: Test on .NET Framework 4.6.2 (Windows only)
         if: matrix.os == 'windows-latest'
