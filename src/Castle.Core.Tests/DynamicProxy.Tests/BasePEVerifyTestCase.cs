@@ -19,6 +19,7 @@ namespace Castle.DynamicProxy.Tests
 	using System.IO;
 
 	using NUnit.Framework;
+	using NUnit.Framework.Internal;
 
 	public class FindPeVerify
 	{
@@ -117,7 +118,10 @@ namespace Castle.DynamicProxy.Tests
 		[TearDown]
 		public virtual void TearDown()
 		{
-			if (IsVerificationPossible && !IsVerificationDisabled)
+			var currentTest = TestExecutionContext.CurrentContext.CurrentTest;
+			bool shouldSkipVerificationForCurrentTest = currentTest.Method.IsDefined<SkipPEVerifyAttribute>(false);
+
+			if (IsVerificationPossible && !IsVerificationDisabled && !shouldSkipVerificationForCurrentTest)
 			{
 				// Note: only supports one generated assembly at the moment
 				var path = ((PersistentProxyBuilder)builder).SaveAssembly();
