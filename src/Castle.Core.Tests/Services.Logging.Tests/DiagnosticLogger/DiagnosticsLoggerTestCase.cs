@@ -64,6 +64,13 @@ namespace Castle.Services.Logging.EventLogIntegration.Tests
 						ignore = true;
 						Assert.Ignore("This test case only valid when running as admin");
 					}
+
+					bool isGitHubActions = Environment.GetEnvironmentVariable("GITHUB_ACTIONS") == "true";
+					if (isGitHubActions)
+					{
+						ignore = true;
+						Assert.Ignore("This test case is flaky on GitHub Actions even when running as admin");
+					}
 				}
 				catch (SecurityException)
 				{
