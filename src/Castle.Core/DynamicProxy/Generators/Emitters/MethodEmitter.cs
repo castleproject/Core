@@ -131,7 +131,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			{
 				if (ReturnType == typeof(void))
 				{
-					CodeBuilder.AddStatement(new ReturnStatement());
+					CodeBuilder.AddStatement(ReturnStatement.Instance);
 				}
 				else
 				{

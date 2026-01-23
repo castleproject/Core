@@ -1,4 +1,4 @@
-// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -179,7 +179,7 @@ namespace Castle.DynamicProxy.Generators
 
 			if (byRefArguments.Count > 0)
 			{
-				invokeMethodOnTarget.CodeBuilder.AddStatement(new TryStatement());
+				invokeMethodOnTarget.CodeBuilder.AddStatement(TryStatement.Instance);
 			}
 
 			var methodOnTargetInvocationExpression = GetCallbackMethodInvocation(invocation, args, callbackMethod, targetField, invokeMethodOnTarget);
@@ -225,7 +225,7 @@ namespace Castle.DynamicProxy.Generators
 				invokeMethodOnTarget.CodeBuilder.AddStatement(setRetVal);
 			}
 
-			invokeMethodOnTarget.CodeBuilder.AddStatement(new ReturnStatement());
+			invokeMethodOnTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		private void AssignBackByRefArguments(MethodEmitter invokeMethodOnTarget, Dictionary<int, LocalReference> byRefArguments)
@@ -235,7 +235,8 @@ namespace Castle.DynamicProxy.Generators
 				return;
 			}
 
-			invokeMethodOnTarget.CodeBuilder.AddStatement(new FinallyStatement());
+			invokeMethodOnTarget.CodeBuilder.AddStatement(FinallyStatement.Instance);
+
 			foreach (var byRefArgument in byRefArguments)
 			{
 				var index = byRefArgument.Key;
@@ -265,7 +266,8 @@ namespace Castle.DynamicProxy.Generators
 						new LiteralIntExpression(index),
 						localValue));
 			}
-			invokeMethodOnTarget.CodeBuilder.AddStatement(new EndExceptionBlockStatement());
+
+			invokeMethodOnTarget.CodeBuilder.AddStatement(EndExceptionBlockStatement.Instance);
 		}
 
 		private void CreateConstructor(ClassEmitter invocation)
@@ -275,7 +277,7 @@ namespace Castle.DynamicProxy.Generators
 
 			var constructor = CreateConstructor(invocation, baseCtorArguments);
 			constructor.CodeBuilder.AddStatement(new ConstructorInvocationStatement(baseConstructor, baseCtorArguments));
-			constructor.CodeBuilder.AddStatement(new ReturnStatement());
+			constructor.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		private ConstructorEmitter CreateConstructor(ClassEmitter invocation, ArgumentReference[] baseCtorArguments)
@@ -292,7 +294,7 @@ namespace Castle.DynamicProxy.Generators
 			var throwOnNoTarget = new MethodInvocationExpression(InvocationMethods.ThrowOnNoTarget);
 
 			invokeMethodOnTarget.CodeBuilder.AddStatement(throwOnNoTarget);
-			invokeMethodOnTarget.CodeBuilder.AddStatement(new ReturnStatement());
+			invokeMethodOnTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		private MethodInfo GetCallbackMethod(ClassEmitter invocation)
@@ -336,7 +338,7 @@ namespace Castle.DynamicProxy.Generators
 			changeInvocationTarget.CodeBuilder.AddStatement(
 				new AssignStatement(targetField,
 				                    new ConvertExpression(targetType, changeInvocationTarget.Arguments[0])));
-			changeInvocationTarget.CodeBuilder.AddStatement(new ReturnStatement());
+			changeInvocationTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		private void ImplementChangeProxyTarget(ClassEmitter invocation, ClassEmitter @class)
@@ -357,7 +359,7 @@ namespace Castle.DynamicProxy.Generators
 					VirtualCall = true
 				});
 
-			changeProxyTarget.CodeBuilder.AddStatement(new ReturnStatement());
+			changeProxyTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		private void ImplementChangeProxyTargetInterface(ClassEmitter @class, ClassEmitter invocation,

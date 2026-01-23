@@ -1,4 +1,4 @@
-// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -118,7 +118,7 @@ namespace Castle.DynamicProxy.Generators
 
 			if (hasByRefArguments)
 			{
-				emitter.CodeBuilder.AddStatement(new TryStatement());
+				emitter.CodeBuilder.AddStatement(TryStatement.Instance);
 			}
 
 			var proceed = new MethodInvocationExpression(invocationLocal, InvocationMethods.Proceed);
@@ -126,14 +126,14 @@ namespace Castle.DynamicProxy.Generators
 
 			if (hasByRefArguments)
 			{
-				emitter.CodeBuilder.AddStatement(new FinallyStatement());
+				emitter.CodeBuilder.AddStatement(FinallyStatement.Instance);
 			}
 
 			GeneratorUtil.CopyOutAndRefParameters(dereferencedArguments, invocationLocal, MethodToOverride, emitter);
 
 			if (hasByRefArguments)
 			{
-				emitter.CodeBuilder.AddStatement(new EndExceptionBlockStatement());
+				emitter.CodeBuilder.AddStatement(EndExceptionBlockStatement.Instance);
 			}
 
 			if (MethodToOverride.ReturnType != typeof(void))
@@ -172,7 +172,7 @@ namespace Castle.DynamicProxy.Generators
 			}
 			else
 			{
-				emitter.CodeBuilder.AddStatement(new ReturnStatement());
+				emitter.CodeBuilder.AddStatement(ReturnStatement.Instance);
 			}
 
 			return emitter;

@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,8 +16,14 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
 	using System.Reflection.Emit;
 
-	internal class FinallyStatement : IStatement
+	internal sealed class FinallyStatement : IStatement
 	{
+		public static readonly FinallyStatement Instance = new FinallyStatement();
+
+		private FinallyStatement()
+		{
+		}
+
 		public void Emit(ILGenerator gen)
 		{
 			gen.BeginFinallyBlock();

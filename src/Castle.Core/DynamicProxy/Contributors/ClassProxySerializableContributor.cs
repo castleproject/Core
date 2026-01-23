@@ -1,4 +1,4 @@
-// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -187,7 +187,8 @@ namespace Castle.DynamicProxy.Contributors
 				                              	                      typeof(object),
 				                              	                      getValue)));
 			}
-			ctor.CodeBuilder.AddStatement(new ReturnStatement());
+
+			ctor.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		private bool VerifyIfBaseImplementsGetObjectData(Type baseType, MetaType model, out MetaMethod getObjectData)

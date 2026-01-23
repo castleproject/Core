@@ -67,7 +67,7 @@ namespace Castle.DynamicProxy.Generators
 
 			if (returnType == typeof(void))
 			{
-				statements.AddStatement(new ReturnStatement());
+				statements.AddStatement(ReturnStatement.Instance);
 			}
 			else
 			{
