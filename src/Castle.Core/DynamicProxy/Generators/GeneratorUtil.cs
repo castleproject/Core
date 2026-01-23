@@ -19,31 +19,18 @@ namespace Castle.DynamicProxy.Generators
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 	using Castle.DynamicProxy.Internal;
-	using Castle.DynamicProxy.Tokens;
 
 	internal static class GeneratorUtil
 	{
-		public static void CopyOutAndRefParameters(Reference[] dereferencedArguments, LocalReference invocation,
+		public static void CopyOutAndRefParameters(Reference[] dereferencedArguments, LocalReference argumentsArray,
 		                                           MethodInfo method, MethodEmitter emitter)
 		{
 			var parameters = method.GetParameters();
-
-			// Create it only if there are byref writable arguments.
-			LocalReference arguments = null;
 
 			for (var i = 0; i < parameters.Length; i++)
 			{
 				if (parameters[i].IsByRef && !parameters[i].IsReadOnly)
 				{
-					if (arguments == null)
-					{
-						arguments = emitter.CodeBuilder.DeclareLocal(typeof(object[]));
-						emitter.CodeBuilder.AddStatement(
-							new AssignStatement(
-								arguments,
-								new MethodInvocationExpression(invocation, InvocationMethods.GetArguments)));
-					}
-
 #if FEATURE_BYREFLIKE
 					var dereferencedParameterType = parameters[i].ParameterType.GetElementType();
 					if (dereferencedParameterType.IsByRefLikeSafe())
@@ -73,7 +60,7 @@ namespace Castle.DynamicProxy.Generators
 								dereferencedArguments[i],
 								new ConvertExpression(
 									dereferencedArguments[i].Type,
-									new ArrayElementReference(arguments, i))));
+									new ArrayElementReference(argumentsArray, i))));
 					}
 				}
 			}

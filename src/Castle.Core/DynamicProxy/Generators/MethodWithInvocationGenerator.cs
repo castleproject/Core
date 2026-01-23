@@ -102,10 +102,17 @@ namespace Castle.DynamicProxy.Generators
 			var methodInterceptors = SetMethodInterceptors(@class, namingScope, emitter, proxiedMethodTokenExpression);
 
 			var dereferencedArguments = IndirectReference.WrapIfByRef(emitter.Arguments);
+
+			var argumentsArray = emitter.CodeBuilder.DeclareLocal(typeof(object[]));
+			emitter.CodeBuilder.AddStatement(
+				new AssignStatement(
+					argumentsArray,
+					new ReferencesToObjectArrayExpression(dereferencedArguments)));
+
 			var hasByRefArguments = HasByRefArguments(emitter.Arguments);
 
-			var arguments = GetCtorArguments(@class, proxiedMethodTokenExpression, dereferencedArguments, methodInterceptors);
-			var ctorArguments = ModifyArguments(@class, arguments);
+			var ctorArguments = GetCtorArguments(@class, proxiedMethodTokenExpression, argumentsArray, methodInterceptors);
+			ctorArguments = ModifyArguments(@class, ctorArguments);
 
 			var invocationLocal = emitter.CodeBuilder.DeclareLocal(invocationType);
 			emitter.CodeBuilder.AddStatement(new AssignStatement(invocationLocal,
@@ -129,7 +136,7 @@ namespace Castle.DynamicProxy.Generators
 				emitter.CodeBuilder.AddStatement(FinallyStatement.Instance);
 			}
 
-			GeneratorUtil.CopyOutAndRefParameters(dereferencedArguments, invocationLocal, MethodToOverride, emitter);
+			GeneratorUtil.CopyOutAndRefParameters(dereferencedArguments, argumentsArray, MethodToOverride, emitter);
 
 			if (hasByRefArguments)
 			{
@@ -232,7 +239,7 @@ namespace Castle.DynamicProxy.Generators
 				                               genericParamsArrayLocal));
 		}
 
-		private IExpression[] GetCtorArguments(ClassEmitter @class, IExpression proxiedMethodTokenExpression, Reference[] dereferencedArguments, IExpression methodInterceptors)
+		private IExpression[] GetCtorArguments(ClassEmitter @class, IExpression proxiedMethodTokenExpression, LocalReference argumentsArray, IExpression methodInterceptors)
 		{
 			return new[]
 			{
@@ -240,7 +247,7 @@ namespace Castle.DynamicProxy.Generators
 				ThisExpression.Instance,
 				methodInterceptors ?? interceptors,
 				proxiedMethodTokenExpression,
-				new ReferencesToObjectArrayExpression(dereferencedArguments)
+				argumentsArray,
 			};
 		}
 
