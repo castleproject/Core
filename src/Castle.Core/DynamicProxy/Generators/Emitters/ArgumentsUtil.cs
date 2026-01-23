@@ -15,13 +15,76 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
+	using System.Linq;
 	using System.Reflection;
-	using System.Reflection.Emit;
+	using System.Runtime.InteropServices;
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
 	internal static class ArgumentsUtil
 	{
+		extension(ParameterInfo parameter)
+		{
+			public bool IsByRef
+			{
+				get
+				{
+					return parameter.ParameterType.IsByRef;
+				}
+			}
+
+			public bool IsReadOnly
+			{
+				get
+				{
+					// C# `in` parameters are also by-ref, but meant to be read-only.
+					// The section "Metadata representation of in parameters" on the following page
+					// defines how such parameters are marked:
+					//
+					// https://github.com/dotnet/csharplang/blob/master/proposals/csharp-7.2/readonly-ref.md
+					//
+					// This poses three problems for detecting them:
+					//
+					//  * The C# Roslyn compiler marks `in` parameters with an `[in]` IL modifier,
+					//    but this isn't specified, nor is it used uniquely for `in` params.
+					//
+					//  * `System.Runtime.CompilerServices.IsReadOnlyAttribute` is not defined on all
+					//    .NET platforms, so the compiler sometimes recreates that type in the same
+					//    assembly that contains the method having an `in` parameter. In other words,
+					//    it's an attribute one must check for by name (which is slow, as it implies
+					//    use of a `GetCustomAttributes` enumeration instead of a faster `IsDefined`).
+					//
+					//  * A required custom modifier `System.Runtime.InteropServices.InAttribute`
+					//    is always present in those cases relevant for DynamicProxy (proxyable methods),
+					//    but not all targeted platforms support reading custom modifiers. Also,
+					//    support for cmods is generally flaky (at this time of writing, mid-2018).
+					//
+					// The above points inform the following detection logic:
+
+					// First, fast-guard against non-`in` params by checking for an IL `[in]` modifier:
+					if ((parameter.Attributes & (ParameterAttributes.In | ParameterAttributes.Out)) != ParameterAttributes.In)
+					{
+						return false;
+					}
+
+					// Second, check for the required modifiers (hoping for good modreq support):
+					if (parameter.GetRequiredCustomModifiers().Any(x => x == typeof(InAttribute)))
+					{
+						return true;
+					}
+
+					// Third, check for `IsReadOnlyAttribute` by name (see explanation above).
+					// This check is likely the slowest (despite being accurate) so we do it last:
+					if (parameter.GetCustomAttributes(false).Any(x => x.GetType().FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute"))
+					{
+						return true;
+					}
+
+					return false;
+				}
+			}
+		}
+
 		extension(ParameterInfo[] parameters)
 		{
 			public ArgumentReference[] ConvertToArgumentReferences()
