@@ -1,4 +1,4 @@
-// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -64,12 +64,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			var returnType = methodToUseAsATemplate.ReturnType;
 			var baseMethodParameters = methodToUseAsATemplate.GetParameters();
-			var parameters = ArgumentsUtil.GetTypes(baseMethodParameters);
+			var parameterTypes = baseMethodParameters.GetTypes();
 
 			genericTypeParams = GenericUtil.CopyGenericArguments(methodToUseAsATemplate, builder);
-			SetParameters(parameters);
+			SetParameters(parameterTypes);
 			SetReturnType(returnType);
-			SetSignature(returnType, methodToUseAsATemplate.ReturnParameter, parameters, baseMethodParameters);
+			SetSignature(returnType, methodToUseAsATemplate.ReturnParameter, parameterTypes, baseMethodParameters);
 			DefineParameters(baseMethodParameters);
 		}
 
@@ -115,8 +115,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public void SetParameters(Type[] paramTypes)
 		{
 			builder.SetParameters(paramTypes);
-			arguments = ArgumentsUtil.ConvertToArgumentReference(paramTypes);
-			ArgumentsUtil.InitializeArgumentsByPosition(arguments, MethodBuilder.IsStatic);
+
+			Debug.Assert(MethodBuilder.IsStatic == false, "The following call to `ConvertToArgumentReferences` assumes the presence of a `this` parameter when assigning parameter positions.");
+			arguments = paramTypes.ConvertToArgumentReferences();
 		}
 
 		public virtual void Generate()

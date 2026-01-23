@@ -1,4 +1,4 @@
-// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,79 +15,135 @@
 namespace Castle.DynamicProxy.Generators.Emitters
 {
 	using System;
+	using System.Linq;
 	using System.Reflection;
-	using System.Reflection.Emit;
+	using System.Runtime.InteropServices;
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	internal abstract class ArgumentsUtil
+	internal static class ArgumentsUtil
 	{
-		public static ArgumentReference[] ConvertToArgumentReference(Type[] args)
+		extension(ParameterInfo parameter)
 		{
-			var arguments = new ArgumentReference[args.Length];
-
-			for (var i = 0; i < args.Length; ++i)
+			public bool IsByRef
 			{
-				arguments[i] = new ArgumentReference(args[i]);
+				get
+				{
+					return parameter.ParameterType.IsByRef;
+				}
 			}
 
-			return arguments;
+			public bool IsReadOnly
+			{
+				get
+				{
+					// C# `in` parameters are also by-ref, but meant to be read-only.
+					// The section "Metadata representation of in parameters" on the following page
+					// defines how such parameters are marked:
+					//
+					// https://github.com/dotnet/csharplang/blob/master/proposals/csharp-7.2/readonly-ref.md
+					//
+					// This poses three problems for detecting them:
+					//
+					//  * The C# Roslyn compiler marks `in` parameters with an `[in]` IL modifier,
+					//    but this isn't specified, nor is it used uniquely for `in` params.
+					//
+					//  * `System.Runtime.CompilerServices.IsReadOnlyAttribute` is not defined on all
+					//    .NET platforms, so the compiler sometimes recreates that type in the same
+					//    assembly that contains the method having an `in` parameter. In other words,
+					//    it's an attribute one must check for by name (which is slow, as it implies
+					//    use of a `GetCustomAttributes` enumeration instead of a faster `IsDefined`).
+					//
+					//  * A required custom modifier `System.Runtime.InteropServices.InAttribute`
+					//    is always present in those cases relevant for DynamicProxy (proxyable methods),
+					//    but not all targeted platforms support reading custom modifiers. Also,
+					//    support for cmods is generally flaky (at this time of writing, mid-2018).
+					//
+					// The above points inform the following detection logic:
+
+					// First, fast-guard against non-`in` params by checking for an IL `[in]` modifier:
+					if ((parameter.Attributes & (ParameterAttributes.In | ParameterAttributes.Out)) != ParameterAttributes.In)
+					{
+						return false;
+					}
+
+					// Second, check for the required modifiers (hoping for good modreq support):
+					if (parameter.GetRequiredCustomModifiers().Any(x => x == typeof(InAttribute)))
+					{
+						return true;
+					}
+
+					// Third, check for `IsReadOnlyAttribute` by name (see explanation above).
+					// This check is likely the slowest (despite being accurate) so we do it last:
+					if (parameter.GetCustomAttributes(false).Any(x => x.GetType().FullName == "System.Runtime.CompilerServices.IsReadOnlyAttribute"))
+					{
+						return true;
+					}
+
+					return false;
+				}
+			}
 		}
 
-		public static ArgumentReference[] ConvertToArgumentReference(ParameterInfo[] args)
+		extension(ParameterInfo[] parameters)
 		{
-			var arguments = new ArgumentReference[args.Length];
-
-			for (var i = 0; i < args.Length; ++i)
+			public ArgumentReference[] ConvertToArgumentReferences()
 			{
-				arguments[i] = new ArgumentReference(args[i].ParameterType);
+				if (parameters.Length == 0) return [];
+
+				var arguments = new ArgumentReference[parameters.Length];
+
+				for (var i = 0; i < parameters.Length; ++i)
+				{
+					arguments[i] = new ArgumentReference(parameters[i].ParameterType, i + 1);
+				}
+
+				return arguments;
 			}
 
-			return arguments;
+			public Type[] GetTypes()
+			{
+				if (parameters.Length == 0) return [];
+
+				var types = new Type[parameters.Length];
+				for (var i = 0; i < parameters.Length; i++)
+				{
+					types[i] = parameters[i].ParameterType;
+				}
+				return types;
+			}
 		}
 
-		public static IExpression[] ConvertToArgumentReferenceExpression(ParameterInfo[] args)
+		extension(Type[] parameterTypes)
 		{
-			var arguments = new IExpression[args.Length];
-
-			for (var i = 0; i < args.Length; ++i)
+			public ArgumentReference[] ConvertToArgumentReferences()
 			{
-				arguments[i] = new ArgumentReference(args[i].ParameterType, i + 1);
-			}
+				if (parameterTypes.Length == 0) return [];
 
-			return arguments;
+				var arguments = new ArgumentReference[parameterTypes.Length];
+
+				for (var i = 0; i < parameterTypes.Length; ++i)
+				{
+					arguments[i] = new ArgumentReference(parameterTypes[i], i + 1);
+				}
+
+				return arguments;
+			}
 		}
 
-		public static Type[] GetTypes(ParameterInfo[] parameters)
+		public static Type[] InitializeAndConvert(ArgumentReference[] arguments)
 		{
-			var types = new Type[parameters.Length];
-			for (var i = 0; i < parameters.Length; i++)
+			if (arguments.Length == 0) return [];
+
+			var types = new Type[arguments.Length];
+
+			for (var i = 0; i < arguments.Length; ++i)
 			{
-				types[i] = parameters[i].ParameterType;
+				arguments[i].Position = i + 1;
+				types[i] = arguments[i].Type;
 			}
+
 			return types;
-		}
-
-		public static Type[] InitializeAndConvert(ArgumentReference[] args)
-		{
-			var types = new Type[args.Length];
-
-			for (var i = 0; i < args.Length; ++i)
-			{
-				args[i].Position = i + 1;
-				types[i] = args[i].Type;
-			}
-
-			return types;
-		}
-
-		public static void InitializeArgumentsByPosition(ArgumentReference[] args, bool isStatic)
-		{
-			var offset = isStatic ? 0 : 1;
-			for (var i = 0; i < args.Length; ++i)
-			{
-				args[i].Position = i + offset;
-			}
 		}
 	}
 }
