@@ -1,4 +1,4 @@
-// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,38 +16,38 @@
 
 namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 {
-	using System;
-	using System.Reflection;
 	using System.Reflection.Emit;
 
 	using Castle.DynamicProxy.Internal;
 
 	internal class ReferencesToObjectArrayExpression : IExpression
 	{
-		private readonly Reference[] args;
+		private readonly ArgumentReference[] arguments;
 
-		public ReferencesToObjectArrayExpression(params Reference[] args)
+		public ReferencesToObjectArrayExpression(ArgumentReference[] arguments)
 		{
-			this.args = args;
+			this.arguments = arguments;
 		}
 
 		public void Emit(ILGenerator gen)
 		{
-			var local = gen.DeclareLocal(typeof(object?[]));
+			var argumentsArray = gen.DeclareLocal(typeof(object?[]));
 
-			gen.Emit(OpCodes.Ldc_I4, args.Length);
+			gen.Emit(OpCodes.Ldc_I4, arguments.Length);
 			gen.Emit(OpCodes.Newarr, typeof(object));
-			gen.Emit(OpCodes.Stloc, local);
+			gen.Emit(OpCodes.Stloc, argumentsArray);
 
-			for (var i = 0; i < args.Length; i++)
+			for (var i = 0; i < arguments.Length; i++)
 			{
-				gen.Emit(OpCodes.Ldloc, local);
+				gen.Emit(OpCodes.Ldloc, argumentsArray);
 				gen.Emit(OpCodes.Ldc_I4, i);
 
-				var reference = args[i];
+				var argument = arguments[i];
+				Reference dereferencedArgument = argument.Type.IsByRef ? new IndirectReference(argument) : argument;
+				var dereferencedArgumentType = dereferencedArgument.Type;
 
 #if FEATURE_BYREFLIKE
-				if (reference.Type.IsByRefLikeSafe())
+				if (dereferencedArgumentType.IsByRefLikeSafe())
 				{
 					// The by-ref-like argument value cannot be put into the `object[]` array,
 					// because it cannot be boxed. We need to replace it with some other value.
@@ -60,26 +60,21 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				}
 #endif
 
-				reference.Emit(gen);
+				dereferencedArgument.Emit(gen);
 
-				if (reference.Type.IsByRef)
+				if (dereferencedArgumentType.IsValueType)
 				{
-					throw new NotSupportedException();
+					gen.Emit(OpCodes.Box, dereferencedArgumentType);
 				}
-
-				if (reference.Type.IsValueType)
+				else if (dereferencedArgumentType.IsGenericParameter)
 				{
-					gen.Emit(OpCodes.Box, reference.Type);
-				}
-				else if (reference.Type.IsGenericParameter)
-				{
-					gen.Emit(OpCodes.Box, reference.Type);
+					gen.Emit(OpCodes.Box, dereferencedArgumentType);
 				}
 
 				gen.Emit(OpCodes.Stelem_Ref);
 			}
 
-			gen.Emit(OpCodes.Ldloc, local);
+			gen.Emit(OpCodes.Ldloc, argumentsArray);
 		}
 	}
 }

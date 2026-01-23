@@ -14,6 +14,7 @@
 
 namespace Castle.DynamicProxy.Generators
 {
+	using System.Diagnostics;
 	using System.Reflection;
 
 	using Castle.DynamicProxy.Generators.Emitters;
@@ -22,18 +23,22 @@ namespace Castle.DynamicProxy.Generators
 
 	internal static class GeneratorUtil
 	{
-		public static void CopyOutAndRefParameters(Reference[] dereferencedArguments, LocalReference argumentsArray,
+		public static void CopyOutAndRefParameters(Reference[] arguments, LocalReference argumentsArray,
 		                                           MethodInfo method, MethodEmitter emitter)
 		{
 			var parameters = method.GetParameters();
 
 			for (var i = 0; i < parameters.Length; i++)
 			{
+				Debug.Assert(parameters[i].ParameterType == arguments[i].Type);
+
 				if (parameters[i].IsByRef && !parameters[i].IsReadOnly)
 				{
+					var dereferencedArgument = new IndirectReference(arguments[i]);
+					var dereferencedArgumentType = dereferencedArgument.Type;
+
 #if FEATURE_BYREFLIKE
-					var dereferencedParameterType = parameters[i].ParameterType.GetElementType();
-					if (dereferencedParameterType.IsByRefLikeSafe())
+					if (dereferencedArgumentType.IsByRefLikeSafe())
 					{
 						// The argument value in the invocation `Arguments` array is an `object`
 						// and cannot be converted back to its original by-ref-like type.
@@ -42,7 +47,10 @@ namespace Castle.DynamicProxy.Generators
 						// For now, we just substitute the by-ref-like type's default value:
 						if (parameters[i].IsOut)
 						{
-							emitter.CodeBuilder.AddStatement(new AssignStatement(dereferencedArguments[i], new DefaultValueExpression(dereferencedParameterType)));
+							emitter.CodeBuilder.AddStatement(
+								new AssignStatement(
+									dereferencedArgument,
+									new DefaultValueExpression(dereferencedArgumentType)));
 						}
 						else
 						{
@@ -57,9 +65,9 @@ namespace Castle.DynamicProxy.Generators
 					{
 						emitter.CodeBuilder.AddStatement(
 							new AssignStatement(
-								dereferencedArguments[i],
+								dereferencedArgument,
 								new ConvertExpression(
-									dereferencedArguments[i].Type,
+									dereferencedArgumentType,
 									new ArrayElementReference(argumentsArray, i))));
 					}
 				}

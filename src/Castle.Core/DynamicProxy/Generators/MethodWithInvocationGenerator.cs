@@ -101,13 +101,13 @@ namespace Castle.DynamicProxy.Generators
 
 			var methodInterceptors = SetMethodInterceptors(@class, namingScope, emitter, proxiedMethodTokenExpression);
 
-			var dereferencedArguments = IndirectReference.WrapIfByRef(emitter.Arguments);
+			var arguments = emitter.Arguments;
 
 			var argumentsArray = emitter.CodeBuilder.DeclareLocal(typeof(object[]));
 			emitter.CodeBuilder.AddStatement(
 				new AssignStatement(
 					argumentsArray,
-					new ReferencesToObjectArrayExpression(dereferencedArguments)));
+					new ReferencesToObjectArrayExpression(arguments)));
 
 			var hasByRefArguments = HasByRefArguments(emitter.Arguments);
 
@@ -136,7 +136,7 @@ namespace Castle.DynamicProxy.Generators
 				emitter.CodeBuilder.AddStatement(FinallyStatement.Instance);
 			}
 
-			GeneratorUtil.CopyOutAndRefParameters(dereferencedArguments, argumentsArray, MethodToOverride, emitter);
+			GeneratorUtil.CopyOutAndRefParameters(arguments, argumentsArray, MethodToOverride, emitter);
 
 			if (hasByRefArguments)
 			{

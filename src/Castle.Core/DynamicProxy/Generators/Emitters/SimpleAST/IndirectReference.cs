@@ -1,4 +1,4 @@
-// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -58,24 +58,6 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 			byRefReference.Emit(gen);
 			value.Emit(gen);
 			OpCodeUtil.EmitStoreIndirectOpCodeForType(gen, Type);
-		}
-
-		public static Reference WrapIfByRef(Reference reference)
-		{
-			return reference.Type.IsByRef ? new IndirectReference(reference) : reference;
-		}
-
-		// TODO: Better name
-		public static Reference[] WrapIfByRef(Reference[] references)
-		{
-			var result = new Reference[references.Length];
-
-			for (var i = 0; i < references.Length; i++)
-			{
-				result[i] = WrapIfByRef(references[i]);
-			}
-
-			return result;
 		}
 	}
 }
