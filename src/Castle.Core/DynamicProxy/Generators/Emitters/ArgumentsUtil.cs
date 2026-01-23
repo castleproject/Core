@@ -24,6 +24,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 	{
 		public static ArgumentReference[] ConvertToArgumentReference(Type[] args)
 		{
+			if (args.Length == 0) return [];
+
 			var arguments = new ArgumentReference[args.Length];
 
 			for (var i = 0; i < args.Length; ++i)
@@ -36,6 +38,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static ArgumentReference[] ConvertToArgumentReference(ParameterInfo[] args)
 		{
+			if (args.Length == 0) return [];
+
 			var arguments = new ArgumentReference[args.Length];
 
 			for (var i = 0; i < args.Length; ++i)
@@ -48,6 +52,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static Type[] GetTypes(ParameterInfo[] parameters)
 		{
+			if (parameters.Length == 0) return [];
+
 			var types = new Type[parameters.Length];
 			for (var i = 0; i < parameters.Length; i++)
 			{
@@ -58,6 +64,8 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 		public static Type[] InitializeAndConvert(ArgumentReference[] args)
 		{
+			if (args.Length == 0) return [];
+
 			var types = new Type[args.Length];
 
 			for (var i = 0; i < args.Length; ++i)
