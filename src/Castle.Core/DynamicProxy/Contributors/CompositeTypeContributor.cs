@@ -139,14 +139,14 @@ namespace Castle.DynamicProxy.Contributors
 
 		protected static Type[] GetCacheKeyTypes(MetaMethod method)
 		{
-			Type[] argumentTypes = ArgumentsUtil.GetTypes(method.MethodOnTarget.GetParameters());
-			if (argumentTypes.Length < 1)
+			Type[] parameterTypes = method.MethodOnTarget.GetParameters().GetTypes();
+			if (parameterTypes.Length < 1)
 			{
 				return new[] { method.MethodOnTarget.ReturnType };
 			}
-			var types = new Type[argumentTypes.Length + 1];
+			var types = new Type[parameterTypes.Length + 1];
 			types[0] = method.MethodOnTarget.ReturnType;
-			argumentTypes.CopyTo(types, 1);
+			parameterTypes.CopyTo(types, 1);
 			return types;
 		}
 

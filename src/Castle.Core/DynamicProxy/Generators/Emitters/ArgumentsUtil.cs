@@ -20,46 +20,52 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
-	internal abstract class ArgumentsUtil
+	internal static class ArgumentsUtil
 	{
-		public static ArgumentReference[] ConvertToArgumentReferences(Type[] parameterTypes)
+		extension(ParameterInfo[] parameters)
 		{
-			if (parameterTypes.Length == 0) return [];
-
-			var arguments = new ArgumentReference[parameterTypes.Length];
-
-			for (var i = 0; i < parameterTypes.Length; ++i)
+			public ArgumentReference[] ConvertToArgumentReferences()
 			{
-				arguments[i] = new ArgumentReference(parameterTypes[i], i + 1);
+				if (parameters.Length == 0) return [];
+
+				var arguments = new ArgumentReference[parameters.Length];
+
+				for (var i = 0; i < parameters.Length; ++i)
+				{
+					arguments[i] = new ArgumentReference(parameters[i].ParameterType, i + 1);
+				}
+
+				return arguments;
 			}
 
-			return arguments;
+			public Type[] GetTypes()
+			{
+				if (parameters.Length == 0) return [];
+
+				var types = new Type[parameters.Length];
+				for (var i = 0; i < parameters.Length; i++)
+				{
+					types[i] = parameters[i].ParameterType;
+				}
+				return types;
+			}
 		}
 
-		public static ArgumentReference[] ConvertToArgumentReferences(ParameterInfo[] parameters)
+		extension(Type[] parameterTypes)
 		{
-			if (parameters.Length == 0) return [];
-
-			var arguments = new ArgumentReference[parameters.Length];
-
-			for (var i = 0; i < parameters.Length; ++i)
+			public ArgumentReference[] ConvertToArgumentReferences()
 			{
-				arguments[i] = new ArgumentReference(parameters[i].ParameterType, i + 1);
+				if (parameterTypes.Length == 0) return [];
+
+				var arguments = new ArgumentReference[parameterTypes.Length];
+
+				for (var i = 0; i < parameterTypes.Length; ++i)
+				{
+					arguments[i] = new ArgumentReference(parameterTypes[i], i + 1);
+				}
+
+				return arguments;
 			}
-
-			return arguments;
-		}
-
-		public static Type[] GetTypes(ParameterInfo[] parameters)
-		{
-			if (parameters.Length == 0) return [];
-
-			var types = new Type[parameters.Length];
-			for (var i = 0; i < parameters.Length; i++)
-			{
-				types[i] = parameters[i].ParameterType;
-			}
-			return types;
 		}
 
 		public static Type[] InitializeAndConvert(ArgumentReference[] arguments)

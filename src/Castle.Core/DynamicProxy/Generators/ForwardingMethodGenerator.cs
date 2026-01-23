@@ -33,7 +33,7 @@ namespace Castle.DynamicProxy.Generators
 		                                                        INamingScope namingScope)
 		{
 			var target = getTarget(@class, MethodToOverride);
-			var arguments = ArgumentsUtil.ConvertToArgumentReferences(MethodToOverride.GetParameters());
+			var arguments = MethodToOverride.GetParameters().ConvertToArgumentReferences();
 
 			emitter.CodeBuilder.AddStatement(new ReturnStatement(
 			                                 	new MethodInvocationExpression(

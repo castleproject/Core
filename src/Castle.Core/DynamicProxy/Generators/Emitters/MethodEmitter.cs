@@ -64,12 +64,12 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 			var returnType = methodToUseAsATemplate.ReturnType;
 			var baseMethodParameters = methodToUseAsATemplate.GetParameters();
-			var parameters = ArgumentsUtil.GetTypes(baseMethodParameters);
+			var parameterTypes = baseMethodParameters.GetTypes();
 
 			genericTypeParams = GenericUtil.CopyGenericArguments(methodToUseAsATemplate, builder);
-			SetParameters(parameters);
+			SetParameters(parameterTypes);
 			SetReturnType(returnType);
-			SetSignature(returnType, methodToUseAsATemplate.ReturnParameter, parameters, baseMethodParameters);
+			SetSignature(returnType, methodToUseAsATemplate.ReturnParameter, parameterTypes, baseMethodParameters);
 			DefineParameters(baseMethodParameters);
 		}
 
@@ -117,7 +117,7 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			builder.SetParameters(paramTypes);
 
 			Debug.Assert(MethodBuilder.IsStatic == false, "The following call to `ConvertToArgumentReferences` assumes the presence of a `this` parameter when assigning parameter positions.");
-			arguments = ArgumentsUtil.ConvertToArgumentReferences(paramTypes);
+			arguments = paramTypes.ConvertToArgumentReferences();
 		}
 
 		public virtual void Generate()
