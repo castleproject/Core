@@ -1,4 +1,4 @@
-// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -156,7 +156,7 @@ namespace Castle.DynamicProxy.Generators
 
 		protected void CompleteInitCacheMethod(CodeBuilder constCodeBuilder)
 		{
-			constCodeBuilder.AddStatement(new ReturnStatement());
+			constCodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		protected virtual void CreateFields(ClassEmitter emitter)
@@ -281,7 +281,7 @@ namespace Castle.DynamicProxy.Generators
 				constructor.CodeBuilder.AddStatement(new ConstructorInvocationStatement(emitter.BaseType));
 			}
 
-			constructor.CodeBuilder.AddStatement(new ReturnStatement());
+			constructor.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		protected void GenerateConstructors(ClassEmitter emitter, Type baseType, params FieldReference[] fields)
@@ -339,7 +339,7 @@ namespace Castle.DynamicProxy.Generators
 
 			constructor.CodeBuilder.AddStatement(new ConstructorInvocationStatement(defaultConstructor));
 
-			constructor.CodeBuilder.AddStatement(new ReturnStatement());
+			constructor.CodeBuilder.AddStatement(ReturnStatement.Instance);
 		}
 
 		protected ConstructorEmitter GenerateStaticConstructor(ClassEmitter emitter)
