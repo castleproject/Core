@@ -22,13 +22,14 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	internal abstract class ArgumentsUtil
 	{
-		public static ArgumentReference[] ConvertToArgumentReference(Type[] args)
+		public static ArgumentReference[] ConvertToArgumentReference(Type[] args, bool isStatic)
 		{
 			var arguments = new ArgumentReference[args.Length];
 
+			var offset = isStatic ? 0 : 1;
 			for (var i = 0; i < args.Length; ++i)
 			{
-				arguments[i] = new ArgumentReference(args[i]);
+				arguments[i] = new ArgumentReference(args[i], i + offset);
 			}
 
 			return arguments;
@@ -67,15 +68,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			}
 
 			return types;
-		}
-
-		public static void InitializeArgumentsByPosition(ArgumentReference[] args, bool isStatic)
-		{
-			var offset = isStatic ? 0 : 1;
-			for (var i = 0; i < args.Length; ++i)
-			{
-				args[i].Position = i + offset;
-			}
 		}
 	}
 }
