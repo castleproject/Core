@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ namespace Castle.DynamicProxy.Generators
 		                                                        INamingScope namingScope)
 		{
 			var target = getTarget(@class, MethodToOverride);
-			var arguments = ArgumentsUtil.ConvertToArgumentReferenceExpression(MethodToOverride.GetParameters());
+			var arguments = ArgumentsUtil.ConvertToArgumentReference(MethodToOverride.GetParameters());
 
 			emitter.CodeBuilder.AddStatement(new ReturnStatement(
 			                                 	new MethodInvocationExpression(
