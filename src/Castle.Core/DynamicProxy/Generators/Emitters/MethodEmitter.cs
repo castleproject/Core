@@ -115,7 +115,9 @@ namespace Castle.DynamicProxy.Generators.Emitters
 		public void SetParameters(Type[] paramTypes)
 		{
 			builder.SetParameters(paramTypes);
-			arguments = ArgumentsUtil.ConvertToArgumentReference(paramTypes, MethodBuilder.IsStatic);
+
+			Debug.Assert(MethodBuilder.IsStatic == false, "The following call to `ConvertToArgumentReference` assumes the presence of a `this` parameter when assigning parameter positions.");
+			arguments = ArgumentsUtil.ConvertToArgumentReference(paramTypes);
 		}
 
 		public virtual void Generate()

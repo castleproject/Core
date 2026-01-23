@@ -22,14 +22,13 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	internal abstract class ArgumentsUtil
 	{
-		public static ArgumentReference[] ConvertToArgumentReference(Type[] args, bool isStatic)
+		public static ArgumentReference[] ConvertToArgumentReference(Type[] args)
 		{
 			var arguments = new ArgumentReference[args.Length];
 
-			var offset = isStatic ? 0 : 1;
 			for (var i = 0; i < args.Length; ++i)
 			{
-				arguments[i] = new ArgumentReference(args[i], i + offset);
+				arguments[i] = new ArgumentReference(args[i], i + 1);
 			}
 
 			return arguments;

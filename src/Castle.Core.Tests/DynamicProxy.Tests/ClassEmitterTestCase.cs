@@ -1,4 +1,4 @@
-// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -39,18 +39,6 @@ namespace Castle.DynamicProxy.Tests
 			                                        Type.EmptyTypes);
 			Type t = emitter.BuildType();
 			Activator.CreateInstance(t);
-		}
-
-		[Test]
-		public void StaticMethodArguments()
-		{
-			ClassEmitter emitter = new ClassEmitter(generator.ProxyBuilder.ModuleScope, "Foo", typeof (List<object>),
-			                                        Type.EmptyTypes);
-			MethodEmitter methodEmitter = emitter.CreateMethod("StaticMethod", MethodAttributes.Public | MethodAttributes.Static,
-			                                                   typeof (string), typeof (string));
-			methodEmitter.CodeBuilder.AddStatement(new ReturnStatement(methodEmitter.Arguments[0]));
-			Type t = emitter.BuildType();
-			Assert.AreEqual("five", t.GetMethod("StaticMethod").Invoke(null, new object[] {"five"}));
 		}
 
 		[Test]
