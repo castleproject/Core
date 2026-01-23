@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Generators
 		private IStatement IfNotNull(IExpression target)
 		{
 			var statements = new BlockStatement();
-			var arguments = ArgumentsUtil.ConvertToArgumentReference(MethodToOverride.GetParameters());
+			var arguments = ArgumentsUtil.ConvertToArgumentReferences(MethodToOverride.GetParameters());
 
 			statements.AddStatement(new ReturnStatement(
 			                        	new MethodInvocationExpression(

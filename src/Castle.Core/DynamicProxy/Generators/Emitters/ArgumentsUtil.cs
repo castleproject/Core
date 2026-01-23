@@ -22,29 +22,29 @@ namespace Castle.DynamicProxy.Generators.Emitters
 
 	internal abstract class ArgumentsUtil
 	{
-		public static ArgumentReference[] ConvertToArgumentReference(Type[] args)
+		public static ArgumentReference[] ConvertToArgumentReferences(Type[] parameterTypes)
 		{
-			if (args.Length == 0) return [];
+			if (parameterTypes.Length == 0) return [];
 
-			var arguments = new ArgumentReference[args.Length];
+			var arguments = new ArgumentReference[parameterTypes.Length];
 
-			for (var i = 0; i < args.Length; ++i)
+			for (var i = 0; i < parameterTypes.Length; ++i)
 			{
-				arguments[i] = new ArgumentReference(args[i], i + 1);
+				arguments[i] = new ArgumentReference(parameterTypes[i], i + 1);
 			}
 
 			return arguments;
 		}
 
-		public static ArgumentReference[] ConvertToArgumentReference(ParameterInfo[] args)
+		public static ArgumentReference[] ConvertToArgumentReferences(ParameterInfo[] parameters)
 		{
-			if (args.Length == 0) return [];
+			if (parameters.Length == 0) return [];
 
-			var arguments = new ArgumentReference[args.Length];
+			var arguments = new ArgumentReference[parameters.Length];
 
-			for (var i = 0; i < args.Length; ++i)
+			for (var i = 0; i < parameters.Length; ++i)
 			{
-				arguments[i] = new ArgumentReference(args[i].ParameterType, i + 1);
+				arguments[i] = new ArgumentReference(parameters[i].ParameterType, i + 1);
 			}
 
 			return arguments;
@@ -62,16 +62,16 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			return types;
 		}
 
-		public static Type[] InitializeAndConvert(ArgumentReference[] args)
+		public static Type[] InitializeAndConvert(ArgumentReference[] arguments)
 		{
-			if (args.Length == 0) return [];
+			if (arguments.Length == 0) return [];
 
-			var types = new Type[args.Length];
+			var types = new Type[arguments.Length];
 
-			for (var i = 0; i < args.Length; ++i)
+			for (var i = 0; i < arguments.Length; ++i)
 			{
-				args[i].Position = i + 1;
-				types[i] = args[i].Type;
+				arguments[i].Position = i + 1;
+				types[i] = arguments[i].Type;
 			}
 
 			return types;
