@@ -37,7 +37,11 @@ namespace Castle.DynamicProxy.Generators
 				{
 					if (arguments == null)
 					{
-						arguments = StoreInvocationArgumentsInLocal(emitter, invocation);
+						arguments = emitter.CodeBuilder.DeclareLocal(typeof(object[]));
+						emitter.CodeBuilder.AddStatement(
+							new AssignStatement(
+								arguments,
+								new MethodInvocationExpression(invocation, InvocationMethods.GetArguments)));
 					}
 
 #if FEATURE_BYREFLIKE
@@ -64,33 +68,15 @@ namespace Castle.DynamicProxy.Generators
 					else
 #endif
 					{
-						emitter.CodeBuilder.AddStatement(AssignArgument(dereferencedArguments, i, arguments));
+						emitter.CodeBuilder.AddStatement(
+							new AssignStatement(
+								dereferencedArguments[i],
+								new ConvertExpression(
+									dereferencedArguments[i].Type,
+									new ArrayElementReference(arguments, i))));
 					}
 				}
 			}
-		}
-
-		private static ConvertExpression Argument(int i, LocalReference invocationArgs, Reference[] arguments)
-		{
-			return new ConvertExpression(arguments[i].Type, new ArrayElementReference(invocationArgs, i));
-		}
-
-		private static AssignStatement AssignArgument(Reference[] dereferencedArguments, int i,
-		                                              LocalReference invocationArgs)
-		{
-			return new AssignStatement(dereferencedArguments[i], Argument(i, invocationArgs, dereferencedArguments));
-		}
-
-		private static AssignStatement GetArguments(LocalReference invocationArgs, LocalReference invocation)
-		{
-			return new AssignStatement(invocationArgs, new MethodInvocationExpression(invocation, InvocationMethods.GetArguments));
-		}
-
-		private static LocalReference StoreInvocationArgumentsInLocal(MethodEmitter emitter, LocalReference invocation)
-		{
-			var invocationArgs = emitter.CodeBuilder.DeclareLocal(typeof(object[]));
-			emitter.CodeBuilder.AddStatement(GetArguments(invocationArgs, invocation));
-			return invocationArgs;
 		}
 	}
 }
