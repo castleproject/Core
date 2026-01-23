@@ -1,4 +1,4 @@
-// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,18 +29,6 @@ namespace Castle.DynamicProxy.Generators.Emitters
 			for (var i = 0; i < args.Length; ++i)
 			{
 				arguments[i] = new ArgumentReference(args[i]);
-			}
-
-			return arguments;
-		}
-
-		public static ArgumentReference[] ConvertToArgumentReference(ParameterInfo[] args)
-		{
-			var arguments = new ArgumentReference[args.Length];
-
-			for (var i = 0; i < args.Length; ++i)
-			{
-				arguments[i] = new ArgumentReference(args[i].ParameterType);
 			}
 
 			return arguments;
