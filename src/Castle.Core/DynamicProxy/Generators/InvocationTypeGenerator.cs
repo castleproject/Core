@@ -274,62 +274,42 @@ namespace Castle.DynamicProxy.Generators
 
 				for (int i = 0, n = parameters.Length; i < n; ++i)
 				{
-					var param = parameters[i];
+					var argumentType = invocation.GetClosedParameterType(parameters[i].ParameterType);
+					var dereferencedArgumentType = argumentType.IsByRef ? argumentType.GetElementType() : argumentType;
 
-					var paramType = invocation.GetClosedParameterType(param.ParameterType);
-					if (paramType.IsByRef)
-					{
-						var localReference = method.CodeBuilder.DeclareLocal(paramType.GetElementType());
-						IExpression localValue;
+					IExpression dereferencedArgument;
 
 #if FEATURE_BYREFLIKE
-						if (paramType.GetElementType().IsByRefLikeSafe())
-						{
-							// The argument value in the invocation `Arguments` array is an `object`
-							// and cannot be converted back to its original by-ref-like type.
-							// We need to replace it with some other value.
+					if (dereferencedArgumentType.IsByRefLikeSafe())
+					{
+						// The argument value in the invocation `Arguments` array is an `object`
+						// and cannot be converted back to its original by-ref-like type.
+						// We need to replace it with some other value.
 
-							// For now, we just substitute the by-ref-like type's default value:
-							localValue = new DefaultValueExpression(localReference.Type);
-						}
-						else
+						// For now, we just substitute the by-ref-like type's default value:
+						dereferencedArgument = new DefaultValueExpression(dereferencedArgumentType);
+					}
+					else
 #endif
-						{
-							localValue = new ConvertExpression(
-								paramType.GetElementType(),
-								new MethodInvocationExpression(
-									ThisExpression.Instance,
-									InvocationMethods.GetArgumentValue,
-									new LiteralIntExpression(i)));
-						}
+					{
+						dereferencedArgument = new ConvertExpression(
+							dereferencedArgumentType,
+							new MethodInvocationExpression(
+								ThisExpression.Instance,
+								InvocationMethods.GetArgumentValue,
+								new LiteralIntExpression(i)));
+					}
 
-						method.CodeBuilder.AddStatement(new AssignStatement(localReference, localValue));
-						var localByRef = new AddressOfExpression(localReference);
-						arguments[i] = localByRef;
-						byRefArguments[i] = localReference;
+					if (argumentType.IsByRef)
+					{
+						var localCopy = method.CodeBuilder.DeclareLocal(dereferencedArgumentType);
+						method.CodeBuilder.AddStatement(new AssignStatement(localCopy, dereferencedArgument));
+						arguments[i] = new AddressOfExpression(localCopy);
+						byRefArguments[i] = localCopy;
 					}
 					else
 					{
-#if FEATURE_BYREFLIKE
-						if (paramType.IsByRefLikeSafe())
-						{
-							// The argument value in the invocation `Arguments` array is an `object`
-							// and cannot be converted back to its original by-ref-like type.
-							// We need to replace it with some other value.
-
-							// For now, we just substitute the by-ref-like type's default value:
-							arguments[i] = new DefaultValueExpression(paramType);
-						}
-						else
-#endif
-						{
-							arguments[i] = new ConvertExpression(
-								paramType,
-								new MethodInvocationExpression(
-									ThisExpression.Instance,
-									InvocationMethods.GetArgumentValue,
-									new LiteralIntExpression(i)));
-						}
+						arguments[i] = dereferencedArgument;
 					}
 				}
 			}
@@ -339,38 +319,41 @@ namespace Castle.DynamicProxy.Generators
 				foreach (var byRefArgument in byRefArguments)
 				{
 					var index = byRefArgument.Key;
-					var localReference = byRefArgument.Value;
-					IExpression localValue;
+					var localCopy = byRefArgument.Value;
 
 #if FEATURE_BYREFLIKE
-					if (localReference.Type.IsByRefLikeSafe())
+					if (localCopy.Type.IsByRefLikeSafe())
 					{
 						// The by-ref-like value in the local buffer variable cannot be put back
 						// into the invocation `Arguments` array, because it cannot be boxed.
 						// We need to replace it with some other value.
 
 						// For now, we just erase it by substituting `null`:
-						localValue = NullExpression.Instance;
+						method.CodeBuilder.AddStatement(
+							new MethodInvocationExpression(
+								ThisExpression.Instance,
+								InvocationMethods.SetArgumentValue,
+								new LiteralIntExpression(index),
+								NullExpression.Instance));
 					}
 					else
 #endif
 					{
-						localValue = new ConvertExpression(typeof(object), localReference.Type, localReference);
+						method.CodeBuilder.AddStatement(
+							new MethodInvocationExpression(
+								ThisExpression.Instance,
+								InvocationMethods.SetArgumentValue,
+								new LiteralIntExpression(index),
+								new ConvertExpression(
+									typeof(object),
+									localCopy.Type,
+									localCopy)));
 					}
-
-					method.CodeBuilder.AddStatement(
-						new MethodInvocationExpression(
-							ThisExpression.Instance,
-							InvocationMethods.SetArgumentValue,
-							new LiteralIntExpression(index),
-							localValue));
 				}
 			}
 
 			public void SetReturnValue(LocalReference returnValue)
 			{
-				IExpression retVal;
-
 #if FEATURE_BYREFLIKE
 				if (returnValue.Type.IsByRefLikeSafe())
 				{
@@ -378,20 +361,22 @@ namespace Castle.DynamicProxy.Generators
 					// because it cannot be boxed. We need to replace it with some other value.
 
 					// For now, we just erase it by substituting `null`:
-					retVal = NullExpression.Instance;
+					method.CodeBuilder.AddStatement(new MethodInvocationExpression(
+						ThisExpression.Instance,
+						InvocationMethods.SetReturnValue,
+						NullExpression.Instance));
 				}
 				else
 #endif
 				{
-					retVal = new ConvertExpression(typeof(object), returnValue.Type, returnValue);
+					method.CodeBuilder.AddStatement(new MethodInvocationExpression(
+						ThisExpression.Instance,
+						InvocationMethods.SetReturnValue,
+						new ConvertExpression(
+							typeof(object),
+							returnValue.Type,
+							returnValue)));
 				}
-
-				var setRetVal = new MethodInvocationExpression(
-					ThisExpression.Instance,
-					InvocationMethods.SetReturnValue,
-					retVal);
-
-				method.CodeBuilder.AddStatement(setRetVal);
 			}
 		}
 	}
