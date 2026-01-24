@@ -101,6 +101,8 @@ namespace Castle.DynamicProxy.Generators
 
 			var methodInterceptors = SetMethodInterceptors(@class, namingScope, emitter, proxiedMethodTokenExpression);
 
+			var argumentsMarshaller = new ArgumentsMarshaller(emitter, MethodToOverride.GetParameters());
+
 			var arguments = emitter.Arguments;
 
 			var argumentsArray = emitter.CodeBuilder.DeclareLocal(typeof(object[]));
@@ -136,7 +138,7 @@ namespace Castle.DynamicProxy.Generators
 				emitter.CodeBuilder.AddStatement(FinallyStatement.Instance);
 			}
 
-			GeneratorUtil.CopyOutAndRefParameters(arguments, argumentsArray, MethodToOverride, emitter);
+			argumentsMarshaller.CopyOut(argumentsArray);
 
 			if (hasByRefArguments)
 			{
@@ -272,6 +274,68 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			return false;
+		}
+
+		private struct ArgumentsMarshaller
+		{
+			private readonly MethodEmitter method;
+			private readonly ParameterInfo[] parameters;
+
+			public ArgumentsMarshaller(MethodEmitter method, ParameterInfo[] parameters)
+			{
+				this.method = method;
+				this.parameters = parameters;
+			}
+
+			public void CopyOut(LocalReference argumentsArray)
+			{
+				var arguments = method.Arguments;
+
+				for (int i = 0, n = arguments.Length; i < n; ++i)
+				{
+					Debug.Assert(parameters[i].ParameterType == arguments[i].Type);
+
+					if (parameters[i].IsByRef && !parameters[i].IsReadOnly)
+					{
+						var dereferencedArgument = new IndirectReference(arguments[i]);
+						var dereferencedArgumentType = dereferencedArgument.Type;
+
+#if FEATURE_BYREFLIKE
+						if (dereferencedArgumentType.IsByRefLikeSafe())
+						{
+							// The argument value in the invocation `Arguments` array is an `object`
+							// and cannot be converted back to its original by-ref-like type.
+							// We need to replace it with some other value.
+
+							// For now, we just substitute the by-ref-like type's default value:
+							if (parameters[i].IsOut)
+							{
+								method.CodeBuilder.AddStatement(
+									new AssignStatement(
+										dereferencedArgument,
+										new DefaultValueExpression(dereferencedArgumentType)));
+							}
+							else
+							{
+								// ... except when we're dealing with a `ref` parameter. Unlike with `out`,
+								// where we would be expected to definitely assign to it, we are free to leave
+								// the original incoming value untouched. For now, that's likely the better
+								// interim solution than unconditionally resetting.
+							}
+						}
+						else
+#endif
+						{
+							method.CodeBuilder.AddStatement(
+								new AssignStatement(
+									dereferencedArgument,
+									new ConvertExpression(
+										dereferencedArgumentType,
+										new ArrayElementReference(argumentsArray, i))));
+						}
+					}
+				}
+			}
 		}
 	}
 }
