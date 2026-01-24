@@ -101,11 +101,12 @@ namespace Castle.DynamicProxy.Generators
 
 			var methodInterceptors = SetMethodInterceptors(@class, namingScope, emitter, proxiedMethodTokenExpression);
 
-			var dereferencedArguments = IndirectReference.WrapIfByRef(emitter.Arguments);
-			var hasByRefArguments = HasByRefArguments(emitter.Arguments);
+			var argumentsMarshaller = new ArgumentsMarshaller(emitter, MethodToOverride.GetParameters());
 
-			var arguments = GetCtorArguments(@class, proxiedMethodTokenExpression, dereferencedArguments, methodInterceptors);
-			var ctorArguments = ModifyArguments(@class, arguments);
+			argumentsMarshaller.CopyIn(out var argumentsArray, out var hasByRefArguments);
+
+			var ctorArguments = GetCtorArguments(@class, proxiedMethodTokenExpression, argumentsArray, methodInterceptors);
+			ctorArguments = ModifyArguments(@class, ctorArguments);
 
 			var invocationLocal = emitter.CodeBuilder.DeclareLocal(invocationType);
 			emitter.CodeBuilder.AddStatement(new AssignStatement(invocationLocal,
@@ -129,51 +130,14 @@ namespace Castle.DynamicProxy.Generators
 				emitter.CodeBuilder.AddStatement(FinallyStatement.Instance);
 			}
 
-			GeneratorUtil.CopyOutAndRefParameters(dereferencedArguments, invocationLocal, MethodToOverride, emitter);
+			argumentsMarshaller.CopyOut(argumentsArray);
 
 			if (hasByRefArguments)
 			{
 				emitter.CodeBuilder.AddStatement(EndExceptionBlockStatement.Instance);
 			}
 
-			if (MethodToOverride.ReturnType != typeof(void))
-			{
-				IExpression retVal;
-
-#if FEATURE_BYREFLIKE
-				if (emitter.ReturnType.IsByRefLikeSafe())
-				{
-					// The return value in the `ReturnValue` property is an `object`
-					// and cannot be converted back to the original by-ref-like return type.
-					// We need to replace it with some other value.
-
-					// For now, we just substitute the by-ref-like type's default value:
-					retVal = new DefaultValueExpression(emitter.ReturnType);
-				}
-				else
-#endif
-				{
-					retVal = new MethodInvocationExpression(invocationLocal, InvocationMethods.GetReturnValue);
-
-					// Emit code to ensure a value type return type is not null, otherwise the cast will cause a null-deref
-					if (emitter.ReturnType.IsValueType && !emitter.ReturnType.IsNullableType())
-					{
-						LocalReference returnValue = emitter.CodeBuilder.DeclareLocal(typeof(object));
-						emitter.CodeBuilder.AddStatement(new AssignStatement(returnValue, retVal));
-
-						emitter.CodeBuilder.AddStatement(new IfNullExpression(returnValue, new ThrowStatement(typeof(InvalidOperationException),
-							"Interceptors failed to set a return value, or swallowed the exception thrown by the target")));
-					}
-
-					retVal = new ConvertExpression(emitter.ReturnType, retVal);
-				}
-
-				emitter.CodeBuilder.AddStatement(new ReturnStatement(retVal));
-			}
-			else
-			{
-				emitter.CodeBuilder.AddStatement(ReturnStatement.Instance);
-			}
+			argumentsMarshaller.Return(invocationLocal);
 
 			return emitter;
 		}
@@ -232,7 +196,7 @@ namespace Castle.DynamicProxy.Generators
 				                               genericParamsArrayLocal));
 		}
 
-		private IExpression[] GetCtorArguments(ClassEmitter @class, IExpression proxiedMethodTokenExpression, Reference[] dereferencedArguments, IExpression methodInterceptors)
+		private IExpression[] GetCtorArguments(ClassEmitter @class, IExpression proxiedMethodTokenExpression, LocalReference argumentsArray, IExpression methodInterceptors)
 		{
 			return new[]
 			{
@@ -240,7 +204,7 @@ namespace Castle.DynamicProxy.Generators
 				ThisExpression.Instance,
 				methodInterceptors ?? interceptors,
 				proxiedMethodTokenExpression,
-				new ReferencesToObjectArrayExpression(dereferencedArguments)
+				argumentsArray,
 			};
 		}
 
@@ -254,17 +218,164 @@ namespace Castle.DynamicProxy.Generators
 			return contributor.GetConstructorInvocationArguments(arguments, @class);
 		}
 
-		private bool HasByRefArguments(ArgumentReference[] arguments)
+		private struct ArgumentsMarshaller
 		{
-			for (int i = 0; i < arguments.Length; i++ )
+			private readonly MethodEmitter method;
+			private readonly ParameterInfo[] parameters;
+
+			public ArgumentsMarshaller(MethodEmitter method, ParameterInfo[] parameters)
 			{
-				if (arguments[i].Type.IsByRef)
+				this.method = method;
+				this.parameters = parameters;
+			}
+
+			public void CopyIn(out LocalReference argumentsArray, out bool hasByRefArguments)
+			{
+				var arguments = method.Arguments;
+
+				argumentsArray = method.CodeBuilder.DeclareLocal(typeof(object[]));
+				hasByRefArguments = false;
+
+				method.CodeBuilder.AddStatement(
+					new AssignStatement(
+						argumentsArray,
+						new NewArrayExpression(arguments.Length, typeof(object))));
+
+				for (int i = 0, n = arguments.Length; i < n; ++i)
 				{
-					return true;
+					var argument = arguments[i];
+					Reference dereferencedArgument;
+					if (argument.Type.IsByRef)
+					{
+						dereferencedArgument = new IndirectReference(argument);
+						hasByRefArguments = true;
+					}
+					else
+					{
+						dereferencedArgument = argument;
+					}
+					var dereferencedArgumentType = dereferencedArgument.Type;
+
+#if FEATURE_BYREFLIKE
+					if (dereferencedArgumentType.IsByRefLikeSafe())
+					{
+						// The by-ref-like argument value cannot be put into the `object[]` array,
+						// because it cannot be boxed. We need to replace it with some other value.
+
+						// For now, we just erase it by substituting `null`:
+						method.CodeBuilder.AddStatement(
+							new AssignStatement(
+								new ArrayElementReference(argumentsArray, i),
+								NullExpression.Instance));
+					}
+					else
+#endif
+					{
+						method.CodeBuilder.AddStatement(
+							new AssignStatement(
+								new ArrayElementReference(argumentsArray, i),
+								new ConvertArgumentToObjectExpression(dereferencedArgument)));
+					}
 				}
 			}
 
-			return false;
+			public void CopyOut(LocalReference argumentsArray)
+			{
+				var arguments = method.Arguments;
+
+				for (int i = 0, n = arguments.Length; i < n; ++i)
+				{
+					Debug.Assert(parameters[i].ParameterType == arguments[i].Type);
+
+					if (parameters[i].IsByRef && !parameters[i].IsReadOnly)
+					{
+						var dereferencedArgument = new IndirectReference(arguments[i]);
+						var dereferencedArgumentType = dereferencedArgument.Type;
+
+#if FEATURE_BYREFLIKE
+						if (dereferencedArgumentType.IsByRefLikeSafe())
+						{
+							// The argument value in the invocation `Arguments` array is an `object`
+							// and cannot be converted back to its original by-ref-like type.
+							// We need to replace it with some other value.
+
+							// For now, we just substitute the by-ref-like type's default value:
+							if (parameters[i].IsOut)
+							{
+								method.CodeBuilder.AddStatement(
+									new AssignStatement(
+										dereferencedArgument,
+										new DefaultValueExpression(dereferencedArgumentType)));
+							}
+							else
+							{
+								// ... except when we're dealing with a `ref` parameter. Unlike with `out`,
+								// where we would be expected to definitely assign to it, we are free to leave
+								// the original incoming value untouched. For now, that's likely the better
+								// interim solution than unconditionally resetting.
+							}
+						}
+						else
+#endif
+						{
+							method.CodeBuilder.AddStatement(
+								new AssignStatement(
+									dereferencedArgument,
+									new ConvertArgumentFromObjectExpression(
+										new ArrayElementReference(argumentsArray, i),
+										dereferencedArgumentType)));
+						}
+					}
+				}
+			}
+
+			public void Return(LocalReference invocation)
+			{
+				var returnType = method.ReturnType;
+
+				if (returnType == typeof(void))
+				{
+					method.CodeBuilder.AddStatement(ReturnStatement.Instance);
+					return;
+				}
+
+#if FEATURE_BYREFLIKE
+				if (returnType.IsByRefLikeSafe())
+				{
+					// The return value in the `ReturnValue` property is an `object`
+					// and cannot be converted back to the original by-ref-like return type.
+					// We need to replace it with some other value.
+
+					// For now, we just substitute the by-ref-like type's default value:
+					method.CodeBuilder.AddStatement(
+						new ReturnStatement(
+							new DefaultValueExpression(returnType)));
+				}
+				else
+#endif
+				{
+					var returnValue = method.CodeBuilder.DeclareLocal(typeof(object));
+					method.CodeBuilder.AddStatement(
+						new AssignStatement(
+							returnValue,
+							new MethodInvocationExpression(invocation, InvocationMethods.GetReturnValue)));
+
+					// Emit code to ensure a value type return type is not null, otherwise the cast will cause a null-deref
+					if (returnType.IsValueType && !returnType.IsNullableType())
+					{
+						method.CodeBuilder.AddStatement(
+							new IfNullExpression(
+								returnValue,
+								new ThrowStatement(
+									typeof(InvalidOperationException),
+									"Interceptors failed to set a return value, or swallowed the exception thrown by the target")));
+					}
+
+					method.CodeBuilder.AddStatement(
+						new ReturnStatement(
+							new ConvertArgumentFromObjectExpression(returnValue, returnType)));
+				}
+			}
 		}
 	}
 }
