@@ -103,13 +103,7 @@ namespace Castle.DynamicProxy.Generators
 
 			var argumentsMarshaller = new ArgumentsMarshaller(emitter, MethodToOverride.GetParameters());
 
-			var arguments = emitter.Arguments;
-
-			var argumentsArray = emitter.CodeBuilder.DeclareLocal(typeof(object[]));
-			emitter.CodeBuilder.AddStatement(
-				new AssignStatement(
-					argumentsArray,
-					new ReferencesToObjectArrayExpression(arguments)));
+			argumentsMarshaller.CopyIn(out var argumentsArray);
 
 			var hasByRefArguments = HasByRefArguments(emitter.Arguments);
 
@@ -285,6 +279,18 @@ namespace Castle.DynamicProxy.Generators
 			{
 				this.method = method;
 				this.parameters = parameters;
+			}
+
+			public void CopyIn(out LocalReference argumentsArray)
+			{
+				var arguments = method.Arguments;
+
+				argumentsArray = method.CodeBuilder.DeclareLocal(typeof(object[]));
+
+				method.CodeBuilder.AddStatement(
+					new AssignStatement(
+						argumentsArray,
+						new ReferencesToObjectArrayExpression(arguments)));
 			}
 
 			public void CopyOut(LocalReference argumentsArray)
