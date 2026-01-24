@@ -290,7 +290,35 @@ namespace Castle.DynamicProxy.Generators
 				method.CodeBuilder.AddStatement(
 					new AssignStatement(
 						argumentsArray,
-						new ReferencesToObjectArrayExpression(arguments)));
+						new NewArrayExpression(arguments.Length, typeof(object))));
+
+				for (int i = 0, n = arguments.Length; i < n; ++i)
+				{
+					var argument = arguments[i];
+					Reference dereferencedArgument = argument.Type.IsByRef ? new IndirectReference(argument) : argument;
+					var dereferencedArgumentType = dereferencedArgument.Type;
+
+#if FEATURE_BYREFLIKE
+					if (dereferencedArgumentType.IsByRefLikeSafe())
+					{
+						// The by-ref-like argument value cannot be put into the `object[]` array,
+						// because it cannot be boxed. We need to replace it with some other value.
+
+						// For now, we just erase it by substituting `null`:
+						method.CodeBuilder.AddStatement(
+							new AssignStatement(
+								new ArrayElementReference(argumentsArray, i),
+								NullExpression.Instance));
+					}
+					else
+#endif
+					{
+						method.CodeBuilder.AddStatement(
+							new AssignStatement(
+								new ArrayElementReference(argumentsArray, i),
+								new ConvertArgumentToObjectExpression(dereferencedArgument)));
+					}
+				}
 			}
 
 			public void CopyOut(LocalReference argumentsArray)
