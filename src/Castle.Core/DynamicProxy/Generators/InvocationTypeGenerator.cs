@@ -113,69 +113,9 @@ namespace Castle.DynamicProxy.Generators
 				return;
 			}
 
-			var args = new IExpression[parameters.Length];
+			var argumentsMarshaller = new ArgumentsMarshaller(invocation, invokeMethodOnTarget, parameters);
 
-			// Idea: instead of grab parameters one by one
-			// we should grab an array
-			var byRefArguments = new Dictionary<int, LocalReference>();
-
-			for (var i = 0; i < parameters.Length; i++)
-			{
-				var param = parameters[i];
-
-				var paramType = invocation.GetClosedParameterType(param.ParameterType);
-				if (paramType.IsByRef)
-				{
-					var localReference = invokeMethodOnTarget.CodeBuilder.DeclareLocal(paramType.GetElementType());
-					IExpression localValue;
-
-#if FEATURE_BYREFLIKE
-					if (paramType.GetElementType().IsByRefLikeSafe())
-					{
-						// The argument value in the invocation `Arguments` array is an `object`
-						// and cannot be converted back to its original by-ref-like type.
-						// We need to replace it with some other value.
-
-						// For now, we just substitute the by-ref-like type's default value:
-						localValue = new DefaultValueExpression(localReference.Type);
-					}
-					else
-#endif
-					{
-						localValue = new ConvertExpression(paramType.GetElementType(),
-						                               new MethodInvocationExpression(ThisExpression.Instance,
-						                                                              InvocationMethods.GetArgumentValue,
-						                                                              new LiteralIntExpression(i)));
-					}
-
-					invokeMethodOnTarget.CodeBuilder.AddStatement(new AssignStatement(localReference, localValue));
-					var localByRef = new AddressOfExpression(localReference);
-					args[i] = localByRef;
-					byRefArguments[i] = localReference;
-				}
-				else
-				{
-#if FEATURE_BYREFLIKE
-					if (paramType.IsByRefLikeSafe())
-					{
-						// The argument value in the invocation `Arguments` array is an `object`
-						// and cannot be converted back to its original by-ref-like type.
-						// We need to replace it with some other value.
-
-						// For now, we just substitute the by-ref-like type's default value:
-						args[i] = new DefaultValueExpression(paramType);
-					}
-					else
-#endif
-					{
-						args[i] =
-							new ConvertExpression(paramType,
-							                      new MethodInvocationExpression(ThisExpression.Instance,
-							                                                     InvocationMethods.GetArgumentValue,
-							                                                     new LiteralIntExpression(i)));
-					}
-				}
-			}
+			argumentsMarshaller.CopyOut(out var args, out var byRefArguments);
 
 			if (byRefArguments.Count > 0)
 			{
@@ -196,78 +136,19 @@ namespace Castle.DynamicProxy.Generators
 				invokeMethodOnTarget.CodeBuilder.AddStatement(methodOnTargetInvocationExpression);
 			}
 
-			AssignBackByRefArguments(invokeMethodOnTarget, byRefArguments);
+			if (byRefArguments.Count > 0)
+			{
+				invokeMethodOnTarget.CodeBuilder.AddStatement(FinallyStatement.Instance);
+				argumentsMarshaller.CopyIn(byRefArguments);
+				invokeMethodOnTarget.CodeBuilder.AddStatement(EndExceptionBlockStatement.Instance);
+			}
 
 			if (callbackMethod.ReturnType != typeof(void))
 			{
-				IExpression retVal;
-
-#if FEATURE_BYREFLIKE
-				if (returnValue.Type.IsByRefLikeSafe())
-				{
-					// The by-ref-like return value cannot be put into the `ReturnValue` property,
-					// because it cannot be boxed. We need to replace it with some other value.
-
-					// For now, we just erase it by substituting `null`:
-					retVal = NullExpression.Instance;
-				}
-				else
-#endif
-				{
-					retVal = new ConvertExpression(typeof(object), returnValue.Type, returnValue);
-				}
-
-				var setRetVal =
-					new MethodInvocationExpression(ThisExpression.Instance,
-					                               InvocationMethods.SetReturnValue,
-					                               retVal);
-
-				invokeMethodOnTarget.CodeBuilder.AddStatement(setRetVal);
+				argumentsMarshaller.SetReturnValue(returnValue);
 			}
 
 			invokeMethodOnTarget.CodeBuilder.AddStatement(ReturnStatement.Instance);
-		}
-
-		private void AssignBackByRefArguments(MethodEmitter invokeMethodOnTarget, Dictionary<int, LocalReference> byRefArguments)
-		{
-			if (byRefArguments.Count == 0)
-			{
-				return;
-			}
-
-			invokeMethodOnTarget.CodeBuilder.AddStatement(FinallyStatement.Instance);
-
-			foreach (var byRefArgument in byRefArguments)
-			{
-				var index = byRefArgument.Key;
-				var localReference = byRefArgument.Value;
-				IExpression localValue;
-
-#if FEATURE_BYREFLIKE
-				if (localReference.Type.IsByRefLikeSafe())
-				{
-					// The by-ref-like value in the local buffer variable cannot be put back
-					// into the invocation `Arguments` array, because it cannot be boxed.
-					// We need to replace it with some other value.
-
-					// For now, we just erase it by substituting `null`:
-					localValue = NullExpression.Instance;
-				}
-				else
-#endif
-				{
-					localValue = new ConvertExpression(typeof(object), localReference.Type, localReference);
-				}
-
-				invokeMethodOnTarget.CodeBuilder.AddStatement(
-					new MethodInvocationExpression(
-						ThisExpression.Instance,
-						InvocationMethods.SetArgumentValue,
-						new LiteralIntExpression(index),
-						localValue));
-			}
-
-			invokeMethodOnTarget.CodeBuilder.AddStatement(EndExceptionBlockStatement.Instance);
 		}
 
 		private void CreateConstructor(ClassEmitter invocation)
@@ -368,6 +249,150 @@ namespace Castle.DynamicProxy.Generators
 			ImplementChangeInvocationTarget(invocation, targetField);
 
 			ImplementChangeProxyTarget(invocation, @class);
+		}
+
+		private struct ArgumentsMarshaller
+		{
+			private readonly ClassEmitter invocation;
+			private readonly MethodEmitter method;
+			private readonly ParameterInfo[] parameters;
+
+			public ArgumentsMarshaller(ClassEmitter invocation, MethodEmitter method, ParameterInfo[] parameters)
+			{
+				this.invocation = invocation;
+				this.method = method;
+				this.parameters = parameters;
+			}
+
+			public void CopyOut(out IExpression[] arguments, out Dictionary<int, LocalReference> byRefArguments)
+			{
+				arguments = new IExpression[parameters.Length];
+
+				// Idea: instead of grab parameters one by one
+				// we should grab an array
+				byRefArguments = new Dictionary<int, LocalReference>();
+
+				for (int i = 0, n = parameters.Length; i < n; ++i)
+				{
+					var param = parameters[i];
+
+					var paramType = invocation.GetClosedParameterType(param.ParameterType);
+					if (paramType.IsByRef)
+					{
+						var localReference = method.CodeBuilder.DeclareLocal(paramType.GetElementType());
+						IExpression localValue;
+
+#if FEATURE_BYREFLIKE
+						if (paramType.GetElementType().IsByRefLikeSafe())
+						{
+							// The argument value in the invocation `Arguments` array is an `object`
+							// and cannot be converted back to its original by-ref-like type.
+							// We need to replace it with some other value.
+
+							// For now, we just substitute the by-ref-like type's default value:
+							localValue = new DefaultValueExpression(localReference.Type);
+						}
+						else
+#endif
+						{
+							localValue = new ConvertExpression(
+								paramType.GetElementType(),
+								new MethodInvocationExpression(
+									ThisExpression.Instance,
+									InvocationMethods.GetArgumentValue,
+									new LiteralIntExpression(i)));
+						}
+
+						method.CodeBuilder.AddStatement(new AssignStatement(localReference, localValue));
+						var localByRef = new AddressOfExpression(localReference);
+						arguments[i] = localByRef;
+						byRefArguments[i] = localReference;
+					}
+					else
+					{
+#if FEATURE_BYREFLIKE
+						if (paramType.IsByRefLikeSafe())
+						{
+							// The argument value in the invocation `Arguments` array is an `object`
+							// and cannot be converted back to its original by-ref-like type.
+							// We need to replace it with some other value.
+
+							// For now, we just substitute the by-ref-like type's default value:
+							arguments[i] = new DefaultValueExpression(paramType);
+						}
+						else
+#endif
+						{
+							arguments[i] = new ConvertExpression(
+								paramType,
+								new MethodInvocationExpression(
+									ThisExpression.Instance,
+									InvocationMethods.GetArgumentValue,
+									new LiteralIntExpression(i)));
+						}
+					}
+				}
+			}
+
+			public void CopyIn(Dictionary<int, LocalReference> byRefArguments)
+			{
+				foreach (var byRefArgument in byRefArguments)
+				{
+					var index = byRefArgument.Key;
+					var localReference = byRefArgument.Value;
+					IExpression localValue;
+
+#if FEATURE_BYREFLIKE
+					if (localReference.Type.IsByRefLikeSafe())
+					{
+						// The by-ref-like value in the local buffer variable cannot be put back
+						// into the invocation `Arguments` array, because it cannot be boxed.
+						// We need to replace it with some other value.
+
+						// For now, we just erase it by substituting `null`:
+						localValue = NullExpression.Instance;
+					}
+					else
+#endif
+					{
+						localValue = new ConvertExpression(typeof(object), localReference.Type, localReference);
+					}
+
+					method.CodeBuilder.AddStatement(
+						new MethodInvocationExpression(
+							ThisExpression.Instance,
+							InvocationMethods.SetArgumentValue,
+							new LiteralIntExpression(index),
+							localValue));
+				}
+			}
+
+			public void SetReturnValue(LocalReference returnValue)
+			{
+				IExpression retVal;
+
+#if FEATURE_BYREFLIKE
+				if (returnValue.Type.IsByRefLikeSafe())
+				{
+					// The by-ref-like return value cannot be put into the `ReturnValue` property,
+					// because it cannot be boxed. We need to replace it with some other value.
+
+					// For now, we just erase it by substituting `null`:
+					retVal = NullExpression.Instance;
+				}
+				else
+#endif
+				{
+					retVal = new ConvertExpression(typeof(object), returnValue.Type, returnValue);
+				}
+
+				var setRetVal = new MethodInvocationExpression(
+					ThisExpression.Instance,
+					InvocationMethods.SetReturnValue,
+					retVal);
+
+				method.CodeBuilder.AddStatement(setRetVal);
+			}
 		}
 	}
 }
