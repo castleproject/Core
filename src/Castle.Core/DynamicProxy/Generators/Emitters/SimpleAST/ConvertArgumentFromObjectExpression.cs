@@ -23,9 +23,8 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 		private readonly IExpression obj;
 		private Type dereferencedArgumentType;
 
-		public ConvertArgumentFromObjectExpression(Reference obj, Type dereferencedArgumentType)
+		public ConvertArgumentFromObjectExpression(IExpression obj, Type dereferencedArgumentType)
 		{
-			Debug.Assert(obj.Type == typeof(object));
 			Debug.Assert(dereferencedArgumentType.IsByRef == false);
 
 			this.obj = obj;

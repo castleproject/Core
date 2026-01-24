@@ -300,12 +300,12 @@ namespace Castle.DynamicProxy.Generators
 					else
 #endif
 					{
-						dereferencedArgument = new ConvertExpression(
-							dereferencedArgumentType,
+						dereferencedArgument = new ConvertArgumentFromObjectExpression(
 							new MethodInvocationExpression(
 								ThisExpression.Instance,
 								InvocationMethods.GetArgumentValue,
-								new LiteralIntExpression(i)));
+								new LiteralIntExpression(i)),
+							dereferencedArgumentType);
 					}
 
 					if (argumentType.IsByRef)
@@ -353,10 +353,7 @@ namespace Castle.DynamicProxy.Generators
 								ThisExpression.Instance,
 								InvocationMethods.SetArgumentValue,
 								new LiteralIntExpression(i),
-								new ConvertExpression(
-									typeof(object),
-									localCopy.Type,
-									localCopy)));
+								new ConvertArgumentToObjectExpression(localCopy)));
 					}
 				}
 			}
@@ -381,10 +378,7 @@ namespace Castle.DynamicProxy.Generators
 					method.CodeBuilder.AddStatement(new MethodInvocationExpression(
 						ThisExpression.Instance,
 						InvocationMethods.SetReturnValue,
-						new ConvertExpression(
-							typeof(object),
-							returnValue.Type,
-							returnValue)));
+						new ConvertArgumentToObjectExpression(returnValue)));
 				}
 			}
 		}
