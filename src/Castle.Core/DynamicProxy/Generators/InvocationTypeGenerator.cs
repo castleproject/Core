@@ -115,9 +115,9 @@ namespace Castle.DynamicProxy.Generators
 
 			var argumentsMarshaller = new ArgumentsMarshaller(invocation, invokeMethodOnTarget, parameters);
 
-			argumentsMarshaller.CopyOut(out var args, out var byRefArguments);
+			argumentsMarshaller.CopyOut(out var args, out var byRefArguments, out var hasByRefArguments);
 
-			if (byRefArguments.Count > 0)
+			if (hasByRefArguments)
 			{
 				invokeMethodOnTarget.CodeBuilder.AddStatement(TryStatement.Instance);
 			}
@@ -136,7 +136,7 @@ namespace Castle.DynamicProxy.Generators
 				invokeMethodOnTarget.CodeBuilder.AddStatement(methodOnTargetInvocationExpression);
 			}
 
-			if (byRefArguments.Count > 0)
+			if (hasByRefArguments)
 			{
 				invokeMethodOnTarget.CodeBuilder.AddStatement(FinallyStatement.Instance);
 				argumentsMarshaller.CopyIn(byRefArguments);
@@ -264,13 +264,19 @@ namespace Castle.DynamicProxy.Generators
 				this.parameters = parameters;
 			}
 
-			public void CopyOut(out IExpression[] arguments, out Dictionary<int, LocalReference> byRefArguments)
+			public void CopyOut(out IExpression[] arguments, out LocalReference[] byRefArguments, out bool hasByRefArguments)
 			{
-				arguments = new IExpression[parameters.Length];
+				if (parameters.Length == 0)
+				{
+					arguments = [];
+					byRefArguments = [];
+					hasByRefArguments = false;
+					return;
+				}
 
-				// Idea: instead of grab parameters one by one
-				// we should grab an array
-				byRefArguments = new Dictionary<int, LocalReference>();
+				arguments = new IExpression[parameters.Length];
+				byRefArguments = new LocalReference[parameters.Length];
+				hasByRefArguments = false;
 
 				for (int i = 0, n = parameters.Length; i < n; ++i)
 				{
@@ -306,6 +312,7 @@ namespace Castle.DynamicProxy.Generators
 						method.CodeBuilder.AddStatement(new AssignStatement(localCopy, dereferencedArgument));
 						arguments[i] = new AddressOfExpression(localCopy);
 						byRefArguments[i] = localCopy;
+						hasByRefArguments = true;
 					}
 					else
 					{
@@ -314,12 +321,12 @@ namespace Castle.DynamicProxy.Generators
 				}
 			}
 
-			public void CopyIn(Dictionary<int, LocalReference> byRefArguments)
+			public void CopyIn(LocalReference[] byRefArguments)
 			{
-				foreach (var byRefArgument in byRefArguments)
+				for (int i = 0, n = byRefArguments.Length; i < n; ++i)
 				{
-					var index = byRefArgument.Key;
-					var localCopy = byRefArgument.Value;
+					var localCopy = byRefArguments[i];
+					if (localCopy == null) continue;
 
 #if FEATURE_BYREFLIKE
 					if (localCopy.Type.IsByRefLikeSafe())
@@ -333,7 +340,7 @@ namespace Castle.DynamicProxy.Generators
 							new MethodInvocationExpression(
 								ThisExpression.Instance,
 								InvocationMethods.SetArgumentValue,
-								new LiteralIntExpression(index),
+								new LiteralIntExpression(i),
 								NullExpression.Instance));
 					}
 					else
@@ -343,7 +350,7 @@ namespace Castle.DynamicProxy.Generators
 							new MethodInvocationExpression(
 								ThisExpression.Instance,
 								InvocationMethods.SetArgumentValue,
-								new LiteralIntExpression(index),
+								new LiteralIntExpression(i),
 								new ConvertExpression(
 									typeof(object),
 									localCopy.Type,
