@@ -139,44 +139,7 @@ namespace Castle.DynamicProxy.Generators
 				emitter.CodeBuilder.AddStatement(EndExceptionBlockStatement.Instance);
 			}
 
-			if (MethodToOverride.ReturnType != typeof(void))
-			{
-				IExpression retVal;
-
-#if FEATURE_BYREFLIKE
-				if (emitter.ReturnType.IsByRefLikeSafe())
-				{
-					// The return value in the `ReturnValue` property is an `object`
-					// and cannot be converted back to the original by-ref-like return type.
-					// We need to replace it with some other value.
-
-					// For now, we just substitute the by-ref-like type's default value:
-					retVal = new DefaultValueExpression(emitter.ReturnType);
-				}
-				else
-#endif
-				{
-					retVal = new MethodInvocationExpression(invocationLocal, InvocationMethods.GetReturnValue);
-
-					// Emit code to ensure a value type return type is not null, otherwise the cast will cause a null-deref
-					if (emitter.ReturnType.IsValueType && !emitter.ReturnType.IsNullableType())
-					{
-						LocalReference returnValue = emitter.CodeBuilder.DeclareLocal(typeof(object));
-						emitter.CodeBuilder.AddStatement(new AssignStatement(returnValue, retVal));
-
-						emitter.CodeBuilder.AddStatement(new IfNullExpression(returnValue, new ThrowStatement(typeof(InvalidOperationException),
-							"Interceptors failed to set a return value, or swallowed the exception thrown by the target")));
-					}
-
-					retVal = new ConvertExpression(emitter.ReturnType, retVal);
-				}
-
-				emitter.CodeBuilder.AddStatement(new ReturnStatement(retVal));
-			}
-			else
-			{
-				emitter.CodeBuilder.AddStatement(ReturnStatement.Instance);
-			}
+			argumentsMarshaller.Return(invocationLocal);
 
 			return emitter;
 		}
@@ -368,6 +331,54 @@ namespace Castle.DynamicProxy.Generators
 										new ArrayElementReference(argumentsArray, i))));
 						}
 					}
+				}
+			}
+
+			public void Return(LocalReference invocation)
+			{
+				var returnType = method.ReturnType;
+
+				if (returnType == typeof(void))
+				{
+					method.CodeBuilder.AddStatement(ReturnStatement.Instance);
+					return;
+				}
+
+#if FEATURE_BYREFLIKE
+				if (returnType.IsByRefLikeSafe())
+				{
+					// The return value in the `ReturnValue` property is an `object`
+					// and cannot be converted back to the original by-ref-like return type.
+					// We need to replace it with some other value.
+
+					// For now, we just substitute the by-ref-like type's default value:
+					method.CodeBuilder.AddStatement(
+						new ReturnStatement(
+							new DefaultValueExpression(returnType)));
+				}
+				else
+#endif
+				{
+					var returnValue = method.CodeBuilder.DeclareLocal(typeof(object));
+					method.CodeBuilder.AddStatement(
+						new AssignStatement(
+							returnValue,
+							new MethodInvocationExpression(invocation, InvocationMethods.GetReturnValue)));
+
+					// Emit code to ensure a value type return type is not null, otherwise the cast will cause a null-deref
+					if (returnType.IsValueType && !returnType.IsNullableType())
+					{
+						method.CodeBuilder.AddStatement(
+							new IfNullExpression(
+								returnValue,
+								new ThrowStatement(
+									typeof(InvalidOperationException),
+									"Interceptors failed to set a return value, or swallowed the exception thrown by the target")));
+					}
+
+					method.CodeBuilder.AddStatement(
+						new ReturnStatement(
+							new ConvertExpression(returnType, returnValue)));
 				}
 			}
 		}
