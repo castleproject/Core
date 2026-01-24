@@ -103,9 +103,7 @@ namespace Castle.DynamicProxy.Generators
 
 			var argumentsMarshaller = new ArgumentsMarshaller(emitter, MethodToOverride.GetParameters());
 
-			argumentsMarshaller.CopyIn(out var argumentsArray);
-
-			var hasByRefArguments = HasByRefArguments(emitter.Arguments);
+			argumentsMarshaller.CopyIn(out var argumentsArray, out var hasByRefArguments);
 
 			var ctorArguments = GetCtorArguments(@class, proxiedMethodTokenExpression, argumentsArray, methodInterceptors);
 			ctorArguments = ModifyArguments(@class, ctorArguments);
@@ -220,19 +218,6 @@ namespace Castle.DynamicProxy.Generators
 			return contributor.GetConstructorInvocationArguments(arguments, @class);
 		}
 
-		private bool HasByRefArguments(ArgumentReference[] arguments)
-		{
-			for (int i = 0; i < arguments.Length; i++ )
-			{
-				if (arguments[i].Type.IsByRef)
-				{
-					return true;
-				}
-			}
-
-			return false;
-		}
-
 		private struct ArgumentsMarshaller
 		{
 			private readonly MethodEmitter method;
@@ -244,11 +229,12 @@ namespace Castle.DynamicProxy.Generators
 				this.parameters = parameters;
 			}
 
-			public void CopyIn(out LocalReference argumentsArray)
+			public void CopyIn(out LocalReference argumentsArray, out bool hasByRefArguments)
 			{
 				var arguments = method.Arguments;
 
 				argumentsArray = method.CodeBuilder.DeclareLocal(typeof(object[]));
+				hasByRefArguments = false;
 
 				method.CodeBuilder.AddStatement(
 					new AssignStatement(
@@ -258,7 +244,16 @@ namespace Castle.DynamicProxy.Generators
 				for (int i = 0, n = arguments.Length; i < n; ++i)
 				{
 					var argument = arguments[i];
-					Reference dereferencedArgument = argument.Type.IsByRef ? new IndirectReference(argument) : argument;
+					Reference dereferencedArgument;
+					if (argument.Type.IsByRef)
+					{
+						dereferencedArgument = new IndirectReference(argument);
+						hasByRefArguments = true;
+					}
+					else
+					{
+						dereferencedArgument = argument;
+					}
 					var dereferencedArgumentType = dereferencedArgument.Type;
 
 #if FEATURE_BYREFLIKE
