@@ -326,9 +326,9 @@ namespace Castle.DynamicProxy.Generators
 							method.CodeBuilder.AddStatement(
 								new AssignStatement(
 									dereferencedArgument,
-									new ConvertExpression(
-										dereferencedArgumentType,
-										new ArrayElementReference(argumentsArray, i))));
+									new ConvertArgumentFromObjectExpression(
+										new ArrayElementReference(argumentsArray, i),
+										dereferencedArgumentType)));
 						}
 					}
 				}
@@ -378,7 +378,7 @@ namespace Castle.DynamicProxy.Generators
 
 					method.CodeBuilder.AddStatement(
 						new ReturnStatement(
-							new ConvertExpression(returnType, returnValue)));
+							new ConvertArgumentFromObjectExpression(returnValue, returnType)));
 				}
 			}
 		}
