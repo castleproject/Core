@@ -18,6 +18,7 @@ If you're new to DynamicProxy you can read a [quick introduction](dynamicproxy-i
 * [Make your supporting classes serializable](dynamicproxy-serializable-types.md)
 * [Use proxy generation hooks and interceptor selectors for fine grained control](dynamicproxy-fine-grained-control.md)
 * [SRP applies to interceptors](dynamicproxy-srp-applies-to-interceptors.md)
+* [Support for byref-like (`ref struct`) parameters and return types](dynamicproxy-byref-like-parameters.md)
 * [Behavior of by-reference parameters during interception](dynamicproxy-by-ref-parameters.md)
 * [Optional parameter value limitations](dynamicproxy-optional-parameter-value-limitations.md)
 * [Asynchronous interception](dynamicproxy-async-interception.md)
