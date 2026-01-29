@@ -1,0 +1,260 @@
+﻿// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#if FEATURE_BYREFLIKE
+
+#nullable enable
+
+namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
+{
+	using System;
+
+	using NUnit.Framework;
+
+	/// <summary>
+	///   Tests that byref-like argument values can be successfully marshalled from user code
+	///   into the interception pipeline (more specifically, into `IInvocation.Arguments`).
+	/// </summary>
+	[TestFixture]
+	public class CallerToInterceptorTestCase : BasePEVerifyTestCase
+	{
+		#region Tests for `ByRefLike` parameters (this type represents all byref-like types that aren't spans)
+
+#if NET9_0_OR_GREATER
+
+		[Test]
+		public void ByRefLike__passed_by_value__can_be_read_from_ByRefLikeReference()
+		{
+			InvokeProxyAndInspectInvocationArgument(
+				invoke: (IPassByRefLikeByValue proxy) =>
+				{
+					ByRefLike arg = new("from caller");
+					proxy.PassByValue(arg);
+				},
+				inspect: (object? invocationArg) =>
+				{
+					Assert.IsInstanceOf<ByRefLikeReference<ByRefLike>>(invocationArg);
+					ByRefLike arg = ((ByRefLikeReference<ByRefLike>)invocationArg!).Value;
+					Assert.AreEqual("from caller", arg.Value);
+				});
+		}
+
+		[Test]
+		public void ByRefLike__passed_by_ref_in__can_be_read_from_ByRefLikeReference()
+		{
+			InvokeProxyAndInspectInvocationArgument(
+				invoke: (IPassByRefLikeByRefIn proxy) =>
+				{
+					ByRefLike arg = new("from caller");
+					proxy.PassByRefIn(in arg);
+				},
+				inspect: (object? invocationArg) =>
+				{
+					Assert.IsInstanceOf<ByRefLikeReference<ByRefLike>>(invocationArg);
+					ByRefLike arg = ((ByRefLikeReference<ByRefLike>)invocationArg!).Value;
+					Assert.AreEqual("from caller", arg.Value);
+				});
+		}
+
+		[Test]
+		public void ByRefLike__passed_by_ref_ref__can_be_read_from_ByRefLikeReference()
+		{
+			InvokeProxyAndInspectInvocationArgument(
+				invoke: (IPassByRefLikeByRefRef proxy) =>
+				{
+					ByRefLike arg = new("from caller");
+					proxy.PassByRefRef(ref arg);
+				},
+				inspect: (object? invocationArg) =>
+				{
+					Assert.IsInstanceOf<ByRefLikeReference<ByRefLike>>(invocationArg);
+					var arg = ((ByRefLikeReference<ByRefLike>)invocationArg!).Value;
+					Assert.AreEqual("from caller", arg.Value);
+				});
+		}
+
+#else
+
+		[Test]
+		public void ByRefLike__passed_by_value__is_replaced_with_ByRefLikeReference()
+		{
+			InvokeProxyAndInspectInvocationArgument(
+				invoke: (IPassByRefLikeByValue proxy) =>
+				{
+					ByRefLike arg = new("from caller");
+					proxy.PassByValue(arg);
+				},
+				inspect: (object? invocationArg) =>
+				{
+					Assert.IsInstanceOf<ByRefLikeReference>(invocationArg);
+				});
+		}
+
+		[Test]
+		public void ByRefLike__passed_by_ref_in__is_replaced_with_ByRefLikeReference()
+		{
+			InvokeProxyAndInspectInvocationArgument(
+				invoke: (IPassByRefLikeByRefIn proxy) =>
+				{
+					ByRefLike arg = new("from caller");
+					proxy.PassByRefIn(in arg);
+				},
+				inspect: (object? invocationArg) =>
+				{
+					Assert.IsInstanceOf<ByRefLikeReference>(invocationArg);
+				});
+		}
+
+		[Test]
+		public void ByRefLike__passed_by_ref_ref__is_replaced_with_ByRefLikeReference()
+		{
+			InvokeProxyAndInspectInvocationArgument(
+				invoke: (IPassByRefLikeByRefRef proxy) =>
+				{
+					ByRefLike arg = new("from caller");
+					proxy.PassByRefRef(ref arg);
+				},
+				inspect: (object? invocationArg) =>
+				{
+					Assert.IsInstanceOf<ByRefLikeReference>(invocationArg);
+				});
+		}
+
+#endif
+
+		#endregion
+
+		#region Tests for `ReadOnlySpan<T>` parameters
+
+		[Test]
+		public void ReadOnlySpan__passed_by_value__can_be_read_from_ReadOnlySpanReference()
+		{
+			InvokeProxyAndInspectInvocationArgument(
+				invoke: (IPassReadOnlySpanByValue proxy) =>
+				{
+					ReadOnlySpan<char> arg = "from caller".AsSpan();
+					proxy.PassByValue(arg);
+				},
+				inspect: (object? invocationArg) =>
+				{
+					Assert.IsInstanceOf<ReadOnlySpanReference<char>>(invocationArg);
+					ReadOnlySpan<char> arg = ((ReadOnlySpanReference<char>)invocationArg!).Value;
+					Assert.AreEqual("from caller", new string(arg));
+				});
+		}
+
+		[Test]
+		public void ReadOnlySpan__passed_by_ref_in__can_be_read_from_ReadOnlySpanReference()
+		{
+			InvokeProxyAndInspectInvocationArgument(
+				invoke: (IPassReadOnlySpanByRefIn proxy) =>
+				{
+					ReadOnlySpan<char> arg = "from caller".AsSpan();
+					proxy.PassByRefIn(in arg);
+				},
+				inspect: (object? invocationArg) =>
+				{
+					Assert.IsInstanceOf<ReadOnlySpanReference<char>>(invocationArg);
+					ReadOnlySpan<char> arg = ((ReadOnlySpanReference<char>)invocationArg!).Value;
+					Assert.AreEqual("from caller", new string(arg));
+				});
+		}
+
+		[Test]
+		public void ReadOnlySpan__passed_by_ref_ref__can_be_read_from_ReadOnlySpanReference()
+		{
+			InvokeProxyAndInspectInvocationArgument(
+				invoke: (IPassReadOnlySpanByRefRef proxy) =>
+				{
+					ReadOnlySpan<char> arg = "from caller".AsSpan();
+					proxy.PassByRefRef(ref arg);
+				},
+				inspect: (object? invocationArg) =>
+				{
+					Assert.IsInstanceOf<ReadOnlySpanReference<char>>(invocationArg);
+					ReadOnlySpan<char> arg = ((ReadOnlySpanReference<char>)invocationArg!).Value;
+					Assert.AreEqual("from caller", new string(arg));
+				});
+		}
+
+		#endregion
+
+		#region Tests for `ReadOnlySpan<T>` parameters
+
+		[Test]
+		public void Span__passed_by_value__can_be_read_from_SpanReference()
+		{
+			InvokeProxyAndInspectInvocationArgument(
+				invoke: (IPassSpanByValue proxy) =>
+				{
+					Span<char> arg = "from caller".ToCharArray().AsSpan();
+					proxy.PassByValue(arg);
+				},
+				inspect: (object? invocationArg) =>
+				{
+					Assert.IsInstanceOf<SpanReference<char>>(invocationArg);
+					Span<char> arg = ((SpanReference<char>)invocationArg!).Value;
+					Assert.AreEqual("from caller", new string(arg));
+				});
+		}
+
+		[Test]
+		public void Span__passed_by_ref_in__can_be_read_from_SpanReference()
+		{
+			InvokeProxyAndInspectInvocationArgument(
+				invoke: (IPassSpanByRefIn proxy) =>
+				{
+					Span<char> arg = "from caller".ToCharArray().AsSpan();
+					proxy.PassByRefIn(in arg);
+				},
+				inspect: (object? invocationArg) =>
+				{
+					Assert.IsInstanceOf<SpanReference<char>>(invocationArg);
+					Span<char> arg = ((SpanReference<char>)invocationArg!).Value;
+					Assert.AreEqual("from caller", new string(arg));
+				});
+		}
+
+		[Test]
+		public void Span__passed_by_ref_ref__can_be_read_from_SpanReference()
+		{
+			InvokeProxyAndInspectInvocationArgument(
+				invoke: (IPassSpanByRefRef proxy) =>
+				{
+					Span<char> arg = "from caller".ToCharArray().AsSpan();
+					proxy.PassByRefRef(ref arg);
+				},
+				inspect: (object? invocationArg) =>
+				{
+					Assert.IsInstanceOf<SpanReference<char>>(invocationArg);
+					Span<char> arg = ((SpanReference<char>)invocationArg!).Value;
+					Assert.AreEqual("from caller", new string(arg));
+				});
+		}
+
+		#endregion
+
+		private void InvokeProxyAndInspectInvocationArgument<TInterface>(Action<TInterface> invoke,
+		                                                                 Action<object?> inspect)
+			where TInterface : class
+		{
+			var interceptor = new AdHoc(invocation => inspect(invocation.Arguments[0]));
+			var proxy = generator.CreateInterfaceProxyWithoutTarget<TInterface>(interceptor);
+			invoke(proxy);
+			Assert.True(interceptor.Executed);
+		}
+	}
+}
+
+#endif
