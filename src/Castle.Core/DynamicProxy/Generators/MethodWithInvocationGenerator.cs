@@ -106,9 +106,6 @@ namespace Castle.DynamicProxy.Generators
 
 			argumentsMarshaller.CopyIn(out var argumentsArray, out var hasByRefArguments, out var hasByRefLikeArguments);
 
-			// TODO: If the return type is byref-like, we should prepare a local variable and a `ByRefLikeReference` for it
-			// and place it in `IInvocation.ReturnValue`, so that the interception pipeline has a means to return something.
-
 			var ctorArguments = GetCtorArguments(@class, proxiedMethodTokenExpression, argumentsArray, methodInterceptors);
 			ctorArguments = ModifyArguments(@class, ctorArguments);
 
@@ -121,7 +118,9 @@ namespace Castle.DynamicProxy.Generators
 				EmitLoadGenericMethodArguments(emitter, MethodToOverride.MakeGenericMethod(genericArguments), invocationLocal);
 			}
 
-			if (hasByRefArguments || hasByRefLikeArguments)
+			argumentsMarshaller.PrepareReturnValueBuffer(invocationLocal, out var returnValueBuffer);
+
+			if (hasByRefArguments || hasByRefLikeArguments || returnValueBuffer != null)
 			{
 				emitter.CodeBuilder.AddStatement(TryStatement.Instance);
 			}
@@ -129,7 +128,9 @@ namespace Castle.DynamicProxy.Generators
 			var proceed = new MethodInvocationExpression(invocationLocal, InvocationMethods.Proceed);
 			emitter.CodeBuilder.AddStatement(proceed);
 
-			if (hasByRefArguments || hasByRefLikeArguments)
+			argumentsMarshaller.GetReturnValue(invocationLocal, out var returnValue);
+
+			if (hasByRefArguments || hasByRefLikeArguments || returnValueBuffer != null)
 			{
 				emitter.CodeBuilder.AddStatement(FinallyStatement.Instance);
 
@@ -143,10 +144,25 @@ namespace Castle.DynamicProxy.Generators
 					argumentsMarshaller.InvalidateByRefLikeProxies(argumentsArray);
 				}
 
+				if (returnValueBuffer != null)
+				{
+					argumentsMarshaller.InvalidateReturnValueBuffer(invocationLocal, returnValueBuffer);
+				}
+
 				emitter.CodeBuilder.AddStatement(EndExceptionBlockStatement.Instance);
 			}
 
-			argumentsMarshaller.Return(invocationLocal);
+			if (returnValue == null)
+			{
+				Debug.Assert(emitter.ReturnType == typeof(void));
+				emitter.CodeBuilder.AddStatement(ReturnStatement.Instance);
+			}
+			else
+			{
+				Debug.Assert(emitter.ReturnType != typeof(void));
+				Debug.Assert(returnValue.Type == emitter.ReturnType);
+				emitter.CodeBuilder.AddStatement(new ReturnStatement(returnValue));
+			}
 
 			return emitter;
 		}
@@ -273,28 +289,7 @@ namespace Castle.DynamicProxy.Generators
 
 						// Byref-like values live exclusively on the stack and cannot be boxed to `object`.
 						// Instead of them, we prepare instances of `ByRefLikeReference` wrappers that reference them.
-
-#if NET9_0_OR_GREATER
-						// TODO: perhaps we should cache these `ConstructorInfo`s?
-						ConstructorInfo referenceCtor = typeof(ByRefLikeReference<>).MakeGenericType(dereferencedArgumentType).GetConstructors().Single();
-#else
-						ConstructorInfo referenceCtor = ByRefLikeReferenceMethods.Constructor;
-#endif
-						if (dereferencedArgumentType.IsConstructedGenericType)
-						{
-							var typeDef = dereferencedArgumentType.GetGenericTypeDefinition();
-							if (typeDef == typeof(ReadOnlySpan<>))
-							{
-								var typeArg = dereferencedArgumentType.GetGenericArguments()[0];
-								referenceCtor = typeof(ReadOnlySpanReference<>).MakeGenericType(typeArg).GetConstructors().Single();
-							}
-							else if (typeDef == typeof(Span<>))
-							{
-								var typeArg = dereferencedArgumentType.GetGenericArguments()[0];
-								referenceCtor = typeof(SpanReference<>).MakeGenericType(typeArg).GetConstructors().Single();
-							}
-						}
-
+						var referenceCtor = GetByRefLikeReferenceCtorFor(dereferencedArgumentType);
 						var reference = method.CodeBuilder.DeclareLocal(typeof(ByRefLikeReference));
 						method.CodeBuilder.AddStatement(
 							new AssignStatement(
@@ -375,40 +370,127 @@ namespace Castle.DynamicProxy.Generators
 #endif
 			}
 
-			public void Return(LocalReference invocation)
+			public void PrepareReturnValueBuffer(LocalReference invocation, out LocalReference returnValueBuffer)
+			{
+#if FEATURE_BYREFLIKE
+				var returnType = method.ReturnType;
+
+				// DynamicProxy does not (yet?) support `ref` returns. Revisit this method once it does!
+				Debug.Assert(returnType.IsByRef == false);
+
+				if (returnType.IsByRefLikeSafe() == false)
+				{
+					returnValueBuffer = null;
+					return;
+				}
+
+				returnValueBuffer = method.CodeBuilder.DeclareLocal(returnType);
+
+				var referenceCtor = GetByRefLikeReferenceCtorFor(returnType);
+				method.CodeBuilder.AddStatement(
+					new MethodInvocationExpression(
+						invocation,
+						InvocationMethods.SetReturnValue,
+						new NewInstanceExpression(
+							referenceCtor,
+							new TypeTokenExpression(returnType),
+							new AddressOfExpression(returnValueBuffer))));
+#else
+				returnValueBuffer = null;
+#endif
+			}
+
+			public void InvalidateReturnValueBuffer(LocalReference invocation, LocalReference returnValueBuffer)
+			{
+#if FEATURE_BYREFLIKE
+				Debug.Assert(returnValueBuffer != null);
+
+				// The `ByRefLikeReference` return value must be rendered unusable
+				// at the end of the (intercepted) method invocation, since it references
+				// a local variable (the buffer) that is about to be popped off the stack.
+				method.CodeBuilder.AddStatement(
+					new MethodInvocationExpression(
+						new AsTypeExpression(
+							new MethodInvocationExpression(invocation, InvocationMethods.GetReturnValue),
+							typeof(ByRefLikeReference)),
+						ByRefLikeReferenceMethods.Invalidate,
+						new AddressOfExpression(returnValueBuffer)));
+
+				// Make the unusable proxy unreachable by erasing it from the invocation arguments array.
+				method.CodeBuilder.AddStatement(
+					new MethodInvocationExpression(invocation, InvocationMethods.SetReturnValue, NullExpression.Instance));
+#endif
+			}
+
+			public void GetReturnValue(LocalReference invocation, out LocalReference returnValue)
 			{
 				var returnType = method.ReturnType;
 
 				if (returnType == typeof(void))
 				{
-					method.CodeBuilder.AddStatement(ReturnStatement.Instance);
+					returnValue = null;
 					return;
 				}
 
-				var returnValue = method.CodeBuilder.DeclareLocal(typeof(object));
+				var invocationReturnValue = method.CodeBuilder.DeclareLocal(typeof(object));
 				method.CodeBuilder.AddStatement(
 					new AssignStatement(
-						returnValue,
+						invocationReturnValue,
 						new MethodInvocationExpression(invocation, InvocationMethods.GetReturnValue)));
+
+#if FEATURE_BYREFLIKE
+				if (returnType.IsByRefLikeSafe() == false)
+#endif
+				{
+					// Emit code to ensure a value type return type is not null, otherwise the cast will cause a null-deref
+					if (returnType.IsValueType && !returnType.IsNullableType())
+					{
+						method.CodeBuilder.AddStatement(
+							new IfNullExpression(
+								invocationReturnValue,
+								new ThrowStatement(
+									typeof(InvalidOperationException),
+									"Interceptors failed to set a return value, or swallowed the exception thrown by the target")));
+					}
+				}
 
 				// Note that we don't need special logic for byref-like values / `ByRefLikeReference` here,
 				// since `ConvertArgumentFromObjectExpression` knows how to deal with those.
 
-				// Emit code to ensure a value type return type is not null, otherwise the cast will cause a null-deref
-				if (returnType.IsValueType && !returnType.IsNullableType())
+				returnValue = method.CodeBuilder.DeclareLocal(returnType);
+				method.CodeBuilder.AddStatement(
+					new AssignStatement(
+						returnValue,
+						new ConvertArgumentFromObjectExpression(invocationReturnValue, returnType)));
+			}
+
+#if FEATURE_BYREFLIKE
+			private static ConstructorInfo GetByRefLikeReferenceCtorFor(Type dereferencedArgumentType)
+			{
+#if NET9_0_OR_GREATER
+				// TODO: perhaps we should cache these `ConstructorInfo`s?
+				ConstructorInfo referenceCtor = typeof(ByRefLikeReference<>).MakeGenericType(dereferencedArgumentType).GetConstructors().Single();
+#else
+				ConstructorInfo referenceCtor = ByRefLikeReferenceMethods.Constructor;
+#endif
+				if (dereferencedArgumentType.IsConstructedGenericType)
 				{
-					method.CodeBuilder.AddStatement(
-						new IfNullExpression(
-							returnValue,
-							new ThrowStatement(
-								typeof(InvalidOperationException),
-								"Interceptors failed to set a return value, or swallowed the exception thrown by the target")));
+					var typeDef = dereferencedArgumentType.GetGenericTypeDefinition();
+					if (typeDef == typeof(ReadOnlySpan<>))
+					{
+						var typeArg = dereferencedArgumentType.GetGenericArguments()[0];
+						referenceCtor = typeof(ReadOnlySpanReference<>).MakeGenericType(typeArg).GetConstructors().Single();
+					}
+					else if (typeDef == typeof(Span<>))
+					{
+						var typeArg = dereferencedArgumentType.GetGenericArguments()[0];
+						referenceCtor = typeof(SpanReference<>).MakeGenericType(typeArg).GetConstructors().Single();
+					}
 				}
 
-				method.CodeBuilder.AddStatement(
-					new ReturnStatement(
-						new ConvertArgumentFromObjectExpression(returnValue, returnType)));
+				return referenceCtor;
 			}
+#endif
 		}
 	}
 }

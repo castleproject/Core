@@ -115,7 +115,7 @@ namespace Castle.DynamicProxy.Generators
 				return;
 			}
 
-			var argumentsMarshaller = new ArgumentsMarshaller(invocation, invokeMethodOnTarget, parameters);
+			var argumentsMarshaller = new ArgumentsMarshaller(invocation, invokeMethodOnTarget, parameters, callbackMethod.ReturnType);
 
 			argumentsMarshaller.CopyOut(out var args, out var byRefArguments, out var hasByRefArguments);
 
@@ -258,12 +258,14 @@ namespace Castle.DynamicProxy.Generators
 			private readonly ClassEmitter invocation;
 			private readonly MethodEmitter method;
 			private readonly ParameterInfo[] parameters;
+			private readonly Type returnType;
 
-			public ArgumentsMarshaller(ClassEmitter invocation, MethodEmitter method, ParameterInfo[] parameters)
+			public ArgumentsMarshaller(ClassEmitter invocation, MethodEmitter method, ParameterInfo[] parameters, Type returnType)
 			{
 				this.invocation = invocation;
 				this.method = method;
 				this.parameters = parameters;
+				this.returnType = returnType;
 			}
 
 			public void CopyOut(out IExpression[] arguments, out LocalReference?[] byRefArguments, out bool hasByRefArguments)
@@ -354,14 +356,32 @@ namespace Castle.DynamicProxy.Generators
 			public void SetReturnValue(LocalReference returnValue)
 			{
 #if FEATURE_BYREFLIKE
-				// TODO: For byref-like return values, we will need to read `IInvocation.ReturnValue`
-				// and set the return value via pointer indirection (`ByRefLikeReference.GetPtr`).
+				if (returnType.IsByRefLikeSafe())
+				{
+					// For byref-like return types, a `ByRefLikeReference` has previously been placed in
+					// `IInvocation.ReturnValue`. We must not replace that proxy, but use it
+					// to update the return value buffer's value:
+					method.CodeBuilder.AddStatement(
+						new AssignStatement(
+							new PointerReference(
+								new MethodInvocationExpression(
+									new MethodInvocationExpression(
+										ThisExpression.Instance,
+										InvocationMethods.GetReturnValue),
+									ByRefLikeReferenceMethods.GetPtr,
+									new TypeTokenExpression(returnType)),
+								returnType),
+							returnValue));
+				}
+				else
 #endif
+				{
 
-				method.CodeBuilder.AddStatement(new MethodInvocationExpression(
-					ThisExpression.Instance,
-					InvocationMethods.SetReturnValue,
-					new ConvertArgumentToObjectExpression(returnValue)));
+					method.CodeBuilder.AddStatement(new MethodInvocationExpression(
+						ThisExpression.Instance,
+						InvocationMethods.SetReturnValue,
+						new ConvertArgumentToObjectExpression(returnValue)));
+				}
 			}
 		}
 	}
