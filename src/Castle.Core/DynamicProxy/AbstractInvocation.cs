@@ -134,6 +134,15 @@ namespace Castle.DynamicProxy
 
 		public IInvocationProceedInfo CaptureProceedInfo()
 		{
+#if FEATURE_BYREFLIKE
+			if (Array.Exists(Arguments, argument => argument is ByRefLikeReference) || ReturnValue is ByRefLikeReference)
+			{
+				throw new InvalidOperationException(
+					"DynamicProxy does not currently support this operation " +
+					"for methods with byref-like parameters or return types. ");
+			}
+#endif
+
 			return new ProceedInfo(this);
 		}
 
