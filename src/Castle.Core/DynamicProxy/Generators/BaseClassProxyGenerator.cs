@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
@@ -25,13 +27,13 @@ namespace Castle.DynamicProxy.Generators
 
 	internal abstract class BaseClassProxyGenerator : BaseProxyGenerator
 	{
-		protected BaseClassProxyGenerator(ModuleScope scope, Type targetType, Type[] interfaces, ProxyGenerationOptions options)
+		protected BaseClassProxyGenerator(ModuleScope scope, Type targetType, Type[]? interfaces, ProxyGenerationOptions options)
 			: base(scope, targetType, interfaces, options)
 		{
 			EnsureDoesNotImplementIProxyTargetAccessor(targetType, nameof(targetType));
 		}
 
-		protected abstract FieldReference TargetField { get; }
+		protected abstract FieldReference? TargetField { get; }
 
 #if FEATURE_SERIALIZATION
 		protected abstract SerializableContributor GetSerializableContributor();
@@ -40,6 +42,8 @@ namespace Castle.DynamicProxy.Generators
 		protected abstract CompositeTypeContributor GetProxyTargetContributor(INamingScope namingScope);
 
 		protected abstract ProxyTargetAccessorContributor GetProxyTargetAccessorContributor();
+
+		protected abstract RecordCloningContributor? GetRecordCloningContributor(INamingScope namingScope);
 
 		protected sealed override Type GenerateType(string name, INamingScope namingScope)
 		{
@@ -192,7 +196,11 @@ namespace Castle.DynamicProxy.Generators
 			}
 #endif
 
-			contributorsList.Add(new RecordCloningContributor(targetType, namingScope));
+			var recordCloningContributor = GetRecordCloningContributor(namingScope);
+			if (recordCloningContributor != null)
+			{
+				contributorsList.Add(recordCloningContributor);
+			}
 
 			var proxyTargetAccessorContributor = GetProxyTargetAccessorContributor();
 			contributorsList.Add(proxyTargetAccessorContributor);
