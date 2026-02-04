@@ -1,4 +1,4 @@
-// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+#nullable enable
 
 namespace Castle.DynamicProxy.Generators
 {
@@ -25,13 +27,13 @@ namespace Castle.DynamicProxy.Generators
 
 	internal abstract class BaseClassProxyGenerator : BaseProxyGenerator
 	{
-		protected BaseClassProxyGenerator(ModuleScope scope, Type targetType, Type[] interfaces, ProxyGenerationOptions options)
+		protected BaseClassProxyGenerator(ModuleScope scope, Type targetType, Type[]? interfaces, ProxyGenerationOptions options)
 			: base(scope, targetType, interfaces, options)
 		{
 			EnsureDoesNotImplementIProxyTargetAccessor(targetType, nameof(targetType));
 		}
 
-		protected abstract FieldReference TargetField { get; }
+		protected abstract FieldReference? TargetField { get; }
 
 #if FEATURE_SERIALIZATION
 		protected abstract SerializableContributor GetSerializableContributor();
@@ -40,6 +42,8 @@ namespace Castle.DynamicProxy.Generators
 		protected abstract CompositeTypeContributor GetProxyTargetContributor(INamingScope namingScope);
 
 		protected abstract ProxyTargetAccessorContributor GetProxyTargetAccessorContributor();
+
+		protected abstract RecordCloningContributor? GetRecordCloningContributor(INamingScope namingScope);
 
 		protected sealed override Type GenerateType(string name, INamingScope namingScope)
 		{
@@ -191,6 +195,12 @@ namespace Castle.DynamicProxy.Generators
 				AddMappingForISerializable(typeImplementerMapping, serializableContributor);
 			}
 #endif
+
+			var recordCloningContributor = GetRecordCloningContributor(namingScope);
+			if (recordCloningContributor != null)
+			{
+				contributorsList.Add(recordCloningContributor);
+			}
 
 			var proxyTargetAccessorContributor = GetProxyTargetAccessorContributor();
 			contributorsList.Add(proxyTargetAccessorContributor);

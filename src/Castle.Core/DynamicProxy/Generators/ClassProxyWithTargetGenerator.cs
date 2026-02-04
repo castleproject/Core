@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,6 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+#nullable enable
 
 namespace Castle.DynamicProxy.Generators
 {
@@ -29,15 +31,15 @@ namespace Castle.DynamicProxy.Generators
 
 	internal sealed class ClassProxyWithTargetGenerator : BaseClassProxyGenerator
 	{
-		private FieldReference targetField;
+		private FieldReference? targetField;
 
-		public ClassProxyWithTargetGenerator(ModuleScope scope, Type targetType, Type[] interfaces,
+		public ClassProxyWithTargetGenerator(ModuleScope scope, Type targetType, Type[]? interfaces,
 		                                     ProxyGenerationOptions options)
 			: base(scope, targetType, interfaces, options)
 		{
 		}
 
-		protected override FieldReference TargetField => targetField;
+		protected override FieldReference? TargetField => targetField;
 
 		protected override CacheKey GetCacheKey()
 		{
@@ -67,6 +69,11 @@ namespace Castle.DynamicProxy.Generators
 			return new ProxyTargetAccessorContributor(
 				getTarget: () => targetField,
 				targetType);
+		}
+
+		protected override RecordCloningContributor? GetRecordCloningContributor(INamingScope namingScope)
+		{
+			return null;
 		}
 
 		private void CreateTargetField(ClassEmitter emitter)

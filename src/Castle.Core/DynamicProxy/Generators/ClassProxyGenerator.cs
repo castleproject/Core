@@ -1,4 +1,4 @@
-// Copyright 2004-2025 Castle Project - http://www.castleproject.org/
+// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#nullable enable
+
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
@@ -24,12 +26,12 @@ namespace Castle.DynamicProxy.Generators
 
 	internal sealed class ClassProxyGenerator : BaseClassProxyGenerator
 	{
-		public ClassProxyGenerator(ModuleScope scope, Type targetType, Type[] interfaces, ProxyGenerationOptions options)
+		public ClassProxyGenerator(ModuleScope scope, Type targetType, Type[]? interfaces, ProxyGenerationOptions options)
 			: base(scope, targetType, interfaces, options)
 		{
 		}
 
-		protected override FieldReference TargetField => null;
+		protected override FieldReference? TargetField => null;
 
 		protected override CacheKey GetCacheKey()
 		{
@@ -53,6 +55,11 @@ namespace Castle.DynamicProxy.Generators
 			return new ProxyTargetAccessorContributor(
 				getTarget: () => ThisExpression.Instance,
 				targetType);
+		}
+
+		protected override RecordCloningContributor? GetRecordCloningContributor(INamingScope namingScope)
+		{
+			return new RecordCloningContributor(targetType, namingScope);
 		}
 	}
 }
