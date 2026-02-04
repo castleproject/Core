@@ -98,6 +98,28 @@ namespace Castle.DynamicProxy.Tests
 			Assert.AreSame(proxy.GetType(), clonedProxy.GetType());
 		}
 
+		[Test]
+		public void Can_proceed_to_record_target()
+		{
+			var target = new IdentifiableRecord { Id = "target" };
+			var proxy = generator.CreateClassProxyWithTarget(target, new StandardInterceptor());
+			var clonedProxy = proxy with { };
+			Assert.False(clonedProxy == proxy);
+			Assert.False(ProxyUtil.IsProxy(clonedProxy));
+			Assert.True(clonedProxy == target);
+		}
+
+		[Test]
+		public void Can_proceed_to_record_target_proxy()
+		{
+			var target = generator.CreateClassProxy<IdentifiableRecord>() with { Id = "target" };
+			var proxy = generator.CreateClassProxyWithTarget(target, new StandardInterceptor());
+			var clonedProxy = proxy with { };
+			Assert.False(clonedProxy == proxy);
+			Assert.True(ProxyUtil.IsProxy(clonedProxy));
+			Assert.True(clonedProxy == target);
+		}
+
 		[Serializable]
 		public record class InterceptNothingHook : IProxyGenerationHook
 		{
