@@ -115,7 +115,7 @@ namespace Castle.DynamicProxy.Generators
 				return;
 			}
 
-			var argumentsMarshaller = new ArgumentsMarshaller(invocation, invokeMethodOnTarget, parameters);
+			var argumentsMarshaller = new ArgumentsMarshaller(invocation, invokeMethodOnTarget, parameters, callbackMethod.ReturnType);
 
 			argumentsMarshaller.CopyOut(out var args, out var byRefArguments, out var hasByRefArguments);
 
@@ -258,12 +258,14 @@ namespace Castle.DynamicProxy.Generators
 			private readonly ClassEmitter invocation;
 			private readonly MethodEmitter method;
 			private readonly ParameterInfo[] parameters;
+			private readonly Type returnType;
 
-			public ArgumentsMarshaller(ClassEmitter invocation, MethodEmitter method, ParameterInfo[] parameters)
+			public ArgumentsMarshaller(ClassEmitter invocation, MethodEmitter method, ParameterInfo[] parameters, Type returnType)
 			{
 				this.invocation = invocation;
 				this.method = method;
 				this.parameters = parameters;
+				this.returnType = returnType;
 			}
 
 			public void CopyOut(out IExpression[] arguments, out LocalReference?[] byRefArguments, out bool hasByRefArguments)
@@ -287,26 +289,15 @@ namespace Castle.DynamicProxy.Generators
 
 					IExpression dereferencedArgument;
 
-#if FEATURE_BYREFLIKE
-					if (dereferencedArgumentType.IsByRefLikeSafe())
-					{
-						// The argument value in the invocation `Arguments` array is an `object`
-						// and cannot be converted back to its original by-ref-like type.
-						// We need to replace it with some other value.
+					// Note that we don't need special logic for byref-like values / `ByRefLikeReference` here,
+					// since `ConvertArgumentFromObjectExpression` knows how to deal with those.
 
-						// For now, we just substitute the by-ref-like type's default value:
-						dereferencedArgument = new DefaultValueExpression(dereferencedArgumentType);
-					}
-					else
-#endif
-					{
-						dereferencedArgument = new ConvertArgumentFromObjectExpression(
-							new MethodInvocationExpression(
-								ThisExpression.Instance,
-								InvocationMethods.GetArgumentValue,
-								new LiteralIntExpression(i)),
-							dereferencedArgumentType);
-					}
+					dereferencedArgument = new ConvertArgumentFromObjectExpression(
+						new MethodInvocationExpression(
+							ThisExpression.Instance,
+							InvocationMethods.GetArgumentValue,
+							new LiteralIntExpression(i)),
+						dereferencedArgumentType);
 
 					if (argumentType.IsByRef)
 					{
@@ -333,17 +324,21 @@ namespace Castle.DynamicProxy.Generators
 #if FEATURE_BYREFLIKE
 					if (localCopy.Type.IsByRefLikeSafe())
 					{
-						// The by-ref-like value in the local buffer variable cannot be put back
-						// into the invocation `Arguments` array, because it cannot be boxed.
-						// We need to replace it with some other value.
-
-						// For now, we just erase it by substituting `null`:
+						// For byref-like values, a `ByRefLikeReference` has previously been placed
+						// in `IInvocation.Arguments`. We must not replace that substitute value,
+						// but use it to update the referenced byref-like parameter:
 						method.CodeBuilder.AddStatement(
-							new MethodInvocationExpression(
-								ThisExpression.Instance,
-								InvocationMethods.SetArgumentValue,
-								new LiteralIntExpression(i),
-								NullExpression.Instance));
+							new AssignStatement(
+								new PointerReference(
+									new MethodInvocationExpression(
+										new MethodInvocationExpression(
+											ThisExpression.Instance,
+											InvocationMethods.GetArgumentValue,
+											new LiteralIntExpression(i)),
+										ByRefLikeReferenceMethods.GetPtr,
+										new TypeTokenExpression(localCopy.Type)),
+									localCopy.Type),
+								localCopy));
 					}
 					else
 #endif
@@ -361,20 +356,27 @@ namespace Castle.DynamicProxy.Generators
 			public void SetReturnValue(LocalReference returnValue)
 			{
 #if FEATURE_BYREFLIKE
-				if (returnValue.Type.IsByRefLikeSafe())
+				if (returnType.IsByRefLikeSafe())
 				{
-					// The by-ref-like return value cannot be put into the `ReturnValue` property,
-					// because it cannot be boxed. We need to replace it with some other value.
-
-					// For now, we just erase it by substituting `null`:
-					method.CodeBuilder.AddStatement(new MethodInvocationExpression(
-						ThisExpression.Instance,
-						InvocationMethods.SetReturnValue,
-						NullExpression.Instance));
+					// For byref-like return types, a `ByRefLikeReference` has previously been placed in
+					// `IInvocation.ReturnValue`. We must not replace that proxy, but use it
+					// to update the return value buffer's value:
+					method.CodeBuilder.AddStatement(
+						new AssignStatement(
+							new PointerReference(
+								new MethodInvocationExpression(
+									new MethodInvocationExpression(
+										ThisExpression.Instance,
+										InvocationMethods.GetReturnValue),
+									ByRefLikeReferenceMethods.GetPtr,
+									new TypeTokenExpression(returnType)),
+								returnType),
+							returnValue));
 				}
 				else
 #endif
 				{
+
 					method.CodeBuilder.AddStatement(new MethodInvocationExpression(
 						ThisExpression.Instance,
 						InvocationMethods.SetReturnValue,

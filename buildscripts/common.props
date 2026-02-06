@@ -75,7 +75,7 @@
 		<DefineConstants>$(NetStandard20Constants)</DefineConstants>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0' Or '$(TargetFramework)'=='net9.0'">
+	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0' Or '$(TargetFramework)'=='net9.0' Or '$(TargetFramework)'=='net10.0'">
 		<DefineConstants>$(DefineConstants);FEATURE_BYREFLIKE</DefineConstants>
 	</PropertyGroup>
 

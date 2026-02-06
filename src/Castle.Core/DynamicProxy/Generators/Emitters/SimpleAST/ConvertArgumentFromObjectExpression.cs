@@ -18,6 +18,9 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 	using System.Diagnostics;
 	using System.Reflection.Emit;
 
+	using Castle.DynamicProxy.Internal;
+	using Castle.DynamicProxy.Tokens;
+
 	internal class ConvertArgumentFromObjectExpression : IExpression
 	{
 		private readonly IExpression obj;
@@ -42,17 +45,29 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 
 			if (dereferencedArgumentType.IsValueType)
 			{
-				// Unbox conversion
-				// Assumes fromType is a boxed value
-				// if we can, we emit a box and ldind, otherwise, we will use unbox.any
-				if (LdindOpCodesDictionary.Instance[dereferencedArgumentType] != LdindOpCodesDictionary.EmptyOpCode)
+#if FEATURE_BYREFLIKE
+				if (dereferencedArgumentType.IsByRefLikeSafe())
 				{
-					gen.Emit(OpCodes.Unbox, dereferencedArgumentType);
-					OpCodeUtil.EmitLoadIndirectOpCodeForType(gen, dereferencedArgumentType);
+					gen.Emit(OpCodes.Ldtoken, dereferencedArgumentType);
+					gen.Emit(OpCodes.Call, TypeMethods.GetTypeFromHandle);
+					gen.Emit(OpCodes.Call, ByRefLikeReferenceMethods.GetPtr);
+					gen.Emit(OpCodes.Ldobj, dereferencedArgumentType);
 				}
 				else
+#endif
 				{
-					gen.Emit(OpCodes.Unbox_Any, dereferencedArgumentType);
+					// Unbox conversion
+					// Assumes fromType is a boxed value
+					// if we can, we emit a box and ldind, otherwise, we will use unbox.any
+					if (LdindOpCodesDictionary.Instance[dereferencedArgumentType] != LdindOpCodesDictionary.EmptyOpCode)
+					{
+						gen.Emit(OpCodes.Unbox, dereferencedArgumentType);
+						OpCodeUtil.EmitLoadIndirectOpCodeForType(gen, dereferencedArgumentType);
+					}
+					else
+					{
+						gen.Emit(OpCodes.Unbox_Any, dereferencedArgumentType);
+					}
 				}
 			}
 			else

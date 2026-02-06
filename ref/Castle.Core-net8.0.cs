@@ -2422,6 +2422,15 @@ namespace Castle.DynamicProxy
         public virtual void NonProxyableMemberNotification(System.Type type, System.Reflection.MemberInfo memberInfo) { }
         public virtual bool ShouldInterceptMethod(System.Type type, System.Reflection.MethodInfo methodInfo) { }
     }
+    public class ByRefLikeReference
+    {
+        [System.CLSCompliant(false)]
+        public ByRefLikeReference(System.Type type, void* ptr) { }
+        [System.CLSCompliant(false)]
+        public unsafe void* GetPtr(System.Type checkType) { }
+        [System.CLSCompliant(false)]
+        public unsafe void Invalidate(void* checkPtr) { }
+    }
     public class CustomAttributeInfo : System.IEquatable<Castle.DynamicProxy.CustomAttributeInfo>
     {
         public CustomAttributeInfo(System.Reflection.ConstructorInfo constructor, object?[] constructorArgs) { }
@@ -2689,6 +2698,18 @@ namespace Castle.DynamicProxy
         public static bool IsAccessible(System.Reflection.MethodBase method, [System.Diagnostics.CodeAnalysis.NotNullWhen(false)] out string? message) { }
         public static bool IsProxy(object? instance) { }
         public static bool IsProxyType(System.Type type) { }
+    }
+    public class ReadOnlySpanReference<T> : Castle.DynamicProxy.ByRefLikeReference
+    {
+        [System.CLSCompliant(false)]
+        public ReadOnlySpanReference(System.Type type, void* ptr) { }
+        public System.ReadOnlySpan<>& Value { get; }
+    }
+    public class SpanReference<T> : Castle.DynamicProxy.ByRefLikeReference
+    {
+        [System.CLSCompliant(false)]
+        public SpanReference(System.Type type, void* ptr) { }
+        public System.Span<>& Value { get; }
     }
     public class StandardInterceptor : Castle.DynamicProxy.IInterceptor
     {
