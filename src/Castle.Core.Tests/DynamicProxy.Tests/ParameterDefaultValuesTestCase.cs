@@ -1,4 +1,4 @@
-﻿// Copyright 2004-2021 Castle Project - http://www.castleproject.org/
+﻿// Copyright 2004-2026 Castle Project - http://www.castleproject.org/
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -74,6 +74,7 @@ namespace Castle.DynamicProxy.Tests
 			Assert.IsAssignableFrom(coreLibDBNullType, proxiedParameter.DefaultValue);
 		}
 
+		[SkipPEVerify(Reason = "no need to verify `HasDefaultValues` proxy type multiple times, it already gets verified in another test")]
 		[TestCase(nameof(HasDefaultValues.Bool_default))]
 		[TestCase(nameof(HasDefaultValues.Bool_non_default))]
 		[TestCase(nameof(HasDefaultValues.Bool_nullable_null))]
@@ -200,6 +201,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Platform(Exclude = "Net,NetCore", Reason = "ParameterBuilder.SetConstant does not accept a null default value for value type parameters. See https://github.com/dotnet/corefx/issues/26164.")]
+		[SkipPEVerify(Reason = "no need to verify `HasDefaultValues` proxy type multiple times, it already gets verified in another test")]
 		[TestCase(nameof(HasDefaultValues.DateTime_default))]
 		[TestCase(nameof(HasDefaultValues.UserDefinedStruct_default))]
 		public void Not_supported_on_the_CLR_Struct_default(string methodName)
@@ -208,6 +210,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Platform(Exclude = "Net,NetCore", Reason = "ParameterBuilder.SetConstant does not accept non-null default values for nullable enum parameters. See https://github.com/dotnet/coreclr/issues/17893.")]
+		[SkipPEVerify(Reason = "no need to verify `HasDefaultValues` proxy type multiple times, it already gets verified in another test")]
 		[TestCase(nameof(HasDefaultValues.UserDefinedEnum_nullable_default))]
 		[TestCase(nameof(HasDefaultValues.UserDefinedEnum_nullable_default_from_attribute))]
 		[TestCase(nameof(HasDefaultValues.UserDefinedEnum_nullable_non_default))]
@@ -218,6 +221,7 @@ namespace Castle.DynamicProxy.Tests
 		}
 
 		[Platform(Exclude = "Mono", Reason = "ParameterInfo.DefaultValue does not report the correct default value for non-null optional parameters of type `DateTime?` and `decimal?`. See https://github.com/mono/mono/issues/11303.")]
+		[SkipPEVerify(Reason = "no need to verify `HasDefaultValues` proxy type multiple times, it already gets verified in another test")]
 		[TestCase(nameof(HasDefaultValues.DateTime_nullable_default_from_attribute))]
 		[TestCase(nameof(HasDefaultValues.DateTime_nullable_non_default_from_attribute))]
 		[TestCase(nameof(HasDefaultValues.Decimal_nullable_default))]
