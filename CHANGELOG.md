@@ -1,6 +1,6 @@
 # Castle Core Changelog
 
-## Next
+## 6.0.0 (2026-02-06)
 
 Breaking Changes:
 - Updated target frameworks to .NET 8 (`net8.0`), .NET 9 (`net9.0`), .NET Standard 2.0 (`netstandard2.0`), and .NET Framework 4.6.2 (`net462`). Tests are being run on .NET 8, .NET 9, .NET 10, and on the .NET Framework. We no longer run tests on earlier frameworks nor on Mono. (@Romfos, #696, #724; @stakx, #719)
