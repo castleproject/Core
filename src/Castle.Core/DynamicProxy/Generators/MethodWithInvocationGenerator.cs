@@ -266,7 +266,8 @@ namespace Castle.DynamicProxy.Generators
 				method.CodeBuilder.AddStatement(
 					new AssignStatement(
 						argumentsArray,
-						new NewArrayExpression(arguments.Length, typeof(object))));
+						arguments.Length > 0 ? new NewArrayExpression(arguments.Length, typeof(object))
+						                     : new MethodInvocationExpression(instance: null, ArrayMethods.EmptyOfObject)));
 
 				for (int i = 0, n = arguments.Length; i < n; ++i)
 				{
