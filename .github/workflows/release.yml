@@ -1,0 +1,45 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Nuget package version"
+        required: true
+        type: string
+      publish:
+        description: "Publish to nuget"
+        type: boolean
+        required: true
+        default: false
+run-name: Release ${{ inputs.Version }}
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build package
+        run: dotnet pack ./Castle.Core.slnx -p:Version=${{ inputs.Version }} -o ./build -p:CI=true
+
+      - name: Make explicit versions for nuget packages
+        run: dotnet run  --project .\tools\Explicit.NuGet.Versions\Explicit.NuGet.Versions.csproj ".\build" "castle."
+
+      - name: Publish to nuget.org
+        if: inputs.publish == 'true'
+        run: dotnet nuget push ./build/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v5
+        with:
+          name: packages
+          path: |
+            build/*.nupkg
+            build/*.snupkg
+          retention-days: 30
