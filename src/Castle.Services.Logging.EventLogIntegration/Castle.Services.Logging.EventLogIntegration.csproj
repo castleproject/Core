@@ -8,8 +8,6 @@
 
 	<PropertyGroup>
 		<PackageId>Castle.Core-DiagnosticsLogger</PackageId>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<PackageOutputPath>../../build/</PackageOutputPath>
 		<AssemblyName>Castle.Services.Logging.EventLogIntegration</AssemblyName>
 		<RootNamespace>Castle.Services.Logging.EventLogIntegration</RootNamespace>
 		<AssemblyTitle>Castle Windows EventLog integration</AssemblyTitle>
