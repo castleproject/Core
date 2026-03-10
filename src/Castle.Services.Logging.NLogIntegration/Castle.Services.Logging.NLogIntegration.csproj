@@ -8,8 +8,6 @@
 
 	<PropertyGroup>
 		<PackageId>Castle.Core-NLog</PackageId>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<PackageOutputPath>../../build/</PackageOutputPath>
 		<AssemblyName>Castle.Services.Logging.NLogIntegration</AssemblyName>
 		<RootNamespace>Castle.Services.Logging.NLogIntegration</RootNamespace>
 		<AssemblyTitle>Castle NLog integration</AssemblyTitle>

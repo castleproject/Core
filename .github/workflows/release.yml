@@ -1,0 +1,53 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Nuget package version
+        required: true
+        type: string
+      publish:
+        description: Publish to nuget
+        type: boolean
+        required: true
+        default: false
+run-name: Release ${{ inputs.version }}
+
+jobs:
+  pack-and-publish:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build package
+        run: dotnet pack ./Castle.Core.slnx -p:Version=${{ inputs.version }} -o ./artifacts -p:CI=true
+
+      - name: Make explicit versions for nuget packages
+        run: dotnet run  --project .\tools\Explicit.NuGet.Versions\Explicit.NuGet.Versions.csproj ".\artifacts" "castle."
+
+      - name: Upload nuget package
+        uses: actions/upload-artifact@v6
+        with:
+          compression-level: 0 # nupkg files are already compressed
+          name: nupkg
+          path: artifacts/*nupkg
+
+      - name: NuGet login
+        if: inputs.publish
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: castleproject
+
+      - name: Push to NuGet.org
+        if: inputs.publish
+        run: dotnet nuget push artifacts\*.nupkg --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --skip-duplicate

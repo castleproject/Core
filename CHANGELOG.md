@@ -11,6 +11,7 @@ Enhancements:
 - Restore ability on .NET 9 and later to save dynamic assemblies to disk using `PersistentProxyBuilder` (@stakx, #718)
 - Configure SourceLink & `.snupkg` symbols package format (@Romfos, #722)
 - Support for C# `with { ... }` expressions. Cloning a record proxy using `with` now produces another proxy of the same type (instead of an instance of the proxied type, as before). The cloning process can still be changed by intercepting the record class' `<Clone>$` method. (@stakx, #733)
+- Moved to GitHub Actions and NuGet Trusted Publishing, removed old build scripts (@Romfos, @304NotModified, #740)
 - Dependencies were updated
 
 Bugfixes:

@@ -3,9 +3,6 @@
     <File Path=".editorconfig" />
     <File Path=".gitattributes" />
     <File Path=".gitignore" />
-    <File Path="appveyor.yml" />
-    <File Path="build.cmd" />
-    <File Path="build.sh" />
     <File Path="buildscripts/common.props" />
     <File Path="CHANGELOG.md" />
     <File Path="CONTRIBUTING.md" />
@@ -14,6 +11,7 @@
   </Folder>
   <Folder Name="/Castle Build/GitHub Actions/">
     <File Path=".github/workflows/build.yml" />
+    <File Path=".github/workflows/release.yml" />
   </Folder>
   <Folder Name="/Castle Services/">
     <Project Path="src/Castle.Services.Logging.EventLogIntegration/Castle.Services.Logging.EventLogIntegration.csproj" />

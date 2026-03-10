@@ -8,8 +8,6 @@
 
 	<PropertyGroup>
 		<PackageId>Castle.Core-log4net</PackageId>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<PackageOutputPath>../../build/</PackageOutputPath>
 		<AssemblyName>Castle.Services.Logging.Log4netIntegration</AssemblyName>
 		<RootNamespace>Castle.Services.Logging.Log4netIntegration</RootNamespace>
 		<AssemblyTitle>Castle log4net integration</AssemblyTitle>
