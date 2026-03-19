@@ -331,11 +331,12 @@ namespace Castle.DynamicProxy.Generators
 							new AssignStatement(
 								new PointerReference(
 									new MethodInvocationExpression(
+										instance: null,
+										ByRefLikeReferenceUnsafeMethods.GetRawPtr,
 										new MethodInvocationExpression(
 											ThisExpression.Instance,
 											InvocationMethods.GetArgumentValue,
 											new LiteralIntExpression(i)),
-										ByRefLikeReferenceMethods.GetPtr,
 										new TypeTokenExpression(localCopy.Type)),
 									localCopy.Type),
 								localCopy));
@@ -365,10 +366,11 @@ namespace Castle.DynamicProxy.Generators
 						new AssignStatement(
 							new PointerReference(
 								new MethodInvocationExpression(
+									instance: null,
+									ByRefLikeReferenceUnsafeMethods.GetRawPtr,
 									new MethodInvocationExpression(
 										ThisExpression.Instance,
 										InvocationMethods.GetReturnValue),
-									ByRefLikeReferenceMethods.GetPtr,
 									new TypeTokenExpression(returnType)),
 								returnType),
 							returnValue));

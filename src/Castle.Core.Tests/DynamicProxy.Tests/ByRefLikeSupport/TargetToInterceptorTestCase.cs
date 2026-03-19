@@ -49,7 +49,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ByRefLikeReference<ByRefLike>>(invocationArg);
-					ByRefLike arg = ((ByRefLikeReference<ByRefLike>)invocationArg!).Value;
+					ByRefLike arg = ((ByRefLikeReference<ByRefLike>)invocationArg!).GetValue();
 					Assert.AreEqual("from target", arg.Value);
 				});
 		}
@@ -69,7 +69,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ByRefLikeReference<ByRefLike>>(invocationArg);
-					ByRefLike arg = ((ByRefLikeReference<ByRefLike>)invocationArg!).Value;
+					ByRefLike arg = ((ByRefLikeReference<ByRefLike>)invocationArg!).GetValue();
 					Assert.AreEqual("from target", arg.Value);
 				});
 		}
@@ -89,7 +89,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationReturnValue) =>
 				{
 					Assert.IsInstanceOf<ByRefLikeReference<ByRefLike>>(invocationReturnValue);
-					ByRefLike returnValue = ((ByRefLikeReference<ByRefLike>)invocationReturnValue!).Value;
+					ByRefLike returnValue = ((ByRefLikeReference<ByRefLike>)invocationReturnValue!).GetValue();
 					Assert.AreEqual("from target", returnValue.Value);
 				});
 		}
@@ -116,7 +116,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ReadOnlySpanReference<char>>(invocationArg);
-					ReadOnlySpan<char> arg = ((ReadOnlySpanReference<char>)invocationArg!).Value;
+					ReadOnlySpan<char> arg = ((ReadOnlySpanReference<char>)invocationArg!).GetValue();
 					Assert.AreEqual("from target", new string(arg));
 				});
 		}
@@ -136,7 +136,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ReadOnlySpanReference<char>>(invocationArg);
-					ReadOnlySpan<char> arg = ((ReadOnlySpanReference<char>)invocationArg!).Value;
+					ReadOnlySpan<char> arg = ((ReadOnlySpanReference<char>)invocationArg!).GetValue();
 					Assert.AreEqual("from target", new string(arg));
 				});
 		}
@@ -156,7 +156,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationReturnValue) =>
 				{
 					Assert.IsInstanceOf<ReadOnlySpanReference<char>>(invocationReturnValue);
-					ReadOnlySpan<char> returnValue = ((ReadOnlySpanReference<char>)invocationReturnValue!).Value;
+					ReadOnlySpan<char> returnValue = ((ReadOnlySpanReference<char>)invocationReturnValue!).GetValue();
 					Assert.AreEqual("from target", new string(returnValue));
 				});
 		}
@@ -181,7 +181,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<SpanReference<char>>(invocationArg);
-					Span<char> arg = ((SpanReference<char>)invocationArg!).Value;
+					Span<char> arg = ((SpanReference<char>)invocationArg!).GetValue();
 					Assert.AreEqual("from target", new string(arg));
 				});
 		}
@@ -201,7 +201,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<SpanReference<char>>(invocationArg);
-					Span<char> arg = ((SpanReference<char>)invocationArg!).Value;
+					Span<char> arg = ((SpanReference<char>)invocationArg!).GetValue();
 					Assert.AreEqual("from target", new string(arg));
 				});
 		}
@@ -221,7 +221,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationReturnValue) =>
 				{
 					Assert.IsInstanceOf<SpanReference<char>>(invocationReturnValue);
-					Span<char> returnValue = ((SpanReference<char>)invocationReturnValue!).Value;
+					Span<char> returnValue = ((SpanReference<char>)invocationReturnValue!).GetValue();
 					Assert.AreEqual("from target", new string(returnValue));
 				});
 		}

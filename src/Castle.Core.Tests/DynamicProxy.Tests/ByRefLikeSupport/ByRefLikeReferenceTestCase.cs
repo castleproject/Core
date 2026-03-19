@@ -20,6 +20,7 @@
 namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 {
 	using System;
+	using System.Threading.Tasks;
 #if NET9_0_OR_GREATER
 	using System.Runtime.CompilerServices;
 #endif
@@ -40,7 +41,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 			Assert.Throws<ArgumentOutOfRangeException>(() =>
 			{
 				bool local = default;
-				_ = new ByRefLikeReference(typeof(bool), &local);
+				_ = new ByRefLikeReference(typeof(bool), &local, false);
 			});
 		}
 
@@ -48,53 +49,84 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 		public unsafe void Ctor_succeeds_if_by_ref_like_type()
 		{
 			ReadOnlySpan<char> local = default;
-			_ = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local);
+			_ = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local, false);
 		}
 
 		[Test]
-		public unsafe void Invalidate_throws_if_address_mismatch()
+		[TestCase(true)]
+		[TestCase(false)]
+		public unsafe void Ctor_preserves_value_is_scoped_value(bool valueIsScoped)
 		{
 			ReadOnlySpan<char> local = default;
-			var reference = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local);
-			Assert.Throws<AccessViolationException>(() =>
+			var result = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local, valueIsScoped: valueIsScoped);
+			Assert.AreEqual(valueIsScoped, result.ValueIsScoped);
+		}
+
+		[Test]
+		public unsafe void Dispose_throws_if_address_mismatch()
+		{
+			ReadOnlySpan<char> local = default;
+			var reference = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local, false);
+			Assert.Throws<InvalidOperationException>(() =>
 			{
 				ReadOnlySpan<char> otherLocal = default;
-				reference.Invalidate(&otherLocal);
+				reference.Dispose(&otherLocal);
 			});
 		}
 
 		[Test]
-		public unsafe void Invalidate_succeeds_if_address_match()
+		public unsafe void Dispose_succeeds_if_address_match()
 		{
 			ReadOnlySpan<char> local = default;
-			var reference = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local);
-			reference.Invalidate(&local);
+			var reference = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local, false);
+			reference.Dispose(&local);
+		}
+		
+		[Test]
+		public unsafe void Dispose_throws_when_access_from_other_thread()
+		{
+			ReadOnlySpan<char> local = default;
+			var reference = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local, false);
+			var address = reference.GetPtr(typeof(ReadOnlySpan<char>));
+			var task = Task.Run(() => reference.Dispose(address));
+			var msg = Assert.Throws<InvalidOperationException>(() => task.GetAwaiter().GetResult()).Message;
+			StringAssert.Contains("thread", msg);
 		}
 
 		[Test]
 		public unsafe void GetPtr_throws_if_type_mismatch()
 		{
 			ReadOnlySpan<char> local = default;
-			var reference = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local);
-			Assert.Throws<AccessViolationException>(() => reference.GetPtr(typeof(bool)));
+			var reference = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local, false);
+			Assert.Throws<ArgumentException>(() => reference.GetPtr(typeof(bool)));
 		}
 
 		[Test]
 		public unsafe void GetPtr_returns_ctor_address_if_type_match()
 		{
 			ReadOnlySpan<char> local = default;
-			var reference = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local);
+			var reference = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local, false);
 			var ptr = reference.GetPtr(typeof(ReadOnlySpan<char>));
 			Assert.True(ptr == &local);
 		}
 
 		[Test]
-		public unsafe void GetPtr_throws_after_Invalidate()
+		public unsafe void GetPtr_throws_after_Dispose()
 		{
 			ReadOnlySpan<char> local = default;
-			var reference = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local);
-			reference.Invalidate(&local);
-			Assert.Throws<AccessViolationException>(() => reference.GetPtr(typeof(ReadOnlySpan<char>)));
+			var reference = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local, false);
+			reference.Dispose(&local);
+			Assert.Throws<ObjectDisposedException>(() => reference.GetPtr(typeof(ReadOnlySpan<char>)));
+		}
+		
+		[Test]
+		public unsafe void GetPtr_throws_when_access_from_other_thread()
+		{
+			ReadOnlySpan<char> local = default;
+			var reference = new ByRefLikeReference(typeof(ReadOnlySpan<char>), &local, false);
+			var task = Task.Run(() => reference.GetPtr(typeof(ReadOnlySpan<char>)));
+			var msg = Assert.Throws<InvalidOperationException>(() => task.GetAwaiter().GetResult()).Message;
+			StringAssert.Contains("thread", msg);
 		}
 
 		#endregion
@@ -109,34 +141,70 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 			Assert.Throws<ArgumentOutOfRangeException>(() =>
 			{
 				ReadOnlySpan<bool> local = default;
-				_ = new ReadOnlySpanReference<char>(typeof(ReadOnlySpan<bool>), &local);
+				_ = new ReadOnlySpanReference<char>(typeof(ReadOnlySpan<bool>), &local, false);
 			});
 		}
 
-		public unsafe void ReadOnlySpanReference_Value_returns_equal_span()
+		[Test]
+		[TestCase(true)]
+		[TestCase(false)]
+		public unsafe void ReadOnlySpanReference_ctor_preserves_value_is_scoped_value(bool valueIsScoped)
 		{
-			ReadOnlySpan<char> local = "foo".AsSpan();
-			var reference = new ReadOnlySpanReference<char>(typeof(ReadOnlySpan<char>), &local);
-			Assert.True(reference.Value == "foo".AsSpan());
+			ReadOnlySpan<char> local = default;
+			var result = new ReadOnlySpanReference<char>(typeof(ReadOnlySpan<char>), &local, valueIsScoped: valueIsScoped);
+			Assert.AreEqual(valueIsScoped, result.ValueIsScoped);
 		}
 
-#if NET9_0_OR_GREATER
-		[Test]
-		public unsafe void ReadOnlySpanReference_Value_returns_same_span()
+		public unsafe void ReadOnlySpanReference_GetValue_returns_equal_span()
 		{
 			ReadOnlySpan<char> local = "foo".AsSpan();
-			var reference = new ReadOnlySpanReference<char>(typeof(ReadOnlySpan<char>), &local);
-			Assert.True(Unsafe.AreSame(ref reference.Value, ref local));
+			var reference = new ReadOnlySpanReference<char>(typeof(ReadOnlySpan<char>), &local, false);
+			Assert.True(reference.GetValue() == "foo".AsSpan());
 		}
-#endif
+		
+		public unsafe void ReadOnlySpanReference_UseValue_returns_equal_span()
+		{
+			ReadOnlySpan<char> local = "foo".AsSpan();
+			var reference = new ReadOnlySpanReference<char>(typeof(ReadOnlySpan<char>), &local, false);
+			var returnedValue = reference.UseValue((scoped x) => x.ToString());
+			Assert.True(returnedValue == "foo");
+		}
 
 		[Test]
-		public unsafe void ReadOnlySpanReference_Value_can_update_original()
+		public unsafe void ReadOnlySpanReference_SetValue_can_update_original()
 		{
 			ReadOnlySpan<char> local = "foo".AsSpan();
-			var reference = new ReadOnlySpanReference<char>(typeof(ReadOnlySpan<char>), &local);
-			reference.Value = "bar".AsSpan();
+			var reference = new ReadOnlySpanReference<char>(typeof(ReadOnlySpan<char>), &local, false);
+			reference.SetValue(() => "bar".AsSpan());
 			Assert.True(local == "bar".AsSpan());
+		}
+		
+		[Test]
+		public unsafe void ReadOnlySpanReference_GetValue_throws_when_access_from_other_thread()
+		{
+			ReadOnlySpan<char> local = "foo".AsSpan();
+			var reference = new ReadOnlySpanReference<char>(typeof(ReadOnlySpan<char>), &local, false);
+			var task = Task.Run(() => reference.GetValue().ToString());
+			var msg = Assert.Throws<InvalidOperationException>(() => task.GetAwaiter().GetResult()).Message;
+			StringAssert.Contains("thread", msg);
+		}
+		
+		[Test]
+		public unsafe void ReadOnlySpanReference_GetValue_throws_when_called_for_scoped()
+		{
+			ReadOnlySpan<char> local = "foo".AsSpan();
+			var reference = new ReadOnlySpanReference<char>(typeof(ReadOnlySpan<char>), &local, valueIsScoped: true);
+			var msg = Assert.Throws<InvalidOperationException>(() => reference.GetValue()).Message;
+			StringAssert.Contains("scoped", msg);
+		}
+		
+		[Test]
+		public unsafe void ReadOnlySpanReference_UseValue_returns_for_scoped()
+		{
+			ReadOnlySpan<char> local = "foo".AsSpan();
+			var reference = new ReadOnlySpanReference<char>(typeof(ReadOnlySpan<char>), &local, valueIsScoped: true);
+			var returnedValue = reference.UseValue((scoped x) => x.ToString());
+			Assert.True(returnedValue == "foo");
 		}
 
 		#endregion

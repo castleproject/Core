@@ -37,9 +37,19 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 		}
 	}
 
+	public ref struct ByRefLikeContainer
+	{
+		public ByRefLike Value { get; set; }
+	}
+
 	public interface IPassByRefLikeByValue
 	{
 		void PassByValue(ByRefLike arg);
+	}
+
+	public interface IPassByRefLikeByValueScoped
+	{
+		void PassByValue(scoped ByRefLike arg);
 	}
 
 	public interface IPassByRefLikeByRefIn
@@ -47,14 +57,29 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 		void PassByRefIn(in ByRefLike arg);
 	}
 
+	public interface IPassByRefLikeByRefInScoped
+	{
+		void PassByRefIn(scoped in ByRefLike arg);
+	}
+
 	public interface IPassByRefLikeByRefRef
 	{
 		void PassByRefRef(ref ByRefLike arg);
 	}
 
+	public interface IPassByRefLikeByRefRefScoped
+	{
+		void PassByRefRef(scoped ref ByRefLike arg);
+	}
+
 	public interface IPassByRefLikeByRefOut
 	{
 		void PassByRefOut(out ByRefLike arg);
+	}
+
+	public interface IPassByRefLikeByRefOutScoped
+	{
+		void PassByRefOut(scoped out ByRefLike arg);
 	}
 
 	public interface IReturnByRefLikeByValue

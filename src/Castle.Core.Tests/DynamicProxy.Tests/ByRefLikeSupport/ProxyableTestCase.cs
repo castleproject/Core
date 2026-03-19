@@ -30,9 +30,13 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 	{
 		// `ByRefLike` types:
 		[TestCase(typeof(IPassByRefLikeByValue))]
+		[TestCase(typeof(IPassByRefLikeByValueScoped))]
 		[TestCase(typeof(IPassByRefLikeByRefIn))]
+		[TestCase(typeof(IPassByRefLikeByRefInScoped))]
 		[TestCase(typeof(IPassByRefLikeByRefRef))]
+		[TestCase(typeof(IPassByRefLikeByRefRefScoped))]
 		[TestCase(typeof(IPassByRefLikeByRefOut))]
+		[TestCase(typeof(IPassByRefLikeByRefOutScoped))]
 		[TestCase(typeof(IReturnByRefLikeByValue))]
 		// `ReadOnlySpan<T>` types:
 		[TestCase(typeof(IPassReadOnlySpanByValue))]

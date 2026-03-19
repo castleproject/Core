@@ -45,8 +45,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				set: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ByRefLikeReference<ByRefLike>>(invocationArg);
-					ByRefLike arg = new("from interceptor");
-					((ByRefLikeReference<ByRefLike>)invocationArg!).Value = arg;
+					((ByRefLikeReference<ByRefLike>)invocationArg!).SetValue(() => new ByRefLike("from interceptor"));
 				},
 				target: () => new PassByRefLikeTarget(inspect: (ByRefLike arg) =>
 				{
@@ -66,8 +65,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				set: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ByRefLikeReference<ByRefLike>>(invocationArg);
-					ByRefLike arg = new("from interceptor");
-					((ByRefLikeReference<ByRefLike>)invocationArg!).Value = arg;
+					((ByRefLikeReference<ByRefLike>)invocationArg!).SetValue(() => new ByRefLike("from interceptor"));
 				},
 				target: () => new PassByRefLikeTarget(inspect: (ByRefLike arg) =>
 				{
@@ -87,8 +85,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				set: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ByRefLikeReference<ByRefLike>>(invocationArg);
-					ByRefLike arg = new("from interceptor");
-					((ByRefLikeReference<ByRefLike>)invocationArg!).Value = arg;
+					((ByRefLikeReference<ByRefLike>)invocationArg!).SetValue(() => new ByRefLike("from interceptor"));
 				},
 				target: () => new PassByRefLikeTarget(inspect: (ByRefLike arg) =>
 				{
@@ -114,8 +111,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				set: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ReadOnlySpanReference<char>>(invocationArg);
-					ReadOnlySpan<char> arg = "from interceptor".AsSpan();
-					((ReadOnlySpanReference<char>)invocationArg!).Value = arg;
+					((ReadOnlySpanReference<char>)invocationArg!).SetValue(() => "from interceptor".AsSpan());
 				},
 				target: () => new PassReadOnlySpanTarget(inspect: (ReadOnlySpan<char> arg) =>
 				{
@@ -135,8 +131,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				set: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ReadOnlySpanReference<char>>(invocationArg);
-					ReadOnlySpan<char> arg = "from interceptor".AsSpan();
-					((ReadOnlySpanReference<char>)invocationArg!).Value = arg;
+					((ReadOnlySpanReference<char>)invocationArg!).SetValue(() => "from interceptor".AsSpan());
 				},
 				target: () => new PassReadOnlySpanTarget(inspect: (ReadOnlySpan<char> arg) =>
 				{
@@ -156,8 +151,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				set: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ReadOnlySpanReference<char>>(invocationArg);
-					ReadOnlySpan<char> arg = "from interceptor".AsSpan();
-					((ReadOnlySpanReference<char>)invocationArg!).Value = arg;
+					((ReadOnlySpanReference<char>)invocationArg!).SetValue(() => "from interceptor".AsSpan());
 				},
 				target: () => new PassReadOnlySpanTarget(inspect: (ReadOnlySpan<char> arg) =>
 				{
@@ -181,8 +175,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				set: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<SpanReference<char>>(invocationArg);
-					Span<char> arg = "from interceptor".ToCharArray().AsSpan();
-					((SpanReference<char>)invocationArg!).Value = arg;
+					((SpanReference<char>)invocationArg!).SetValue(() => "from interceptor".ToCharArray().AsSpan());
 				},
 				target: () => new PassSpanTarget(inspect: (Span<char> arg) =>
 				{
@@ -202,8 +195,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				set: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<SpanReference<char>>(invocationArg);
-					Span<char> arg = "from interceptor".ToCharArray().AsSpan();
-					((SpanReference<char>)invocationArg!).Value = arg;
+					((SpanReference<char>)invocationArg!).SetValue(() => "from interceptor".ToCharArray().AsSpan());
 				},
 				target: () => new PassSpanTarget(inspect: (Span<char> arg) =>
 				{
@@ -223,8 +215,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				set: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<SpanReference<char>>(invocationArg);
-					Span<char> arg = "from interceptor".ToCharArray().AsSpan();
-					((SpanReference<char>)invocationArg!).Value = arg;
+					((SpanReference<char>)invocationArg!).SetValue(() => "from interceptor".ToCharArray().AsSpan());
 				},
 				target: () => new PassSpanTarget(inspect: (Span<char> arg) =>
 				{

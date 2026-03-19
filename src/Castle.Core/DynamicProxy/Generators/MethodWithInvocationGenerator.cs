@@ -303,15 +303,20 @@ namespace Castle.DynamicProxy.Generators
 
 						// Byref-like values live exclusively on the stack and cannot be boxed to `object`.
 						// Instead of them, we prepare instances of `ByRefLikeReference` wrappers that reference them.
-						var referenceCtor = GetByRefLikeReferenceCtorFor(dereferencedArgumentType);
+						var referenceFactory = GetByRefLikeReferenceFactoryFor(dereferencedArgumentType);
 						var reference = method.CodeBuilder.DeclareLocal(typeof(ByRefLikeReference));
+						// Notice, if a parameter is by-ref, scoped applies to the reference - not to the value itself.
+						// We are interested only in tracking if the value is scoped.
+						var valueIsScoped = parameters[i].GetCustomAttribute<ScopedRefAttribute>() != null && !parameters[i].IsByRef;
 						method.CodeBuilder.AddStatement(
 							new AssignStatement(
 								reference,
-								new NewInstanceExpression(
-									referenceCtor,
+								new MethodInvocationExpression(
+									instance: null,
+									referenceFactory,
 									new TypeTokenExpression(dereferencedArgumentType),
-									new AddressOfExpression(dereferencedArgument))));
+									new AddressOfExpression(dereferencedArgument),
+									new LiteralBoolExpression(valueIsScoped))));
 
 						dereferencedArgument = reference;
 					}
@@ -379,10 +384,11 @@ namespace Castle.DynamicProxy.Generators
 						// a method argument that is about to be popped off the stack.
 						method.CodeBuilder.AddStatement(
 							new MethodInvocationExpression(
+								instance: null,
+								ByRefLikeReferenceUnsafeMethods.DisposeReference,
 								new AsTypeExpression(
 									new ArrayElementReference(argumentsArray, i),
 									typeof(ByRefLikeReference)),
-								ByRefLikeReferenceMethods.Invalidate,
 								argumentType.IsByRef ? argument : new AddressOfExpression(argument)));
 
 						// Make the unusable substitute value unreachable by erasing it from `IInvocation.Arguments`.
@@ -411,15 +417,18 @@ namespace Castle.DynamicProxy.Generators
 
 				returnValueBuffer = method.CodeBuilder.DeclareLocal(returnType);
 
-				var referenceCtor = GetByRefLikeReferenceCtorFor(returnType);
+				var referenceFactory = GetByRefLikeReferenceFactoryFor(returnType);
 				method.CodeBuilder.AddStatement(
 					new MethodInvocationExpression(
 						invocation,
 						InvocationMethods.SetReturnValue,
-						new NewInstanceExpression(
-							referenceCtor,
+						new MethodInvocationExpression(
+							instance: null,
+							referenceFactory,
 							new TypeTokenExpression(returnType),
-							new AddressOfExpression(returnValueBuffer))));
+							new AddressOfExpression(returnValueBuffer),
+							// Return values are never scoped
+							new LiteralBoolExpression(false))));
 #else
 				returnValueBuffer = null;
 #endif
@@ -435,10 +444,11 @@ namespace Castle.DynamicProxy.Generators
 				// a local variable (the buffer) that is about to be popped off the stack.
 				method.CodeBuilder.AddStatement(
 					new MethodInvocationExpression(
+						instance: null,
+						ByRefLikeReferenceUnsafeMethods.DisposeReference,
 						new AsTypeExpression(
 							new MethodInvocationExpression(invocation, InvocationMethods.GetReturnValue),
 							typeof(ByRefLikeReference)),
-						ByRefLikeReferenceMethods.Invalidate,
 						new AddressOfExpression(returnValueBuffer)));
 
 				// Make the unusable proxy unreachable by erasing it from the invocation arguments array.
@@ -490,13 +500,13 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 #if FEATURE_BYREFLIKE
-			private static ConstructorInfo GetByRefLikeReferenceCtorFor(Type dereferencedArgumentType)
+			private static MethodInfo GetByRefLikeReferenceFactoryFor(Type dereferencedArgumentType)
 			{
 #if NET9_0_OR_GREATER
-				// TODO: perhaps we should cache these `ConstructorInfo`s?
-				ConstructorInfo referenceCtor = typeof(ByRefLikeReference<>).MakeGenericType(dereferencedArgumentType).GetConstructors().Single();
+				// TODO: perhaps we should cache these `MethodInfo`s?
+				MethodInfo referenceFactory = ByRefLikeReferenceUnsafeMethods.CreateByRefLikeReference.MakeGenericMethod(dereferencedArgumentType);
 #else
-				ConstructorInfo referenceCtor = ByRefLikeReferenceMethods.Constructor;
+				MethodInfo referenceFactory = ByRefLikeReferenceUnsafeMethods.CreateByRefLikeReferenceUntyped;
 #endif
 				if (dereferencedArgumentType.IsConstructedGenericType)
 				{
@@ -504,16 +514,16 @@ namespace Castle.DynamicProxy.Generators
 					if (typeDef == typeof(ReadOnlySpan<>))
 					{
 						var typeArg = dereferencedArgumentType.GetGenericArguments()[0];
-						referenceCtor = typeof(ReadOnlySpanReference<>).MakeGenericType(typeArg).GetConstructors().Single();
+						referenceFactory = ByRefLikeReferenceUnsafeMethods.CreateReadOnlySpanReference.MakeGenericMethod(typeArg);
 					}
 					else if (typeDef == typeof(Span<>))
 					{
 						var typeArg = dereferencedArgumentType.GetGenericArguments()[0];
-						referenceCtor = typeof(SpanReference<>).MakeGenericType(typeArg).GetConstructors().Single();
+						referenceFactory = ByRefLikeReferenceUnsafeMethods.CreateSpanReference.MakeGenericMethod(typeArg);
 					}
 				}
 
-				return referenceCtor;
+				return referenceFactory;
 			}
 #endif
 		}

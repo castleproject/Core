@@ -20,7 +20,6 @@
 namespace Castle.DynamicProxy
 {
 	using System;
-	using System.ComponentModel;
 	using System.Diagnostics;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Threading;
@@ -42,49 +41,56 @@ namespace Castle.DynamicProxy
 	//
 	// *) Unmanaged pointers can be safe when used to reference stack-allocated objects. However, that is only true
 	//    when they point into "live" stack frames. That is, they MUST NOT reference parameters or local variables
-	//    of methods that have already finished executing. This is why we have the `ByRefLikeReference.Invalidate` method:
+	//    of methods that have already finished executing. This is why we have the `ByRefLikeReference.Dispose` method:
 	//    DynamicProxy (or whatever else instantiated a `ByRefLikeReference` object to point at a method parameter or local
 	//    variable) must invoke this method before said method returns (or tail-calls).
 	//
-	// *) The `checkType` / `checkPtr` arguments of `GetPtr` or `Invalidate`, respectively, have two purposes:
+	// *) The `checkType` / `checkPtr` arguments of `GetPtr` or `Dispose`, respectively, have two purposes:
 	//
 	//     1. DynamicProxy, or whatever else instantiated a `ByRefLikeReference`, is expected to know at all times what
 	//        exactly each instance references. These parameters make it harder for anyone to use the type directly
 	//        if they didn't also instantiate it themselves.
 	//
-	//     2. `checkPtr` of `Invalidate` attempts to prevent re-use of a referenced storage location for another
+	//     2. `checkPtr` of `Dispose` attempts to prevent re-use of a referenced storage location for another
 	//        similarly-typed local variable by the JIT. DynamicProxy typically instantiates `ByRefLikeReference` instances
-	//        at the start of intercepted method bodies, and it invokes `Invalidate` at the very end, meaning that
+	//        at the start of intercepted method bodies, and it invokes `Dispose` at the very end, meaning that
 	//        the address of the local/parameter is taken at each method boundary, meaning that static analysis should
 	//        never during the whole method see the local/parameter as "no longer in use". (This may be a little
 	//        paranoid, since the CoreCLR JIT probably exempts so-called "address-exposed" locals from reuse anyway.)
 	//
-	// *) Finally, we only ever access the unmanaged pointer field through `Volatile` or `Interlocked` to better guard
-	//    against cases where someone foolishly copied a `ByRefLikeReference` instance out of the `IInvocation.Arguments`
-	//    and uses it from another thread.
+	// *) We track if each reference represents scoped value. Scoped values usually represent data living on stack only,
+	//    so we should apply more strict rules on how we expose the value. Otherwise, we could have use-after-free scenario,
+	//    which could lead to stack corruption and weird behavior.
+	//    Dynamic generator analyzes method signature and provides the correct value.
+	//
+	// *) We always return a copy of the original value and never expose the value by reference.
+	//    This is important to make sure that we prevent possibility `ref struct` interior mutability (as copy will be changed)
+	//    and close a possibility to leak scoped values out of their lifetime scope by storing them inside another `ref struct`.
+	//
+	// *) The SetValue() function uses delegate to get the value. This is required to make sure that local variables
+	//    or variables with scoped visibility could never be promoted outside their lifetime.
+	//    When we have delegate, we could only use heap-backed values and compiler will enforce the safety for us.
+	//
+	// *) Finally, we allow accessing reference data from the owning thread only to avoid all possible concurrency-related issues.
+	//    Otherwise, it's very easy to have use-after-free scenario, as other thread could access value after function exit.
 	//
 	// As far as I can reason, `ByRefLikeReference` et al. should be safe to use IFF they are never copied out from an
 	// `IInvocation`, and IFF DynamicProxy succeeds in destructing them and erasing them from the `IInvocation` right
 	// before the intercepted method finishes executing.
 
-	/// <summary>
-	///   Do not use! This type should only be used by DynamicProxy internals.
-	/// </summary>
-	[EditorBrowsable(EditorBrowsableState.Never)]
 	public unsafe class ByRefLikeReference
 	{
 		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
 		private readonly Type type;
 
 		[DebuggerBrowsable(DebuggerBrowsableState.Never)]
-		private nint ptr;
+		private void* ptr;
 
-		/// <summary>
-		///   Do not use! This constructor should only be called by DynamicProxy internals.
-		/// </summary>
-		[CLSCompliant(false)]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public ByRefLikeReference(Type type, void* ptr)
+		private Thread ownerThread;
+
+		internal bool ValueIsScoped { get; }
+
+		internal ByRefLikeReference(Type type, void* ptr, bool valueIsScoped)
 		{
 			if (type.IsByRefLikeSafe() == false)
 			{
@@ -97,48 +103,45 @@ namespace Castle.DynamicProxy
 			}
 
 			this.type = type;
-			this.ptr = (nint)ptr;
+			this.ptr = ptr;
+			this.ValueIsScoped = valueIsScoped;
+			this.ownerThread = Thread.CurrentThread;
 		}
 
-		/// <summary>
-		///   Do not use! This method should only be called by DynamicProxy internals.
-		/// </summary>
-		[CLSCompliant(false)]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public void* GetPtr(Type checkType)
+		internal void* GetPtr(Type checkType)
 		{
+			AssertCurrentThread();
+			
 			if (checkType != type)
 			{
-				throw new AccessViolationException();
+				throw new ArgumentException($"The reference type {type.FullName} does not match the expected type {checkType.FullName}");
 			}
 
-			return GetPtrNocheck();
+			if (this.ptr == null)
+			{
+				throw new ObjectDisposedException("This reference was already disposed");
+			}
+			
+			return this.ptr;
 		}
 
-		internal void* GetPtrNocheck()
+		internal void Dispose(void* checkPtr)
 		{
-			var ptr = (void*)Volatile.Read(ref this.ptr);
-
-			if (ptr == null)
+			AssertCurrentThread();
+			
+			if (this.ptr == null || this.ptr != checkPtr)
 			{
-				throw new AccessViolationException();
+				throw new InvalidOperationException($"BUG: Pointer mismatch on reference disposal. Expected: {(nint)checkPtr:X16}, Actual: {(nint)this.ptr:X16}");
 			}
 
-			return ptr;
+			this.ptr = null;
 		}
 
-		/// <summary>
-		///   Do not use! This method should only be called by DynamicProxy internals.
-		/// </summary>
-		[CLSCompliant(false)]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public void Invalidate(void* checkPtr)
+		private void AssertCurrentThread()
 		{
-			var ptr = (void*)Interlocked.CompareExchange(ref this.ptr, (nint)null, (nint)checkPtr);
-
-			if (ptr == null || checkPtr != ptr)
+			if (this.ownerThread != Thread.CurrentThread)
 			{
-				throw new AccessViolationException();
+				throw new InvalidOperationException("This reference cannot be used from another thread");
 			}
 		}
 	}
@@ -162,13 +165,8 @@ namespace Castle.DynamicProxy
 	public unsafe class ByRefLikeReference<TByRefLike> : ByRefLikeReference
 		where TByRefLike : struct, allows ref struct
 	{
-		/// <summary>
-		///   Do not use! This constructor should only be called by DynamicProxy internals.
-		/// </summary>
-		[CLSCompliant(false)]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public ByRefLikeReference(Type type, void* ptr)
-			: base(type, ptr)
+		internal ByRefLikeReference(Type type, void* ptr, bool valueIsScoped)
+			: base(type, ptr, valueIsScoped)
 		{
 			if (type != typeof(TByRefLike))
 			{
@@ -176,13 +174,44 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		public ref TByRefLike Value
+		private ref TByRefLike Value
 		{
 			get
 			{
-				return ref *(TByRefLike*)GetPtrNocheck();
+				return ref *(TByRefLike*)GetPtr(typeof(TByRefLike));
 			}
 		}
+		
+		public TByRefLike GetValue()
+		{
+			if (ValueIsScoped)
+			{
+				throw new InvalidOperationException($"Use {nameof(UseValue)} method for scoped arguments");
+			}
+			
+			return Value;
+		}
+
+		public void SetValue(ValueGetter valueGetter)
+		{
+			Value = valueGetter.Invoke();
+		}
+
+		public void UseValue(ValueConsumer valueConsumer)
+		{
+			valueConsumer.Invoke(Value);
+		}
+		
+		public TResult UseValue<TResult>(ValueConsumerWithResult<TResult> valueConsumer) where TResult : allows ref struct
+		{
+			return valueConsumer.Invoke(Value);
+		}
+		
+		public delegate TResult ValueConsumerWithResult<TResult>(scoped TByRefLike value) where TResult : allows ref struct;
+		
+		public delegate void ValueConsumer(scoped TByRefLike value);
+		
+		public delegate TByRefLike ValueGetter();
 	}
 #endif
 
@@ -207,13 +236,8 @@ namespace Castle.DynamicProxy
 		: ByRefLikeReference
 #endif
 	{
-		/// <summary>
-		///   Do not use! This constructor should only be called by DynamicProxy internals.
-		/// </summary>
-		[CLSCompliant(false)]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public ReadOnlySpanReference(Type type, void* ptr)
-			: base(type, ptr)
+		internal ReadOnlySpanReference(Type type, void* ptr, bool valueIsScoped)
+			: base(type, ptr, valueIsScoped)
 		{
 			if (type != typeof(ReadOnlySpan<T>))
 			{
@@ -222,13 +246,44 @@ namespace Castle.DynamicProxy
 		}
 
 #if !NET9_0_OR_GREATER
-		public ref ReadOnlySpan<T> Value
+		private ref ReadOnlySpan<T> Value
 		{
 			get
 			{
-				return ref *(ReadOnlySpan<T>*)GetPtrNocheck();
+				return ref *(ReadOnlySpan<T>*)GetPtr(typeof(ReadOnlySpan<T>));
 			}
 		}
+		
+		public ReadOnlySpan<T> GetValue()
+		{
+			if (ValueIsScoped)
+			{
+				throw new InvalidOperationException($"Use {nameof(UseValue)} method for scoped arguments");
+			}
+			
+			return Value;
+		}
+
+		public void SetValue(ValueGetter valueGetter)
+		{
+			Value = valueGetter.Invoke();
+		}
+
+		public void UseValue(ValueConsumer valueConsumer)
+		{
+			valueConsumer.Invoke(Value);
+		}
+		
+		public TResult UseValue<TResult>(ValueConsumerWithResult<TResult> valueConsumer)
+		{
+			return valueConsumer.Invoke(Value);
+		}
+
+		public delegate TResult ValueConsumerWithResult<TResult>(scoped ReadOnlySpan<T> value);
+		
+		public delegate void ValueConsumer(scoped ReadOnlySpan<T> value);
+		
+		public delegate ReadOnlySpan<T> ValueGetter();
 #endif
 	}
 
@@ -253,13 +308,8 @@ namespace Castle.DynamicProxy
 		: ByRefLikeReference
 #endif
 	{
-		/// <summary>
-		///   Do not use! This constructor should only be called by DynamicProxy internals.
-		/// </summary>
-		[CLSCompliant(false)]
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public SpanReference(Type type, void* ptr)
-			: base(type, ptr)
+		internal SpanReference(Type type, void* ptr, bool valueIsScoped)
+			: base(type, ptr, valueIsScoped)
 		{
 			if (type != typeof(Span<T>))
 			{
@@ -268,13 +318,44 @@ namespace Castle.DynamicProxy
 		}
 
 #if !NET9_0_OR_GREATER
-		public ref Span<T> Value
+		private ref Span<T> Value
 		{
 			get
 			{
-				return ref *(Span<T>*)GetPtrNocheck();
+				return ref *(Span<T>*)GetPtr(typeof(Span<T>));
 			}
 		}
+		
+		public Span<T> GetValue()
+		{
+			if (ValueIsScoped)
+			{
+				throw new InvalidOperationException($"Use {nameof(UseValue)} method for scoped arguments");
+			}
+			
+			return Value;
+		}
+
+		public void SetValue(ValueGetter valueGetter)
+		{
+			Value = valueGetter.Invoke();
+		}
+
+		public void UseValue(ValueConsumer valueConsumer)
+		{
+			valueConsumer.Invoke(Value);
+		}
+		
+		public TResult UseValue<TResult>(ValueConsumerWithResult<TResult> valueConsumer)
+		{
+			return valueConsumer.Invoke(Value);
+		}
+
+		public delegate TResult ValueConsumerWithResult<TResult>(scoped Span<T> value);
+		
+		public delegate void ValueConsumer(scoped Span<T> value);
+		
+		public delegate Span<T> ValueGetter();
 #endif
 	}
 }

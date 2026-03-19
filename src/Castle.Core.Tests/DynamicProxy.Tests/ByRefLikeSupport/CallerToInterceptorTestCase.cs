@@ -45,7 +45,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ByRefLikeReference<ByRefLike>>(invocationArg);
-					ByRefLike arg = ((ByRefLikeReference<ByRefLike>)invocationArg!).Value;
+					ByRefLike arg = ((ByRefLikeReference<ByRefLike>)invocationArg!).GetValue();
 					Assert.AreEqual("from caller", arg.Value);
 				});
 		}
@@ -62,7 +62,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ByRefLikeReference<ByRefLike>>(invocationArg);
-					ByRefLike arg = ((ByRefLikeReference<ByRefLike>)invocationArg!).Value;
+					ByRefLike arg = ((ByRefLikeReference<ByRefLike>)invocationArg!).GetValue();
 					Assert.AreEqual("from caller", arg.Value);
 				});
 		}
@@ -79,7 +79,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ByRefLikeReference<ByRefLike>>(invocationArg);
-					var arg = ((ByRefLikeReference<ByRefLike>)invocationArg!).Value;
+					var arg = ((ByRefLikeReference<ByRefLike>)invocationArg!).GetValue();
 					Assert.AreEqual("from caller", arg.Value);
 				});
 		}
@@ -133,6 +133,125 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 
 #endif
 
+		delegate void ByRefLike__scoped_property_shall_be_correct_ProxyInvocation<TInterface>(TInterface proxy, ByRefLike value) where TInterface : class;
+
+		/// <summary>
+		/// Do not test other arg variations - we use the same call path.
+		/// </summary>
+		[Test]
+		public void ByRefLike__scoped_property__shall_be_correct()
+		{
+			{
+				static void Demo(ByRefLikeContainer container, ByRefLike value)
+				{
+					container.Value = value;
+				}
+
+				InvokeProxyAndAssertIsScoped<IPassByRefLikeByValue>(
+					invoke: (p, v) => p.PassByValue(v),
+					expectedValueIsScoped: false);
+			}
+
+			{
+				static void Demo(ByRefLikeContainer container, scoped ByRefLike value)
+				{
+					// Compiler error
+					// container.Value = value;
+				}
+				
+				InvokeProxyAndAssertIsScoped<IPassByRefLikeByValueScoped>(
+					invoke: (p, v) => p.PassByValue(v),
+					expectedValueIsScoped: true);
+			}
+
+			{
+				static void Demo(ByRefLikeContainer container, in ByRefLike value)
+				{
+					container.Value = value;
+				}
+
+				InvokeProxyAndAssertIsScoped<IPassByRefLikeByRefIn>(
+					invoke: (p, v) => p.PassByRefIn(v),
+					expectedValueIsScoped: false);
+			}
+
+			{
+				static void Demo(ByRefLikeContainer container, scoped in ByRefLike value)
+				{
+					container.Value = value;
+				}
+
+				InvokeProxyAndAssertIsScoped<IPassByRefLikeByRefInScoped>(
+					invoke: (p, v) => p.PassByRefIn(v),
+					expectedValueIsScoped: false);
+			}
+
+			{
+				static void Demo(ByRefLikeContainer container, ref ByRefLike value)
+				{
+					container.Value = value;
+				}
+				
+				InvokeProxyAndAssertIsScoped<IPassByRefLikeByRefRef>(
+					invoke: (p, v) => p.PassByRefRef(ref v),
+					expectedValueIsScoped: false);
+			}
+
+			{
+				static void Demo(ByRefLikeContainer container, scoped ref ByRefLike value)
+				{
+					container.Value = value;
+				}
+
+				InvokeProxyAndAssertIsScoped<IPassByRefLikeByRefRefScoped>(
+					invoke: (p, v) => p.PassByRefRef(ref v),
+					expectedValueIsScoped: false);
+			}
+
+			{
+				static void Demo(ByRefLikeContainer container, out ByRefLike value)
+				{
+					// IsScoped is not actually relevant here, as it's not possible to access the value
+					// container.Value = value;
+					
+					value = default;
+				}
+				
+				InvokeProxyAndAssertIsScoped<IPassByRefLikeByRefOut>(
+					invoke: (p, v) => p.PassByRefOut(out v),
+					expectedValueIsScoped: false);
+			}
+
+			{
+				static void Demo(ByRefLikeContainer container, scoped out ByRefLike value)
+				{
+					// IsScoped is not actually relevant here, as it's not possible to access the value
+					// container.Value = value;
+					
+					value = default;
+				}
+
+				InvokeProxyAndAssertIsScoped<IPassByRefLikeByRefOutScoped>(
+					invoke: (p, v) => p.PassByRefOut(out v),
+					expectedValueIsScoped: false);
+			}
+
+			void InvokeProxyAndAssertIsScoped<TInterface>(ByRefLike__scoped_property_shall_be_correct_ProxyInvocation<TInterface> invoke, bool expectedValueIsScoped) where TInterface : class
+			{
+				InvokeProxyAndInspectInvocationArgument<TInterface>(
+					invoke: (TInterface proxy) =>
+					{
+						var byRefLike = new ByRefLike("from caller");
+						invoke(proxy, byRefLike);
+					},
+					inspect: (object? invocationArg) =>
+					{
+						var arg = (ByRefLikeReference)invocationArg!;
+						Assert.AreEqual(expectedValueIsScoped, arg.ValueIsScoped);
+					});
+			}
+		}
+
 		#endregion
 
 		#region Tests for `ReadOnlySpan<T>` parameters
@@ -149,7 +268,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ReadOnlySpanReference<char>>(invocationArg);
-					ReadOnlySpan<char> arg = ((ReadOnlySpanReference<char>)invocationArg!).Value;
+					ReadOnlySpan<char> arg = ((ReadOnlySpanReference<char>)invocationArg!).GetValue();
 					Assert.AreEqual("from caller", new string(arg));
 				});
 		}
@@ -166,7 +285,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ReadOnlySpanReference<char>>(invocationArg);
-					ReadOnlySpan<char> arg = ((ReadOnlySpanReference<char>)invocationArg!).Value;
+					ReadOnlySpan<char> arg = ((ReadOnlySpanReference<char>)invocationArg!).GetValue();
 					Assert.AreEqual("from caller", new string(arg));
 				});
 		}
@@ -183,7 +302,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<ReadOnlySpanReference<char>>(invocationArg);
-					ReadOnlySpan<char> arg = ((ReadOnlySpanReference<char>)invocationArg!).Value;
+					ReadOnlySpan<char> arg = ((ReadOnlySpanReference<char>)invocationArg!).GetValue();
 					Assert.AreEqual("from caller", new string(arg));
 				});
 		}
@@ -204,7 +323,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<SpanReference<char>>(invocationArg);
-					Span<char> arg = ((SpanReference<char>)invocationArg!).Value;
+					Span<char> arg = ((SpanReference<char>)invocationArg!).GetValue();
 					Assert.AreEqual("from caller", new string(arg));
 				});
 		}
@@ -221,7 +340,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<SpanReference<char>>(invocationArg);
-					Span<char> arg = ((SpanReference<char>)invocationArg!).Value;
+					Span<char> arg = ((SpanReference<char>)invocationArg!).GetValue();
 					Assert.AreEqual("from caller", new string(arg));
 				});
 		}
@@ -238,7 +357,7 @@ namespace Castle.DynamicProxy.Tests.ByRefLikeSupport
 				inspect: (object? invocationArg) =>
 				{
 					Assert.IsInstanceOf<SpanReference<char>>(invocationArg);
-					Span<char> arg = ((SpanReference<char>)invocationArg!).Value;
+					Span<char> arg = ((SpanReference<char>)invocationArg!).GetValue();
 					Assert.AreEqual("from caller", new string(arg));
 				});
 		}

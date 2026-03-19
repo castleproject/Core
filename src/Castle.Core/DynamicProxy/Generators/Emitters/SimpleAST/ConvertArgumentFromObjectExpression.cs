@@ -50,7 +50,7 @@ namespace Castle.DynamicProxy.Generators.Emitters.SimpleAST
 				{
 					gen.Emit(OpCodes.Ldtoken, dereferencedArgumentType);
 					gen.Emit(OpCodes.Call, TypeMethods.GetTypeFromHandle);
-					gen.Emit(OpCodes.Call, ByRefLikeReferenceMethods.GetPtr);
+					gen.Emit(OpCodes.Call, ByRefLikeReferenceUnsafeMethods.GetRawPtr);
 					gen.Emit(OpCodes.Ldobj, dereferencedArgumentType);
 				}
 				else
