@@ -108,6 +108,7 @@ namespace Castle.Core.Logging
 
 				var defaultLevel = MapSourceLevels(Level);
 				traceSource = new TraceSource(Name, defaultLevel);
+				traceSource.Switch.Level = defaultLevel;
 
 				// no further action necessary when the named source is configured
 				if (IsSourceConfigured(traceSource))
@@ -134,6 +135,7 @@ namespace Castle.Core.Logging
 
 				// reconfigure the created source to act like the found source
 				traceSource.Switch = foundSource.Switch;
+				traceSource.Switch.Level = defaultLevel;
 				traceSource.Listeners.Clear();
 				foreach (TraceListener listener in foundSource.Listeners)
 				{

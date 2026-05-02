@@ -109,6 +109,16 @@ namespace Castle.DynamicProxy.Tests
 				"Castle.DynamicProxy.Tests.LoggingTestCase+NonVirtualMethodClass because it cannot be intercepted."));
 		}
 
+		[Test]
+		public void LogsWarningOnlyByDefault()
+		{
+			var generator = new ProxyGenerator();
+			Assert.IsInstanceOf<TraceLogger>(generator.Logger);
+
+			var logger = (TraceLogger)generator.Logger;
+			Assert.AreEqual(LoggerLevel.Warn, logger.Level);
+		}
+
 		#region Test Types
 
 		public interface IEmptyInterface
