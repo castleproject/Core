@@ -176,7 +176,7 @@ namespace Castle.DynamicProxy.Contributors
 				GetCacheKeyTypes(method),
 				null);
 
-			return scope.TypeCache.GetOrAddWithoutTakingLock(key, _ =>
+			return scope.GetOrAddFromCache(key, _ =>
 				new DelegateTypeGenerator(method, targetType)
 				.Generate(@class, namingScope)
 				.BuildType());

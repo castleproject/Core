@@ -20,7 +20,7 @@ namespace Castle.DynamicProxy.Generators
 #if FEATURE_SERIALIZATION
 	[Serializable]
 #endif
-	internal class CacheKey
+	internal struct CacheKey : IEquatable<CacheKey>
 	{
 		private readonly MemberInfo target;
 		private readonly Type[] interfaces;
@@ -73,37 +73,31 @@ namespace Castle.DynamicProxy.Generators
 
 		public override bool Equals(object obj)
 		{
-			if (this == obj)
-			{
-				return true;
-			}
+			return obj is CacheKey other && Equals(other);
+		}
 
-			var cacheKey = obj as CacheKey;
-			if (cacheKey == null)
+		public bool Equals(CacheKey other)
+		{
+			if (!Equals(type, other.type))
 			{
 				return false;
 			}
-
-			if (!Equals(type, cacheKey.type))
+			if (!Equals(target, other.target))
 			{
 				return false;
 			}
-			if (!Equals(target, cacheKey.target))
-			{
-				return false;
-			}
-			if (interfaces.Length != cacheKey.interfaces.Length)
+			if (interfaces.Length != other.interfaces.Length)
 			{
 				return false;
 			}
 			for (var i = 0; i < interfaces.Length; i++)
 			{
-				if (!Equals(interfaces[i], cacheKey.interfaces[i]))
+				if (!Equals(interfaces[i], other.interfaces[i]))
 				{
 					return false;
 				}
 			}
-			if (!Equals(options, cacheKey.options))
+			if (!Equals(options, other.options))
 			{
 				return false;
 			}

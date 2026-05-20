@@ -152,7 +152,7 @@ namespace Castle.DynamicProxy
 			}
 		}
 
-		private void AssertValidTypes(IEnumerable<Type>? targetTypes, string paramName)
+		private void AssertValidTypes(Type[]? targetTypes, string paramName)
 		{
 			if (targetTypes != null)
 			{

@@ -15,18 +15,16 @@
 namespace Castle.DynamicProxy.Internal
 {
 	using System;
-	using System.Collections.Generic;
+	using System.Collections.Concurrent;
 	using System.Diagnostics;
 	using System.Reflection;
-	using System.Threading;
 
-	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
 
 	internal static class InvocationHelper
 	{
-		private static readonly SynchronizedDictionary<CacheKey, MethodInfo> cache =
-			new SynchronizedDictionary<CacheKey, MethodInfo>();
+		private static readonly ConcurrentDictionary<CacheKey, MethodInfo> cache =
+			new ConcurrentDictionary<CacheKey, MethodInfo>();
 
 		public static MethodInfo GetMethodOnObject(object target, MethodInfo proxiedMethod)
 		{

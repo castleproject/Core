@@ -130,15 +130,14 @@ namespace Castle.DynamicProxy.Internal
 		/// </summary>
 		internal static Type[] GetAllInterfaces(params Type[]? types)
 		{
-			if (types == null)
+			if (types == null || types.Length == 0)
 			{
 				return Type.EmptyTypes;
 			}
 
 			var interfaces = new HashSet<Type>();
-			for (var index = 0; index < types.Length; index++)
+			foreach (var type in types)
 			{
-				var type = types[index];
 				if (type == null)
 				{
 					continue;
@@ -153,9 +152,8 @@ namespace Castle.DynamicProxy.Internal
 				}
 
 				var innerInterfaces = type.GetInterfaces();
-				for (var i = 0; i < innerInterfaces.Length; i++)
+				foreach (var @interface in innerInterfaces)
 				{
-					var @interface = innerInterfaces[i];
 					interfaces.Add(@interface);
 				}
 			}
@@ -167,7 +165,6 @@ namespace Castle.DynamicProxy.Internal
 		{
 			return GetAllInterfaces(new[] { type });
 		}
-
 
 		public static Type? GetTypeOrNull(object? target)
 		{
@@ -307,6 +304,9 @@ namespace Castle.DynamicProxy.Internal
 
 		private static Type[] Sort(ICollection<Type> types)
 		{
+			if (types.Count == 0)
+				return Type.EmptyTypes;
+
 			var array = new Type[types.Count];
 			types.CopyTo(array, 0);
 			//NOTE: is there a better, stable way to sort Types. We will need to revise this once we allow open generics

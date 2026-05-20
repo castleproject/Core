@@ -40,7 +40,7 @@ namespace Castle.DynamicProxy.Generators
 		protected readonly Type[] interfaces;
 		private readonly ModuleScope scope;
 		private ILogger logger = NullLogger.Instance;
-		private ProxyGenerationOptions proxyGenerationOptions;
+		private readonly ProxyGenerationOptions proxyGenerationOptions;
 
 		protected BaseProxyGenerator(ModuleScope scope, Type targetType, Type[] interfaces, ProxyGenerationOptions proxyGenerationOptions)
 		{
@@ -74,9 +74,11 @@ namespace Castle.DynamicProxy.Generators
 		{
 			bool notFoundInTypeCache = false;
 
-			var proxyType = Scope.TypeCache.GetOrAdd(GetCacheKey(), cacheKey =>
+			var cacheKey = GetCacheKey();
+			var proxyType = Scope.GetOrAddFromCache(cacheKey, key =>
 			{
 				notFoundInTypeCache = true;
+
 				Logger.DebugFormat("No cached proxy type was found for target type {0}.", targetType.FullName);
 
 				EnsureOptionsOverrideEqualsAndGetHashCode();

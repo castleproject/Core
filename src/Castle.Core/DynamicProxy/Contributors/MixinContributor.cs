@@ -140,7 +140,7 @@ namespace Castle.DynamicProxy.Contributors
 
 			// no locking required as we're already within a lock
 
-			return scope.TypeCache.GetOrAddWithoutTakingLock(key, _ =>
+			return scope.GetOrAddFromCache(key, _ =>
 				new CompositionInvocationTypeGenerator(method.Method.DeclaringType,
 				                                       method,
 				                                       method.Method,

@@ -16,6 +16,7 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Concurrent;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.ComponentModel;
@@ -34,8 +35,8 @@ namespace Castle.Components.DictionaryAdapter
 	/// </summary>
 	public class DictionaryAdapterFactory : IDictionaryAdapterFactory
 	{
-		private readonly SynchronizedDictionary<Type, DictionaryAdapterMeta> interfaceToMeta =
-			new SynchronizedDictionary<Type, DictionaryAdapterMeta>();
+		private readonly ConcurrentDictionary<Type, DictionaryAdapterMeta> interfaceToMeta =
+			new ConcurrentDictionary<Type, DictionaryAdapterMeta>();
 
 		#region IDictionaryAdapterFactory
 
