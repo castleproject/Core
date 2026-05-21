@@ -56,7 +56,7 @@
 		<DiagnosticsConstants>DEBUG</DiagnosticsConstants>
 		<NetStandard20Constants>TRACE</NetStandard20Constants>
 		<NetStandard21Constants>TRACE</NetStandard21Constants>
-		<DesktopClrConstants>TRACE;FEATURE_APPDOMAIN;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_SERIALIZATION;FEATURE_SYSTEM_CONFIGURATION</DesktopClrConstants>
+		<DesktopClrConstants>TRACE;FEATURE_APPDOMAIN;FEATURE_ASSEMBLYBUILDER_SAVE;FEATURE_SYSTEM_CONFIGURATION</DesktopClrConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(TargetFramework)|$(Configuration)'=='net462|Debug'">

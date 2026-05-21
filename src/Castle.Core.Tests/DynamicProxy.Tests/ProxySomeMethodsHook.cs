@@ -17,9 +17,6 @@ namespace Castle.DynamicProxy.Tests
 	using System;
 	using System.Reflection;
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class ProxySomeMethodsHook : IProxyGenerationHook
 	{
 		private readonly Func<Type, MethodInfo, bool> shouldInterceptMethod;

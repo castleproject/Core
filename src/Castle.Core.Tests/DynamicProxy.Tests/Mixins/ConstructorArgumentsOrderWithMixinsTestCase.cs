@@ -39,9 +39,6 @@ namespace Castle.DynamicProxy.Tests.Mixins
 	{
 	}
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class Foo : IFoo1
 	{
 	}
@@ -50,9 +47,6 @@ namespace Castle.DynamicProxy.Tests.Mixins
 	{
 	}
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class Bar : IFoo2
 	{
 	}
@@ -61,9 +55,6 @@ namespace Castle.DynamicProxy.Tests.Mixins
 	{
 	}
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class Baz : IFoo3
 	{
 	}

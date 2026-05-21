@@ -14,17 +14,12 @@
 
 namespace Castle.DynamicProxy.Tests.Interfaces
 {
-	using System;
-
 	public interface IGenericWithRefOut
 	{
 		void Do<T>(out T i);
 		void Did<T>(ref T i);
 	}
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class GenericWithRefOut : IGenericWithRefOut
 	{
 		public void Do<T>(out T i)

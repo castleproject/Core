@@ -17,12 +17,9 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Reflection;
 
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Castle.DynamicProxy.Serialization;
 
 	internal sealed class ClassProxyGenerator : BaseClassProxyGenerator
 	{
@@ -37,13 +34,6 @@ namespace Castle.DynamicProxy.Generators
 		{
 			return new CacheKey(targetType, interfaces, ProxyGenerationOptions);
 		}
-
-#if FEATURE_SERIALIZATION
-		protected override SerializableContributor GetSerializableContributor()
-		{
-			return new ClassProxySerializableContributor(targetType, interfaces, ProxyTypeConstants.Class);
-		}
-#endif
 
 		protected override CompositeTypeContributor GetProxyTargetContributor(INamingScope namingScope)
 		{

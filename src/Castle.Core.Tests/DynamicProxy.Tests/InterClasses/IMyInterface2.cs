@@ -27,9 +27,6 @@ namespace Castle.DynamicProxy.Tests.InterClasses
 		int Calc(int x, int y, int z, Single k);
 	}
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	[MyAttribute("MyInterfaceImpl")]
 	public class MyInterfaceImpl : IMyInterface2
 	{

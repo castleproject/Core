@@ -23,9 +23,6 @@ namespace Castle.DynamicProxy
 	// Prefer throwing Base Class Library exception types wherever appropriate.
 	// This exception type is to be used mostly when something inside DynamicProxy goes wrong.
 	// Think of it as a "failed assertion" / "bug" exception.
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public sealed class DynamicProxyException : Exception
 	{
 		internal DynamicProxyException(string message) : base(message)
@@ -35,11 +32,5 @@ namespace Castle.DynamicProxy
 		internal DynamicProxyException(string message, Exception innerException) : base(message, innerException)
 		{
 		}
-
-#if FEATURE_SERIALIZATION
-		internal DynamicProxyException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-		}
-#endif
 	}
 }

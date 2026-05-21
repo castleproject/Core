@@ -18,9 +18,6 @@ namespace Castle.DynamicProxy.Tests
 {
 	using System;
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class CrossAppDomainCaller
 	{
 		public static void RunInOtherAppDomain(Action<object[]> callback, params object[] args)

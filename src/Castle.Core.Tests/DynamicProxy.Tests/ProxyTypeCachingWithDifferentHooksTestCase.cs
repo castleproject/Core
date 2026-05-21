@@ -25,14 +25,8 @@ namespace Castle.DynamicProxy.Tests
 	[TestFixture]
 	public class ProxyTypeCachingWithDifferentHooksTestCase : BasePEVerifyTestCase
 	{
-#if FEATURE_SERIALIZATION
-		[Serializable]
-#endif
 		public class CustomHook : AllMethodsHook { }
 
-#if FEATURE_SERIALIZATION
-		[Serializable]
-#endif
 		public class EquatableHook : IProxyGenerationHook, IEquatable<EquatableHook>
 		{
 			public override bool Equals(object obj) => Equals(obj as EquatableHook);
@@ -45,9 +39,6 @@ namespace Castle.DynamicProxy.Tests
 			public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo) => false;
 		}
 
-#if FEATURE_SERIALIZATION
-		[Serializable]
-#endif
 		public record class RecordClassHook : IProxyGenerationHook
 		{
 			public RecordClassHook(string id)

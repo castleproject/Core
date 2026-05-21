@@ -9,7 +9,6 @@ namespace Castle.Services.Logging.SerilogIntegration
         public override Castle.Core.Logging.ILogger Create(string name) { }
         public override Castle.Core.Logging.ILogger Create(string name, Castle.Core.Logging.LoggerLevel level) { }
     }
-    [System.Serializable]
     public class SerilogLogger : Castle.Core.Logging.ILogger
     {
         public SerilogLogger(Serilog.ILogger logger, Castle.Services.Logging.SerilogIntegration.SerilogFactory factory) { }

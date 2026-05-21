@@ -22,9 +22,6 @@ namespace Castle.Core.Logging
 	/// provides a LogLevel attribute and reroutes all functions into
 	/// one Log method.
 	/// </summary>
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public abstract class LevelFilteredLogger : ILogger
 	{
 		private LoggerLevel level = LoggerLevel.Off;

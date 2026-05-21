@@ -23,9 +23,6 @@ namespace Castle.Core.Logging
 	///   to files. The name of the file is derived from the log name
 	///   plus the 'log' extension.
 	/// </summary>
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class StreamLoggerFactory : AbstractLoggerFactory
 	{
 		public override ILogger Create(string name)

@@ -12,22 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if FEATURE_SERIALIZATION
-
-namespace Castle.DynamicProxy.Tokens
+namespace Castle.DynamicProxy
 {
-	using System;
-	using System.Reflection;
-	using System.Runtime.Serialization;
-
-	internal static class FormatterServicesMethods
+	internal static class ProxyTypeConstants
 	{
-		public static readonly MethodInfo GetObjectData =
-			typeof(FormatterServices).GetMethod("GetObjectData", new[] { typeof(object), typeof(MemberInfo[]) });
-
-		public static readonly MethodInfo GetSerializableMembers =
-			typeof(FormatterServices).GetMethod("GetSerializableMembers", new[] { typeof(Type) });
+		public static readonly string Class = "class";
+		public static readonly string ClassWithTarget = "class.with.target";
+		public static readonly string InterfaceWithTarget = "interface.with.target";
+		public static readonly string InterfaceWithTargetInterface = "interface.with.target.interface";
+		public static readonly string InterfaceWithoutTarget = "interface.without.target";
 	}
 }
-
-#endif

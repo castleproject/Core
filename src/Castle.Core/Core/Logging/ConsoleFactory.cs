@@ -16,9 +16,6 @@ namespace Castle.Core.Logging
 {
 	using System;
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class ConsoleFactory : ILoggerFactory
 	{
 		private LoggerLevel? level;

@@ -17,9 +17,6 @@ namespace Castle.Services.Logging.EventLogIntegration
 	using System;
 	using Castle.Core.Logging;
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 #if NET6_0_OR_GREATER
 	[System.Runtime.Versioning.SupportedOSPlatform("windows")]
 #endif

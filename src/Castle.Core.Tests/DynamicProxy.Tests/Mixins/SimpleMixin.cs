@@ -21,9 +21,6 @@ namespace Castle.DynamicProxy.Tests.Mixins
 		int DoSomething();
 	}
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class SimpleMixin : ISimpleMixin
 	{
 		public SimpleMixin()

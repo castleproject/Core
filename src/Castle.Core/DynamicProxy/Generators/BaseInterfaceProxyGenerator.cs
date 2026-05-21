@@ -18,9 +18,6 @@ namespace Castle.DynamicProxy.Generators
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
-#if FEATURE_SERIALIZATION
-	using System.Xml.Serialization;
-#endif
 
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
@@ -70,14 +67,6 @@ namespace Castle.DynamicProxy.Generators
 			AddMappingForAdditionalInterfaces(contributor, proxiedInterfaces, typeImplementerMapping, targetInterfaces);
 			return contributor;
 		}
-
-#if FEATURE_SERIALIZATION
-		protected override void CreateTypeAttributes(ClassEmitter emitter)
-		{
-			base.CreateTypeAttributes(emitter);
-			emitter.DefineCustomAttribute<SerializableAttribute>();
-		}
-#endif
 
 		protected override CacheKey GetCacheKey()
 		{
@@ -218,13 +207,6 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// 4. plus special interfaces
-
-#if FEATURE_SERIALIZATION
-			var serializableContributor = new InterfaceProxySerializableContributor(targetType, GeneratorType, interfaces);
-			contributorsList.Add(serializableContributor);
-			AddMappingForISerializable(typeImplementerMapping, serializableContributor);
-#endif
-
 			var proxyTargetAccessorContributor = GetProxyTargetAccessorContributor();
 			contributorsList.Add(proxyTargetAccessorContributor);
 			try
@@ -258,9 +240,6 @@ namespace Castle.DynamicProxy.Generators
 		{
 			base.CreateFields(emitter);
 			targetField = emitter.CreateField("__target", proxyTargetType);
-#if FEATURE_SERIALIZATION
-			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(targetField);
-#endif
 		}
 
 		private void EnsureValidBaseType(Type type)

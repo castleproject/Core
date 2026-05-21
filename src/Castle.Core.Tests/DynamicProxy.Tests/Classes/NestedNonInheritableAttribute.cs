@@ -18,12 +18,9 @@ namespace Castle.DynamicProxy.Tests.Classes
 
 	public partial class Nested
 	{
-#if FEATURE_SERIALIZATION
-			[Serializable]
-#endif
-			[AttributeUsage(AttributeTargets.All, Inherited = false)]
-			public class NonInheritableAttribute : Attribute
-			{
-			}
+		[AttributeUsage(AttributeTargets.All, Inherited = false)]
+		public class NonInheritableAttribute : Attribute
+		{
+		}
 	}
 }

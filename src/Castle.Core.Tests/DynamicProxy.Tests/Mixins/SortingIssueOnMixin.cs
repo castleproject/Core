@@ -25,17 +25,11 @@ namespace Castle.DynamicProxy.Tests.Mixins
 		void DoSomethingElse();
 	}
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class DomainWithMixin : IDomainWithMixin
 	{
 		public void DoSomething() { }
 	}
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class DomainsAs : IDomainsAs
 	{
 		public void DoSomethingElse() { }

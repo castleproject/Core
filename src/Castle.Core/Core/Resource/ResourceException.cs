@@ -15,11 +15,7 @@
 namespace Castle.Core.Resource
 {
 	using System;
-	using System.Runtime.Serialization;
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class ResourceException : Exception
 	{
 		public ResourceException()
@@ -33,11 +29,5 @@ namespace Castle.Core.Resource
 		public ResourceException(string message, Exception innerException) : base(message, innerException)
 		{
 		}
-
-#if FEATURE_SERIALIZATION
-		protected ResourceException(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-		}
-#endif
 	}
 }

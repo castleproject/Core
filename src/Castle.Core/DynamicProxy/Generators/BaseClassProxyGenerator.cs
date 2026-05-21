@@ -35,10 +35,6 @@ namespace Castle.DynamicProxy.Generators
 
 		protected abstract FieldReference? TargetField { get; }
 
-#if FEATURE_SERIALIZATION
-		protected abstract SerializableContributor GetSerializableContributor();
-#endif
-
 		protected abstract CompositeTypeContributor GetProxyTargetContributor(INamingScope namingScope);
 
 		protected abstract ProxyTargetAccessorContributor GetProxyTargetAccessorContributor();
@@ -186,15 +182,6 @@ namespace Castle.DynamicProxy.Generators
 			}
 
 			// 4. plus special interfaces
-
-#if FEATURE_SERIALIZATION
-			if (targetType.IsSerializable)
-			{
-				var serializableContributor = GetSerializableContributor();
-				contributorsList.Add(serializableContributor);
-				AddMappingForISerializable(typeImplementerMapping, serializableContributor);
-			}
-#endif
 
 			var recordCloningContributor = GetRecordCloningContributor(namingScope);
 			if (recordCloningContributor != null)

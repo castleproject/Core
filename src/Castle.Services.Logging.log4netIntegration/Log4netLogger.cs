@@ -21,9 +21,6 @@ namespace Castle.Services.Logging.Log4netIntegration
 	using log4net.Core;
 	using log4net.Util;
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class Log4netLogger : Castle.Core.Logging.ILogger
 	{
 		private static readonly Type declaringType = typeof(Log4netLogger);

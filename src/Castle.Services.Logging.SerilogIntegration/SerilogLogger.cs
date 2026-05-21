@@ -19,9 +19,6 @@ namespace Castle.Services.Logging.SerilogIntegration
     using Serilog;
     using Serilog.Events;
 
-#if FEATURE_SERIALIZATION
-    [Serializable]
-#endif
     public class SerilogLogger : Castle.Core.Logging.ILogger
     {
         public SerilogLogger(ILogger logger, SerilogFactory factory)

@@ -2,7 +2,6 @@
 [assembly: System.Runtime.Versioning.TargetFramework(".NETFramework,Version=v4.6.2", FrameworkDisplayName=".NET Framework 4.6.2")]
 namespace Castle.Services.Logging.EventLogIntegration
 {
-    [System.Serializable]
     public class DiagnosticsLogger : Castle.Core.Logging.LevelFilteredLogger, System.IDisposable
     {
         public DiagnosticsLogger(string logName) { }
@@ -14,7 +13,6 @@ namespace Castle.Services.Logging.EventLogIntegration
         protected override void Finalize() { }
         protected override void Log(Castle.Core.Logging.LoggerLevel loggerLevel, string loggerName, string message, System.Exception exception) { }
     }
-    [System.Serializable]
     public class DiagnosticsLoggerFactory : Castle.Core.Logging.AbstractLoggerFactory
     {
         public DiagnosticsLoggerFactory() { }

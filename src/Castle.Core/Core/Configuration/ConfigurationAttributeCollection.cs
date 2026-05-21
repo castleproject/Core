@@ -14,25 +14,11 @@
 
 namespace Castle.Core.Configuration
 {
-#if FEATURE_SERIALIZATION
-	using System;
-	using System.Runtime.Serialization;
-#endif
-
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	public class ConfigurationAttributeCollection
 		: System.Collections.Specialized.NameValueCollection
 	{
 		public ConfigurationAttributeCollection()
 		{
 		}
-
-#if FEATURE_SERIALIZATION
-		protected ConfigurationAttributeCollection(SerializationInfo info, StreamingContext context) : base(info, context)
-		{
-		}
-#endif
 	}
 }

@@ -17,17 +17,10 @@
 namespace Castle.DynamicProxy.Generators
 {
 	using System;
-	using System.Collections.Generic;
-	using System.Reflection;
-
-#if FEATURE_SERIALIZATION
-	using System.Xml.Serialization;
-#endif
 
 	using Castle.DynamicProxy.Contributors;
 	using Castle.DynamicProxy.Generators.Emitters;
 	using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-	using Castle.DynamicProxy.Serialization;
 
 	internal sealed class ClassProxyWithTargetGenerator : BaseClassProxyGenerator
 	{
@@ -52,13 +45,6 @@ namespace Castle.DynamicProxy.Generators
 			CreateTargetField(emitter);
 		}
 
-#if FEATURE_SERIALIZATION
-		protected override SerializableContributor GetSerializableContributor()
-		{
-			return new ClassProxySerializableContributor(targetType, interfaces, ProxyTypeConstants.ClassWithTarget);
-		}
-#endif
-
 		protected override CompositeTypeContributor GetProxyTargetContributor(INamingScope namingScope)
 		{
 			return new ClassProxyWithTargetTargetContributor(targetType, namingScope) { Logger = Logger };
@@ -79,9 +65,6 @@ namespace Castle.DynamicProxy.Generators
 		private void CreateTargetField(ClassEmitter emitter)
 		{
 			targetField = emitter.CreateField("__target", targetType);
-#if FEATURE_SERIALIZATION
-			emitter.DefineCustomAttributeFor<XmlIgnoreAttribute>(targetField);
-#endif
 		}
 	}
 }

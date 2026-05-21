@@ -19,7 +19,6 @@ namespace Castle.DynamicProxy.Generators
 	using System.Linq;
 
 	using Castle.DynamicProxy.Contributors;
-	using Castle.DynamicProxy.Serialization;
 
 	internal sealed class InterfaceProxyWithTargetGenerator : BaseInterfaceProxyGenerator
 	{

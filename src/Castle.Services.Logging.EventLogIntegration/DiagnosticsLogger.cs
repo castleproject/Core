@@ -22,17 +22,11 @@ namespace Castle.Services.Logging.EventLogIntegration
 	/// <summary>
 	///   The Logger using standard Diagnostics namespace.
 	/// </summary>
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 #if NET6_0_OR_GREATER
 	[System.Runtime.Versioning.SupportedOSPlatform("windows")]
 #endif
 	public class DiagnosticsLogger : LevelFilteredLogger, IDisposable
 	{
-#if FEATURE_SERIALIZATION
-		[NonSerialized]
-#endif
 		private EventLog eventLog;
 
 		/// <summary>

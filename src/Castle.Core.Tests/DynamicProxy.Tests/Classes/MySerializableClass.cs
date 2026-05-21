@@ -15,12 +15,7 @@
 namespace Castle.DynamicProxy.Tests.Classes
 {
 	using System;
-#if FEATURE_SERIALIZATION
-	using System.Runtime.Serialization;
-#endif
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
+
 	public class MySerializableClass
 	{
 		protected DateTime current;
@@ -40,24 +35,4 @@ namespace Castle.DynamicProxy.Tests.Classes
 			return Math.PI;
 		}
 	}
-
-#if FEATURE_SERIALIZATION
-	[Serializable]
-	public class MySerializableClass2 : MySerializableClass, ISerializable
-	{
-		public MySerializableClass2()
-		{
-		}
-
-		public MySerializableClass2(SerializationInfo info, StreamingContext context)
-		{
-			current = (DateTime) info.GetValue("dt", typeof (DateTime));
-		}
-
-		public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
-		{
-			info.AddValue("dt", current);
-		}
-	}
-#endif
 }

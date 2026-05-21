@@ -21,9 +21,6 @@ namespace Castle.DynamicProxy.Internal
 	using System.Diagnostics;
 	using System.Reflection;
 
-#if FEATURE_SERIALIZATION
-	[Serializable]
-#endif
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public sealed class InterfaceMethodWithoutTargetInvocation : AbstractInvocation
 	{
